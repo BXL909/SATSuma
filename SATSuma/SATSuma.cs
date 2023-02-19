@@ -15,11 +15,12 @@
 ────██──██─────
 
  * Stuff to do:
- * further testing of own node connection, then add to settings once tested, with warning it will be much slower
+ * further testing of own node connection, then add to settings once tested, with warning it might be much slower
  * bring the address screen within the Group1timertick? Might not be practical/useful
  * better/more error handling everywhere
- * add block and transaction screens
+ * finish block and transaction screens
  * deal with scaling issues
+ * handle tabbing and focus better
  */
 
 #region Using
@@ -262,6 +263,7 @@ namespace SATSuma
                             lblBlockNumber.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockNumber.Text = result2.blockNumber;
+                                textBoxSubmittedBlockNumber.Text = result2.blockNumber; //pre-populate the block field on the Block screen
                             });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
@@ -1604,6 +1606,11 @@ namespace SATSuma
             {
                 mempoolConfUnconfOrAllTx = "chain";
             }
+            // set focus
+            if (btnNextTransactions.Visible && btnNextTransactions.Enabled)
+            {
+                btnNextTransactions.Focus();
+            }
         }
 
         private async void BtnGetNextTransactions(object sender, EventArgs e)
@@ -1867,6 +1874,51 @@ namespace SATSuma
             label67.Visible = false;
             label63.Visible = false;
             listViewTransactions.Visible = false;
+        }
+        #endregion
+
+        #region BLOCK SCREEN STUFF
+        //==============================================================================================================================================================================================
+        //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
+        //=============================================================================================================
+        //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
+        private void textBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the pressed key is a number or a control key
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // If it's not a number or control key, discard the key press event
+            }
+        }
+
+        //=============================================================================================================
+        //-------------------- MAKE SURE ENTERED VALUE NOT GREATER THAN BLOCK HEIGHT ----------------------------------
+        private void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        {
+            // Parse the textbox value
+            if (int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight))
+            {
+                // If the submitted value is greater than the current block height, set the textbox value to the current block height
+                if (submittedBlockHeight > Convert.ToInt32(lblBlockNumber.Text))
+                {
+                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text;
+                }
+                // Set the cursor position to the end of the string
+                textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+
+                // display block hash
+                using (WebClient client = new WebClient())
+                {
+                    string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
+                    string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
+                    lblBlockHash.Text = BlockHash;
+                }
+            }
+            else
+            {
+                // If the textbox value is not a valid integer, clear the textbox value
+                textBoxSubmittedBlockNumber.Text = string.Empty;
+            }
         }
         #endregion
 
@@ -2267,6 +2319,7 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
+
         #endregion
     }
 

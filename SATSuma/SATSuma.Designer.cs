@@ -237,6 +237,8 @@
             this.textBoxSubmittedBlockNumber = new System.Windows.Forms.TextBox();
             this.label60 = new System.Windows.Forms.Label();
             this.btnBlock = new System.Windows.Forms.Button();
+            this.lblBlockHash = new System.Windows.Forms.Label();
+            this.label64 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panelLightningDashboard.SuspendLayout();
             this.panelAddress.SuspendLayout();
@@ -2985,6 +2987,8 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.label64);
+            this.panelBlock.Controls.Add(this.lblBlockHash);
             this.panelBlock.Controls.Add(this.textBoxSubmittedBlockNumber);
             this.panelBlock.Controls.Add(this.label60);
             this.panelBlock.Location = new System.Drawing.Point(21, 188);
@@ -2999,11 +3003,13 @@
             this.textBoxSubmittedBlockNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSubmittedBlockNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSubmittedBlockNumber.ForeColor = System.Drawing.Color.Black;
-            this.textBoxSubmittedBlockNumber.Location = new System.Drawing.Point(171, 0);
+            this.textBoxSubmittedBlockNumber.Location = new System.Drawing.Point(135, 0);
             this.textBoxSubmittedBlockNumber.MaxLength = 80;
             this.textBoxSubmittedBlockNumber.Name = "textBoxSubmittedBlockNumber";
-            this.textBoxSubmittedBlockNumber.Size = new System.Drawing.Size(578, 25);
+            this.textBoxSubmittedBlockNumber.Size = new System.Drawing.Size(60, 25);
             this.textBoxSubmittedBlockNumber.TabIndex = 7;
+            this.textBoxSubmittedBlockNumber.TextChanged += new System.EventHandler(this.textBoxSubmittedBlockNumber_TextChanged);
+            this.textBoxSubmittedBlockNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSubmittedBlockNumber_KeyPress);
             // 
             // label60
             // 
@@ -3036,6 +3042,27 @@
             this.btnBlock.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBlock.UseVisualStyleBackColor = false;
             this.btnBlock.Click += new System.EventHandler(this.btnBlock_Click);
+            // 
+            // lblBlockHash
+            // 
+            this.lblBlockHash.AutoSize = true;
+            this.lblBlockHash.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockHash.Location = new System.Drawing.Point(290, 5);
+            this.lblBlockHash.Name = "lblBlockHash";
+            this.lblBlockHash.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockHash.TabIndex = 8;
+            this.lblBlockHash.Text = "no data";
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label64.ForeColor = System.Drawing.Color.Silver;
+            this.label64.Location = new System.Drawing.Point(209, 5);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(88, 18);
+            this.label64.TabIndex = 9;
+            this.label64.Text = "Block hash";
             // 
             // SATSuma
             // 
@@ -3317,6 +3344,8 @@
         private System.Windows.Forms.Button btnBlock;
         private System.Windows.Forms.TextBox textBoxSubmittedBlockNumber;
         private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.Label lblBlockHash;
     }
 }
 

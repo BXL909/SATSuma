@@ -81,7 +81,8 @@ namespace SATSuma
         private int APIGroup2RefreshFrequency = 24; // hours. Default value 2. Initial value only
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
-        private TransactionService _transactionService;
+        private TransactionsForAddressService _transactionService;
+        private BlockDataService _blockService;
         private int TotalTransactionRowsAdded = 0; // keeps track of how many rows of transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         bool PartOfAnAllTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
@@ -105,7 +106,8 @@ namespace SATSuma
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
-            _transactionService = new TransactionService(NodeURL);
+            _transactionService = new TransactionsForAddressService(NodeURL);
+            _blockService = new BlockDataService(NodeURL);
         }
 
         private void Form1_Load(object sender, EventArgs e) // on form loading
@@ -263,7 +265,6 @@ namespace SATSuma
                             lblBlockNumber.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockNumber.Text = result2.blockNumber;
-                                textBoxSubmittedBlockNumber.Text = result2.blockNumber; //pre-populate the block field on the Block screen
                             });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
@@ -1257,7 +1258,7 @@ namespace SATSuma
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtonsOnAddressScreen("disable"); // disable buttons during operation
-            listViewTransactions.Items.Clear(); // wipe any data in the transaction listview
+            listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalTransactionRowsAdded = 0;
 
             /*if (tboxSubmittedAddress.Text == "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa") // demo data
@@ -1462,50 +1463,50 @@ namespace SATSuma
             }
 
             //LIST VIEW
-            listViewTransactions.Items.Clear(); // remove any data that may be there already
-            listViewTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewTransactions, new object[] { true });
+            listViewAddressTransactions.Items.Clear(); // remove any data that may be there already
+            listViewAddressTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewAddressTransactions, new object[] { true });
 
             // Check if the column header already exists
-            if (listViewTransactions.Columns.Count == 0)
+            if (listViewAddressTransactions.Columns.Count == 0)
             {
                 // If not, add the column header
                 if (mempoolConfUnconfOrAllTx == "chain")
                 {
                     if (PartOfAnAllTransactionsRequest)
                     {
-                        listViewTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                        listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
                     }
                     else
                     {
-                        listViewTransactions.Columns.Add(" Transaction ID (confirmed)", 260);
+                        listViewAddressTransactions.Columns.Add(" Transaction ID (confirmed)", 260);
                     }
                 }
                 if (mempoolConfUnconfOrAllTx == "mempool")
                 {
-                    listViewTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
+                    listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
                 }
                 if (mempoolConfUnconfOrAllTx == "all")
                 {
-                    listViewTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                    listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
                 }
             }
 
             // Add the block height column header
-            if (listViewTransactions.Columns.Count == 1)
+            if (listViewAddressTransactions.Columns.Count == 1)
             {
-                listViewTransactions.Columns.Add("Block", 65);
+                listViewAddressTransactions.Columns.Add("Block", 65);
             }
 
             // Add the balance change column header
-            if (listViewTransactions.Columns.Count == 2)
+            if (listViewAddressTransactions.Columns.Count == 2)
             {
-                listViewTransactions.Columns.Add("Amount", 110);
+                listViewAddressTransactions.Columns.Add("Amount", 110);
             }
 
             // Add the status column header
-            if (listViewTransactions.Columns.Count == 3)
+            if (listViewAddressTransactions.Columns.Count == 3)
             {
-                listViewTransactions.Columns.Add("Confs", 70);
+                listViewAddressTransactions.Columns.Add("Confs", 70);
             }
 
             // Add the items to the ListView
@@ -1560,7 +1561,7 @@ namespace SATSuma
                     item.SubItems.Add("---".ToString()); // unconfirmed, so no confirmations
                 }
 
-                listViewTransactions.Items.Add(item); // add row
+                listViewAddressTransactions.Items.Add(item); // add row
 
                 counter++; // increment rows for this batch
                 TotalTransactionRowsAdded++; // increment all rows
@@ -1620,13 +1621,13 @@ namespace SATSuma
             var address = tboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
             var lastSeenTxId = "";
-            if (listViewTransactions.Items[listViewTransactions.Items.Count - 1].SubItems[1].Text == "------")
+            if (listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].SubItems[1].Text == "------")
             {
                 lastSeenTxId = ""; // last seen transaction was unconfirmed, so next call will be for confirmed TXs, starting from the first
             }
             else
             {
-                lastSeenTxId = listViewTransactions.Items[listViewTransactions.Items.Count - 1].Text; // last seen transaction was confirmed, so next call will carry on where we left off
+                lastSeenTxId = listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].Text; // last seen transaction was confirmed, so next call will carry on where we left off
             }
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
@@ -1672,7 +1673,7 @@ namespace SATSuma
             // force a text box (address) change event to fetch unconfirmed transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
-            listViewTransactions.Columns.Clear(); // force headings to be redrawn
+            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
             tboxSubmittedAddress.Text = temp;
         }
 
@@ -1688,7 +1689,7 @@ namespace SATSuma
             // force a text box (address) change event to fetch confirmed transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
-            listViewTransactions.Columns.Clear(); // force headings to be redrawn
+            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
             tboxSubmittedAddress.Text = temp;
         }
 
@@ -1704,7 +1705,7 @@ namespace SATSuma
             // force a text box (address) change event to fetch all (confirmed and unconfirmed) transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
-            listViewTransactions.Columns.Clear(); // force headings to be redrawn
+            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
             tboxSubmittedAddress.Text = temp;
         }
 
@@ -1712,7 +1713,7 @@ namespace SATSuma
         {
             //assign block number to text box on block panel
             // Get the selected item
-            ListViewItem selectedItem = listViewTransactions.SelectedItems[0];
+            ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
 
             // Get the second subitem in the selected item (index 1)
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
@@ -1743,15 +1744,15 @@ namespace SATSuma
         private void listViewTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             bool anySelected = false;
-            foreach (ListViewItem item in listViewTransactions.Items)
+            foreach (ListViewItem item in listViewAddressTransactions.Items)
             {
                 if (item.Selected)
                 {
                     item.ForeColor = Color.White; // txID
                     item.SubItems[1].ForeColor = Color.White; //Block 
                     anySelected = true;
-                    BtnViewTransaction.Location = new Point(item.Position.X + listViewTransactions.Location.X + listViewTransactions.Columns[0].Width - BtnViewTransaction.Width - 8, item.Position.Y + listViewTransactions.Location.Y - 2);
-                    BtnViewBlock.Location = new Point(item.Position.X + listViewTransactions.Location.X + listViewTransactions.Columns[0].Width + listViewTransactions.Columns[1].Width - BtnViewBlock.Width - 3, item.Position.Y + listViewTransactions.Location.Y - 2);
+                    BtnViewTransaction.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransaction.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    BtnViewBlock.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlock.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
                 }
                 else
                 {
@@ -1780,7 +1781,7 @@ namespace SATSuma
                 e.SubItem.ForeColor = Color.IndianRed; // make it red
             }
 
-            var font = listViewTransactions.Font;
+            var font = listViewAddressTransactions.Font;
             var columnWidth = e.Header.Width;
             var textWidth = TextRenderer.MeasureText(text, font).Width;
             if (textWidth > columnWidth)
@@ -1789,7 +1790,7 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactions.BackColor), bounds);
+                e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -1797,7 +1798,7 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactions.BackColor), bounds);
+                e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -1809,23 +1810,23 @@ namespace SATSuma
         {
             if (e.ColumnIndex == 0)
             {
-                if (listViewTransactions.Columns[e.ColumnIndex].Width < 260) // min width
+                if (listViewAddressTransactions.Columns[e.ColumnIndex].Width < 260) // min width
                 {
                     e.Cancel = true;
                     e.NewWidth = 260;
                 }
-                if (listViewTransactions.Columns[e.ColumnIndex].Width > 460) // max width
+                if (listViewAddressTransactions.Columns[e.ColumnIndex].Width > 460) // max width
                 {
                     e.Cancel = true;
                     e.NewWidth = 460;
                 }
-                BtnViewTransaction.Location = new Point(listViewTransactions.Columns[0].Width + listViewTransactions.Location.X - BtnViewTransaction.Width - 6, BtnViewTransaction.Location.Y);
-                BtnViewBlock.Location = new Point(listViewTransactions.Columns[0].Width + listViewTransactions.Columns[1].Width + listViewTransactions.Location.X - BtnViewBlock.Width + 2, BtnViewBlock.Location.Y);
+                BtnViewTransaction.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransaction.Width - 6, BtnViewTransaction.Location.Y);
+                BtnViewBlock.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlock.Width + 2, BtnViewBlock.Location.Y);
             }
 
             if (e.ColumnIndex == 1)
             {
-                if (listViewTransactions.Columns[e.ColumnIndex].Width != 65) // don't allow this one to change
+                if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 65) // don't allow this one to change
                 {
                     e.Cancel = true;
                     e.NewWidth = 65;
@@ -1833,7 +1834,7 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 2)
             {
-                if (listViewTransactions.Columns[e.ColumnIndex].Width != 110) // don't allow this one to change
+                if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 110) // don't allow this one to change
                 {
                     e.Cancel = true;
                     e.NewWidth = 110;
@@ -1841,7 +1842,7 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 3)
             {
-                if (listViewTransactions.Columns[e.ColumnIndex].Width != 70) // don't allow this one to change
+                if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 70) // don't allow this one to change
                 {
                     e.Cancel = true;
                     e.NewWidth = 70;
@@ -1861,7 +1862,7 @@ namespace SATSuma
             label61.Visible = true;
             label67.Visible = true;
             label63.Visible = true;
-            listViewTransactions.Visible = true;
+            listViewAddressTransactions.Visible = true;
         }
 
         private void AddressInvalidHideControls() // hide all address related controls
@@ -1873,7 +1874,7 @@ namespace SATSuma
             label61.Visible = false;
             label67.Visible = false;
             label63.Visible = false;
-            listViewTransactions.Visible = false;
+            listViewAddressTransactions.Visible = false;
         }
         #endregion
 
@@ -1902,6 +1903,7 @@ namespace SATSuma
                 if (submittedBlockHeight > Convert.ToInt32(lblBlockNumber.Text))
                 {
                     textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text;
+                    submittedBlockHeight = Convert.ToInt32(lblBlockNumber.Text); // also set the submittedblockheight to current block height
                 }
                 // Set the cursor position to the end of the string
                 textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
@@ -1919,6 +1921,43 @@ namespace SATSuma
                 // If the textbox value is not a valid integer, clear the textbox value
                 textBoxSubmittedBlockNumber.Text = string.Empty;
             }
+            var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
+            GetFifteenBlocks(blockNumber);
+        }
+
+        private async Task GetFifteenBlocks(string blockNumber)
+        {
+            var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
+            var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+            lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
+            long sizeInBytes = blocks[0].size;
+            string sizeString;
+
+            if (sizeInBytes < 1000)
+            {
+                sizeString = $"{sizeInBytes} bytes";
+            }
+            else if (sizeInBytes < 1000 * 1000)
+            {
+                double sizeInKB = (double)sizeInBytes / 1000;
+                sizeString = $"{sizeInKB:N2} KB";
+            }
+            else
+            {
+                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                sizeString = $"{sizeInMB:N2} MB";
+            }
+
+            lblSizeOfBlock.Text = sizeString;
+            // lblSizeOfBlock.Text = Convert.ToString(blocks[0].size);
+            lblBlockWeight.Text = Convert.ToString(blocks[0].weight);
+            string Reward = Convert.ToString(blocks[0].extras.reward);
+            lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+            lblBlockFeeRange.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + " - " + Convert.ToString(blocks[0].extras.feeRange[6]);
+            lblBlockAverageMedianFee.Text = Convert.ToString(blocks[0].extras.avgFee) + " / " + Convert.ToString(blocks[0].extras.medianFee);
+            lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
+            lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
+
         }
         #endregion
 
@@ -2209,7 +2248,12 @@ namespace SATSuma
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
-            
+            if (textBoxSubmittedBlockNumber.Text == "") 
+            {
+                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; //pre-populate the block field on the Block screen)
+            }
+                
+
 
         }
 
@@ -2277,7 +2321,7 @@ namespace SATSuma
             if (settingsScreen.Instance.NodeURL != NodeURL)
             {
                 NodeURL = settingsScreen.Instance.NodeURL;
-                _transactionService = new TransactionService(NodeURL);
+                _transactionService = new TransactionsForAddressService(NodeURL);
             }
             CheckBlockchainExplorerApiStatus();
 
@@ -2327,11 +2371,11 @@ namespace SATSuma
     //==============================================================================================================================================================================================
 
     #region CLASSES
-    public class TransactionService
+    public class TransactionsForAddressService
     {
         private readonly string _nodeUrl;
 
-        public TransactionService(string nodeUrl)
+        public TransactionsForAddressService(string nodeUrl)
         {
             _nodeUrl = nodeUrl;
         }
@@ -2364,7 +2408,7 @@ namespace SATSuma
                         }
                         if (mempoolConfOrAllTx == "all")
                         {
-                            var response = await client.GetAsync($"address/{address}/txs"); //subsequent calls need to redirect to the confirmed tx query... STILL TO DO!!!
+                            var response = await client.GetAsync($"address/{address}/txs"); 
                             if (response.IsSuccessStatusCode)
                             {
                                 return await response.Content.ReadAsStringAsync();
@@ -2384,8 +2428,6 @@ namespace SATSuma
             return string.Empty;
         }
     }
-    //=================================================================================================================
-    //----------------------- CLASS TO STORE TXID FOR EACH TRANSACTION ------------------------------------------------
 
     public class Transaction
     {
@@ -2419,6 +2461,76 @@ namespace SATSuma
     {
         public int block_height { get; set; }
         public string confirmed { get; set; }
+    }
+
+    public class BlockDataService
+    {
+        private readonly string _nodeUrl;
+        public BlockDataService(string nodeUrl)
+        {
+            _nodeUrl = nodeUrl;
+        }
+        public async Task<string> GetBlockDataAsync(string blockHeight)
+        {
+            int retryCount = 3;
+            while (retryCount > 0)
+            {
+                using (var client = new HttpClient())
+                {
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/blocks/{blockHeight}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+            }
+            return string.Empty;
+        }
+    }
+
+    public class Block
+    {
+        public extras extras { get; set; }
+        public string Id { get; set; }
+        public string height { get; set; }
+        public string version { get; set; }
+        public string timestamp { get; set; }
+        public string bits { get; set; }
+        public string nonce { get; set; }
+        public string difficulty { get; set; }
+        public string merkle_root { get; set; }
+        public int tx_count { get; set; }
+        public int size { get; set; }
+        public string weight { get; set; }
+        public string previousblockhash { get; set; }
+    }
+
+    public class extras
+    {
+        public string reward { get; set; }
+        public string medianFee { get; set; }
+        public int[] feeRange { get; set; }
+        public string totalFees { get; set; }
+        public string avgFee { get; set; }
+        public string avgFeeRate { get; set; }
+        public pool pool { get; set; }
+
+    }
+
+    public class pool
+    {
+        public string name { get; set; }
     }
     #endregion
 }

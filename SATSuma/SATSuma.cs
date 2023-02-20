@@ -1922,7 +1922,7 @@ namespace SATSuma
                 textBoxSubmittedBlockNumber.Text = string.Empty;
             }
             var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-            GetFifteenBlocks(blockNumber);
+            _ = GetFifteenBlocks(blockNumber); //asynchronous. Don't want user to wait between key presses
         }
 
         private async Task GetFifteenBlocks(string blockNumber)
@@ -1931,8 +1931,7 @@ namespace SATSuma
             var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
             lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
             long sizeInBytes = blocks[0].size;
-            string sizeString;
-
+            string sizeString; // convert display to byes/kb/mb accordingly
             if (sizeInBytes < 1000)
             {
                 sizeString = $"{sizeInBytes} bytes";
@@ -1947,14 +1946,15 @@ namespace SATSuma
                 double sizeInMB = (double)sizeInBytes / (1000 * 1000);
                 sizeString = $"{sizeInMB:N2} MB";
             }
-
             lblSizeOfBlock.Text = sizeString;
-            // lblSizeOfBlock.Text = Convert.ToString(blocks[0].size);
-            lblBlockWeight.Text = Convert.ToString(blocks[0].weight);
+            string strWeight = Convert.ToString(blocks[0].weight);
+            decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
+            string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
+            lblBlockWeight.Text = strFormattedWeight;
             string Reward = Convert.ToString(blocks[0].extras.reward);
             lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-            lblBlockFeeRange.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + " - " + Convert.ToString(blocks[0].extras.feeRange[6]);
-            lblBlockAverageMedianFee.Text = Convert.ToString(blocks[0].extras.avgFee) + " / " + Convert.ToString(blocks[0].extras.medianFee);
+            lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
+            lblBlockAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
             lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
             lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
 

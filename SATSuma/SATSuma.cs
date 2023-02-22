@@ -81,9 +81,11 @@ namespace SATSuma
         private int APIGroup2RefreshFrequency = 24; // hours. Default value 2. Initial value only
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
-        private TransactionsForAddressService _transactionService;
+        private TransactionsForAddressService _transactionsForAddressService;
         private BlockDataService _blockService;
-        private int TotalTransactionRowsAdded = 0; // keeps track of how many rows of transactions have been added to the listview
+        private TransactionsForBlockService _transactionsForBlockService;
+        private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
+        private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         bool PartOfAnAllTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
@@ -106,8 +108,10 @@ namespace SATSuma
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
-            _transactionService = new TransactionsForAddressService(NodeURL);
+            _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             _blockService = new BlockDataService(NodeURL);
+            _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+
         }
 
         private void Form1_Load(object sender, EventArgs e) // on form loading
@@ -1259,7 +1263,7 @@ namespace SATSuma
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtonsOnAddressScreen("disable"); // disable buttons during operation
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
-            TotalTransactionRowsAdded = 0;
+            TotalAddressTransactionRowsAdded = 0;
 
             /*if (tboxSubmittedAddress.Text == "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa") // demo data
             {
@@ -1441,11 +1445,11 @@ namespace SATSuma
         }
 
         //=============================================================================================================
-        //---------------------- GET CONFIRMED TRANSACTIONS FOR ADDRESS -----------------------------------------------
+        //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
         private async Task GetTransactionsForAddress(string addressString, string lastSeenTxId)
         {
-            var transactionsJson = await _transactionService.GetTransactionsAsync(addressString, mempoolConfUnconfOrAllTx, lastSeenTxId);
-            var transactions = JsonConvert.DeserializeObject<List<Transaction>>(transactionsJson);
+            var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, mempoolConfUnconfOrAllTx, lastSeenTxId);
+            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
             List<string> txIds = transactions.Select(t => t.txid).ToList();
 
             // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
@@ -1514,7 +1518,7 @@ namespace SATSuma
             WebClient client2 = new WebClient();
             string CurrentBlockHeightStringForCalc = client2.DownloadString("https://mempool.space/api/blocks/tip/height");
 
-            foreach (Transaction transaction in transactions)
+            foreach (AddressTransactions transaction in transactions)
             {
                 decimal balanceChange = 0; // will hold net result of transaction to this address
                 decimal balanceChangeVin = 0; // will hold net result of inputs to this address
@@ -1564,9 +1568,9 @@ namespace SATSuma
                 listViewAddressTransactions.Items.Add(item); // add row
 
                 counter++; // increment rows for this batch
-                TotalTransactionRowsAdded++; // increment all rows
+                TotalAddressTransactionRowsAdded++; // increment all rows
 
-                if (TotalTransactionRowsAdded <= 15) // less than 15 transactions in all
+                if (TotalAddressTransactionRowsAdded <= 15) // less than 15 transactions in all
                 {
                     btnFirstTransaction.Visible = false; // so this won't be needed
                 }
@@ -1578,7 +1582,7 @@ namespace SATSuma
                     }
                 }
 
-                if (Convert.ToString(TotalTransactionRowsAdded) == lblConfirmedTransactionCount.Text) // we've shown all the TXs
+                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblConfirmedTransactionCount.Text) // we've shown all the TXs
                 {
                     btnNextTransactions.Visible = false; // so we won't need this
                 }
@@ -1597,7 +1601,7 @@ namespace SATSuma
             }
             if (counter > 1)
             {
-                lblTXPositionInList.Text = "Transactions " + (TotalTransactionRowsAdded - counter + 1) + " - " + (TotalTransactionRowsAdded) + " of " + lblConfirmedTransactionCount.Text;
+                lblTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblConfirmedTransactionCount.Text;
             }
             else
             {
@@ -1648,7 +1652,7 @@ namespace SATSuma
             btnFirstTransaction.Visible = false; 
             var address = tboxSubmittedAddress.Text; // Get the address from the address text box
             var lastSeenTxId = ""; // Reset the last seen transaction ID to go back to start
-            TotalTransactionRowsAdded = 0;
+            TotalAddressTransactionRowsAdded = 0;
             btnNextTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
             BtnViewBlock.Visible = false;
             BtnViewTransaction.Visible = false;
@@ -1922,7 +1926,8 @@ namespace SATSuma
                 textBoxSubmittedBlockNumber.Text = string.Empty;
             }
             var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-            _ = GetFifteenBlocks(blockNumber); //asynchronous. Don't want user to wait between key presses
+            GetFifteenBlocks(blockNumber); //asynchronous. Don't want user to wait between key presses
+            
         }
 
         private async Task GetFifteenBlocks(string blockNumber)
@@ -1957,8 +1962,132 @@ namespace SATSuma
             lblBlockAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
             lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
             lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
-
         }
+
+        private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
+        {
+            var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
+            var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
+            List<string> txIds = transactions.Select(t => t.txid).ToList();
+
+            // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+            if (txIds.Count > 0)
+            {
+                lastSeenBlockTransaction = txIds.Last();
+            }
+
+            //LIST VIEW
+            listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
+            listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
+
+            // Check if the column header already exists
+            if (listViewBlockTransactions.Columns.Count == 0)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add(" Transaction ID", 260);
+            }
+
+            if (listViewBlockTransactions.Columns.Count == 1)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add("Fee", 100);
+            }
+
+            // Add the items to the ListView
+            int counter = 0; // used to count rows in list as they're added
+
+            foreach (var blockTransaction in transactions)
+            {
+                ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
+                item.SubItems.Add(blockTransaction.fee.ToString());
+                listViewBlockTransactions.Items.Add(item); // add row
+                    
+
+                counter++; // increment rows for this batch
+                TotalBlockTransactionRowsAdded++; // increment all rows
+
+                if (TotalBlockTransactionRowsAdded <= 15) // less than 15 transactions in all
+                {
+                    btnPreviousBlockTransactions.Visible = false; // so this won't be needed
+                }
+                else
+                {
+                    btnPreviousBlockTransactions.Visible = true;
+                }
+
+                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
+                {
+                    btnNextBlockTransactions.Visible = false; // so we won't need this
+                }
+                else
+                {
+                    btnNextBlockTransactions.Visible = true;
+                }
+
+                if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
+                {
+                    break;
+                }
+            }
+        }
+
+        private async void btnShowBlockTXs_Click(object sender, EventArgs e)
+        {
+            string BlockHashToGetTransactionsFor = lblBlockHash.Text;
+            await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0"); //----------------------------------------------------CURRENTLY HARDCODED LAST BLOCK TRANSACTION SEEN
+        }
+
+        private void listViewBlockTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            Color headerColor = Color.FromArgb(50, 50, 50);
+            SolidBrush brush = new SolidBrush(headerColor);
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            // Change text color and alignment
+            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Near;
+            format.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
+        private void listViewBlockTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (text[0] == '+') // if the string is a change to an amount and positive
+            {
+                e.SubItem.ForeColor = Color.OliveDrab; // make it green
+
+            }
+            else
+            if (text[0] == '-') // if the string is a change to an amount and negative
+            {
+                e.SubItem.ForeColor = Color.IndianRed; // make it red
+            }
+
+            var font = listViewBlockTransactions.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
         #endregion
 
         #region REUSEABLE STUFF
@@ -2252,9 +2381,6 @@ namespace SATSuma
             {
                 textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; //pre-populate the block field on the Block screen)
             }
-                
-
-
         }
 
         private void BtnSettings_Click(object sender, EventArgs e)
@@ -2321,7 +2447,7 @@ namespace SATSuma
             if (settingsScreen.Instance.NodeURL != NodeURL)
             {
                 NodeURL = settingsScreen.Instance.NodeURL;
-                _transactionService = new TransactionsForAddressService(NodeURL);
+                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             }
             CheckBlockchainExplorerApiStatus();
 
@@ -2371,6 +2497,8 @@ namespace SATSuma
     //==============================================================================================================================================================================================
 
     #region CLASSES
+
+    // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
     {
         private readonly string _nodeUrl;
@@ -2380,7 +2508,7 @@ namespace SATSuma
             _nodeUrl = nodeUrl;
         }
 
-        public async Task<string> GetTransactionsAsync(string address, string mempoolConfOrAllTx, string lastSeenTxId = "")
+        public async Task<string> GetTransactionsForAddressAsync(string address, string mempoolConfOrAllTx, string lastSeenTxId = "")
         {
             int retryCount = 3;
             while (retryCount > 0)
@@ -2429,40 +2557,41 @@ namespace SATSuma
         }
     }
 
-    public class Transaction
+    public class AddressTransactions
     {
         public string txid { get; set; }
-        public Status status { get; set; }
-        public List<Vout> vout { get; set; }
-        public List<Vin> vin { get; set; }
+        public Status_AddressTransactions status { get; set; }
+        public List<Vout_AddressTransactions> vout { get; set; }
+        public List<Vin_AddressTransactions> vin { get; set; }
     }
 
-    public class Vin
+    public class Vin_AddressTransactions
     {
-        public Prevout prevout { get; set; }
+        public Prevout_AddressTransactions prevout { get; set; }
         public decimal value { get; set; }
         public decimal amount { get; set; }
     }
 
-    public class Prevout
+    public class Prevout_AddressTransactions
     {
         public string scriptpubkey_address { get; set; }
         public decimal value { get; set; }
     }
 
-    public class Vout
+    public class Vout_AddressTransactions
     {
         public double value { get; set; }
         public decimal amount { get; set; }
         public string scriptpubkey_address { get; set; }
     }
 
-    public class Status
+    public class Status_AddressTransactions
     {
         public int block_height { get; set; }
         public string confirmed { get; set; }
     }
 
+    // ------------------------------------- Blocks -------------------------------------------------
     public class BlockDataService
     {
         private readonly string _nodeUrl;
@@ -2501,7 +2630,7 @@ namespace SATSuma
 
     public class Block
     {
-        public extras extras { get; set; }
+        public Block_extras extras { get; set; }
         public string Id { get; set; }
         public string height { get; set; }
         public string version { get; set; }
@@ -2516,7 +2645,7 @@ namespace SATSuma
         public string previousblockhash { get; set; }
     }
 
-    public class extras
+    public class Block_extras
     {
         public string reward { get; set; }
         public string medianFee { get; set; }
@@ -2524,13 +2653,107 @@ namespace SATSuma
         public string totalFees { get; set; }
         public string avgFee { get; set; }
         public string avgFeeRate { get; set; }
-        public pool pool { get; set; }
+        public Block_pool pool { get; set; }
 
     }
 
-    public class pool
+    public class Block_pool
     {
         public string name { get; set; }
+    }
+
+    // ------------------------------------- Block Transactions -------------------------------------
+    public class TransactionsForBlockService
+    {
+        private readonly string _nodeUrl;
+
+        public TransactionsForBlockService(string nodeUrl)
+        {
+            _nodeUrl = nodeUrl;
+        }
+
+        public async Task<string> GetTransactionsForBlockAsync(string blockHash, string lastSeenBlockTransaction)
+        {
+            int retryCount = 3;
+            while (retryCount > 0)
+            {
+                using (var client = new HttpClient())
+                {
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"block/{blockHash}/txs/{lastSeenBlockTransaction}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+            }
+            return null;
+        }
+    }
+    public class BlockTransactionsResponse
+    {
+        public List<Block_Transactions> txs { get; set; }
+    }
+
+    public class Block_Transactions
+    {
+        public string txid { get; set; }
+    //    public string version { get; set; }
+     //   public string locktime { get; set; }
+     //   public List<Vin_BlockTransactions> vin { get; set; }
+     //   public List<Vout_BlockTransactions> vout { get; set; }
+     //   public string size { get; set; }
+     //   public string weight { get; set; }
+        public string fee { get; set; }
+      //  public List<Status_BlockTransactions> status { get; set; }
+     }
+
+    public class Vin_BlockTransactions
+    {
+        public string txid { get; set; }
+        public string vout { get; set; }
+        public List<Prevout_BlockTransactions> prevout { get; set; }
+        public string scriptsig { get; set; }
+        public string scriptsig_asm { get; set; }
+        public string is_coinbase { get; set; }
+        public string sequence { get; set; }
+    }
+
+    public class Prevout_BlockTransactions
+    {
+        public string scriptpubkey { get; set; }
+        public string scriptpubkey_asm { get; set; }
+        public string scriptpubkey_type { get; set; }
+        public string scriptpubkey_address { get; set; }
+        public string value { get; set; }
+    }
+
+    public class Status_BlockTransactions
+    {
+        public string confirmed { get; set; }
+        public string block_height { get; set; }
+        public string block_hash { get; set; }
+        public string block_time { get; set; }
+    }
+
+    public class Vout_BlockTransactions
+    {
+        public string scriptpubkey { get; set; }
+        public string scriptpubkey_asm { get; set; }
+        public string scriptpubkey_type { get; set; }
+        public string scriptpubkey_address { get; set; }
+        public string value { get; set; }
     }
     #endregion
 }

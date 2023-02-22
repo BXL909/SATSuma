@@ -234,8 +234,10 @@
             this.btnAddress = new System.Windows.Forms.Button();
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
-            this.btnPreviousBlock = new System.Windows.Forms.Button();
-            this.btnNextBlock = new System.Windows.Forms.Button();
+            this.btnShowBlockTXs = new System.Windows.Forms.Button();
+            this.lblTXForBlockPositionInList = new System.Windows.Forms.Label();
+            this.btnPreviousBlockTransactions = new System.Windows.Forms.Button();
+            this.btnNextBlockTransactions = new System.Windows.Forms.Button();
             this.listViewBlockTransactions = new System.Windows.Forms.ListView();
             this.label69 = new System.Windows.Forms.Label();
             this.lblBlockTime = new System.Windows.Forms.Label();
@@ -3006,8 +3008,10 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
-            this.panelBlock.Controls.Add(this.btnPreviousBlock);
-            this.panelBlock.Controls.Add(this.btnNextBlock);
+            this.panelBlock.Controls.Add(this.btnShowBlockTXs);
+            this.panelBlock.Controls.Add(this.lblTXForBlockPositionInList);
+            this.panelBlock.Controls.Add(this.btnPreviousBlockTransactions);
+            this.panelBlock.Controls.Add(this.btnNextBlockTransactions);
             this.panelBlock.Controls.Add(this.listViewBlockTransactions);
             this.panelBlock.Controls.Add(this.label69);
             this.panelBlock.Controls.Add(this.lblBlockTime);
@@ -3035,37 +3039,67 @@
             this.panelBlock.TabIndex = 141;
             this.panelBlock.Visible = false;
             // 
-            // btnPreviousBlock
+            // btnShowBlockTXs
             // 
-            this.btnPreviousBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPreviousBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPreviousBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnPreviousBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnPreviousBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreviousBlock.ForeColor = System.Drawing.Color.White;
-            this.btnPreviousBlock.Location = new System.Drawing.Point(614, 349);
-            this.btnPreviousBlock.Margin = new System.Windows.Forms.Padding(1);
-            this.btnPreviousBlock.Name = "btnPreviousBlock";
-            this.btnPreviousBlock.Size = new System.Drawing.Size(68, 22);
-            this.btnPreviousBlock.TabIndex = 156;
-            this.btnPreviousBlock.Text = "◁ prev";
-            this.btnPreviousBlock.UseVisualStyleBackColor = false;
+            this.btnShowBlockTXs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowBlockTXs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowBlockTXs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnShowBlockTXs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnShowBlockTXs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowBlockTXs.ForeColor = System.Drawing.Color.White;
+            this.btnShowBlockTXs.Location = new System.Drawing.Point(113, 328);
+            this.btnShowBlockTXs.Margin = new System.Windows.Forms.Padding(1);
+            this.btnShowBlockTXs.Name = "btnShowBlockTXs";
+            this.btnShowBlockTXs.Size = new System.Drawing.Size(60, 22);
+            this.btnShowBlockTXs.TabIndex = 158;
+            this.btnShowBlockTXs.Text = "show txs";
+            this.btnShowBlockTXs.UseVisualStyleBackColor = false;
+            this.btnShowBlockTXs.Click += new System.EventHandler(this.btnShowBlockTXs_Click);
             // 
-            // btnNextBlock
+            // lblTXForBlockPositionInList
             // 
-            this.btnNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnNextBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnNextBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnNextBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnNextBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextBlock.ForeColor = System.Drawing.Color.White;
-            this.btnNextBlock.Location = new System.Drawing.Point(689, 349);
-            this.btnNextBlock.Margin = new System.Windows.Forms.Padding(1);
-            this.btnNextBlock.Name = "btnNextBlock";
-            this.btnNextBlock.Size = new System.Drawing.Size(60, 22);
-            this.btnNextBlock.TabIndex = 155;
-            this.btnNextBlock.Text = "▷ next";
-            this.btnNextBlock.UseVisualStyleBackColor = false;
+            this.lblTXForBlockPositionInList.AutoSize = true;
+            this.lblTXForBlockPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTXForBlockPositionInList.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTXForBlockPositionInList.ForeColor = System.Drawing.Color.Silver;
+            this.lblTXForBlockPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblTXForBlockPositionInList.Location = new System.Drawing.Point(248, 329);
+            this.lblTXForBlockPositionInList.Name = "lblTXForBlockPositionInList";
+            this.lblTXForBlockPositionInList.Size = new System.Drawing.Size(154, 15);
+            this.lblTXForBlockPositionInList.TabIndex = 157;
+            this.lblTXForBlockPositionInList.Text = "Transactions n-n of n";
+            // 
+            // btnPreviousBlockTransactions
+            // 
+            this.btnPreviousBlockTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPreviousBlockTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPreviousBlockTransactions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnPreviousBlockTransactions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnPreviousBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPreviousBlockTransactions.ForeColor = System.Drawing.Color.White;
+            this.btnPreviousBlockTransactions.Location = new System.Drawing.Point(614, 349);
+            this.btnPreviousBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPreviousBlockTransactions.Name = "btnPreviousBlockTransactions";
+            this.btnPreviousBlockTransactions.Size = new System.Drawing.Size(68, 22);
+            this.btnPreviousBlockTransactions.TabIndex = 156;
+            this.btnPreviousBlockTransactions.Text = "◁ prev";
+            this.btnPreviousBlockTransactions.UseVisualStyleBackColor = false;
+            // 
+            // btnNextBlockTransactions
+            // 
+            this.btnNextBlockTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnNextBlockTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnNextBlockTransactions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnNextBlockTransactions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnNextBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNextBlockTransactions.ForeColor = System.Drawing.Color.White;
+            this.btnNextBlockTransactions.Location = new System.Drawing.Point(689, 349);
+            this.btnNextBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
+            this.btnNextBlockTransactions.Name = "btnNextBlockTransactions";
+            this.btnNextBlockTransactions.Size = new System.Drawing.Size(60, 22);
+            this.btnNextBlockTransactions.TabIndex = 155;
+            this.btnNextBlockTransactions.Text = "▷ next";
+            this.btnNextBlockTransactions.UseVisualStyleBackColor = false;
             // 
             // listViewBlockTransactions
             // 
@@ -3090,6 +3124,8 @@
             this.listViewBlockTransactions.TabStop = false;
             this.listViewBlockTransactions.UseCompatibleStateImageBehavior = false;
             this.listViewBlockTransactions.View = System.Windows.Forms.View.Details;
+            this.listViewBlockTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewBlockTransactions_DrawColumnHeader);
+            this.listViewBlockTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewBlockTransactions_DrawSubItem);
             // 
             // label69
             // 
@@ -3649,8 +3685,10 @@
         private System.Windows.Forms.Label label69;
         private System.Windows.Forms.Label lblBlockTime;
         private System.Windows.Forms.ListView listViewBlockTransactions;
-        private System.Windows.Forms.Button btnPreviousBlock;
-        private System.Windows.Forms.Button btnNextBlock;
+        private System.Windows.Forms.Button btnPreviousBlockTransactions;
+        private System.Windows.Forms.Button btnNextBlockTransactions;
+        private System.Windows.Forms.Label lblTXForBlockPositionInList;
+        private System.Windows.Forms.Button btnShowBlockTXs;
     }
 }
 

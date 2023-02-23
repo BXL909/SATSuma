@@ -209,7 +209,7 @@
             this.btnShowUnconfirmedTX = new System.Windows.Forms.Button();
             this.BtnViewBlock = new System.Windows.Forms.Button();
             this.BtnViewTransaction = new System.Windows.Forms.Button();
-            this.lblTXPositionInList = new System.Windows.Forms.Label();
+            this.lblAddressTXPositionInList = new System.Windows.Forms.Label();
             this.btnFirstTransaction = new System.Windows.Forms.Button();
             this.btnNextTransactions = new System.Windows.Forms.Button();
             this.listViewAddressTransactions = new System.Windows.Forms.ListView();
@@ -227,15 +227,14 @@
             this.label67 = new System.Windows.Forms.Label();
             this.lblConfirmedReceived = new System.Windows.Forms.Label();
             this.label59 = new System.Windows.Forms.Label();
-            this.lblConfirmedTransactionCount = new System.Windows.Forms.Label();
+            this.lblConfirmedAddressTransactionCount = new System.Windows.Forms.Label();
             this.label58 = new System.Windows.Forms.Label();
             this.lblAddressType = new System.Windows.Forms.Label();
             this.tboxSubmittedAddress = new System.Windows.Forms.TextBox();
             this.btnAddress = new System.Windows.Forms.Button();
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
-            this.btnShowBlockTXs = new System.Windows.Forms.Button();
-            this.lblTXForBlockPositionInList = new System.Windows.Forms.Label();
+            this.lblBlockTXPositionInList = new System.Windows.Forms.Label();
             this.btnPreviousBlockTransactions = new System.Windows.Forms.Button();
             this.btnNextBlockTransactions = new System.Windows.Forms.Button();
             this.listViewBlockTransactions = new System.Windows.Forms.ListView();
@@ -2578,7 +2577,7 @@
             this.panelAddress.Controls.Add(this.btnShowUnconfirmedTX);
             this.panelAddress.Controls.Add(this.BtnViewBlock);
             this.panelAddress.Controls.Add(this.BtnViewTransaction);
-            this.panelAddress.Controls.Add(this.lblTXPositionInList);
+            this.panelAddress.Controls.Add(this.lblAddressTXPositionInList);
             this.panelAddress.Controls.Add(this.btnFirstTransaction);
             this.panelAddress.Controls.Add(this.btnNextTransactions);
             this.panelAddress.Controls.Add(this.listViewAddressTransactions);
@@ -2595,7 +2594,7 @@
             this.panelAddress.Controls.Add(this.label67);
             this.panelAddress.Controls.Add(this.lblConfirmedReceived);
             this.panelAddress.Controls.Add(this.label59);
-            this.panelAddress.Controls.Add(this.lblConfirmedTransactionCount);
+            this.panelAddress.Controls.Add(this.lblConfirmedAddressTransactionCount);
             this.panelAddress.Controls.Add(this.label58);
             this.panelAddress.Controls.Add(this.lblAddressType);
             this.panelAddress.Controls.Add(this.tboxSubmittedAddress);
@@ -2693,18 +2692,18 @@
             this.BtnViewTransaction.UseVisualStyleBackColor = false;
             this.BtnViewTransaction.Visible = false;
             // 
-            // lblTXPositionInList
+            // lblAddressTXPositionInList
             // 
-            this.lblTXPositionInList.AutoSize = true;
-            this.lblTXPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTXPositionInList.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTXPositionInList.ForeColor = System.Drawing.Color.Silver;
-            this.lblTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblTXPositionInList.Location = new System.Drawing.Point(248, 329);
-            this.lblTXPositionInList.Name = "lblTXPositionInList";
-            this.lblTXPositionInList.Size = new System.Drawing.Size(154, 15);
-            this.lblTXPositionInList.TabIndex = 142;
-            this.lblTXPositionInList.Text = "Transactions n-n of n";
+            this.lblAddressTXPositionInList.AutoSize = true;
+            this.lblAddressTXPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressTXPositionInList.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressTXPositionInList.ForeColor = System.Drawing.Color.Silver;
+            this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 329);
+            this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
+            this.lblAddressTXPositionInList.Size = new System.Drawing.Size(154, 15);
+            this.lblAddressTXPositionInList.TabIndex = 142;
+            this.lblAddressTXPositionInList.Text = "Transactions n-n of n";
             // 
             // btnFirstTransaction
             // 
@@ -2926,16 +2925,16 @@
             this.label59.TabIndex = 118;
             this.label59.Text = "Confirmed transaction count";
             // 
-            // lblConfirmedTransactionCount
+            // lblConfirmedAddressTransactionCount
             // 
-            this.lblConfirmedTransactionCount.AutoSize = true;
-            this.lblConfirmedTransactionCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblConfirmedTransactionCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConfirmedTransactionCount.Location = new System.Drawing.Point(-3, 259);
-            this.lblConfirmedTransactionCount.Name = "lblConfirmedTransactionCount";
-            this.lblConfirmedTransactionCount.Size = new System.Drawing.Size(87, 23);
-            this.lblConfirmedTransactionCount.TabIndex = 117;
-            this.lblConfirmedTransactionCount.Text = "no data";
+            this.lblConfirmedAddressTransactionCount.AutoSize = true;
+            this.lblConfirmedAddressTransactionCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblConfirmedAddressTransactionCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblConfirmedAddressTransactionCount.Location = new System.Drawing.Point(-3, 259);
+            this.lblConfirmedAddressTransactionCount.Name = "lblConfirmedAddressTransactionCount";
+            this.lblConfirmedAddressTransactionCount.Size = new System.Drawing.Size(87, 23);
+            this.lblConfirmedAddressTransactionCount.TabIndex = 117;
+            this.lblConfirmedAddressTransactionCount.Text = "no data";
             // 
             // label58
             // 
@@ -3008,8 +3007,7 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
-            this.panelBlock.Controls.Add(this.btnShowBlockTXs);
-            this.panelBlock.Controls.Add(this.lblTXForBlockPositionInList);
+            this.panelBlock.Controls.Add(this.lblBlockTXPositionInList);
             this.panelBlock.Controls.Add(this.btnPreviousBlockTransactions);
             this.panelBlock.Controls.Add(this.btnNextBlockTransactions);
             this.panelBlock.Controls.Add(this.listViewBlockTransactions);
@@ -3039,35 +3037,18 @@
             this.panelBlock.TabIndex = 141;
             this.panelBlock.Visible = false;
             // 
-            // btnShowBlockTXs
+            // lblBlockTXPositionInList
             // 
-            this.btnShowBlockTXs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowBlockTXs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowBlockTXs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnShowBlockTXs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnShowBlockTXs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowBlockTXs.ForeColor = System.Drawing.Color.White;
-            this.btnShowBlockTXs.Location = new System.Drawing.Point(113, 328);
-            this.btnShowBlockTXs.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowBlockTXs.Name = "btnShowBlockTXs";
-            this.btnShowBlockTXs.Size = new System.Drawing.Size(60, 22);
-            this.btnShowBlockTXs.TabIndex = 158;
-            this.btnShowBlockTXs.Text = "show txs";
-            this.btnShowBlockTXs.UseVisualStyleBackColor = false;
-            this.btnShowBlockTXs.Click += new System.EventHandler(this.btnShowBlockTXs_Click);
-            // 
-            // lblTXForBlockPositionInList
-            // 
-            this.lblTXForBlockPositionInList.AutoSize = true;
-            this.lblTXForBlockPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTXForBlockPositionInList.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTXForBlockPositionInList.ForeColor = System.Drawing.Color.Silver;
-            this.lblTXForBlockPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblTXForBlockPositionInList.Location = new System.Drawing.Point(248, 329);
-            this.lblTXForBlockPositionInList.Name = "lblTXForBlockPositionInList";
-            this.lblTXForBlockPositionInList.Size = new System.Drawing.Size(154, 15);
-            this.lblTXForBlockPositionInList.TabIndex = 157;
-            this.lblTXForBlockPositionInList.Text = "Transactions n-n of n";
+            this.lblBlockTXPositionInList.AutoSize = true;
+            this.lblBlockTXPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockTXPositionInList.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockTXPositionInList.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblBlockTXPositionInList.Location = new System.Drawing.Point(248, 329);
+            this.lblBlockTXPositionInList.Name = "lblBlockTXPositionInList";
+            this.lblBlockTXPositionInList.Size = new System.Drawing.Size(154, 15);
+            this.lblBlockTXPositionInList.TabIndex = 157;
+            this.lblBlockTXPositionInList.Text = "Transactions n-n of n";
             // 
             // btnPreviousBlockTransactions
             // 
@@ -3124,6 +3105,7 @@
             this.listViewBlockTransactions.TabStop = false;
             this.listViewBlockTransactions.UseCompatibleStateImageBehavior = false;
             this.listViewBlockTransactions.View = System.Windows.Forms.View.Details;
+            this.listViewBlockTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewBlockTransactions_ColumnWidthChanging);
             this.listViewBlockTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewBlockTransactions_DrawColumnHeader);
             this.listViewBlockTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewBlockTransactions_DrawSubItem);
             // 
@@ -3638,7 +3620,7 @@
         private System.Windows.Forms.TextBox tboxSubmittedAddress;
         private System.Windows.Forms.Label label58;
         private System.Windows.Forms.Label label59;
-        private System.Windows.Forms.Label lblConfirmedTransactionCount;
+        private System.Windows.Forms.Label lblConfirmedAddressTransactionCount;
         private System.Windows.Forms.Label label61;
         private System.Windows.Forms.Label lblConfirmedUnspent;
         private System.Windows.Forms.Label label63;
@@ -3652,7 +3634,7 @@
         private System.Windows.Forms.ListView listViewAddressTransactions;
         private System.Windows.Forms.Button btnNextTransactions;
         private System.Windows.Forms.Button btnFirstTransaction;
-        private System.Windows.Forms.Label lblTXPositionInList;
+        private System.Windows.Forms.Label lblAddressTXPositionInList;
         private System.Windows.Forms.ImageList imageListUpDownArrows;
         private System.Windows.Forms.Button BtnViewTransaction;
         private System.Windows.Forms.Button BtnViewBlock;
@@ -3687,8 +3669,7 @@
         private System.Windows.Forms.ListView listViewBlockTransactions;
         private System.Windows.Forms.Button btnPreviousBlockTransactions;
         private System.Windows.Forms.Button btnNextBlockTransactions;
-        private System.Windows.Forms.Label lblTXForBlockPositionInList;
-        private System.Windows.Forms.Button btnShowBlockTXs;
+        private System.Windows.Forms.Label lblBlockTXPositionInList;
     }
 }
 

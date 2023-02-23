@@ -23,6 +23,8 @@
  * handle tabbing and focus better
  */
 
+
+
 #region Using
 using System;
 using System.Collections.Generic;
@@ -96,6 +98,8 @@ namespace SATSuma
         bool btnNextTransactionsWasEnabled = false;
         bool BtnViewTransactionWasEnabled = false;
         bool BtnViewBlockWasEnabled = false;
+        bool btnPreviousBlockTransactionsWasEnabled = false;
+        bool btnNextBlockTransactionsWasEnabled = false;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -1261,7 +1265,7 @@ namespace SATSuma
         private async void TboxSubmittedAddress_TextChanged(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtonsOnAddressScreen("disable"); // disable buttons during operation
+            DisableEnableButtons("disable"); // disable buttons during operation
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalAddressTransactionRowsAdded = 0;
 
@@ -1307,12 +1311,12 @@ namespace SATSuma
                 lblConfirmedReceivedOutputs.Text = string.Empty;
                 lblConfirmedSpent.Text = string.Empty;
                 lblConfirmedSpentOutputs.Text = string.Empty;
-                lblConfirmedTransactionCount.Text = string.Empty;
+                lblConfirmedAddressTransactionCount.Text = string.Empty;
                 lblConfirmedUnspent.Text = string.Empty;
                 lblConfirmedUnspentOutputs.Text = string.Empty;
                 AddressInvalidHideControls();
             }
-            DisableEnableButtonsOnAddressScreen("enable"); // enable the buttons that were previously enabled again
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
         }
 
@@ -1341,7 +1345,7 @@ namespace SATSuma
                 label59.Text = "Confirmed transaction count";
                 label67.Text = "Confirmed received";
                 label63.Text = "Confirmed spent";
-                lblConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                lblConfirmedAddressTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                 lblConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
                 lblConfirmedReceivedOutputs.Location = new Point(lblConfirmedReceived.Location.X + lblConfirmedReceived.Width, lblConfirmedReceivedOutputs.Location.Y);
                 lblConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
@@ -1364,7 +1368,7 @@ namespace SATSuma
                 label59.Text = "Unconfirmed transaction count";
                 label67.Text = "Unconfirmed received";
                 label63.Text = "Unconfirmed spent";
-                lblConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
+                lblConfirmedAddressTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
                 lblConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
                 lblConfirmedReceivedOutputs.Location = new Point(lblConfirmedReceived.Location.X + lblConfirmedReceived.Width, lblConfirmedReceivedOutputs.Location.Y);
                 lblConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
@@ -1390,7 +1394,7 @@ namespace SATSuma
                 int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
                 int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
                 int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
-                lblConfirmedTransactionCount.Text = Convert.ToString(totalTransactionCount);
+                lblConfirmedAddressTransactionCount.Text = Convert.ToString(totalTransactionCount);
 
                 long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
                 long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
@@ -1582,7 +1586,7 @@ namespace SATSuma
                     }
                 }
 
-                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblConfirmedTransactionCount.Text) // we've shown all the TXs
+                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblConfirmedAddressTransactionCount.Text) // we've shown all the TXs
                 {
                     btnNextTransactions.Visible = false; // so we won't need this
                 }
@@ -1601,11 +1605,11 @@ namespace SATSuma
             }
             if (counter > 1)
             {
-                lblTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblConfirmedTransactionCount.Text;
+                lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblConfirmedAddressTransactionCount.Text;
             }
             else
             {
-                lblTXPositionInList.Text = "No transactions to display";
+                lblAddressTXPositionInList.Text = "No transactions to display";
             }
             if (mempoolConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
             {
@@ -1621,7 +1625,7 @@ namespace SATSuma
         private async void BtnGetNextTransactions(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtonsOnAddressScreen("disable"); // disable buttons during operation
+            DisableEnableButtons("disable"); // disable buttons during operation
             var address = tboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
             var lastSeenTxId = "";
@@ -1635,7 +1639,7 @@ namespace SATSuma
             }
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
-            DisableEnableButtonsOnAddressScreen("enable"); // enable the buttons that were previously enabled again
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
             BtnViewBlock.Visible = false;
             BtnViewTransaction.Visible = false;
@@ -1644,7 +1648,7 @@ namespace SATSuma
         private async void BtnFirstTransaction_Click(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtonsOnAddressScreen("disable"); // disable buttons during operation
+            DisableEnableButtons("disable"); // disable buttons during operation
             if (PartOfAnAllTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
             {
                 mempoolConfUnconfOrAllTx = "all";
@@ -1659,7 +1663,7 @@ namespace SATSuma
 
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
-            DisableEnableButtonsOnAddressScreen("enable"); // enable the buttons that were previously enabled again
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
         }
 
@@ -1861,7 +1865,7 @@ namespace SATSuma
                 btnNextTransactions.Visible = false;
                 btnFirstTransaction.Visible = false;
             }
-            lblTXPositionInList.Visible = true;
+            lblAddressTXPositionInList.Visible = true;
             label59.Visible = true;
             label61.Visible = true;
             label67.Visible = true;
@@ -1873,7 +1877,7 @@ namespace SATSuma
         {
             btnNextTransactions.Visible = false;
             btnFirstTransaction.Visible = false;
-            lblTXPositionInList.Visible = false;
+            lblAddressTXPositionInList.Visible = false;
             label59.Visible = false;
             label61.Visible = false;
             label67.Visible = false;
@@ -1898,7 +1902,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //-------------------- MAKE SURE ENTERED VALUE NOT GREATER THAN BLOCK HEIGHT ----------------------------------
-        private void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
         {
             // Parse the textbox value
             if (int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight))
@@ -1926,8 +1930,13 @@ namespace SATSuma
                 textBoxSubmittedBlockNumber.Text = string.Empty;
             }
             var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-            GetFifteenBlocks(blockNumber); //asynchronous. Don't want user to wait between key presses
-            
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            await GetFifteenBlocks(blockNumber); 
+            string BlockHashToGetTransactionsFor = lblBlockHash.Text;
+            await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
+            DisableEnableLoadingAnimation("disable"); // start the loading animation
+            DisableEnableButtons("enable"); // disable buttons during operation
         }
 
         private async Task GetFifteenBlocks(string blockNumber)
@@ -1964,77 +1973,153 @@ namespace SATSuma
             lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
         }
 
-        private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
+                private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
+                {
+                    var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
+                    var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
+                    List<string> txIds = transactions.Select(t => t.txid).ToList();
+
+                    // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+                    if (txIds.Count > 0)
+                    {
+                        lastSeenBlockTransaction = txIds.Last();
+                    }
+
+                    //LIST VIEW
+                    listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
+                    listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
+
+                    // Check if the column header already exists
+                    if (listViewBlockTransactions.Columns.Count == 0)
+                    {
+                        // If not, add the column header
+                        listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
+                    }
+
+                    if (listViewBlockTransactions.Columns.Count == 1)
+                    {
+                        // If not, add the column header
+                        listViewBlockTransactions.Columns.Add("Fee", 70);
+                    }
+
+                    if (listViewBlockTransactions.Columns.Count == 2)
+                    {
+                        // If not, add the column header
+                        listViewBlockTransactions.Columns.Add("I/P", 40);
+                    }
+                    if (listViewBlockTransactions.Columns.Count == 3)
+                    {
+                        // If not, add the column header
+                        listViewBlockTransactions.Columns.Add("O/P", 40);
+                    }
+                    if (listViewBlockTransactions.Columns.Count == 4)
+                    {
+                        // If not, add the column header
+                        listViewBlockTransactions.Columns.Add("Amount", 100);
+                    }
+                    // Add the items to the ListView
+                    int counter = 0; // used to count rows in list as they're added
+
+                    foreach (var blockTransaction in transactions)
+                    {
+                        ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
+                        item.SubItems.Add(blockTransaction.fee.ToString());
+                        item.SubItems.Add(blockTransaction.vin.Count.ToString()); // number of inputs
+                        item.SubItems.Add(blockTransaction.vout.Count.ToString()); // number of outputs
+                        decimal totalValue = blockTransaction.vout.Sum(v => decimal.Parse(v.value)); // sum of outputs
+                        totalValue = ConvertSatsToBitcoin(totalValue.ToString()); 
+                        item.SubItems.Add(totalValue.ToString());
+                        listViewBlockTransactions.Items.Add(item); // add row
+
+
+                        counter++; // increment rows for this batch
+                        TotalBlockTransactionRowsAdded++; // increment all rows
+
+                        if (TotalBlockTransactionRowsAdded <= 15) // less than 15 transactions in all
+                        {
+                            btnPreviousBlockTransactions.Visible = false; // so this won't be needed
+                        }
+                        else
+                        {
+                            btnPreviousBlockTransactions.Visible = true;
+                        }
+
+                        if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
+                        {
+                            btnNextBlockTransactions.Visible = false; // so we won't need this
+                        }
+                        else
+                        {
+                            btnNextBlockTransactions.Visible = true;
+                        }
+
+                        if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
+                        {
+                            break;
+                        }
+                    }
+                    if (counter > 1)
+                    {
+                        lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
+                    }
+                    else
+                    {
+                        lblBlockTXPositionInList.Text = "No transactions to display";
+                    }
+                }
+        
+
+
+        private void listViewBlockTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
-            var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
-            var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
-            List<string> txIds = transactions.Select(t => t.txid).ToList();
-
-            // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-            if (txIds.Count > 0)
+            if (e.ColumnIndex == 0)
             {
-                lastSeenBlockTransaction = txIds.Last();
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width < 250) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 250;
+                }
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width > 460) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 460;
+                }
+             //   BtnViewTransaction.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransaction.Width - 6, BtnViewTransaction.Location.Y);
+             //   BtnViewBlock.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlock.Width + 2, BtnViewBlock.Location.Y);
             }
 
-            //LIST VIEW
-            listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
-            listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
-
-            // Check if the column header already exists
-            if (listViewBlockTransactions.Columns.Count == 0)
+            if (e.ColumnIndex == 1)
             {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add(" Transaction ID", 260);
-            }
-
-            if (listViewBlockTransactions.Columns.Count == 1)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add("Fee", 100);
-            }
-
-            // Add the items to the ListView
-            int counter = 0; // used to count rows in list as they're added
-
-            foreach (var blockTransaction in transactions)
-            {
-                ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
-                item.SubItems.Add(blockTransaction.fee.ToString());
-                listViewBlockTransactions.Items.Add(item); // add row
-                    
-
-                counter++; // increment rows for this batch
-                TotalBlockTransactionRowsAdded++; // increment all rows
-
-                if (TotalBlockTransactionRowsAdded <= 15) // less than 15 transactions in all
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 70) // don't allow this one to change
                 {
-                    btnPreviousBlockTransactions.Visible = false; // so this won't be needed
-                }
-                else
-                {
-                    btnPreviousBlockTransactions.Visible = true;
-                }
-
-                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
-                {
-                    btnNextBlockTransactions.Visible = false; // so we won't need this
-                }
-                else
-                {
-                    btnNextBlockTransactions.Visible = true;
-                }
-
-                if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
-                {
-                    break;
+                    e.Cancel = true;
+                    e.NewWidth = 70;
                 }
             }
-        }
-
-        private async void btnShowBlockTXs_Click(object sender, EventArgs e)
-        {
-            string BlockHashToGetTransactionsFor = lblBlockHash.Text;
-            await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0"); //----------------------------------------------------CURRENTLY HARDCODED LAST BLOCK TRANSACTION SEEN
+            if (e.ColumnIndex == 2)
+            {
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 40;
+                }
+            }
+            if (e.ColumnIndex == 3)
+            {
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 40;
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 100) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+            }
         }
 
         private void listViewBlockTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
@@ -2104,9 +2189,9 @@ namespace SATSuma
 
         //=============================================================================================================
         //-------DISABLE/ENABLE BUTTONS AND ANIMATION DURING LOADING AND RETURN THEM TO PREVIOUS STATE-----------------
-        private void DisableEnableButtonsOnAddressScreen(string enableOrDisableAllAddressScreenButtons)
+        private void DisableEnableButtons(string enableOrDisableAllButtons)
         {
-            if (enableOrDisableAllAddressScreenButtons == "disable")
+            if (enableOrDisableAllButtons == "disable")
             {
                 // get current state of buttons before disabling them
                 btnShowAllTXWasEnabled = btnShowAllTX.Enabled;
@@ -2116,7 +2201,9 @@ namespace SATSuma
                 btnNextTransactionsWasEnabled = btnNextTransactions.Enabled;
                 BtnViewTransactionWasEnabled = BtnViewTransaction.Enabled;
                 BtnViewBlockWasEnabled = BtnViewBlock.Enabled;
-                
+                btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
+                btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
+
                 //disable them all
                 btnShowAllTX.Enabled = false; 
                 btnShowConfirmedTX.Enabled = false; 
@@ -2125,6 +2212,8 @@ namespace SATSuma
                 btnNextTransactions.Enabled = false;
                 BtnViewTransaction.Enabled = false;
                 BtnViewBlock.Enabled = false;
+                btnPreviousBlockTransactions.Enabled = false;
+                btnNextBlockTransactions.Enabled = false;
             }
             else
             {
@@ -2136,6 +2225,8 @@ namespace SATSuma
                 btnNextTransactions.Enabled = btnNextTransactionsWasEnabled;
                 BtnViewTransaction.Enabled = BtnViewTransactionWasEnabled;
                 BtnViewBlock.Enabled = BtnViewBlockWasEnabled;
+                btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
+                btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
             }
         }
 
@@ -2701,34 +2792,33 @@ namespace SATSuma
             return null;
         }
     }
-    public class BlockTransactionsResponse
-    {
-        public List<Block_Transactions> txs { get; set; }
-    }
+
 
     public class Block_Transactions
     {
         public string txid { get; set; }
-    //    public string version { get; set; }
-     //   public string locktime { get; set; }
-     //   public List<Vin_BlockTransactions> vin { get; set; }
-     //   public List<Vout_BlockTransactions> vout { get; set; }
-     //   public string size { get; set; }
-     //   public string weight { get; set; }
+  //      public string version { get; set; }
+  //     public string locktime { get; set; }
+        public List<Vin_BlockTransactions> vin { get; set; }
+        public List<Vout_BlockTransactions> vout { get; set; }
+  //      public string size { get; set; }
+  //      public string weight { get; set; }
         public string fee { get; set; }
-      //  public List<Status_BlockTransactions> status { get; set; }
+   //     public List<Status_BlockTransactions> status { get; set; }
      }
 
     public class Vin_BlockTransactions
     {
-        public string txid { get; set; }
-        public string vout { get; set; }
-        public List<Prevout_BlockTransactions> prevout { get; set; }
-        public string scriptsig { get; set; }
-        public string scriptsig_asm { get; set; }
+     //   public string txid { get; set; }
+     //   public string vout { get; set; }
+    //    public List<Prevout_BlockTransactions> prevout { get; set; }
+    //    public string scriptsig { get; set; }
+     //   public string scriptsig_asm { get; set; }
+     //   public List<string> witness { get; set; }
         public string is_coinbase { get; set; }
-        public string sequence { get; set; }
+     //   public string sequence { get; set; }
     }
+
 
     public class Prevout_BlockTransactions
     {
@@ -2749,10 +2839,10 @@ namespace SATSuma
 
     public class Vout_BlockTransactions
     {
-        public string scriptpubkey { get; set; }
-        public string scriptpubkey_asm { get; set; }
-        public string scriptpubkey_type { get; set; }
-        public string scriptpubkey_address { get; set; }
+   //     public string scriptpubkey { get; set; }
+   //     public string scriptpubkey_asm { get; set; }
+    //    public string scriptpubkey_type { get; set; }
+    //    public string scriptpubkey_address { get; set; }
         public string value { get; set; }
     }
     #endregion

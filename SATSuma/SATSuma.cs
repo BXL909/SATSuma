@@ -21,7 +21,6 @@
  * finish block and transaction screens
  * deal with scaling issues
  * handle tabbing and focus better
- * make listViews handle 25 records instead of 15. Larger window rather than scrollbar or a pretty scrollbar!
  */
 
 #region Using
@@ -1574,7 +1573,7 @@ namespace SATSuma
                 counter++; // increment rows for this batch
                 TotalAddressTransactionRowsAdded++; // increment all rows
 
-                if (TotalAddressTransactionRowsAdded <= 15) // less than 15 transactions in all
+                if (TotalAddressTransactionRowsAdded <= 25) // less than 25 transactions in all
                 {
                     btnFirstTransaction.Visible = false; // so this won't be needed
                 }
@@ -1598,7 +1597,7 @@ namespace SATSuma
                     }
                 }
 
-                if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here next time.
+                if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here next time.
                 {
                     break;
                 }
@@ -1722,10 +1721,8 @@ namespace SATSuma
             //assign block number to text box on block panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
-
             // Get the second subitem in the selected item (index 1)
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
-
             // Set the text of the textBoxSubmittedBlockNumber control
             textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
             //show the block screen
@@ -1973,100 +1970,100 @@ namespace SATSuma
             lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
         }
 
-                private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
+        private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
+        {
+            var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
+            var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
+            List<string> txIds = transactions.Select(t => t.txid).ToList();
+
+            // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+            if (txIds.Count > 0)
+            {
+                lastSeenBlockTransaction = txIds.Last();
+            }
+
+            //LIST VIEW
+            listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
+            listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
+
+            // Check if the column header already exists
+            if (listViewBlockTransactions.Columns.Count == 0)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
+            }
+
+            if (listViewBlockTransactions.Columns.Count == 1)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add("Fee", 70);
+            }
+
+            if (listViewBlockTransactions.Columns.Count == 2)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add("I/P", 40);
+            }
+            if (listViewBlockTransactions.Columns.Count == 3)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add("O/P", 40);
+            }
+            if (listViewBlockTransactions.Columns.Count == 4)
+            {
+                // If not, add the column header
+                listViewBlockTransactions.Columns.Add("Amount", 100);
+            }
+            // Add the items to the ListView
+            int counter = 0; // used to count rows in list as they're added
+
+            foreach (var blockTransaction in transactions)
+            {
+                ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
+                item.SubItems.Add(blockTransaction.fee.ToString());
+                item.SubItems.Add(blockTransaction.vin.Count.ToString()); // number of inputs
+                item.SubItems.Add(blockTransaction.vout.Count.ToString()); // number of outputs
+                decimal totalValue = blockTransaction.vout.Sum(v => decimal.Parse(v.value)); // sum of outputs
+                totalValue = ConvertSatsToBitcoin(totalValue.ToString()); 
+                item.SubItems.Add(totalValue.ToString());
+                listViewBlockTransactions.Items.Add(item); // add row
+
+
+                counter++; // increment rows for this batch
+                TotalBlockTransactionRowsAdded++; // increment all rows
+
+                if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
                 {
-                    var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
-                    var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
-                    List<string> txIds = transactions.Select(t => t.txid).ToList();
-
-                    // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-                    if (txIds.Count > 0)
-                    {
-                        lastSeenBlockTransaction = txIds.Last();
-                    }
-
-                    //LIST VIEW
-                    listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
-                    listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
-
-                    // Check if the column header already exists
-                    if (listViewBlockTransactions.Columns.Count == 0)
-                    {
-                        // If not, add the column header
-                        listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
-                    }
-
-                    if (listViewBlockTransactions.Columns.Count == 1)
-                    {
-                        // If not, add the column header
-                        listViewBlockTransactions.Columns.Add("Fee", 70);
-                    }
-
-                    if (listViewBlockTransactions.Columns.Count == 2)
-                    {
-                        // If not, add the column header
-                        listViewBlockTransactions.Columns.Add("I/P", 40);
-                    }
-                    if (listViewBlockTransactions.Columns.Count == 3)
-                    {
-                        // If not, add the column header
-                        listViewBlockTransactions.Columns.Add("O/P", 40);
-                    }
-                    if (listViewBlockTransactions.Columns.Count == 4)
-                    {
-                        // If not, add the column header
-                        listViewBlockTransactions.Columns.Add("Amount", 100);
-                    }
-                    // Add the items to the ListView
-                    int counter = 0; // used to count rows in list as they're added
-
-                    foreach (var blockTransaction in transactions)
-                    {
-                        ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
-                        item.SubItems.Add(blockTransaction.fee.ToString());
-                        item.SubItems.Add(blockTransaction.vin.Count.ToString()); // number of inputs
-                        item.SubItems.Add(blockTransaction.vout.Count.ToString()); // number of outputs
-                        decimal totalValue = blockTransaction.vout.Sum(v => decimal.Parse(v.value)); // sum of outputs
-                        totalValue = ConvertSatsToBitcoin(totalValue.ToString()); 
-                        item.SubItems.Add(totalValue.ToString());
-                        listViewBlockTransactions.Items.Add(item); // add row
-
-
-                        counter++; // increment rows for this batch
-                        TotalBlockTransactionRowsAdded++; // increment all rows
-
-                        if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
-                        {
-                            btnPreviousBlockTransactions.Visible = false; // so this won't be needed
-                        }
-                        else
-                        {
-                            btnPreviousBlockTransactions.Visible = true;
-                        }
-
-                        if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
-                        {
-                            btnNextBlockTransactions.Visible = false; // so we won't need this
-                        }
-                        else
-                        {
-                            btnNextBlockTransactions.Visible = true;
-                        }
-
-                        if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
-                        {
-                            break;
-                        }
-                    }
-                    if (counter > 1)
-                    {
-                        lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
-                    }
-                    else
-                    {
-                        lblBlockTXPositionInList.Text = "No transactions to display";
-                    }
+                    btnPreviousBlockTransactions.Visible = false; // so this won't be needed
                 }
+                else
+                {
+                    btnPreviousBlockTransactions.Visible = true;
+                }
+
+                if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
+                {
+                    btnNextBlockTransactions.Visible = false; // so we won't need this
+                }
+                else
+                {
+                    btnNextBlockTransactions.Visible = true;
+                }
+
+                if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
+                {
+                    break;
+                }
+            }
+            if (counter > 1)
+            {
+                lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
+            }
+            else
+            {
+                lblBlockTXPositionInList.Text = "No transactions to display";
+            }
+        }
         
         private async void btnNextBlockTransactions_Click(object sender, EventArgs e)
         {
@@ -2687,9 +2684,6 @@ namespace SATSuma
                     }
                 }
             }
-
-
-
             return string.Empty;
         }
     }
@@ -2892,7 +2886,6 @@ namespace SATSuma
         public string value { get; set; }
     }
     #endregion
-
 }
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

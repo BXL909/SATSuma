@@ -21,9 +21,8 @@
  * finish block and transaction screens
  * deal with scaling issues
  * handle tabbing and focus better
+ * make listViews handle 25 records instead of 15. Larger window rather than scrollbar or a pretty scrollbar!
  */
-
-
 
 #region Using
 using System;
@@ -57,6 +56,8 @@ using QRCoder;
 using System.Windows.Controls;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using System.Reflection;
+using System.Windows.Forms.VisualStyles;
+using System.Runtime.Remoting;
 #endregion
 
 namespace SATSuma
@@ -115,7 +116,6 @@ namespace SATSuma
             _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             _blockService = new BlockDataService(NodeURL);
             _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-
         }
 
         private void Form1_Load(object sender, EventArgs e) // on form loading
@@ -1641,8 +1641,8 @@ namespace SATSuma
             await GetTransactionsForAddress(address, lastSeenTxId);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            BtnViewBlock.Visible = false;
-            BtnViewTransaction.Visible = false;
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
         }
 
         private async void BtnFirstTransaction_Click(object sender, EventArgs e)
@@ -1658,8 +1658,8 @@ namespace SATSuma
             var lastSeenTxId = ""; // Reset the last seen transaction ID to go back to start
             TotalAddressTransactionRowsAdded = 0;
             btnNextTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
-            BtnViewBlock.Visible = false;
-            BtnViewTransaction.Visible = false;
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
 
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
@@ -1676,8 +1676,8 @@ namespace SATSuma
             btnNextTransactions.Visible = false;
             btnFirstTransaction.Visible = false;
             PartOfAnAllTransactionsRequest = false;
-            BtnViewBlock.Visible = false;
-            BtnViewTransaction.Visible = false;
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch unconfirmed transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
@@ -1692,8 +1692,8 @@ namespace SATSuma
             btnShowUnconfirmedTX.Enabled = true;
             mempoolConfUnconfOrAllTx = "chain";
             PartOfAnAllTransactionsRequest = false;
-            BtnViewBlock.Visible = false;
-            BtnViewTransaction.Visible = false;
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch confirmed transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
@@ -1708,8 +1708,8 @@ namespace SATSuma
             btnShowUnconfirmedTX.Enabled = true;
             mempoolConfUnconfOrAllTx = "all";
             PartOfAnAllTransactionsRequest = true;
-            BtnViewBlock.Visible = false;
-            BtnViewTransaction.Visible = false;
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch all (confirmed and unconfirmed) transactions
             string temp = tboxSubmittedAddress.Text;
             tboxSubmittedAddress.Text = "";
@@ -1759,8 +1759,8 @@ namespace SATSuma
                     item.ForeColor = Color.White; // txID
                     item.SubItems[1].ForeColor = Color.White; //Block 
                     anySelected = true;
-                    BtnViewTransaction.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransaction.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
-                    BtnViewBlock.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlock.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
                 }
                 else
                 {
@@ -1768,8 +1768,8 @@ namespace SATSuma
                     item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); //Block
                 }
             }
-            BtnViewTransaction.Visible = anySelected;
-            BtnViewBlock.Visible = anySelected;
+            BtnViewTransactionFromAddress.Visible = anySelected;
+            BtnViewBlockFromAddress.Visible = anySelected;
         }
 
         //=============================================================================================================
@@ -1828,8 +1828,8 @@ namespace SATSuma
                     e.Cancel = true;
                     e.NewWidth = 460;
                 }
-                BtnViewTransaction.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransaction.Width - 6, BtnViewTransaction.Location.Y);
-                BtnViewBlock.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlock.Width + 2, BtnViewBlock.Location.Y);
+                BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - 6, BtnViewTransactionFromAddress.Location.Y);
+                BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + 2, BtnViewBlockFromAddress.Location.Y);
             }
 
             if (e.ColumnIndex == 1)
@@ -2035,7 +2035,7 @@ namespace SATSuma
                         counter++; // increment rows for this batch
                         TotalBlockTransactionRowsAdded++; // increment all rows
 
-                        if (TotalBlockTransactionRowsAdded <= 15) // less than 15 transactions in all
+                        if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
                         {
                             btnPreviousBlockTransactions.Visible = false; // so this won't be needed
                         }
@@ -2053,7 +2053,7 @@ namespace SATSuma
                             btnNextBlockTransactions.Visible = true;
                         }
 
-                        if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
+                        if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
                         {
                             break;
                         }
@@ -2068,7 +2068,51 @@ namespace SATSuma
                     }
                 }
         
+        private async void btnNextBlockTransactions_Click(object sender, EventArgs e)
+        {
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
+            // Get the last seen transaction ID from the list view
+            var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
+            // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
+            await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+        }
 
+        private async void btnPreviousBlockTransactions_Click(object sender, EventArgs e)
+        {
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
+            // Get the last seen transaction ID from the list view
+            TotalBlockTransactionRowsAdded = TotalBlockTransactionRowsAdded - 50;
+            var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
+            // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
+            await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+        }
+
+        private void listViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            bool anySelected = false;
+            foreach (ListViewItem item in listViewBlockTransactions.Items)
+            {
+                if (item.Selected)
+                {
+                    item.ForeColor = Color.White; // txID
+                    anySelected = true;
+                    btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y - 2);
+                }
+                else
+                {
+                    item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                }
+            }
+            btnViewTransactionFromBlock.Visible = anySelected;
+        }
 
         private void listViewBlockTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -2084,8 +2128,7 @@ namespace SATSuma
                     e.Cancel = true;
                     e.NewWidth = 460;
                 }
-             //   BtnViewTransaction.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransaction.Width - 6, BtnViewTransaction.Location.Y);
-             //   BtnViewBlock.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlock.Width + 2, BtnViewBlock.Location.Y);
+                btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - 6, btnViewTransactionFromBlock.Location.Y);
             }
 
             if (e.ColumnIndex == 1)
@@ -2172,7 +2215,6 @@ namespace SATSuma
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
         }
-
         #endregion
 
         #region REUSEABLE STUFF
@@ -2199,8 +2241,8 @@ namespace SATSuma
                 btnShowUnconfirmedTXWasEnabled = btnShowUnconfirmedTX.Enabled;
                 btnFirstTransactionWasEnabled = btnFirstTransaction.Enabled;
                 btnNextTransactionsWasEnabled = btnNextTransactions.Enabled;
-                BtnViewTransactionWasEnabled = BtnViewTransaction.Enabled;
-                BtnViewBlockWasEnabled = BtnViewBlock.Enabled;
+                BtnViewTransactionWasEnabled = BtnViewTransactionFromAddress.Enabled;
+                BtnViewBlockWasEnabled = BtnViewBlockFromAddress.Enabled;
                 btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
                 btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
 
@@ -2210,8 +2252,8 @@ namespace SATSuma
                 btnShowUnconfirmedTX.Enabled = false;
                 btnFirstTransaction.Enabled = false;
                 btnNextTransactions.Enabled = false;
-                BtnViewTransaction.Enabled = false;
-                BtnViewBlock.Enabled = false;
+                BtnViewTransactionFromAddress.Enabled = false;
+                BtnViewBlockFromAddress.Enabled = false;
                 btnPreviousBlockTransactions.Enabled = false;
                 btnNextBlockTransactions.Enabled = false;
             }
@@ -2223,8 +2265,8 @@ namespace SATSuma
                 btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedTXWasEnabled;
                 btnFirstTransaction.Enabled = btnFirstTransactionWasEnabled;
                 btnNextTransactions.Enabled = btnNextTransactionsWasEnabled;
-                BtnViewTransaction.Enabled = BtnViewTransactionWasEnabled;
-                BtnViewBlock.Enabled = BtnViewBlockWasEnabled;
+                BtnViewTransactionFromAddress.Enabled = BtnViewTransactionWasEnabled;
+                BtnViewBlockFromAddress.Enabled = BtnViewBlockWasEnabled;
                 btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
                 btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
             }
@@ -2563,6 +2605,7 @@ namespace SATSuma
         #endregion
 
         #region MISC UI STUFF
+
         //=============================================================================================================
         //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
         private void UpdateOnScreenClock()
@@ -2644,6 +2687,9 @@ namespace SATSuma
                     }
                 }
             }
+
+
+
             return string.Empty;
         }
     }
@@ -2846,6 +2892,7 @@ namespace SATSuma
         public string value { get; set; }
     }
     #endregion
+
 }
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

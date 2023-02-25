@@ -260,6 +260,10 @@
             this.textBoxSubmittedBlockNumber = new System.Windows.Forms.TextBox();
             this.label60 = new System.Windows.Forms.Label();
             this.btnBlock = new System.Windows.Forms.Button();
+            this.label66 = new System.Windows.Forms.Label();
+            this.lblTotalFees = new System.Windows.Forms.Label();
+            this.label71 = new System.Windows.Forms.Label();
+            this.lblNonce = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panelLightningDashboard.SuspendLayout();
             this.panelAddress.SuspendLayout();
@@ -2706,7 +2710,7 @@
             this.lblAddressTXPositionInList.TabIndex = 142;
             this.lblAddressTXPositionInList.Text = "Transactions n-n of n";
             // 
-            // btnFirstTransaction
+            // btnFirstAddressTransaction
             // 
             this.btnFirstAddressTransaction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnFirstAddressTransaction.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -2716,14 +2720,14 @@
             this.btnFirstAddressTransaction.ForeColor = System.Drawing.Color.White;
             this.btnFirstAddressTransaction.Location = new System.Drawing.Point(614, 533);
             this.btnFirstAddressTransaction.Margin = new System.Windows.Forms.Padding(1);
-            this.btnFirstAddressTransaction.Name = "btnFirstTransaction";
+            this.btnFirstAddressTransaction.Name = "btnFirstAddressTransaction";
             this.btnFirstAddressTransaction.Size = new System.Drawing.Size(68, 22);
             this.btnFirstAddressTransaction.TabIndex = 141;
             this.btnFirstAddressTransaction.Text = "◀ newest";
             this.btnFirstAddressTransaction.UseVisualStyleBackColor = false;
             this.btnFirstAddressTransaction.Click += new System.EventHandler(this.BtnFirstTransactionForAddress_Click);
             // 
-            // btnNextTransactions
+            // btnNextAddressTransactions
             // 
             this.btnNextAddressTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnNextAddressTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -2733,7 +2737,7 @@
             this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
             this.btnNextAddressTransactions.Location = new System.Drawing.Point(689, 533);
             this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
-            this.btnNextAddressTransactions.Name = "btnNextTransactions";
+            this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
             this.btnNextAddressTransactions.Size = new System.Drawing.Size(60, 22);
             this.btnNextAddressTransactions.TabIndex = 140;
             this.btnNextAddressTransactions.Text = "▷ next";
@@ -2788,32 +2792,32 @@
             this.lblNodeStatusLight.Text = "🟢";
             this.lblNodeStatusLight.Visible = false;
             // 
-            // lblConfirmedUnspentOutputs
+            // lblAddressConfirmedUnspentOutputs
             // 
             this.lblAddressConfirmedUnspentOutputs.AutoSize = true;
             this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspentOutputs.Location = new System.Drawing.Point(103, 222);
-            this.lblAddressConfirmedUnspentOutputs.Name = "lblConfirmedUnspentOutputs";
+            this.lblAddressConfirmedUnspentOutputs.Name = "lblAddressConfirmedUnspentOutputs";
             this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
             // 
-            // lblConfirmedSpentOutputs
+            // lblAddressConfirmedSpentOutputs
             // 
             this.lblAddressConfirmedSpentOutputs.AutoSize = true;
             this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpentOutputs.Location = new System.Drawing.Point(103, 347);
-            this.lblAddressConfirmedSpentOutputs.Name = "lblConfirmedSpentOutputs";
+            this.lblAddressConfirmedSpentOutputs.Name = "lblAddressConfirmedSpentOutputs";
             this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
             // 
-            // lblConfirmedReceivedOutputs
+            // lblAddressConfirmedReceivedOutputs
             // 
             this.lblAddressConfirmedReceivedOutputs.AutoSize = true;
             this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceivedOutputs.Location = new System.Drawing.Point(105, 306);
-            this.lblAddressConfirmedReceivedOutputs.Name = "lblConfirmedReceivedOutputs";
+            this.lblAddressConfirmedReceivedOutputs.Name = "lblAddressConfirmedReceivedOutputs";
             this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
             this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
@@ -2831,11 +2835,11 @@
             this.lblActiveNode.Text = "Node status";
             this.lblActiveNode.Visible = false;
             // 
-            // QRCodePicturebox
+            // AddressQRCodePicturebox
             // 
             this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.AddressQRCodePicturebox.Location = new System.Drawing.Point(0, 36);
-            this.AddressQRCodePicturebox.Name = "QRCodePicturebox";
+            this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
             this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
             this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.AddressQRCodePicturebox.TabIndex = 131;
@@ -2854,13 +2858,13 @@
             this.label61.TabIndex = 130;
             this.label61.Text = "Confirmed unspent (balance)";
             // 
-            // lblConfirmedUnspent
+            // lblAddressConfirmedUnspent
             // 
             this.lblAddressConfirmedUnspent.AutoSize = true;
             this.lblAddressConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspent.Location = new System.Drawing.Point(-3, 217);
-            this.lblAddressConfirmedUnspent.Name = "lblConfirmedUnspent";
+            this.lblAddressConfirmedUnspent.Name = "lblAddressConfirmedUnspent";
             this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(87, 23);
             this.lblAddressConfirmedUnspent.TabIndex = 129;
             this.lblAddressConfirmedUnspent.Text = "no data";
@@ -2878,13 +2882,13 @@
             this.label63.TabIndex = 128;
             this.label63.Text = "Confirmed spent";
             // 
-            // lblConfirmedSpent
+            // lblAddressConfirmedSpent
             // 
             this.lblAddressConfirmedSpent.AutoSize = true;
             this.lblAddressConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedSpent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpent.Location = new System.Drawing.Point(-3, 343);
-            this.lblAddressConfirmedSpent.Name = "lblConfirmedSpent";
+            this.lblAddressConfirmedSpent.Name = "lblAddressConfirmedSpent";
             this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(87, 23);
             this.lblAddressConfirmedSpent.TabIndex = 127;
             this.lblAddressConfirmedSpent.Text = "no data";
@@ -2902,13 +2906,13 @@
             this.label67.TabIndex = 126;
             this.label67.Text = "Confirmed received";
             // 
-            // lblConfirmedReceived
+            // lblAddressConfirmedReceived
             // 
             this.lblAddressConfirmedReceived.AutoSize = true;
             this.lblAddressConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedReceived.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceived.Location = new System.Drawing.Point(-3, 301);
-            this.lblAddressConfirmedReceived.Name = "lblConfirmedReceived";
+            this.lblAddressConfirmedReceived.Name = "lblAddressConfirmedReceived";
             this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(87, 23);
             this.lblAddressConfirmedReceived.TabIndex = 125;
             this.lblAddressConfirmedReceived.Text = "no data";
@@ -2926,13 +2930,13 @@
             this.label59.TabIndex = 118;
             this.label59.Text = "Confirmed transaction count";
             // 
-            // lblConfirmedAddressTransactionCount
+            // lblAddressConfirmedTransactionCount
             // 
             this.lblAddressConfirmedTransactionCount.AutoSize = true;
             this.lblAddressConfirmedTransactionCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedTransactionCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedTransactionCount.Location = new System.Drawing.Point(-3, 259);
-            this.lblAddressConfirmedTransactionCount.Name = "lblConfirmedAddressTransactionCount";
+            this.lblAddressConfirmedTransactionCount.Name = "lblAddressConfirmedTransactionCount";
             this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(87, 23);
             this.lblAddressConfirmedTransactionCount.TabIndex = 117;
             this.lblAddressConfirmedTransactionCount.Text = "no data";
@@ -3008,6 +3012,10 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.label71);
+            this.panelBlock.Controls.Add(this.lblNonce);
+            this.panelBlock.Controls.Add(this.label66);
+            this.panelBlock.Controls.Add(this.lblTotalFees);
             this.panelBlock.Controls.Add(this.btnViewTransactionFromBlock);
             this.panelBlock.Controls.Add(this.listViewBlockTransactions);
             this.panelBlock.Controls.Add(this.lblBlockTXPositionInList);
@@ -3164,7 +3172,7 @@
             this.label65.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label65.ForeColor = System.Drawing.Color.Silver;
             this.label65.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label65.Location = new System.Drawing.Point(-1, 244);
+            this.label65.Location = new System.Drawing.Point(-1, 286);
             this.label65.Name = "label65";
             this.label65.Size = new System.Drawing.Size(203, 15);
             this.label65.TabIndex = 151;
@@ -3175,7 +3183,7 @@
             this.lblBlockFeeRangeAndMedianFee.AutoSize = true;
             this.lblBlockFeeRangeAndMedianFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(-3, 259);
+            this.lblBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(-3, 301);
             this.lblBlockFeeRangeAndMedianFee.Name = "lblBlockFeeRangeAndMedianFee";
             this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(87, 23);
             this.lblBlockFeeRangeAndMedianFee.TabIndex = 150;
@@ -3188,7 +3196,7 @@
             this.label77.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label77.ForeColor = System.Drawing.Color.Silver;
             this.label77.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label77.Location = new System.Drawing.Point(-1, 328);
+            this.label77.Location = new System.Drawing.Point(-1, 412);
             this.label77.Name = "label77";
             this.label77.Size = new System.Drawing.Size(42, 15);
             this.label77.TabIndex = 149;
@@ -3199,7 +3207,7 @@
             this.lblMiner.AutoSize = true;
             this.lblMiner.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiner.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMiner.Location = new System.Drawing.Point(-3, 343);
+            this.lblMiner.Location = new System.Drawing.Point(-3, 427);
             this.lblMiner.Name = "lblMiner";
             this.lblMiner.Size = new System.Drawing.Size(87, 23);
             this.lblMiner.TabIndex = 148;
@@ -3212,7 +3220,7 @@
             this.label62.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label62.ForeColor = System.Drawing.Color.Silver;
             this.label62.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label62.Location = new System.Drawing.Point(-1, 286);
+            this.label62.Location = new System.Drawing.Point(-1, 328);
             this.label62.Name = "label62";
             this.label62.Size = new System.Drawing.Size(133, 15);
             this.label62.TabIndex = 145;
@@ -3223,7 +3231,7 @@
             this.lblBlockAverageFee.AutoSize = true;
             this.lblBlockAverageFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockAverageFee.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockAverageFee.Location = new System.Drawing.Point(-3, 301);
+            this.lblBlockAverageFee.Location = new System.Drawing.Point(-3, 343);
             this.lblBlockAverageFee.Name = "lblBlockAverageFee";
             this.lblBlockAverageFee.Size = new System.Drawing.Size(87, 23);
             this.lblBlockAverageFee.TabIndex = 144;
@@ -3260,7 +3268,7 @@
             this.label70.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label70.ForeColor = System.Drawing.Color.Silver;
             this.label70.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label70.Location = new System.Drawing.Point(-1, 202);
+            this.label70.Location = new System.Drawing.Point(-1, 244);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(168, 15);
             this.label70.TabIndex = 141;
@@ -3271,7 +3279,7 @@
             this.lblReward.AutoSize = true;
             this.lblReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblReward.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReward.Location = new System.Drawing.Point(-3, 217);
+            this.lblReward.Location = new System.Drawing.Point(-3, 259);
             this.lblReward.Name = "lblReward";
             this.lblReward.Size = new System.Drawing.Size(87, 23);
             this.lblReward.TabIndex = 140;
@@ -3392,6 +3400,54 @@
             this.btnBlock.UseVisualStyleBackColor = false;
             this.btnBlock.Click += new System.EventHandler(this.btnBlock_Click);
             // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label66.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label66.ForeColor = System.Drawing.Color.Silver;
+            this.label66.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label66.Location = new System.Drawing.Point(-1, 202);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(77, 15);
+            this.label66.TabIndex = 167;
+            this.label66.Text = "Total fees";
+            // 
+            // lblTotalFees
+            // 
+            this.lblTotalFees.AutoSize = true;
+            this.lblTotalFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTotalFees.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalFees.Location = new System.Drawing.Point(-3, 217);
+            this.lblTotalFees.Name = "lblTotalFees";
+            this.lblTotalFees.Size = new System.Drawing.Size(87, 23);
+            this.lblTotalFees.TabIndex = 166;
+            this.lblTotalFees.Text = "no data";
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label71.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label71.ForeColor = System.Drawing.Color.Silver;
+            this.label71.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label71.Location = new System.Drawing.Point(-1, 370);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(42, 15);
+            this.label71.TabIndex = 169;
+            this.label71.Text = "Nonce";
+            // 
+            // lblNonce
+            // 
+            this.lblNonce.AutoSize = true;
+            this.lblNonce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblNonce.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNonce.Location = new System.Drawing.Point(-3, 385);
+            this.lblNonce.Name = "lblNonce";
+            this.lblNonce.Size = new System.Drawing.Size(87, 23);
+            this.lblNonce.TabIndex = 168;
+            this.lblNonce.Text = "no data";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -3401,6 +3457,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.lblErrorMessage);
+            this.Controls.Add(this.lblAlert);
             this.Controls.Add(this.btnBlock);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.pictureBoxLoadingAnimation);
@@ -3425,8 +3483,6 @@
             this.Controls.Add(this.lblFees60Mins);
             this.Controls.Add(this.lblfeesNextBlock);
             this.Controls.Add(this.lblFees30Mins);
-            this.Controls.Add(this.lblAlert);
-            this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.lblSecsCountdown);
             this.Controls.Add(this.lblStatusLight);
             this.Controls.Add(this.lblStatusMessPart1);
@@ -3695,6 +3751,10 @@
         private System.Windows.Forms.Label lblBlockTXPositionInList;
         private System.Windows.Forms.ListView listViewBlockTransactions;
         private System.Windows.Forms.Button btnViewTransactionFromBlock;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.Label lblTotalFees;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.Label lblNonce;
     }
 }
 

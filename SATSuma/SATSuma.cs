@@ -18,8 +18,8 @@
  * further testing of own node connection, then add to settings once tested, with warning it might be much slower
  * bring the address screen within the Group1timertick? Might not be practical/useful
  * better/more error handling everywhere
- * finish block and transaction screens
- * deal with scaling issues
+ * finish block screen
+ * check whether there are any UI scaling issues
  * handle tabbing and focus better
  */
 
@@ -122,12 +122,12 @@ namespace SATSuma
         private void Form1_Load(object sender, EventArgs e) // on form loading
         {
             UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
-            UpdateAPIGroup2DataFields(); // set the initial data for the daily updates to avoid waiting for the first data
+           // UpdateAPIGroup2DataFields(); // set the initial data for the daily updates to avoid waiting for the first data
             StartTheClocksTicking(); // start all the timers
             textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
             CheckBlockchainExplorerApiStatus();
             mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
-            btnShowConfirmedTX.Enabled = false;
+            btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
         }
         #endregion
 
@@ -170,6 +170,11 @@ namespace SATSuma
                     lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
                 }
             }
+            if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh...
+            {
+                lblAlert.Text = "";
+                lblErrorMessage.Text = "";
+            }
         }
 
         private void TimerAPIGroup1_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
@@ -180,7 +185,7 @@ namespace SATSuma
 
         private void TimerAPIGroup2_Tick(object sender, EventArgs e)
         {
-            UpdateAPIGroup2DataFields(); // update the rest of the btc/lightning fields
+          //  UpdateAPIGroup2DataFields(); // update the rest of the btc/lightning fields
         }
         #endregion
 
@@ -252,6 +257,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -348,6 +357,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -429,6 +442,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -478,6 +495,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -550,6 +571,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -740,6 +765,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -747,16 +776,145 @@ namespace SATSuma
                     }
                 });
 
-                await Task.WhenAll(task1, task2, task3, task4, task5, task6);
+                Task task7 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
+                {
+                    try
+                    {
+                        if (RunBlockchairComJSONAPI)
+                        {
+                            var result7 = BlockchairComJSONRefresh();
+                            int hodling_addresses = int.Parse(result7.hodling_addresses);
+                            if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
+                            {
+                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHodlingAddresses.Text = result7.hodling_addresses;
+                                });
+                            }
+                            else
+                            {
+                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHodlingAddresses.Text = "no data";
+                                });
+                            }
+                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlocksIn24Hours.Text = result7.blocks_24h;
+                            });
+                            lblNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblNodes.Text = result7.nodes;
+                            });
+                            dynamic blockchainSize = result7.blockchain_size;
+                            double blockchainSizeGB = Math.Round(Convert.ToDouble(blockchainSize) / 1073741824.0, 2);
+                            lblBlockchainSize.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockchainSize.Text = blockchainSizeGB.ToString();
+                            });
+                        }
+                        else
+                        {
+                            lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                            {
+                                lblHodlingAddresses.Text = "disabled";
+                            });
+                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlocksIn24Hours.Text = "disabled";
+                            });
+                            lblNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblNodes.Text = "disabled";
+                            });
+                            lblBlockchainSize.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockchainSize.Text = "disabled";
+                            });
+                        }
+                        SetLightsMessagesAndResetTimers();
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
+                        });
+                    }
+                });
+
+                Task task8 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
+                {
+                    try
+                    {
+                        if (RunBlockchairComJSONAPI)
+                        {
+                            var result8 = BlockchairComHalvingJSONRefresh();
+                            lblHalveningBlock.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalveningBlock.Text = result8.halveningBlock + "/" + result8.blocksLeft;
+                            });
+                            string halvening_time = result8.halveningTime;
+                            DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
+
+                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                            {
+                                lblEstimatedHalvingDate.Text = halveningDate + "/";
+                            });
+                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalveningSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
+                                lblHalveningSecondsRemaining.Text = result8.seconds_left;
+                                ObtainedHalveningSecondsRemainingYet = true; // signifies that we can now start deducting from this
+                            });
+                        }
+                        else
+                        {
+                            lblHalveningBlock.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalveningBlock.Text = "disabled";
+                            });
+                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                            {
+                                lblEstimatedHalvingDate.Text = "disabled";
+                            });
+                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalveningSecondsRemaining.Text = "disabled";
+                            });
+                        }
+                        SetLightsMessagesAndResetTimers();
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
+                        });
+                    }
+                });
+
+                await Task.WhenAll(task1, task2, task3, task4, task5, task6, task7, task8);
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    lblAlert.Invoke((MethodInvoker)delegate
-                    {
-                        lblAlert.Text = "⚠️";
-                    });
+                   // lblAlert.Invoke((MethodInvoker)delegate
+                   // {
+                   //     lblAlert.Text = "⚠️";
+                   // });
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblStatusLight.ForeColor = Color.Red;
@@ -841,6 +999,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -894,6 +1056,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
+                        lblAlert.Invoke((MethodInvoker)delegate
+                        {
+                            lblAlert.Text = "⚠️";
+                        });
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
                             lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
@@ -907,10 +1073,6 @@ namespace SATSuma
                 if (errorOccurred)
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    lblAlert.Invoke((MethodInvoker)delegate
-                    {
-                        lblAlert.Text = "⚠️";
-                    });
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblStatusLight.ForeColor = Color.Red;
@@ -926,7 +1088,7 @@ namespace SATSuma
                 }
             }
             DisableEnableLoadingAnimation("disable");
-        }
+        }  // leaving here for now, but currently unused.
 
         //=============================================================================================================
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
@@ -1267,6 +1429,8 @@ namespace SATSuma
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
+            BtnViewBlockFromAddress.Visible = false;
+            BtnViewTransactionFromAddress.Visible = false;
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalAddressTransactionRowsAdded = 0;
 
@@ -1932,7 +2096,7 @@ namespace SATSuma
         private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
         {
             TotalBlockTransactionRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
-            
+            btnViewTransactionFromBlock.Visible = false;
             int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight);
             // display block hash
             using (WebClient client = new WebClient())
@@ -1978,6 +2142,12 @@ namespace SATSuma
             decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
             string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
             lblBlockWeight.Text = strFormattedWeight;
+            string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
+            TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
+            lblTotalFees.Text = TotalBlockFees;
+            int nonceDecimal = Convert.ToInt32(blocks[0].nonce);
+
+            lblNonce.Text = "0x" + nonceDecimal.ToString("X");
             string Reward = Convert.ToString(blocks[0].extras.reward);
             lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
             lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
@@ -2091,6 +2261,7 @@ namespace SATSuma
             await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            btnViewTransactionFromBlock.Visible = false;
         }
 
         private async void btnPreviousBlockTransactions_Click(object sender, EventArgs e)
@@ -2105,6 +2276,7 @@ namespace SATSuma
             await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            btnViewTransactionFromBlock.Visible = false;
         }
 
         private void listViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -2332,12 +2504,12 @@ namespace SATSuma
             lblSecsCountdown.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width - 8, lblSecsCountdown.Location.Y); // place the countdown according to the width of the status message
             if (intDisplayCountdownToRefresh < (APIGroup1DisplayTimerIntervalSecsConstant - 1)) // if more than a second has expired since the data from the blocktimer was refreshed...
             {
-                ChangeStatusLightAndClearErrorMessage();
+                ChangeStatusLights();
             }
             lblElapsedSinceUpdate.Location = new Point(lblSecsCountdown.Location.X + lblSecsCountdown.Width, lblElapsedSinceUpdate.Location.Y);
         }
 
-        private void ChangeStatusLightAndClearErrorMessage()
+        private void ChangeStatusLights()
         {
             if (lblStatusLight.ForeColor != Color.IndianRed && lblStatusLight.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
             {
@@ -2348,11 +2520,6 @@ namespace SATSuma
                 else // an error must have just occured
                 {
                     lblStatusLight.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                    if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh...
-                    {
-                        lblErrorMessage.Text = ""; // hide any previous error message
-                        lblAlert.Text = ""; // and hide the alert icon
-                    }
                 }
             }
         }
@@ -2814,7 +2981,7 @@ namespace SATSuma
         public string reward { get; set; }
         public string medianFee { get; set; }
         public int[] feeRange { get; set; }
-        public string totalFees { get; set; }
+        public int totalFees { get; set; }
         public string avgFee { get; set; }
         public string avgFeeRate { get; set; }
         public Block_pool pool { get; set; }

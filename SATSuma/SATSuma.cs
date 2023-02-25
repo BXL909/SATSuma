@@ -89,17 +89,19 @@ namespace SATSuma
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
-        bool PartOfAnAllTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
+        bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
-        bool btnShowAllTXWasEnabled = true;
-        bool btnShowConfirmedTXWasEnabled = false;
-        bool btnShowUnconfirmedTXWasEnabled = true;
-        bool btnFirstTransactionWasEnabled = false;
-        bool btnNextTransactionsWasEnabled = false;
-        bool BtnViewTransactionWasEnabled = false;
-        bool BtnViewBlockWasEnabled = false;
+        bool btnShowAllAddressTXWasEnabled = true;
+        bool btnShowConfirmedAddressTXWasEnabled = false;
+        bool btnShowUnconfirmedAddressTXWasEnabled = true;
+        bool btnFirstAddressTransactionWasEnabled = false;
+        bool btnNextAddressTransactionsWasEnabled = false;
+        bool BtnViewTransactionFromAddressWasEnabled = false;
+        bool BtnViewBlockFromAddressWasEnabled = false;
         bool btnPreviousBlockTransactionsWasEnabled = false;
         bool btnNextBlockTransactionsWasEnabled = false;
+        bool textBoxSubmittedBlockNumberWasEnabled = true;
+        bool textBoxSubmittedAddressWasEnabled = true;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -122,7 +124,7 @@ namespace SATSuma
             UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
             UpdateAPIGroup2DataFields(); // set the initial data for the daily updates to avoid waiting for the first data
             StartTheClocksTicking(); // start all the timers
-            tboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
+            textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
             CheckBlockchainExplorerApiStatus();
             mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
             btnShowConfirmedTX.Enabled = false;
@@ -1268,16 +1270,7 @@ namespace SATSuma
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalAddressTransactionRowsAdded = 0;
 
-            /*if (tboxSubmittedAddress.Text == "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa") // demo data
-            {
-                lblGenesisAddress.Text = "(This is Satoshi's Genesis address. Enter any bitcoin address)"; 
-            }
-            else
-            {
-                lblGenesisAddress.Text = null;
-            }*/
-
-            if (tboxSubmittedAddress.Text == "")
+            if (textboxSubmittedAddress.Text == "")
             {
                 AddressInvalidHideControls();
             }
@@ -1285,7 +1278,7 @@ namespace SATSuma
             {
                 AddressValidShowControls();
             }
-            string addressString = tboxSubmittedAddress.Text; //user entered address
+            string addressString = textboxSubmittedAddress.Text; //user entered address
             string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
@@ -1296,7 +1289,7 @@ namespace SATSuma
                 QRCode qrCode = new QRCode(qrCodeData);
                 var qrCodeImage = qrCode.GetGraphic(20, Color.Gray, Color.Black, false);
                 qrCodeImage.MakeTransparent(Color.Black);
-                QRCodePicturebox.Image = qrCodeImage;
+                AddressQRCodePicturebox.Image = qrCodeImage;
 
                 await GetAddressBalanceAsync(addressString); // make sure we get these results before processing transactions
                 string lastSeenTxId = ""; // start from the top of the JSON (most recent tx)
@@ -1305,14 +1298,14 @@ namespace SATSuma
             else
             {
                 lblAddressType.Text = "Invalid address format";
-                QRCodePicturebox.Image = null;
-                lblConfirmedReceived.Text = string.Empty;
-                lblConfirmedReceivedOutputs.Text = string.Empty;
-                lblConfirmedSpent.Text = string.Empty;
-                lblConfirmedSpentOutputs.Text = string.Empty;
-                lblConfirmedAddressTransactionCount.Text = string.Empty;
-                lblConfirmedUnspent.Text = string.Empty;
-                lblConfirmedUnspentOutputs.Text = string.Empty;
+                AddressQRCodePicturebox.Image = null;
+                lblAddressConfirmedReceived.Text = string.Empty;
+                lblAddressConfirmedReceivedOutputs.Text = string.Empty;
+                lblAddressConfirmedSpent.Text = string.Empty;
+                lblAddressConfirmedSpentOutputs.Text = string.Empty;
+                lblAddressConfirmedTransactionCount.Text = string.Empty;
+                lblAddressConfirmedUnspent.Text = string.Empty;
+                lblAddressConfirmedUnspentOutputs.Text = string.Empty;
                 AddressInvalidHideControls();
             }
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
@@ -1338,28 +1331,28 @@ namespace SATSuma
             var jsonData = await response.Content.ReadAsStringAsync();
             var addressData = JObject.Parse(jsonData);
 
-            if (mempoolConfUnconfOrAllTx == "chain" && !PartOfAnAllTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+            if (mempoolConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
             {
                 label61.Text = "Confirmed unspent (balance)";
                 label59.Text = "Confirmed transaction count";
                 label67.Text = "Confirmed received";
                 label63.Text = "Confirmed spent";
-                lblConfirmedAddressTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                lblConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                lblConfirmedReceivedOutputs.Location = new Point(lblConfirmedReceived.Location.X + lblConfirmedReceived.Width, lblConfirmedReceivedOutputs.Location.Y);
-                lblConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
-                lblConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
-                lblConfirmedSpentOutputs.Location = new Point(lblConfirmedSpent.Location.X + lblConfirmedSpent.Width - 5, lblConfirmedSpentOutputs.Location.Y);
-                lblConfirmedSpentOutputs.Text = " (" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
+                lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
+                lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
+                lblAddressConfirmedSpentOutputs.Text = " (" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
                 var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
                 var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
                 var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
                 var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
                 var confirmedUnspent = confirmedReceived - confirmedSpent;
                 var unSpentTxOutputs = fundedTx - spentTx;
-                lblConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblConfirmedUnspentOutputs.Location = new Point(lblConfirmedUnspent.Location.X + lblConfirmedUnspent.Width, lblConfirmedUnspentOutputs.Location.Y);
-                lblConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
             }
             if (mempoolConfUnconfOrAllTx == "mempool") //mempool stats only
             {
@@ -1367,24 +1360,24 @@ namespace SATSuma
                 label59.Text = "Unconfirmed transaction count";
                 label67.Text = "Unconfirmed received";
                 label63.Text = "Unconfirmed spent";
-                lblConfirmedAddressTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
-                lblConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
-                lblConfirmedReceivedOutputs.Location = new Point(lblConfirmedReceived.Location.X + lblConfirmedReceived.Width, lblConfirmedReceivedOutputs.Location.Y);
-                lblConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
-                lblConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
-                lblConfirmedSpentOutputs.Location = new Point(lblConfirmedSpent.Location.X + lblConfirmedSpent.Width - 5, lblConfirmedSpentOutputs.Location.Y);
-                lblConfirmedSpentOutputs.Text = " (" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
+                lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
+                lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
+                lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
+                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
+                lblAddressConfirmedSpentOutputs.Text = " (" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
                 var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
                 var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
                 var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
                 var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
                 var confirmedUnspent = confirmedReceived - confirmedSpent;
                 var unSpentTxOutputs = fundedTx - spentTx;
-                lblConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblConfirmedUnspentOutputs.Location = new Point(lblConfirmedUnspent.Location.X + lblConfirmedUnspent.Width, lblConfirmedUnspentOutputs.Location.Y);
-                lblConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
             }
-            if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+            if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
             {
                 label61.Text = "Total unspent (balance)";
                 label59.Text = "Total transaction count";
@@ -1393,31 +1386,31 @@ namespace SATSuma
                 int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
                 int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
                 int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
-                lblConfirmedAddressTransactionCount.Text = Convert.ToString(totalTransactionCount);
+                lblAddressConfirmedTransactionCount.Text = Convert.ToString(totalTransactionCount);
 
                 long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
                 long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
                 long totalReceived = chainReceived + mempoolReceived;
                 decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
-                lblConfirmedReceived.Text = Convert.ToString(BTCtotalReceived);
+                lblAddressConfirmedReceived.Text = Convert.ToString(BTCtotalReceived);
 
-                lblConfirmedReceivedOutputs.Location = new Point(lblConfirmedReceived.Location.X + lblConfirmedReceived.Width, lblConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
                 int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
                 int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
                 int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
-                lblConfirmedReceivedOutputs.Text = "(" + totalReceivedOutputs + " outputs)";
+                lblAddressConfirmedReceivedOutputs.Text = "(" + totalReceivedOutputs + " outputs)";
 
                 long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
                 long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
                 long totalSpent = chainSpent + mempoolSpent;
                 decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
-                lblConfirmedSpent.Text = Convert.ToString(BTCtotalSpent);
+                lblAddressConfirmedSpent.Text = Convert.ToString(BTCtotalSpent);
 
-                lblConfirmedSpentOutputs.Location = new Point(lblConfirmedSpent.Location.X + lblConfirmedSpent.Width - 5, lblConfirmedSpentOutputs.Location.Y);
+                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
                 int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
                 int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
                 int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
-                lblConfirmedSpentOutputs.Text = " (" + totalSpentOutputs + " outputs)";
+                lblAddressConfirmedSpentOutputs.Text = " (" + totalSpentOutputs + " outputs)";
 
                 var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
                 var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
@@ -1436,9 +1429,9 @@ namespace SATSuma
                 var totalUnspent = chainUnspent + mempoolUnspent;
                 var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
 
-                lblConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
-                lblConfirmedUnspentOutputs.Location = new Point(lblConfirmedUnspent.Location.X + lblConfirmedUnspent.Width, lblConfirmedUnspentOutputs.Location.Y);
-                lblConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
+                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
             }
         }
 
@@ -1479,7 +1472,7 @@ namespace SATSuma
                 // If not, add the column header
                 if (mempoolConfUnconfOrAllTx == "chain")
                 {
-                    if (PartOfAnAllTransactionsRequest)
+                    if (PartOfAnAllAddressTransactionsRequest)
                     {
                         listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
                     }
@@ -1575,25 +1568,25 @@ namespace SATSuma
 
                 if (TotalAddressTransactionRowsAdded <= 25) // less than 25 transactions in all
                 {
-                    btnFirstTransaction.Visible = false; // so this won't be needed
+                    btnFirstAddressTransaction.Visible = false; // so this won't be needed
                 }
                 else
                 {
                     if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
                     {
-                        btnFirstTransaction.Visible = true;
+                        btnFirstAddressTransaction.Visible = true;
                     }
                 }
 
-                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblConfirmedAddressTransactionCount.Text) // we've shown all the TXs
+                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblAddressConfirmedTransactionCount.Text) // we've shown all the TXs
                 {
-                    btnNextTransactions.Visible = false; // so we won't need this
+                    btnNextAddressTransactions.Visible = false; // so we won't need this
                 }
                 else
                 {
                     if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
                     {
-                        btnNextTransactions.Visible = true;
+                        btnNextAddressTransactions.Visible = true;
                     }
                 }
 
@@ -1602,9 +1595,9 @@ namespace SATSuma
                     break;
                 }
             }
-            if (counter > 1)
+            if (counter > 0)
             {
-                lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblConfirmedAddressTransactionCount.Text;
+                lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblAddressConfirmedTransactionCount.Text;
             }
             else
             {
@@ -1615,17 +1608,17 @@ namespace SATSuma
                 mempoolConfUnconfOrAllTx = "chain";
             }
             // set focus
-            if (btnNextTransactions.Visible && btnNextTransactions.Enabled)
+            if (btnNextAddressTransactions.Visible && btnNextAddressTransactions.Enabled)
             {
-                btnNextTransactions.Focus();
+                btnNextAddressTransactions.Focus();
             }
         }
 
-        private async void BtnGetNextTransactions(object sender, EventArgs e)
+        private async void BtnGetNextTransactionsForAddress(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            var address = tboxSubmittedAddress.Text; // Get the address from the address text box
+            var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
             var lastSeenTxId = "";
             if (listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].SubItems[1].Text == "------")
@@ -1644,19 +1637,19 @@ namespace SATSuma
             BtnViewTransactionFromAddress.Visible = false;
         }
 
-        private async void BtnFirstTransaction_Click(object sender, EventArgs e)
+        private async void BtnFirstTransactionForAddress_Click(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            if (PartOfAnAllTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
+            if (PartOfAnAllAddressTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
             {
                 mempoolConfUnconfOrAllTx = "all";
             }
-            btnFirstTransaction.Visible = false; 
-            var address = tboxSubmittedAddress.Text; // Get the address from the address text box
+            btnFirstAddressTransaction.Visible = false; 
+            var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             var lastSeenTxId = ""; // Reset the last seen transaction ID to go back to start
             TotalAddressTransactionRowsAdded = 0;
-            btnNextTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
+            btnNextAddressTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
 
@@ -1666,57 +1659,57 @@ namespace SATSuma
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
         }
 
-        private void btnShowUnconfirmedTX_Click(object sender, EventArgs e)
+        private void btnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = true;
             btnShowUnconfirmedTX.Enabled = false;
             mempoolConfUnconfOrAllTx = "mempool";
-            btnNextTransactions.Visible = false;
-            btnFirstTransaction.Visible = false;
-            PartOfAnAllTransactionsRequest = false;
+            btnNextAddressTransactions.Visible = false;
+            btnFirstAddressTransaction.Visible = false;
+            PartOfAnAllAddressTransactionsRequest = false;
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch unconfirmed transactions
-            string temp = tboxSubmittedAddress.Text;
-            tboxSubmittedAddress.Text = "";
+            string temp = textboxSubmittedAddress.Text;
+            textboxSubmittedAddress.Text = "";
             listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            tboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Text = temp;
         }
 
-        private void btnShowConfirmedTX_Click(object sender, EventArgs e)
+        private void btnShowConfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = false;
             btnShowAllTX.Enabled = true;
             btnShowUnconfirmedTX.Enabled = true;
             mempoolConfUnconfOrAllTx = "chain";
-            PartOfAnAllTransactionsRequest = false;
+            PartOfAnAllAddressTransactionsRequest = false;
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch confirmed transactions
-            string temp = tboxSubmittedAddress.Text;
-            tboxSubmittedAddress.Text = "";
+            string temp = textboxSubmittedAddress.Text;
+            textboxSubmittedAddress.Text = "";
             listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            tboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Text = temp;
         }
 
-        private void btnShowAllTX_Click(object sender, EventArgs e)
+        private void btnShowAllTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = false;
             btnShowUnconfirmedTX.Enabled = true;
             mempoolConfUnconfOrAllTx = "all";
-            PartOfAnAllTransactionsRequest = true;
+            PartOfAnAllAddressTransactionsRequest = true;
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch all (confirmed and unconfirmed) transactions
-            string temp = tboxSubmittedAddress.Text;
-            tboxSubmittedAddress.Text = "";
+            string temp = textboxSubmittedAddress.Text;
+            textboxSubmittedAddress.Text = "";
             listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            tboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Text = temp;
         }
 
-        private void BtnViewBlock_Click(object sender, EventArgs e)
+        private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
             //assign block number to text box on block panel
             // Get the selected item
@@ -1731,7 +1724,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //--------------- OVERRIDE COLOURS FOR LISTVIEW HEADINGS ------------------------------------------------------
-        private void listViewTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void listViewAddressTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             Color headerColor = Color.FromArgb(50, 50, 50);
             SolidBrush brush = new SolidBrush(headerColor);
@@ -1746,7 +1739,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
-        private void listViewTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void listViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             bool anySelected = false;
             foreach (ListViewItem item in listViewAddressTransactions.Items)
@@ -1771,7 +1764,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //-----DRAW AN ELLIPSIS WHEN STRINGS DONT FIT IN LISTVIEW COLUMN (ALSO COLOUR BALANCE DIFFERENCE RED/GREEN)----
-        private void ListViewTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void ListViewAddressTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
 
@@ -1811,7 +1804,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //------------------ LIMIT MINIMUM WIDTH OF LISTVIEW COLUMNS --------------------------------------------------
-        private void listViewTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void listViewAddressTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -1859,8 +1852,8 @@ namespace SATSuma
         {
             if (mempoolConfUnconfOrAllTx == "mempool")//only one page of unconfirmed tx regardless how many tx there are
             {
-                btnNextTransactions.Visible = false;
-                btnFirstTransaction.Visible = false;
+                btnNextAddressTransactions.Visible = false;
+                btnFirstAddressTransaction.Visible = false;
             }
             lblAddressTXPositionInList.Visible = true;
             label59.Visible = true;
@@ -1872,8 +1865,8 @@ namespace SATSuma
 
         private void AddressInvalidHideControls() // hide all address related controls
         {
-            btnNextTransactions.Visible = false;
-            btnFirstTransaction.Visible = false;
+            btnNextAddressTransactions.Visible = false;
+            btnFirstAddressTransaction.Visible = false;
             lblAddressTXPositionInList.Visible = false;
             label59.Visible = false;
             label61.Visible = false;
@@ -1888,61 +1881,84 @@ namespace SATSuma
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
         //=============================================================================================================
         //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
-        private void textBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
+
+        private string previousValueOfTextBoxSubmittedBlockNumber;
+
+        private void textBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e) //allow numerics and backspace only, avoiding triggering a _textchanged until we have valid input.
         {
-            // Check if the pressed key is a number or a control key
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            // Store the previous value of the textbox
+            if (string.IsNullOrEmpty(previousValueOfTextBoxSubmittedBlockNumber))
             {
-                e.Handled = true; // If it's not a number or control key, discard the key press event
+                previousValueOfTextBoxSubmittedBlockNumber = textBoxSubmittedBlockNumber.Text;
             }
-        }
 
-        //=============================================================================================================
-        //-------------------- MAKE SURE ENTERED VALUE NOT GREATER THAN BLOCK HEIGHT ----------------------------------
-        private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
-        {
-            // Parse the textbox value
-            if (int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight))
+            // Check if the entered key is a digit or backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b')
             {
-                // If the submitted value is greater than the current block height, set the textbox value to the current block height
-                if (submittedBlockHeight > Convert.ToInt32(lblBlockNumber.Text))
-                {
-                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text;
-                    submittedBlockHeight = Convert.ToInt32(lblBlockNumber.Text); // also set the submittedblockheight to current block height
-                }
-                // Set the cursor position to the end of the string
-                textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+                // If it's not a digit or backspace, set Handled property to true to prevent the character from being entered
+                e.Handled = true;
+            }
+            else if (e.KeyChar == '\b' && textBoxSubmittedBlockNumber.SelectionStart > 0)
+            {
+                // If the key pressed is backspace and the cursor is not at the start of the textbox,
+                // remove the last character from the textbox and update the previous value variable
+                previousValueOfTextBoxSubmittedBlockNumber = textBoxSubmittedBlockNumber.Text.Remove(textBoxSubmittedBlockNumber.SelectionStart - 1, 1);
+            }
 
-                // display block hash
-                using (WebClient client = new WebClient())
+            if (int.TryParse(previousValueOfTextBoxSubmittedBlockNumber + e.KeyChar, out int value))
+            {
+                int maxValue = int.Parse(lblBlockNumber.Text);
+
+                if (value < 0 || value > maxValue)
                 {
-                    string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
-                    string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
-                    lblBlockHash.Text = BlockHash;
+                    // If the value is outside the allowed range, set the Text property of textBoxSubmittedBlockNumber to the previous value
+                    e.Handled = true;
+                    textBoxSubmittedBlockNumber.Text = previousValueOfTextBoxSubmittedBlockNumber;
+                }
+                else
+                {
+                    // Update the previous value variable
+                    previousValueOfTextBoxSubmittedBlockNumber += e.KeyChar;
                 }
             }
             else
             {
-                // If the textbox value is not a valid integer, clear the textbox value
-                textBoxSubmittedBlockNumber.Text = string.Empty;
+                // If the value is not a valid integer, set the Text property of textBoxSubmittedBlockNumber to the previous value
+                e.Handled = true;
+                textBoxSubmittedBlockNumber.Text = previousValueOfTextBoxSubmittedBlockNumber;
             }
+        }
+
+        private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        {
+            TotalBlockTransactionRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
+            
+            int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight);
+            // display block hash
+            using (WebClient client = new WebClient())
+            {
+                string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
+                string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
+                lblBlockHash.Text = BlockHash;
+            }
+
             var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            await GetFifteenBlocks(blockNumber); 
+            await GetTwentyFiveBlocks(blockNumber);
             string BlockHashToGetTransactionsFor = lblBlockHash.Text;
             await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
-            DisableEnableLoadingAnimation("disable"); // start the loading animation
-            DisableEnableButtons("enable"); // disable buttons during operation
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            DisableEnableButtons("enable"); // enable buttons after operation is complete
         }
 
-        private async Task GetFifteenBlocks(string blockNumber)
+        private async Task GetTwentyFiveBlocks(string blockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
         {
             var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
             var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
             lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
             long sizeInBytes = blocks[0].size;
-            string sizeString; // convert display to byes/kb/mb accordingly
+            string sizeString; // convert display to bytes/kb/mb accordingly
             if (sizeInBytes < 1000)
             {
                 sizeString = $"{sizeInBytes} bytes";
@@ -2028,7 +2044,6 @@ namespace SATSuma
                 item.SubItems.Add(totalValue.ToString());
                 listViewBlockTransactions.Items.Add(item); // add row
 
-
                 counter++; // increment rows for this batch
                 TotalBlockTransactionRowsAdded++; // increment all rows
 
@@ -2055,13 +2070,13 @@ namespace SATSuma
                     break;
                 }
             }
-            if (counter > 1)
+            if (counter > 0)
             {
                 lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
             }
             else
             {
-                lblBlockTXPositionInList.Text = "No transactions to display";
+                lblBlockTXPositionInList.Text = "No transactions to display"; // this can't really happen as there will always be a coinbase transaction
             }
         }
         
@@ -2233,39 +2248,57 @@ namespace SATSuma
             if (enableOrDisableAllButtons == "disable")
             {
                 // get current state of buttons before disabling them
-                btnShowAllTXWasEnabled = btnShowAllTX.Enabled;
-                btnShowConfirmedTXWasEnabled = btnShowConfirmedTX.Enabled;
-                btnShowUnconfirmedTXWasEnabled = btnShowUnconfirmedTX.Enabled;
-                btnFirstTransactionWasEnabled = btnFirstTransaction.Enabled;
-                btnNextTransactionsWasEnabled = btnNextTransactions.Enabled;
-                BtnViewTransactionWasEnabled = BtnViewTransactionFromAddress.Enabled;
-                BtnViewBlockWasEnabled = BtnViewBlockFromAddress.Enabled;
+                btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
+                btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
+                btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
+                btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
+                btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
+                BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
+                BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
                 btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
                 btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
+                textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
+                textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
 
                 //disable them all
                 btnShowAllTX.Enabled = false; 
                 btnShowConfirmedTX.Enabled = false; 
                 btnShowUnconfirmedTX.Enabled = false;
-                btnFirstTransaction.Enabled = false;
-                btnNextTransactions.Enabled = false;
+                btnFirstAddressTransaction.Enabled = false;
+                btnNextAddressTransactions.Enabled = false;
                 BtnViewTransactionFromAddress.Enabled = false;
                 BtnViewBlockFromAddress.Enabled = false;
                 btnPreviousBlockTransactions.Enabled = false;
                 btnNextBlockTransactions.Enabled = false;
+                textboxSubmittedAddress.Enabled = false;
+                textBoxSubmittedBlockNumber.Enabled = false;
             }
             else
             {
                 // use previously saved states to reinstate buttons
-                btnShowAllTX.Enabled = btnShowAllTXWasEnabled;
-                btnShowConfirmedTX.Enabled = btnShowConfirmedTXWasEnabled;
-                btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedTXWasEnabled;
-                btnFirstTransaction.Enabled = btnFirstTransactionWasEnabled;
-                btnNextTransactions.Enabled = btnNextTransactionsWasEnabled;
-                BtnViewTransactionFromAddress.Enabled = BtnViewTransactionWasEnabled;
-                BtnViewBlockFromAddress.Enabled = BtnViewBlockWasEnabled;
+                btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
+                btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
+                btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
+                btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
+                btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
+                BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
+                BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                 btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
                 btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
+                textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
+                textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
+                if (panelBlock.Visible == true)
+                {
+                    textBoxSubmittedBlockNumber.Focus();
+                    // Set the cursor position to the end of the string
+                    textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+                }
+                if (panelAddress.Visible == true)
+                {
+                    textboxSubmittedAddress.Focus();
+                    // Set the cursor position to the end of the string
+                    textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
+                }
             }
         }
 

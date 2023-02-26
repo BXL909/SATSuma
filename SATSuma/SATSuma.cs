@@ -154,11 +154,11 @@ namespace SATSuma
             intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
             if (intDisplaySecondsElapsedSinceUpdate == 1)
             {
-                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago";
+                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh); 
             }
             else
             {
-                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago";
+                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
             }
             if (ObtainedHalveningSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
             {
@@ -925,7 +925,7 @@ namespace SATSuma
                     });
                     lblStatusMessPart1.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusMessPart1.Text = "One or more fields failed to update. Trying again in ";
+                        lblStatusMessPart1.Text = "One or more fields failed to update.";
                     });
                 }
             }
@@ -2145,9 +2145,9 @@ namespace SATSuma
             string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
             TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
             lblTotalFees.Text = TotalBlockFees;
-            int nonceDecimal = Convert.ToInt32(blocks[0].nonce);
+            long nonceLong = Convert.ToInt64(blocks[0].nonce);
 
-            lblNonce.Text = "0x" + nonceDecimal.ToString("X");
+            lblNonce.Text = "0x" + nonceLong.ToString("X");
             string Reward = Convert.ToString(blocks[0].extras.reward);
             lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
             lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
@@ -2495,18 +2495,16 @@ namespace SATSuma
         //--------------------COUNTDOWN, ERROR MESSAGES AND STATUS LIGHTS----------------------------------------------
         private void UpdateOnScreenCountdownAndFlashLights()
         {
-            lblSecsCountdown.Text = Convert.ToString(intDisplayCountdownToRefresh) + ". "; // update the countdown on the form
             intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
             if (intDisplayCountdownToRefresh <= 0) // if the 1 minute timer countdown has reached zero...
             {
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset it
             }
-            lblSecsCountdown.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width - 8, lblSecsCountdown.Location.Y); // place the countdown according to the width of the status message
             if (intDisplayCountdownToRefresh < (APIGroup1DisplayTimerIntervalSecsConstant - 1)) // if more than a second has expired since the data from the blocktimer was refreshed...
             {
                 ChangeStatusLights();
             }
-            lblElapsedSinceUpdate.Location = new Point(lblSecsCountdown.Location.X + lblSecsCountdown.Width, lblElapsedSinceUpdate.Location.Y);
+            lblElapsedSinceUpdate.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width, lblElapsedSinceUpdate.Location.Y);
         }
 
         private void ChangeStatusLights()
@@ -2543,7 +2541,7 @@ namespace SATSuma
             });
             lblStatusMessPart1.Invoke((MethodInvoker)delegate
             {
-                lblStatusMessPart1.Text = "Data updated successfully. Refreshing in ";
+                lblStatusMessPart1.Text = "Data updated successfully.";
             });
             intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset the timer
             intDisplaySecondsElapsedSinceUpdate = 0; // reset the seconds since last refresh
@@ -2630,6 +2628,7 @@ namespace SATSuma
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
         private void BtnSplash_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             splash splash = new splash(); // invoke the about/splash screen
             splash.ShowDialog();
         }
@@ -2657,6 +2656,7 @@ namespace SATSuma
 
         private void BtnBitcoinDashboard_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = false;
             btnLightningDashboard.Enabled = true;
@@ -2672,6 +2672,7 @@ namespace SATSuma
 
         private void BtnLightningDashboard_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
             btnBlock.Enabled = true;
@@ -2687,6 +2688,7 @@ namespace SATSuma
 
         private void BtnAddress_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             btnAddress.Enabled= false;
             btnBitcoinDashboard.Enabled = true;
             btnBlock.Enabled = true;
@@ -2699,6 +2701,7 @@ namespace SATSuma
 
         private void btnBlock_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             btnBlock.Enabled= false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
@@ -2713,8 +2716,23 @@ namespace SATSuma
             }
         }
 
+        private void lblBlockNumber_Click(object sender, EventArgs e)
+        {
+            panelMenu.Visible = false;
+            btnBlock.Enabled = false;
+            btnAddress.Enabled = true;
+            btnBitcoinDashboard.Enabled = true;
+            btnLightningDashboard.Enabled = true;
+            panelBlock.Visible = true;
+            panelBitcoinDashboard.Visible = false;
+            panelLightningDashboard.Visible = false;
+            panelAddress.Visible = false;
+            textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
+        }
+
         private void BtnSettings_Click(object sender, EventArgs e)
         {
+            panelMenu.Visible = false;
             settingsScreen.CreateInstance();
             settingsScreen.Instance.ShowDialog();
             // read all fields from the settings screen and set variables for use on the main form
@@ -2822,6 +2840,18 @@ namespace SATSuma
         }
 
         #endregion
+
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            if (panelMenu.Visible == false)
+            {
+                panelMenu.Visible = true;
+            }
+            else
+            {
+                panelMenu.Visible = false;
+            }
+        }
     }
 
     //==============================================================================================================================================================================================

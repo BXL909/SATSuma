@@ -2095,6 +2095,22 @@ namespace SATSuma
 
         private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
         {
+            if (textBoxSubmittedBlockNumber.Text == "0")
+            {
+                btnPreviousBlock.Enabled = false;
+            }
+            else
+            {
+                btnPreviousBlock.Enabled = true;
+            }
+            if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text)
+            { 
+                btnNextBlock.Enabled = false;
+            }
+            else
+            {
+                btnNextBlock.Enabled = true;
+            }
             TotalBlockTransactionRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
             btnViewTransactionFromBlock.Visible = false;
             int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight);
@@ -2277,6 +2293,18 @@ namespace SATSuma
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
             btnViewTransactionFromBlock.Visible = false;
+        }
+
+        private void btnPreviousBlock_Click(object sender, EventArgs e)
+        {
+            long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
+            textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber - 1);
+        }
+
+        private void btnNextBlock_Click(object sender, EventArgs e)
+        {
+            long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
+            textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber + 1);
         }
 
         private void listViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -2626,9 +2654,22 @@ namespace SATSuma
         #region GENERAL FORM NAVIGATION AND CONTROLS
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (panelMenu.Height == 24)
+            {
+                panelMenu.Height = 168;
+            }
+            else
+            {
+                panelMenu.Height = 24;
+            }
+        }
+
         private void BtnSplash_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             splash splash = new splash(); // invoke the about/splash screen
             splash.ShowDialog();
         }
@@ -2645,6 +2686,7 @@ namespace SATSuma
 
         private void BtnMoveWindow_MouseDown(object sender, MouseEventArgs e) // move the form when the move control is used
         {
+            panelMenu.Height = 24; //close menu
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
@@ -2653,10 +2695,15 @@ namespace SATSuma
         {
             btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
         }
+        
+        private void btnMoveWindow_Click(object sender, EventArgs e)
+        {
+            panelMenu.Height = 24; //close menu
+        }
 
         private void BtnBitcoinDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = false;
             btnLightningDashboard.Enabled = true;
@@ -2672,7 +2719,7 @@ namespace SATSuma
 
         private void BtnLightningDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
             btnBlock.Enabled = true;
@@ -2688,7 +2735,7 @@ namespace SATSuma
 
         private void BtnAddress_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             btnAddress.Enabled= false;
             btnBitcoinDashboard.Enabled = true;
             btnBlock.Enabled = true;
@@ -2701,7 +2748,7 @@ namespace SATSuma
 
         private void btnBlock_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             btnBlock.Enabled= false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
@@ -2718,7 +2765,7 @@ namespace SATSuma
 
         private void lblBlockNumber_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             btnBlock.Enabled = false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
@@ -2732,7 +2779,7 @@ namespace SATSuma
 
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            panelMenu.Visible = false;
+            panelMenu.Height = 24;
             settingsScreen.CreateInstance();
             settingsScreen.Instance.ShowDialog();
             // read all fields from the settings screen and set variables for use on the main form
@@ -2838,20 +2885,7 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
-
         #endregion
-
-        private void btnMenu_Click(object sender, EventArgs e)
-        {
-            if (panelMenu.Visible == false)
-            {
-                panelMenu.Visible = true;
-            }
-            else
-            {
-                panelMenu.Visible = false;
-            }
-        }
     }
 
     //==============================================================================================================================================================================================

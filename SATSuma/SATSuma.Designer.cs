@@ -949,7 +949,7 @@
             this.panelBitcoinDashboard.Controls.Add(this.lblPriceUSD);
             this.panelBitcoinDashboard.Controls.Add(this.label2);
             this.panelBitcoinDashboard.Controls.Add(this.lblBlockReward);
-            this.panelBitcoinDashboard.Location = new System.Drawing.Point(601, 756);
+            this.panelBitcoinDashboard.Location = new System.Drawing.Point(21, 188);
             this.panelBitcoinDashboard.Name = "panelBitcoinDashboard";
             this.panelBitcoinDashboard.Size = new System.Drawing.Size(773, 556);
             this.panelBitcoinDashboard.TabIndex = 87;

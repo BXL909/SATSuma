@@ -18,7 +18,6 @@
  * further testing of own node connection, then add to settings once tested, with warning it might be much slower
  * bring the address screen within the Group1timertick? Might not be practical/useful
  * better/more error handling everywhere
- * finish block screen
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
  */
@@ -57,6 +56,7 @@ using ListViewItem = System.Windows.Forms.ListViewItem;
 using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
 #endregion
 
 namespace SATSuma
@@ -69,7 +69,6 @@ namespace SATSuma
         private int intDisplayCountdownToRefresh; // countdown in seconds to next refresh, for display only
         private int intAPIGroup1TimerIntervalMillisecsConstant; // milliseconds, used to reset the interval of the timer for api group1 refresh
         private int APIGroup1DisplayTimerIntervalSecsConstant; // seconds, used to reset the countdown display to its original number
-        private int intAPIGroup2TimerIntervalMillisecsConstant; // milliseconds, used to reset the interval of the timer for api group2 refresh
         // booleans used to say whether to run individual API's or not. All on/true by default.
         private bool RunBitcoinExplorerEndpointAPI = true;
         private bool RunBlockchainInfoEndpointAPI = true;
@@ -80,7 +79,6 @@ namespace SATSuma
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private int APIGroup1RefreshFrequency = 1; // mins. Default value 1. Initial value only
-        private int APIGroup2RefreshFrequency = 24; // hours. Default value 2. Initial value only
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private TransactionsForAddressService _transactionsForAddressService;
@@ -122,7 +120,6 @@ namespace SATSuma
         private void Form1_Load(object sender, EventArgs e) // on form loading
         {
             UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
-           // UpdateAPIGroup2DataFields(); // set the initial data for the daily updates to avoid waiting for the first data
             StartTheClocksTicking(); // start all the timers
             textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
             CheckBlockchainExplorerApiStatus();
@@ -140,11 +137,8 @@ namespace SATSuma
             APIGroup1DisplayTimerIntervalSecsConstant = (APIGroup1RefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
             intAPIGroup1TimerIntervalMillisecsConstant = ((APIGroup1RefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
             timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant; // set the timer interval
-            intAPIGroup2TimerIntervalMillisecsConstant = (((APIGroup2RefreshFrequency * 60) * 60) * 1000);  // turn hours to minutes, then seconds, then milliseconds
-            timerAPIGroup2.Interval = intAPIGroup2TimerIntervalMillisecsConstant; // set the time interval
             timer1Sec.Start(); // timer used to refresh the clock values
             timerAPIGroup1.Start(); // timer used to refresh most btc data
-            timerAPIGroup2.Start(); // start timer for less frequent api calls
         }
 
         private void Timer1Sec_Tick(object sender, EventArgs e) // update the calendar time and date
@@ -183,10 +177,6 @@ namespace SATSuma
             UpdateAPIGroup1DataFields(); // fetch data and populate fields
         }
 
-        private void TimerAPIGroup2_Tick(object sender, EventArgs e)
-        {
-          //  UpdateAPIGroup2DataFields(); // update the rest of the btc/lightning fields
-        }
         #endregion
 
         #region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
@@ -194,6 +184,7 @@ namespace SATSuma
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
         //=============================================================================================================
         //-------------------------UPDATE FORM FIELDS------------------------------------------------------------------
+
         public async void UpdateAPIGroup1DataFields()
         {
             DisableEnableLoadingAnimation("enable");
@@ -931,164 +922,6 @@ namespace SATSuma
             }
             DisableEnableLoadingAnimation("disable");
         }
-
-        public async void UpdateAPIGroup2DataFields()
-        {
-            DisableEnableLoadingAnimation("enable");
-            using (WebClient client = new WebClient())
-            {
-                bool errorOccurred = false;
-                Task task7 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
-                {
-                    try
-                    {
-                        if (RunBlockchairComJSONAPI)
-                        {
-                            var result7 = BlockchairComJSONRefresh();
-                            int hodling_addresses = int.Parse(result7.hodling_addresses);
-                            if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
-                            {
-                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHodlingAddresses.Text = result7.hodling_addresses;
-                                });
-                            }
-                            else
-                            {
-                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHodlingAddresses.Text = "no data";
-                                });
-                            }
-                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlocksIn24Hours.Text = result7.blocks_24h;
-                            });
-                            lblNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodes.Text = result7.nodes;
-                            });
-                            dynamic blockchainSize = result7.blockchain_size;
-                            double blockchainSizeGB = Math.Round(Convert.ToDouble(blockchainSize) / 1073741824.0, 2);
-                            lblBlockchainSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockchainSize.Text = blockchainSizeGB.ToString();
-                            });
-                        }
-                        else
-                        {
-                            lblHodlingAddresses.Invoke((MethodInvoker)delegate
-                            {
-                                lblHodlingAddresses.Text = "disabled";
-                            });
-                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlocksIn24Hours.Text = "disabled";
-                            });
-                            lblNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodes.Text = "disabled";
-                            });
-                            lblBlockchainSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockchainSize.Text = "disabled";
-                            });
-                        }
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
-                    }
-                });
-
-                Task task8 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
-                {
-                    try
-                    {
-                        if (RunBlockchairComJSONAPI)
-                        {
-                            var result8 = BlockchairComHalvingJSONRefresh();
-                            lblHalveningBlock.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalveningBlock.Text = result8.halveningBlock + "/" + result8.blocksLeft;
-                            });
-                            string halvening_time = result8.halveningTime;
-                            DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                            string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
-
-                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstimatedHalvingDate.Text = halveningDate + "/";
-                            });
-                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalveningSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
-                                lblHalveningSecondsRemaining.Text = result8.seconds_left;
-                                ObtainedHalveningSecondsRemainingYet = true; // signifies that we can now start deducting from this
-                            });
-                        }
-                        else
-                        {
-                            lblHalveningBlock.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalveningBlock.Text = "disabled";
-                            });
-                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstimatedHalvingDate.Text = "disabled";
-                            });
-                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalveningSecondsRemaining.Text = "disabled";
-                            });
-                        }
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
-                    }
-                });
-
-                await Task.WhenAll(task7, task8);
-
-                // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
-                if (errorOccurred)
-                {
-                    intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    lblStatusLight.Invoke((MethodInvoker)delegate
-                    {
-                        lblStatusLight.ForeColor = Color.Red;
-                    });
-                    lblStatusLight.Invoke((MethodInvoker)delegate
-                    {
-                        lblStatusLight.Text = "🔴"; // red light
-                    });
-                    lblStatusMessPart1.Invoke((MethodInvoker)delegate
-                    {
-                        lblStatusMessPart1.Text = "One or more fields failed to update. Trying again in ";
-                    });
-                }
-            }
-            DisableEnableLoadingAnimation("disable");
-        }  // leaving here for now, but currently unused.
 
         //=============================================================================================================
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
@@ -1882,6 +1715,7 @@ namespace SATSuma
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
             // Set the text of the textBoxSubmittedBlockNumber control
             textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+            LookupBlock();
             //show the block screen
             btnBlock_Click(sender, e);
         }
@@ -2046,54 +1880,131 @@ namespace SATSuma
         //=============================================================================================================
         //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
 
-        private string previousValueOfTextBoxSubmittedBlockNumber;
-
-        private void textBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e) //allow numerics and backspace only, avoiding triggering a _textchanged until we have valid input.
+        private void TextBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Store the previous value of the textbox
-            if (string.IsNullOrEmpty(previousValueOfTextBoxSubmittedBlockNumber))
-            {
-                previousValueOfTextBoxSubmittedBlockNumber = textBoxSubmittedBlockNumber.Text;
-            }
+            // Get the maximum allowed value for the block number
+            int maxValue = int.Parse(lblBlockNumber.Text);
 
-            // Check if the entered key is a digit or backspace
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b')
+            // Allow only digits, backspace, delete, and enter
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
             {
-                // If it's not a digit or backspace, set Handled property to true to prevent the character from being entered
                 e.Handled = true;
-            }
-            else if (e.KeyChar == '\b' && textBoxSubmittedBlockNumber.SelectionStart > 0)
-            {
-                // If the key pressed is backspace and the cursor is not at the start of the textbox,
-                // remove the last character from the textbox and update the previous value variable
-                previousValueOfTextBoxSubmittedBlockNumber = textBoxSubmittedBlockNumber.Text.Remove(textBoxSubmittedBlockNumber.SelectionStart - 1, 1);
+                return;
             }
 
-            if (int.TryParse(previousValueOfTextBoxSubmittedBlockNumber + e.KeyChar, out int value))
+            // Handle backspace
+            if (e.KeyChar == '\b')
             {
-                int maxValue = int.Parse(lblBlockNumber.Text);
+                // If there is a selection, delete it
+                if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                {
+                    int start = textBoxSubmittedBlockNumber.SelectionStart;
+                    int length = textBoxSubmittedBlockNumber.SelectionLength;
+                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
+                    textBoxSubmittedBlockNumber.SelectionStart = start;
+                }
+                // If the cursor is not at the beginning, delete the character to the left of the cursor
+                else if (textBoxSubmittedBlockNumber.SelectionStart > 0)
+                {
+                    int pos = textBoxSubmittedBlockNumber.SelectionStart - 1;
+                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
+                    textBoxSubmittedBlockNumber.SelectionStart = pos;
+                }
 
-                if (value < 0 || value > maxValue)
-                {
-                    // If the value is outside the allowed range, set the Text property of textBoxSubmittedBlockNumber to the previous value
-                    e.Handled = true;
-                    textBoxSubmittedBlockNumber.Text = previousValueOfTextBoxSubmittedBlockNumber;
-                }
-                else
-                {
-                    // Update the previous value variable
-                    previousValueOfTextBoxSubmittedBlockNumber += e.KeyChar;
-                }
-            }
-            else
-            {
-                // If the value is not a valid integer, set the Text property of textBoxSubmittedBlockNumber to the previous value
                 e.Handled = true;
-                textBoxSubmittedBlockNumber.Text = previousValueOfTextBoxSubmittedBlockNumber;
+                return;
+            }
+
+            // Handle delete
+            if (e.KeyChar == '\u007F')
+            {
+                // If there is a selection, delete it
+                if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                {
+                    int start = textBoxSubmittedBlockNumber.SelectionStart;
+                    int length = textBoxSubmittedBlockNumber.SelectionLength;
+                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
+                    textBoxSubmittedBlockNumber.SelectionStart = start;
+                }
+                // If the cursor is not at the end, delete the character to the right of the cursor
+                else if (textBoxSubmittedBlockNumber.SelectionStart < textBoxSubmittedBlockNumber.Text.Length)
+                {
+                    int pos = textBoxSubmittedBlockNumber.SelectionStart;
+                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
+                    textBoxSubmittedBlockNumber.SelectionStart = pos;
+                }
+
+                e.Handled = true;
+                return;
+            }
+
+            // Handle enter
+            if (e.KeyChar == '\r')
+            {
+                // Submit button was pressed
+                LookupBlock();
+                e.Handled = true;
+                return;
+            }
+
+            // Construct the new value of the textbox by appending the pressed character
+            string valueString = textBoxSubmittedBlockNumber.Text + e.KeyChar.ToString();
+
+            // Handle the case where the textbox is empty by setting it to 0
+            if (string.IsNullOrEmpty(textBoxSubmittedBlockNumber.Text.Trim()))
+            {
+                textBoxSubmittedBlockNumber.Text = "0";
+                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            // Handle non-numeric input
+            if (!int.TryParse(valueString, out int value))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Handle negative input by setting the textbox to 0
+            if (value < 0)
+            {
+                textBoxSubmittedBlockNumber.Text = "0";
+                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
+            if (value > maxValue)
+            {
+                textBoxSubmittedBlockNumber.Text = maxValue.ToString();
+                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            textBoxSubmittedBlockNumber.Text = value.ToString();
+            textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                            e.Handled = true;
+        }
+
+        private void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxSubmittedBlockNumber.Text.Trim()))
+            {
+                textBoxSubmittedBlockNumber.Text = "0";
+                btnPreviousBlock.Enabled = false;
+                btnNextBlock.Enabled = true;
+            }
+            if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text) 
+            {
+                btnNextBlock.Enabled = false;
+                btnPreviousBlock.Enabled = true;
             }
         }
 
-        private async void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        private async void LookupBlock()
         {
             if (textBoxSubmittedBlockNumber.Text == "0")
             {
@@ -2104,7 +2015,7 @@ namespace SATSuma
                 btnPreviousBlock.Enabled = true;
             }
             if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text)
-            { 
+            {
                 btnNextBlock.Enabled = false;
             }
             else
@@ -2295,16 +2206,18 @@ namespace SATSuma
             btnViewTransactionFromBlock.Visible = false;
         }
 
-        private void btnPreviousBlock_Click(object sender, EventArgs e)
+        private void btnPreviousBlock_Click(object sender, EventArgs e) // decrease block number by 1 and populate block data
         {
             long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
             textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber - 1);
+            LookupBlock();
         }
 
-        private void btnNextBlock_Click(object sender, EventArgs e)
+        private void btnNextBlock_Click(object sender, EventArgs e) // increase block number by 1 and populate block data
         {
             long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
             textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber + 1);
+            LookupBlock();
         }
 
         private void listViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -2655,7 +2568,7 @@ namespace SATSuma
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnMenu_Click(object sender, EventArgs e)
         {
             if (panelMenu.Height == 24)
             {
@@ -2759,7 +2672,8 @@ namespace SATSuma
             panelAddress.Visible = false;
             if (textBoxSubmittedBlockNumber.Text == "") 
             {
-                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; //pre-populate the block field on the Block screen)
+                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                LookupBlock(); // fetch all the block data automatically for the initial view. 
             }
         }
 
@@ -2854,14 +2768,6 @@ namespace SATSuma
                 timerAPIGroup1.Stop();
                 timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
                 timerAPIGroup1.Start();
-            }
-
-            if (intAPIGroup2TimerIntervalMillisecsConstant != (((settingsScreen.Instance.APIGroup2RefreshInHoursSelection * 60) * 60) * 1000))
-            {
-                intAPIGroup2TimerIntervalMillisecsConstant = (((settingsScreen.Instance.APIGroup2RefreshInHoursSelection * 60) * 60) * 1000);
-                timerAPIGroup2.Stop();
-                timerAPIGroup2.Interval = intAPIGroup2TimerIntervalMillisecsConstant;
-                timerAPIGroup2.Start();
             }
         }
         #endregion

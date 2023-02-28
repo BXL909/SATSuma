@@ -78,7 +78,6 @@
             this.label25 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
-            this.timerAPIGroup2 = new System.Windows.Forms.Timer(this.components);
             this.lblElapsedSinceUpdate = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard = new System.Windows.Forms.Panel();
             this.label57 = new System.Windows.Forms.Label();
@@ -119,6 +118,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblBlockReward = new System.Windows.Forms.Label();
             this.panelLightningDashboard = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label78 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label76 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label75 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label53 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label54 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.lblMedBaseFeeTokens = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
@@ -226,6 +235,8 @@
             this.textboxSubmittedAddress = new System.Windows.Forms.TextBox();
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
+            this.btnPreviousBlock = new System.Windows.Forms.Button();
+            this.btnNextBlock = new System.Windows.Forms.Button();
             this.label71 = new System.Windows.Forms.Label();
             this.lblNonce = new System.Windows.Forms.Label();
             this.label66 = new System.Windows.Forms.Label();
@@ -258,38 +269,26 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label73 = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.btnMenu = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnSplash = new System.Windows.Forms.Button();
             this.btnBlock = new System.Windows.Forms.Button();
             this.btnAddress = new System.Windows.Forms.Button();
             this.btnBitcoinDashboard = new System.Windows.Forms.Button();
             this.btnLightningDashboard = new System.Windows.Forms.Button();
-            this.btnMenu = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label54 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label53 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label75 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.label76 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.label78 = new System.Windows.Forms.Label();
-            this.btnNextBlock = new System.Windows.Forms.Button();
-            this.btnPreviousBlock = new System.Windows.Forms.Button();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panelLightningDashboard.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panelAddress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoadingAnimation)).BeginInit();
             this.panelBlock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelMenu.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -879,11 +878,6 @@
             this.label29.TabIndex = 74;
             this.label29.Text = "1day";
             // 
-            // timerAPIGroup2
-            // 
-            this.timerAPIGroup2.Interval = 86400000;
-            this.timerAPIGroup2.Tick += new System.EventHandler(this.TimerAPIGroup2_Tick);
-            // 
             // lblElapsedSinceUpdate
             // 
             this.lblElapsedSinceUpdate.AutoSize = true;
@@ -955,7 +949,7 @@
             this.panelBitcoinDashboard.Controls.Add(this.lblPriceUSD);
             this.panelBitcoinDashboard.Controls.Add(this.label2);
             this.panelBitcoinDashboard.Controls.Add(this.lblBlockReward);
-            this.panelBitcoinDashboard.Location = new System.Drawing.Point(518, 756);
+            this.panelBitcoinDashboard.Location = new System.Drawing.Point(601, 756);
             this.panelBitcoinDashboard.Name = "panelBitcoinDashboard";
             this.panelBitcoinDashboard.Size = new System.Drawing.Size(773, 556);
             this.panelBitcoinDashboard.TabIndex = 87;
@@ -1495,6 +1489,111 @@
             this.panelLightningDashboard.TabIndex = 88;
             this.panelLightningDashboard.Visible = false;
             this.panelLightningDashboard.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelLightningDashboard_Paint);
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel5.Controls.Add(this.label78);
+            this.panel5.Location = new System.Drawing.Point(388, 2);
+            this.panel5.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(359, 23);
+            this.panel5.TabIndex = 197;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label78.ForeColor = System.Drawing.Color.Silver;
+            this.label78.Location = new System.Drawing.Point(3, 1);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(77, 20);
+            this.label78.TabIndex = 193;
+            this.label78.Text = "Channels";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel4.Controls.Add(this.label76);
+            this.panel4.Location = new System.Drawing.Point(3, 2);
+            this.panel4.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(359, 23);
+            this.panel4.TabIndex = 196;
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label76.ForeColor = System.Drawing.Color.Silver;
+            this.label76.Location = new System.Drawing.Point(3, 1);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(77, 20);
+            this.label76.TabIndex = 193;
+            this.label76.Text = "Capacity";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel3.Controls.Add(this.label75);
+            this.panel3.Location = new System.Drawing.Point(3, 140);
+            this.panel3.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(359, 23);
+            this.panel3.TabIndex = 195;
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label75.ForeColor = System.Drawing.Color.Silver;
+            this.label75.Location = new System.Drawing.Point(3, 1);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(56, 20);
+            this.label75.TabIndex = 193;
+            this.label75.Text = "Nodes";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel2.Controls.Add(this.label53);
+            this.panel2.Location = new System.Drawing.Point(3, 313);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(359, 23);
+            this.panel2.TabIndex = 194;
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label53.ForeColor = System.Drawing.Color.Silver;
+            this.label53.Location = new System.Drawing.Point(3, 1);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(169, 20);
+            this.label53.TabIndex = 193;
+            this.label53.Text = "Highest liquidity nodes";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel1.Controls.Add(this.label54);
+            this.panel1.Location = new System.Drawing.Point(388, 313);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(359, 23);
+            this.panel1.TabIndex = 192;
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label54.ForeColor = System.Drawing.Color.Silver;
+            this.label54.Location = new System.Drawing.Point(3, 1);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(207, 20);
+            this.label54.TabIndex = 193;
+            this.label54.Text = "Highest connectivity nodes";
             // 
             // label43
             // 
@@ -2950,6 +3049,44 @@
             this.panelBlock.TabIndex = 141;
             this.panelBlock.Visible = false;
             // 
+            // btnPreviousBlock
+            // 
+            this.btnPreviousBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPreviousBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPreviousBlock.FlatAppearance.BorderSize = 0;
+            this.btnPreviousBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnPreviousBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnPreviousBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPreviousBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPreviousBlock.ForeColor = System.Drawing.Color.White;
+            this.btnPreviousBlock.Location = new System.Drawing.Point(125, 3);
+            this.btnPreviousBlock.Margin = new System.Windows.Forms.Padding(0);
+            this.btnPreviousBlock.Name = "btnPreviousBlock";
+            this.btnPreviousBlock.Size = new System.Drawing.Size(23, 23);
+            this.btnPreviousBlock.TabIndex = 171;
+            this.btnPreviousBlock.Text = "◁";
+            this.btnPreviousBlock.UseVisualStyleBackColor = false;
+            this.btnPreviousBlock.Click += new System.EventHandler(this.btnPreviousBlock_Click);
+            // 
+            // btnNextBlock
+            // 
+            this.btnNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnNextBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnNextBlock.FlatAppearance.BorderSize = 0;
+            this.btnNextBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnNextBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnNextBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNextBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextBlock.ForeColor = System.Drawing.Color.White;
+            this.btnNextBlock.Location = new System.Drawing.Point(220, 3);
+            this.btnNextBlock.Margin = new System.Windows.Forms.Padding(0);
+            this.btnNextBlock.Name = "btnNextBlock";
+            this.btnNextBlock.Size = new System.Drawing.Size(23, 23);
+            this.btnNextBlock.TabIndex = 170;
+            this.btnNextBlock.Text = "▷";
+            this.btnNextBlock.UseVisualStyleBackColor = false;
+            this.btnNextBlock.Click += new System.EventHandler(this.btnNextBlock_Click);
+            // 
             // label71
             // 
             this.label71.AutoSize = true;
@@ -3322,7 +3459,7 @@
             this.textBoxSubmittedBlockNumber.Size = new System.Drawing.Size(60, 25);
             this.textBoxSubmittedBlockNumber.TabIndex = 7;
             this.textBoxSubmittedBlockNumber.TextChanged += new System.EventHandler(this.textBoxSubmittedBlockNumber_TextChanged);
-            this.textBoxSubmittedBlockNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSubmittedBlockNumber_KeyPress);
+            this.textBoxSubmittedBlockNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedBlockNumber_KeyPress);
             // 
             // label60
             // 
@@ -3372,6 +3509,28 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(144, 24);
             this.panelMenu.TabIndex = 152;
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnMenu.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenu.FlatAppearance.BorderSize = 0;
+            this.btnMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenu.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenu.ForeColor = System.Drawing.Color.White;
+            this.btnMenu.Location = new System.Drawing.Point(0, 0);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(144, 24);
+            this.btnMenu.TabIndex = 153;
+            this.btnMenu.TabStop = false;
+            this.btnMenu.Text = "MENU";
+            this.btnMenu.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenu.UseVisualStyleBackColor = false;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
             // 
             // btnSettings
             // 
@@ -3502,171 +3661,6 @@
             this.btnLightningDashboard.UseVisualStyleBackColor = false;
             this.btnLightningDashboard.Click += new System.EventHandler(this.BtnLightningDashboard_Click);
             // 
-            // btnMenu
-            // 
-            this.btnMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnMenu.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenu.FlatAppearance.BorderSize = 0;
-            this.btnMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenu.ForeColor = System.Drawing.Color.White;
-            this.btnMenu.Location = new System.Drawing.Point(0, 0);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(144, 24);
-            this.btnMenu.TabIndex = 153;
-            this.btnMenu.TabStop = false;
-            this.btnMenu.Text = "MENU";
-            this.btnMenu.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnMenu.UseVisualStyleBackColor = false;
-            this.btnMenu.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel1.Controls.Add(this.label54);
-            this.panel1.Location = new System.Drawing.Point(388, 313);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(359, 23);
-            this.panel1.TabIndex = 192;
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label54.ForeColor = System.Drawing.Color.Silver;
-            this.label54.Location = new System.Drawing.Point(3, 1);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(207, 20);
-            this.label54.TabIndex = 193;
-            this.label54.Text = "Highest connectivity nodes";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel2.Controls.Add(this.label53);
-            this.panel2.Location = new System.Drawing.Point(3, 313);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(359, 23);
-            this.panel2.TabIndex = 194;
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label53.ForeColor = System.Drawing.Color.Silver;
-            this.label53.Location = new System.Drawing.Point(3, 1);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(169, 20);
-            this.label53.TabIndex = 193;
-            this.label53.Text = "Highest liquidity nodes";
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel3.Controls.Add(this.label75);
-            this.panel3.Location = new System.Drawing.Point(3, 140);
-            this.panel3.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(359, 23);
-            this.panel3.TabIndex = 195;
-            // 
-            // label75
-            // 
-            this.label75.AutoSize = true;
-            this.label75.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label75.ForeColor = System.Drawing.Color.Silver;
-            this.label75.Location = new System.Drawing.Point(3, 1);
-            this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(56, 20);
-            this.label75.TabIndex = 193;
-            this.label75.Text = "Nodes";
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel4.Controls.Add(this.label76);
-            this.panel4.Location = new System.Drawing.Point(3, 2);
-            this.panel4.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(359, 23);
-            this.panel4.TabIndex = 196;
-            // 
-            // label76
-            // 
-            this.label76.AutoSize = true;
-            this.label76.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label76.ForeColor = System.Drawing.Color.Silver;
-            this.label76.Location = new System.Drawing.Point(3, 1);
-            this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(77, 20);
-            this.label76.TabIndex = 193;
-            this.label76.Text = "Capacity";
-            // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel5.Controls.Add(this.label78);
-            this.panel5.Location = new System.Drawing.Point(388, 2);
-            this.panel5.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(359, 23);
-            this.panel5.TabIndex = 197;
-            // 
-            // label78
-            // 
-            this.label78.AutoSize = true;
-            this.label78.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label78.ForeColor = System.Drawing.Color.Silver;
-            this.label78.Location = new System.Drawing.Point(3, 1);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(77, 20);
-            this.label78.TabIndex = 193;
-            this.label78.Text = "Channels";
-            // 
-            // btnNextBlock
-            // 
-            this.btnNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnNextBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnNextBlock.FlatAppearance.BorderSize = 0;
-            this.btnNextBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnNextBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnNextBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextBlock.ForeColor = System.Drawing.Color.White;
-            this.btnNextBlock.Location = new System.Drawing.Point(220, 3);
-            this.btnNextBlock.Margin = new System.Windows.Forms.Padding(0);
-            this.btnNextBlock.Name = "btnNextBlock";
-            this.btnNextBlock.Size = new System.Drawing.Size(23, 23);
-            this.btnNextBlock.TabIndex = 170;
-            this.btnNextBlock.Text = "▷";
-            this.btnNextBlock.UseVisualStyleBackColor = false;
-            this.btnNextBlock.Click += new System.EventHandler(this.btnNextBlock_Click);
-            // 
-            // btnPreviousBlock
-            // 
-            this.btnPreviousBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPreviousBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPreviousBlock.FlatAppearance.BorderSize = 0;
-            this.btnPreviousBlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnPreviousBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnPreviousBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreviousBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPreviousBlock.ForeColor = System.Drawing.Color.White;
-            this.btnPreviousBlock.Location = new System.Drawing.Point(125, 3);
-            this.btnPreviousBlock.Margin = new System.Windows.Forms.Padding(0);
-            this.btnPreviousBlock.Name = "btnPreviousBlock";
-            this.btnPreviousBlock.Size = new System.Drawing.Size(23, 23);
-            this.btnPreviousBlock.TabIndex = 171;
-            this.btnPreviousBlock.Text = "◁";
-            this.btnPreviousBlock.UseVisualStyleBackColor = false;
-            this.btnPreviousBlock.Click += new System.EventHandler(this.btnPreviousBlock_Click);
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -3723,6 +3717,16 @@
             this.panelBitcoinDashboard.PerformLayout();
             this.panelLightningDashboard.ResumeLayout(false);
             this.panelLightningDashboard.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panelAddress.ResumeLayout(false);
             this.panelAddress.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).EndInit();
@@ -3731,16 +3735,6 @@
             this.panelBlock.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelMenu.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3777,7 +3771,6 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Timer timerAPIGroup2;
         private System.Windows.Forms.Label lblElapsedSinceUpdate;
         private System.Windows.Forms.Panel panelBitcoinDashboard;
         private System.Windows.Forms.Label label33;

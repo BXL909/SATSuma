@@ -224,11 +224,6 @@ namespace SATSuma
             APIGroup1RefreshInMinsSelection = (int)numericUpDownAPIGroup1.Value;
         }
 
-        private void NumericUpDownAPIGroup2_ValueChanged(object sender, EventArgs e) // number of mins between refreshes for API group 2 has been changed
-        {
-            APIGroup2RefreshInHoursSelection = (int)numericUpDownAPIGroup2.Value;
-        }
-
         private void ComboAPISelectorForQueries_SelectedIndexChanged(object sender, EventArgs e) // set the node to be used for user queries
         {
             if (!hasAPISelectorComboBoxJustBeenPainted) // ignore the selectedindexchanged event that occurs during form paint

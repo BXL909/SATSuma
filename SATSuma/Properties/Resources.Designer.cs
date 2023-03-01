@@ -63,16 +63,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap tinylogo {
-            get {
-                object obj = ResourceManager.GetObject("tinylogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap tinylogo1 {
             get {
                 object obj = ResourceManager.GetObject("tinylogo1", resourceCulture);
@@ -86,6 +76,16 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap title {
             get {
                 object obj = ResourceManager.GetObject("title", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap titleBGLongerOrange {
+            get {
+                object obj = ResourceManager.GetObject("titleBGLongerOrange", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

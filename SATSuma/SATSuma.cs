@@ -85,6 +85,7 @@ namespace SATSuma
         private BlockDataService _blockService;
         private TransactionsForBlockService _transactionsForBlockService;
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
+        private int TotalBlockRowsAdded = 0; // keeps track of how many rows of blocks have been added to the blocks listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
@@ -100,6 +101,10 @@ namespace SATSuma
         bool btnNextBlockTransactionsWasEnabled = false;
         bool textBoxSubmittedBlockNumberWasEnabled = true;
         bool textBoxSubmittedAddressWasEnabled = true;
+        bool btnNextBlockWasEnabled = false;
+        bool btnPreviousBlockWasEnabled = true;
+        bool btnBlockListNextBlockWasEnabled = false;
+        bool btnBlockListPreviousBlockWasEnabled = true;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -278,6 +283,9 @@ namespace SATSuma
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = result2.blockReward;
+                                decimal DecBlockReward = Convert.ToDecimal(result2.blockReward);
+                                decimal NextBlockReward = DecBlockReward / 2;
+                                lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
                             });
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
@@ -289,7 +297,7 @@ namespace SATSuma
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
-                                lblBTCInCirc.Text = result2.btcInCirc;
+                                lblBTCInCirc.Text = result2.btcInCirc + " / 21000000";
                             });
                             lblHashesToSolve.Invoke((MethodInvoker)delegate
                             {
@@ -523,11 +531,7 @@ namespace SATSuma
                             });
                             lbl24HrHigh.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HrHigh.Text = result5.twentyFourHourHigh;
-                            });
-                            lbl24HrLow.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HrLow.Text = result5.twentyFourHourLow;
+                                lbl24HrHigh.Text = result5.twentyFourHourHigh + " / " + result5.twentyFourHourLow;
                             });
                         }
                         else
@@ -551,10 +555,6 @@ namespace SATSuma
                             lbl24HrHigh.Invoke((MethodInvoker)delegate
                             {
                                 lbl24HrHigh.Text = "disabled";
-                            });
-                            lbl24HrLow.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HrLow.Text = "disabled";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -848,7 +848,7 @@ namespace SATSuma
                             var result8 = BlockchairComHalvingJSONRefresh();
                             lblHalveningBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningBlock.Text = result8.halveningBlock + "/" + result8.blocksLeft;
+                                lblHalveningBlock.Text = result8.halveningBlock + " / " + result8.blocksLeft;
                             });
                             string halvening_time = result8.halveningTime;
                             DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -856,7 +856,7 @@ namespace SATSuma
 
                             lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
                             {
-                                lblEstimatedHalvingDate.Text = halveningDate + "/";
+                                lblEstimatedHalvingDate.Text = halveningDate + " / ";
                             });
                             lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
                             {
@@ -1336,11 +1336,11 @@ namespace SATSuma
                 label63.Text = "Confirmed spent";
                 lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                 lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
                 lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
                 lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
                 lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
-                lblAddressConfirmedSpentOutputs.Text = " (" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
+                lblAddressConfirmedSpentOutputs.Text = "(" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
                 var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
                 var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
                 var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
@@ -1348,7 +1348,7 @@ namespace SATSuma
                 var confirmedUnspent = confirmedReceived - confirmedSpent;
                 var unSpentTxOutputs = fundedTx - spentTx;
                 lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
                 lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
             }
             if (mempoolConfUnconfOrAllTx == "mempool") //mempool stats only
@@ -1359,11 +1359,11 @@ namespace SATSuma
                 label63.Text = "Unconfirmed spent";
                 lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
                 lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
                 lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
                 lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
                 lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
-                lblAddressConfirmedSpentOutputs.Text = " (" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
+                lblAddressConfirmedSpentOutputs.Text = "(" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
                 var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
                 var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
                 var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
@@ -1371,7 +1371,7 @@ namespace SATSuma
                 var confirmedUnspent = confirmedReceived - confirmedSpent;
                 var unSpentTxOutputs = fundedTx - spentTx;
                 lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
                 lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
             }
             if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
@@ -1391,7 +1391,7 @@ namespace SATSuma
                 decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
                 lblAddressConfirmedReceived.Text = Convert.ToString(BTCtotalReceived);
 
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width, lblAddressConfirmedReceivedOutputs.Location.Y);
+                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
                 int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
                 int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
                 int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
@@ -1407,7 +1407,7 @@ namespace SATSuma
                 int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
                 int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
                 int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
-                lblAddressConfirmedSpentOutputs.Text = " (" + totalSpentOutputs + " outputs)";
+                lblAddressConfirmedSpentOutputs.Text = "(" + totalSpentOutputs + " outputs)";
 
                 var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
                 var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
@@ -1427,7 +1427,7 @@ namespace SATSuma
                 var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
 
                 lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width, lblAddressConfirmedUnspentOutputs.Location.Y);
+                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
                 lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
             }
         }
@@ -2036,14 +2036,14 @@ namespace SATSuma
             var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            await GetTwentyFiveBlocks(blockNumber);
+            await GetFifteenBlocks(blockNumber);
             string BlockHashToGetTransactionsFor = lblBlockHash.Text;
             await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
             DisableEnableButtons("enable"); // enable buttons after operation is complete
         }
 
-        private async Task GetTwentyFiveBlocks(string blockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
+        private async Task GetFifteenBlocks(string blockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
         {
             var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
             var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
@@ -2342,6 +2342,363 @@ namespace SATSuma
         }
         #endregion
 
+        #region BLOCK LIST STUFF
+
+        private void textBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Get the maximum allowed value for the block number
+            int maxValue = int.Parse(lblBlockNumber.Text);
+
+            // Allow only digits, backspace, delete, and enter
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Handle backspace
+            if (e.KeyChar == '\b')
+            {
+                // If there is a selection, delete it
+                if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                {
+                    int start = textBoxBlockHeightToStartListFrom.SelectionStart;
+                    int length = textBoxBlockHeightToStartListFrom.SelectionLength;
+                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
+                    textBoxBlockHeightToStartListFrom.SelectionStart = start;
+                }
+                // If the cursor is not at the beginning, delete the character to the left of the cursor
+                else if (textBoxBlockHeightToStartListFrom.SelectionStart > 0)
+                {
+                    int pos = textBoxBlockHeightToStartListFrom.SelectionStart - 1;
+                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
+                    textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                }
+
+                e.Handled = true;
+                return;
+            }
+
+            // Handle delete
+            if (e.KeyChar == '\u007F')
+            {
+                // If there is a selection, delete it
+                if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                {
+                    int start = textBoxBlockHeightToStartListFrom.SelectionStart;
+                    int length = textBoxBlockHeightToStartListFrom.SelectionLength;
+                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
+                    textBoxBlockHeightToStartListFrom.SelectionStart = start;
+                }
+                // If the cursor is not at the end, delete the character to the right of the cursor
+                else if (textBoxBlockHeightToStartListFrom.SelectionStart < textBoxBlockHeightToStartListFrom.Text.Length)
+                {
+                    int pos = textBoxBlockHeightToStartListFrom.SelectionStart;
+                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
+                    textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                }
+
+                e.Handled = true;
+                return;
+            }
+
+            // Handle enter
+            if (e.KeyChar == '\r')
+            {
+                // Submit button was pressed
+                LookupBlockList();
+                e.Handled = true;
+                return;
+            }
+
+            // Construct the new value of the textbox by appending the pressed character
+            string valueString = textBoxBlockHeightToStartListFrom.Text + e.KeyChar.ToString();
+
+            // Handle the case where the textbox is empty by setting it to 0
+            if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
+            {
+                textBoxBlockHeightToStartListFrom.Text = "0";
+                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            // Handle non-numeric input
+            if (!int.TryParse(valueString, out int value))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Handle negative input by setting the textbox to 0
+            if (value < 0)
+            {
+                textBoxBlockHeightToStartListFrom.Text = "0";
+                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
+            if (value > maxValue)
+            {
+                textBoxBlockHeightToStartListFrom.Text = maxValue.ToString();
+                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                e.Handled = true;
+                return;
+            }
+
+            textBoxBlockHeightToStartListFrom.Text = value.ToString();
+            textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+            e.Handled = true;
+        }
+
+        private void textBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
+            {
+                textBoxBlockHeightToStartListFrom.Text = "0";
+                btnBlockListPreviousBlock.Enabled = false;
+                btnBlockListNextBlock.Enabled = true;
+            }
+            if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
+            {
+                btnBlockListNextBlock.Enabled = false;
+                btnBlockListPreviousBlock.Enabled = true;
+            }
+        }
+
+        private async void LookupBlockList()
+        {
+            if (textBoxBlockHeightToStartListFrom.Text == "0")
+            {
+                btnBlockListPreviousBlock.Enabled = false;
+            }
+            else
+            {
+                btnBlockListPreviousBlock.Enabled = true;
+            }
+            if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
+            {
+                btnBlockListNextBlock.Enabled = false;
+            }
+            else
+            {
+                btnBlockListNextBlock.Enabled = true;
+            }
+            TotalBlockRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
+            btnViewBlockFromBlockList.Visible = false;
+            var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            await GetFifteenBlocksForBlockList(blockNumber);
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            DisableEnableButtons("enable"); // enable buttons after operation is complete
+        }
+
+        private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
+        {
+            var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
+            var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+            List<string> blocklist = blocks.Select(t => t.height).ToList();
+
+            // Update lastSeenBlockNumber if this isn't our first fetch of blocks to restart from the right place
+            if (blocklist.Count > 0)
+            {
+                lastSeenBlockNumber = blocklist.Last();
+            }
+
+            //LIST VIEW
+            listViewBlockList.Items.Clear(); // remove any data that may be there already
+            listViewBlockList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockList, new object[] { true });
+
+            // Check if the column header already exists
+            if (listViewBlockList.Columns.Count == 0)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add(" Date / time", 120);
+            }
+
+            if (listViewBlockList.Columns.Count == 1)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("Height", 70);
+            }
+
+            if (listViewBlockList.Columns.Count == 2)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("TX count", 70);
+            }
+            if (listViewBlockList.Columns.Count == 3)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("Size", 40);
+            }
+            // Add the items to the ListView
+            int counter = 0; // used to count rows in list as they're added
+
+            foreach (var block in blocks)
+            {
+                ListViewItem item = new ListViewItem(block.timestamp); // create new row
+                item.SubItems.Add(block.height.ToString());
+                item.SubItems.Add(block.tx_count.ToString());
+                item.SubItems.Add(block.size.ToString()); // number of outputs
+                listViewBlockList.Items.Add(item); // add row
+
+                counter++; // increment rows for this batch
+                TotalBlockRowsAdded++; // increment all rows
+
+                // THESE CONDITIONS ARE ALL WRONG RIGHT NOW -------------------------------------------------------------------------------------------------------------
+                if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
+                {
+                    btnNewer15Blocks.Visible = false; // so this won't be needed
+                }
+                else
+                {
+                    btnNewer15Blocks.Visible = true;
+                }
+
+                if (Convert.ToInt32(lastSeenBlockNumber) <= 14) // we've reached the Genesis Block (bottom of the list)
+                {
+                    btnOlder15Blocks.Visible = false; // so we won't need this
+                }
+                else
+                {
+                    btnOlder15Blocks.Visible = true;
+                }
+                // -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
+                {
+                    break;
+                }
+            }
+            if (counter > 0)
+            {
+                lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
+            }
+            else
+            {
+                lblBlockListPositionInList.Text = "No blocks to display"; // this can't really happen as there will always be a coinbase transaction
+            }
+
+            /*            lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
+                        long sizeInBytes = blocks[0].size;
+                        string sizeString; // convert display to bytes/kb/mb accordingly
+                        if (sizeInBytes < 1000)
+                        {
+                            sizeString = $"{sizeInBytes} bytes";
+                        }
+                        else if (sizeInBytes < 1000 * 1000)
+                        {
+                            double sizeInKB = (double)sizeInBytes / 1000;
+                            sizeString = $"{sizeInKB:N2} KB";
+                        }
+                        else
+                        {
+                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                            sizeString = $"{sizeInMB:N2} MB";
+                        }
+                        lblSizeOfBlock.Text = sizeString;
+                        string strWeight = Convert.ToString(blocks[0].weight);
+                        decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
+                        string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
+                        lblBlockWeight.Text = strFormattedWeight;
+                        string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
+                        TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
+                        lblTotalFees.Text = TotalBlockFees;
+                        long nonceLong = Convert.ToInt64(blocks[0].nonce);
+
+                        lblNonce.Text = "0x" + nonceLong.ToString("X");
+                        string Reward = Convert.ToString(blocks[0].extras.reward);
+                        lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+                        lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
+                        lblBlockAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
+                        lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
+                        lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
+            */
+        }
+
+        private async void btnOlder15Blocks_Click(object sender, EventArgs e)
+        {
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            int blockheight = Convert.ToInt32(lblBlockNumber.Text);
+            var blockNumber = Convert.ToString(blockheight - TotalBlockRowsAdded);
+            // Get 15 more blocks starting from the current block height minus the number we've already seen
+            await GetFifteenBlocksForBlockList(blockNumber);
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            btnViewBlockFromBlockList.Visible = false;
+        }
+
+        private async void btnNewer15Blocks_Click(object sender, EventArgs e)
+        {
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            int blockheight = Convert.ToInt32(lblBlockNumber.Text);
+            var blockNumber = Convert.ToString(blockheight - TotalBlockRowsAdded + 30);
+            // Get 15 more blocks starting from the current block height minus the number we've already seen
+            await GetFifteenBlocksForBlockList(blockNumber);
+            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            btnViewTransactionFromBlock.Visible = false;
+            TotalBlockRowsAdded = TotalBlockRowsAdded - 30;
+        }
+
+        private void listViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            Color headerColor = Color.FromArgb(50, 50, 50);
+            SolidBrush brush = new SolidBrush(headerColor);
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            // Change text color and alignment
+            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Near;
+            format.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
+        private void listViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (text[0] == '+') // if the string is a change to an amount and positive
+            {
+                e.SubItem.ForeColor = Color.OliveDrab; // make it green
+
+            }
+            else
+            if (text[0] == '-') // if the string is a change to an amount and negative
+            {
+                e.SubItem.ForeColor = Color.IndianRed; // make it red
+            }
+
+            var font = listViewBlockList.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+        #endregion
+
         #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== GENERIC STUFF =========================================================================================================================================================
@@ -2372,6 +2729,10 @@ namespace SATSuma
                 btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
                 textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
                 textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
+                btnNextBlockWasEnabled = btnNextBlock.Enabled;
+                btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
+                btnBlockListNextBlockWasEnabled = btnBlockListNextBlock.Enabled;
+                btnBlockListPreviousBlockWasEnabled = btnBlockListPreviousBlock.Enabled;
 
                 //disable them all
                 btnShowAllTX.Enabled = false; 
@@ -2385,6 +2746,10 @@ namespace SATSuma
                 btnNextBlockTransactions.Enabled = false;
                 textboxSubmittedAddress.Enabled = false;
                 textBoxSubmittedBlockNumber.Enabled = false;
+                btnNextBlock.Enabled = false;
+                btnPreviousBlock.Enabled = false;
+                btnBlockListNextBlock.Enabled = false;
+                btnBlockListPreviousBlock.Enabled = false;
             }
             else
             {
@@ -2398,6 +2763,10 @@ namespace SATSuma
                 BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                 btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
                 btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
+                btnNextBlock.Enabled = btnNextBlockWasEnabled;
+                btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
+                btnBlockListNextBlock.Enabled = btnBlockListNextBlockWasEnabled;
+                btnBlockListPreviousBlock.Enabled = btnBlockListPreviousBlockWasEnabled;
                 textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
                 textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
                 if (panelBlock.Visible == true)
@@ -2570,9 +2939,10 @@ namespace SATSuma
 
         private void btnMenu_Click(object sender, EventArgs e)
         {
+            panelMenu.BringToFront();
             if (panelMenu.Height == 24)
             {
-                panelMenu.Height = 168;
+                panelMenu.Height = 192;
             }
             else
             {
@@ -2619,10 +2989,12 @@ namespace SATSuma
             panelMenu.Height = 24;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = false;
+            btnBlockList.Enabled = true;
             btnLightningDashboard.Enabled = true;
             btnBlock.Enabled = true;
             this.DoubleBuffered = true;
             this.SuspendLayout();
+            panelBlockList.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
             panelBlock.Visible = false;
@@ -2635,11 +3007,13 @@ namespace SATSuma
             panelMenu.Height = 24;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
+            btnBlockList.Enabled = true;
             btnBlock.Enabled = true;
             btnLightningDashboard.Enabled = false;
             this.DoubleBuffered = true;
             this.SuspendLayout();
             panelBitcoinDashboard.Visible = false;
+            panelBlockList.Visible = false;
             panelAddress.Visible = false;
             panelBlock.Visible = false;
             panelLightningDashboard.Visible = true;
@@ -2650,10 +3024,12 @@ namespace SATSuma
         {
             panelMenu.Height = 24;
             btnAddress.Enabled= false;
+            btnBlockList.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
             btnBlock.Enabled = true;
             btnLightningDashboard.Enabled = true;
             panelBitcoinDashboard.Visible = false;
+            panelBlockList.Visible = false;
             panelLightningDashboard.Visible = false;
             panelBlock.Visible = false;
             panelAddress.Visible = true;
@@ -2664,12 +3040,14 @@ namespace SATSuma
             panelMenu.Height = 24;
             btnBlock.Enabled= false;
             btnAddress.Enabled = true;
+            btnBlockList.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
             btnLightningDashboard.Enabled = true;
-            panelBlock.Visible = true;
+            panelBlockList.Visible = false;
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
+            panelBlock.Visible = true;
             if (textBoxSubmittedBlockNumber.Text == "") 
             {
                 textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
@@ -2680,15 +3058,38 @@ namespace SATSuma
         private void lblBlockNumber_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
+            btnBlockList.Enabled = true;
             btnBlock.Enabled = false;
             btnAddress.Enabled = true;
             btnBitcoinDashboard.Enabled = true;
             btnLightningDashboard.Enabled = true;
-            panelBlock.Visible = true;
+            panelBlockList.Visible = false;
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
+            panelBlock.Visible = true;
             textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
+            LookupBlock();
+        }
+
+        private void btnBlockList_Click(object sender, EventArgs e)
+        {
+            panelMenu.Height = 24;
+            btnBlockList.Enabled = false;
+            btnBlock.Enabled = true;
+            btnAddress.Enabled = true;
+            btnBitcoinDashboard.Enabled = true;
+            btnLightningDashboard.Enabled = true;
+            panelBitcoinDashboard.Visible = false;
+            panelLightningDashboard.Visible = false;
+            panelAddress.Visible = false;
+            panelBlock.Visible = false;
+            panelBlockList.Visible = true;
+            if (textBoxBlockHeightToStartListFrom.Text == "")
+            {
+                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+            }
         }
 
         private void BtnSettings_Click(object sender, EventArgs e)

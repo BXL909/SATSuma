@@ -2618,6 +2618,7 @@ namespace SATSuma
                         lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
                         lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
             */
+
         }
 
         private async void btnOlder15Blocks_Click(object sender, EventArgs e)

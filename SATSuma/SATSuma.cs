@@ -85,9 +85,9 @@ namespace SATSuma
         private BlockDataService _blockService;
         private TransactionsForBlockService _transactionsForBlockService;
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
-        private int TotalBlockRowsAdded = 0; // keeps track of how many rows of blocks have been added to the blocks listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
+        private string storedLastSeenBlockNumber;
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
         bool btnShowAllAddressTXWasEnabled = true;
@@ -97,6 +97,8 @@ namespace SATSuma
         bool btnNextAddressTransactionsWasEnabled = false;
         bool BtnViewTransactionFromAddressWasEnabled = false;
         bool BtnViewBlockFromAddressWasEnabled = false;
+        bool btnViewBlockFromBlockListWasEnabled = false;
+        bool btnViewTransactionsFromBlockListWasEnabled = false;
         bool btnPreviousBlockTransactionsWasEnabled = false;
         bool btnNextBlockTransactionsWasEnabled = false;
         bool textBoxSubmittedBlockNumberWasEnabled = true;
@@ -2458,45 +2460,25 @@ namespace SATSuma
             if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
             {
                 textBoxBlockHeightToStartListFrom.Text = "0";
-                btnBlockListPreviousBlock.Enabled = false;
-                btnBlockListNextBlock.Enabled = true;
             }
             if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
             {
-                btnBlockListNextBlock.Enabled = false;
-                btnBlockListPreviousBlock.Enabled = true;
             }
         }
 
         private async void LookupBlockList()
         {
-            if (textBoxBlockHeightToStartListFrom.Text == "0")
-            {
-                btnBlockListPreviousBlock.Enabled = false;
-            }
-            else
-            {
-                btnBlockListPreviousBlock.Enabled = true;
-            }
-            if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
-            {
-                btnBlockListNextBlock.Enabled = false;
-            }
-            else
-            {
-                btnBlockListNextBlock.Enabled = true;
-            }
-            TotalBlockRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
             btnViewBlockFromBlockList.Visible = false;
+            btnViewTransactionsFromBlockList.Visible = false;
             var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            await GetFifteenBlocksForBlockList(blockNumber);
+            await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
             DisableEnableButtons("enable"); // enable buttons after operation is complete
         }
 
-        private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
+        private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber) 
         {
             var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
             var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
@@ -2506,6 +2488,7 @@ namespace SATSuma
             if (blocklist.Count > 0)
             {
                 lastSeenBlockNumber = blocklist.Last();
+                storedLastSeenBlockNumber = blocklist.Last();
             }
 
             //LIST VIEW
@@ -2516,40 +2499,66 @@ namespace SATSuma
             if (listViewBlockList.Columns.Count == 0)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add(" Date / time", 120);
+                listViewBlockList.Columns.Add(" Date / time", 115);
             }
 
             if (listViewBlockList.Columns.Count == 1)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("Height", 70);
+                listViewBlockList.Columns.Add("Height", 65);
             }
 
             if (listViewBlockList.Columns.Count == 2)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("TX count", 70);
+                listViewBlockList.Columns.Add("TX count", 60);
             }
             if (listViewBlockList.Columns.Count == 3)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("Size", 40);
+                listViewBlockList.Columns.Add("Size (MB)", 50);
+            }
+            if (listViewBlockList.Columns.Count == 4)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("Fee range (sat/vB)", 70);
+            }
+            if (listViewBlockList.Columns.Count == 5)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("Median fee", 50);
+            }
+            if (listViewBlockList.Columns.Count == 6)
+            {
+                // If not, add the column header
+                listViewBlockList.Columns.Add("Reward (BTC)", 90);
             }
             // Add the items to the ListView
             int counter = 0; // used to count rows in list as they're added
 
             foreach (var block in blocks)
             {
-                ListViewItem item = new ListViewItem(block.timestamp); // create new row
+                long unixTimestamp = Convert.ToInt64(block.timestamp);
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
+                string formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
+                ListViewItem item = new ListViewItem(formattedDateTime); // create new row
                 item.SubItems.Add(block.height.ToString());
                 item.SubItems.Add(block.tx_count.ToString());
-                item.SubItems.Add(block.size.ToString()); // number of outputs
+                decimal sizeInMB = block.size;
+                sizeInMB = sizeInMB / 1000000;
+                item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
+                string feerange = Convert.ToString(block.extras.feeRange[0]) + "-" + Convert.ToString(block.extras.feeRange[6]);
+                item.SubItems.Add(feerange.ToString());
+                string medFee = "~" + block.extras.medianFee;
+                item.SubItems.Add(medFee.ToString());
+                string RewardInSats = Convert.ToString(block.extras.reward);
+                decimal RewardInBTC = ConvertSatsToBitcoin(RewardInSats);
+                item.SubItems.Add(RewardInBTC.ToString());
                 listViewBlockList.Items.Add(item); // add row
 
                 counter++; // increment rows for this batch
-                TotalBlockRowsAdded++; // increment all rows
 
-                // THESE CONDITIONS ARE ALL WRONG RIGHT NOW -------------------------------------------------------------------------------------------------------------
+
                 if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
                 {
                     btnNewer15Blocks.Visible = false; // so this won't be needed
@@ -2559,7 +2568,7 @@ namespace SATSuma
                     btnNewer15Blocks.Visible = true;
                 }
 
-                if (Convert.ToInt32(lastSeenBlockNumber) <= 14) // we've reached the Genesis Block (bottom of the list)
+                if (counter > 1 && blocklist.Last() == "0") // we've reached the Genesis Block (bottom of the list)
                 {
                     btnOlder15Blocks.Visible = false; // so we won't need this
                 }
@@ -2567,7 +2576,6 @@ namespace SATSuma
                 {
                     btnOlder15Blocks.Visible = true;
                 }
-                // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
                 if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
                 {
@@ -2576,76 +2584,49 @@ namespace SATSuma
             }
             if (counter > 0)
             {
+                listViewBlockList.Items[0].Selected = true;
+                if (btnOlder15Blocks.Enabled == true)
+                {
+                    btnOlder15Blocks.Focus();
+                }
+                else
+                {
+                    btnNewer15Blocks.Focus();
+                }
                 lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
             }
             else
             {
                 lblBlockListPositionInList.Text = "No blocks to display"; // this can't really happen as there will always be a coinbase transaction
             }
-
-            /*            lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
-                        long sizeInBytes = blocks[0].size;
-                        string sizeString; // convert display to bytes/kb/mb accordingly
-                        if (sizeInBytes < 1000)
-                        {
-                            sizeString = $"{sizeInBytes} bytes";
-                        }
-                        else if (sizeInBytes < 1000 * 1000)
-                        {
-                            double sizeInKB = (double)sizeInBytes / 1000;
-                            sizeString = $"{sizeInKB:N2} KB";
-                        }
-                        else
-                        {
-                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                            sizeString = $"{sizeInMB:N2} MB";
-                        }
-                        lblSizeOfBlock.Text = sizeString;
-                        string strWeight = Convert.ToString(blocks[0].weight);
-                        decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
-                        string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
-                        lblBlockWeight.Text = strFormattedWeight;
-                        string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
-                        TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
-                        lblTotalFees.Text = TotalBlockFees;
-                        long nonceLong = Convert.ToInt64(blocks[0].nonce);
-
-                        lblNonce.Text = "0x" + nonceLong.ToString("X");
-                        string Reward = Convert.ToString(blocks[0].extras.reward);
-                        lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-                        lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
-                        lblBlockAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
-                        lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
-                        lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
-            */
-
         }
 
         private async void btnOlder15Blocks_Click(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            int blockheight = Convert.ToInt32(lblBlockNumber.Text);
-            var blockNumber = Convert.ToString(blockheight - TotalBlockRowsAdded);
+            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber)-1);
+            string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
             btnViewBlockFromBlockList.Visible = false;
+            btnViewTransactionsFromBlockList.Visible = false;
         }
 
         private async void btnNewer15Blocks_Click(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
-            int blockheight = Convert.ToInt32(lblBlockNumber.Text);
-            var blockNumber = Convert.ToString(blockheight - TotalBlockRowsAdded + 30);
+            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) +29);
+            string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            btnViewTransactionFromBlock.Visible = false;
-            TotalBlockRowsAdded = TotalBlockRowsAdded - 30;
+            btnViewBlockFromBlockList.Visible = false;
+            btnViewTransactionsFromBlockList.Visible = false;
         }
 
         private void listViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
@@ -2659,6 +2640,170 @@ namespace SATSuma
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
+        private async void listViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            bool anySelected = false;
+            foreach (ListViewItem item in listViewBlockList.Items)
+            {
+                if (item.Selected)
+                {
+                    btnViewBlockFromBlockList.Enabled = true;
+                    btnViewTransactionsFromBlockList.Enabled= true;
+                    item.SubItems[1].ForeColor = Color.White; // Block number
+                    item.SubItems[2].ForeColor = Color.White; // TX count
+                    anySelected = true;
+                    btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y - 1);
+                    btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y - 1);
+                    // display block hash
+                    using (WebClient client = new WebClient())
+                    {
+                        string BlockHashURL = NodeURL + "block-height/" + item.SubItems[1].Text;
+                        string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
+                        lblBlockListBlockHash.Text = BlockHash;
+                    }
+                    string blockNumber = item.SubItems[1].Text;
+                    DisableEnableLoadingAnimation("enable"); // start the loading animation
+                    DisableEnableButtons("disable"); // disable buttons during operation
+                    var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
+                    var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                    List<string> blocklist = blocks.Select(t => t.height).ToList();
+                    lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
+                    long sizeInBytes = blocks[0].size;
+                    string sizeString; // convert display to bytes/kb/mb accordingly
+                    if (sizeInBytes < 1000)
+                    {
+                        sizeString = $"{sizeInBytes} bytes";
+                    }
+                    else if (sizeInBytes < 1000 * 1000)
+                    {
+                        double sizeInKB = (double)sizeInBytes / 1000;
+                        sizeString = $"{sizeInKB:N2} KB";
+                    }
+                    else
+                    {
+                        double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                        sizeString = $"{sizeInMB:N2} MB";
+                    }
+                    lblBlockListBlockSize.Text = sizeString;
+                    string strWeight = Convert.ToString(blocks[0].weight);
+                    decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
+                    string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
+                    lblBlockListBlockWeight.Text = strFormattedWeight;
+                    long nonceLong = Convert.ToInt64(blocks[0].nonce);
+                    lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
+                    lblBlockListMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
+                    lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].tx_count);
+                    string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
+                    TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
+                    lblBlockListTotalFees.Text = TotalBlockFees;
+                    string Reward = Convert.ToString(blocks[0].extras.reward);
+                    lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+                    lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
+                    lblBlockListAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
+                    lblBlockListDifficulty.Text = Convert.ToString(blocks[0].difficulty);
+                    lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].extras.totalInputs);
+                    lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].extras.totalOutputs);
+                    DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                    DisableEnableButtons("enable"); // enable buttons after operation is complete
+                }
+                else
+                {
+                    item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); // Block number
+                    item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0); // TX count
+                }
+            }
+            btnViewBlockFromBlockList.Visible = anySelected;
+            btnViewTransactionsFromBlockList.Visible = anySelected;
+        }
+
+        private void btnViewTransactionsFromBlockList_Click(object sender, EventArgs e)  // this and btnViewBlockFromBlockList_Click do exactly the same. They both exist for UI only
+        {
+            //assign block number to text box on block panel
+            // Get the selected item
+            ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
+            // Get the second subitem in the selected item (index 1)
+            string submittedBlockNumber = selectedItem.SubItems[1].Text;
+            // Set the text of the textBoxSubmittedBlockNumber control
+            textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+            LookupBlock();
+            //show the block screen
+            btnBlock_Click(sender, e);
+        }
+
+        private void btnViewBlockFromBlockList_Click(object sender, EventArgs e)  // this and btnViewTransactionsFromBlockList_Click do exactly the same. They both exist for UI only
+        {
+            //assign block number to text box on block panel
+            // Get the selected item
+            ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
+            // Get the second subitem in the selected item (index 1)
+            string submittedBlockNumber = selectedItem.SubItems[1].Text;
+            // Set the text of the textBoxSubmittedBlockNumber control
+            textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+            LookupBlock();
+            //show the block screen
+            btnBlock_Click(sender, e);
+        }
+
+        private void listViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 115) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 115;
+                }
+            }
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 60;
+                }
+            }
+            if (e.ColumnIndex == 2)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 60;
+                }
+            }
+            if (e.ColumnIndex == 3)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 50;
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 75) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 75;
+                }
+            }
+            if (e.ColumnIndex == 5)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 50;
+                }
+            }
+            if (e.ColumnIndex == 6)
+            {
+                if (listViewBlockList.Columns[e.ColumnIndex].Width != 90) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 90;
+                }
+            }
         }
 
         private void listViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
@@ -2726,14 +2871,14 @@ namespace SATSuma
                 btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
                 BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
                 BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
+                btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
+                btnViewTransactionsFromBlockListWasEnabled = btnViewTransactionsFromBlockList.Enabled;
                 btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
                 btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
                 textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
                 textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
                 btnNextBlockWasEnabled = btnNextBlock.Enabled;
                 btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
-                btnBlockListNextBlockWasEnabled = btnBlockListNextBlock.Enabled;
-                btnBlockListPreviousBlockWasEnabled = btnBlockListPreviousBlock.Enabled;
 
                 //disable them all
                 btnShowAllTX.Enabled = false; 
@@ -2743,14 +2888,14 @@ namespace SATSuma
                 btnNextAddressTransactions.Enabled = false;
                 BtnViewTransactionFromAddress.Enabled = false;
                 BtnViewBlockFromAddress.Enabled = false;
+                btnViewBlockFromBlockList.Enabled = false;
+                btnViewTransactionsFromBlockList.Enabled = false;
                 btnPreviousBlockTransactions.Enabled = false;
                 btnNextBlockTransactions.Enabled = false;
                 textboxSubmittedAddress.Enabled = false;
                 textBoxSubmittedBlockNumber.Enabled = false;
                 btnNextBlock.Enabled = false;
                 btnPreviousBlock.Enabled = false;
-                btnBlockListNextBlock.Enabled = false;
-                btnBlockListPreviousBlock.Enabled = false;
             }
             else
             {
@@ -2762,12 +2907,12 @@ namespace SATSuma
                 btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
                 BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                 BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
+                btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
+                btnViewTransactionsFromBlockList.Enabled = btnViewTransactionsFromBlockListWasEnabled;
                 btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
                 btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
                 btnNextBlock.Enabled = btnNextBlockWasEnabled;
                 btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
-                btnBlockListNextBlock.Enabled = btnBlockListNextBlockWasEnabled;
-                btnBlockListPreviousBlock.Enabled = btnBlockListPreviousBlockWasEnabled;
                 textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
                 textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
                 if (panelBlock.Visible == true)
@@ -3356,6 +3501,9 @@ namespace SATSuma
         public int totalFees { get; set; }
         public string avgFee { get; set; }
         public string avgFeeRate { get; set; }
+        public string totalInputs { get; set; }
+        public string totalOutputs { get; set; }
+        public string totalOutputAmt { get; set; }
         public Block_pool pool { get; set; }
 
     }

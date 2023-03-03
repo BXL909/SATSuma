@@ -195,6 +195,7 @@ namespace SATSuma
         public async void UpdateAPIGroup1DataFields()
         {
             DisableEnableLoadingAnimation("enable");
+            
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
@@ -923,6 +924,7 @@ namespace SATSuma
                 }
             }
             DisableEnableLoadingAnimation("disable");
+            
         }
 
         //=============================================================================================================
@@ -2642,6 +2644,19 @@ namespace SATSuma
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
         }
 
+        private void listViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewBlockList.SelectedItems.Count > 0)
+            {
+                Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
+                panel14.Top = itemRect.Top + 42;
+                panel19.Height = panel17.Top - panel14.Top;
+                panel19.Top = panel14.Top;
+
+
+            }
+        }
+
         private async void listViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             bool anySelected = false;
@@ -2898,6 +2913,7 @@ namespace SATSuma
                 textBoxSubmittedBlockNumber.Enabled = false;
                 btnNextBlock.Enabled = false;
                 btnPreviousBlock.Enabled = false;
+                btnMenu.Enabled = false;
             }
             else
             {
@@ -2929,6 +2945,7 @@ namespace SATSuma
                     // Set the cursor position to the end of the string
                     textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
                 }
+                btnMenu.Enabled = true;
             }
         }
 
@@ -3341,19 +3358,6 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
         #endregion
-
-        private void listViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listViewBlockList.SelectedItems.Count > 0)
-            {
-                Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
-                panel14.Top = itemRect.Top + 42;
-                panel19.Height = panel17.Top - panel14.Top;
-                panel19.Top = panel14.Top;
-                
-                
-            }
-        }
     }
 
     //==============================================================================================================================================================================================

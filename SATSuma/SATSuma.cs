@@ -2702,9 +2702,11 @@ namespace SATSuma
                     lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
                     lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
                     lblBlockListAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
-                    lblBlockListDifficulty.Text = Convert.ToString(blocks[0].difficulty);
                     lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].extras.totalInputs);
                     lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].extras.totalOutputs);
+                    lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].extras.avgTxSize);
+                    lblBlockListVersion.Text = Convert.ToString(blocks[0].version);
+                    lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].height);
                     DisableEnableLoadingAnimation("disable"); // stop the loading animation
                     DisableEnableButtons("enable"); // enable buttons after operation is complete
                 }
@@ -3339,6 +3341,19 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
         #endregion
+
+        private void listViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewBlockList.SelectedItems.Count > 0)
+            {
+                Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
+                panel14.Top = itemRect.Top + 42;
+                panel19.Height = panel17.Top - panel14.Top;
+                panel19.Top = panel14.Top;
+                
+                
+            }
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -3501,6 +3516,7 @@ namespace SATSuma
         public int totalFees { get; set; }
         public string avgFee { get; set; }
         public string avgFeeRate { get; set; }
+        public string avgTxSize { get; set; }
         public string totalInputs { get; set; }
         public string totalOutputs { get; set; }
         public string totalOutputAmt { get; set; }

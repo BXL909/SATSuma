@@ -42,11 +42,6 @@ namespace SATSuma
             
         }
 
-        private void BtnExitSettings_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void Settings_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);

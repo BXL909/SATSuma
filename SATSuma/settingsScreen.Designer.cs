@@ -52,6 +52,7 @@
             this.comboAPISelectorForQueries = new System.Windows.Forms.ComboBox();
             this.lblActiveNode = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnExit = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIGroup1)).BeginInit();
             this.panel4.SuspendLayout();
@@ -66,14 +67,13 @@
             this.btnExitSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExitSettings.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExitSettings.ForeColor = System.Drawing.Color.Gray;
-            this.btnExitSettings.Location = new System.Drawing.Point(299, 469);
+            this.btnExitSettings.Location = new System.Drawing.Point(299, 507);
             this.btnExitSettings.Name = "btnExitSettings";
             this.btnExitSettings.Size = new System.Drawing.Size(66, 30);
             this.btnExitSettings.TabIndex = 2;
             this.btnExitSettings.TabStop = false;
             this.btnExitSettings.Text = "close";
             this.btnExitSettings.UseVisualStyleBackColor = false;
-            this.btnExitSettings.Click += new System.EventHandler(this.BtnExitSettings_Click);
             // 
             // label1
             // 
@@ -106,7 +106,7 @@
             this.panel3.Controls.Add(this.label8);
             this.panel3.Controls.Add(this.lblBlockchainInfoJSON);
             this.panel3.Controls.Add(this.label1);
-            this.panel3.Location = new System.Drawing.Point(12, 12);
+            this.panel3.Location = new System.Drawing.Point(12, 50);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(353, 308);
             this.panel3.TabIndex = 23;
@@ -327,7 +327,7 @@
             this.panel4.Controls.Add(this.comboAPISelectorForQueries);
             this.panel4.Controls.Add(this.lblActiveNode);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(12, 335);
+            this.panel4.Location = new System.Drawing.Point(12, 373);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(353, 128);
             this.panel4.TabIndex = 24;
@@ -385,13 +385,35 @@
             this.label7.TabIndex = 22;
             this.label7.Text = "Select API to use for address, transaction and block queries";
             // 
+            // btnExit
+            // 
+            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnExit.FlatAppearance.BorderSize = 0;
+            this.btnExit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.Color.White;
+            this.btnExit.Location = new System.Drawing.Point(344, 9);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(24, 24);
+            this.btnExit.TabIndex = 152;
+            this.btnExit.TabStop = false;
+            this.btnExit.Text = "❌";
+            this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnExit.UseVisualStyleBackColor = false;
+            // 
             // settingsScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExitSettings;
-            this.ClientSize = new System.Drawing.Size(377, 512);
+            this.ClientSize = new System.Drawing.Size(377, 553);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.btnExitSettings);
@@ -437,5 +459,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label lblBlockchainInfoJSON;
+        private System.Windows.Forms.Button btnExit;
     }
 }

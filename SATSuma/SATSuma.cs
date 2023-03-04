@@ -57,6 +57,7 @@ using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
+using Panel = System.Windows.Forms.Panel;
 #endregion
 
 namespace SATSuma
@@ -155,11 +156,11 @@ namespace SATSuma
             intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
             if (intDisplaySecondsElapsedSinceUpdate == 1)
             {
-                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh); 
+                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh); 
             }
             else
             {
-                lblElapsedSinceUpdate.Text = "Last updated " + intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
             }
             if (ObtainedHalveningSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
             {
@@ -223,9 +224,17 @@ namespace SATSuma
                             {
                                 lblDifficultyAdjEst.Text = result.difficultyAdjEst;
                             });
+                            lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // Blocks list
+                            {
+                                lblBlockListNextDifficultyAdjustment.Text = result.difficultyAdjEst;
+                            });
                             lblTXInMempool.Invoke((MethodInvoker)delegate
                             {
                                 lblTXInMempool.Text = result.txInMempool;
+                            });
+                            lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
+                            {
+                                lblBlockListTXInMempool.Text = result.txInMempool;
                             });
                         }
                         else
@@ -246,9 +255,17 @@ namespace SATSuma
                             {
                                 lblDifficultyAdjEst.Text = "disabled";
                             });
+                            lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // Blocks list
+                            {
+                                lblBlockListNextDifficultyAdjustment.Text = "disabled";
+                            });
                             lblTXInMempool.Invoke((MethodInvoker)delegate
                             {
                                 lblTXInMempool.Text = "disabled";
+                            });
+                            lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
+                            {
+                                lblBlockListTXInMempool.Text = "disabled";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -290,13 +307,25 @@ namespace SATSuma
                                 decimal NextBlockReward = DecBlockReward / 2;
                                 lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
                             });
+                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListBlockReward.Text = result2.blockReward;
+                            });
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
                                 lblEstHashrate.Text = result2.estHashrate;
                             });
+                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListEstHashRate.Text = result2.estHashrate;
+                            });
                             lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
                             {
                                 lblAvgTimeBetweenBlocks.Text = result2.avgTimeBetweenBlocks;
+                            });
+                            lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListAvgTimeBetweenBlocks.Text = result2.avgTimeBetweenBlocks;
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
@@ -305,6 +334,10 @@ namespace SATSuma
                             lblHashesToSolve.Invoke((MethodInvoker)delegate
                             {
                                 lblHashesToSolve.Text = result2.hashesToSolve;
+                            });
+                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListAttemptsToSolveBlock.Text = result2.hashesToSolve;
                             });
                             lbl24HourTransCount.Invoke((MethodInvoker)delegate
                             {
@@ -329,6 +362,10 @@ namespace SATSuma
                             {
                                 lblBlockReward.Text = "disabled";
                             });
+                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListBlockReward.Text = "disabled";
+                            });
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
                                 lblEstHashrate.Text = "disabled";
@@ -336,6 +373,10 @@ namespace SATSuma
                             lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
                             {
                                 lblAvgTimeBetweenBlocks.Text = "disabled";
+                            });
+                            lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListAvgTimeBetweenBlocks.Text = "disabled";
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
@@ -345,6 +386,10 @@ namespace SATSuma
                             {
                                 lblHashesToSolve.Text = "disabled";
                             });
+                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListAttemptsToSolveBlock.Text = "disabled";
+                            });
                             lbl24HourTransCount.Invoke((MethodInvoker)delegate
                             {
                                 lbl24HourTransCount.Text = "disabled";
@@ -352,6 +397,10 @@ namespace SATSuma
                             lbl24HourBTCSent.Invoke((MethodInvoker)delegate
                             {
                                 lbl24HourBTCSent.Text = "disabled";
+                            });
+                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListEstHashRate.Text = "disabled";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -398,13 +447,25 @@ namespace SATSuma
                             {
                                 lblTransInNextBlock.Text = result3.txInNextBlock;
                             });
-                            lblNextBlockMinFee.Invoke((MethodInvoker)delegate
+                            lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblNextBlockMinFee.Text = result3.nextBlockMinFee + " / " + result3.nextBlockMaxFee;
+                                lblBlockListTXInNextBlock.Text = result3.txInNextBlock;
+                            });
+                            lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                            {
+                                lblNextBlockMinMaxFee.Text = result3.nextBlockMinFee + " / " + result3.nextBlockMaxFee;
+                            });
+                            lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListMinMaxInFeeNextBlock.Text = result3.nextBlockMinFee + " / " + result3.nextBlockMaxFee;
                             });
                             lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
                             {
                                 lblNextBlockTotalFees.Text = result3.nextBlockTotalFees;
+                            });
+                            lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListTotalFeesInNextBlock.Text = result3.nextBlockTotalFees;
                             });
                         }
                         else
@@ -429,13 +490,26 @@ namespace SATSuma
                             {
                                 lblTransInNextBlock.Text = "disabled";
                             });
-                            lblNextBlockMinFee.Invoke((MethodInvoker)delegate
+                            lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblNextBlockMinFee.Text = "disabled";
+                                lblBlockListTXInNextBlock.Text = "disabled";
+                            });
+
+                            lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                            {
+                                lblNextBlockMinMaxFee.Text = "disabled";
+                            });
+                            lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
                             });
                             lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
                             {
                                 lblNextBlockTotalFees.Text = "disabled";
+                            });
+                            lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListTotalFeesInNextBlock.Text = "disabled";
                             });
 
                         }
@@ -475,6 +549,10 @@ namespace SATSuma
                             {
                                 lblNextDifficultyChange.Text = result4.nextretarget;
                             });
+                            lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListNextDiffAdjBlock.Text = result4.nextretarget;
+                            });
                         }
                         else
                         {
@@ -490,7 +568,10 @@ namespace SATSuma
                             {
                                 lblNextDifficultyChange.Text = "disabled";
                             });
-
+                            lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListNextDiffAdjBlock.Text = "disabled";
+                            });
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -853,6 +934,10 @@ namespace SATSuma
                             {
                                 lblHalveningBlock.Text = result8.halveningBlock + " / " + result8.blocksLeft;
                             });
+                            lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListHalvingBlockAndRemaining.Text = result8.halveningBlock + " / " + result8.blocksLeft;
+                            });
                             string halvening_time = result8.halveningTime;
                             DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
@@ -874,6 +959,11 @@ namespace SATSuma
                             {
                                 lblHalveningBlock.Text = "disabled";
                             });
+                            lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListHalvingBlockAndRemaining.Text = "disabled";
+                            });
+
                             lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
                             {
                                 lblEstimatedHalvingDate.Text = "disabled";
@@ -919,7 +1009,7 @@ namespace SATSuma
                     });
                     lblStatusMessPart1.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusMessPart1.Text = "One or more fields failed to update.";
+                        lblStatusMessPart1.Text = "One or more fields failed to update";
                     });
                 }
             }
@@ -3016,7 +3106,7 @@ namespace SATSuma
             });
             lblStatusMessPart1.Invoke((MethodInvoker)delegate
             {
-                lblStatusMessPart1.Text = "Data updated successfully.";
+                lblStatusMessPart1.Text = "Data updated successfully";
             });
             intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset the timer
             intDisplaySecondsElapsedSinceUpdate = 0; // reset the seconds since last refresh
@@ -3336,6 +3426,39 @@ namespace SATSuma
                 timerAPIGroup1.Start();
             }
         }
+
+        private void btnHelp_Click(object sender, EventArgs e) // help screen
+        {
+            var modalWindow = new helpScreen();
+            modalWindow.Owner = this; // Set the parent window as the owner of the modal window
+            modalWindow.StartPosition = FormStartPosition.CenterParent; // Set the start position to center of parent
+            modalWindow.ShowDialog();
+        }
+
+        public Panel GetPanelBlock() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelBlock;
+        }
+
+        public Panel GetPanelBlockList() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelBlockList;
+        }
+
+        public Panel GetPanelAddress() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelAddress;
+        }
+
+        public Panel GetPanelBitcoinDashboard() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelBitcoinDashboard;
+        }
+
+        public Panel GetPanelLightningDashboard() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelLightningDashboard;
+        }
         #endregion
 
         #region MISC UI STUFF
@@ -3359,7 +3482,6 @@ namespace SATSuma
         }
         #endregion
     }
-
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 

@@ -147,6 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomToolTipRenderer.cs" />
+    <Compile Include="helpScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="helpScreen.Designer.cs">
+      <DependentUpon>helpScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -172,6 +178,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="helpScreen.resx">
+      <DependentUpon>helpScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="settingsScreen.resx">
       <DependentUpon>settingsScreen.cs</DependentUpon>
     </EmbeddedResource>

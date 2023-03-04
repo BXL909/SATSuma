@@ -70,6 +70,15 @@
             this.lblAvgNoTransactions = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lblDifficultyAdjEst = new System.Windows.Forms.Label();
+            this.label100 = new System.Windows.Forms.Label();
+            this.lblBlockListTXInNextBlock = new System.Windows.Forms.Label();
+            this.lblBlockListMinMaxInFeeNextBlock = new System.Windows.Forms.Label();
+            this.label106 = new System.Windows.Forms.Label();
+            this.lblBlockListTotalFeesInNextBlock = new System.Windows.Forms.Label();
+            this.label108 = new System.Windows.Forms.Label();
+            this.label115 = new System.Windows.Forms.Label();
+            this.label116 = new System.Windows.Forms.Label();
+            this.lblBlockListNextDifficultyAdjustment = new System.Windows.Forms.Label();
             this.lblBlockchainSize = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.lblTransactions = new System.Windows.Forms.Label();
@@ -292,6 +301,19 @@
             this.btnBitcoinDashboard = new System.Windows.Forms.Button();
             this.btnLightningDashboard = new System.Windows.Forms.Button();
             this.panelBlockList = new System.Windows.Forms.Panel();
+            this.label122 = new System.Windows.Forms.Label();
+            this.lblBlockListHalvingBlockAndRemaining = new System.Windows.Forms.Label();
+            this.label120 = new System.Windows.Forms.Label();
+            this.lblBlockListBlockReward = new System.Windows.Forms.Label();
+            this.label118 = new System.Windows.Forms.Label();
+            this.lblBlockListEstHashRate = new System.Windows.Forms.Label();
+            this.lblBlockListAvgTimeBetweenBlocks = new System.Windows.Forms.Label();
+            this.label112 = new System.Windows.Forms.Label();
+            this.lblBlockListNextDiffAdjBlock = new System.Windows.Forms.Label();
+            this.label110 = new System.Windows.Forms.Label();
+            this.lblBlockListAttemptsToSolveBlock = new System.Windows.Forms.Label();
+            this.label87 = new System.Windows.Forms.Label();
+            this.lblBlockListTXInMempool = new System.Windows.Forms.Label();
             this.panel21 = new System.Windows.Forms.Panel();
             this.panel16 = new System.Windows.Forms.Panel();
             this.panel15 = new System.Windows.Forms.Panel();
@@ -342,28 +364,6 @@
             this.lblBlockListNonce = new System.Windows.Forms.Label();
             this.panel22 = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
-            this.label87 = new System.Windows.Forms.Label();
-            this.lblBlockListTXInMempool = new System.Windows.Forms.Label();
-            this.label100 = new System.Windows.Forms.Label();
-            this.lblBlockListTXInNextBlock = new System.Windows.Forms.Label();
-            this.lblBlockListMinMaxInFeeNextBlock = new System.Windows.Forms.Label();
-            this.label106 = new System.Windows.Forms.Label();
-            this.lblBlockListTotalFeesInNextBlock = new System.Windows.Forms.Label();
-            this.label108 = new System.Windows.Forms.Label();
-            this.label110 = new System.Windows.Forms.Label();
-            this.lblBlockListAttemptsToSolveBlock = new System.Windows.Forms.Label();
-            this.label112 = new System.Windows.Forms.Label();
-            this.lblBlockListNextDiffAdjBlock = new System.Windows.Forms.Label();
-            this.lblBlockListAvgTimeBetweenBlocks = new System.Windows.Forms.Label();
-            this.label115 = new System.Windows.Forms.Label();
-            this.label116 = new System.Windows.Forms.Label();
-            this.lblBlockListNextDifficultyAdjustment = new System.Windows.Forms.Label();
-            this.label118 = new System.Windows.Forms.Label();
-            this.lblBlockListEstHashRate = new System.Windows.Forms.Label();
-            this.label120 = new System.Windows.Forms.Label();
-            this.lblBlockListBlockReward = new System.Windows.Forms.Label();
-            this.label122 = new System.Windows.Forms.Label();
-            this.lblBlockListHalvingBlockAndRemaining = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -726,13 +726,13 @@
             this.label20.Text = "Total fees in next block (BTC)*";
             this.toolTip1.SetToolTip(this.label20, "(estimated)");
             // 
-            // lblNextBlockMinFee
+            // lblNextBlockMinMaxFee
             // 
             this.lblNextBlockMinMaxFee.AutoSize = true;
             this.lblNextBlockMinMaxFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblNextBlockMinMaxFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNextBlockMinMaxFee.Location = new System.Drawing.Point(272, 264);
-            this.lblNextBlockMinMaxFee.Name = "lblNextBlockMinFee";
+            this.lblNextBlockMinMaxFee.Name = "lblNextBlockMinMaxFee";
             this.lblNextBlockMinMaxFee.Size = new System.Drawing.Size(80, 22);
             this.lblNextBlockMinMaxFee.TabIndex = 114;
             this.lblNextBlockMinMaxFee.Text = "no data";
@@ -881,6 +881,124 @@
             this.lblDifficultyAdjEst.TabIndex = 204;
             this.lblDifficultyAdjEst.Text = "no data";
             this.toolTip1.SetToolTip(this.lblDifficultyAdjEst, "(estimated)");
+            // 
+            // label100
+            // 
+            this.label100.AutoSize = true;
+            this.label100.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label100.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label100.ForeColor = System.Drawing.Color.Silver;
+            this.label100.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label100.Location = new System.Drawing.Point(0, 95);
+            this.label100.Name = "label100";
+            this.label100.Size = new System.Drawing.Size(199, 20);
+            this.label100.TabIndex = 205;
+            this.label100.Text = "Transactions in next block*";
+            this.toolTip1.SetToolTip(this.label100, "(estimated)");
+            // 
+            // lblBlockListTXInNextBlock
+            // 
+            this.lblBlockListTXInNextBlock.AutoSize = true;
+            this.lblBlockListTXInNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListTXInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListTXInNextBlock.Location = new System.Drawing.Point(0, 110);
+            this.lblBlockListTXInNextBlock.Name = "lblBlockListTXInNextBlock";
+            this.lblBlockListTXInNextBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListTXInNextBlock.TabIndex = 206;
+            this.lblBlockListTXInNextBlock.Text = "no data";
+            this.toolTip1.SetToolTip(this.lblBlockListTXInNextBlock, "(estimated)");
+            // 
+            // lblBlockListMinMaxInFeeNextBlock
+            // 
+            this.lblBlockListMinMaxInFeeNextBlock.AutoSize = true;
+            this.lblBlockListMinMaxInFeeNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListMinMaxInFeeNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListMinMaxInFeeNextBlock.Location = new System.Drawing.Point(0, 146);
+            this.lblBlockListMinMaxInFeeNextBlock.Name = "lblBlockListMinMaxInFeeNextBlock";
+            this.lblBlockListMinMaxInFeeNextBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListMinMaxInFeeNextBlock.TabIndex = 208;
+            this.lblBlockListMinMaxInFeeNextBlock.Text = "no data";
+            this.toolTip1.SetToolTip(this.lblBlockListMinMaxInFeeNextBlock, "(estimated)");
+            // 
+            // label106
+            // 
+            this.label106.AutoSize = true;
+            this.label106.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label106.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label106.ForeColor = System.Drawing.Color.Silver;
+            this.label106.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label106.Location = new System.Drawing.Point(0, 131);
+            this.label106.Name = "label106";
+            this.label106.Size = new System.Drawing.Size(212, 20);
+            this.label106.TabIndex = 207;
+            this.label106.Text = "Min / max fee in next block*";
+            this.toolTip1.SetToolTip(this.label106, "(estimated)");
+            // 
+            // lblBlockListTotalFeesInNextBlock
+            // 
+            this.lblBlockListTotalFeesInNextBlock.AutoSize = true;
+            this.lblBlockListTotalFeesInNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListTotalFeesInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListTotalFeesInNextBlock.Location = new System.Drawing.Point(0, 182);
+            this.lblBlockListTotalFeesInNextBlock.Name = "lblBlockListTotalFeesInNextBlock";
+            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListTotalFeesInNextBlock.TabIndex = 210;
+            this.lblBlockListTotalFeesInNextBlock.Text = "no data";
+            this.toolTip1.SetToolTip(this.lblBlockListTotalFeesInNextBlock, "(estimated)");
+            // 
+            // label108
+            // 
+            this.label108.AutoSize = true;
+            this.label108.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label108.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label108.ForeColor = System.Drawing.Color.Silver;
+            this.label108.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label108.Location = new System.Drawing.Point(0, 167);
+            this.label108.Name = "label108";
+            this.label108.Size = new System.Drawing.Size(219, 20);
+            this.label108.TabIndex = 209;
+            this.label108.Text = "Total fees in next block (BTC)*";
+            this.toolTip1.SetToolTip(this.label108, "(estimated)");
+            // 
+            // label115
+            // 
+            this.label115.AutoSize = true;
+            this.label115.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label115.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label115.ForeColor = System.Drawing.Color.Silver;
+            this.label115.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label115.Location = new System.Drawing.Point(0, 275);
+            this.label115.Name = "label115";
+            this.label115.Size = new System.Drawing.Size(198, 20);
+            this.label115.TabIndex = 218;
+            this.label115.Text = "Avg time between blocks";
+            this.toolTip1.SetToolTip(this.label115, "(estimated)");
+            // 
+            // label116
+            // 
+            this.label116.AutoSize = true;
+            this.label116.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label116.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label116.ForeColor = System.Drawing.Color.Silver;
+            this.label116.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label116.Location = new System.Drawing.Point(0, 311);
+            this.label116.Name = "label116";
+            this.label116.Size = new System.Drawing.Size(197, 20);
+            this.label116.TabIndex = 221;
+            this.label116.Text = "Next difficulty adjustment*";
+            this.toolTip1.SetToolTip(this.label116, "(estimated)");
+            // 
+            // lblBlockListNextDifficultyAdjustment
+            // 
+            this.lblBlockListNextDifficultyAdjustment.AutoSize = true;
+            this.lblBlockListNextDifficultyAdjustment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListNextDifficultyAdjustment.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListNextDifficultyAdjustment.Location = new System.Drawing.Point(0, 326);
+            this.lblBlockListNextDifficultyAdjustment.Name = "lblBlockListNextDifficultyAdjustment";
+            this.lblBlockListNextDifficultyAdjustment.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListNextDifficultyAdjustment.TabIndex = 220;
+            this.lblBlockListNextDifficultyAdjustment.Text = "no data";
+            this.toolTip1.SetToolTip(this.lblBlockListNextDifficultyAdjustment, "(estimated)");
             // 
             // lblBlockchainSize
             // 
@@ -4009,11 +4127,166 @@
             this.panelBlockList.TabIndex = 172;
             this.panelBlockList.Visible = false;
             // 
+            // label122
+            // 
+            this.label122.AutoSize = true;
+            this.label122.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label122.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label122.ForeColor = System.Drawing.Color.Silver;
+            this.label122.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label122.Location = new System.Drawing.Point(0, 419);
+            this.label122.Name = "label122";
+            this.label122.Size = new System.Drawing.Size(196, 20);
+            this.label122.TabIndex = 227;
+            this.label122.Text = "Halving block / remaining";
+            // 
+            // lblBlockListHalvingBlockAndRemaining
+            // 
+            this.lblBlockListHalvingBlockAndRemaining.AutoSize = true;
+            this.lblBlockListHalvingBlockAndRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListHalvingBlockAndRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListHalvingBlockAndRemaining.Location = new System.Drawing.Point(0, 434);
+            this.lblBlockListHalvingBlockAndRemaining.Name = "lblBlockListHalvingBlockAndRemaining";
+            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListHalvingBlockAndRemaining.TabIndex = 226;
+            this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
+            // 
+            // label120
+            // 
+            this.label120.AutoSize = true;
+            this.label120.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label120.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label120.ForeColor = System.Drawing.Color.Silver;
+            this.label120.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label120.Location = new System.Drawing.Point(0, 383);
+            this.label120.Name = "label120";
+            this.label120.Size = new System.Drawing.Size(147, 20);
+            this.label120.TabIndex = 225;
+            this.label120.Text = "Block reward (BTC)";
+            // 
+            // lblBlockListBlockReward
+            // 
+            this.lblBlockListBlockReward.AutoSize = true;
+            this.lblBlockListBlockReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 398);
+            this.lblBlockListBlockReward.Name = "lblBlockListBlockReward";
+            this.lblBlockListBlockReward.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListBlockReward.TabIndex = 224;
+            this.lblBlockListBlockReward.Text = "no data";
+            // 
+            // label118
+            // 
+            this.label118.AutoSize = true;
+            this.label118.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label118.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label118.ForeColor = System.Drawing.Color.Silver;
+            this.label118.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label118.Location = new System.Drawing.Point(0, 347);
+            this.label118.Name = "label118";
+            this.label118.Size = new System.Drawing.Size(181, 20);
+            this.label118.TabIndex = 223;
+            this.label118.Text = "Est. hashrate (gigahash)";
+            // 
+            // lblBlockListEstHashRate
+            // 
+            this.lblBlockListEstHashRate.AutoSize = true;
+            this.lblBlockListEstHashRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListEstHashRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListEstHashRate.Location = new System.Drawing.Point(0, 362);
+            this.lblBlockListEstHashRate.Name = "lblBlockListEstHashRate";
+            this.lblBlockListEstHashRate.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListEstHashRate.TabIndex = 222;
+            this.lblBlockListEstHashRate.Text = "no data";
+            // 
+            // lblBlockListAvgTimeBetweenBlocks
+            // 
+            this.lblBlockListAvgTimeBetweenBlocks.AutoSize = true;
+            this.lblBlockListAvgTimeBetweenBlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListAvgTimeBetweenBlocks.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListAvgTimeBetweenBlocks.Location = new System.Drawing.Point(0, 290);
+            this.lblBlockListAvgTimeBetweenBlocks.Name = "lblBlockListAvgTimeBetweenBlocks";
+            this.lblBlockListAvgTimeBetweenBlocks.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListAvgTimeBetweenBlocks.TabIndex = 219;
+            this.lblBlockListAvgTimeBetweenBlocks.Text = "no data";
+            // 
+            // label112
+            // 
+            this.label112.AutoSize = true;
+            this.label112.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label112.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label112.ForeColor = System.Drawing.Color.Silver;
+            this.label112.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label112.Location = new System.Drawing.Point(0, 239);
+            this.label112.Name = "label112";
+            this.label112.Size = new System.Drawing.Size(236, 20);
+            this.label112.TabIndex = 215;
+            this.label112.Text = "Next difficulty adjustment block";
+            // 
+            // lblBlockListNextDiffAdjBlock
+            // 
+            this.lblBlockListNextDiffAdjBlock.AutoSize = true;
+            this.lblBlockListNextDiffAdjBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListNextDiffAdjBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListNextDiffAdjBlock.Location = new System.Drawing.Point(0, 254);
+            this.lblBlockListNextDiffAdjBlock.Name = "lblBlockListNextDiffAdjBlock";
+            this.lblBlockListNextDiffAdjBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListNextDiffAdjBlock.TabIndex = 214;
+            this.lblBlockListNextDiffAdjBlock.Text = "no data";
+            // 
+            // label110
+            // 
+            this.label110.AutoSize = true;
+            this.label110.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label110.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label110.ForeColor = System.Drawing.Color.Silver;
+            this.label110.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label110.Location = new System.Drawing.Point(0, 203);
+            this.label110.Name = "label110";
+            this.label110.Size = new System.Drawing.Size(215, 20);
+            this.label110.TabIndex = 213;
+            this.label110.Text = "Avg attempts to solve block";
+            // 
+            // lblBlockListAttemptsToSolveBlock
+            // 
+            this.lblBlockListAttemptsToSolveBlock.AutoSize = true;
+            this.lblBlockListAttemptsToSolveBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListAttemptsToSolveBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListAttemptsToSolveBlock.Location = new System.Drawing.Point(0, 218);
+            this.lblBlockListAttemptsToSolveBlock.Name = "lblBlockListAttemptsToSolveBlock";
+            this.lblBlockListAttemptsToSolveBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListAttemptsToSolveBlock.TabIndex = 212;
+            this.lblBlockListAttemptsToSolveBlock.Text = "no data";
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label87.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label87.ForeColor = System.Drawing.Color.Silver;
+            this.label87.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label87.Location = new System.Drawing.Point(0, 59);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(188, 20);
+            this.label87.TabIndex = 204;
+            this.label87.Text = "Transactions in Mempool";
+            // 
+            // lblBlockListTXInMempool
+            // 
+            this.lblBlockListTXInMempool.AutoSize = true;
+            this.lblBlockListTXInMempool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListTXInMempool.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListTXInMempool.Location = new System.Drawing.Point(0, 74);
+            this.lblBlockListTXInMempool.Name = "lblBlockListTXInMempool";
+            this.lblBlockListTXInMempool.Size = new System.Drawing.Size(80, 22);
+            this.lblBlockListTXInMempool.TabIndex = 203;
+            this.lblBlockListTXInMempool.Text = "no data";
+            // 
             // panel21
             // 
             this.panel21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel21.Location = new System.Drawing.Point(250, 555);
+            this.panel21.Location = new System.Drawing.Point(250, 534);
             this.panel21.Name = "panel21";
             this.panel21.Size = new System.Drawing.Size(500, 1);
             this.panel21.TabIndex = 201;
@@ -4022,7 +4295,7 @@
             // 
             this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel16.Location = new System.Drawing.Point(250, 376);
+            this.panel16.Location = new System.Drawing.Point(250, 355);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(500, 1);
             this.panel16.TabIndex = 200;
@@ -4031,7 +4304,7 @@
             // 
             this.panel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel15.Location = new System.Drawing.Point(750, 376);
+            this.panel15.Location = new System.Drawing.Point(750, 355);
             this.panel15.Name = "panel15";
             this.panel15.Size = new System.Drawing.Size(1, 179);
             this.panel15.TabIndex = 201;
@@ -4040,7 +4313,7 @@
             // 
             this.panel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel19.Location = new System.Drawing.Point(225, 274);
+            this.panel19.Location = new System.Drawing.Point(225, 241);
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(1, 176);
             this.panel19.TabIndex = 201;
@@ -4049,7 +4322,7 @@
             // 
             this.panel18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel18.Location = new System.Drawing.Point(250, 376);
+            this.panel18.Location = new System.Drawing.Point(250, 355);
             this.panel18.Name = "panel18";
             this.panel18.Size = new System.Drawing.Size(1, 179);
             this.panel18.TabIndex = 200;
@@ -4058,7 +4331,7 @@
             // 
             this.panel17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel17.Location = new System.Drawing.Point(225, 464);
+            this.panel17.Location = new System.Drawing.Point(225, 443);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(25, 1);
             this.panel17.TabIndex = 199;
@@ -4067,7 +4340,7 @@
             // 
             this.panel14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel14.Location = new System.Drawing.Point(225, 196);
+            this.panel14.Location = new System.Drawing.Point(225, 163);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(25, 1);
             this.panel14.TabIndex = 197;
@@ -4078,7 +4351,7 @@
             this.panel13.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel13.BackgroundImage")));
             this.panel13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel13.Controls.Add(this.lblBlockListBlockHeight);
-            this.panel13.Location = new System.Drawing.Point(250, 376);
+            this.panel13.Location = new System.Drawing.Point(250, 355);
             this.panel13.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(500, 23);
@@ -4105,7 +4378,7 @@
             this.btnViewTransactionsFromBlockList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewTransactionsFromBlockList.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewTransactionsFromBlockList.ForeColor = System.Drawing.Color.White;
-            this.btnViewTransactionsFromBlockList.Location = new System.Drawing.Point(499, 178);
+            this.btnViewTransactionsFromBlockList.Location = new System.Drawing.Point(499, 145);
             this.btnViewTransactionsFromBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.btnViewTransactionsFromBlockList.Name = "btnViewTransactionsFromBlockList";
             this.btnViewTransactionsFromBlockList.Size = new System.Drawing.Size(18, 15);
@@ -4125,7 +4398,7 @@
             this.btnViewBlockFromBlockList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewBlockFromBlockList.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewBlockFromBlockList.ForeColor = System.Drawing.Color.White;
-            this.btnViewBlockFromBlockList.Location = new System.Drawing.Point(430, 178);
+            this.btnViewBlockFromBlockList.Location = new System.Drawing.Point(430, 145);
             this.btnViewBlockFromBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.btnViewBlockFromBlockList.Name = "btnViewBlockFromBlockList";
             this.btnViewBlockFromBlockList.Size = new System.Drawing.Size(18, 15);
@@ -4146,7 +4419,7 @@
             this.listViewBlockList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBlockList.HideSelection = false;
             this.listViewBlockList.LabelWrap = false;
-            this.listViewBlockList.Location = new System.Drawing.Point(250, 36);
+            this.listViewBlockList.Location = new System.Drawing.Point(250, 3);
             this.listViewBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBlockList.MultiSelect = false;
             this.listViewBlockList.Name = "listViewBlockList";
@@ -4172,7 +4445,7 @@
             this.lblBlockListPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockListPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 336);
+            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 303);
             this.lblBlockListPositionInList.Name = "lblBlockListPositionInList";
             this.lblBlockListPositionInList.Size = new System.Drawing.Size(114, 20);
             this.lblBlockListPositionInList.TabIndex = 157;
@@ -4188,7 +4461,7 @@
             this.btnNewer15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewer15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewer15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 336);
+            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 303);
             this.btnNewer15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnNewer15Blocks.Name = "btnNewer15Blocks";
             this.btnNewer15Blocks.Size = new System.Drawing.Size(78, 22);
@@ -4207,7 +4480,7 @@
             this.btnOlder15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOlder15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOlder15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnOlder15Blocks.Location = new System.Drawing.Point(683, 336);
+            this.btnOlder15Blocks.Location = new System.Drawing.Point(683, 303);
             this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnOlder15Blocks.Name = "btnOlder15Blocks";
             this.btnOlder15Blocks.Size = new System.Drawing.Size(70, 22);
@@ -4235,7 +4508,7 @@
             this.label109.AutoSize = true;
             this.label109.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label109.ForeColor = System.Drawing.Color.Silver;
-            this.label109.Location = new System.Drawing.Point(-3, 5);
+            this.label109.Location = new System.Drawing.Point(0, 5);
             this.label109.Name = "label109";
             this.label109.Size = new System.Drawing.Size(173, 20);
             this.label109.TabIndex = 6;
@@ -4274,7 +4547,7 @@
             this.panel20.Controls.Add(this.label24);
             this.panel20.Controls.Add(this.label88);
             this.panel20.Controls.Add(this.lblBlockListNonce);
-            this.panel20.Location = new System.Drawing.Point(250, 376);
+            this.panel20.Location = new System.Drawing.Point(250, 355);
             this.panel20.Name = "panel20";
             this.panel20.Size = new System.Drawing.Size(500, 179);
             this.panel20.TabIndex = 202;
@@ -4666,279 +4939,6 @@
             this.btnHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelp.UseVisualStyleBackColor = false;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
-            // 
-            // label87
-            // 
-            this.label87.AutoSize = true;
-            this.label87.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label87.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label87.ForeColor = System.Drawing.Color.Silver;
-            this.label87.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label87.Location = new System.Drawing.Point(0, 36);
-            this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(188, 20);
-            this.label87.TabIndex = 204;
-            this.label87.Text = "Transactions in Mempool";
-            // 
-            // lblBlockListTXInMempool
-            // 
-            this.lblBlockListTXInMempool.AutoSize = true;
-            this.lblBlockListTXInMempool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListTXInMempool.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListTXInMempool.Location = new System.Drawing.Point(0, 51);
-            this.lblBlockListTXInMempool.Name = "lblBlockListTXInMempool";
-            this.lblBlockListTXInMempool.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListTXInMempool.TabIndex = 203;
-            this.lblBlockListTXInMempool.Text = "no data";
-            // 
-            // label100
-            // 
-            this.label100.AutoSize = true;
-            this.label100.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label100.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label100.ForeColor = System.Drawing.Color.Silver;
-            this.label100.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label100.Location = new System.Drawing.Point(0, 72);
-            this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(199, 20);
-            this.label100.TabIndex = 205;
-            this.label100.Text = "Transactions in next block*";
-            this.toolTip1.SetToolTip(this.label100, "(estimated)");
-            // 
-            // lblBlockListTXInNextBlock
-            // 
-            this.lblBlockListTXInNextBlock.AutoSize = true;
-            this.lblBlockListTXInNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListTXInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListTXInNextBlock.Location = new System.Drawing.Point(0, 87);
-            this.lblBlockListTXInNextBlock.Name = "lblBlockListTXInNextBlock";
-            this.lblBlockListTXInNextBlock.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListTXInNextBlock.TabIndex = 206;
-            this.lblBlockListTXInNextBlock.Text = "no data";
-            this.toolTip1.SetToolTip(this.lblBlockListTXInNextBlock, "(estimated)");
-            // 
-            // lblBlockListMinMaxInFeeNextBlock
-            // 
-            this.lblBlockListMinMaxInFeeNextBlock.AutoSize = true;
-            this.lblBlockListMinMaxInFeeNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListMinMaxInFeeNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListMinMaxInFeeNextBlock.Location = new System.Drawing.Point(0, 123);
-            this.lblBlockListMinMaxInFeeNextBlock.Name = "lblBlockListMinMaxInFeeNextBlock";
-            this.lblBlockListMinMaxInFeeNextBlock.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListMinMaxInFeeNextBlock.TabIndex = 208;
-            this.lblBlockListMinMaxInFeeNextBlock.Text = "no data";
-            this.toolTip1.SetToolTip(this.lblBlockListMinMaxInFeeNextBlock, "(estimated)");
-            // 
-            // label106
-            // 
-            this.label106.AutoSize = true;
-            this.label106.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label106.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label106.ForeColor = System.Drawing.Color.Silver;
-            this.label106.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label106.Location = new System.Drawing.Point(0, 108);
-            this.label106.Name = "label106";
-            this.label106.Size = new System.Drawing.Size(212, 20);
-            this.label106.TabIndex = 207;
-            this.label106.Text = "Min / max fee in next block*";
-            this.toolTip1.SetToolTip(this.label106, "(estimated)");
-            // 
-            // lblBlockListTotalFeesInNextBlock
-            // 
-            this.lblBlockListTotalFeesInNextBlock.AutoSize = true;
-            this.lblBlockListTotalFeesInNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListTotalFeesInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListTotalFeesInNextBlock.Location = new System.Drawing.Point(0, 159);
-            this.lblBlockListTotalFeesInNextBlock.Name = "lblBlockListTotalFeesInNextBlock";
-            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListTotalFeesInNextBlock.TabIndex = 210;
-            this.lblBlockListTotalFeesInNextBlock.Text = "no data";
-            this.toolTip1.SetToolTip(this.lblBlockListTotalFeesInNextBlock, "(estimated)");
-            // 
-            // label108
-            // 
-            this.label108.AutoSize = true;
-            this.label108.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label108.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label108.ForeColor = System.Drawing.Color.Silver;
-            this.label108.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label108.Location = new System.Drawing.Point(0, 144);
-            this.label108.Name = "label108";
-            this.label108.Size = new System.Drawing.Size(219, 20);
-            this.label108.TabIndex = 209;
-            this.label108.Text = "Total fees in next block (BTC)*";
-            this.toolTip1.SetToolTip(this.label108, "(estimated)");
-            // 
-            // label110
-            // 
-            this.label110.AutoSize = true;
-            this.label110.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label110.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label110.ForeColor = System.Drawing.Color.Silver;
-            this.label110.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label110.Location = new System.Drawing.Point(0, 180);
-            this.label110.Name = "label110";
-            this.label110.Size = new System.Drawing.Size(215, 20);
-            this.label110.TabIndex = 213;
-            this.label110.Text = "Avg attempts to solve block";
-            // 
-            // lblBlockListAttemptsToSolveBlock
-            // 
-            this.lblBlockListAttemptsToSolveBlock.AutoSize = true;
-            this.lblBlockListAttemptsToSolveBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListAttemptsToSolveBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListAttemptsToSolveBlock.Location = new System.Drawing.Point(0, 195);
-            this.lblBlockListAttemptsToSolveBlock.Name = "lblBlockListAttemptsToSolveBlock";
-            this.lblBlockListAttemptsToSolveBlock.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListAttemptsToSolveBlock.TabIndex = 212;
-            this.lblBlockListAttemptsToSolveBlock.Text = "no data";
-            // 
-            // label112
-            // 
-            this.label112.AutoSize = true;
-            this.label112.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label112.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label112.ForeColor = System.Drawing.Color.Silver;
-            this.label112.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label112.Location = new System.Drawing.Point(0, 216);
-            this.label112.Name = "label112";
-            this.label112.Size = new System.Drawing.Size(236, 20);
-            this.label112.TabIndex = 215;
-            this.label112.Text = "Next difficulty adjustment block";
-            // 
-            // lblBlockListNextDiffAdjBlock
-            // 
-            this.lblBlockListNextDiffAdjBlock.AutoSize = true;
-            this.lblBlockListNextDiffAdjBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListNextDiffAdjBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListNextDiffAdjBlock.Location = new System.Drawing.Point(0, 231);
-            this.lblBlockListNextDiffAdjBlock.Name = "lblBlockListNextDiffAdjBlock";
-            this.lblBlockListNextDiffAdjBlock.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListNextDiffAdjBlock.TabIndex = 214;
-            this.lblBlockListNextDiffAdjBlock.Text = "no data";
-            // 
-            // lblBlockListAvgTimeBetweenBlocks
-            // 
-            this.lblBlockListAvgTimeBetweenBlocks.AutoSize = true;
-            this.lblBlockListAvgTimeBetweenBlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListAvgTimeBetweenBlocks.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListAvgTimeBetweenBlocks.Location = new System.Drawing.Point(0, 267);
-            this.lblBlockListAvgTimeBetweenBlocks.Name = "lblBlockListAvgTimeBetweenBlocks";
-            this.lblBlockListAvgTimeBetweenBlocks.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListAvgTimeBetweenBlocks.TabIndex = 219;
-            this.lblBlockListAvgTimeBetweenBlocks.Text = "no data";
-            // 
-            // label115
-            // 
-            this.label115.AutoSize = true;
-            this.label115.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label115.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label115.ForeColor = System.Drawing.Color.Silver;
-            this.label115.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label115.Location = new System.Drawing.Point(0, 252);
-            this.label115.Name = "label115";
-            this.label115.Size = new System.Drawing.Size(198, 20);
-            this.label115.TabIndex = 218;
-            this.label115.Text = "Avg time between blocks";
-            this.toolTip1.SetToolTip(this.label115, "(estimated)");
-            // 
-            // label116
-            // 
-            this.label116.AutoSize = true;
-            this.label116.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label116.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label116.ForeColor = System.Drawing.Color.Silver;
-            this.label116.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label116.Location = new System.Drawing.Point(0, 288);
-            this.label116.Name = "label116";
-            this.label116.Size = new System.Drawing.Size(197, 20);
-            this.label116.TabIndex = 221;
-            this.label116.Text = "Next difficulty adjustment*";
-            this.toolTip1.SetToolTip(this.label116, "(estimated)");
-            // 
-            // lblBlockListNextDifficultyAdjustment
-            // 
-            this.lblBlockListNextDifficultyAdjustment.AutoSize = true;
-            this.lblBlockListNextDifficultyAdjustment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListNextDifficultyAdjustment.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListNextDifficultyAdjustment.Location = new System.Drawing.Point(0, 303);
-            this.lblBlockListNextDifficultyAdjustment.Name = "lblBlockListNextDifficultyAdjustment";
-            this.lblBlockListNextDifficultyAdjustment.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListNextDifficultyAdjustment.TabIndex = 220;
-            this.lblBlockListNextDifficultyAdjustment.Text = "no data";
-            this.toolTip1.SetToolTip(this.lblBlockListNextDifficultyAdjustment, "(estimated)");
-            // 
-            // label118
-            // 
-            this.label118.AutoSize = true;
-            this.label118.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label118.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label118.ForeColor = System.Drawing.Color.Silver;
-            this.label118.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label118.Location = new System.Drawing.Point(0, 324);
-            this.label118.Name = "label118";
-            this.label118.Size = new System.Drawing.Size(181, 20);
-            this.label118.TabIndex = 223;
-            this.label118.Text = "Est. hashrate (gigahash)";
-            // 
-            // lblBlockListEstHashRate
-            // 
-            this.lblBlockListEstHashRate.AutoSize = true;
-            this.lblBlockListEstHashRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListEstHashRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListEstHashRate.Location = new System.Drawing.Point(0, 339);
-            this.lblBlockListEstHashRate.Name = "lblBlockListEstHashRate";
-            this.lblBlockListEstHashRate.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListEstHashRate.TabIndex = 222;
-            this.lblBlockListEstHashRate.Text = "no data";
-            // 
-            // label120
-            // 
-            this.label120.AutoSize = true;
-            this.label120.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label120.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label120.ForeColor = System.Drawing.Color.Silver;
-            this.label120.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label120.Location = new System.Drawing.Point(0, 360);
-            this.label120.Name = "label120";
-            this.label120.Size = new System.Drawing.Size(147, 20);
-            this.label120.TabIndex = 225;
-            this.label120.Text = "Block reward (BTC)";
-            // 
-            // lblBlockListBlockReward
-            // 
-            this.lblBlockListBlockReward.AutoSize = true;
-            this.lblBlockListBlockReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 375);
-            this.lblBlockListBlockReward.Name = "lblBlockListBlockReward";
-            this.lblBlockListBlockReward.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListBlockReward.TabIndex = 224;
-            this.lblBlockListBlockReward.Text = "no data";
-            // 
-            // label122
-            // 
-            this.label122.AutoSize = true;
-            this.label122.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label122.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label122.ForeColor = System.Drawing.Color.Silver;
-            this.label122.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label122.Location = new System.Drawing.Point(0, 396);
-            this.label122.Name = "label122";
-            this.label122.Size = new System.Drawing.Size(196, 20);
-            this.label122.TabIndex = 227;
-            this.label122.Text = "Halving block / remaining";
-            // 
-            // lblBlockListHalvingBlockAndRemaining
-            // 
-            this.lblBlockListHalvingBlockAndRemaining.AutoSize = true;
-            this.lblBlockListHalvingBlockAndRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListHalvingBlockAndRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListHalvingBlockAndRemaining.Location = new System.Drawing.Point(0, 411);
-            this.lblBlockListHalvingBlockAndRemaining.Name = "lblBlockListHalvingBlockAndRemaining";
-            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListHalvingBlockAndRemaining.TabIndex = 226;
-            this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
             // 
             // SATSuma
             // 

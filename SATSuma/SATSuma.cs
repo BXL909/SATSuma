@@ -108,6 +108,9 @@ namespace SATSuma
         bool btnPreviousBlockWasEnabled = true;
         bool btnBlockListNextBlockWasEnabled = false;
         bool btnBlockListPreviousBlockWasEnabled = true;
+        bool btnNewer15BlocksWasEnabled = false;
+        bool btnOlder15BlocksWasEnabled = true;
+        bool textBoxBlockHeightToStartListFromWasEnabled = true;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -2563,16 +2566,23 @@ namespace SATSuma
             btnViewBlockFromBlockList.Visible = false;
             btnViewTransactionsFromBlockList.Visible = false;
             var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
+//            DisableEnableLoadingAnimation("enable"); // start the loading animation
+//            DisableEnableButtons("disable"); // disable buttons during operation
             await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            DisableEnableButtons("enable"); // enable buttons after operation is complete
+//            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+//            DisableEnableButtons("enable"); // enable buttons after operation is complete
         }
 
         private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber) 
         {
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+
             var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
+
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            DisableEnableButtons("enable"); // enable buttons after operation is complete
+
             var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
             List<string> blocklist = blocks.Select(t => t.height).ToList();
 
@@ -2608,17 +2618,17 @@ namespace SATSuma
             if (listViewBlockList.Columns.Count == 3)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("Size (MB)", 50);
+                listViewBlockList.Columns.Add("Size", 50);
             }
             if (listViewBlockList.Columns.Count == 4)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("Fee range (sat/vB)", 70);
+                listViewBlockList.Columns.Add("Fee range", 70);
             }
             if (listViewBlockList.Columns.Count == 5)
             {
                 // If not, add the column header
-                listViewBlockList.Columns.Add("Median fee", 50);
+                listViewBlockList.Columns.Add("Med.", 50);
             }
             if (listViewBlockList.Columns.Count == 6)
             {
@@ -2695,28 +2705,20 @@ namespace SATSuma
 
         private async void btnOlder15Blocks_Click(object sender, EventArgs e)
         {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
             int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber)-1);
             string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
             btnViewBlockFromBlockList.Visible = false;
             btnViewTransactionsFromBlockList.Visible = false;
         }
 
         private async void btnNewer15Blocks_Click(object sender, EventArgs e)
         {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
             int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) +29);
             string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
             btnViewBlockFromBlockList.Visible = false;
             btnViewTransactionsFromBlockList.Visible = false;
         }
@@ -2739,7 +2741,7 @@ namespace SATSuma
             if (listViewBlockList.SelectedItems.Count > 0)
             {
                 Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
-                panel14.Top = itemRect.Top + 42;
+                panel14.Top = itemRect.Top + 8;
                 panel19.Height = panel17.Top - panel14.Top;
                 panel19.Top = panel14.Top;
 
@@ -2986,6 +2988,9 @@ namespace SATSuma
                 textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
                 btnNextBlockWasEnabled = btnNextBlock.Enabled;
                 btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
+                btnNewer15BlocksWasEnabled = btnNewer15Blocks.Enabled;
+                btnOlder15BlocksWasEnabled = btnOlder15Blocks.Enabled;
+                textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
 
                 //disable them all
                 btnShowAllTX.Enabled = false; 
@@ -3004,6 +3009,9 @@ namespace SATSuma
                 btnNextBlock.Enabled = false;
                 btnPreviousBlock.Enabled = false;
                 btnMenu.Enabled = false;
+                btnNewer15Blocks.Enabled = false;
+                btnOlder15Blocks.Enabled = false;
+                textBoxBlockHeightToStartListFrom.Enabled = false;
             }
             else
             {
@@ -3023,6 +3031,9 @@ namespace SATSuma
                 btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
                 textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
                 textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
+                btnNewer15Blocks.Enabled = btnNewer15BlocksWasEnabled;
+                btnOlder15Blocks.Enabled = btnOlder15BlocksWasEnabled;
+                textBoxBlockHeightToStartListFrom.Enabled = textBoxBlockHeightToStartListFromWasEnabled;
                 if (panelBlock.Visible == true)
                 {
                     textBoxSubmittedBlockNumber.Focus();

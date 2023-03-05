@@ -1808,13 +1808,27 @@ namespace SATSuma
             //assign block number to text box on block panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
-            // Get the second subitem in the selected item (index 1)
+            // Get the second subitem in the selected item 
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
             // Set the text of the textBoxSubmittedBlockNumber control
             textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
             LookupBlock();
             //show the block screen
-            btnBlock_Click(sender, e);
+            btnMenuBlock_Click(sender, e);
+        }
+
+        private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
+        {
+            //assign TX ID to text box on transaction panel
+            // Get the selected item
+            ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
+            // Get the first subitem in the selected item 
+            string TransactionIDFromRow = selectedItem.SubItems[0].Text;
+            // Set the text of the textBoxTransactionID control
+            textBoxTransactionID.Text = TransactionIDFromRow;
+            // LookupTransaction();
+            //show the transaction screen
+            btnMenuTransaction_Click(sender, e);
         }
 
         //=============================================================================================================
@@ -2437,6 +2451,21 @@ namespace SATSuma
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
         }
+
+        private void btnViewTransactionFromBlock_Click(object sender, EventArgs e)
+        {
+            //assign TX ID to text box on transaction panel
+            // Get the selected item
+            ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
+            // Get the first subitem in the selected item 
+            string TransactionIDFromRow = selectedItem.SubItems[0].Text;
+            // Set the text of the textBoxTransactionID control
+            textBoxTransactionID.Text = TransactionIDFromRow;
+            // LookupTransaction();
+            //show the transaction screen
+            btnMenuTransaction_Click(sender, e);
+        }
+
         #endregion
 
         #region BLOCK LIST STUFF
@@ -2838,7 +2867,7 @@ namespace SATSuma
             textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
             LookupBlock();
             //show the block screen
-            btnBlock_Click(sender, e);
+            btnMenuBlock_Click(sender, e);
         }
 
         private void btnViewBlockFromBlockList_Click(object sender, EventArgs e)  // this and btnViewTransactionsFromBlockList_Click do exactly the same. They both exist for UI only
@@ -2852,7 +2881,7 @@ namespace SATSuma
             textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
             LookupBlock();
             //show the block screen
-            btnBlock_Click(sender, e);
+            btnMenuBlock_Click(sender, e);
         }
 
         private void listViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -3208,7 +3237,7 @@ namespace SATSuma
             panelMenu.BringToFront();
             if (panelMenu.Height == 24)
             {
-                panelMenu.Height = 192;
+                panelMenu.Height = 216;
             }
             else
             {
@@ -3216,7 +3245,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnSplash_Click(object sender, EventArgs e)
+        private void BtnMenuSplash_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
             splash splash = new splash(); // invoke the about/splash screen
@@ -3250,69 +3279,77 @@ namespace SATSuma
             panelMenu.Height = 24; //close menu
         }
 
-        private void BtnBitcoinDashboard_Click(object sender, EventArgs e)
+        private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnAddress.Enabled = true;
-            btnBitcoinDashboard.Enabled = false;
-            btnBlockList.Enabled = true;
-            btnLightningDashboard.Enabled = true;
-            btnBlock.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = false;
+            btnMenuBlockList.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
+            btnMenuBlock.Enabled = true;
             this.DoubleBuffered = true;
             this.SuspendLayout();
             panelBlockList.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
             panelBlock.Visible = false;
+            panelTransaction.Visible = false;
             panelBitcoinDashboard.Visible = true;
             this.ResumeLayout();
         }
 
-        private void BtnLightningDashboard_Click(object sender, EventArgs e)
+        private void BtnMenuLightningDashboard_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnAddress.Enabled = true;
-            btnBitcoinDashboard.Enabled = true;
-            btnBlockList.Enabled = true;
-            btnBlock.Enabled = true;
-            btnLightningDashboard.Enabled = false;
+            btnMenuAddress.Enabled = true;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuBlock.Enabled = true;
+            btnMenuLightningDashboard.Enabled = false;
             this.DoubleBuffered = true;
             this.SuspendLayout();
             panelBitcoinDashboard.Visible = false;
             panelBlockList.Visible = false;
             panelAddress.Visible = false;
             panelBlock.Visible = false;
+            panelTransaction.Visible = false;
             panelLightningDashboard.Visible = true;
             this.ResumeLayout();
         }
 
-        private void BtnAddress_Click(object sender, EventArgs e)
+        private void BtnMenuAddress_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnAddress.Enabled= false;
-            btnBlockList.Enabled = true;
-            btnBitcoinDashboard.Enabled = true;
-            btnBlock.Enabled = true;
-            btnLightningDashboard.Enabled = true;
+            btnMenuAddress.Enabled= false;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuBlock.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
             panelBitcoinDashboard.Visible = false;
             panelBlockList.Visible = false;
             panelLightningDashboard.Visible = false;
             panelBlock.Visible = false;
+            panelTransaction.Visible = false;
             panelAddress.Visible = true;
         }
 
-        private void btnBlock_Click(object sender, EventArgs e)
+        private void btnMenuBlock_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnBlock.Enabled= false;
-            btnAddress.Enabled = true;
-            btnBlockList.Enabled = true;
-            btnBitcoinDashboard.Enabled = true;
-            btnLightningDashboard.Enabled = true;
+            btnMenuBlock.Enabled= false;
+            btnMenuTransaction.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
             panelBlockList.Visible = false;
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
+            panelTransaction.Visible = false;
             panelBlock.Visible = true;
             if (textBoxSubmittedBlockNumber.Text == "") 
             {
@@ -3324,32 +3361,36 @@ namespace SATSuma
         private void lblBlockNumber_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnBlockList.Enabled = true;
-            btnBlock.Enabled = false;
-            btnAddress.Enabled = true;
-            btnBitcoinDashboard.Enabled = true;
-            btnLightningDashboard.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBlock.Enabled = false;
+            btnMenuAddress.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
             panelBlockList.Visible = false;
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
+            panelTransaction.Visible = false;
             panelBlock.Visible = true;
             textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
             LookupBlock();
         }
 
-        private void btnBlockList_Click(object sender, EventArgs e)
+        private void btnMenuBlockList_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnBlockList.Enabled = false;
-            btnBlock.Enabled = true;
-            btnAddress.Enabled = true;
-            btnBitcoinDashboard.Enabled = true;
-            btnLightningDashboard.Enabled = true;
+            btnMenuBlockList.Enabled = false;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBlock.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
             panelBitcoinDashboard.Visible = false;
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
             panelBlock.Visible = false;
+            panelTransaction.Visible = false;
             panelBlockList.Visible = true;
             if (textBoxBlockHeightToStartListFrom.Text == "")
             {
@@ -3358,7 +3399,30 @@ namespace SATSuma
             }
         }
 
-        private void BtnSettings_Click(object sender, EventArgs e)
+        private void btnMenuTransaction_Click(object sender, EventArgs e)
+        {
+            panelMenu.Height = 24;
+            btnMenuTransaction.Enabled = false;
+            btnMenuBlockList.Enabled = true;
+            btnMenuBlock.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
+            panelBitcoinDashboard.Visible = false;
+            panelLightningDashboard.Visible = false;
+            panelAddress.Visible = false;
+            panelBlock.Visible = false;
+            panelTransaction.Visible = false;
+            panelBlockList.Visible = false;
+            panelTransaction.Visible = true;
+            if (textBoxBlockHeightToStartListFrom.Text == "")
+            {
+                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+            }
+        }
+
+        private void BtnMenuSettings_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
             settingsScreen.CreateInstance();
@@ -3470,6 +3534,11 @@ namespace SATSuma
         {
             return this.panelLightningDashboard;
         }
+
+        public Panel GetPanelTransaction() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelTransaction;
+        }
         #endregion
 
         #region MISC UI STUFF
@@ -3492,6 +3561,8 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
         #endregion
+
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================

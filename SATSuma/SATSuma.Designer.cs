@@ -367,24 +367,24 @@
             this.btnHelp = new System.Windows.Forms.Button();
             this.panelTransaction = new System.Windows.Forms.Panel();
             this.label98 = new System.Windows.Forms.Label();
-            this.label102 = new System.Windows.Forms.Label();
+            this.lblTransactionVersion = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
-            this.label107 = new System.Windows.Forms.Label();
+            this.lblTransactionFee = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.label113 = new System.Windows.Forms.Label();
-            this.label114 = new System.Windows.Forms.Label();
+            this.lblTransactionBlockHeight = new System.Windows.Forms.Label();
             this.label117 = new System.Windows.Forms.Label();
-            this.label119 = new System.Windows.Forms.Label();
+            this.lblTransactionInputCount = new System.Windows.Forms.Label();
             this.label124 = new System.Windows.Forms.Label();
-            this.label125 = new System.Windows.Forms.Label();
+            this.lblTransactionOutputCount = new System.Windows.Forms.Label();
             this.label126 = new System.Windows.Forms.Label();
-            this.label127 = new System.Windows.Forms.Label();
+            this.lblTransactionBlockTime = new System.Windows.Forms.Label();
             this.label128 = new System.Windows.Forms.Label();
-            this.label129 = new System.Windows.Forms.Label();
+            this.lblTransactionLockTime = new System.Windows.Forms.Label();
             this.label130 = new System.Windows.Forms.Label();
-            this.label131 = new System.Windows.Forms.Label();
+            this.lblTransactionWeight = new System.Windows.Forms.Label();
             this.label132 = new System.Windows.Forms.Label();
-            this.label133 = new System.Windows.Forms.Label();
+            this.lblTransactionSize = new System.Windows.Forms.Label();
             this.textBoxTransactionID = new System.Windows.Forms.TextBox();
             this.label136 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
@@ -4993,24 +4993,24 @@
             // 
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
             this.panelTransaction.Controls.Add(this.label98);
-            this.panelTransaction.Controls.Add(this.label102);
+            this.panelTransaction.Controls.Add(this.lblTransactionVersion);
             this.panelTransaction.Controls.Add(this.label104);
-            this.panelTransaction.Controls.Add(this.label107);
+            this.panelTransaction.Controls.Add(this.lblTransactionFee);
             this.panelTransaction.Controls.Add(this.listView1);
             this.panelTransaction.Controls.Add(this.label113);
-            this.panelTransaction.Controls.Add(this.label114);
+            this.panelTransaction.Controls.Add(this.lblTransactionBlockHeight);
             this.panelTransaction.Controls.Add(this.label117);
-            this.panelTransaction.Controls.Add(this.label119);
+            this.panelTransaction.Controls.Add(this.lblTransactionInputCount);
             this.panelTransaction.Controls.Add(this.label124);
-            this.panelTransaction.Controls.Add(this.label125);
+            this.panelTransaction.Controls.Add(this.lblTransactionOutputCount);
             this.panelTransaction.Controls.Add(this.label126);
-            this.panelTransaction.Controls.Add(this.label127);
+            this.panelTransaction.Controls.Add(this.lblTransactionBlockTime);
             this.panelTransaction.Controls.Add(this.label128);
-            this.panelTransaction.Controls.Add(this.label129);
+            this.panelTransaction.Controls.Add(this.lblTransactionLockTime);
             this.panelTransaction.Controls.Add(this.label130);
-            this.panelTransaction.Controls.Add(this.label131);
+            this.panelTransaction.Controls.Add(this.lblTransactionWeight);
             this.panelTransaction.Controls.Add(this.label132);
-            this.panelTransaction.Controls.Add(this.label133);
+            this.panelTransaction.Controls.Add(this.lblTransactionSize);
             this.panelTransaction.Controls.Add(this.textBoxTransactionID);
             this.panelTransaction.Controls.Add(this.label136);
             this.panelTransaction.Location = new System.Drawing.Point(21, 188);
@@ -5032,16 +5032,16 @@
             this.label98.TabIndex = 169;
             this.label98.Text = "Version";
             // 
-            // label102
+            // lblTransactionVersion
             // 
-            this.label102.AutoSize = true;
-            this.label102.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label102.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label102.Location = new System.Drawing.Point(-3, 385);
-            this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(87, 23);
-            this.label102.TabIndex = 168;
-            this.label102.Text = "no data";
+            this.lblTransactionVersion.AutoSize = true;
+            this.lblTransactionVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionVersion.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionVersion.Location = new System.Drawing.Point(-3, 385);
+            this.lblTransactionVersion.Name = "lblTransactionVersion";
+            this.lblTransactionVersion.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionVersion.TabIndex = 168;
+            this.lblTransactionVersion.Text = "no data";
             // 
             // label104
             // 
@@ -5056,16 +5056,16 @@
             this.label104.TabIndex = 167;
             this.label104.Text = "Fee";
             // 
-            // label107
+            // lblTransactionFee
             // 
-            this.label107.AutoSize = true;
-            this.label107.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label107.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label107.Location = new System.Drawing.Point(-3, 217);
-            this.label107.Name = "label107";
-            this.label107.Size = new System.Drawing.Size(87, 23);
-            this.label107.TabIndex = 166;
-            this.label107.Text = "no data";
+            this.lblTransactionFee.AutoSize = true;
+            this.lblTransactionFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionFee.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionFee.Location = new System.Drawing.Point(-3, 217);
+            this.lblTransactionFee.Name = "lblTransactionFee";
+            this.lblTransactionFee.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionFee.TabIndex = 166;
+            this.lblTransactionFee.Text = "no data";
             // 
             // listView1
             // 
@@ -5105,16 +5105,16 @@
             this.label113.TabIndex = 153;
             this.label113.Text = "Block height";
             // 
-            // label114
+            // lblTransactionBlockHeight
             // 
-            this.label114.AutoSize = true;
-            this.label114.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label114.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label114.Location = new System.Drawing.Point(-3, 49);
-            this.label114.Name = "label114";
-            this.label114.Size = new System.Drawing.Size(87, 23);
-            this.label114.TabIndex = 152;
-            this.label114.Text = "no data";
+            this.lblTransactionBlockHeight.AutoSize = true;
+            this.lblTransactionBlockHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionBlockHeight.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionBlockHeight.Location = new System.Drawing.Point(-3, 49);
+            this.lblTransactionBlockHeight.Name = "lblTransactionBlockHeight";
+            this.lblTransactionBlockHeight.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionBlockHeight.TabIndex = 152;
+            this.lblTransactionBlockHeight.Text = "no data";
             // 
             // label117
             // 
@@ -5129,16 +5129,16 @@
             this.label117.TabIndex = 151;
             this.label117.Text = "Inputs";
             // 
-            // label119
+            // lblTransactionInputCount
             // 
-            this.label119.AutoSize = true;
-            this.label119.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label119.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label119.Location = new System.Drawing.Point(-3, 301);
-            this.label119.Name = "label119";
-            this.label119.Size = new System.Drawing.Size(87, 23);
-            this.label119.TabIndex = 150;
-            this.label119.Text = "no data";
+            this.lblTransactionInputCount.AutoSize = true;
+            this.lblTransactionInputCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionInputCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionInputCount.Location = new System.Drawing.Point(-3, 301);
+            this.lblTransactionInputCount.Name = "lblTransactionInputCount";
+            this.lblTransactionInputCount.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionInputCount.TabIndex = 150;
+            this.lblTransactionInputCount.Text = "no data";
             // 
             // label124
             // 
@@ -5153,16 +5153,16 @@
             this.label124.TabIndex = 145;
             this.label124.Text = "Outputs";
             // 
-            // label125
+            // lblTransactionOutputCount
             // 
-            this.label125.AutoSize = true;
-            this.label125.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label125.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label125.Location = new System.Drawing.Point(-3, 343);
-            this.label125.Name = "label125";
-            this.label125.Size = new System.Drawing.Size(87, 23);
-            this.label125.TabIndex = 144;
-            this.label125.Text = "no data";
+            this.lblTransactionOutputCount.AutoSize = true;
+            this.lblTransactionOutputCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionOutputCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionOutputCount.Location = new System.Drawing.Point(-3, 343);
+            this.lblTransactionOutputCount.Name = "lblTransactionOutputCount";
+            this.lblTransactionOutputCount.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionOutputCount.TabIndex = 144;
+            this.lblTransactionOutputCount.Text = "no data";
             // 
             // label126
             // 
@@ -5177,16 +5177,16 @@
             this.label126.TabIndex = 143;
             this.label126.Text = "Block time";
             // 
-            // label127
+            // lblTransactionBlockTime
             // 
-            this.label127.AutoSize = true;
-            this.label127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label127.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label127.Location = new System.Drawing.Point(-3, 91);
-            this.label127.Name = "label127";
-            this.label127.Size = new System.Drawing.Size(87, 23);
-            this.label127.TabIndex = 142;
-            this.label127.Text = "no data";
+            this.lblTransactionBlockTime.AutoSize = true;
+            this.lblTransactionBlockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionBlockTime.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionBlockTime.Location = new System.Drawing.Point(-3, 91);
+            this.lblTransactionBlockTime.Name = "lblTransactionBlockTime";
+            this.lblTransactionBlockTime.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionBlockTime.TabIndex = 142;
+            this.lblTransactionBlockTime.Text = "no data";
             // 
             // label128
             // 
@@ -5201,16 +5201,16 @@
             this.label128.TabIndex = 141;
             this.label128.Text = "Lock time";
             // 
-            // label129
+            // lblTransactionLockTime
             // 
-            this.label129.AutoSize = true;
-            this.label129.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label129.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label129.Location = new System.Drawing.Point(-3, 259);
-            this.label129.Name = "label129";
-            this.label129.Size = new System.Drawing.Size(87, 23);
-            this.label129.TabIndex = 140;
-            this.label129.Text = "no data";
+            this.lblTransactionLockTime.AutoSize = true;
+            this.lblTransactionLockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionLockTime.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionLockTime.Location = new System.Drawing.Point(-3, 259);
+            this.lblTransactionLockTime.Name = "lblTransactionLockTime";
+            this.lblTransactionLockTime.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionLockTime.TabIndex = 140;
+            this.lblTransactionLockTime.Text = "no data";
             // 
             // label130
             // 
@@ -5225,16 +5225,16 @@
             this.label130.TabIndex = 139;
             this.label130.Text = "Transaction weight (MWU)";
             // 
-            // label131
+            // lblTransactionWeight
             // 
-            this.label131.AutoSize = true;
-            this.label131.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label131.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label131.Location = new System.Drawing.Point(-3, 175);
-            this.label131.Name = "label131";
-            this.label131.Size = new System.Drawing.Size(87, 23);
-            this.label131.TabIndex = 138;
-            this.label131.Text = "no data";
+            this.lblTransactionWeight.AutoSize = true;
+            this.lblTransactionWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionWeight.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionWeight.Location = new System.Drawing.Point(-3, 175);
+            this.lblTransactionWeight.Name = "lblTransactionWeight";
+            this.lblTransactionWeight.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionWeight.TabIndex = 138;
+            this.lblTransactionWeight.Text = "no data";
             // 
             // label132
             // 
@@ -5249,16 +5249,16 @@
             this.label132.TabIndex = 137;
             this.label132.Text = "Transaction size (bytes)";
             // 
-            // label133
+            // lblTransactionSize
             // 
-            this.label133.AutoSize = true;
-            this.label133.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label133.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label133.Location = new System.Drawing.Point(-3, 133);
-            this.label133.Name = "label133";
-            this.label133.Size = new System.Drawing.Size(87, 23);
-            this.label133.TabIndex = 136;
-            this.label133.Text = "no data";
+            this.lblTransactionSize.AutoSize = true;
+            this.lblTransactionSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionSize.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionSize.Location = new System.Drawing.Point(-3, 133);
+            this.lblTransactionSize.Name = "lblTransactionSize";
+            this.lblTransactionSize.Size = new System.Drawing.Size(87, 23);
+            this.lblTransactionSize.TabIndex = 136;
+            this.lblTransactionSize.Text = "no data";
             // 
             // textBoxTransactionID
             // 
@@ -5271,6 +5271,7 @@
             this.textBoxTransactionID.Name = "textBoxTransactionID";
             this.textBoxTransactionID.Size = new System.Drawing.Size(479, 25);
             this.textBoxTransactionID.TabIndex = 7;
+            this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxTransactionID_KeyPress);
             // 
             // label136
             // 
@@ -5726,24 +5727,24 @@
         private System.Windows.Forms.Button btnMenuTransaction;
         private System.Windows.Forms.Panel panelTransaction;
         private System.Windows.Forms.Label label98;
-        private System.Windows.Forms.Label label102;
+        private System.Windows.Forms.Label lblTransactionVersion;
         private System.Windows.Forms.Label label104;
-        private System.Windows.Forms.Label label107;
+        private System.Windows.Forms.Label lblTransactionFee;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label label113;
-        private System.Windows.Forms.Label label114;
+        private System.Windows.Forms.Label lblTransactionBlockHeight;
         private System.Windows.Forms.Label label117;
-        private System.Windows.Forms.Label label119;
+        private System.Windows.Forms.Label lblTransactionInputCount;
         private System.Windows.Forms.Label label124;
-        private System.Windows.Forms.Label label125;
+        private System.Windows.Forms.Label lblTransactionOutputCount;
         private System.Windows.Forms.Label label126;
-        private System.Windows.Forms.Label label127;
+        private System.Windows.Forms.Label lblTransactionBlockTime;
         private System.Windows.Forms.Label label128;
-        private System.Windows.Forms.Label label129;
+        private System.Windows.Forms.Label lblTransactionLockTime;
         private System.Windows.Forms.Label label130;
-        private System.Windows.Forms.Label label131;
+        private System.Windows.Forms.Label lblTransactionWeight;
         private System.Windows.Forms.Label label132;
-        private System.Windows.Forms.Label label133;
+        private System.Windows.Forms.Label lblTransactionSize;
         private System.Windows.Forms.TextBox textBoxTransactionID;
         private System.Windows.Forms.Label label136;
     }

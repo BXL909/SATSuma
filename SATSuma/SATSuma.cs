@@ -20,6 +20,7 @@
  * better/more error handling everywhere
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
+ * validation of user input of transaction ID
  */
 
 #region Using
@@ -58,13 +59,14 @@ using System.Windows.Forms.VisualStyles;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using Panel = System.Windows.Forms.Panel;
+using System.Windows.Documents;
 #endregion
 
 namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        #region INITIALISE
+#region INITIALISE
         //=============================================================================================================
         //---------------------------INITIALISE------------------------------------------------------------------------
         private int intDisplayCountdownToRefresh; // countdown in seconds to next refresh, for display only
@@ -84,6 +86,7 @@ namespace SATSuma
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private TransactionsForAddressService _transactionsForAddressService;
         private BlockDataService _blockService;
+        private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
@@ -126,6 +129,7 @@ namespace SATSuma
             _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             _blockService = new BlockDataService(NodeURL);
             _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+            _transactionService = new TransactionService(NodeURL);
         }
 
         private void Form1_Load(object sender, EventArgs e) // on form loading
@@ -137,9 +141,9 @@ namespace SATSuma
             mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
             btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
         }
-        #endregion
+#endregion
 
-        #region CLOCK TICK EVENTS
+#region CLOCK TICK EVENTS
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
@@ -159,7 +163,7 @@ namespace SATSuma
             intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
             if (intDisplaySecondsElapsedSinceUpdate == 1)
             {
-                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh); 
+                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
             }
             else
             {
@@ -188,9 +192,9 @@ namespace SATSuma
             UpdateAPIGroup1DataFields(); // fetch data and populate fields
         }
 
-        #endregion
+#endregion
 
-        #region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
+#region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
         //==============================================================================================================================================================================================
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
         //=============================================================================================================
@@ -199,7 +203,7 @@ namespace SATSuma
         public async void UpdateAPIGroup1DataFields()
         {
             DisableEnableLoadingAnimation("enable");
-            
+
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
@@ -998,10 +1002,10 @@ namespace SATSuma
                 if (errorOccurred)
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                   // lblAlert.Invoke((MethodInvoker)delegate
-                   // {
-                   //     lblAlert.Text = "⚠️";
-                   // });
+                    // lblAlert.Invoke((MethodInvoker)delegate
+                    // {
+                    //     lblAlert.Text = "⚠️";
+                    // });
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblStatusLight.ForeColor = Color.Red;
@@ -1017,7 +1021,7 @@ namespace SATSuma
                 }
             }
             DisableEnableLoadingAnimation("disable");
-            
+
         }
 
         //=============================================================================================================
@@ -1306,9 +1310,9 @@ namespace SATSuma
                 e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
             }
         }
-        #endregion
+#endregion
 
-        #region ADDRESS SCREEN STUFF
+#region ADDRESS SCREEN STUFF
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
         //=============================================================================================================
@@ -1739,7 +1743,7 @@ namespace SATSuma
             {
                 mempoolConfUnconfOrAllTx = "all";
             }
-            btnFirstAddressTransaction.Visible = false; 
+            btnFirstAddressTransaction.Visible = false;
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             var lastSeenTxId = ""; // Reset the last seen transaction ID to go back to start
             TotalAddressTransactionRowsAdded = 0;
@@ -1983,9 +1987,9 @@ namespace SATSuma
             label63.Visible = false;
             listViewAddressTransactions.Visible = false;
         }
-        #endregion
+#endregion
 
-        #region BLOCK SCREEN STUFF
+#region BLOCK SCREEN STUFF
         //==============================================================================================================================================================================================
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
         //=============================================================================================================
@@ -2097,7 +2101,7 @@ namespace SATSuma
 
             textBoxSubmittedBlockNumber.Text = value.ToString();
             textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
-                            e.Handled = true;
+            e.Handled = true;
         }
 
         private void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
@@ -2108,7 +2112,7 @@ namespace SATSuma
                 btnPreviousBlock.Enabled = false;
                 btnNextBlock.Enabled = true;
             }
-            if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text) 
+            if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text)
             {
                 btnNextBlock.Enabled = false;
                 btnPreviousBlock.Enabled = true;
@@ -2248,7 +2252,7 @@ namespace SATSuma
                 item.SubItems.Add(blockTransaction.vin.Count.ToString()); // number of inputs
                 item.SubItems.Add(blockTransaction.vout.Count.ToString()); // number of outputs
                 decimal totalValue = blockTransaction.vout.Sum(v => decimal.Parse(v.value)); // sum of outputs
-                totalValue = ConvertSatsToBitcoin(totalValue.ToString()); 
+                totalValue = ConvertSatsToBitcoin(totalValue.ToString());
                 item.SubItems.Add(totalValue.ToString());
                 listViewBlockTransactions.Items.Add(item); // add row
 
@@ -2287,7 +2291,7 @@ namespace SATSuma
                 lblBlockTXPositionInList.Text = "No transactions to display"; // this can't really happen as there will always be a coinbase transaction
             }
         }
-        
+
         private async void btnNextBlockTransactions_Click(object sender, EventArgs e)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
@@ -2466,9 +2470,69 @@ namespace SATSuma
             btnMenuTransaction_Click(sender, e);
         }
 
-        #endregion
+#endregion
 
-        #region BLOCK LIST STUFF
+#region TRANSACTION STUFF
+
+        private void textBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Handle enter
+            if (e.KeyChar == '\r')
+            {
+                // Submit button was pressed
+                LookupTransaction();
+                e.Handled = true;
+                return;
+            }
+        }
+
+        private async void LookupTransaction()
+        {
+            string submittedTransactionID = textBoxTransactionID.Text;
+            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            DisableEnableButtons("disable"); // disable buttons during operation
+            await GetTransaction(submittedTransactionID);
+            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            DisableEnableButtons("enable"); // enable buttons after operation is complete
+
+        }
+
+        private async Task GetTransaction(string submittedTransactionID) 
+        {
+            var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
+            var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
+            lblTransactionVersion.Text = Convert.ToString(transaction.version);
+            lblTransactionLockTime.Text = Convert.ToString(transaction.locktime);
+            lblTransactionSize.Text = Convert.ToString(transaction.size);
+            lblTransactionWeight.Text = Convert.ToString(transaction.weight);
+            lblTransactionFee.Text = Convert.ToString(transaction.fee);
+            lblTransactionBlockHeight.Text = Convert.ToString(transaction.status.block_height);
+            long unixTimestamp = Convert.ToInt64(transaction.status.block_time);
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
+            lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
+            lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count());
+            lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count());
+
+            int y = 10;
+            foreach (var vin in transaction.vin)
+            {
+                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+                {
+                    
+                    using (var g = panelTransaction.CreateGraphics())
+                    {
+                        g.DrawLine(pen, 10, y, 100, y);
+                        y = y + 10;
+                        
+                    }
+                }
+            }
+        }
+
+
+#endregion
+
+#region BLOCK LIST STUFF
 
         private void textBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -2595,14 +2659,14 @@ namespace SATSuma
             btnViewBlockFromBlockList.Visible = false;
             btnViewTransactionsFromBlockList.Visible = false;
             var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
-//            DisableEnableLoadingAnimation("enable"); // start the loading animation
-//            DisableEnableButtons("disable"); // disable buttons during operation
+            //            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            //            DisableEnableButtons("disable"); // disable buttons during operation
             await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
-//            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-//            DisableEnableButtons("enable"); // enable buttons after operation is complete
+                                                             //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                                                             //            DisableEnableButtons("enable"); // enable buttons after operation is complete
         }
 
-        private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber) 
+        private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber)
         {
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
@@ -2734,7 +2798,7 @@ namespace SATSuma
 
         private async void btnOlder15Blocks_Click(object sender, EventArgs e)
         {
-            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber)-1);
+            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) - 1);
             string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
@@ -2744,7 +2808,7 @@ namespace SATSuma
 
         private async void btnNewer15Blocks_Click(object sender, EventArgs e)
         {
-            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) +29);
+            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) + 29);
             string blockNumber = Convert.ToString(blockheight);
             // Get 15 more blocks starting from the current block height minus the number we've already seen
             await GetFifteenBlocksForBlockList(blockNumber);
@@ -2786,7 +2850,7 @@ namespace SATSuma
                 if (item.Selected)
                 {
                     btnViewBlockFromBlockList.Enabled = true;
-                    btnViewTransactionsFromBlockList.Enabled= true;
+                    btnViewTransactionsFromBlockList.Enabled = true;
                     item.SubItems[1].ForeColor = Color.White; // Block number
                     item.SubItems[2].ForeColor = Color.White; // TX count
                     anySelected = true;
@@ -2981,9 +3045,9 @@ namespace SATSuma
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
         }
-        #endregion
+#endregion
 
-        #region REUSEABLE STUFF
+#region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== GENERIC STUFF =========================================================================================================================================================
         //=============================================================================================================
@@ -3022,8 +3086,8 @@ namespace SATSuma
                 textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
 
                 //disable them all
-                btnShowAllTX.Enabled = false; 
-                btnShowConfirmedTX.Enabled = false; 
+                btnShowAllTX.Enabled = false;
+                btnShowConfirmedTX.Enabled = false;
                 btnShowUnconfirmedTX.Enabled = false;
                 btnFirstAddressTransaction.Enabled = false;
                 btnNextAddressTransactions.Enabled = false;
@@ -3226,9 +3290,9 @@ namespace SATSuma
             }
         }
 
-        #endregion
+#endregion
 
-        #region GENERAL FORM NAVIGATION AND CONTROLS
+#region GENERAL FORM NAVIGATION AND CONTROLS
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
 
@@ -3273,7 +3337,7 @@ namespace SATSuma
         {
             btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
         }
-        
+
         private void btnMoveWindow_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24; //close menu
@@ -3322,7 +3386,7 @@ namespace SATSuma
         private void BtnMenuAddress_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnMenuAddress.Enabled= false;
+            btnMenuAddress.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuBlockList.Enabled = true;
             btnMenuBitcoinDashboard.Enabled = true;
@@ -3339,7 +3403,7 @@ namespace SATSuma
         private void btnMenuBlock_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
-            btnMenuBlock.Enabled= false;
+            btnMenuBlock.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuAddress.Enabled = true;
             btnMenuBlockList.Enabled = true;
@@ -3351,7 +3415,7 @@ namespace SATSuma
             panelAddress.Visible = false;
             panelTransaction.Visible = false;
             panelBlock.Visible = true;
-            if (textBoxSubmittedBlockNumber.Text == "") 
+            if (textBoxSubmittedBlockNumber.Text == "")
             {
                 textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
                 LookupBlock(); // fetch all the block data automatically for the initial view. 
@@ -3539,9 +3603,9 @@ namespace SATSuma
         {
             return this.panelTransaction;
         }
-        #endregion
+#endregion
 
-        #region MISC UI STUFF
+#region MISC UI STUFF
 
         //=============================================================================================================
         //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
@@ -3560,14 +3624,13 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
-        #endregion
 
-
+#endregion
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 
-    #region CLASSES
+#region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
@@ -3607,7 +3670,7 @@ namespace SATSuma
                         }
                         if (mempoolConfOrAllTx == "all")
                         {
-                            var response = await client.GetAsync($"address/{address}/txs"); 
+                            var response = await client.GetAsync($"address/{address}/txs");
                             if (response.IsSuccessStatusCode)
                             {
                                 return await response.Content.ReadAsStringAsync();
@@ -3737,6 +3800,96 @@ namespace SATSuma
         public string name { get; set; }
     }
 
+    // ------------------------------------- Transaction --------------------------------------------
+    public class TransactionService
+    {
+        private readonly string _nodeUrl;
+        public TransactionService(string nodeUrl)
+        {
+            _nodeUrl = nodeUrl;
+        }
+        public async Task<string> GetTransactionAsync(string TransactionID)
+        {
+            int retryCount = 3;
+            while (retryCount > 0)
+            {
+                using (var client = new HttpClient())
+                {
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"tx/{TransactionID}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+            }
+            return string.Empty;
+        }
+    }
+
+    public class Transaction
+    {
+        public string txid { get; set; }
+        public int version { get; set; }
+        public int locktime { get; set; }
+        public TransactionVin[] vin { get; set; }
+        public TransactionVout[] vout { get; set; }
+        public int size { get; set; }
+        public int weight { get; set; }
+        public int fee { get; set; }
+        public TransactionStatus status { get; set; }
+    }
+
+    public class TransactionStatus
+    {
+        public bool confirmed { get; set; }
+        public int block_height { get; set; }
+        public string block_hash { get; set; }
+        public int block_time { get; set; }
+    }
+
+    public class TransactionVin
+    {
+        public string txid { get; set; }
+        public int vout { get; set; }
+        public TransactionVinPrevout prevout { get; set; }
+        public string scriptsig { get; set; }
+        public string scriptsig_asm { get; set; }
+        public string[] witness { get; set; }
+        public bool is_coinbase { get; set; }
+        public long sequence { get; set; }
+        public string inner_redeemscript_asm { get; set; }
+    }
+
+    public class TransactionVinPrevout
+    {
+        public string scriptpubkey { get; set; }
+        public string scriptpubkey_asm { get; set; }
+        public string scriptpubkey_type { get; set; }
+        public string scriptpubkey_address { get; set; }
+        public long value { get; set; }
+    }
+
+    public class TransactionVout
+    {
+        public string scriptpubkey { get; set; }
+        public string scriptpubkey_asm { get; set; }
+        public string scriptpubkey_type { get; set; }
+        public string scriptpubkey_address { get; set; }
+        public long value { get; set; }
+    }
+
+
     // ------------------------------------- Block Transactions -------------------------------------
     public class TransactionsForBlockService
     {
@@ -3781,26 +3934,26 @@ namespace SATSuma
     public class Block_Transactions
     {
         public string txid { get; set; }
-  //      public string version { get; set; }
-  //     public string locktime { get; set; }
+        //      public string version { get; set; }
+        //     public string locktime { get; set; }
         public List<Vin_BlockTransactions> vin { get; set; }
         public List<Vout_BlockTransactions> vout { get; set; }
-  //      public string size { get; set; }
-  //      public string weight { get; set; }
+        //      public string size { get; set; }
+        //      public string weight { get; set; }
         public string fee { get; set; }
-   //     public List<Status_BlockTransactions> status { get; set; }
-     }
+        //     public List<Status_BlockTransactions> status { get; set; }
+    }
 
     public class Vin_BlockTransactions
     {
-     //   public string txid { get; set; }
-     //   public string vout { get; set; }
-    //    public List<Prevout_BlockTransactions> prevout { get; set; }
-    //    public string scriptsig { get; set; }
-     //   public string scriptsig_asm { get; set; }
-     //   public List<string> witness { get; set; }
+        //   public string txid { get; set; }
+        //   public string vout { get; set; }
+        //    public List<Prevout_BlockTransactions> prevout { get; set; }
+        //    public string scriptsig { get; set; }
+        //   public string scriptsig_asm { get; set; }
+        //   public List<string> witness { get; set; }
         public string is_coinbase { get; set; }
-     //   public string sequence { get; set; }
+        //   public string sequence { get; set; }
     }
 
 
@@ -3823,14 +3976,16 @@ namespace SATSuma
 
     public class Vout_BlockTransactions
     {
-   //     public string scriptpubkey { get; set; }
-   //     public string scriptpubkey_asm { get; set; }
-    //    public string scriptpubkey_type { get; set; }
-    //    public string scriptpubkey_address { get; set; }
+        //     public string scriptpubkey { get; set; }
+        //     public string scriptpubkey_asm { get; set; }
+        //    public string scriptpubkey_type { get; set; }
+        //    public string scriptpubkey_address { get; set; }
         public string value { get; set; }
     }
-    #endregion
+#endregion
 }
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================
 //==================================================================================================================================================================================================
+
+

@@ -111,8 +111,6 @@ namespace SATSuma
         bool textBoxSubmittedAddressWasEnabled = true;
         bool btnNextBlockWasEnabled = false;
         bool btnPreviousBlockWasEnabled = true;
-        bool btnBlockListNextBlockWasEnabled = false;
-        bool btnBlockListPreviousBlockWasEnabled = true;
         bool btnNewer15BlocksWasEnabled = false;
         bool btnOlder15BlocksWasEnabled = true;
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
@@ -181,11 +179,13 @@ namespace SATSuma
                     lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
                 }
             }
+           
             if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh...
             {
                 lblAlert.Text = "";
                 lblErrorMessage.Text = "";
             }
+           
         }
 
         private void TimerAPIGroup1_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
@@ -205,7 +205,7 @@ namespace SATSuma
         public async void UpdateAPIGroup1DataFields()
         {
             DisableEnableLoadingAnimation("enable");
-
+            
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
@@ -1022,6 +1022,7 @@ namespace SATSuma
                     });
                 }
             }
+            
             DisableEnableLoadingAnimation("disable");
 
         }
@@ -2501,6 +2502,8 @@ namespace SATSuma
 
         private async Task GetTransaction(string submittedTransactionID) 
         {
+
+            //panelTransactionDiagram.Invalidate();
             var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
             var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
             lblTransactionVersion.Text = Convert.ToString(transaction.version);
@@ -2532,9 +2535,21 @@ namespace SATSuma
             
             // inputs 
             int NumberOfInputLines = Convert.ToInt32(transaction.vin.Count());
-            int YInputsStep = panelTransactionDiagram.Size.Height / (NumberOfInputLines + 1);
-            int YInputsPos = YInputsStep;
-            lblTransactionInputCount.Location = new Point(10, YInputsPos - 20);
+            int YInputsStep = 0;
+            int YInputsPos = 0;
+            if (NumberOfInputLines > 1)
+            {
+                YInputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
+                YInputsPos = 10;
+            }
+            else
+            {
+                YInputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
+                YInputsPos = (panelTransactionDiagram.Size.Height / 2);
+            }
+                        
+            panelTransactionMiddle.Location = new Point((panelTransactionDiagram.Width / 2) - (panelTransactionMiddle.Width / 2), (panelTransactionDiagram.Height / 2) - (panelTransactionMiddle.Height / 2)); //move middle panel to centre
+            lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 130, (panelTransactionDiagram.Size.Height / 2) - 15);
             foreach (var vin in transaction.vin)
             {
                 using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
@@ -2542,23 +2557,27 @@ namespace SATSuma
                     using (var g = panelTransactionDiagram.CreateGraphics())
                     {
                         g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
-//                        System.Windows.Forms.Label myLabel = new System.Windows.Forms.Label();
-//                        myLabel.Text = "test";
-//                        myLabel.ForeColor = Color.White;
-//                        myLabel.Location = new Point(10, YInputsPos + 2);
-//                        myLabel.AutoSize = true;
-//                        myLabel.BringToFront();
-//                        this.Controls.Add(myLabel);
-                        g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 50, panelTransactionDiagram.Size.Height / 2);
+                        g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
                         YInputsPos += YInputsStep;
                     }
                 }
             }
             // outputs
             int NumberOfOutputLines = Convert.ToInt32(transaction.vout.Count());
-            int YOutputsStep = panelTransactionDiagram.Size.Height / (NumberOfOutputLines + 1);
-            int YOutputsPos = YOutputsStep;
-            lblTransactionOutputCount.Location = new Point(panelTransactionDiagram.Width - 10 - lblTransactionOutputCount.Width, YOutputsPos - 20);
+            int YOutputsStep = 0;
+            int YOutputsPos = 0;
+            if (NumberOfOutputLines > 1)
+            {
+                YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
+                YOutputsPos = 10;
+            }
+            else
+            {
+                YOutputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
+                YOutputsPos = (panelTransactionDiagram.Size.Height / 2);
+            }
+
+            lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
             foreach (var vout in transaction.vout)
             {
                 using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
@@ -2566,7 +2585,7 @@ namespace SATSuma
                     using (var g = panelTransactionDiagram.CreateGraphics())
                     {
                         g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
-                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 50, panelTransactionDiagram.Size.Height / 2);
+                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
                         YOutputsPos += YOutputsStep;
 
                     }
@@ -2574,17 +2593,21 @@ namespace SATSuma
             }
 
             // central bit
+            
             using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
             {
                 using (var g = panelTransactionDiagram.CreateGraphics())
                 {
-                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 50, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 50, panelTransactionDiagram.Size.Height / 2); // central horizontal
+                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
                     g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
 
                 }
             }
             lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
             label104.Location = new Point ((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
+
+
+      
         }
 
 
@@ -2654,7 +2677,11 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
                 LookupBlockList();
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableButtons("enable"); // enable buttons after operation is complete
                 e.Handled = true;
                 return;
             }
@@ -2699,10 +2726,12 @@ namespace SATSuma
             textBoxBlockHeightToStartListFrom.Text = value.ToString();
             textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
             e.Handled = true;
+
         }
 
         private void textBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
         {
+            
             if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
             {
                 textBoxBlockHeightToStartListFrom.Text = "0";
@@ -2710,10 +2739,12 @@ namespace SATSuma
             if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
             {
             }
+            
         }
 
         private async void LookupBlockList()
         {
+            
             btnViewBlockFromBlockList.Visible = false;
             btnViewTransactionsFromBlockList.Visible = false;
             var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
@@ -2722,10 +2753,12 @@ namespace SATSuma
             await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
                                                              //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
                                                              //            DisableEnableButtons("enable"); // enable buttons after operation is complete
+            
         }
 
         private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber)
         {
+            
             DisableEnableLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
 
@@ -2852,6 +2885,7 @@ namespace SATSuma
             {
                 lblBlockListPositionInList.Text = "No blocks to display"; // this can't really happen as there will always be a coinbase transaction
             }
+            
         }
 
         private async void btnOlder15Blocks_Click(object sender, EventArgs e)
@@ -2876,6 +2910,7 @@ namespace SATSuma
 
         private void listViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
+            
             Color headerColor = Color.FromArgb(50, 50, 50);
             SolidBrush brush = new SolidBrush(headerColor);
             e.Graphics.FillRectangle(brush, e.Bounds);
@@ -2885,10 +2920,12 @@ namespace SATSuma
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+            
         }
 
         private void listViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             if (listViewBlockList.SelectedItems.Count > 0)
             {
                 Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
@@ -2896,10 +2933,12 @@ namespace SATSuma
                 panel19.Height = panel17.Top - panel14.Top;
                 panel19.Top = panel14.Top;
             }
+            
         }
 
         private async void listViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            
             bool anySelected = false;
             foreach (ListViewItem item in listViewBlockList.Items)
             {
@@ -2974,6 +3013,7 @@ namespace SATSuma
             }
             btnViewBlockFromBlockList.Visible = anySelected;
             btnViewTransactionsFromBlockList.Visible = anySelected;
+            
         }
 
         private void btnViewTransactionsFromBlockList_Click(object sender, EventArgs e)  // this and btnViewBlockFromBlockList_Click do exactly the same. They both exist for UI only
@@ -3066,6 +3106,7 @@ namespace SATSuma
 
         private void listViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
+            
             var text = e.SubItem.Text;
 
             if (text[0] == '+') // if the string is a change to an amount and positive
@@ -3100,6 +3141,7 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
+            
         }
 #endregion
 

@@ -60,6 +60,8 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using Panel = System.Windows.Forms.Panel;
 using System.Windows.Documents;
+using System.Reflection.Emit;
+using Control = System.Windows.Forms.Control;
 #endregion
 
 namespace SATSuma
@@ -1830,7 +1832,7 @@ namespace SATSuma
             string TransactionIDFromRow = selectedItem.SubItems[0].Text;
             // Set the text of the textBoxTransactionID control
             textBoxTransactionID.Text = TransactionIDFromRow;
-            // LookupTransaction();
+            LookupTransaction();
             //show the transaction screen
             btnMenuTransaction_Click(sender, e);
         }
@@ -2465,12 +2467,12 @@ namespace SATSuma
             string TransactionIDFromRow = selectedItem.SubItems[0].Text;
             // Set the text of the textBoxTransactionID control
             textBoxTransactionID.Text = TransactionIDFromRow;
-            // LookupTransaction();
+            LookupTransaction();
             //show the transaction screen
             btnMenuTransaction_Click(sender, e);
         }
 
-#endregion
+        #endregion
 
 #region TRANSACTION STUFF
 
@@ -2503,30 +2505,86 @@ namespace SATSuma
             var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
             lblTransactionVersion.Text = Convert.ToString(transaction.version);
             lblTransactionLockTime.Text = Convert.ToString(transaction.locktime);
-            lblTransactionSize.Text = Convert.ToString(transaction.size);
-            lblTransactionWeight.Text = Convert.ToString(transaction.weight);
+            lblTransactionSize.Text = Convert.ToString(transaction.size) + " bytes";
+            lblTransactionWeight.Text = Convert.ToString(transaction.weight) + " MWU";
             lblTransactionFee.Text = Convert.ToString(transaction.fee);
+
             lblTransactionBlockHeight.Text = Convert.ToString(transaction.status.block_height);
             long unixTimestamp = Convert.ToInt64(transaction.status.block_time);
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
             lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
-            lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count());
-            lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count());
-
-            int y = 10;
+            if (transaction.vin.Count() == 1)
+            {
+                lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count()) + " input";
+            }
+            else
+            {
+                lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count()) + " inputs";
+            }
+            if (transaction.vout.Count() == 1)
+            {
+                lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count()) + " output";
+            }
+            else
+            {
+                lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count()) + " outputs";
+            }
+            
+            // inputs 
+            int NumberOfInputLines = Convert.ToInt32(transaction.vin.Count());
+            int YInputsStep = panelTransactionDiagram.Size.Height / (NumberOfInputLines + 1);
+            int YInputsPos = YInputsStep;
+            lblTransactionInputCount.Location = new Point(10, YInputsPos - 20);
             foreach (var vin in transaction.vin)
             {
                 using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
                 {
-                    
-                    using (var g = panelTransaction.CreateGraphics())
+                    using (var g = panelTransactionDiagram.CreateGraphics())
                     {
-                        g.DrawLine(pen, 10, y, 100, y);
-                        y = y + 10;
-                        
+                        g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
+//                        System.Windows.Forms.Label myLabel = new System.Windows.Forms.Label();
+//                        myLabel.Text = "test";
+//                        myLabel.ForeColor = Color.White;
+//                        myLabel.Location = new Point(10, YInputsPos + 2);
+//                        myLabel.AutoSize = true;
+//                        myLabel.BringToFront();
+//                        this.Controls.Add(myLabel);
+                        g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 50, panelTransactionDiagram.Size.Height / 2);
+                        YInputsPos += YInputsStep;
                     }
                 }
             }
+            // outputs
+            int NumberOfOutputLines = Convert.ToInt32(transaction.vout.Count());
+            int YOutputsStep = panelTransactionDiagram.Size.Height / (NumberOfOutputLines + 1);
+            int YOutputsPos = YOutputsStep;
+            lblTransactionOutputCount.Location = new Point(panelTransactionDiagram.Width - 10 - lblTransactionOutputCount.Width, YOutputsPos - 20);
+            foreach (var vout in transaction.vout)
+            {
+                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+                {
+                    using (var g = panelTransactionDiagram.CreateGraphics())
+                    {
+                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 50, panelTransactionDiagram.Size.Height / 2);
+                        YOutputsPos += YOutputsStep;
+
+                    }
+                }
+            }
+
+            // central bit
+            using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+            {
+                using (var g = panelTransactionDiagram.CreateGraphics())
+                {
+                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 50, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 50, panelTransactionDiagram.Size.Height / 2); // central horizontal
+                    g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
+
+                }
+            }
+            lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
+            label104.Location = new Point ((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
         }
 
 
@@ -2837,8 +2895,6 @@ namespace SATSuma
                 panel14.Top = itemRect.Top + 8;
                 panel19.Height = panel17.Top - panel14.Top;
                 panel19.Top = panel14.Top;
-
-
             }
         }
 
@@ -3625,12 +3681,13 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
 
-#endregion
+        #endregion
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 
-#region CLASSES
+    #region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
@@ -3982,7 +4039,8 @@ namespace SATSuma
         //    public string scriptpubkey_address { get; set; }
         public string value { get; set; }
     }
-#endregion
+    #endregion
+
 }
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

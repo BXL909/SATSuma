@@ -71,9 +71,9 @@ namespace SATSuma
 #region INITIALISE
         //=============================================================================================================
         //---------------------------INITIALISE------------------------------------------------------------------------
-        private int intDisplayCountdownToRefresh; // countdown in seconds to next refresh, for display only
-        private int intAPIGroup1TimerIntervalMillisecsConstant; // milliseconds, used to reset the interval of the timer for api group1 refresh
-        private int APIGroup1DisplayTimerIntervalSecsConstant; // seconds, used to reset the countdown display to its original number
+        private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
+        private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api group1 refresh
+        private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
         // booleans used to say whether to run individual API's or not. All on/true by default.
         private bool RunBitcoinExplorerEndpointAPI = true;
         private bool RunBlockchainInfoEndpointAPI = true;
@@ -93,7 +93,7 @@ namespace SATSuma
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
-        private string storedLastSeenBlockNumber;
+        private string storedLastSeenBlockNumber = "0";
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
         bool btnShowAllAddressTXWasEnabled = true;
@@ -136,7 +136,10 @@ namespace SATSuma
         {
             UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
             StartTheClocksTicking(); // start all the timers
-            textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
+            });
             CheckBlockchainExplorerApiStatus();
             mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
             btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
@@ -163,11 +166,17 @@ namespace SATSuma
             intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
             if (intDisplaySecondsElapsedSinceUpdate == 1)
             {
-                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
             }
             else
             {
-                lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
             }
             if (ObtainedHalveningSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
             {
@@ -176,14 +185,23 @@ namespace SATSuma
                 if (SecondsToHalving > 0)
                 {
                     SecondsToHalving = SecondsToHalving - 1; // one second closer to the halvening!
-                    lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
+                    lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                    {
+                        lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
+                    });
                 }
             }
            
             if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh...
             {
-                lblAlert.Text = "";
-                lblErrorMessage.Text = "";
+                lblAlert.Invoke((MethodInvoker)delegate
+                {
+                    lblAlert.Text = "";
+                });
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "";
+                });
             }
            
         }
@@ -312,8 +330,11 @@ namespace SATSuma
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = result2.blockReward;
-                                decimal DecBlockReward = Convert.ToDecimal(result2.blockReward);
-                                decimal NextBlockReward = DecBlockReward / 2;
+                            });
+                            decimal DecBlockReward = Convert.ToDecimal(result2.blockReward);
+                            decimal NextBlockReward = DecBlockReward / 2;
+                            lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                            {
                                 lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
                             });
                             lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
@@ -374,6 +395,10 @@ namespace SATSuma
                             lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
                             {
                                 lblBlockListBlockReward.Text = "disabled";
+                            });
+                            lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockRewardAfterHalving.Text = "disabled";
                             });
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
@@ -613,9 +638,6 @@ namespace SATSuma
                             lblATHDate.Invoke((MethodInvoker)delegate
                             {
                                 lblATHDate.Location = new Point(lblATH.Location.X + lblATH.Width, lblATHDate.Location.Y); // place the ATH date according to the width of the ATH (future proofed for hyperbitcoinization!)
-                            });
-                            lblATHDate.Invoke((MethodInvoker)delegate
-                            {
                                 lblATHDate.Text = "(" + result5.athDate + ")";
                             });
                             lblATHDifference.Invoke((MethodInvoker)delegate
@@ -636,9 +658,6 @@ namespace SATSuma
                             lblATHDate.Invoke((MethodInvoker)delegate
                             {
                                 lblATHDate.Location = new Point(lblATH.Location.X + lblATH.Width, lblATHDate.Location.Y); // place the ATH date according to the width of the ATH (future proofed for hyperbitcoinization!)
-                            });
-                            lblATHDate.Invoke((MethodInvoker)delegate
-                            {
                                 lblATHDate.Text = "(" + "disabled" + ")";
                             });
                             lblATHDifference.Invoke((MethodInvoker)delegate
@@ -1022,9 +1041,7 @@ namespace SATSuma
                     });
                 }
             }
-            
             DisableEnableLoadingAnimation("disable");
-
         }
 
         //=============================================================================================================
@@ -1032,258 +1049,665 @@ namespace SATSuma
         //------BitcoinExplorer and BlockchainInfo endpoints 
         private (string priceUSD, string moscowTime, string marketCapUSD, string difficultyAdjEst, string txInMempool) BitcoinExplorerOrgEndpointsRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
-                string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
-                string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
-                string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
-                string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
-                return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
+                using (WebClient client = new WebClient())
+                {
+                    string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
+                    string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
+                    string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
+                    string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
+                    string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
+                    return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0");
         }
 
         private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string btcInCirc, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoEndpointsRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
-                double dblAvgNoTransactions = Convert.ToDouble(avgNoTransactions);
-                dblAvgNoTransactions = Math.Round(dblAvgNoTransactions); // so lets get it down to an integer
-                string avgNoTransactionsText = Convert.ToString(dblAvgNoTransactions);
-                string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
-                string blockReward = client.DownloadString("https://blockchain.info/q/bcperblock"); // current block reward
-                string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
-                string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
-                double dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
-                TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
-                string timeString = string.Format("{0:%m}m {0:%s}s", time);
-                string avgTimeBetweenBlocks = timeString;
-                string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
-                string btcInCirc = ConvertSatsToBitcoin(totalBTC).ToString();
-                string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
-                string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
-                string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
-                twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
+                using (WebClient client = new WebClient())
+                {
+                    string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
+                    double dblAvgNoTransactions = Convert.ToDouble(avgNoTransactions);
+                    dblAvgNoTransactions = Math.Round(dblAvgNoTransactions); // so lets get it down to an integer
+                    string avgNoTransactionsText = Convert.ToString(dblAvgNoTransactions);
+                    string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
+                    string blockReward = client.DownloadString("https://blockchain.info/q/bcperblock"); // current block reward
+                    string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
+                    string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
+                    double dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
+                    TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
+                    string timeString = string.Format("{0:%m}m {0:%s}s", time);
+                    string avgTimeBetweenBlocks = timeString;
+                    string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
+                    string btcInCirc = ConvertSatsToBitcoin(totalBTC).ToString();
+                    string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
+                    string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
+                    string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
+                    twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
+                    return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
         //-----Mempool Lighting JSON
         private (List<string> aliases, List<string> capacities) MempoolSpaceLiquidityRankingJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/liquidity");
-                var data = JArray.Parse(response);
-
-                List<string> aliases = new List<string>();
-                List<string> capacities = new List<string>();
-                for (int i = 0; i < 10; i++)
+                using (WebClient client = new WebClient())
                 {
-                    aliases.Add((string)data[i]["alias"]);
-                    string capacity = (string)data[i]["capacity"];
-                    capacity = ConvertSatsToBitcoin(capacity).ToString();
-                    double dblCapacity = Convert.ToDouble(capacity);
-                    dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
-                    capacity = Convert.ToString(dblCapacity);
-                    capacities.Add(capacity);
-                }
+                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/liquidity");
+                    var data = JArray.Parse(response);
 
-                return (aliases, capacities);
+                    List<string> aliases = new List<string>();
+                    List<string> capacities = new List<string>();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        aliases.Add((string)data[i]["alias"]);
+                        string capacity = (string)data[i]["capacity"];
+                        capacity = ConvertSatsToBitcoin(capacity).ToString();
+                        double dblCapacity = Convert.ToDouble(capacity);
+                        dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
+                        capacity = Convert.ToString(dblCapacity);
+                        capacities.Add(capacity);
+                    }
+
+                    return (aliases, capacities);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return (new List<string>(), new List<string>());
         }
 
         private (List<string> aliases, List<string> channels) MempoolSpaceConnectivityRankingJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/connectivity");
-                var data = JArray.Parse(response);
-
-                List<string> aliases = new List<string>();
-                List<string> channels = new List<string>();
-                for (int i = 0; i < 10; i++)
+                using (WebClient client = new WebClient())
                 {
-                    aliases.Add((string)data[i]["alias"]);
-                    channels.Add((string)data[i]["channels"]);
-                }
+                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/connectivity");
+                    var data = JArray.Parse(response);
 
-                return (aliases, channels);
+                    List<string> aliases = new List<string>();
+                    List<string> channels = new List<string>();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        aliases.Add((string)data[i]["alias"]);
+                        channels.Add((string)data[i]["channels"]);
+                    }
+
+                    return (aliases, channels);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return (new List<string>(), new List<string>());
         }
 
         private (string clearnetCapacity, string torCapacity, string unknownCapacity) MempoolSpaceCapacityBreakdownJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/isp-ranking");
-                var data = JObject.Parse(response);
-                string clearnetCapacityString = Convert.ToString(data["clearnetCapacity"]);
-                string clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
-                double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
-                dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
-                clearnetCapacity = Convert.ToString(dblClearnetCapacity);
-                string torCapacityString = Convert.ToString(data["torCapacity"]);
-                string torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
-                double dblTorCapacity = Convert.ToDouble(torCapacity);
-                dblTorCapacity = Math.Round(dblTorCapacity, 2);
-                torCapacity = Convert.ToString(dblTorCapacity);
-                string unknownCapacityString = Convert.ToString(data["unknownCapacity"]);
-                string unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
-                double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
-                dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
-                unknownCapacity = Convert.ToString(dblUnknownCapacity);
-                return (clearnetCapacity, torCapacity, unknownCapacity);
+                using (WebClient client = new WebClient())
+                {
+                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/isp-ranking");
+                    var data = JObject.Parse(response);
+                    string clearnetCapacityString = Convert.ToString(data["clearnetCapacity"]);
+                    string clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
+                    double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
+                    dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
+                    clearnetCapacity = Convert.ToString(dblClearnetCapacity);
+                    string torCapacityString = Convert.ToString(data["torCapacity"]);
+                    string torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
+                    double dblTorCapacity = Convert.ToDouble(torCapacity);
+                    dblTorCapacity = Math.Round(dblTorCapacity, 2);
+                    torCapacity = Convert.ToString(dblTorCapacity);
+                    string unknownCapacityString = Convert.ToString(data["unknownCapacity"]);
+                    string unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
+                    double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
+                    dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
+                    unknownCapacity = Convert.ToString(dblUnknownCapacity);
+                    return (clearnetCapacity, torCapacity, unknownCapacity);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0");
         }
 
         private (string channelCount, string nodeCount, string totalCapacity, string torNodes, string clearnetNodes, string unannouncedNodes, string avgCapacity, string avgFeeRate, string avgBaseeFeeMtokens, string medCapacity, string medFeeRate, string medBaseeFeeMtokens, string clearnetTorNodes) MempoolSpaceLightningJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://mempool.space/api/v1/lightning/statistics/latest");
-                var data = JObject.Parse(response);
-                var channelCount = (string)data["latest"]["channel_count"];
-                var nodeCount = (string)data["latest"]["node_count"];
-                string totalCapacityString = Convert.ToString(data["latest"]["total_capacity"]);
-                string totalCapacity = ConvertSatsToBitcoin(totalCapacityString).ToString();
-                double dblTotalCapacity = Convert.ToDouble(totalCapacity);
-                dblTotalCapacity = Math.Round(dblTotalCapacity, 2);
-                totalCapacity = Convert.ToString(dblTotalCapacity);
-                var torNodes = (string)data["latest"]["tor_nodes"];
-                var clearnetNodes = (string)data["latest"]["clearnet_nodes"];
-                var unannouncedNodes = (string)data["latest"]["unannounced_nodes"];
-                var avgCapacity = (string)data["latest"]["avg_capacity"];
-                var avgFeeRate = (string)data["latest"]["avg_fee_rate"];
-                var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
-                var medCapacity = (string)data["latest"]["med_capacity"];
-                var medFeeRate = (string)data["latest"]["med_fee_rate"];
-                var medBaseeFeeMtokens = (string)data["latest"]["med_basee_fee_mtokens"];
-                if (medBaseeFeeMtokens == null)
+                using (WebClient client = new WebClient())
                 {
-                    medBaseeFeeMtokens = "0";
+                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/statistics/latest");
+                    var data = JObject.Parse(response);
+                    var channelCount = (string)data["latest"]["channel_count"];
+                    var nodeCount = (string)data["latest"]["node_count"];
+                    string totalCapacityString = Convert.ToString(data["latest"]["total_capacity"]);
+                    string totalCapacity = ConvertSatsToBitcoin(totalCapacityString).ToString();
+                    double dblTotalCapacity = Convert.ToDouble(totalCapacity);
+                    dblTotalCapacity = Math.Round(dblTotalCapacity, 2);
+                    totalCapacity = Convert.ToString(dblTotalCapacity);
+                    var torNodes = (string)data["latest"]["tor_nodes"];
+                    var clearnetNodes = (string)data["latest"]["clearnet_nodes"];
+                    var unannouncedNodes = (string)data["latest"]["unannounced_nodes"];
+                    var avgCapacity = (string)data["latest"]["avg_capacity"];
+                    var avgFeeRate = (string)data["latest"]["avg_fee_rate"];
+                    var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
+                    var medCapacity = (string)data["latest"]["med_capacity"];
+                    var medFeeRate = (string)data["latest"]["med_fee_rate"];
+                    var medBaseeFeeMtokens = (string)data["latest"]["med_basee_fee_mtokens"];
+                    if (medBaseeFeeMtokens == null)
+                    {
+                        medBaseeFeeMtokens = "0";
+                    }
+                    var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
+                    return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
                 }
-                var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
-                return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
         //-----BitcoinExplorer JSON
         private (string nextBlockFee, string thirtyMinFee, string sixtyMinFee, string oneDayFee, string txInNextBlock, string nextBlockMinFee, string nextBlockMaxFee, string nextBlockTotalFees) BitcoinExplorerOrgJSONRefresh()
         {
-            // fees
-            var client = new HttpClient();
-            var response = client.GetAsync("https://bitcoinexplorer.org/api/mempool/fees").Result;
-            var json = response.Content.ReadAsStringAsync().Result;
-            var data = JObject.Parse(json);
-            var nextBlockFee = (string)data["nextBlock"];
-            var thirtyMinFee = (string)data["30min"];
-            var sixtyMinFee = (string)data["60min"];
-            var oneDayFee = (string)data["1day"];
-            // next block
-            var response2 = client.GetAsync("https://bitcoinexplorer.org/api/mining/next-block").Result;
-            var json2 = response2.Content.ReadAsStringAsync().Result;
-            var data2 = JObject.Parse(json2);
-            var txInNextBlock = (string)data2["txCount"]; //transaction count
-            var nextBlockMinFee = (string)data2["minFeeRate"]; // minimum fee rate
-            double valuetoround = Convert.ToDouble(nextBlockMinFee);
-            double roundedValue = Math.Round(valuetoround, 2);
-            nextBlockMinFee = Convert.ToString(roundedValue);
-            var nextBlockMaxFee = (string)data2["maxFeeRate"]; // maximum fee rate
-            valuetoround = Convert.ToDouble(nextBlockMaxFee);
-            roundedValue = Math.Round(valuetoround, 2);
-            nextBlockMaxFee = Convert.ToString(roundedValue);
-            var nextBlockTotalFees = (string)data2["totalFees"]; // total fees
-            valuetoround = Convert.ToDouble(nextBlockTotalFees);
-            roundedValue = Math.Round(valuetoround, 2);
-            nextBlockTotalFees = Convert.ToString(roundedValue);
-            return (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
+            try
+            {
+                // fees
+                var client = new HttpClient();
+                var response = client.GetAsync("https://bitcoinexplorer.org/api/mempool/fees").Result;
+                var json = response.Content.ReadAsStringAsync().Result;
+                var data = JObject.Parse(json);
+                var nextBlockFee = (string)data["nextBlock"];
+                var thirtyMinFee = (string)data["30min"];
+                var sixtyMinFee = (string)data["60min"];
+                var oneDayFee = (string)data["1day"];
+                // next block
+                var response2 = client.GetAsync("https://bitcoinexplorer.org/api/mining/next-block").Result;
+                var json2 = response2.Content.ReadAsStringAsync().Result;
+                var data2 = JObject.Parse(json2);
+                var txInNextBlock = (string)data2["txCount"]; //transaction count
+                var nextBlockMinFee = (string)data2["minFeeRate"]; // minimum fee rate
+                double valuetoround = Convert.ToDouble(nextBlockMinFee);
+                double roundedValue = Math.Round(valuetoround, 2);
+                nextBlockMinFee = Convert.ToString(roundedValue);
+                var nextBlockMaxFee = (string)data2["maxFeeRate"]; // maximum fee rate
+                valuetoround = Convert.ToDouble(nextBlockMaxFee);
+                roundedValue = Math.Round(valuetoround, 2);
+                nextBlockMaxFee = Convert.ToString(roundedValue);
+                var nextBlockTotalFees = (string)data2["totalFees"]; // total fees
+                valuetoround = Convert.ToDouble(nextBlockTotalFees);
+                roundedValue = Math.Round(valuetoround, 2);
+                nextBlockTotalFees = Convert.ToString(roundedValue);
+                return (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
 
         //-----BlockchainInfo JSON
         private (string n_tx, string size, string nextretarget) BlockchainInfoJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                // LATEST BLOCK
-                string jsonurl = "https://blockchain.info/rawblock/";  // use this...
-                string blockNumberUrl = "https://blockchain.info/q/getblockcount";
-                string blocknumber = client.DownloadString(blockNumberUrl); //combined with the result of that (we can't rely on already knowing the latest block number)
-                string finalurl = jsonurl + blocknumber; // to create a url we can use to get the JSON of the latest block
-                string size;
-                var response3 = client.DownloadString(finalurl);
-                var data3 = JObject.Parse(response3);
-                var n_tx = (string)data3["n_tx"] + " transactions";  // number of transactions
-                var sizeInKB = ((double)data3["size"] / 1000); // size in bytes divided by 1000 to get kb
-                if (sizeInKB < 1024) // if less than 1MB
+                using (WebClient client = new WebClient())
                 {
-                    size = sizeInKB + " KB block size";
+                    // LATEST BLOCK
+                    string jsonurl = "https://blockchain.info/rawblock/";  // use this...
+                    string blockNumberUrl = "https://blockchain.info/q/getblockcount";
+                    string blocknumber = client.DownloadString(blockNumberUrl); //combined with the result of that (we can't rely on already knowing the latest block number)
+                    string finalurl = jsonurl + blocknumber; // to create a url we can use to get the JSON of the latest block
+                    string size;
+                    var response3 = client.DownloadString(finalurl);
+                    var data3 = JObject.Parse(response3);
+                    var n_tx = (string)data3["n_tx"] + " transactions";  // number of transactions
+                    var sizeInKB = ((double)data3["size"] / 1000); // size in bytes divided by 1000 to get kb
+                    if (sizeInKB < 1024) // if less than 1MB
+                    {
+                        size = sizeInKB + " KB block size";
+                    }
+                    else // if more than 1MB
+                    {
+                        size = Convert.ToString(Math.Round((sizeInKB / 1000), 2)) + "MB block size";
+                    }
+                    // NEXT DIFFICULTY ADJUSTMENT BLOCK
+                    var response4 = client.DownloadString("https://api.blockchain.info/stats");
+                    var data4 = JObject.Parse(response4);
+                    var nextretarget = (string)data4["nextretarget"];
+                    return (n_tx, size, nextretarget);
                 }
-                else // if more than 1MB
-                {
-                    size = Convert.ToString(Math.Round((sizeInKB / 1000), 2)) + "MB block size";
-                }
-                // NEXT DIFFICULTY ADJUSTMENT BLOCK
-                var response4 = client.DownloadString("https://api.blockchain.info/stats");
-                var data4 = JObject.Parse(response4);
-                var nextretarget = (string)data4["nextretarget"];
-                return (n_tx, size, nextretarget);
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0");
         }
 
         //-----CoinGecko JSON
         private (string ath, string athDate, string athDifference, string twentyFourHourHigh, string twentyFourHourLow) CoingeckoComJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                // ATH & 24hr data
-                var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
-                var data5 = JArray.Parse(response5);
-                var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
-                var ath = (string)btcData["ath"];  // all time high value of btc in usd
-                var athDate = (string)btcData["ath_date"]; // date of the all time high
-                DateTime date = DateTime.Parse(athDate); // change it to dd MMM yyyy format
-                string strATHDate = date.ToString("dd MMM yyyy");
-                athDate = strATHDate;
-                double doubleathDifference = (double)btcData["ath_change_percentage"]; // percentage change from ATH to multiple decimal places
-                string formattedAthDifference = doubleathDifference.ToString("0.00"); // round it to 2 decimal places before sending it back
-                string athDifference = Convert.ToString(formattedAthDifference);
+                using (WebClient client = new WebClient())
+                {
+                    // ATH & 24hr data
+                    var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+                    var data5 = JArray.Parse(response5);
+                    var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
+                    var ath = (string)btcData["ath"];  // all time high value of btc in usd
+                    var athDate = (string)btcData["ath_date"]; // date of the all time high
+                    DateTime date = DateTime.Parse(athDate); // change it to dd MMM yyyy format
+                    string strATHDate = date.ToString("dd MMM yyyy");
+                    athDate = strATHDate;
+                    double doubleathDifference = (double)btcData["ath_change_percentage"]; // percentage change from ATH to multiple decimal places
+                    string formattedAthDifference = doubleathDifference.ToString("0.00"); // round it to 2 decimal places before sending it back
+                    string athDifference = Convert.ToString(formattedAthDifference);
 
-                var twentyFourHourHigh = (string)btcData["high_24h"]; // highest value of btc in usd over last 24 hours
-                var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
-                return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
+                    var twentyFourHourHigh = (string)btcData["high_24h"]; // highest value of btc in usd over last 24 hours
+                    var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
+                    return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0");
         }
 
         //-----Blockchair JSON
         private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://api.blockchair.com/tools/halvening");
-                var data = JObject.Parse(response);
-                var halveningBlock = (string)data["data"]["bitcoin"]["halvening_block"];
-                var halveningReward = (string)data["data"]["bitcoin"]["halvening_reward"];
-                var halveningTime = (string)data["data"]["bitcoin"]["halvening_time"];
-                var blocksLeft = (string)data["data"]["bitcoin"]["blocks_left"];
-                var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
-                return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
+                using (WebClient client = new WebClient())
+                {
+                    var response = client.DownloadString("https://api.blockchair.com/tools/halvening");
+                    var data = JObject.Parse(response);
+                    var halveningBlock = (string)data["data"]["bitcoin"]["halvening_block"];
+                    var halveningReward = (string)data["data"]["bitcoin"]["halvening_reward"];
+                    var halveningTime = (string)data["data"]["bitcoin"]["halvening_time"];
+                    var blocksLeft = (string)data["data"]["bitcoin"]["blocks_left"];
+                    var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
+                    return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0", "0");
         }
 
         private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComJSONRefresh()
         {
-            using (WebClient client = new WebClient())
+            try
             {
-                var response = client.DownloadString("https://api.blockchair.com/bitcoin/stats");
-                var data = JObject.Parse(response);
-                var hodling_addresses = (string)data["data"]["hodling_addresses"];
-                var blocks_24h = (string)data["data"]["blocks_24h"];
-                var nodes = (string)data["data"]["nodes"];
-                var blockchain_size = (string)data["data"]["blockchain_size"];
-                return (hodling_addresses, blocks_24h, nodes, blockchain_size);
+                using (WebClient client = new WebClient())
+                {
+                    var response = client.DownloadString("https://api.blockchair.com/bitcoin/stats");
+                    var data = JObject.Parse(response);
+                    var hodling_addresses = (string)data["data"]["hodling_addresses"];
+                    var blocks_24h = (string)data["data"]["blocks_24h"];
+                    var nodes = (string)data["data"]["nodes"];
+                    var blockchain_size = (string)data["data"]["blockchain_size"];
+                    return (hodling_addresses, blocks_24h, nodes, blockchain_size);
+                }
             }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = ex.Message;
+                });
+            }
+
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+            return ("0", "0", "0", "0");
         }
 
         //=============================================================================================================
@@ -1383,30 +1807,92 @@ namespace SATSuma
             string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
-                lblAddressType.Text = addressType + " address";
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressType.Text = addressType + " address";
+                });
                 // generate QR code for address
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(addressString, QRCodeGenerator.ECCLevel.Q);
                 QRCode qrCode = new QRCode(qrCodeData);
                 var qrCodeImage = qrCode.GetGraphic(20, Color.Gray, Color.Black, false);
                 qrCodeImage.MakeTransparent(Color.Black);
-                AddressQRCodePicturebox.Image = qrCodeImage;
-
-                await GetAddressBalanceAsync(addressString); // make sure we get these results before processing transactions
+                AddressQRCodePicturebox.Invoke((MethodInvoker)delegate
+                {
+                    AddressQRCodePicturebox.Image = qrCodeImage;
+                });
+                try
+                {
+                    await GetAddressBalanceAsync(addressString); // make sure we get these results before processing transactions
+                }
+                catch (Exception ex)
+                {
+                    lblAlert.Invoke((MethodInvoker)delegate
+                    {
+                        lblAlert.Text = "⚠️";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Error getting address balance: " + ex.Message;
+                    });
+                    return;
+                }
                 string lastSeenTxId = ""; // start from the top of the JSON (most recent tx)
-                await GetTransactionsForAddress(addressString, lastSeenTxId); // get first batch of transactions
+                try
+                {
+                    await GetTransactionsForAddress(addressString, lastSeenTxId); // get first batch of transactions
+                }
+                catch (Exception ex)
+                {
+                    lblAlert.Invoke((MethodInvoker)delegate
+                    {
+                        lblAlert.Text = "⚠️";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Error getting first batch of transactions for address: " + ex.Message;
+                    });
+                    return;
+                }
             }
             else
             {
-                lblAddressType.Text = "Invalid address format";
-                AddressQRCodePicturebox.Image = null;
-                lblAddressConfirmedReceived.Text = string.Empty;
-                lblAddressConfirmedReceivedOutputs.Text = string.Empty;
-                lblAddressConfirmedSpent.Text = string.Empty;
-                lblAddressConfirmedSpentOutputs.Text = string.Empty;
-                lblAddressConfirmedTransactionCount.Text = string.Empty;
-                lblAddressConfirmedUnspent.Text = string.Empty;
-                lblAddressConfirmedUnspentOutputs.Text = string.Empty;
+                lblAddressType.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressType.Text = "Invalid address format";
+                });
+                AddressQRCodePicturebox.Invoke((MethodInvoker)delegate
+                {
+                    AddressQRCodePicturebox.Image = null;
+                });
+                lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedReceived.Text = string.Empty;
+                });
+                lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedReceivedOutputs.Text = string.Empty;
+                });
+                lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedSpent.Text = string.Empty;
+                });
+                lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedSpentOutputs.Text = string.Empty;
+                });
+                lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedTransactionCount.Text = string.Empty;
+                });
+                lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedUnspent.Text = string.Empty;
+                });
+                lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
+                {
+                    lblAddressConfirmedUnspentOutputs.Text = string.Empty;
+                });
                 AddressInvalidHideControls();
             }
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
@@ -1417,122 +1903,258 @@ namespace SATSuma
         //------------------------------------------ GET ADDRESS BALANCE-----------------------------------------------
         private async Task GetAddressBalance(string addressString)
         {
-            var request = "address/" + addressString;
-            var RequestURL = NodeURL + request;
-            //var RequestURL = "http://umbrel.local:3006/api/" + request;
-            var client = new HttpClient();
-            var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                lblNodeStatusLight.ForeColor = Color.Red;
-                lblActiveNode.Text = "Disconnected/error";
-                return;
+                var request = "address/" + addressString;
+                var RequestURL = NodeURL + request;
+                //var RequestURL = "http://umbrel.local:3006/api/" + request;
+                var client = new HttpClient();
+                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                if (!response.IsSuccessStatusCode)
+                {
+                    lblNodeStatusLight.ForeColor = Color.Red;
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = "Disconnected/error";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                    });
+                    return;
+                }
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var addressData = JObject.Parse(jsonData);
+
+                if (mempoolConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+                {
+                    label61.Invoke((MethodInvoker)delegate
+                    {
+                        label61.Text = "Confirmed unspent (balance)";
+                    });
+                    label59.Invoke((MethodInvoker)delegate
+                    {
+                        label59.Text = "Confirmed transaction count";
+                    });
+                    label67.Invoke((MethodInvoker)delegate
+                    {
+                        label67.Text = "Confirmed received";
+                    });
+                    label63.Invoke((MethodInvoker)delegate
+                    {
+                        label63.Text = "Confirmed spent";
+                    });
+                    lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    });
+                    lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                    });
+                    lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
+                        lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
+                    });
+                    lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+                    });
+                    lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
+                        lblAddressConfirmedSpentOutputs.Text = "(" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
+                    });
+                    var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
+                    var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
+                    var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspent = confirmedReceived - confirmedSpent;
+                    var unSpentTxOutputs = fundedTx - spentTx;
+                    lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                    });
+                    lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
+                        lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                    });
+                }
+                if (mempoolConfUnconfOrAllTx == "mempool") //mempool stats only
+                {
+                    label61.Invoke((MethodInvoker)delegate
+                    {
+                        label61.Text = "Unconfirmed unspent (balance)";
+                    });
+                    label59.Invoke((MethodInvoker)delegate
+                    {
+                        label59.Text = "Unconfirmed transaction count";
+                    });
+                    label67.Invoke((MethodInvoker)delegate
+                    {
+                        label67.Text = "Unconfirmed received";
+                    });
+                    label63.Invoke((MethodInvoker)delegate
+                    {
+                        label63.Text = "Unconfirmed spent";
+                    });
+                    lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
+                    });
+                    lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
+                    });
+                    lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
+                        lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
+                    });
+                    lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
+                    });
+                    lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
+                        lblAddressConfirmedSpentOutputs.Text = "(" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
+                    });
+                    var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
+                    var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
+                    var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
+                    var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+                    var confirmedUnspent = confirmedReceived - confirmedSpent;
+                    var unSpentTxOutputs = fundedTx - spentTx;
+                    lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                    });
+                    lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
+                        lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                    });
+                }
+                if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+                {
+                    label61.Invoke((MethodInvoker)delegate
+                    {
+                        label61.Text = "Total unspent (balance)";
+                    });
+                    label59.Invoke((MethodInvoker)delegate
+                    {
+                        label59.Text = "Total transaction count";
+                    });
+                    label67.Invoke((MethodInvoker)delegate
+                    {
+                        label67.Text = "Total received";
+                    });
+                    label63.Invoke((MethodInvoker)delegate
+                    {
+                        label63.Text = "Total spent";
+                    });
+                    int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                    int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
+                    int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
+                    lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedTransactionCount.Text = Convert.ToString(totalTransactionCount);
+                    });
+
+                    long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
+                    long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
+                    long totalReceived = chainReceived + mempoolReceived;
+                    decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
+                    lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceived.Text = Convert.ToString(BTCtotalReceived);
+                    });
+
+                    int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
+                    int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
+                    int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
+                    lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
+                        lblAddressConfirmedReceivedOutputs.Text = "(" + totalReceivedOutputs + " outputs)";
+                    });
+
+                    long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
+                    long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
+                    long totalSpent = chainSpent + mempoolSpent;
+                    decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
+                    lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpent.Text = Convert.ToString(BTCtotalSpent);
+                    });
+
+                    int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
+                    int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
+                    int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
+                    lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
+                        lblAddressConfirmedSpentOutputs.Text = "(" + totalSpentOutputs + " outputs)";
+                    });
+
+                    var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
+                    var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
+                    var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
+                    var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
+                    var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
+                    var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+
+                    var chainUnspent = chainReceived2 - chainSpent2;
+                    var chainUnspentTxOutputs = chainFundedTx - chainSpentTx;
+                    var mempoolUnspent = mempoolReceived2 - mempoolSpent2;
+                    var mempoolUnspentTxOutputs = mempoolFundedTx - mempoolSpentTx;
+
+                    var totalUnspent = chainUnspent + mempoolUnspent;
+                    var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
+
+                    lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
+                    });
+                    lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
+                        lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
+                    });
+                }
             }
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var addressData = JObject.Parse(jsonData);
-
-            if (mempoolConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+            catch (WebException ex)
             {
-                label61.Text = "Confirmed unspent (balance)";
-                label59.Text = "Confirmed transaction count";
-                label67.Text = "Confirmed received";
-                label63.Text = "Confirmed spent";
-                lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
-                lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
-                lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
-                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
-                lblAddressConfirmedSpentOutputs.Text = "(" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
-                var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                var confirmedUnspent = confirmedReceived - confirmedSpent;
-                var unSpentTxOutputs = fundedTx - spentTx;
-                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
-                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetAddressBalance, Web exception: " + ex.Message;
+                });
             }
-            if (mempoolConfUnconfOrAllTx == "mempool") //mempool stats only
+            catch (HttpRequestException ex)
             {
-                label61.Text = "Unconfirmed unspent (balance)";
-                label59.Text = "Unconfirmed transaction count";
-                label67.Text = "Unconfirmed received";
-                label63.Text = "Unconfirmed spent";
-                lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
-                lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
-                lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
-                lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
-                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
-                lblAddressConfirmedSpentOutputs.Text = "(" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
-                var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
-                var confirmedUnspent = confirmedReceived - confirmedSpent;
-                var unSpentTxOutputs = fundedTx - spentTx;
-                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
-                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetAddressBalance, HTTP Request error: " + ex.Message;
+                });
             }
-            if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+            catch (JsonException ex)
             {
-                label61.Text = "Total unspent (balance)";
-                label59.Text = "Total transaction count";
-                label67.Text = "Total received";
-                label63.Text = "Total spent";
-                int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
-                int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
-                lblAddressConfirmedTransactionCount.Text = Convert.ToString(totalTransactionCount);
-
-                long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
-                long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
-                long totalReceived = chainReceived + mempoolReceived;
-                decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
-                lblAddressConfirmedReceived.Text = Convert.ToString(BTCtotalReceived);
-
-                lblAddressConfirmedReceivedOutputs.Location = new Point(lblAddressConfirmedReceived.Location.X + lblAddressConfirmedReceived.Width - 5, lblAddressConfirmedReceivedOutputs.Location.Y);
-                int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
-                int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
-                int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
-                lblAddressConfirmedReceivedOutputs.Text = "(" + totalReceivedOutputs + " outputs)";
-
-                long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
-                long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
-                long totalSpent = chainSpent + mempoolSpent;
-                decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
-                lblAddressConfirmedSpent.Text = Convert.ToString(BTCtotalSpent);
-
-                lblAddressConfirmedSpentOutputs.Location = new Point(lblAddressConfirmedSpent.Location.X + lblAddressConfirmedSpent.Width - 5, lblAddressConfirmedSpentOutputs.Location.Y);
-                int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
-                int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
-                int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
-                lblAddressConfirmedSpentOutputs.Text = "(" + totalSpentOutputs + " outputs)";
-
-                var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
-
-                var chainUnspent = chainReceived2 - chainSpent2;
-                var chainUnspentTxOutputs = chainFundedTx - chainSpentTx;
-                var mempoolUnspent = mempoolReceived2 - mempoolSpent2;
-                var mempoolUnspentTxOutputs = mempoolFundedTx - mempoolSpentTx;
-
-                var totalUnspent = chainUnspent + mempoolUnspent;
-                var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
-
-                lblAddressConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
-                lblAddressConfirmedUnspentOutputs.Location = new Point(lblAddressConfirmedUnspent.Location.X + lblAddressConfirmedUnspent.Width - 5, lblAddressConfirmedUnspentOutputs.Location.Y);
-                lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetAddressBalance, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetAddressBalance " + ex.Message;
+                });
             }
         }
 
@@ -2492,11 +3114,8 @@ namespace SATSuma
         private async void LookupTransaction()
         {
             string submittedTransactionID = textBoxTransactionID.Text;
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
             await GetTransaction(submittedTransactionID);
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            DisableEnableButtons("enable"); // enable buttons after operation is complete
+
 
         }
 
@@ -2504,7 +3123,11 @@ namespace SATSuma
         {
 
             //panelTransactionDiagram.Invalidate();
+//            DisableEnableLoadingAnimation("enable"); // start the loading animation
+//            DisableEnableButtons("disable"); // disable buttons during operation
             var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
+//            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+//            DisableEnableButtons("enable"); // enable buttons after operation is complete
             var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
             lblTransactionVersion.Text = Convert.ToString(transaction.version);
             lblTransactionLockTime.Text = Convert.ToString(transaction.locktime);
@@ -2532,7 +3155,51 @@ namespace SATSuma
             {
                 lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count()) + " outputs";
             }
-            
+            // central bit
+
+
+            long totalValueIn = 0;
+            foreach (TransactionVin vin in transaction.vin)
+            {
+                totalValueIn += vin.prevout.value;
+            }
+            string strTotalValueIn = totalValueIn.ToString(); // using ToString() instead of Convert.ToString()
+            decimal decTotalBitcoinIn = ConvertSatsToBitcoin(strTotalValueIn);
+            lblTotalInputValue.Text = decTotalBitcoinIn.ToString();
+            lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 140, (panelTransactionDiagram.Size.Height / 2) + 3);
+            long totalValueOut = 0;
+            foreach (TransactionVout vout in transaction.vout)
+            {
+                totalValueOut += vout.value;
+            }
+            string strTotalValueOut = totalValueOut.ToString(); // using ToString() instead of Convert.ToString()
+            decimal decTotalBitcoinOut = ConvertSatsToBitcoin(strTotalValueOut);
+            lblTotalOutputValue.Text = decTotalBitcoinOut.ToString();
+            lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 140 - lblTotalOutputValue.Width, (panelTransactionDiagram.Size.Height / 2) + 3);
+
+            lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
+            label104.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
+            panelTransactionMiddle.Location = new Point((panelTransactionDiagram.Width / 2) - (panelTransactionMiddle.Width / 2), (panelTransactionDiagram.Height / 2) - (panelTransactionMiddle.Height / 2)); //move middle panel to centre
+            lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 130, (panelTransactionDiagram.Size.Height / 2) - 15);
+            lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
+            if (transaction.vin[0].is_coinbase == true)
+            {
+                lblCoinbase.Text = "Coinbase transaction";
+                lblCoinbase.Location = new Point(10,(panelTransactionDiagram.Size.Height / 2) - 15);
+            }
+            else
+            {
+                lblCoinbase.Text = "";
+            }
+            using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+            {
+                using (var g = panelTransactionDiagram.CreateGraphics())
+                {
+                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
+                    g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
+
+                }
+            }
             // inputs 
             int NumberOfInputLines = Convert.ToInt32(transaction.vin.Count());
             int YInputsStep = 0;
@@ -2541,6 +3208,10 @@ namespace SATSuma
             {
                 YInputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
                 YInputsPos = 10;
+                if (NumberOfInputLines > panelTransactionDiagram.Height)
+                {
+                    YInputsStep = 1;
+                }
             }
             else
             {
@@ -2548,10 +3219,12 @@ namespace SATSuma
                 YInputsPos = (panelTransactionDiagram.Size.Height / 2);
             }
                         
-            panelTransactionMiddle.Location = new Point((panelTransactionDiagram.Width / 2) - (panelTransactionMiddle.Width / 2), (panelTransactionDiagram.Height / 2) - (panelTransactionMiddle.Height / 2)); //move middle panel to centre
-            lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 130, (panelTransactionDiagram.Size.Height / 2) - 15);
             foreach (var vin in transaction.vin)
             {
+                if (YInputsPos >= panelTransactionDiagram.Height)
+                {
+                    break;
+                }
                 using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
                 {
                     using (var g = panelTransactionDiagram.CreateGraphics())
@@ -2570,16 +3243,23 @@ namespace SATSuma
             {
                 YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
                 YOutputsPos = 10;
+                if (NumberOfOutputLines > panelTransactionDiagram.Height)
+                {
+                    YOutputsStep = 1;
+                }
             }
             else
             {
                 YOutputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
                 YOutputsPos = (panelTransactionDiagram.Size.Height / 2);
             }
-
-            lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
+            
             foreach (var vout in transaction.vout)
             {
+                if (YOutputsPos >= panelTransactionDiagram.Height)
+                {
+                    break;
+                }
                 using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
                 {
                     using (var g = panelTransactionDiagram.CreateGraphics())
@@ -2591,26 +3271,7 @@ namespace SATSuma
                     }
                 }
             }
-
-            // central bit
-            
-            using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-            {
-                using (var g = panelTransactionDiagram.CreateGraphics())
-                {
-                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
-                    g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
-
-                }
-            }
-            lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
-            label104.Location = new Point ((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
-
-
-      
         }
-
-
 #endregion
 
 #region BLOCK LIST STUFF
@@ -2677,11 +3338,11 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+                //DisableEnableLoadingAnimation("enable"); // start the loading animation
+                //DisableEnableButtons("disable"); // disable buttons during operation
                 LookupBlockList();
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                DisableEnableButtons("enable"); // enable buttons after operation is complete
+                //DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                //DisableEnableButtons("enable"); // enable buttons after operation is complete
                 e.Handled = true;
                 return;
             }
@@ -2962,11 +3623,13 @@ namespace SATSuma
                     DisableEnableLoadingAnimation("enable"); // start the loading animation
                     DisableEnableButtons("disable"); // disable buttons during operation
                     var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
+                    DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                    DisableEnableButtons("enable"); // enable buttons after operation is complete
                     var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                     List<string> blocklist = blocks.Select(t => t.height).ToList();
                     lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
                     long sizeInBytes = blocks[0].size;
-                    string sizeString; // convert display to bytes/kb/mb accordingly
+                    string sizeString = ""; // convert display to bytes/kb/mb accordingly
                     if (sizeInBytes < 1000)
                     {
                         sizeString = $"{sizeInBytes} bytes";
@@ -3002,8 +3665,6 @@ namespace SATSuma
                     lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].extras.avgTxSize);
                     lblBlockListVersion.Text = Convert.ToString(blocks[0].version);
                     lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].height);
-                    DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                    DisableEnableButtons("enable"); // enable buttons after operation is complete
                 }
                 else
                 {
@@ -3960,7 +4621,7 @@ namespace SATSuma
     public class TransactionVin
     {
         public string txid { get; set; }
-        public int vout { get; set; }
+        public long vout { get; set; }
         public TransactionVinPrevout prevout { get; set; }
         public string scriptsig { get; set; }
         public string scriptsig_asm { get; set; }

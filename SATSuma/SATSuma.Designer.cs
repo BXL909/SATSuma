@@ -366,27 +366,32 @@
             this.panel22 = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
             this.panelTransaction = new System.Windows.Forms.Panel();
+            this.panel24 = new System.Windows.Forms.Panel();
+            this.listViewTransactionInputs = new System.Windows.Forms.ListView();
+            this.panel23 = new System.Windows.Forms.Panel();
+            this.label113 = new System.Windows.Forms.Label();
+            this.label98 = new System.Windows.Forms.Label();
+            this.lblTransactionVersion = new System.Windows.Forms.Label();
+            this.lblTransactionBlockHeight = new System.Windows.Forms.Label();
+            this.label126 = new System.Windows.Forms.Label();
+            this.lblTransactionBlockTime = new System.Windows.Forms.Label();
+            this.label128 = new System.Windows.Forms.Label();
+            this.lblTransactionLockTime = new System.Windows.Forms.Label();
             this.panelTransactionDiagram = new System.Windows.Forms.Panel();
+            this.lblTotalInputValue = new System.Windows.Forms.Label();
+            this.lblCoinbase = new System.Windows.Forms.Label();
             this.panelTransactionMiddle = new System.Windows.Forms.Panel();
             this.label132 = new System.Windows.Forms.Label();
             this.label130 = new System.Windows.Forms.Label();
             this.lblTransactionSize = new System.Windows.Forms.Label();
             this.lblTransactionWeight = new System.Windows.Forms.Label();
-            this.label98 = new System.Windows.Forms.Label();
             this.lblTransactionFee = new System.Windows.Forms.Label();
-            this.lblTransactionVersion = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
-            this.label128 = new System.Windows.Forms.Label();
-            this.lblTransactionLockTime = new System.Windows.Forms.Label();
-            this.label126 = new System.Windows.Forms.Label();
-            this.lblTransactionBlockTime = new System.Windows.Forms.Label();
-            this.label113 = new System.Windows.Forms.Label();
-            this.lblTransactionBlockHeight = new System.Windows.Forms.Label();
             this.lblTransactionInputCount = new System.Windows.Forms.Label();
             this.lblTransactionOutputCount = new System.Windows.Forms.Label();
             this.textBoxTransactionID = new System.Windows.Forms.TextBox();
             this.label136 = new System.Windows.Forms.Label();
-            this.panel23 = new System.Windows.Forms.Panel();
+            this.lblTotalOutputValue = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -412,9 +417,10 @@
             this.panel20.SuspendLayout();
             this.panel22.SuspendLayout();
             this.panelTransaction.SuspendLayout();
+            this.panel24.SuspendLayout();
+            this.panel23.SuspendLayout();
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
-            this.panel23.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -4995,6 +5001,7 @@
             // panelTransaction
             // 
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
+            this.panelTransaction.Controls.Add(this.panel24);
             this.panelTransaction.Controls.Add(this.panel23);
             this.panelTransaction.Controls.Add(this.panelTransactionDiagram);
             this.panelTransaction.Controls.Add(this.textBoxTransactionID);
@@ -5005,9 +5012,160 @@
             this.panelTransaction.TabIndex = 172;
             this.panelTransaction.Visible = false;
             // 
+            // panel24
+            // 
+            this.panel24.Controls.Add(this.listViewTransactionInputs);
+            this.panel24.Location = new System.Drawing.Point(7, 454);
+            this.panel24.Name = "panel24";
+            this.panel24.Size = new System.Drawing.Size(375, 100);
+            this.panel24.TabIndex = 197;
+            // 
+            // listViewTransactionInputs
+            // 
+            this.listViewTransactionInputs.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewTransactionInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewTransactionInputs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewTransactionInputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewTransactionInputs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewTransactionInputs.FullRowSelect = true;
+            this.listViewTransactionInputs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewTransactionInputs.HideSelection = false;
+            this.listViewTransactionInputs.LabelWrap = false;
+            this.listViewTransactionInputs.Location = new System.Drawing.Point(10, 10);
+            this.listViewTransactionInputs.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewTransactionInputs.MultiSelect = false;
+            this.listViewTransactionInputs.Name = "listViewTransactionInputs";
+            this.listViewTransactionInputs.OwnerDraw = true;
+            this.listViewTransactionInputs.Scrollable = false;
+            this.listViewTransactionInputs.ShowGroups = false;
+            this.listViewTransactionInputs.Size = new System.Drawing.Size(351, 232);
+            this.listViewTransactionInputs.SmallImageList = this.imageListUpDownArrows;
+            this.listViewTransactionInputs.TabIndex = 165;
+            this.listViewTransactionInputs.TabStop = false;
+            this.listViewTransactionInputs.UseCompatibleStateImageBehavior = false;
+            this.listViewTransactionInputs.View = System.Windows.Forms.View.Details;
+            // 
+            // panel23
+            // 
+            this.panel23.BackColor = System.Drawing.Color.Transparent;
+            this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
+            this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel23.Controls.Add(this.label113);
+            this.panel23.Controls.Add(this.label98);
+            this.panel23.Controls.Add(this.lblTransactionVersion);
+            this.panel23.Controls.Add(this.lblTransactionBlockHeight);
+            this.panel23.Controls.Add(this.label126);
+            this.panel23.Controls.Add(this.lblTransactionBlockTime);
+            this.panel23.Controls.Add(this.label128);
+            this.panel23.Controls.Add(this.lblTransactionLockTime);
+            this.panel23.Location = new System.Drawing.Point(7, 35);
+            this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel23.Name = "panel23";
+            this.panel23.Size = new System.Drawing.Size(669, 23);
+            this.panel23.TabIndex = 196;
+            // 
+            // label113
+            // 
+            this.label113.AutoSize = true;
+            this.label113.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label113.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label113.ForeColor = System.Drawing.Color.Silver;
+            this.label113.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label113.Location = new System.Drawing.Point(3, 2);
+            this.label113.Name = "label113";
+            this.label113.Size = new System.Drawing.Size(119, 17);
+            this.label113.TabIndex = 153;
+            this.label113.Text = "Included in block";
+            // 
+            // label98
+            // 
+            this.label98.AutoSize = true;
+            this.label98.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label98.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label98.ForeColor = System.Drawing.Color.Silver;
+            this.label98.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label98.Location = new System.Drawing.Point(455, 2);
+            this.label98.Name = "label98";
+            this.label98.Size = new System.Drawing.Size(54, 17);
+            this.label98.TabIndex = 169;
+            this.label98.Text = "Version";
+            // 
+            // lblTransactionVersion
+            // 
+            this.lblTransactionVersion.AutoSize = true;
+            this.lblTransactionVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionVersion.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionVersion.Location = new System.Drawing.Point(498, 3);
+            this.lblTransactionVersion.Name = "lblTransactionVersion";
+            this.lblTransactionVersion.Size = new System.Drawing.Size(64, 18);
+            this.lblTransactionVersion.TabIndex = 168;
+            this.lblTransactionVersion.Text = "no data";
+            // 
+            // lblTransactionBlockHeight
+            // 
+            this.lblTransactionBlockHeight.AutoSize = true;
+            this.lblTransactionBlockHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionBlockHeight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionBlockHeight.Location = new System.Drawing.Point(102, 3);
+            this.lblTransactionBlockHeight.Name = "lblTransactionBlockHeight";
+            this.lblTransactionBlockHeight.Size = new System.Drawing.Size(64, 18);
+            this.lblTransactionBlockHeight.TabIndex = 152;
+            this.lblTransactionBlockHeight.Text = "no data";
+            // 
+            // label126
+            // 
+            this.label126.AutoSize = true;
+            this.label126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label126.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label126.ForeColor = System.Drawing.Color.Silver;
+            this.label126.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label126.Location = new System.Drawing.Point(163, 2);
+            this.label126.Name = "label126";
+            this.label126.Size = new System.Drawing.Size(75, 17);
+            this.label126.TabIndex = 143;
+            this.label126.Text = "Block time";
+            // 
+            // lblTransactionBlockTime
+            // 
+            this.lblTransactionBlockTime.AutoSize = true;
+            this.lblTransactionBlockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionBlockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionBlockTime.Location = new System.Drawing.Point(221, 3);
+            this.lblTransactionBlockTime.Name = "lblTransactionBlockTime";
+            this.lblTransactionBlockTime.Size = new System.Drawing.Size(64, 18);
+            this.lblTransactionBlockTime.TabIndex = 142;
+            this.lblTransactionBlockTime.Text = "no data";
+            // 
+            // label128
+            // 
+            this.label128.AutoSize = true;
+            this.label128.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label128.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label128.ForeColor = System.Drawing.Color.Silver;
+            this.label128.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label128.Location = new System.Drawing.Point(338, 2);
+            this.label128.Name = "label128";
+            this.label128.Size = new System.Drawing.Size(71, 17);
+            this.label128.TabIndex = 141;
+            this.label128.Text = "Lock time";
+            // 
+            // lblTransactionLockTime
+            // 
+            this.lblTransactionLockTime.AutoSize = true;
+            this.lblTransactionLockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionLockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionLockTime.Location = new System.Drawing.Point(396, 3);
+            this.lblTransactionLockTime.Name = "lblTransactionLockTime";
+            this.lblTransactionLockTime.Size = new System.Drawing.Size(64, 18);
+            this.lblTransactionLockTime.TabIndex = 140;
+            this.lblTransactionLockTime.Text = "no data";
+            // 
             // panelTransactionDiagram
             // 
             this.panelTransactionDiagram.BackColor = System.Drawing.Color.Transparent;
+            this.panelTransactionDiagram.Controls.Add(this.lblTotalOutputValue);
+            this.panelTransactionDiagram.Controls.Add(this.lblTotalInputValue);
+            this.panelTransactionDiagram.Controls.Add(this.lblCoinbase);
             this.panelTransactionDiagram.Controls.Add(this.panelTransactionMiddle);
             this.panelTransactionDiagram.Controls.Add(this.lblTransactionFee);
             this.panelTransactionDiagram.Controls.Add(this.label104);
@@ -5017,6 +5175,28 @@
             this.panelTransactionDiagram.Name = "panelTransactionDiagram";
             this.panelTransactionDiagram.Size = new System.Drawing.Size(753, 384);
             this.panelTransactionDiagram.TabIndex = 170;
+            // 
+            // lblTotalInputValue
+            // 
+            this.lblTotalInputValue.AutoSize = true;
+            this.lblTotalInputValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalInputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalInputValue.Location = new System.Drawing.Point(314, 242);
+            this.lblTotalInputValue.Name = "lblTotalInputValue";
+            this.lblTotalInputValue.Size = new System.Drawing.Size(128, 18);
+            this.lblTotalInputValue.TabIndex = 169;
+            this.lblTotalInputValue.Text = "totalInputValue";
+            // 
+            // lblCoinbase
+            // 
+            this.lblCoinbase.AutoSize = true;
+            this.lblCoinbase.BackColor = System.Drawing.Color.Transparent;
+            this.lblCoinbase.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCoinbase.Location = new System.Drawing.Point(243, 34);
+            this.lblCoinbase.Name = "lblCoinbase";
+            this.lblCoinbase.Size = new System.Drawing.Size(96, 18);
+            this.lblCoinbase.TabIndex = 168;
+            this.lblCoinbase.Text = "Is_coinbase";
             // 
             // panelTransactionMiddle
             // 
@@ -5080,40 +5260,16 @@
             this.lblTransactionWeight.Text = "no data";
             this.lblTransactionWeight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label98
-            // 
-            this.label98.AutoSize = true;
-            this.label98.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label98.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label98.ForeColor = System.Drawing.Color.Silver;
-            this.label98.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label98.Location = new System.Drawing.Point(455, 2);
-            this.label98.Name = "label98";
-            this.label98.Size = new System.Drawing.Size(54, 17);
-            this.label98.TabIndex = 169;
-            this.label98.Text = "Version";
-            // 
             // lblTransactionFee
             // 
             this.lblTransactionFee.AutoSize = true;
-            this.lblTransactionFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionFee.BackColor = System.Drawing.Color.Transparent;
             this.lblTransactionFee.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionFee.Location = new System.Drawing.Point(340, 31);
             this.lblTransactionFee.Name = "lblTransactionFee";
             this.lblTransactionFee.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionFee.TabIndex = 166;
             this.lblTransactionFee.Text = "no data";
-            // 
-            // lblTransactionVersion
-            // 
-            this.lblTransactionVersion.AutoSize = true;
-            this.lblTransactionVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTransactionVersion.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransactionVersion.Location = new System.Drawing.Point(498, 3);
-            this.lblTransactionVersion.Name = "lblTransactionVersion";
-            this.lblTransactionVersion.Size = new System.Drawing.Size(64, 18);
-            this.lblTransactionVersion.TabIndex = 168;
-            this.lblTransactionVersion.Text = "no data";
             // 
             // label104
             // 
@@ -5127,78 +5283,6 @@
             this.label104.Size = new System.Drawing.Size(30, 17);
             this.label104.TabIndex = 167;
             this.label104.Text = "Fee";
-            // 
-            // label128
-            // 
-            this.label128.AutoSize = true;
-            this.label128.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label128.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label128.ForeColor = System.Drawing.Color.Silver;
-            this.label128.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label128.Location = new System.Drawing.Point(338, 2);
-            this.label128.Name = "label128";
-            this.label128.Size = new System.Drawing.Size(71, 17);
-            this.label128.TabIndex = 141;
-            this.label128.Text = "Lock time";
-            // 
-            // lblTransactionLockTime
-            // 
-            this.lblTransactionLockTime.AutoSize = true;
-            this.lblTransactionLockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTransactionLockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransactionLockTime.Location = new System.Drawing.Point(396, 3);
-            this.lblTransactionLockTime.Name = "lblTransactionLockTime";
-            this.lblTransactionLockTime.Size = new System.Drawing.Size(64, 18);
-            this.lblTransactionLockTime.TabIndex = 140;
-            this.lblTransactionLockTime.Text = "no data";
-            // 
-            // label126
-            // 
-            this.label126.AutoSize = true;
-            this.label126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label126.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label126.ForeColor = System.Drawing.Color.Silver;
-            this.label126.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label126.Location = new System.Drawing.Point(163, 2);
-            this.label126.Name = "label126";
-            this.label126.Size = new System.Drawing.Size(75, 17);
-            this.label126.TabIndex = 143;
-            this.label126.Text = "Block time";
-            // 
-            // lblTransactionBlockTime
-            // 
-            this.lblTransactionBlockTime.AutoSize = true;
-            this.lblTransactionBlockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTransactionBlockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransactionBlockTime.Location = new System.Drawing.Point(221, 3);
-            this.lblTransactionBlockTime.Name = "lblTransactionBlockTime";
-            this.lblTransactionBlockTime.Size = new System.Drawing.Size(64, 18);
-            this.lblTransactionBlockTime.TabIndex = 142;
-            this.lblTransactionBlockTime.Text = "no data";
-            // 
-            // label113
-            // 
-            this.label113.AutoSize = true;
-            this.label113.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label113.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label113.ForeColor = System.Drawing.Color.Silver;
-            this.label113.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label113.Location = new System.Drawing.Point(3, 2);
-            this.label113.Name = "label113";
-            this.label113.Size = new System.Drawing.Size(119, 17);
-            this.label113.TabIndex = 153;
-            this.label113.Text = "Included in block";
-            // 
-            // lblTransactionBlockHeight
-            // 
-            this.lblTransactionBlockHeight.AutoSize = true;
-            this.lblTransactionBlockHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTransactionBlockHeight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransactionBlockHeight.Location = new System.Drawing.Point(102, 3);
-            this.lblTransactionBlockHeight.Name = "lblTransactionBlockHeight";
-            this.lblTransactionBlockHeight.Size = new System.Drawing.Size(64, 18);
-            this.lblTransactionBlockHeight.TabIndex = 152;
-            this.lblTransactionBlockHeight.Text = "no data";
             // 
             // lblTransactionInputCount
             // 
@@ -5246,24 +5330,16 @@
             this.label136.TabIndex = 6;
             this.label136.Text = "Enter transaction ID";
             // 
-            // panel23
+            // lblTotalOutputValue
             // 
-            this.panel23.BackColor = System.Drawing.Color.Transparent;
-            this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
-            this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel23.Controls.Add(this.label113);
-            this.panel23.Controls.Add(this.label98);
-            this.panel23.Controls.Add(this.lblTransactionVersion);
-            this.panel23.Controls.Add(this.lblTransactionBlockHeight);
-            this.panel23.Controls.Add(this.label126);
-            this.panel23.Controls.Add(this.lblTransactionBlockTime);
-            this.panel23.Controls.Add(this.label128);
-            this.panel23.Controls.Add(this.lblTransactionLockTime);
-            this.panel23.Location = new System.Drawing.Point(7, 35);
-            this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(669, 23);
-            this.panel23.TabIndex = 196;
+            this.lblTotalOutputValue.AutoSize = true;
+            this.lblTotalOutputValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalOutputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalOutputValue.Location = new System.Drawing.Point(318, 264);
+            this.lblTotalOutputValue.Name = "lblTotalOutputValue";
+            this.lblTotalOutputValue.Size = new System.Drawing.Size(136, 18);
+            this.lblTotalOutputValue.TabIndex = 170;
+            this.lblTotalOutputValue.Text = "totalOutputValue";
             // 
             // SATSuma
             // 
@@ -5364,11 +5440,12 @@
             this.panel22.PerformLayout();
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
+            this.panel24.ResumeLayout(false);
+            this.panel23.ResumeLayout(false);
+            this.panel23.PerformLayout();
             this.panelTransactionDiagram.ResumeLayout(false);
             this.panelTransactionDiagram.PerformLayout();
             this.panelTransactionMiddle.ResumeLayout(false);
-            this.panel23.ResumeLayout(false);
-            this.panel23.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5733,6 +5810,11 @@
         private System.Windows.Forms.Panel panelTransactionDiagram;
         private System.Windows.Forms.Panel panelTransactionMiddle;
         private System.Windows.Forms.Panel panel23;
+        private System.Windows.Forms.Panel panel24;
+        private System.Windows.Forms.ListView listViewTransactionInputs;
+        private System.Windows.Forms.Label lblCoinbase;
+        private System.Windows.Forms.Label lblTotalInputValue;
+        private System.Windows.Forms.Label lblTotalOutputValue;
     }
 }
 

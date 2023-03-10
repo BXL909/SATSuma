@@ -83,13 +83,15 @@ namespace SATSuma
         private bool RunBlockchairComJSONAPI = true;
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
+#pragma warning disable IDE0044 // Add readonly modifier
         private int APIGroup1RefreshFrequency = 1; // mins. Default value 1. Initial value only
+#pragma warning restore IDE0044 // Add readonly modifier
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private TransactionsForAddressService _transactionsForAddressService;
-        private BlockDataService _blockService;
-        private TransactionService _transactionService;
-        private TransactionsForBlockService _transactionsForBlockService;
+        private readonly BlockDataService _blockService;
+        private readonly TransactionService _transactionService;
+        private readonly TransactionsForBlockService _transactionsForBlockService;
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
@@ -184,7 +186,7 @@ namespace SATSuma
                 int SecondsToHalving = int.Parse(secondsString);
                 if (SecondsToHalving > 0)
                 {
-                    SecondsToHalving = SecondsToHalving - 1; // one second closer to the halvening!
+                    SecondsToHalving--; // one second closer to the halvening!
                     lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
                     {
                         lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
@@ -233,35 +235,35 @@ namespace SATSuma
                     {
                         if (RunBitcoinExplorerEndpointAPI)
                         {
-                            var result = BitcoinExplorerOrgEndpointsRefresh();
+                            var (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool) = BitcoinExplorerOrgEndpointsRefresh();
                             // move returned data to the labels on the form
                             lblPriceUSD.Invoke((MethodInvoker)delegate
                             {
-                                lblPriceUSD.Text = result.priceUSD;
+                                lblPriceUSD.Text = priceUSD;
                             });
                             lblMoscowTime.Invoke((MethodInvoker)delegate
                             {
-                                lblMoscowTime.Text = result.moscowTime;
+                                lblMoscowTime.Text = moscowTime;
                             });
                             lblMarketCapUSD.Invoke((MethodInvoker)delegate
                             {
-                                lblMarketCapUSD.Text = result.marketCapUSD;
+                                lblMarketCapUSD.Text = marketCapUSD;
                             });
                             lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
                             {
-                                lblDifficultyAdjEst.Text = result.difficultyAdjEst;
+                                lblDifficultyAdjEst.Text = difficultyAdjEst;
                             });
                             lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // Blocks list
                             {
-                                lblBlockListNextDifficultyAdjustment.Text = result.difficultyAdjEst;
+                                lblBlockListNextDifficultyAdjustment.Text = difficultyAdjEst;
                             });
                             lblTXInMempool.Invoke((MethodInvoker)delegate
                             {
-                                lblTXInMempool.Text = result.txInMempool;
+                                lblTXInMempool.Text = txInMempool;
                             });
                             lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
                             {
-                                lblBlockListTXInMempool.Text = result.txInMempool;
+                                lblBlockListTXInMempool.Text = txInMempool;
                             });
                         }
                         else
@@ -317,21 +319,21 @@ namespace SATSuma
                     {
                         if (RunBlockchainInfoEndpointAPI)
                         {
-                            var result2 = BlockchainInfoEndpointsRefresh();
+                            var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
                             // move returned data to the labels on the form
                             lblAvgNoTransactions.Invoke((MethodInvoker)delegate
                             {
-                                lblAvgNoTransactions.Text = result2.avgNoTransactions;
+                                lblAvgNoTransactions.Text = avgNoTransactions;
                             });
                             lblBlockNumber.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockNumber.Text = result2.blockNumber;
+                                lblBlockNumber.Text = blockNumber;
                             });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockReward.Text = result2.blockReward;
+                                lblBlockReward.Text = blockReward;
                             });
-                            decimal DecBlockReward = Convert.ToDecimal(result2.blockReward);
+                            decimal DecBlockReward = Convert.ToDecimal(blockReward);
                             decimal NextBlockReward = DecBlockReward / 2;
                             lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
                             {
@@ -339,43 +341,43 @@ namespace SATSuma
                             });
                             lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListBlockReward.Text = result2.blockReward;
+                                lblBlockListBlockReward.Text = blockReward;
                             });
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
-                                lblEstHashrate.Text = result2.estHashrate;
+                                lblEstHashrate.Text = estHashrate;
                             });
                             lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListEstHashRate.Text = result2.estHashrate;
+                                lblBlockListEstHashRate.Text = estHashrate;
                             });
                             lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
                             {
-                                lblAvgTimeBetweenBlocks.Text = result2.avgTimeBetweenBlocks;
+                                lblAvgTimeBetweenBlocks.Text = avgTimeBetweenBlocks;
                             });
                             lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListAvgTimeBetweenBlocks.Text = result2.avgTimeBetweenBlocks;
+                                lblBlockListAvgTimeBetweenBlocks.Text = avgTimeBetweenBlocks;
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
-                                lblBTCInCirc.Text = result2.btcInCirc + " / 21000000";
+                                lblBTCInCirc.Text = btcInCirc + " / 21000000";
                             });
                             lblHashesToSolve.Invoke((MethodInvoker)delegate
                             {
-                                lblHashesToSolve.Text = result2.hashesToSolve;
+                                lblHashesToSolve.Text = hashesToSolve;
                             });
                             lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListAttemptsToSolveBlock.Text = result2.hashesToSolve;
+                                lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
                             });
                             lbl24HourTransCount.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HourTransCount.Text = result2.twentyFourHourTransCount;
+                                lbl24HourTransCount.Text = twentyFourHourTransCount;
                             });
                             lbl24HourBTCSent.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HourBTCSent.Text = result2.twentyFourHourBTCSent;
+                                lbl24HourBTCSent.Text = twentyFourHourBTCSent;
                             });
                         }
                         else
@@ -459,47 +461,47 @@ namespace SATSuma
                     {
                         if (RunBitcoinExplorerOrgJSONAPI)
                         {
-                            var result3 = BitcoinExplorerOrgJSONRefresh();
+                            var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
                             // move returned data to the labels on the form
                             lblfeesNextBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblfeesNextBlock.Text = result3.nextBlockFee;
+                                lblfeesNextBlock.Text = nextBlockFee;
                             });
                             lblFees30Mins.Invoke((MethodInvoker)delegate
                             {
-                                lblFees30Mins.Text = result3.thirtyMinFee;
+                                lblFees30Mins.Text = thirtyMinFee;
                             });
                             lblFees60Mins.Invoke((MethodInvoker)delegate
                             {
-                                lblFees60Mins.Text = result3.sixtyMinFee;
+                                lblFees60Mins.Text = sixtyMinFee;
                             });
                             lblFees1Day.Invoke((MethodInvoker)delegate
                             {
-                                lblFees1Day.Text = result3.oneDayFee;
+                                lblFees1Day.Text = oneDayFee;
                             });
                             lblTransInNextBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblTransInNextBlock.Text = result3.txInNextBlock;
+                                lblTransInNextBlock.Text = txInNextBlock;
                             });
                             lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListTXInNextBlock.Text = result3.txInNextBlock;
+                                lblBlockListTXInNextBlock.Text = txInNextBlock;
                             });
                             lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                             {
-                                lblNextBlockMinMaxFee.Text = result3.nextBlockMinFee + " / " + result3.nextBlockMaxFee;
+                                lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
                             });
                             lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListMinMaxInFeeNextBlock.Text = result3.nextBlockMinFee + " / " + result3.nextBlockMaxFee;
+                                lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
                             });
                             lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
                             {
-                                lblNextBlockTotalFees.Text = result3.nextBlockTotalFees;
+                                lblNextBlockTotalFees.Text = nextBlockTotalFees;
                             });
                             lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListTotalFeesInNextBlock.Text = result3.nextBlockTotalFees;
+                                lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
                             });
                         }
                         else
@@ -569,23 +571,23 @@ namespace SATSuma
                     {
                         if (RunBlockchainInfoJSONAPI)
                         {
-                            var result4 = BlockchainInfoJSONRefresh();
+                            var (n_tx, size, nextretarget) = BlockchainInfoJSONRefresh();
                             // move returned data to the labels on the form
                             lblTransactions.Invoke((MethodInvoker)delegate
                             {
-                                lblTransactions.Text = result4.n_tx;
+                                lblTransactions.Text = n_tx;
                             });
                             lblBlockSize.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockSize.Text = result4.size;
+                                lblBlockSize.Text = size;
                             });
                             lblNextDifficultyChange.Invoke((MethodInvoker)delegate
                             {
-                                lblNextDifficultyChange.Text = result4.nextretarget;
+                                lblNextDifficultyChange.Text = nextretarget;
                             });
                             lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListNextDiffAdjBlock.Text = result4.nextretarget;
+                                lblBlockListNextDiffAdjBlock.Text = nextretarget;
                             });
                         }
                         else
@@ -629,24 +631,24 @@ namespace SATSuma
                     {
                         if (RunCoingeckoComJSONAPI)
                         {
-                            var result5 = CoingeckoComJSONRefresh();
+                            var (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow) = CoingeckoComJSONRefresh();
                             // move returned data to the labels on the form
                             lblATH.Invoke((MethodInvoker)delegate
                             {
-                                lblATH.Text = result5.ath;
+                                lblATH.Text = ath;
                             });
                             lblATHDate.Invoke((MethodInvoker)delegate
                             {
                                 lblATHDate.Location = new Point(lblATH.Location.X + lblATH.Width, lblATHDate.Location.Y); // place the ATH date according to the width of the ATH (future proofed for hyperbitcoinization!)
-                                lblATHDate.Text = "(" + result5.athDate + ")";
+                                lblATHDate.Text = "(" + athDate + ")";
                             });
                             lblATHDifference.Invoke((MethodInvoker)delegate
                             {
-                                lblATHDifference.Text = result5.athDifference;
+                                lblATHDifference.Text = athDifference;
                             });
                             lbl24HrHigh.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HrHigh.Text = result5.twentyFourHourHigh + " / " + result5.twentyFourHourLow;
+                                lbl24HrHigh.Text = twentyFourHourHigh + " / " + twentyFourHourLow;
                             });
                         }
                         else
@@ -691,59 +693,59 @@ namespace SATSuma
                     {
                         if (RunMempoolSpaceLightningAPI)
                         {
-                            var result6 = MempoolSpaceLightningJSONRefresh();
+                            var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
                             // move returned data to the labels on the form
                             lblChannelCount.Invoke((MethodInvoker)delegate
                             {
-                                lblChannelCount.Text = result6.channelCount;
+                                lblChannelCount.Text = channelCount;
                             });
                             lblNodeCount.Invoke((MethodInvoker)delegate
                             {
-                                lblNodeCount.Text = result6.nodeCount;
+                                lblNodeCount.Text = nodeCount;
                             });
                             lblTotalCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblTotalCapacity.Text = result6.totalCapacity;
+                                lblTotalCapacity.Text = totalCapacity;
                             });
                             lblTorNodes.Invoke((MethodInvoker)delegate
                             {
-                                lblTorNodes.Text = result6.torNodes;
+                                lblTorNodes.Text = torNodes;
                             });
                             lblClearnetNodes.Invoke((MethodInvoker)delegate
                             {
-                                lblClearnetNodes.Text = result6.clearnetNodes;
+                                lblClearnetNodes.Text = clearnetNodes;
                             });
                             lblAverageCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblAverageCapacity.Text = result6.avgCapacity;
+                                lblAverageCapacity.Text = avgCapacity;
                             });
                             lblAverageFeeRate.Invoke((MethodInvoker)delegate
                             {
-                                lblAverageFeeRate.Text = result6.avgFeeRate;
+                                lblAverageFeeRate.Text = avgFeeRate;
                             });
                             lblUnannouncedNodes.Invoke((MethodInvoker)delegate
                             {
-                                lblUnannouncedNodes.Text = result6.unannouncedNodes;
+                                lblUnannouncedNodes.Text = unannouncedNodes;
                             });
                             lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
                             {
-                                lblAverageBaseFeeMtokens.Text = result6.avgBaseeFeeMtokens;
+                                lblAverageBaseFeeMtokens.Text = avgBaseeFeeMtokens;
                             });
                             lblMedCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblMedCapacity.Text = result6.medCapacity;
+                                lblMedCapacity.Text = medCapacity;
                             });
                             lblMedFeeRate.Invoke((MethodInvoker)delegate
                             {
-                                lblMedFeeRate.Text = result6.medFeeRate;
+                                lblMedFeeRate.Text = medFeeRate;
                             });
                             lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
                             {
-                                lblMedBaseFeeTokens.Text = result6.medBaseeFeeMtokens;
+                                lblMedBaseFeeTokens.Text = medBaseeFeeMtokens;
                             });
                             lblClearnetTorNodes.Invoke((MethodInvoker)delegate
                             {
-                                lblClearnetTorNodes.Text = result6.clearnetTorNodes;
+                                lblClearnetTorNodes.Text = clearnetTorNodes;
                             });
                         }
                         else
@@ -803,18 +805,18 @@ namespace SATSuma
                         }
                         if (RunMempoolSpaceLightningAPI)
                         {
-                            var result6 = MempoolSpaceCapacityBreakdownJSONRefresh();
+                            var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
                             lblClearnetCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblClearnetCapacity.Text = result6.clearnetCapacity;
+                                lblClearnetCapacity.Text = clearnetCapacity;
                             });
                             lblTorCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblTorCapacity.Text = result6.torCapacity;
+                                lblTorCapacity.Text = torCapacity;
                             });
                             lblUnknownCapacity.Invoke((MethodInvoker)delegate
                             {
-                                lblUnknownCapacity.Text = result6.unknownCapacity;
+                                lblUnknownCapacity.Text = unknownCapacity;
                             });
                         }
                         else
@@ -834,18 +836,18 @@ namespace SATSuma
                         }
                         if (RunMempoolSpaceLightningAPI)
                         {
-                            var result6 = MempoolSpaceLiquidityRankingJSONRefresh();
+                            var (aliases, capacities) = MempoolSpaceLiquidityRankingJSONRefresh();
                             for (int i = 0; i < 10; i++)
                             {
                                 System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
                                 aliasLabel.Invoke((MethodInvoker)delegate
                                 {
-                                    aliasLabel.Text = result6.aliases[i];
+                                    aliasLabel.Text = aliases[i];
                                 });
                                 System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
                                 capacityLabel.Invoke((MethodInvoker)delegate
                                 {
-                                    capacityLabel.Text = result6.capacities[i];
+                                    capacityLabel.Text = capacities[i];
                                 });
                             }
                             var result7 = MempoolSpaceConnectivityRankingJSONRefresh();
@@ -957,16 +959,16 @@ namespace SATSuma
                     {
                         if (RunBlockchairComJSONAPI)
                         {
-                            var result8 = BlockchairComHalvingJSONRefresh();
+                            var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
                             lblHalveningBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningBlock.Text = result8.halveningBlock + " / " + result8.blocksLeft;
+                                lblHalveningBlock.Text = halveningBlock + " / " + blocksLeft;
                             });
                             lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListHalvingBlockAndRemaining.Text = result8.halveningBlock + " / " + result8.blocksLeft;
+                                lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
                             });
-                            string halvening_time = result8.halveningTime;
+                            string halvening_time = halveningTime;
                             DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
 
@@ -977,7 +979,7 @@ namespace SATSuma
                             lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
                             {
                                 lblHalveningSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
-                                lblHalveningSecondsRemaining.Text = result8.seconds_left;
+                                lblHalveningSecondsRemaining.Text = seconds_left;
                                 ObtainedHalveningSecondsRemainingYet = true; // signifies that we can now start deducting from this
                             });
                         }
@@ -1051,15 +1053,13 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
-                    string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
-                    string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
-                    string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
-                    string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
-                    return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
-                }
+                using WebClient client = new WebClient();
+                string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
+                string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
+                string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
+                string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
+                string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
+                return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
             }
             catch (WebException ex)
             {
@@ -1101,28 +1101,26 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
-                    double dblAvgNoTransactions = Convert.ToDouble(avgNoTransactions);
-                    dblAvgNoTransactions = Math.Round(dblAvgNoTransactions); // so lets get it down to an integer
-                    string avgNoTransactionsText = Convert.ToString(dblAvgNoTransactions);
-                    string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
-                    string blockReward = client.DownloadString("https://blockchain.info/q/bcperblock"); // current block reward
-                    string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
-                    string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
-                    double dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
-                    TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
-                    string timeString = string.Format("{0:%m}m {0:%s}s", time);
-                    string avgTimeBetweenBlocks = timeString;
-                    string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
-                    string btcInCirc = ConvertSatsToBitcoin(totalBTC).ToString();
-                    string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
-                    string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
-                    string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
-                    twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                    return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
-                }
+                using WebClient client = new WebClient();
+                string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
+                double dblAvgNoTransactions = Convert.ToDouble(avgNoTransactions);
+                dblAvgNoTransactions = Math.Round(dblAvgNoTransactions); // so lets get it down to an integer
+                string avgNoTransactionsText = Convert.ToString(dblAvgNoTransactions);
+                string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
+                string blockReward = client.DownloadString("https://blockchain.info/q/bcperblock"); // current block reward
+                string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
+                string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
+                double dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
+                TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
+                string timeString = string.Format("{0:%m}m {0:%s}s", time);
+                string avgTimeBetweenBlocks = timeString;
+                string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
+                string btcInCirc = ConvertSatsToBitcoin(totalBTC).ToString();
+                string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
+                string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
+                string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
+                twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
+                return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
             }
             catch (WebException ex)
             {
@@ -1165,26 +1163,24 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/liquidity");
+                var data = JArray.Parse(response);
+
+                List<string> aliases = new List<string>();
+                List<string> capacities = new List<string>();
+                for (int i = 0; i < 10; i++)
                 {
-                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/liquidity");
-                    var data = JArray.Parse(response);
-
-                    List<string> aliases = new List<string>();
-                    List<string> capacities = new List<string>();
-                    for (int i = 0; i < 10; i++)
-                    {
-                        aliases.Add((string)data[i]["alias"]);
-                        string capacity = (string)data[i]["capacity"];
-                        capacity = ConvertSatsToBitcoin(capacity).ToString();
-                        double dblCapacity = Convert.ToDouble(capacity);
-                        dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
-                        capacity = Convert.ToString(dblCapacity);
-                        capacities.Add(capacity);
-                    }
-
-                    return (aliases, capacities);
+                    aliases.Add((string)data[i]["alias"]);
+                    string capacity = (string)data[i]["capacity"];
+                    capacity = ConvertSatsToBitcoin(capacity).ToString();
+                    double dblCapacity = Convert.ToDouble(capacity);
+                    dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
+                    capacity = Convert.ToString(dblCapacity);
+                    capacities.Add(capacity);
                 }
+
+                return (aliases, capacities);
             }
             catch (WebException ex)
             {
@@ -1226,21 +1222,19 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/connectivity");
+                var data = JArray.Parse(response);
+
+                List<string> aliases = new List<string>();
+                List<string> channels = new List<string>();
+                for (int i = 0; i < 10; i++)
                 {
-                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/rankings/connectivity");
-                    var data = JArray.Parse(response);
-
-                    List<string> aliases = new List<string>();
-                    List<string> channels = new List<string>();
-                    for (int i = 0; i < 10; i++)
-                    {
-                        aliases.Add((string)data[i]["alias"]);
-                        channels.Add((string)data[i]["channels"]);
-                    }
-
-                    return (aliases, channels);
+                    aliases.Add((string)data[i]["alias"]);
+                    channels.Add((string)data[i]["channels"]);
                 }
+
+                return (aliases, channels);
             }
             catch (WebException ex)
             {
@@ -1282,27 +1276,25 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/isp-ranking");
-                    var data = JObject.Parse(response);
-                    string clearnetCapacityString = Convert.ToString(data["clearnetCapacity"]);
-                    string clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
-                    double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
-                    dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
-                    clearnetCapacity = Convert.ToString(dblClearnetCapacity);
-                    string torCapacityString = Convert.ToString(data["torCapacity"]);
-                    string torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
-                    double dblTorCapacity = Convert.ToDouble(torCapacity);
-                    dblTorCapacity = Math.Round(dblTorCapacity, 2);
-                    torCapacity = Convert.ToString(dblTorCapacity);
-                    string unknownCapacityString = Convert.ToString(data["unknownCapacity"]);
-                    string unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
-                    double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
-                    dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
-                    unknownCapacity = Convert.ToString(dblUnknownCapacity);
-                    return (clearnetCapacity, torCapacity, unknownCapacity);
-                }
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/lightning/nodes/isp-ranking");
+                var data = JObject.Parse(response);
+                string clearnetCapacityString = Convert.ToString(data["clearnetCapacity"]);
+                string clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
+                double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
+                dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
+                clearnetCapacity = Convert.ToString(dblClearnetCapacity);
+                string torCapacityString = Convert.ToString(data["torCapacity"]);
+                string torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
+                double dblTorCapacity = Convert.ToDouble(torCapacity);
+                dblTorCapacity = Math.Round(dblTorCapacity, 2);
+                torCapacity = Convert.ToString(dblTorCapacity);
+                string unknownCapacityString = Convert.ToString(data["unknownCapacity"]);
+                string unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
+                double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
+                dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
+                unknownCapacity = Convert.ToString(dblUnknownCapacity);
+                return (clearnetCapacity, torCapacity, unknownCapacity);
             }
             catch (WebException ex)
             {
@@ -1344,33 +1336,28 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    var response = client.DownloadString("https://mempool.space/api/v1/lightning/statistics/latest");
-                    var data = JObject.Parse(response);
-                    var channelCount = (string)data["latest"]["channel_count"];
-                    var nodeCount = (string)data["latest"]["node_count"];
-                    string totalCapacityString = Convert.ToString(data["latest"]["total_capacity"]);
-                    string totalCapacity = ConvertSatsToBitcoin(totalCapacityString).ToString();
-                    double dblTotalCapacity = Convert.ToDouble(totalCapacity);
-                    dblTotalCapacity = Math.Round(dblTotalCapacity, 2);
-                    totalCapacity = Convert.ToString(dblTotalCapacity);
-                    var torNodes = (string)data["latest"]["tor_nodes"];
-                    var clearnetNodes = (string)data["latest"]["clearnet_nodes"];
-                    var unannouncedNodes = (string)data["latest"]["unannounced_nodes"];
-                    var avgCapacity = (string)data["latest"]["avg_capacity"];
-                    var avgFeeRate = (string)data["latest"]["avg_fee_rate"];
-                    var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
-                    var medCapacity = (string)data["latest"]["med_capacity"];
-                    var medFeeRate = (string)data["latest"]["med_fee_rate"];
-                    var medBaseeFeeMtokens = (string)data["latest"]["med_basee_fee_mtokens"];
-                    if (medBaseeFeeMtokens == null)
-                    {
-                        medBaseeFeeMtokens = "0";
-                    }
-                    var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
-                    return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
-                }
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/lightning/statistics/latest");
+                var data = JObject.Parse(response);
+                var channelCount = (string)data["latest"]["channel_count"];
+                var nodeCount = (string)data["latest"]["node_count"];
+                string totalCapacityString = Convert.ToString(data["latest"]["total_capacity"]);
+                string totalCapacity = ConvertSatsToBitcoin(totalCapacityString).ToString();
+                double dblTotalCapacity = Convert.ToDouble(totalCapacity);
+                dblTotalCapacity = Math.Round(dblTotalCapacity, 2);
+                totalCapacity = Convert.ToString(dblTotalCapacity);
+                var torNodes = (string)data["latest"]["tor_nodes"];
+                var clearnetNodes = (string)data["latest"]["clearnet_nodes"];
+                var unannouncedNodes = (string)data["latest"]["unannounced_nodes"];
+                var avgCapacity = (string)data["latest"]["avg_capacity"];
+                var avgFeeRate = (string)data["latest"]["avg_fee_rate"];
+                var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
+                var medCapacity = (string)data["latest"]["med_capacity"];
+                var medFeeRate = (string)data["latest"]["med_fee_rate"];
+                var medBaseeFeeMtokens = (string)data["latest"]["med_basee_fee_mtokens"];
+                medBaseeFeeMtokens ??= "0";
+                var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
+                return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
             }
             catch (WebException ex)
             {
@@ -1482,32 +1469,30 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
+                using WebClient client = new WebClient();
+                // LATEST BLOCK
+                string jsonurl = "https://blockchain.info/rawblock/";  // use this...
+                string blockNumberUrl = "https://blockchain.info/q/getblockcount";
+                string blocknumber = client.DownloadString(blockNumberUrl); //combined with the result of that (we can't rely on already knowing the latest block number)
+                string finalurl = jsonurl + blocknumber; // to create a url we can use to get the JSON of the latest block
+                string size;
+                var response3 = client.DownloadString(finalurl);
+                var data3 = JObject.Parse(response3);
+                var n_tx = (string)data3["n_tx"] + " transactions";  // number of transactions
+                var sizeInKB = ((double)data3["size"] / 1000); // size in bytes divided by 1000 to get kb
+                if (sizeInKB < 1024) // if less than 1MB
                 {
-                    // LATEST BLOCK
-                    string jsonurl = "https://blockchain.info/rawblock/";  // use this...
-                    string blockNumberUrl = "https://blockchain.info/q/getblockcount";
-                    string blocknumber = client.DownloadString(blockNumberUrl); //combined with the result of that (we can't rely on already knowing the latest block number)
-                    string finalurl = jsonurl + blocknumber; // to create a url we can use to get the JSON of the latest block
-                    string size;
-                    var response3 = client.DownloadString(finalurl);
-                    var data3 = JObject.Parse(response3);
-                    var n_tx = (string)data3["n_tx"] + " transactions";  // number of transactions
-                    var sizeInKB = ((double)data3["size"] / 1000); // size in bytes divided by 1000 to get kb
-                    if (sizeInKB < 1024) // if less than 1MB
-                    {
-                        size = sizeInKB + " KB block size";
-                    }
-                    else // if more than 1MB
-                    {
-                        size = Convert.ToString(Math.Round((sizeInKB / 1000), 2)) + "MB block size";
-                    }
-                    // NEXT DIFFICULTY ADJUSTMENT BLOCK
-                    var response4 = client.DownloadString("https://api.blockchain.info/stats");
-                    var data4 = JObject.Parse(response4);
-                    var nextretarget = (string)data4["nextretarget"];
-                    return (n_tx, size, nextretarget);
+                    size = sizeInKB + " KB block size";
                 }
+                else // if more than 1MB
+                {
+                    size = Convert.ToString(Math.Round((sizeInKB / 1000), 2)) + "MB block size";
+                }
+                // NEXT DIFFICULTY ADJUSTMENT BLOCK
+                var response4 = client.DownloadString("https://api.blockchain.info/stats");
+                var data4 = JObject.Parse(response4);
+                var nextretarget = (string)data4["nextretarget"];
+                return (n_tx, size, nextretarget);
             }
             catch (WebException ex)
             {
@@ -1550,25 +1535,23 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    // ATH & 24hr data
-                    var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
-                    var data5 = JArray.Parse(response5);
-                    var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
-                    var ath = (string)btcData["ath"];  // all time high value of btc in usd
-                    var athDate = (string)btcData["ath_date"]; // date of the all time high
-                    DateTime date = DateTime.Parse(athDate); // change it to dd MMM yyyy format
-                    string strATHDate = date.ToString("dd MMM yyyy");
-                    athDate = strATHDate;
-                    double doubleathDifference = (double)btcData["ath_change_percentage"]; // percentage change from ATH to multiple decimal places
-                    string formattedAthDifference = doubleathDifference.ToString("0.00"); // round it to 2 decimal places before sending it back
-                    string athDifference = Convert.ToString(formattedAthDifference);
+                using WebClient client = new WebClient();
+                // ATH & 24hr data
+                var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+                var data5 = JArray.Parse(response5);
+                var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
+                var ath = (string)btcData["ath"];  // all time high value of btc in usd
+                var athDate = (string)btcData["ath_date"]; // date of the all time high
+                DateTime date = DateTime.Parse(athDate); // change it to dd MMM yyyy format
+                string strATHDate = date.ToString("dd MMM yyyy");
+                athDate = strATHDate;
+                double doubleathDifference = (double)btcData["ath_change_percentage"]; // percentage change from ATH to multiple decimal places
+                string formattedAthDifference = doubleathDifference.ToString("0.00"); // round it to 2 decimal places before sending it back
+                string athDifference = Convert.ToString(formattedAthDifference);
 
-                    var twentyFourHourHigh = (string)btcData["high_24h"]; // highest value of btc in usd over last 24 hours
-                    var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
-                    return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
-                }
+                var twentyFourHourHigh = (string)btcData["high_24h"]; // highest value of btc in usd over last 24 hours
+                var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
+                return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
             }
             catch (WebException ex)
             {
@@ -1611,17 +1594,15 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    var response = client.DownloadString("https://api.blockchair.com/tools/halvening");
-                    var data = JObject.Parse(response);
-                    var halveningBlock = (string)data["data"]["bitcoin"]["halvening_block"];
-                    var halveningReward = (string)data["data"]["bitcoin"]["halvening_reward"];
-                    var halveningTime = (string)data["data"]["bitcoin"]["halvening_time"];
-                    var blocksLeft = (string)data["data"]["bitcoin"]["blocks_left"];
-                    var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
-                    return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
-                }
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://api.blockchair.com/tools/halvening");
+                var data = JObject.Parse(response);
+                var halveningBlock = (string)data["data"]["bitcoin"]["halvening_block"];
+                var halveningReward = (string)data["data"]["bitcoin"]["halvening_reward"];
+                var halveningTime = (string)data["data"]["bitcoin"]["halvening_time"];
+                var blocksLeft = (string)data["data"]["bitcoin"]["blocks_left"];
+                var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
+                return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
             }
             catch (WebException ex)
             {
@@ -1663,16 +1644,14 @@ namespace SATSuma
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    var response = client.DownloadString("https://api.blockchair.com/bitcoin/stats");
-                    var data = JObject.Parse(response);
-                    var hodling_addresses = (string)data["data"]["hodling_addresses"];
-                    var blocks_24h = (string)data["data"]["blocks_24h"];
-                    var nodes = (string)data["data"]["nodes"];
-                    var blockchain_size = (string)data["data"]["blockchain_size"];
-                    return (hodling_addresses, blocks_24h, nodes, blockchain_size);
-                }
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://api.blockchair.com/bitcoin/stats");
+                var data = JObject.Parse(response);
+                var hodling_addresses = (string)data["data"]["hodling_addresses"];
+                var blocks_24h = (string)data["data"]["blocks_24h"];
+                var nodes = (string)data["data"]["nodes"];
+                var blockchain_size = (string)data["data"]["blockchain_size"];
+                return (hodling_addresses, blocks_24h, nodes, blockchain_size);
             }
             catch (WebException ex)
             {
@@ -1714,28 +1693,26 @@ namespace SATSuma
         //---------------------- CONNECTING LINES BETWEEN FIELDS ON LIGHTNING DASHBOARD -------------------------------
         private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
         {
-            using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-            {
-                // Capacity connecting lines
-                e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorCapacity.Top + (lblTorCapacity.Height / 2), lblTorCapacity.Left, lblTorCapacity.Top + (lblTorCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2), lblUnknownCapacity.Left, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
-                // Node connecting lines
-                e.Graphics.DrawLine(pen, lblNodeCount.Right, lblNodeCount.Top + (lblNodeCount.Height / 2), lblTorNodes.Left, lblTorNodes.Top + (lblTorNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorNodes.Top + (lblTorNodes.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2), lblClearnetNodes.Left, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2), lblClearnetTorNodes.Left, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2), lblUnannouncedNodes.Left, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
-                // Channel connecting lines
-                e.Graphics.DrawLine(pen, lblChannelCount.Right, lblChannelCount.Top + (lblChannelCount.Height / 2), lblAverageCapacity.Left, lblAverageCapacity.Top + (lblAverageCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblChannelCount.Top + (lblChannelCount.Height / 2), (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2), lblAverageFeeRate.Left, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2), lblAverageBaseFeeMtokens.Left, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedCapacity.Top + (lblMedCapacity.Height / 2), lblMedCapacity.Left, lblMedCapacity.Top + (lblMedCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2), lblMedFeeRate.Left, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
-            }
+            using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+            // Capacity connecting lines
+            e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorCapacity.Top + (lblTorCapacity.Height / 2), lblTorCapacity.Left, lblTorCapacity.Top + (lblTorCapacity.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2), lblUnknownCapacity.Left, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
+            // Node connecting lines
+            e.Graphics.DrawLine(pen, lblNodeCount.Right, lblNodeCount.Top + (lblNodeCount.Height / 2), lblTorNodes.Left, lblTorNodes.Top + (lblTorNodes.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorNodes.Top + (lblTorNodes.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2), lblClearnetNodes.Left, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2), lblClearnetTorNodes.Left, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2));
+            e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2), lblUnannouncedNodes.Left, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
+            // Channel connecting lines
+            e.Graphics.DrawLine(pen, lblChannelCount.Right, lblChannelCount.Top + (lblChannelCount.Height / 2), lblAverageCapacity.Left, lblAverageCapacity.Top + (lblAverageCapacity.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblChannelCount.Top + (lblChannelCount.Height / 2), (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2), lblAverageFeeRate.Left, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2), lblAverageBaseFeeMtokens.Left, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedCapacity.Top + (lblMedCapacity.Height / 2), lblMedCapacity.Left, lblMedCapacity.Top + (lblMedCapacity.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2), lblMedFeeRate.Left, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2));
+            e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
         }
 #endregion
 
@@ -2167,173 +2144,237 @@ namespace SATSuma
         //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
         private async Task GetTransactionsForAddress(string addressString, string lastSeenTxId)
         {
-            var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, mempoolConfUnconfOrAllTx, lastSeenTxId);
-            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-            List<string> txIds = transactions.Select(t => t.txid).ToList();
-
-            // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-            if (transactions.Count > 0)
+            try
             {
-                if (transactions.Last().status.confirmed == "true") // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
-                {
-                    lastSeenTxId = transactions.Last().txid; // it was a confirmed tx so we can carry on the next api call from that point
-                }
-                else
-                {
-                    lastSeenTxId = ""; // If it was a mempool record then the next call (to confirmed tx's) will need a null txid to start from the beginning
-                }
-                lastSeenTxId = transactions.Last().txid;
-            }
+                var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, mempoolConfUnconfOrAllTx, lastSeenTxId);
+                var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                List<string> txIds = transactions.Select(t => t.Txid).ToList();
 
-            //LIST VIEW
-            listViewAddressTransactions.Items.Clear(); // remove any data that may be there already
-            listViewAddressTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewAddressTransactions, new object[] { true });
-
-            // Check if the column header already exists
-            if (listViewAddressTransactions.Columns.Count == 0)
-            {
-                // If not, add the column header
-                if (mempoolConfUnconfOrAllTx == "chain")
+                // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+                if (transactions.Count > 0)
                 {
-                    if (PartOfAnAllAddressTransactionsRequest)
+                    if (transactions.Last().Status.Confirmed == "true") // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
                     {
-                        listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                        lastSeenTxId = transactions.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
                     }
                     else
                     {
-                        listViewAddressTransactions.Columns.Add(" Transaction ID (confirmed)", 260);
+                        lastSeenTxId = ""; // If it was a mempool record then the next call (to confirmed tx's) will need a null txid to start from the beginning
                     }
-                }
-                if (mempoolConfUnconfOrAllTx == "mempool")
-                {
-                    listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
-                }
-                if (mempoolConfUnconfOrAllTx == "all")
-                {
-                    listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
-                }
-            }
-
-            // Add the block height column header
-            if (listViewAddressTransactions.Columns.Count == 1)
-            {
-                listViewAddressTransactions.Columns.Add("Block", 65);
-            }
-
-            // Add the balance change column header
-            if (listViewAddressTransactions.Columns.Count == 2)
-            {
-                listViewAddressTransactions.Columns.Add("Amount", 110);
-            }
-
-            // Add the status column header
-            if (listViewAddressTransactions.Columns.Count == 3)
-            {
-                listViewAddressTransactions.Columns.Add("Confs", 70);
-            }
-
-            // Add the items to the ListView
-            int counter = 0; // used to count rows in list as they're added
-            WebClient client2 = new WebClient();
-            string CurrentBlockHeightStringForCalc = client2.DownloadString("https://mempool.space/api/blocks/tip/height");
-
-            foreach (AddressTransactions transaction in transactions)
-            {
-                decimal balanceChange = 0; // will hold net result of transaction to this address
-                decimal balanceChangeVin = 0; // will hold net result of inputs to this address
-                decimal balanceChangeVout = 0; // will hold net result of outputs to this address
-                balanceChangeVout = (decimal)transaction.vout // value of all outputs where address is the provided address
-                    .Where(v => v.scriptpubkey_address == addressString)
-                    .Sum(v => v.value);
-                balanceChangeVin = (decimal)transaction.vin // value of all inputs where address is the provided address
-                    .Where(v => v.prevout.scriptpubkey_address == addressString)
-                    .Sum(v => v.prevout.value);
-                balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
-                string balanceChangeString = balanceChange.ToString();
-                balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
-                if (balanceChange >= 0)
-                {
-                    balanceChangeString = "+" + balanceChange.ToString("0.00000000"); // add a + for positive numbers
-                }
-                else
-                {
-                    balanceChangeString = balanceChange.ToString("0.00000000"); // - already there for negatives
+                    lastSeenTxId = transactions.Last().Txid;
                 }
 
-                ListViewItem item = new ListViewItem(transaction.txid); // create new row
-                if (transaction.status.confirmed == "true")
+                //LIST VIEW
+                listViewAddressTransactions.Invoke((MethodInvoker)delegate
                 {
-                    item.SubItems.Add(transaction.status.block_height.ToString()); // add block height
-                }
-                else
-                {
-                    item.SubItems.Add("------".ToString()); // unconfirmed, so no block height
-                }
+                    listViewAddressTransactions.Items.Clear(); // remove any data that may be there already
+                });
+                listViewAddressTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewAddressTransactions, new object[] { true });
 
-                item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
-
-                if (transaction.status.confirmed == "true")
+                // Check if the column header already exists
+                if (listViewAddressTransactions.Columns.Count == 0)
                 {
-                    decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
-                    decimal TransactionBlockForCalc = transaction.status.block_height;
-                    decimal Confirmations = (CurrentBlockForCalc - TransactionBlockForCalc) + 1;
-                    item.SubItems.Add(Confirmations.ToString()); // and confirmed status
-                }
-                else
-                {
-                    item.SubItems.Add("---".ToString()); // unconfirmed, so no confirmations
-                }
-
-                listViewAddressTransactions.Items.Add(item); // add row
-
-                counter++; // increment rows for this batch
-                TotalAddressTransactionRowsAdded++; // increment all rows
-
-                if (TotalAddressTransactionRowsAdded <= 25) // less than 25 transactions in all
-                {
-                    btnFirstAddressTransaction.Visible = false; // so this won't be needed
-                }
-                else
-                {
-                    if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                    // If not, add the column header
+                    if (mempoolConfUnconfOrAllTx == "chain")
                     {
-                        btnFirstAddressTransaction.Visible = true;
+                        if (PartOfAnAllAddressTransactionsRequest)
+                        {
+                            listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                            {
+                                listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                            });
+                        }
+                        else
+                        {
+                            listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                            {
+                                listViewAddressTransactions.Columns.Add(" Transaction ID (confirmed)", 260);
+                            });
+                        }
+                    }
+                    if (mempoolConfUnconfOrAllTx == "mempool")
+                    {
+                        listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                        {
+                            listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
+                        });
+                    }
+                    if (mempoolConfUnconfOrAllTx == "all")
+                    {
+                        listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                        {
+                            listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                        });
                     }
                 }
 
-                if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblAddressConfirmedTransactionCount.Text) // we've shown all the TXs
+                // Add the block height column header
+                if (listViewAddressTransactions.Columns.Count == 1)
                 {
-                    btnNextAddressTransactions.Visible = false; // so we won't need this
+                    listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressTransactions.Columns.Add("Block", 65);
+                    });
+                }
+
+                // Add the balance change column header
+                if (listViewAddressTransactions.Columns.Count == 2)
+                {
+                    listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressTransactions.Columns.Add("Amount", 110);
+                    });
+                }
+
+                // Add the status column header
+                if (listViewAddressTransactions.Columns.Count == 3)
+                {
+                    listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressTransactions.Columns.Add("Confs", 70);
+                    });
+                }
+
+                // Add the items to the ListView
+                int counter = 0; // used to count rows in list as they're added
+                WebClient client2 = new WebClient();
+                string CurrentBlockHeightStringForCalc = client2.DownloadString("https://mempool.space/api/blocks/tip/height");
+
+                foreach (AddressTransactions transaction in transactions)
+                {
+                    decimal balanceChange = 0; // will hold net result of transaction to this address
+                    decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                    decimal balanceChangeVout = 0; // will hold net result of outputs to this address
+                    balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                        .Where(v => v.Scriptpubkey_address == addressString)
+                        .Sum(v => v.Value);
+                    balanceChangeVin = (decimal)transaction.Vin // value of all inputs where address is the provided address
+                        .Where(v => v.Prevout.Scriptpubkey_address == addressString)
+                        .Sum(v => v.Prevout.Value);
+                    balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
+                    string balanceChangeString = balanceChange.ToString();
+                    balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
+                    if (balanceChange >= 0)
+                    {
+                        balanceChangeString = "+" + balanceChange.ToString("0.00000000"); // add a + for positive numbers
+                    }
+                    else
+                    {
+                        balanceChangeString = balanceChange.ToString("0.00000000"); // - already there for negatives
+                    }
+
+                    ListViewItem item = new ListViewItem(transaction.Txid); // create new row
+                    if (transaction.Status.Confirmed == "true")
+                    {
+                        item.SubItems.Add(transaction.Status.Block_height.ToString()); // add block height
+                    }
+                    else
+                    {
+                        item.SubItems.Add("------".ToString()); // unconfirmed, so no block height
+                    }
+
+                    item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
+
+                    if (transaction.Status.Confirmed == "true")
+                    {
+                        decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
+                        decimal TransactionBlockForCalc = transaction.Status.Block_height;
+                        decimal Confirmations = (CurrentBlockForCalc - TransactionBlockForCalc) + 1;
+                        item.SubItems.Add(Confirmations.ToString()); // and confirmed status
+                    }
+                    else
+                    {
+                        item.SubItems.Add("---".ToString()); // unconfirmed, so no confirmations
+                    }
+
+                    listViewAddressTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressTransactions.Items.Add(item); // add row
+                    });
+
+                    counter++; // increment rows for this batch
+                    TotalAddressTransactionRowsAdded++; // increment all rows
+
+                    if (TotalAddressTransactionRowsAdded <= 25) // less than 25 transactions in all
+                    {
+                        btnFirstAddressTransaction.Visible = false; // so this won't be needed
+                    }
+                    else
+                    {
+                        if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                        {
+                            btnFirstAddressTransaction.Visible = true;
+                        }
+                    }
+
+                    if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblAddressConfirmedTransactionCount.Text) // we've shown all the TXs
+                    {
+                        btnNextAddressTransactions.Visible = false; // so we won't need this
+                    }
+                    else
+                    {
+                        if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                        {
+                            btnNextAddressTransactions.Visible = true;
+                        }
+                    }
+
+                    if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here next time.
+                    {
+                        break;
+                    }
+                }
+                if (counter > 0)
+                {
+                    lblAddressTXPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblAddressConfirmedTransactionCount.Text;
+                    });
                 }
                 else
                 {
-                    if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                    lblAddressTXPositionInList.Invoke((MethodInvoker)delegate
                     {
-                        btnNextAddressTransactions.Visible = true;
-                    }
+                        lblAddressTXPositionInList.Text = "No transactions to display";
+                    });
                 }
-
-                if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here next time.
+                if (mempoolConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
                 {
-                    break;
+                    mempoolConfUnconfOrAllTx = "chain";
+                }
+                // set focus
+                if (btnNextAddressTransactions.Visible && btnNextAddressTransactions.Enabled)
+                {
+                    btnNextAddressTransactions.Focus();
                 }
             }
-            if (counter > 0)
+            catch (WebException ex)
             {
-                lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblAddressConfirmedTransactionCount.Text;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForAddress, Web exception: " + ex.Message;
+                });
             }
-            else
+            catch (HttpRequestException ex)
             {
-                lblAddressTXPositionInList.Text = "No transactions to display";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForAddress, HTTP Request error: " + ex.Message;
+                });
             }
-            if (mempoolConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
+            catch (JsonException ex)
             {
-                mempoolConfUnconfOrAllTx = "chain";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForAddress, JSON parsing error: " + ex.Message;
+                });
             }
-            // set focus
-            if (btnNextAddressTransactions.Visible && btnNextAddressTransactions.Enabled)
+            catch (Exception ex)
             {
-                btnNextAddressTransactions.Focus();
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForAddress: " + ex.Message;
+                });
             }
         }
 
@@ -2343,7 +2384,7 @@ namespace SATSuma
             DisableEnableButtons("disable"); // disable buttons during operation
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
-            var lastSeenTxId = "";
+            string lastSeenTxId;
             if (listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].SubItems[1].Text == "------")
             {
                 lastSeenTxId = ""; // last seen transaction was unconfirmed, so next call will be for confirmed TXs, starting from the first
@@ -2382,7 +2423,7 @@ namespace SATSuma
             DisableEnableLoadingAnimation("disable"); // stop the loading animation
         }
 
-        private void btnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
+        private void BtnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = true;
@@ -2395,12 +2436,21 @@ namespace SATSuma
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch unconfirmed transactions
             string temp = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            textboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = "";
+            });
+            listViewAddressTransactions.Invoke((MethodInvoker)delegate
+            {
+                listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
+            });
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = temp;
+            });
         }
 
-        private void btnShowConfirmedTXForAddress_Click(object sender, EventArgs e)
+        private void BtnShowConfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = false;
             btnShowAllTX.Enabled = true;
@@ -2411,12 +2461,21 @@ namespace SATSuma
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch confirmed transactions
             string temp = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            textboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = "";
+            });
+            listViewAddressTransactions.Invoke((MethodInvoker)delegate
+            {
+                listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
+            });
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = temp;
+            });
         }
 
-        private void btnShowAllTXForAddress_Click(object sender, EventArgs e)
+        private void BtnShowAllTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = false;
@@ -2427,9 +2486,18 @@ namespace SATSuma
             BtnViewTransactionFromAddress.Visible = false;
             // force a text box (address) change event to fetch all (confirmed and unconfirmed) transactions
             string temp = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
-            textboxSubmittedAddress.Text = temp;
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = "";
+            });
+            listViewAddressTransactions.Invoke((MethodInvoker)delegate
+            {
+                listViewAddressTransactions.Columns.Clear(); // force headings to be redrawn
+            });
+            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            {
+                textboxSubmittedAddress.Text = temp;
+            });
         }
 
         private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
@@ -2440,10 +2508,44 @@ namespace SATSuma
             // Get the second subitem in the selected item 
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
             // Set the text of the textBoxSubmittedBlockNumber control
-            textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
-            LookupBlock();
+            textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+            {
+                textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+            });
+            try
+            {
+                LookupBlock();
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewBlockFromAddress, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewBlockFromAddress, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewBlockFromAddress, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewBlockFromAddress: " + ex.Message;
+                });
+            }
             //show the block screen
-            btnMenuBlock_Click(sender, e);
+            BtnMenuBlock_Click(sender, e);
         }
 
         private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
@@ -2454,30 +2556,66 @@ namespace SATSuma
             // Get the first subitem in the selected item 
             string TransactionIDFromRow = selectedItem.SubItems[0].Text;
             // Set the text of the textBoxTransactionID control
-            textBoxTransactionID.Text = TransactionIDFromRow;
-            LookupTransaction();
+            textBoxTransactionID.Invoke((MethodInvoker)delegate
+            {
+                textBoxTransactionID.Text = TransactionIDFromRow;
+            });
+            try
+            {
+                LookupTransaction();
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click: " + ex.Message;
+                });
+            }
             //show the transaction screen
-            btnMenuTransaction_Click(sender, e);
+            BtnMenuTransaction_Click(sender, e);
         }
 
         //=============================================================================================================
         //--------------- OVERRIDE COLOURS FOR LISTVIEW HEADINGS ------------------------------------------------------
-        private void listViewAddressTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void ListViewAddressTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             Color headerColor = Color.FromArgb(50, 50, 50);
             SolidBrush brush = new SolidBrush(headerColor);
             e.Graphics.FillRectangle(brush, e.Bounds);
             // Change text color and alignment
             SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
         }
 
         //=============================================================================================================
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
-        private void listViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             bool anySelected = false;
             foreach (ListViewItem item in listViewAddressTransactions.Items)
@@ -2487,8 +2625,14 @@ namespace SATSuma
                     item.ForeColor = Color.White; // txID
                     item.SubItems[1].ForeColor = Color.White; //Block 
                     anySelected = true;
-                    BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
-                    BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
+                    {
+                        BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    });
+                    BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
+                    {
+                        BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                    });
                 }
                 else
                 {
@@ -2542,7 +2686,7 @@ namespace SATSuma
 
         //=============================================================================================================
         //------------------ LIMIT MINIMUM WIDTH OF LISTVIEW COLUMNS --------------------------------------------------
-        private void listViewAddressTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void ListViewAddressTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -2556,8 +2700,15 @@ namespace SATSuma
                     e.Cancel = true;
                     e.NewWidth = 460;
                 }
-                BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - 6, BtnViewTransactionFromAddress.Location.Y);
-                BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + 2, BtnViewBlockFromAddress.Location.Y);
+
+                BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
+                {
+                    BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - 6, BtnViewTransactionFromAddress.Location.Y);
+                });
+                BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
+                {
+                    BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + 2, BtnViewBlockFromAddress.Location.Y);
+                });
             }
 
             if (e.ColumnIndex == 1)
@@ -2622,118 +2773,176 @@ namespace SATSuma
 
         private void TextBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Get the maximum allowed value for the block number
-            int maxValue = int.Parse(lblBlockNumber.Text);
-
-            // Allow only digits, backspace, delete, and enter
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
+            try
             {
-                e.Handled = true;
-                return;
-            }
+                // Get the maximum allowed value for the block number
+                int maxValue = int.Parse(lblBlockNumber.Text);
 
-            // Handle backspace
-            if (e.KeyChar == '\b')
-            {
-                // If there is a selection, delete it
-                if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                // Allow only digits, backspace, delete, and enter
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
                 {
-                    int start = textBoxSubmittedBlockNumber.SelectionStart;
-                    int length = textBoxSubmittedBlockNumber.SelectionLength;
-                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
-                    textBoxSubmittedBlockNumber.SelectionStart = start;
-                }
-                // If the cursor is not at the beginning, delete the character to the left of the cursor
-                else if (textBoxSubmittedBlockNumber.SelectionStart > 0)
-                {
-                    int pos = textBoxSubmittedBlockNumber.SelectionStart - 1;
-                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
-                    textBoxSubmittedBlockNumber.SelectionStart = pos;
+                    e.Handled = true;
+                    return;
                 }
 
-                e.Handled = true;
-                return;
-            }
-
-            // Handle delete
-            if (e.KeyChar == '\u007F')
-            {
-                // If there is a selection, delete it
-                if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                // Handle backspace
+                if (e.KeyChar == '\b')
                 {
-                    int start = textBoxSubmittedBlockNumber.SelectionStart;
-                    int length = textBoxSubmittedBlockNumber.SelectionLength;
-                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
-                    textBoxSubmittedBlockNumber.SelectionStart = start;
+                    // If there is a selection, delete it
+                    if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                    {
+                        int start = textBoxSubmittedBlockNumber.SelectionStart;
+                        int length = textBoxSubmittedBlockNumber.SelectionLength;
+                        textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
+                            textBoxSubmittedBlockNumber.SelectionStart = start;
+                        });
+                    }
+                    // If the cursor is not at the beginning, delete the character to the left of the cursor
+                    else if (textBoxSubmittedBlockNumber.SelectionStart > 0)
+                    {
+                        int pos = textBoxSubmittedBlockNumber.SelectionStart - 1;
+                        textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
+                            textBoxSubmittedBlockNumber.SelectionStart = pos;
+                        });
+                    }
+
+                    e.Handled = true;
+                    return;
                 }
-                // If the cursor is not at the end, delete the character to the right of the cursor
-                else if (textBoxSubmittedBlockNumber.SelectionStart < textBoxSubmittedBlockNumber.Text.Length)
+
+                // Handle delete
+                if (e.KeyChar == '\u007F')
                 {
-                    int pos = textBoxSubmittedBlockNumber.SelectionStart;
-                    textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
-                    textBoxSubmittedBlockNumber.SelectionStart = pos;
+                    // If there is a selection, delete it
+                    if (textBoxSubmittedBlockNumber.SelectionLength > 0)
+                    {
+                        int start = textBoxSubmittedBlockNumber.SelectionStart;
+                        int length = textBoxSubmittedBlockNumber.SelectionLength;
+                        textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(start, length);
+                            textBoxSubmittedBlockNumber.SelectionStart = start;
+                        });
+                    }
+                    // If the cursor is not at the end, delete the character to the right of the cursor
+                    else if (textBoxSubmittedBlockNumber.SelectionStart < textBoxSubmittedBlockNumber.Text.Length)
+                    {
+                        int pos = textBoxSubmittedBlockNumber.SelectionStart;
+                        textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxSubmittedBlockNumber.Text = textBoxSubmittedBlockNumber.Text.Remove(pos, 1);
+                            textBoxSubmittedBlockNumber.SelectionStart = pos;
+                        });
+                    }
+
+                    e.Handled = true;
+                    return;
                 }
 
-                e.Handled = true;
-                return;
-            }
+                // Handle enter
+                if (e.KeyChar == '\r')
+                {
+                    // Submit button was pressed
+                    LookupBlock();
+                    e.Handled = true;
+                    return;
+                }
 
-            // Handle enter
-            if (e.KeyChar == '\r')
+                // Construct the new value of the textbox by appending the pressed character
+                string valueString = textBoxSubmittedBlockNumber.Text + e.KeyChar.ToString();
+
+                // Handle the case where the textbox is empty by setting it to 0
+                if (string.IsNullOrEmpty(textBoxSubmittedBlockNumber.Text.Trim()))
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = "0";
+                        textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle non-numeric input
+                if (!int.TryParse(valueString, out int value))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle negative input by setting the textbox to 0
+                if (value < 0)
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = "0";
+                        textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
+                if (value > maxValue)
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = maxValue.ToString();
+                        textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = value.ToString();
+                    textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
+                });
+                e.Handled = true;
+            }
+            catch (WebException ex)
             {
-                // Submit button was pressed
-                LookupBlock();
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, Web exception: " + ex.Message;
+                });
             }
-
-            // Construct the new value of the textbox by appending the pressed character
-            string valueString = textBoxSubmittedBlockNumber.Text + e.KeyChar.ToString();
-
-            // Handle the case where the textbox is empty by setting it to 0
-            if (string.IsNullOrEmpty(textBoxSubmittedBlockNumber.Text.Trim()))
+            catch (HttpRequestException ex)
             {
-                textBoxSubmittedBlockNumber.Text = "0";
-                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, HTTP Request error: " + ex.Message;
+                });
             }
-
-            // Handle non-numeric input
-            if (!int.TryParse(valueString, out int value))
+            catch (JsonException ex)
             {
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, JSON parsing error: " + ex.Message;
+                });
             }
-
-            // Handle negative input by setting the textbox to 0
-            if (value < 0)
+            catch (Exception ex)
             {
-                textBoxSubmittedBlockNumber.Text = "0";
-                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress: " + ex.Message;
+                });
             }
-
-            // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
-            if (value > maxValue)
-            {
-                textBoxSubmittedBlockNumber.Text = maxValue.ToString();
-                textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
-                e.Handled = true;
-                return;
-            }
-
-            textBoxSubmittedBlockNumber.Text = value.ToString();
-            textBoxSubmittedBlockNumber.SelectionStart = textBoxSubmittedBlockNumber.Text.Length;
-            e.Handled = true;
         }
 
-        private void textBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
+        private void TextBoxSubmittedBlockNumber_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBoxSubmittedBlockNumber.Text.Trim()))
             {
-                textBoxSubmittedBlockNumber.Text = "0";
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = "0";
+                });
                 btnPreviousBlock.Enabled = false;
                 btnNextBlock.Enabled = true;
             }
@@ -2746,240 +2955,556 @@ namespace SATSuma
 
         private async void LookupBlock()
         {
-            if (textBoxSubmittedBlockNumber.Text == "0")
+            try
             {
-                btnPreviousBlock.Enabled = false;
-            }
-            else
-            {
-                btnPreviousBlock.Enabled = true;
-            }
-            if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text)
-            {
-                btnNextBlock.Enabled = false;
-            }
-            else
-            {
-                btnNextBlock.Enabled = true;
-            }
-            TotalBlockTransactionRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
-            btnViewTransactionFromBlock.Visible = false;
-            int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight);
-            // display block hash
-            using (WebClient client = new WebClient())
-            {
-                string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
-                string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
-                lblBlockHash.Text = BlockHash;
-            }
+                if (textBoxSubmittedBlockNumber.Text == "0")
+                {
+                    btnPreviousBlock.Enabled = false;
+                }
+                else
+                {
+                    btnPreviousBlock.Enabled = true;
+                }
+                if (textBoxSubmittedBlockNumber.Text == lblBlockNumber.Text)
+                {
+                    btnNextBlock.Enabled = false;
+                }
+                else
+                {
+                    btnNextBlock.Enabled = true;
+                }
+                TotalBlockTransactionRowsAdded = 0; // _TextChanged has occurred so even if the submitted block hasn't changed, start again
+                btnViewTransactionFromBlock.Visible = false;
+                int.TryParse(textBoxSubmittedBlockNumber.Text, out var submittedBlockHeight);
+                // display block hash
+                using (WebClient client = new WebClient())
+                {
+                    string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
+                    string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
+                    lblBlockHash.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockHash.Text = BlockHash;
+                    });
+                }
 
-            var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
-            await GetFifteenBlocks(blockNumber);
-            string BlockHashToGetTransactionsFor = lblBlockHash.Text;
-            await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            DisableEnableButtons("enable"); // enable buttons after operation is complete
+                var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+                await GetFifteenBlocks(blockNumber);
+                string BlockHashToGetTransactionsFor = lblBlockHash.Text;
+                await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableButtons("enable"); // enable buttons after operation is complete
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlock, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlock, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlock, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlock: " + ex.Message;
+                });
+            }
         }
 
         private async Task GetFifteenBlocks(string blockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
         {
-            var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
-            var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-            lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].tx_count);
-            long sizeInBytes = blocks[0].size;
-            string sizeString; // convert display to bytes/kb/mb accordingly
-            if (sizeInBytes < 1000)
+            try
             {
-                sizeString = $"{sizeInBytes} bytes";
+                var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
+                var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                lblNumberOfTXInBlock.Invoke((MethodInvoker)delegate
+                {
+                    lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].Tx_count);
+                });
+                long sizeInBytes = blocks[0].Size;
+                string sizeString; // convert display to bytes/kb/mb accordingly
+                if (sizeInBytes < 1000)
+                {
+                    sizeString = $"{sizeInBytes} bytes";
+                }
+                else if (sizeInBytes < 1000 * 1000)
+                {
+                    double sizeInKB = (double)sizeInBytes / 1000;
+                    sizeString = $"{sizeInKB:N2} KB";
+                }
+                else
+                {
+                    double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                    sizeString = $"{sizeInMB:N2} MB";
+                }
+                lblSizeOfBlock.Invoke((MethodInvoker)delegate
+                {
+                    lblSizeOfBlock.Text = sizeString;
+                });
+                string strWeight = Convert.ToString(blocks[0].Weight);
+                decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
+                string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
+                lblBlockWeight.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockWeight.Text = strFormattedWeight;
+                });
+                string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
+                TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
+                lblTotalFees.Invoke((MethodInvoker)delegate
+                {
+                    lblTotalFees.Text = TotalBlockFees;
+                });
+                long nonceLong = Convert.ToInt64(blocks[0].Nonce);
+                lblNonce.Invoke((MethodInvoker)delegate
+                {
+                    lblNonce.Text = "0x" + nonceLong.ToString("X");
+                });
+                string Reward = Convert.ToString(blocks[0].Extras.Reward);
+                lblReward.Invoke((MethodInvoker)delegate
+                {
+                    lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+                });
+                lblBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
+                });
+                lblBlockAverageFee.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
+                });
+                lblMiner.Invoke((MethodInvoker)delegate
+                {
+                    lblMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                });
+                lblBlockTime.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
+                });
             }
-            else if (sizeInBytes < 1000 * 1000)
+            catch (WebException ex)
             {
-                double sizeInKB = (double)sizeInBytes / 1000;
-                sizeString = $"{sizeInKB:N2} KB";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocks, Web exception: " + ex.Message;
+                });
             }
-            else
+            catch (HttpRequestException ex)
             {
-                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                sizeString = $"{sizeInMB:N2} MB";
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocks, HTTP Request error: " + ex.Message;
+                });
             }
-            lblSizeOfBlock.Text = sizeString;
-            string strWeight = Convert.ToString(blocks[0].weight);
-            decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
-            string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
-            lblBlockWeight.Text = strFormattedWeight;
-            string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
-            TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
-            lblTotalFees.Text = TotalBlockFees;
-            long nonceLong = Convert.ToInt64(blocks[0].nonce);
-
-            lblNonce.Text = "0x" + nonceLong.ToString("X");
-            string Reward = Convert.ToString(blocks[0].extras.reward);
-            lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-            lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
-            lblBlockAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
-            lblMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
-            lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocks, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocks: " + ex.Message;
+                });
+            }
         }
 
         private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
         {
-            var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
-            var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
-            List<string> txIds = transactions.Select(t => t.txid).ToList();
-
-            // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-            if (txIds.Count > 0)
+            try
             {
-                lastSeenBlockTransaction = txIds.Last();
-            }
+                var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
+                var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
+                List<string> txIds = transactions.Select(t => t.Txid).ToList();
 
-            //LIST VIEW
-            listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
-            listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
-
-            // Check if the column header already exists
-            if (listViewBlockTransactions.Columns.Count == 0)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
-            }
-
-            if (listViewBlockTransactions.Columns.Count == 1)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add("Fee", 70);
-            }
-
-            if (listViewBlockTransactions.Columns.Count == 2)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add("I/P", 40);
-            }
-            if (listViewBlockTransactions.Columns.Count == 3)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add("O/P", 40);
-            }
-            if (listViewBlockTransactions.Columns.Count == 4)
-            {
-                // If not, add the column header
-                listViewBlockTransactions.Columns.Add("Amount", 100);
-            }
-            // Add the items to the ListView
-            int counter = 0; // used to count rows in list as they're added
-
-            foreach (var blockTransaction in transactions)
-            {
-                ListViewItem item = new ListViewItem(blockTransaction.txid); // create new row
-                item.SubItems.Add(blockTransaction.fee.ToString());
-                item.SubItems.Add(blockTransaction.vin.Count.ToString()); // number of inputs
-                item.SubItems.Add(blockTransaction.vout.Count.ToString()); // number of outputs
-                decimal totalValue = blockTransaction.vout.Sum(v => decimal.Parse(v.value)); // sum of outputs
-                totalValue = ConvertSatsToBitcoin(totalValue.ToString());
-                item.SubItems.Add(totalValue.ToString());
-                listViewBlockTransactions.Items.Add(item); // add row
-
-                counter++; // increment rows for this batch
-                TotalBlockTransactionRowsAdded++; // increment all rows
-
-                if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
+                // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+                if (txIds.Count > 0)
                 {
-                    btnPreviousBlockTransactions.Visible = false; // so this won't be needed
+                    lastSeenBlockTransaction = txIds.Last();
+                }
+
+                //LIST VIEW
+                listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                {
+                    listViewBlockTransactions.Items.Clear(); // remove any data that may be there already
+                });
+                listViewBlockTransactions.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockTransactions, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewBlockTransactions.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
+                    });
+                }
+
+                if (listViewBlockTransactions.Columns.Count == 1)
+                {
+                    // If not, add the column header
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Columns.Add("Fee", 70);
+                    });
+                }
+
+                if (listViewBlockTransactions.Columns.Count == 2)
+                {
+                    // If not, add the column header
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Columns.Add("I/P", 40);
+                    });
+                }
+                if (listViewBlockTransactions.Columns.Count == 3)
+                {
+                    // If not, add the column header
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Columns.Add("O/P", 40);
+                    });
+                }
+                if (listViewBlockTransactions.Columns.Count == 4)
+                {
+                    // If not, add the column header
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Columns.Add("Amount", 100);
+                    });
+                }
+                // Add the items to the ListView
+                int counter = 0; // used to count rows in list as they're added
+
+                foreach (var blockTransaction in transactions)
+                {
+                    ListViewItem item = new ListViewItem(blockTransaction.Txid); // create new row
+                    item.SubItems.Add(blockTransaction.Fee.ToString());
+                    item.SubItems.Add(blockTransaction.Vin.Count.ToString()); // number of inputs
+                    item.SubItems.Add(blockTransaction.Vout.Count.ToString()); // number of outputs
+                    decimal totalValue = blockTransaction.Vout.Sum(v => decimal.Parse(v.Value)); // sum of outputs
+                    totalValue = ConvertSatsToBitcoin(totalValue.ToString());
+                    item.SubItems.Add(totalValue.ToString());
+                    listViewBlockTransactions.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockTransactions.Items.Add(item); // add row
+                    });
+
+                    counter++; // increment rows for this batch
+                    TotalBlockTransactionRowsAdded++; // increment all rows
+
+                    if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
+                    {
+                        btnPreviousBlockTransactions.Visible = false; // so this won't be needed
+                    }
+                    else
+                    {
+                        btnPreviousBlockTransactions.Visible = true;
+                    }
+
+                    if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
+                    {
+                        btnNextBlockTransactions.Visible = false; // so we won't need this
+                    }
+                    else
+                    {
+                        btnNextBlockTransactions.Visible = true;
+                    }
+
+                    if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
+                    {
+                        break;
+                    }
+                }
+                if (counter > 0)
+                {
+                    lblBlockTXPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
+                    });
                 }
                 else
                 {
-                    btnPreviousBlockTransactions.Visible = true;
-                }
-
-                if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
-                {
-                    btnNextBlockTransactions.Visible = false; // so we won't need this
-                }
-                else
-                {
-                    btnNextBlockTransactions.Visible = true;
-                }
-
-                if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
-                {
-                    break;
+                    lblBlockTXPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockTXPositionInList.Text = "No transactions to display"; // this can't really happen as there will always be a coinbase transaction
+                    });
                 }
             }
-            if (counter > 0)
+            catch (WebException ex)
             {
-                lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
-            }
-            else
-            {
-                lblBlockTXPositionInList.Text = "No transactions to display"; // this can't really happen as there will always be a coinbase transaction
-            }
-        }
-
-        private async void btnNextBlockTransactions_Click(object sender, EventArgs e)
-        {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
-            var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-            // Get the last seen transaction ID from the list view
-            var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
-            // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-            await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            btnViewTransactionFromBlock.Visible = false;
-        }
-
-        private async void btnPreviousBlockTransactions_Click(object sender, EventArgs e)
-        {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
-            var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-            // Get the last seen transaction ID from the list view
-            TotalBlockTransactionRowsAdded = TotalBlockTransactionRowsAdded - 50;
-            var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
-            // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-            await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            btnViewTransactionFromBlock.Visible = false;
-        }
-
-        private void btnPreviousBlock_Click(object sender, EventArgs e) // decrease block number by 1 and populate block data
-        {
-            long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
-            textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber - 1);
-            LookupBlock();
-        }
-
-        private void btnNextBlock_Click(object sender, EventArgs e) // increase block number by 1 and populate block data
-        {
-            long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
-            textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber + 1);
-            LookupBlock();
-        }
-
-        private void listViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            bool anySelected = false;
-            foreach (ListViewItem item in listViewBlockTransactions.Items)
-            {
-                if (item.Selected)
+                lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
-                    item.ForeColor = Color.White; // txID
-                    anySelected = true;
-                    btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y - 2);
-                }
-                else
-                {
-                    item.ForeColor = Color.FromArgb(255, 153, 0); //txID
-                }
+                    lblErrorMessage.Text = "GetTransactionsForBlock, Web exception: " + ex.Message;
+                });
             }
-            btnViewTransactionFromBlock.Visible = anySelected;
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForBlock, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForBlock, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransactionsForBlock: " + ex.Message;
+                });
+            }
         }
 
-        private void listViewBlockTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private async void BtnNextBlockTransactions_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+                var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
+                                                   // Get the last seen transaction ID from the list view
+                var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
+                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
+                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                btnViewTransactionFromBlock.Visible = false;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlockTransactions_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private async void BtnPreviousBlockTransactions_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+                var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
+                                                   // Get the last seen transaction ID from the list view
+                TotalBlockTransactionRowsAdded -= 50;
+                var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
+                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
+                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                btnViewTransactionFromBlock.Visible = false;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private void BtnPreviousBlock_Click(object sender, EventArgs e) // decrease block number by 1 and populate block data
+        {
+            try
+            {
+                long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber - 1);
+                });
+                LookupBlock();
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlock_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlock_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlock_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnPreviousBlock_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private void BtnNextBlock_Click(object sender, EventArgs e) // increase block number by 1 and populate block data
+        {
+            try
+            {
+                long CurrentSubmittedBlockNumber = Convert.ToInt32(textBoxSubmittedBlockNumber.Text);
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = Convert.ToString(CurrentSubmittedBlockNumber + 1);
+                });
+                LookupBlock();
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlock_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlock_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlock_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNextBlock_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private void ListViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewBlockTransactions.Items)
+                {
+                    if (item.Selected)
+                    {
+                            item.ForeColor = Color.White; // txID
+                        btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y - 2);
+                        });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                    }
+                }
+                btnViewTransactionFromBlock.Visible = anySelected;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged: " + ex.Message;
+                });
+            }
+        }
+
+        private void ListViewBlockTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -2993,7 +3518,10 @@ namespace SATSuma
                     e.Cancel = true;
                     e.NewWidth = 460;
                 }
-                btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - 6, btnViewTransactionFromBlock.Location.Y);
+                btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
+                {
+                    btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - 6, btnViewTransactionFromBlock.Location.Y);
+                });
             }
 
             if (e.ColumnIndex == 1)
@@ -3030,20 +3558,22 @@ namespace SATSuma
             }
         }
 
-        private void listViewBlockTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void ListViewBlockTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             Color headerColor = Color.FromArgb(50, 50, 50);
             SolidBrush brush = new SolidBrush(headerColor);
             e.Graphics.FillRectangle(brush, e.Bounds);
             // Change text color and alignment
             SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
         }
 
-        private void listViewBlockTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void ListViewBlockTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
 
@@ -3081,321 +3611,550 @@ namespace SATSuma
             }
         }
 
-        private void btnViewTransactionFromBlock_Click(object sender, EventArgs e)
+        private void BtnViewTransactionFromBlock_Click(object sender, EventArgs e)
         {
-            //assign TX ID to text box on transaction panel
-            // Get the selected item
-            ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
-            // Get the first subitem in the selected item 
-            string TransactionIDFromRow = selectedItem.SubItems[0].Text;
-            // Set the text of the textBoxTransactionID control
-            textBoxTransactionID.Text = TransactionIDFromRow;
-            LookupTransaction();
-            //show the transaction screen
-            btnMenuTransaction_Click(sender, e);
+            try
+            {
+                //assign TX ID to text box on transaction panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
+                // Get the first subitem in the selected item 
+                string TransactionIDFromRow = selectedItem.SubItems[0].Text;
+                // Set the text of the textBoxTransactionID control
+                textBoxTransactionID.Invoke((MethodInvoker)delegate
+                {
+                    textBoxTransactionID.Text = TransactionIDFromRow;
+                });
+                LookupTransaction();
+                //show the transaction screen
+                BtnMenuTransaction_Click(sender, e);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click: " + ex.Message;
+                });
+            }
         }
 
         #endregion
 
 #region TRANSACTION STUFF
 
-        private void textBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Handle enter
-            if (e.KeyChar == '\r')
+            try
             {
-                // Submit button was pressed
-                LookupTransaction();
-                e.Handled = true;
-                return;
+                // Handle enter
+                if (e.KeyChar == '\r')
+                {
+                    // Submit button was pressed
+                    LookupTransaction();
+                    e.Handled = true;
+                    return;
+                }
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress: " + ex.Message;
+                });
             }
         }
 
         private async void LookupTransaction()
         {
-            string submittedTransactionID = textBoxTransactionID.Text;
-            await GetTransaction(submittedTransactionID);
-
-
+            try
+            {
+                string submittedTransactionID = textBoxTransactionID.Text;
+                await GetTransaction(submittedTransactionID);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupTransaction, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupTransaction, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupTransaction, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupTransaction: " + ex.Message;
+                });
+            }
         }
 
         private async Task GetTransaction(string submittedTransactionID) 
         {
-
-            //panelTransactionDiagram.Invalidate();
-//            DisableEnableLoadingAnimation("enable"); // start the loading animation
-//            DisableEnableButtons("disable"); // disable buttons during operation
-            var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
-//            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-//            DisableEnableButtons("enable"); // enable buttons after operation is complete
-            var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
-            lblTransactionVersion.Text = Convert.ToString(transaction.version);
-            lblTransactionLockTime.Text = Convert.ToString(transaction.locktime);
-            lblTransactionSize.Text = Convert.ToString(transaction.size) + " bytes";
-            lblTransactionWeight.Text = Convert.ToString(transaction.weight) + " MWU";
-            lblTransactionFee.Text = Convert.ToString(transaction.fee);
-
-            lblTransactionBlockHeight.Text = Convert.ToString(transaction.status.block_height);
-            long unixTimestamp = Convert.ToInt64(transaction.status.block_time);
-            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
-            lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
-            if (transaction.vin.Count() == 1)
+            try
             {
-                lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count()) + " input";
-            }
-            else
-            {
-                lblTransactionInputCount.Text = Convert.ToString(transaction.vin.Count()) + " inputs";
-            }
-            if (transaction.vout.Count() == 1)
-            {
-                lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count()) + " output";
-            }
-            else
-            {
-                lblTransactionOutputCount.Text = Convert.ToString(transaction.vout.Count()) + " outputs";
-            }
-            // central bit
-
-
-            long totalValueIn = 0;
-            foreach (TransactionVin vin in transaction.vin)
-            {
-                totalValueIn += vin.prevout.value;
-            }
-            string strTotalValueIn = totalValueIn.ToString(); // using ToString() instead of Convert.ToString()
-            decimal decTotalBitcoinIn = ConvertSatsToBitcoin(strTotalValueIn);
-            lblTotalInputValue.Text = decTotalBitcoinIn.ToString();
-            lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 140, (panelTransactionDiagram.Size.Height / 2) + 3);
-            long totalValueOut = 0;
-            foreach (TransactionVout vout in transaction.vout)
-            {
-                totalValueOut += vout.value;
-            }
-            string strTotalValueOut = totalValueOut.ToString(); // using ToString() instead of Convert.ToString()
-            decimal decTotalBitcoinOut = ConvertSatsToBitcoin(strTotalValueOut);
-            lblTotalOutputValue.Text = decTotalBitcoinOut.ToString();
-            lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 140 - lblTotalOutputValue.Width, (panelTransactionDiagram.Size.Height / 2) + 3);
-
-            lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
-            label104.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
-            panelTransactionMiddle.Location = new Point((panelTransactionDiagram.Width / 2) - (panelTransactionMiddle.Width / 2), (panelTransactionDiagram.Height / 2) - (panelTransactionMiddle.Height / 2)); //move middle panel to centre
-            lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 130, (panelTransactionDiagram.Size.Height / 2) - 15);
-            lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
-            if (transaction.vin[0].is_coinbase == true)
-            {
-                lblCoinbase.Text = "Coinbase transaction";
-                lblCoinbase.Location = new Point(10,(panelTransactionDiagram.Size.Height / 2) - 15);
-            }
-            else
-            {
-                lblCoinbase.Text = "";
-            }
-            using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-            {
-                using (var g = panelTransactionDiagram.CreateGraphics())
+                //panelTransactionDiagram.Invalidate();
+                //            DisableEnableLoadingAnimation("enable"); // start the loading animation
+                //            DisableEnableButtons("disable"); // disable buttons during operation
+                var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
+                //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                //            DisableEnableButtons("enable"); // enable buttons after operation is complete
+                var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
+                lblTransactionVersion.Invoke((MethodInvoker)delegate
                 {
+                    lblTransactionVersion.Text = Convert.ToString(transaction.Version);
+                });
+                lblTransactionLockTime.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionLockTime.Text = Convert.ToString(transaction.Locktime);
+                });
+                lblTransactionSize.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionSize.Text = Convert.ToString(transaction.Size) + " bytes";
+                });
+                lblTransactionWeight.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionWeight.Text = Convert.ToString(transaction.Weight) + " MWU";
+                });
+                lblTransactionFee.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionFee.Text = Convert.ToString(transaction.Fee);
+                });
+                lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
+                });
+                long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
+                lblTransactionBlockTime.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
+                });
+                if (transaction.Vin.Count() == 1)
+                {
+                    lblTransactionInputCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblTransactionInputCount.Text = Convert.ToString(transaction.Vin.Count()) + " input";
+                    });
+                }
+                else
+                {
+                    lblTransactionInputCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblTransactionInputCount.Text = Convert.ToString(transaction.Vin.Count()) + " inputs";
+                    });
+                }
+                if (transaction.Vout.Count() == 1)
+                {
+                    lblTransactionOutputCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblTransactionOutputCount.Text = Convert.ToString(transaction.Vout.Count()) + " output";
+                    });
+                }
+                else
+                {
+                    lblTransactionOutputCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblTransactionOutputCount.Text = Convert.ToString(transaction.Vout.Count()) + " outputs";
+                    });
+                }
+                // central bit
+
+
+                long totalValueIn = 0;
+                foreach (TransactionVin vin in transaction.Vin)
+                {
+                    totalValueIn += vin.Prevout.Value;
+                }
+                string strTotalValueIn = totalValueIn.ToString(); // using ToString() instead of Convert.ToString()
+                decimal decTotalBitcoinIn = ConvertSatsToBitcoin(strTotalValueIn);
+                lblTotalInputValue.Invoke((MethodInvoker)delegate
+                {
+                    lblTotalInputValue.Text = decTotalBitcoinIn.ToString();
+                    lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 140, (panelTransactionDiagram.Size.Height / 2) + 3);
+                });
+                long totalValueOut = 0;
+                foreach (TransactionVout vout in transaction.Vout)
+                {
+                    totalValueOut += vout.Value;
+                }
+                string strTotalValueOut = totalValueOut.ToString(); // using ToString() instead of Convert.ToString()
+                decimal decTotalBitcoinOut = ConvertSatsToBitcoin(strTotalValueOut);
+                lblTotalOutputValue.Invoke((MethodInvoker)delegate
+                {
+                    lblTotalOutputValue.Text = decTotalBitcoinOut.ToString();
+                    lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 140 - lblTotalOutputValue.Width, (panelTransactionDiagram.Size.Height / 2) + 3);
+                });
+
+                lblTransactionFee.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 120);
+                });
+                label104.Invoke((MethodInvoker)delegate
+                {
+                    label104.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 135);
+                });
+                panelTransactionMiddle.Invoke((MethodInvoker)delegate
+                {
+                    panelTransactionMiddle.Location = new Point((panelTransactionDiagram.Width / 2) - (panelTransactionMiddle.Width / 2), (panelTransactionDiagram.Height / 2) - (panelTransactionMiddle.Height / 2)); //move middle panel to centre
+                });
+                lblTransactionInputCount.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 130, (panelTransactionDiagram.Size.Height / 2) - 15);
+                });
+                lblTransactionOutputCount.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
+                });
+                
+                if (transaction.Vin[0].Is_coinbase == true)
+                {
+                    lblCoinbase.Invoke((MethodInvoker)delegate
+                    {
+                        lblCoinbase.Text = "Coinbase transaction";
+                        lblCoinbase.Location = new Point(10, (panelTransactionDiagram.Size.Height / 2) - 15);
+                    });
+                }
+                else
+                {
+                    lblCoinbase.Invoke((MethodInvoker)delegate
+                    {
+                        lblCoinbase.Text = "";
+                    });
+                }
+                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+                {
+                    using var g = panelTransactionDiagram.CreateGraphics();
                     g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
                     g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
-
                 }
-            }
-            // inputs 
-            int NumberOfInputLines = Convert.ToInt32(transaction.vin.Count());
-            int YInputsStep = 0;
-            int YInputsPos = 0;
-            if (NumberOfInputLines > 1)
-            {
-                YInputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
-                YInputsPos = 10;
-                if (NumberOfInputLines > panelTransactionDiagram.Height)
+                // inputs 
+                int NumberOfInputLines = Convert.ToInt32(transaction.Vin.Count());
+                int YInputsStep = 0;
+                int YInputsPos = 0;
+                if (NumberOfInputLines > 1)
                 {
-                    YInputsStep = 1;
-                }
-            }
-            else
-            {
-                YInputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
-                YInputsPos = (panelTransactionDiagram.Size.Height / 2);
-            }
-                        
-            foreach (var vin in transaction.vin)
-            {
-                if (YInputsPos >= panelTransactionDiagram.Height)
-                {
-                    break;
-                }
-                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-                {
-                    using (var g = panelTransactionDiagram.CreateGraphics())
+                    YInputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
+                    YInputsPos = 10;
+                    if (NumberOfInputLines > panelTransactionDiagram.Height)
                     {
-                        g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
-                        g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
-                        YInputsPos += YInputsStep;
+                        YInputsStep = 1;
                     }
                 }
-            }
-            // outputs
-            int NumberOfOutputLines = Convert.ToInt32(transaction.vout.Count());
-            int YOutputsStep = 0;
-            int YOutputsPos = 0;
-            if (NumberOfOutputLines > 1)
-            {
-                YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
-                YOutputsPos = 10;
-                if (NumberOfOutputLines > panelTransactionDiagram.Height)
+                else
                 {
-                    YOutputsStep = 1;
+                    YInputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
+                    YInputsPos = (panelTransactionDiagram.Size.Height / 2);
                 }
-            }
-            else
-            {
-                YOutputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
-                YOutputsPos = (panelTransactionDiagram.Size.Height / 2);
-            }
-            
-            foreach (var vout in transaction.vout)
-            {
-                if (YOutputsPos >= panelTransactionDiagram.Height)
-                {
-                    break;
-                }
-                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-                {
-                    using (var g = panelTransactionDiagram.CreateGraphics())
-                    {
-                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
-                        g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
-                        YOutputsPos += YOutputsStep;
 
+                foreach (var vin in transaction.Vin)
+                {
+                    if (YInputsPos >= panelTransactionDiagram.Height)
+                    {
+                        break;
+                    }
+                    using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+                    using var g = panelTransactionDiagram.CreateGraphics();
+                    g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
+                    g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
+                    YInputsPos += YInputsStep;
+                }
+                // outputs
+                int NumberOfOutputLines = Convert.ToInt32(transaction.Vout.Count());
+                int YOutputsStep = 0;
+                int YOutputsPos = 0;
+                if (NumberOfOutputLines > 1)
+                {
+                    YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
+                    YOutputsPos = 10;
+                    if (NumberOfOutputLines > panelTransactionDiagram.Height)
+                    {
+                        YOutputsStep = 1;
                     }
                 }
+                else
+                {
+                    YOutputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
+                    YOutputsPos = (panelTransactionDiagram.Size.Height / 2);
+                }
+
+                foreach (var vout in transaction.Vout)
+                {
+                    if (YOutputsPos >= panelTransactionDiagram.Height)
+                    {
+                        break;
+                    }
+                    using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+                    using var g = panelTransactionDiagram.CreateGraphics();
+                    g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                    YOutputsPos += YOutputsStep;
+                }
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransaction, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransaction, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransaction, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetTransaction: " + ex.Message;
+                });
             }
         }
 #endregion
 
 #region BLOCK LIST STUFF
 
-        private void textBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Get the maximum allowed value for the block number
-            int maxValue = int.Parse(lblBlockNumber.Text);
-
-            // Allow only digits, backspace, delete, and enter
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
+            try
             {
-                e.Handled = true;
-                return;
-            }
+                // Get the maximum allowed value for the block number
+                int maxValue = int.Parse(lblBlockNumber.Text);
 
-            // Handle backspace
-            if (e.KeyChar == '\b')
-            {
-                // If there is a selection, delete it
-                if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                // Allow only digits, backspace, delete, and enter
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != '\u007F' && e.KeyChar != '\r')
                 {
-                    int start = textBoxBlockHeightToStartListFrom.SelectionStart;
-                    int length = textBoxBlockHeightToStartListFrom.SelectionLength;
-                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
-                    textBoxBlockHeightToStartListFrom.SelectionStart = start;
-                }
-                // If the cursor is not at the beginning, delete the character to the left of the cursor
-                else if (textBoxBlockHeightToStartListFrom.SelectionStart > 0)
-                {
-                    int pos = textBoxBlockHeightToStartListFrom.SelectionStart - 1;
-                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
-                    textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                    e.Handled = true;
+                    return;
                 }
 
-                e.Handled = true;
-                return;
-            }
-
-            // Handle delete
-            if (e.KeyChar == '\u007F')
-            {
-                // If there is a selection, delete it
-                if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                // Handle backspace
+                if (e.KeyChar == '\b')
                 {
-                    int start = textBoxBlockHeightToStartListFrom.SelectionStart;
-                    int length = textBoxBlockHeightToStartListFrom.SelectionLength;
-                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
-                    textBoxBlockHeightToStartListFrom.SelectionStart = start;
+                    // If there is a selection, delete it
+                    if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                    {
+                        int start = textBoxBlockHeightToStartListFrom.SelectionStart;
+                        int length = textBoxBlockHeightToStartListFrom.SelectionLength;
+                        textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
+                            textBoxBlockHeightToStartListFrom.SelectionStart = start;
+                        });
+                    }
+                    // If the cursor is not at the beginning, delete the character to the left of the cursor
+                    else if (textBoxBlockHeightToStartListFrom.SelectionStart > 0)
+                    {
+                        int pos = textBoxBlockHeightToStartListFrom.SelectionStart - 1;
+                        textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
+                            textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                        });
+                    }
+
+                    e.Handled = true;
+                    return;
                 }
-                // If the cursor is not at the end, delete the character to the right of the cursor
-                else if (textBoxBlockHeightToStartListFrom.SelectionStart < textBoxBlockHeightToStartListFrom.Text.Length)
+
+                // Handle delete
+                if (e.KeyChar == '\u007F')
                 {
-                    int pos = textBoxBlockHeightToStartListFrom.SelectionStart;
-                    textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
-                    textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                    // If there is a selection, delete it
+                    if (textBoxBlockHeightToStartListFrom.SelectionLength > 0)
+                    {
+                        int start = textBoxBlockHeightToStartListFrom.SelectionStart;
+                        int length = textBoxBlockHeightToStartListFrom.SelectionLength;
+                        textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(start, length);
+                            textBoxBlockHeightToStartListFrom.SelectionStart = start;
+                        });
+                    }
+                    // If the cursor is not at the end, delete the character to the right of the cursor
+                    else if (textBoxBlockHeightToStartListFrom.SelectionStart < textBoxBlockHeightToStartListFrom.Text.Length)
+                    {
+                        int pos = textBoxBlockHeightToStartListFrom.SelectionStart;
+                        textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxBlockHeightToStartListFrom.Text = textBoxBlockHeightToStartListFrom.Text.Remove(pos, 1);
+                            textBoxBlockHeightToStartListFrom.SelectionStart = pos;
+                        });
+                    }
+
+                    e.Handled = true;
+                    return;
                 }
 
-                e.Handled = true;
-                return;
-            }
+                // Handle enter
+                if (e.KeyChar == '\r')
+                {
+                    // Submit button was pressed
+                    //DisableEnableLoadingAnimation("enable"); // start the loading animation
+                    //DisableEnableButtons("disable"); // disable buttons during operation
+                    LookupBlockList();
+                    //DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                    //DisableEnableButtons("enable"); // enable buttons after operation is complete
+                    e.Handled = true;
+                    return;
+                }
 
-            // Handle enter
-            if (e.KeyChar == '\r')
+                // Construct the new value of the textbox by appending the pressed character
+                string valueString = textBoxBlockHeightToStartListFrom.Text + e.KeyChar.ToString();
+
+                // Handle the case where the textbox is empty by setting it to 0
+                if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
+                {
+                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxBlockHeightToStartListFrom.Text = "0";
+                        textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle non-numeric input
+                if (!int.TryParse(valueString, out int value))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle negative input by setting the textbox to 0
+                if (value < 0)
+                {
+                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxBlockHeightToStartListFrom.Text = "0";
+                        textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
+                if (value > maxValue)
+                {
+                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxBlockHeightToStartListFrom.Text = maxValue.ToString();
+                        textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                    });
+                    e.Handled = true;
+                    return;
+                }
+
+                textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBlockHeightToStartListFrom.Text = value.ToString();
+                    textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
+                });
+                e.Handled = true;
+            }
+            catch (WebException ex)
             {
-                // Submit button was pressed
-                //DisableEnableLoadingAnimation("enable"); // start the loading animation
-                //DisableEnableButtons("disable"); // disable buttons during operation
-                LookupBlockList();
-                //DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                //DisableEnableButtons("enable"); // enable buttons after operation is complete
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, Web exception: " + ex.Message;
+                });
             }
-
-            // Construct the new value of the textbox by appending the pressed character
-            string valueString = textBoxBlockHeightToStartListFrom.Text + e.KeyChar.ToString();
-
-            // Handle the case where the textbox is empty by setting it to 0
-            if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
+            catch (HttpRequestException ex)
             {
-                textBoxBlockHeightToStartListFrom.Text = "0";
-                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, HTTP Request error: " + ex.Message;
+                });
             }
-
-            // Handle non-numeric input
-            if (!int.TryParse(valueString, out int value))
+            catch (JsonException ex)
             {
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, JSON parsing error: " + ex.Message;
+                });
             }
-
-            // Handle negative input by setting the textbox to 0
-            if (value < 0)
+            catch (Exception ex)
             {
-                textBoxBlockHeightToStartListFrom.Text = "0";
-                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
-                e.Handled = true;
-                return;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress: " + ex.Message;
+                });
             }
-
-            // Handle input that exceeds the maximum allowed value by setting the textbox to the maximum value
-            if (value > maxValue)
-            {
-                textBoxBlockHeightToStartListFrom.Text = maxValue.ToString();
-                textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
-                e.Handled = true;
-                return;
-            }
-
-            textBoxBlockHeightToStartListFrom.Text = value.ToString();
-            textBoxBlockHeightToStartListFrom.SelectionStart = textBoxBlockHeightToStartListFrom.Text.Length;
-            e.Handled = true;
-
         }
 
-        private void textBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
+        private void TextBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
         {
             
             if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
             {
-                textBoxBlockHeightToStartListFrom.Text = "0";
+                textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBlockHeightToStartListFrom.Text = "0";
+                });
             }
             if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
             {
@@ -3405,171 +4164,324 @@ namespace SATSuma
 
         private async void LookupBlockList()
         {
-            
-            btnViewBlockFromBlockList.Visible = false;
-            btnViewTransactionsFromBlockList.Visible = false;
-            var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
-            //            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            //            DisableEnableButtons("disable"); // disable buttons during operation
-            await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
-                                                             //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                                                             //            DisableEnableButtons("enable"); // enable buttons after operation is complete
-            
+            try
+            {
+                btnViewBlockFromBlockList.Visible = false;
+                btnViewTransactionsFromBlockList.Visible = false;
+                var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
+                //            DisableEnableLoadingAnimation("enable"); // start the loading animation
+                //            DisableEnableButtons("disable"); // disable buttons during operation
+                await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
+                                                                 //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                                                                 //            DisableEnableButtons("enable"); // enable buttons after operation is complete
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlockList, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlockList, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlockList, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "LookupBlockList: " + ex.Message;
+                });
+            }
         }
 
         private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber)
         {
-            
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
-
-            var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
-
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-            DisableEnableButtons("enable"); // enable buttons after operation is complete
-
-            var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-            List<string> blocklist = blocks.Select(t => t.height).ToList();
-
-            // Update lastSeenBlockNumber if this isn't our first fetch of blocks to restart from the right place
-            if (blocklist.Count > 0)
+            try
             {
-                lastSeenBlockNumber = blocklist.Last();
-                storedLastSeenBlockNumber = blocklist.Last();
-            }
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
 
-            //LIST VIEW
-            listViewBlockList.Items.Clear(); // remove any data that may be there already
-            listViewBlockList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockList, new object[] { true });
+                var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
 
-            // Check if the column header already exists
-            if (listViewBlockList.Columns.Count == 0)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add(" Date / time", 115);
-            }
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableButtons("enable"); // enable buttons after operation is complete
 
-            if (listViewBlockList.Columns.Count == 1)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("Height", 65);
-            }
+                var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                List<string> blocklist = blocks.Select(t => t.Height).ToList();
 
-            if (listViewBlockList.Columns.Count == 2)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("TX count", 60);
-            }
-            if (listViewBlockList.Columns.Count == 3)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("Size", 50);
-            }
-            if (listViewBlockList.Columns.Count == 4)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("Fee range", 70);
-            }
-            if (listViewBlockList.Columns.Count == 5)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("Med.", 50);
-            }
-            if (listViewBlockList.Columns.Count == 6)
-            {
-                // If not, add the column header
-                listViewBlockList.Columns.Add("Reward (BTC)", 90);
-            }
-            // Add the items to the ListView
-            int counter = 0; // used to count rows in list as they're added
-
-            foreach (var block in blocks)
-            {
-                long unixTimestamp = Convert.ToInt64(block.timestamp);
-                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
-                string formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
-                ListViewItem item = new ListViewItem(formattedDateTime); // create new row
-                item.SubItems.Add(block.height.ToString());
-                item.SubItems.Add(block.tx_count.ToString());
-                decimal sizeInMB = block.size;
-                sizeInMB = sizeInMB / 1000000;
-                item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
-                string feerange = Convert.ToString(block.extras.feeRange[0]) + "-" + Convert.ToString(block.extras.feeRange[6]);
-                item.SubItems.Add(feerange.ToString());
-                string medFee = "~" + block.extras.medianFee;
-                item.SubItems.Add(medFee.ToString());
-                string RewardInSats = Convert.ToString(block.extras.reward);
-                decimal RewardInBTC = ConvertSatsToBitcoin(RewardInSats);
-                item.SubItems.Add(RewardInBTC.ToString());
-                listViewBlockList.Items.Add(item); // add row
-
-                counter++; // increment rows for this batch
-
-
-                if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
+                // Update lastSeenBlockNumber if this isn't our first fetch of blocks to restart from the right place
+                if (blocklist.Count > 0)
                 {
-                    btnNewer15Blocks.Visible = false; // so this won't be needed
+                    lastSeenBlockNumber = blocklist.Last();
+                    storedLastSeenBlockNumber = blocklist.Last();
+                }
+
+                //LIST VIEW
+                listViewBlockList.Invoke((MethodInvoker)delegate
+                {
+                    listViewBlockList.Items.Clear(); // remove any data that may be there already
+                });
+                listViewBlockList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockList, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewBlockList.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockList.Columns.Add(" Date / time", 115);
+                    });
+                }
+
+                if (listViewBlockList.Columns.Count == 1)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("Height", 65);
+                    });
+                }
+
+                if (listViewBlockList.Columns.Count == 2)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("TX count", 60);
+                    });
+                }
+                if (listViewBlockList.Columns.Count == 3)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("Size", 50);
+                    });
+                }
+                if (listViewBlockList.Columns.Count == 4)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("Fee range", 70);
+                    });
+                }
+                if (listViewBlockList.Columns.Count == 5)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("Med.", 50);
+                    });
+                }
+                if (listViewBlockList.Columns.Count == 6)
+                {
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewBlockList.Columns.Add("Reward (BTC)", 90);
+                    });
+                }
+                // Add the items to the ListView
+                int counter = 0; // used to count rows in list as they're added
+
+                foreach (var block in blocks)
+                {
+                    long unixTimestamp = Convert.ToInt64(block.Timestamp);
+                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
+                    string formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
+                    ListViewItem item = new ListViewItem(formattedDateTime); // create new row
+                    item.SubItems.Add(block.Height.ToString());
+                    item.SubItems.Add(block.Tx_count.ToString());
+                    decimal sizeInMB = block.Size;
+                    sizeInMB /= 1000000;
+                    item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
+                    string feerange = Convert.ToString(block.Extras.FeeRange[0]) + "-" + Convert.ToString(block.Extras.FeeRange[6]);
+                    item.SubItems.Add(feerange.ToString());
+                    string medFee = "~" + block.Extras.MedianFee;
+                    item.SubItems.Add(medFee.ToString());
+                    string RewardInSats = Convert.ToString(block.Extras.Reward);
+                    decimal RewardInBTC = ConvertSatsToBitcoin(RewardInSats);
+                    item.SubItems.Add(RewardInBTC.ToString());
+                    listViewBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBlockList.Items.Add(item); // add row
+                    });
+
+                    counter++; // increment rows for this batch
+
+
+                    if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
+                    {
+                        btnNewer15Blocks.Visible = false; // so this won't be needed
+                    }
+                    else
+                    {
+                        btnNewer15Blocks.Visible = true;
+                    }
+
+                    if (counter > 1 && blocklist.Last() == "0") // we've reached the Genesis Block (bottom of the list)
+                    {
+                        btnOlder15Blocks.Visible = false; // so we won't need this
+                    }
+                    else
+                    {
+                        btnOlder15Blocks.Visible = true;
+                    }
+
+                    if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
+                    {
+                        break;
+                    }
+                }
+                if (counter > 0)
+                {
+                    listViewBlockList.Items[0].Selected = true;
+                    if (btnOlder15Blocks.Enabled == true)
+                    {
+                        btnOlder15Blocks.Focus();
+                    }
+                    else
+                    {
+                        btnNewer15Blocks.Focus();
+                    }
+                    lblBlockListPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
+                    });
                 }
                 else
                 {
-                    btnNewer15Blocks.Visible = true;
-                }
-
-                if (counter > 1 && blocklist.Last() == "0") // we've reached the Genesis Block (bottom of the list)
-                {
-                    btnOlder15Blocks.Visible = false; // so we won't need this
-                }
-                else
-                {
-                    btnOlder15Blocks.Visible = true;
-                }
-
-                if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
-                {
-                    break;
+                    lblBlockListPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockListPositionInList.Text = "No blocks to display"; // this can't really happen as there will always be a coinbase transaction
+                    });
                 }
             }
-            if (counter > 0)
+            catch (WebException ex)
             {
-                listViewBlockList.Items[0].Selected = true;
-                if (btnOlder15Blocks.Enabled == true)
+                lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
-                    btnOlder15Blocks.Focus();
-                }
-                else
-                {
-                    btnNewer15Blocks.Focus();
-                }
-                lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
+                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, Web exception: " + ex.Message;
+                });
             }
-            else
+            catch (HttpRequestException ex)
             {
-                lblBlockListPositionInList.Text = "No blocks to display"; // this can't really happen as there will always be a coinbase transaction
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, HTTP Request error: " + ex.Message;
+                });
             }
-            
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList: " + ex.Message;
+                });
+            }
         }
 
-        private async void btnOlder15Blocks_Click(object sender, EventArgs e)
+        private async void BtnOlder15Blocks_Click(object sender, EventArgs e)
         {
-            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) - 1);
-            string blockNumber = Convert.ToString(blockheight);
-            // Get 15 more blocks starting from the current block height minus the number we've already seen
-            await GetFifteenBlocksForBlockList(blockNumber);
-            btnViewBlockFromBlockList.Visible = false;
-            btnViewTransactionsFromBlockList.Visible = false;
+            try
+            {
+                int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) - 1);
+                string blockNumber = Convert.ToString(blockheight);
+                // Get 15 more blocks starting from the current block height minus the number we've already seen
+                await GetFifteenBlocksForBlockList(blockNumber);
+                btnViewBlockFromBlockList.Visible = false;
+                btnViewTransactionsFromBlockList.Visible = false;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnOlder15Blocks_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnOlder15Blocks_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnOlder15Blocks_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnOlder15Blocks_Click: " + ex.Message;
+                });
+            }
         }
 
-        private async void btnNewer15Blocks_Click(object sender, EventArgs e)
+        private async void BtnNewer15Blocks_Click(object sender, EventArgs e)
         {
-            int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) + 29);
-            string blockNumber = Convert.ToString(blockheight);
-            // Get 15 more blocks starting from the current block height minus the number we've already seen
-            await GetFifteenBlocksForBlockList(blockNumber);
-            btnViewBlockFromBlockList.Visible = false;
-            btnViewTransactionsFromBlockList.Visible = false;
+            try
+            {
+                int blockheight = (Convert.ToInt32(storedLastSeenBlockNumber) + 29);
+                string blockNumber = Convert.ToString(blockheight);
+                // Get 15 more blocks starting from the current block height minus the number we've already seen
+                await GetFifteenBlocksForBlockList(blockNumber);
+                btnViewBlockFromBlockList.Visible = false;
+                btnViewTransactionsFromBlockList.Visible = false;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNewer15Blocks_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNewer15Blocks_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNewer15Blocks_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnNewer15Blocks_Click: " + ex.Message;
+                });
+            }
         }
 
-        private void listViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void ListViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             
             Color headerColor = Color.FromArgb(50, 50, 50);
@@ -3577,135 +4489,293 @@ namespace SATSuma
             e.Graphics.FillRectangle(brush, e.Bounds);
             // Change text color and alignment
             SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
             e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
             
         }
 
-        private void listViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
             if (listViewBlockList.SelectedItems.Count > 0)
             {
                 Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
-                panel14.Top = itemRect.Top + 8;
-                panel19.Height = panel17.Top - panel14.Top;
-                panel19.Top = panel14.Top;
+                panel14.Invoke((MethodInvoker)delegate
+                {
+                    panel14.Top = itemRect.Top + 8;
+                });
+                panel19.Invoke((MethodInvoker)delegate
+                {
+                    panel19.Height = panel17.Top - panel14.Top;
+                    panel19.Top = panel14.Top;
+                });
             }
-            
         }
 
-        private async void listViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private async void ListViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            
-            bool anySelected = false;
-            foreach (ListViewItem item in listViewBlockList.Items)
+            try
             {
-                if (item.Selected)
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewBlockList.Items)
                 {
-                    btnViewBlockFromBlockList.Enabled = true;
-                    btnViewTransactionsFromBlockList.Enabled = true;
-                    item.SubItems[1].ForeColor = Color.White; // Block number
-                    item.SubItems[2].ForeColor = Color.White; // TX count
-                    anySelected = true;
-                    btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y - 1);
-                    btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y - 1);
-                    // display block hash
-                    using (WebClient client = new WebClient())
+                    if (item.Selected)
                     {
-                        string BlockHashURL = NodeURL + "block-height/" + item.SubItems[1].Text;
-                        string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
-                        lblBlockListBlockHash.Text = BlockHash;
-                    }
-                    string blockNumber = item.SubItems[1].Text;
-                    DisableEnableLoadingAnimation("enable"); // start the loading animation
-                    DisableEnableButtons("disable"); // disable buttons during operation
-                    var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
-                    DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                    DisableEnableButtons("enable"); // enable buttons after operation is complete
-                    var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-                    List<string> blocklist = blocks.Select(t => t.height).ToList();
-                    lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].timestamp)).ToString("yyyy-MM-dd HH:mm");
-                    long sizeInBytes = blocks[0].size;
-                    string sizeString = ""; // convert display to bytes/kb/mb accordingly
-                    if (sizeInBytes < 1000)
-                    {
-                        sizeString = $"{sizeInBytes} bytes";
-                    }
-                    else if (sizeInBytes < 1000 * 1000)
-                    {
-                        double sizeInKB = (double)sizeInBytes / 1000;
-                        sizeString = $"{sizeInKB:N2} KB";
+                        btnViewBlockFromBlockList.Enabled = true;
+                        btnViewTransactionsFromBlockList.Enabled = true;
+                        item.SubItems[1].ForeColor = Color.White; // Block number
+                        item.SubItems[2].ForeColor = Color.White; // TX count
+                        anySelected = true;
+                        btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y - 1);
+                        });
+                        btnViewTransactionsFromBlockList.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y - 1);
+                        });
+                        // display block hash
+                        using (WebClient client = new WebClient())
+                        {
+                            string BlockHashURL = NodeURL + "block-height/" + item.SubItems[1].Text;
+                            string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
+                            lblBlockListBlockHash.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockListBlockHash.Text = BlockHash;
+                            });
+                        }
+                        string blockNumber = item.SubItems[1].Text;
+                        DisableEnableLoadingAnimation("enable"); // start the loading animation
+                        DisableEnableButtons("disable"); // disable buttons during operation
+                        var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
+                        DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                        DisableEnableButtons("enable"); // enable buttons after operation is complete
+                        var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                        List<string> blocklist = blocks.Select(t => t.Height).ToList();
+                        lblBlockListBlockTime.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
+                        });
+                        long sizeInBytes = blocks[0].Size;
+                        string sizeString = ""; // convert display to bytes/kb/mb accordingly
+                        if (sizeInBytes < 1000)
+                        {
+                            sizeString = $"{sizeInBytes} bytes";
+                        }
+                        else if (sizeInBytes < 1000 * 1000)
+                        {
+                            double sizeInKB = (double)sizeInBytes / 1000;
+                            sizeString = $"{sizeInKB:N2} KB";
+                        }
+                        else
+                        {
+                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                            sizeString = $"{sizeInMB:N2} MB";
+                        }
+                        lblBlockListBlockSize.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListBlockSize.Text = sizeString;
+                        });
+                        string strWeight = Convert.ToString(blocks[0].Weight);
+                        decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
+                        string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
+                        lblBlockListBlockWeight.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListBlockWeight.Text = strFormattedWeight;
+                        });
+                        long nonceLong = Convert.ToInt64(blocks[0].Nonce);
+                        lblBlockListNonce.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
+                        });
+                        lblBlockListMiner.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                        });
+                        lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
+                        });
+                        string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
+                        TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
+                        lblBlockListTotalFees.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListTotalFees.Text = TotalBlockFees;
+                        });
+                        string Reward = Convert.ToString(blocks[0].Extras.Reward);
+                        lblBlockListReward.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+                        });
+                        lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
+                        });
+                        lblBlockListAverageFee.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
+                        });
+                        lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
+                        });
+                        lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
+                        });
+                        lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].Extras.AvgTxSize);
+                        });
+                        lblBlockListVersion.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListVersion.Text = Convert.ToString(blocks[0].Version);
+                        });
+                        lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].Height);
+                        });
                     }
                     else
                     {
-                        double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                        sizeString = $"{sizeInMB:N2} MB";
+                        item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); // Block number
+                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0); // TX count
                     }
-                    lblBlockListBlockSize.Text = sizeString;
-                    string strWeight = Convert.ToString(blocks[0].weight);
-                    decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
-                    string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
-                    lblBlockListBlockWeight.Text = strFormattedWeight;
-                    long nonceLong = Convert.ToInt64(blocks[0].nonce);
-                    lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
-                    lblBlockListMiner.Text = Convert.ToString(blocks[0].extras.pool.name);
-                    lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].tx_count);
-                    string TotalBlockFees = Convert.ToString(blocks[0].extras.totalFees);
-                    TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
-                    lblBlockListTotalFees.Text = TotalBlockFees;
-                    string Reward = Convert.ToString(blocks[0].extras.reward);
-                    lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-                    lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].extras.feeRange[0]) + "-" + Convert.ToString(blocks[0].extras.feeRange[6]) + " / " + Convert.ToString(blocks[0].extras.medianFee);
-                    lblBlockListAverageFee.Text = Convert.ToString(blocks[0].extras.avgFee);
-                    lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].extras.totalInputs);
-                    lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].extras.totalOutputs);
-                    lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].extras.avgTxSize);
-                    lblBlockListVersion.Text = Convert.ToString(blocks[0].version);
-                    lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].height);
                 }
-                else
-                {
-                    item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); // Block number
-                    item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0); // TX count
-                }
+                btnViewBlockFromBlockList.Visible = anySelected;
+                btnViewTransactionsFromBlockList.Visible = anySelected;
             }
-            btnViewBlockFromBlockList.Visible = anySelected;
-            btnViewTransactionsFromBlockList.Visible = anySelected;
-            
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged: " + ex.Message;
+                });
+            }
+
         }
 
-        private void btnViewTransactionsFromBlockList_Click(object sender, EventArgs e)  // this and btnViewBlockFromBlockList_Click do exactly the same. They both exist for UI only
+        private void BtnViewTransactionsFromBlockList_Click(object sender, EventArgs e)  // this and btnViewBlockFromBlockList_Click do exactly the same. They both exist for UI only
         {
-            //assign block number to text box on block panel
-            // Get the selected item
-            ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
-            // Get the second subitem in the selected item (index 1)
-            string submittedBlockNumber = selectedItem.SubItems[1].Text;
-            // Set the text of the textBoxSubmittedBlockNumber control
-            textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
-            LookupBlock();
-            //show the block screen
-            btnMenuBlock_Click(sender, e);
+            try
+            {
+                //assign block number to text box on block panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
+                // Get the second subitem in the selected item (index 1)
+                string submittedBlockNumber = selectedItem.SubItems[1].Text;
+                // Set the text of the textBoxSubmittedBlockNumber control
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+                });
+                LookupBlock();
+                //show the block screen
+                BtnMenuBlock_Click(sender, e);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click: " + ex.Message;
+                });
+            }
         }
 
-        private void btnViewBlockFromBlockList_Click(object sender, EventArgs e)  // this and btnViewTransactionsFromBlockList_Click do exactly the same. They both exist for UI only
+        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)  // this and btnViewTransactionsFromBlockList_Click do exactly the same. They both exist for UI only
         {
-            //assign block number to text box on block panel
-            // Get the selected item
-            ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
-            // Get the second subitem in the selected item (index 1)
-            string submittedBlockNumber = selectedItem.SubItems[1].Text;
-            // Set the text of the textBoxSubmittedBlockNumber control
-            textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
-            LookupBlock();
-            //show the block screen
-            btnMenuBlock_Click(sender, e);
+            try
+            {
+                //assign block number to text box on block panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
+                // Get the second subitem in the selected item (index 1)
+                string submittedBlockNumber = selectedItem.SubItems[1].Text;
+                // Set the text of the textBoxSubmittedBlockNumber control
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
+                });
+                LookupBlock();
+                //show the block screen
+                BtnMenuBlock_Click(sender, e);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click: " + ex.Message;
+                });
+            }
         }
 
-        private void listViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void ListViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -3765,7 +4835,7 @@ namespace SATSuma
             }
         }
 
-        private void listViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void ListViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             
             var text = e.SubItem.Text;
@@ -3907,15 +4977,26 @@ namespace SATSuma
 
         private void DisableEnableLoadingAnimation(string enableOrDisableAnimation)
         {
-            if (enableOrDisableAnimation == "enable")
+            try
             {
-                //start the loading animation
-                pictureBoxLoadingAnimation.Enabled = true;
+                if (enableOrDisableAnimation == "enable")
+                {
+
+                    //start the loading animation
+                    pictureBoxLoadingAnimation.Enabled = true;
+                }
+                else
+                {
+                    //stop the animation
+                    pictureBoxLoadingAnimation.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //stop the animation
-                pictureBoxLoadingAnimation.Enabled = false;
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "DisableEnableLoadingAnimation: " + ex.Message;
+                });
             }
         }
 
@@ -3923,37 +5004,72 @@ namespace SATSuma
         //--------------------COUNTDOWN, ERROR MESSAGES AND STATUS LIGHTS----------------------------------------------
         private void UpdateOnScreenCountdownAndFlashLights()
         {
-            intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
-            if (intDisplayCountdownToRefresh <= 0) // if the 1 minute timer countdown has reached zero...
+            try
             {
-                intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset it
+                intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
+                if (intDisplayCountdownToRefresh <= 0) // if the 1 minute timer countdown has reached zero...
+                {
+                    intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset it
+                }
+                if (intDisplayCountdownToRefresh < (APIGroup1DisplayTimerIntervalSecsConstant - 1)) // if more than a second has expired since the data from the blocktimer was refreshed...
+                {
+                    ChangeStatusLights();
+                }
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width, lblElapsedSinceUpdate.Location.Y);
+                });
             }
-            if (intDisplayCountdownToRefresh < (APIGroup1DisplayTimerIntervalSecsConstant - 1)) // if more than a second has expired since the data from the blocktimer was refreshed...
+            catch (Exception ex)
             {
-                ChangeStatusLights();
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "UpdateOnScreenCountdownAndFlashLights: " + ex.Message;
+                });
             }
-            lblElapsedSinceUpdate.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width, lblElapsedSinceUpdate.Location.Y);
         }
 
         private void ChangeStatusLights()
         {
-            if (lblStatusLight.ForeColor != Color.IndianRed && lblStatusLight.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+            try
             {
-                if (lblStatusLight.ForeColor == Color.Lime) // successful data refresh has occured
+                if (lblStatusLight.ForeColor != Color.IndianRed && lblStatusLight.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
                 {
-                    lblStatusLight.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                    if (lblStatusLight.ForeColor == Color.Lime) // successful data refresh has occured
+                    {
+                        lblStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblStatusLight.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                    else // an error must have just occured
+                    {
+                        lblStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblStatusLight.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
                 }
-                else // an error must have just occured
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
-                    lblStatusLight.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                }
+                    lblErrorMessage.Text = "ChangeStatusLights: " + ex.Message;
+                });
             }
         }
 
         private void ClearAlertAndErrorMessage()
         {
-            lblAlert.Text = ""; // clear any error message
-            lblErrorMessage.Text = ""; // clear any error message
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = ""; // clear any error message
+            });
+            lblErrorMessage.Invoke((MethodInvoker)delegate
+            {
+                lblErrorMessage.Text = ""; // clear any error message
+            });
         }
 
         private void SetLightsMessagesAndResetTimers()
@@ -3979,61 +5095,31 @@ namespace SATSuma
         //-------------------------- CHECK API ONLINE STATUS ----------------------------------------------------------
         private async void CheckBlockchainExplorerApiStatus()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            try
             {
-                try
+                Ping pingSender = new Ping();
+                string pingAddress = null;
+                if (NodeURL == "https://blockstream.info/api/")
                 {
-                    Ping pingSender = new Ping();
-                    string pingAddress = null;
-                    if (NodeURL == "https://blockstream.info/api/")
-                    {
-                        pingAddress = "blockstream.info";
-                    }
-                    if (NodeURL == "https://mempool.space/api/")
-                    {
-                        pingAddress = "mempool.space";
-                    }
-                    if (NodeURL == null)
-                    {
-                        pingAddress = "mempool.space";
-                        NodeURL = "https://mempool.space/api/";
-
-                    }
-                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                    if (reply.Status == IPStatus.Success)
+                    pingAddress = "blockstream.info";
+                }
+                if (NodeURL == "https://mempool.space/api/")
+                {
+                    pingAddress = "mempool.space";
+                }
+                if (NodeURL == null)
+                {
+                    pingAddress = "mempool.space";
+                    NodeURL = "https://mempool.space/api/";
+                }
+                PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                if (reply.Status == IPStatus.Success)
+                {
+                    lblNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblNodeStatusLight.ForeColor = Color.OliveDrab;
-                        var displayNodeName = "";
-                        if (NodeURL == "https://blockstream.info/api/")
-                        {
-                            displayNodeName = "Blockstream";
-                        }
-                        if (NodeURL == "https://mempool.space/api/")
-                        {
-                            displayNodeName = "Mempool.space";
-                        }
-                        lblActiveNode.Text = displayNodeName + " status";
-                    }
-                    else
-                    {
-                        // API is not online
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        var displayNodeName = "";
-                        if (NodeURL == "https://blockstream.info/api/")
-                        {
-                            displayNodeName = "Blockstream";
-                        }
-                        if (NodeURL == "https://mempool.space/api/")
-                        {
-                            displayNodeName = "Mempool.space";
-                        }
-                        lblActiveNode.Text = displayNodeName + " status";
-                    }
-                }
-                catch (HttpRequestException)
-                {
-                    // API is not online
-                    lblNodeStatusLight.ForeColor = Color.Red;
+                    });
                     var displayNodeName = "";
                     if (NodeURL == "https://blockstream.info/api/")
                     {
@@ -4043,10 +5129,65 @@ namespace SATSuma
                     {
                         displayNodeName = "Mempool.space";
                     }
-                    lblActiveNode.Text = displayNodeName + " status";
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = displayNodeName + " status";
+                    });
                 }
-                lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
+                else
+                {
+                    // API is not online
+                    lblNodeStatusLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblNodeStatusLight.ForeColor = Color.Red;
+                    });
+                    var displayNodeName = "";
+                    if (NodeURL == "https://blockstream.info/api/")
+                    {
+                        displayNodeName = "Blockstream";
+                    }
+                    if (NodeURL == "https://mempool.space/api/")
+                    {
+                        displayNodeName = "Mempool.space";
+                    }
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = displayNodeName + " status";
+                    });
+                }
             }
+            catch (HttpRequestException)
+            {
+                // API is not online
+                lblNodeStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    lblNodeStatusLight.ForeColor = Color.Red;
+                });
+                var displayNodeName = "";
+                if (NodeURL == "https://blockstream.info/api/")
+                {
+                    displayNodeName = "Blockstream";
+                }
+                if (NodeURL == "https://mempool.space/api/")
+                {
+                    displayNodeName = "Mempool.space";
+                }
+                lblActiveNode.Invoke((MethodInvoker)delegate
+                {
+                    lblActiveNode.Text = displayNodeName + " status";
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "CheckBlockchainExplorerApiStatus: " + ex.Message;
+                });
+            }
+            lblNodeStatusLight.Invoke((MethodInvoker)delegate
+            {
+                lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
+            });
         }
 
 #endregion
@@ -4055,24 +5196,43 @@ namespace SATSuma
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
 
-        private void btnMenu_Click(object sender, EventArgs e)
+        private void BtnMenu_Click(object sender, EventArgs e)
         {
             panelMenu.BringToFront();
             if (panelMenu.Height == 24)
             {
-                panelMenu.Height = 216;
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 216;
+                });
             }
             else
             {
-                panelMenu.Height = 24;
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
             }
         }
 
         private void BtnMenuSplash_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
-            splash splash = new splash(); // invoke the about/splash screen
-            splash.ShowDialog();
+            try
+            {
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                splash splash = new splash(); // invoke the about/splash screen
+                splash.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnMenuSplash_Click: " + ex.Message;
+                });
+            }
         }
 
         private void BtnExit_Click(object sender, EventArgs e) // exit
@@ -4087,7 +5247,10 @@ namespace SATSuma
 
         private void BtnMoveWindow_MouseDown(object sender, MouseEventArgs e) // move the form when the move control is used
         {
-            panelMenu.Height = 24; //close menu
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24; //close menu
+            });
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
@@ -4097,14 +5260,20 @@ namespace SATSuma
             btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
         }
 
-        private void btnMoveWindow_Click(object sender, EventArgs e)
+        private void BtnMoveWindow_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24; //close menu
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24; //close menu
+            });
         }
 
         private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24;
+            });
             btnMenuAddress.Enabled = true;
             btnMenuTransaction.Enabled = true;
             btnMenuBitcoinDashboard.Enabled = false;
@@ -4124,7 +5293,10 @@ namespace SATSuma
 
         private void BtnMenuLightningDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24;
+            });
             btnMenuAddress.Enabled = true;
             btnMenuTransaction.Enabled = true;
             btnMenuBitcoinDashboard.Enabled = true;
@@ -4144,7 +5316,10 @@ namespace SATSuma
 
         private void BtnMenuAddress_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24;
+            });
             btnMenuAddress.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuBlockList.Enabled = true;
@@ -4159,9 +5334,12 @@ namespace SATSuma
             panelAddress.Visible = true;
         }
 
-        private void btnMenuBlock_Click(object sender, EventArgs e)
+        private void BtnMenuBlock_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24;
+            });
             btnMenuBlock.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuAddress.Enabled = true;
@@ -4176,161 +5354,297 @@ namespace SATSuma
             panelBlock.Visible = true;
             if (textBoxSubmittedBlockNumber.Text == "")
             {
-                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                });
                 LookupBlock(); // fetch all the block data automatically for the initial view. 
             }
         }
 
-        private void lblBlockNumber_Click(object sender, EventArgs e)
+        private void LblBlockNumber_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
-            btnMenuBlockList.Enabled = true;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBlock.Enabled = false;
-            btnMenuAddress.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBlockList.Visible = false;
-            panelBitcoinDashboard.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelTransaction.Visible = false;
-            panelBlock.Visible = true;
-            textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
-            LookupBlock();
-        }
-
-        private void btnMenuBlockList_Click(object sender, EventArgs e)
-        {
-            panelMenu.Height = 24;
-            btnMenuBlockList.Enabled = false;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBlock.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBitcoinDashboard.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelBlockList.Visible = true;
-            if (textBoxBlockHeightToStartListFrom.Text == "")
+            try
             {
-                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
-                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuBlockList.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBlock.Enabled = false;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelBlock.Visible = true;
+                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
+                LookupBlock();
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "lblBlockNumber_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "lblBlockNumber_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "lblBlockNumber_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "lblBlockNumber_Click: " + ex.Message;
+                });
             }
         }
 
-        private void btnMenuTransaction_Click(object sender, EventArgs e)
+        private void BtnMenuBlockList_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
-            btnMenuTransaction.Enabled = false;
-            btnMenuBlockList.Enabled = true;
-            btnMenuBlock.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBitcoinDashboard.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelBlockList.Visible = false;
-            panelTransaction.Visible = true;
-            if (textBoxBlockHeightToStartListFrom.Text == "")
+            try
             {
-                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
-                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuBlockList.Enabled = false;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBitcoinDashboard.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelBlock.Visible = false;
+                panelTransaction.Visible = false;
+                panelBlockList.Visible = true;
+                if (textBoxBlockHeightToStartListFrom.Text == "")
+                {
+                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                    });
+                    LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+                }
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuBlockList_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuBlockList_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuBlockList_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuBlockList_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private void BtnMenuTransaction_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuTransaction.Enabled = false;
+                btnMenuBlockList.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBitcoinDashboard.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelBlock.Visible = false;
+                panelTransaction.Visible = false;
+                panelBlockList.Visible = false;
+                panelTransaction.Visible = true;
+                if (textBoxBlockHeightToStartListFrom.Text == "")
+                {
+                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                    });
+                    LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+                }
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuTransaction_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuTransaction_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuTransaction_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnMenuTransaction_Click: " + ex.Message;
+                });
             }
         }
 
         private void BtnMenuSettings_Click(object sender, EventArgs e)
         {
-            panelMenu.Height = 24;
-            settingsScreen.CreateInstance();
-            settingsScreen.Instance.ShowDialog();
-            // read all fields from the settings screen and set variables for use on the main form
-            if (settingsScreen.Instance.BitcoinExplorerEndpointsEnabled)
+            try
             {
-                RunBitcoinExplorerEndpointAPI = true;
-            }
-            else
-            {
-                RunBitcoinExplorerEndpointAPI = false;
-            }
-            if (settingsScreen.Instance.BlockchainInfoEndpointsEnabled)
-            {
-                RunBlockchainInfoEndpointAPI = true;
-            }
-            else
-            {
-                RunBlockchainInfoEndpointAPI = false;
-            }
-            if (settingsScreen.Instance.BitcoinExplorerOrgJSONEnabled)
-            {
-                RunBitcoinExplorerOrgJSONAPI = true;
-            }
-            else
-            {
-                RunBitcoinExplorerOrgJSONAPI = false;
-            }
-            if (settingsScreen.Instance.BlockchainInfoJSONEnabled)
-            {
-                RunBlockchainInfoJSONAPI = true;
-            }
-            else
-            {
-                RunBlockchainInfoJSONAPI = false;
-            }
-            if (settingsScreen.Instance.CoingeckoComJSONEnabled)
-            {
-                RunCoingeckoComJSONAPI = true;
-            }
-            else
-            {
-                RunCoingeckoComJSONAPI = false;
-            }
-            if (settingsScreen.Instance.BlockchairComJSONEnabled)
-            {
-                RunBlockchairComJSONAPI = true;
-            }
-            else
-            {
-                RunBlockchairComJSONAPI = false;
-            }
-            if (settingsScreen.Instance.MempoolSpaceLightningJSONEnabled)
-            {
-                RunMempoolSpaceLightningAPI = true;
-            }
-            else
-            {
-                RunMempoolSpaceLightningAPI = false;
-            }
-            if (settingsScreen.Instance.NodeURL != NodeURL)
-            {
-                NodeURL = settingsScreen.Instance.NodeURL;
-                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-            }
-            CheckBlockchainExplorerApiStatus();
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                settingsScreen.CreateInstance();
+                settingsScreen.Instance.ShowDialog();
+                // read all fields from the settings screen and set variables for use on the main form
+                if (settingsScreen.Instance.BitcoinExplorerEndpointsEnabled)
+                {
+                    RunBitcoinExplorerEndpointAPI = true;
+                }
+                else
+                {
+                    RunBitcoinExplorerEndpointAPI = false;
+                }
+                if (settingsScreen.Instance.BlockchainInfoEndpointsEnabled)
+                {
+                    RunBlockchainInfoEndpointAPI = true;
+                }
+                else
+                {
+                    RunBlockchainInfoEndpointAPI = false;
+                }
+                if (settingsScreen.Instance.BitcoinExplorerOrgJSONEnabled)
+                {
+                    RunBitcoinExplorerOrgJSONAPI = true;
+                }
+                else
+                {
+                    RunBitcoinExplorerOrgJSONAPI = false;
+                }
+                if (settingsScreen.Instance.BlockchainInfoJSONEnabled)
+                {
+                    RunBlockchainInfoJSONAPI = true;
+                }
+                else
+                {
+                    RunBlockchainInfoJSONAPI = false;
+                }
+                if (settingsScreen.Instance.CoingeckoComJSONEnabled)
+                {
+                    RunCoingeckoComJSONAPI = true;
+                }
+                else
+                {
+                    RunCoingeckoComJSONAPI = false;
+                }
+                if (settingsScreen.Instance.BlockchairComJSONEnabled)
+                {
+                    RunBlockchairComJSONAPI = true;
+                }
+                else
+                {
+                    RunBlockchairComJSONAPI = false;
+                }
+                if (settingsScreen.Instance.MempoolSpaceLightningJSONEnabled)
+                {
+                    RunMempoolSpaceLightningAPI = true;
+                }
+                else
+                {
+                    RunMempoolSpaceLightningAPI = false;
+                }
+                if (settingsScreen.Instance.NodeURL != NodeURL)
+                {
+                    NodeURL = settingsScreen.Instance.NodeURL;
+                    _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
+                }
+                CheckBlockchainExplorerApiStatus();
 
-            if (APIGroup1DisplayTimerIntervalSecsConstant != (settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
+                if (APIGroup1DisplayTimerIntervalSecsConstant != (settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
+                {
+                    APIGroup1DisplayTimerIntervalSecsConstant = settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
+                    intAPIGroup1TimerIntervalMillisecsConstant = ((settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
+                    intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
+                    timerAPIGroup1.Stop();
+                    timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
+                    timerAPIGroup1.Start();
+                }
+            }
+            catch (Exception ex)
             {
-                APIGroup1DisplayTimerIntervalSecsConstant = settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
-                intAPIGroup1TimerIntervalMillisecsConstant = ((settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
-                intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                timerAPIGroup1.Stop();
-                timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
-                timerAPIGroup1.Start();
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnMenuSettings_Click: " + ex.Message;
+                });
             }
         }
 
-        private void btnHelp_Click(object sender, EventArgs e) // help screen
+        private void BtnHelp_Click(object sender, EventArgs e) // help screen
         {
-            var modalWindow = new helpScreen();
-            modalWindow.Owner = this; // Set the parent window as the owner of the modal window
-            modalWindow.StartPosition = FormStartPosition.CenterParent; // Set the start position to center of parent
-            modalWindow.ShowDialog();
+            try
+            {
+                var modalWindow = new helpScreen
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent // Set the start position to center of parent
+                };
+                modalWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnHelp_Click: " + ex.Message;
+                });
+            }
         }
 
         public Panel GetPanelBlock() // enables help screen to get state (visible) of panel to determine which help text to show
@@ -4370,11 +5684,36 @@ namespace SATSuma
         //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
         private void UpdateOnScreenClock()
         {
-            lblTime.Text = DateTime.Now.ToString("HH:mm");
-            lblSeconds.Text = DateTime.Now.ToString("ss");
-            lblDate.Text = DateTime.Now.ToString("MMMM dd yyyy");
-            lblDay.Text = DateTime.Now.ToString("dddd");
-            lblSeconds.Location = new Point(lblTime.Location.X + lblTime.Width - 10, lblSeconds.Location.Y); // place the seconds according to the width of the minutes/seconds (lblTime)
+            try
+            {
+                lblTime.Invoke((MethodInvoker)delegate
+                {
+                    lblTime.Text = DateTime.Now.ToString("HH:mm");
+                });
+                lblSeconds.Invoke((MethodInvoker)delegate
+                {
+                    lblSeconds.Text = DateTime.Now.ToString("ss");
+                });
+                lblDate.Invoke((MethodInvoker)delegate
+                {
+                    lblDate.Text = DateTime.Now.ToString("MMMM dd yyyy");
+                });
+                lblDay.Invoke((MethodInvoker)delegate
+                {
+                    lblDay.Text = DateTime.Now.ToString("dddd");
+                });
+                lblSeconds.Invoke((MethodInvoker)delegate
+                {
+                    lblSeconds.Location = new Point(lblTime.Location.X + lblTime.Width - 10, lblSeconds.Location.Y); // place the seconds according to the width of the minutes/seconds (lblTime)
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "UpdateOnScreenClock: " + ex.Message;
+                });
+            }
         }
 
         //=============================================================================================================
@@ -4407,44 +5746,42 @@ namespace SATSuma
             int retryCount = 3;
             while (retryCount > 0)
             {
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                try
                 {
-                    try
+                    client.BaseAddress = new Uri(_nodeUrl);
+                    if (mempoolConfOrAllTx == "chain")
                     {
-                        client.BaseAddress = new Uri(_nodeUrl);
-                        if (mempoolConfOrAllTx == "chain")
+                        var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
+                        if (response.IsSuccessStatusCode)
                         {
-                            var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
+                            return await response.Content.ReadAsStringAsync();
                         }
-                        if (mempoolConfOrAllTx == "mempool")
+                    }
+                    if (mempoolConfOrAllTx == "mempool")
+                    {
+                        var response = await client.GetAsync($"address/{address}/txs/mempool");
+                        if (response.IsSuccessStatusCode)
                         {
-                            var response = await client.GetAsync($"address/{address}/txs/mempool");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
+                            return await response.Content.ReadAsStringAsync();
                         }
-                        if (mempoolConfOrAllTx == "all")
+                    }
+                    if (mempoolConfOrAllTx == "all")
+                    {
+                        var response = await client.GetAsync($"address/{address}/txs");
+                        if (response.IsSuccessStatusCode)
                         {
-                            var response = await client.GetAsync($"address/{address}/txs");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
+                            return await response.Content.ReadAsStringAsync();
                         }
+                    }
 
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
+                    retryCount--;
+                    await Task.Delay(3000);
+                }
+                catch (HttpRequestException)
+                {
+                    retryCount--;
+                    await Task.Delay(3000);
                 }
             }
             return string.Empty;
@@ -4453,36 +5790,36 @@ namespace SATSuma
 
     public class AddressTransactions
     {
-        public string txid { get; set; }
-        public Status_AddressTransactions status { get; set; }
-        public List<Vout_AddressTransactions> vout { get; set; }
-        public List<Vin_AddressTransactions> vin { get; set; }
+        public string Txid { get; set; }
+        public Status_AddressTransactions Status { get; set; }
+        public List<Vout_AddressTransactions> Vout { get; set; }
+        public List<Vin_AddressTransactions> Vin { get; set; }
     }
 
     public class Vin_AddressTransactions
     {
-        public Prevout_AddressTransactions prevout { get; set; }
-        public decimal value { get; set; }
-        public decimal amount { get; set; }
+        public Prevout_AddressTransactions Prevout { get; set; }
+        public decimal Value { get; set; }
+        public decimal Amount { get; set; }
     }
 
     public class Prevout_AddressTransactions
     {
-        public string scriptpubkey_address { get; set; }
-        public decimal value { get; set; }
+        public string Scriptpubkey_address { get; set; }
+        public decimal Value { get; set; }
     }
 
     public class Vout_AddressTransactions
     {
-        public double value { get; set; }
-        public decimal amount { get; set; }
-        public string scriptpubkey_address { get; set; }
+        public double Value { get; set; }
+        public decimal Amount { get; set; }
+        public string Scriptpubkey_address { get; set; }
     }
 
     public class Status_AddressTransactions
     {
-        public int block_height { get; set; }
-        public string confirmed { get; set; }
+        public int Block_height { get; set; }
+        public string Confirmed { get; set; }
     }
 
     // ------------------------------------- Blocks -------------------------------------------------
@@ -4498,24 +5835,22 @@ namespace SATSuma
             int retryCount = 3;
             while (retryCount > 0)
             {
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                try
                 {
-                    try
+                    client.BaseAddress = new Uri(_nodeUrl);
+                    var response = await client.GetAsync($"v1/blocks/{blockHeight}");
+                    if (response.IsSuccessStatusCode)
                     {
-                        client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/blocks/{blockHeight}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
-                        retryCount--;
-                        await Task.Delay(3000);
+                        return await response.Content.ReadAsStringAsync();
                     }
-                    catch (HttpRequestException ex)
-                    {
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
+                    retryCount--;
+                    await Task.Delay(3000);
+                }
+                catch (HttpRequestException)
+                {
+                    retryCount--;
+                    await Task.Delay(3000);
                 }
             }
             return string.Empty;
@@ -4524,40 +5859,40 @@ namespace SATSuma
 
     public class Block
     {
-        public Block_extras extras { get; set; }
+        public Block_extras Extras { get; set; }
         public string Id { get; set; }
-        public string height { get; set; }
-        public string version { get; set; }
-        public string timestamp { get; set; }
-        public string bits { get; set; }
-        public string nonce { get; set; }
-        public string difficulty { get; set; }
-        public string merkle_root { get; set; }
-        public int tx_count { get; set; }
-        public int size { get; set; }
-        public string weight { get; set; }
-        public string previousblockhash { get; set; }
+        public string Height { get; set; }
+        public string Version { get; set; }
+        public string Timestamp { get; set; }
+        public string Bits { get; set; }
+        public string Nonce { get; set; }
+        public string Difficulty { get; set; }
+        public string Merkle_root { get; set; }
+        public int Tx_count { get; set; }
+        public int Size { get; set; }
+        public string Weight { get; set; }
+        public string Previousblockhash { get; set; }
     }
 
     public class Block_extras
     {
-        public string reward { get; set; }
-        public string medianFee { get; set; }
-        public int[] feeRange { get; set; }
-        public int totalFees { get; set; }
-        public string avgFee { get; set; }
-        public string avgFeeRate { get; set; }
-        public string avgTxSize { get; set; }
-        public string totalInputs { get; set; }
-        public string totalOutputs { get; set; }
-        public string totalOutputAmt { get; set; }
-        public Block_pool pool { get; set; }
+        public string Reward { get; set; }
+        public string MedianFee { get; set; }
+        public int[] FeeRange { get; set; }
+        public int TotalFees { get; set; }
+        public string AvgFee { get; set; }
+        public string AvgFeeRate { get; set; }
+        public string AvgTxSize { get; set; }
+        public string TotalInputs { get; set; }
+        public string TotalOutputs { get; set; }
+        public string TotalOutputAmt { get; set; }
+        public Block_pool Pool { get; set; }
 
     }
 
     public class Block_pool
     {
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 
     // ------------------------------------- Transaction --------------------------------------------
@@ -4573,24 +5908,22 @@ namespace SATSuma
             int retryCount = 3;
             while (retryCount > 0)
             {
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                try
                 {
-                    try
+                    client.BaseAddress = new Uri(_nodeUrl);
+                    var response = await client.GetAsync($"tx/{TransactionID}");
+                    if (response.IsSuccessStatusCode)
                     {
-                        client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"tx/{TransactionID}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
-                        retryCount--;
-                        await Task.Delay(3000);
+                        return await response.Content.ReadAsStringAsync();
                     }
-                    catch (HttpRequestException ex)
-                    {
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
+                    retryCount--;
+                    await Task.Delay(3000);
+                }
+                catch (HttpRequestException)
+                {
+                    retryCount--;
+                    await Task.Delay(3000);
                 }
             }
             return string.Empty;
@@ -4599,54 +5932,54 @@ namespace SATSuma
 
     public class Transaction
     {
-        public string txid { get; set; }
-        public int version { get; set; }
-        public int locktime { get; set; }
-        public TransactionVin[] vin { get; set; }
-        public TransactionVout[] vout { get; set; }
-        public int size { get; set; }
-        public int weight { get; set; }
-        public int fee { get; set; }
-        public TransactionStatus status { get; set; }
+        public string Txid { get; set; }
+        public int Version { get; set; }
+        public int Locktime { get; set; }
+        public TransactionVin[] Vin { get; set; }
+        public TransactionVout[] Vout { get; set; }
+        public int Size { get; set; }
+        public int Weight { get; set; }
+        public int Fee { get; set; }
+        public TransactionStatus Status { get; set; }
     }
 
     public class TransactionStatus
     {
-        public bool confirmed { get; set; }
-        public int block_height { get; set; }
-        public string block_hash { get; set; }
-        public int block_time { get; set; }
+        public bool Confirmed { get; set; }
+        public int Block_height { get; set; }
+        public string Block_hash { get; set; }
+        public int Block_time { get; set; }
     }
 
     public class TransactionVin
     {
-        public string txid { get; set; }
-        public long vout { get; set; }
-        public TransactionVinPrevout prevout { get; set; }
-        public string scriptsig { get; set; }
-        public string scriptsig_asm { get; set; }
-        public string[] witness { get; set; }
-        public bool is_coinbase { get; set; }
-        public long sequence { get; set; }
-        public string inner_redeemscript_asm { get; set; }
+        public string Txid { get; set; }
+        public long Vout { get; set; }
+        public TransactionVinPrevout Prevout { get; set; }
+        public string Scriptsig { get; set; }
+        public string Scriptsig_asm { get; set; }
+        public string[] Witness { get; set; }
+        public bool Is_coinbase { get; set; }
+        public long Sequence { get; set; }
+        public string Inner_redeemscript_asm { get; set; }
     }
 
     public class TransactionVinPrevout
     {
-        public string scriptpubkey { get; set; }
-        public string scriptpubkey_asm { get; set; }
-        public string scriptpubkey_type { get; set; }
-        public string scriptpubkey_address { get; set; }
-        public long value { get; set; }
+        public string Scriptpubkey { get; set; }
+        public string Scriptpubkey_asm { get; set; }
+        public string Scriptpubkey_type { get; set; }
+        public string Scriptpubkey_address { get; set; }
+        public long Value { get; set; }
     }
 
     public class TransactionVout
     {
-        public string scriptpubkey { get; set; }
-        public string scriptpubkey_asm { get; set; }
-        public string scriptpubkey_type { get; set; }
-        public string scriptpubkey_address { get; set; }
-        public long value { get; set; }
+        public string Scriptpubkey { get; set; }
+        public string Scriptpubkey_asm { get; set; }
+        public string Scriptpubkey_type { get; set; }
+        public string Scriptpubkey_address { get; set; }
+        public long Value { get; set; }
     }
 
 
@@ -4665,25 +5998,23 @@ namespace SATSuma
             int retryCount = 3;
             while (retryCount > 0)
             {
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                try
                 {
-                    try
+                    client.BaseAddress = new Uri(_nodeUrl);
+                    var response = await client.GetAsync($"block/{blockHash}/txs/{lastSeenBlockTransaction}");
+                    if (response.IsSuccessStatusCode)
                     {
-                        client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"block/{blockHash}/txs/{lastSeenBlockTransaction}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
+                        return await response.Content.ReadAsStringAsync();
+                    }
 
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        retryCount--;
-                        await Task.Delay(3000);
-                    }
+                    retryCount--;
+                    await Task.Delay(3000);
+                }
+                catch (HttpRequestException)
+                {
+                    retryCount--;
+                    await Task.Delay(3000);
                 }
             }
             return null;
@@ -4693,14 +6024,14 @@ namespace SATSuma
 
     public class Block_Transactions
     {
-        public string txid { get; set; }
+        public string Txid { get; set; }
         //      public string version { get; set; }
         //     public string locktime { get; set; }
-        public List<Vin_BlockTransactions> vin { get; set; }
-        public List<Vout_BlockTransactions> vout { get; set; }
+        public List<Vin_BlockTransactions> Vin { get; set; }
+        public List<Vout_BlockTransactions> Vout { get; set; }
         //      public string size { get; set; }
         //      public string weight { get; set; }
-        public string fee { get; set; }
+        public string Fee { get; set; }
         //     public List<Status_BlockTransactions> status { get; set; }
     }
 
@@ -4712,26 +6043,26 @@ namespace SATSuma
         //    public string scriptsig { get; set; }
         //   public string scriptsig_asm { get; set; }
         //   public List<string> witness { get; set; }
-        public string is_coinbase { get; set; }
+        public string Is_coinbase { get; set; }
         //   public string sequence { get; set; }
     }
 
 
     public class Prevout_BlockTransactions
     {
-        public string scriptpubkey { get; set; }
-        public string scriptpubkey_asm { get; set; }
-        public string scriptpubkey_type { get; set; }
-        public string scriptpubkey_address { get; set; }
-        public string value { get; set; }
+        public string Scriptpubkey { get; set; }
+        public string Scriptpubkey_asm { get; set; }
+        public string Scriptpubkey_type { get; set; }
+        public string Scriptpubkey_address { get; set; }
+        public string Value { get; set; }
     }
 
     public class Status_BlockTransactions
     {
-        public string confirmed { get; set; }
-        public string block_height { get; set; }
-        public string block_hash { get; set; }
-        public string block_time { get; set; }
+        public string Confirmed { get; set; }
+        public string Block_height { get; set; }
+        public string Block_hash { get; set; }
+        public string Block_time { get; set; }
     }
 
     public class Vout_BlockTransactions
@@ -4740,7 +6071,7 @@ namespace SATSuma
         //     public string scriptpubkey_asm { get; set; }
         //    public string scriptpubkey_type { get; set; }
         //    public string scriptpubkey_address { get; set; }
-        public string value { get; set; }
+        public string Value { get; set; }
     }
     #endregion
 

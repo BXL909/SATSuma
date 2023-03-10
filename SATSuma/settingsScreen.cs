@@ -29,10 +29,7 @@ namespace SATSuma
         
         public static void CreateInstance()
         {
-            if (Instance == null)
-            {
-                Instance = new settingsScreen();
-            }
+            Instance ??= new settingsScreen();
         }
 
         public settingsScreen()
@@ -238,58 +235,41 @@ namespace SATSuma
 
         private async void CheckBlockchainExplorerApiStatus()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            try
             {
-                try
+                Ping pingSender = new Ping();
+                string pingAddress = null;
+                if (NodeURL == "https://blockstream.info/api/")
                 {
-                    Ping pingSender = new Ping();
-                    string pingAddress = null;
+                    pingAddress = "blockstream.info";
+                }
+                if (NodeURL == "https://mempool.space/api/")
+                {
+                    pingAddress = "mempool.space";
+                }
+                if (NodeURL == null)
+                {
+                    pingAddress = "mempool.space";
+                    NodeURL = "https://mempool.space/api/";
+
+                }
+                PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                if (reply.Status == IPStatus.Success)
+                {
+                    lblNodeStatusLight.ForeColor = Color.Lime;
+                    var displayNodeName = "";
                     if (NodeURL == "https://blockstream.info/api/")
                     {
-                        pingAddress = "blockstream.info";
+                        displayNodeName = "Blockstream";
                     }
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        pingAddress = "mempool.space";
+                        displayNodeName = "Mempool.space";
                     }
-                    if (NodeURL == null)
-                    {
-                        pingAddress = "mempool.space";
-                        NodeURL = "https://mempool.space/api/";
-
-                    }
-                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        lblNodeStatusLight.ForeColor = Color.Lime;
-                        var displayNodeName = "";
-                        if (NodeURL == "https://blockstream.info/api/")
-                        {
-                            displayNodeName = "Blockstream";
-                        }
-                        if (NodeURL == "https://mempool.space/api/")
-                        {
-                            displayNodeName = "Mempool.space";
-                        }
-                        lblActiveNode.Text = displayNodeName + " status";
-                    }
-                    else
-                    {
-                        // API is not online
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        var displayNodeName = "";
-                        if (NodeURL == "https://blockstream.info/api/")
-                        {
-                            displayNodeName = "Blockstream";
-                        }
-                        if (NodeURL == "https://mempool.space/api/")
-                        {
-                            displayNodeName = "Mempool.space";
-                        }
-                        lblActiveNode.Text = displayNodeName + " status";
-                    }
+                    lblActiveNode.Text = displayNodeName + " status";
                 }
-                catch (HttpRequestException)
+                else
                 {
                     // API is not online
                     lblNodeStatusLight.ForeColor = Color.Red;
@@ -304,8 +284,23 @@ namespace SATSuma
                     }
                     lblActiveNode.Text = displayNodeName + " status";
                 }
-                lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
             }
+            catch (HttpRequestException)
+            {
+                // API is not online
+                lblNodeStatusLight.ForeColor = Color.Red;
+                var displayNodeName = "";
+                if (NodeURL == "https://blockstream.info/api/")
+                {
+                    displayNodeName = "Blockstream";
+                }
+                if (NodeURL == "https://mempool.space/api/")
+                {
+                    displayNodeName = "Mempool.space";
+                }
+                lblActiveNode.Text = displayNodeName + " status";
+            }
+            lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
         }
 
     }

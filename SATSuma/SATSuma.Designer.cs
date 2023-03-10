@@ -510,7 +510,7 @@
             this.lblBlockNumber.TabIndex = 5;
             this.lblBlockNumber.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockNumber, "Click to view this block");
-            this.lblBlockNumber.Click += new System.EventHandler(this.lblBlockNumber_Click);
+            this.lblBlockNumber.Click += new System.EventHandler(this.LblBlockNumber_Click);
             // 
             // timerAPIGroup1
             // 
@@ -566,7 +566,7 @@
             this.btnMoveWindow.TabStop = false;
             this.btnMoveWindow.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMoveWindow.UseVisualStyleBackColor = false;
-            this.btnMoveWindow.Click += new System.EventHandler(this.btnMoveWindow_Click);
+            this.btnMoveWindow.Click += new System.EventHandler(this.BtnMoveWindow_Click);
             this.btnMoveWindow.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnMoveWindow_MouseDown);
             this.btnMoveWindow.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMoveWindow_MouseUp);
             // 
@@ -3063,7 +3063,7 @@
             this.btnShowAllTX.TabIndex = 147;
             this.btnShowAllTX.Text = "show all TX";
             this.btnShowAllTX.UseVisualStyleBackColor = false;
-            this.btnShowAllTX.Click += new System.EventHandler(this.btnShowAllTXForAddress_Click);
+            this.btnShowAllTX.Click += new System.EventHandler(this.BtnShowAllTXForAddress_Click);
             // 
             // btnShowConfirmedTX
             // 
@@ -3083,7 +3083,7 @@
             this.btnShowConfirmedTX.TabIndex = 146;
             this.btnShowConfirmedTX.Text = "confirmed TX";
             this.btnShowConfirmedTX.UseVisualStyleBackColor = false;
-            this.btnShowConfirmedTX.Click += new System.EventHandler(this.btnShowConfirmedTXForAddress_Click);
+            this.btnShowConfirmedTX.Click += new System.EventHandler(this.BtnShowConfirmedTXForAddress_Click);
             // 
             // btnShowUnconfirmedTX
             // 
@@ -3102,7 +3102,7 @@
             this.btnShowUnconfirmedTX.TabIndex = 145;
             this.btnShowUnconfirmedTX.Text = "unconfirmed TX";
             this.btnShowUnconfirmedTX.UseVisualStyleBackColor = false;
-            this.btnShowUnconfirmedTX.Click += new System.EventHandler(this.btnShowUnconfirmedTXForAddress_Click);
+            this.btnShowUnconfirmedTX.Click += new System.EventHandler(this.BtnShowUnconfirmedTXForAddress_Click);
             // 
             // BtnViewBlockFromAddress
             // 
@@ -3218,10 +3218,10 @@
             this.listViewAddressTransactions.TabStop = false;
             this.listViewAddressTransactions.UseCompatibleStateImageBehavior = false;
             this.listViewAddressTransactions.View = System.Windows.Forms.View.Details;
-            this.listViewAddressTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewAddressTransactions_ColumnWidthChanging);
-            this.listViewAddressTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewAddressTransactions_DrawColumnHeader);
+            this.listViewAddressTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewAddressTransactions_ColumnWidthChanging);
+            this.listViewAddressTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListViewAddressTransactions_DrawColumnHeader);
             this.listViewAddressTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressTransactions_DrawSubItem);
-            this.listViewAddressTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewAddressTransactions_ItemSelectionChanged);
+            this.listViewAddressTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressTransactions_ItemSelectionChanged);
             // 
             // imageListUpDownArrows
             // 
@@ -3495,7 +3495,7 @@
             this.btnPreviousBlock.TabIndex = 171;
             this.btnPreviousBlock.Text = "◁";
             this.btnPreviousBlock.UseVisualStyleBackColor = false;
-            this.btnPreviousBlock.Click += new System.EventHandler(this.btnPreviousBlock_Click);
+            this.btnPreviousBlock.Click += new System.EventHandler(this.BtnPreviousBlock_Click);
             // 
             // btnNextBlock
             // 
@@ -3514,7 +3514,7 @@
             this.btnNextBlock.TabIndex = 170;
             this.btnNextBlock.Text = "▷";
             this.btnNextBlock.UseVisualStyleBackColor = false;
-            this.btnNextBlock.Click += new System.EventHandler(this.btnNextBlock_Click);
+            this.btnNextBlock.Click += new System.EventHandler(this.BtnNextBlock_Click);
             // 
             // label71
             // 
@@ -3582,7 +3582,7 @@
             this.btnViewTransactionFromBlock.Text = "▶️";
             this.btnViewTransactionFromBlock.UseVisualStyleBackColor = false;
             this.btnViewTransactionFromBlock.Visible = false;
-            this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.btnViewTransactionFromBlock_Click);
+            this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.BtnViewTransactionFromBlock_Click);
             // 
             // listViewBlockTransactions
             // 
@@ -3608,10 +3608,10 @@
             this.listViewBlockTransactions.TabStop = false;
             this.listViewBlockTransactions.UseCompatibleStateImageBehavior = false;
             this.listViewBlockTransactions.View = System.Windows.Forms.View.Details;
-            this.listViewBlockTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewBlockTransactions_ColumnWidthChanging);
-            this.listViewBlockTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewBlockTransactions_DrawColumnHeader);
-            this.listViewBlockTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewBlockTransactions_DrawSubItem);
-            this.listViewBlockTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewBlockTransactions_ItemSelectionChanged);
+            this.listViewBlockTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewBlockTransactions_ColumnWidthChanging);
+            this.listViewBlockTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListViewBlockTransactions_DrawColumnHeader);
+            this.listViewBlockTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlockTransactions_DrawSubItem);
+            this.listViewBlockTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockTransactions_ItemSelectionChanged);
             // 
             // lblBlockTXPositionInList
             // 
@@ -3643,7 +3643,7 @@
             this.btnPreviousBlockTransactions.TabIndex = 156;
             this.btnPreviousBlockTransactions.Text = "◁ prev";
             this.btnPreviousBlockTransactions.UseVisualStyleBackColor = false;
-            this.btnPreviousBlockTransactions.Click += new System.EventHandler(this.btnPreviousBlockTransactions_Click);
+            this.btnPreviousBlockTransactions.Click += new System.EventHandler(this.BtnPreviousBlockTransactions_Click);
             // 
             // btnNextBlockTransactions
             // 
@@ -3662,7 +3662,7 @@
             this.btnNextBlockTransactions.TabIndex = 155;
             this.btnNextBlockTransactions.Text = "▷ next";
             this.btnNextBlockTransactions.UseVisualStyleBackColor = false;
-            this.btnNextBlockTransactions.Click += new System.EventHandler(this.btnNextBlockTransactions_Click);
+            this.btnNextBlockTransactions.Click += new System.EventHandler(this.BtnNextBlockTransactions_Click);
             // 
             // label69
             // 
@@ -3888,7 +3888,7 @@
             this.textBoxSubmittedBlockNumber.Name = "textBoxSubmittedBlockNumber";
             this.textBoxSubmittedBlockNumber.Size = new System.Drawing.Size(60, 25);
             this.textBoxSubmittedBlockNumber.TabIndex = 7;
-            this.textBoxSubmittedBlockNumber.TextChanged += new System.EventHandler(this.textBoxSubmittedBlockNumber_TextChanged);
+            this.textBoxSubmittedBlockNumber.TextChanged += new System.EventHandler(this.TextBoxSubmittedBlockNumber_TextChanged);
             this.textBoxSubmittedBlockNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedBlockNumber_KeyPress);
             // 
             // label60
@@ -3962,7 +3962,7 @@
             this.btnMenuTransaction.Text = "transaction";
             this.btnMenuTransaction.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuTransaction.UseVisualStyleBackColor = false;
-            this.btnMenuTransaction.Click += new System.EventHandler(this.btnMenuTransaction_Click);
+            this.btnMenuTransaction.Click += new System.EventHandler(this.BtnMenuTransaction_Click);
             // 
             // btnMenuBlockList
             // 
@@ -3984,7 +3984,7 @@
             this.btnMenuBlockList.Text = "recent blocks";
             this.btnMenuBlockList.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuBlockList.UseVisualStyleBackColor = false;
-            this.btnMenuBlockList.Click += new System.EventHandler(this.btnMenuBlockList_Click);
+            this.btnMenuBlockList.Click += new System.EventHandler(this.BtnMenuBlockList_Click);
             // 
             // btnMenu
             // 
@@ -4006,7 +4006,7 @@
             this.btnMenu.Text = "MENU";
             this.btnMenu.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenu.UseVisualStyleBackColor = false;
-            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
+            this.btnMenu.Click += new System.EventHandler(this.BtnMenu_Click);
             // 
             // btnMenuSettings
             // 
@@ -4068,7 +4068,7 @@
             this.btnMenuBlock.Text = "block";
             this.btnMenuBlock.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuBlock.UseVisualStyleBackColor = false;
-            this.btnMenuBlock.Click += new System.EventHandler(this.btnMenuBlock_Click);
+            this.btnMenuBlock.Click += new System.EventHandler(this.BtnMenuBlock_Click);
             // 
             // btnMenuAddress
             // 
@@ -4444,7 +4444,7 @@
             this.btnViewTransactionsFromBlockList.Text = "▶️";
             this.btnViewTransactionsFromBlockList.UseVisualStyleBackColor = false;
             this.btnViewTransactionsFromBlockList.Visible = false;
-            this.btnViewTransactionsFromBlockList.Click += new System.EventHandler(this.btnViewTransactionsFromBlockList_Click);
+            this.btnViewTransactionsFromBlockList.Click += new System.EventHandler(this.BtnViewTransactionsFromBlockList_Click);
             // 
             // btnViewBlockFromBlockList
             // 
@@ -4464,7 +4464,7 @@
             this.btnViewBlockFromBlockList.Text = "▶️";
             this.btnViewBlockFromBlockList.UseVisualStyleBackColor = false;
             this.btnViewBlockFromBlockList.Visible = false;
-            this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.btnViewBlockFromBlockList_Click);
+            this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.BtnViewBlockFromBlockList_Click);
             // 
             // listViewBlockList
             // 
@@ -4490,11 +4490,11 @@
             this.listViewBlockList.TabStop = false;
             this.listViewBlockList.UseCompatibleStateImageBehavior = false;
             this.listViewBlockList.View = System.Windows.Forms.View.Details;
-            this.listViewBlockList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewBlockList_ColumnWidthChanging);
-            this.listViewBlockList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewBlockList_DrawColumnHeader);
-            this.listViewBlockList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewBlockList_DrawSubItem);
-            this.listViewBlockList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewBlockList_ItemSelectionChanged);
-            this.listViewBlockList.SelectedIndexChanged += new System.EventHandler(this.listViewBlockList_SelectedIndexChanged);
+            this.listViewBlockList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewBlockList_ColumnWidthChanging);
+            this.listViewBlockList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListViewBlockList_DrawColumnHeader);
+            this.listViewBlockList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlockList_DrawSubItem);
+            this.listViewBlockList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockList_ItemSelectionChanged);
+            this.listViewBlockList.SelectedIndexChanged += new System.EventHandler(this.ListViewBlockList_SelectedIndexChanged);
             // 
             // lblBlockListPositionInList
             // 
@@ -4526,7 +4526,7 @@
             this.btnNewer15Blocks.TabIndex = 156;
             this.btnNewer15Blocks.Text = "◁ newer";
             this.btnNewer15Blocks.UseVisualStyleBackColor = false;
-            this.btnNewer15Blocks.Click += new System.EventHandler(this.btnNewer15Blocks_Click);
+            this.btnNewer15Blocks.Click += new System.EventHandler(this.BtnNewer15Blocks_Click);
             // 
             // btnOlder15Blocks
             // 
@@ -4545,7 +4545,7 @@
             this.btnOlder15Blocks.TabIndex = 155;
             this.btnOlder15Blocks.Text = "▷ older";
             this.btnOlder15Blocks.UseVisualStyleBackColor = false;
-            this.btnOlder15Blocks.Click += new System.EventHandler(this.btnOlder15Blocks_Click);
+            this.btnOlder15Blocks.Click += new System.EventHandler(this.BtnOlder15Blocks_Click);
             // 
             // textBoxBlockHeightToStartListFrom
             // 
@@ -4558,8 +4558,8 @@
             this.textBoxBlockHeightToStartListFrom.Name = "textBoxBlockHeightToStartListFrom";
             this.textBoxBlockHeightToStartListFrom.Size = new System.Drawing.Size(60, 25);
             this.textBoxBlockHeightToStartListFrom.TabIndex = 7;
-            this.textBoxBlockHeightToStartListFrom.TextChanged += new System.EventHandler(this.textBoxBlockHeightToStartListFrom_TextChanged);
-            this.textBoxBlockHeightToStartListFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxBlockHeightToStartListFrom_KeyPress);
+            this.textBoxBlockHeightToStartListFrom.TextChanged += new System.EventHandler(this.TextBoxBlockHeightToStartListFrom_TextChanged);
+            this.textBoxBlockHeightToStartListFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxBlockHeightToStartListFrom_KeyPress);
             // 
             // label109
             // 
@@ -4996,7 +4996,7 @@
             this.btnHelp.Text = "❔";
             this.btnHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelp.UseVisualStyleBackColor = false;
-            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
+            this.btnHelp.Click += new System.EventHandler(this.BtnHelp_Click);
             // 
             // panelTransaction
             // 
@@ -5317,7 +5317,7 @@
             this.textBoxTransactionID.Name = "textBoxTransactionID";
             this.textBoxTransactionID.Size = new System.Drawing.Size(479, 25);
             this.textBoxTransactionID.TabIndex = 7;
-            this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxTransactionID_KeyPress);
+            this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxTransactionID_KeyPress);
             // 
             // label136
             // 

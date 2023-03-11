@@ -16,11 +16,11 @@
 
  * Stuff to do:
  * further testing of own node connection, then add to settings once tested, with warning it might be much slower
- * bring the address screen within the Group1timertick? Might not be practical/useful
+ * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
- * move all line drawing to the paint event somehow
+ * remove calls to view transaction from blocks or address as they already happen on transaction id textchange. Instead just show/hide relevant panels after passing the tx id
  */
 
 #region Using
@@ -3945,9 +3945,7 @@ namespace SATSuma
                         lblTransactionOutputCount.Text = Convert.ToString(transaction.Vout.Count()) + " outputs";
                     });
                 }
-                // central bit
-
-
+                // ----------------- central bit of diagram
                 long totalValueIn = 0;
                 foreach (TransactionVin vin in transaction.Vin)
                 {
@@ -4019,13 +4017,7 @@ namespace SATSuma
                 Point endPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100);
                 linePoints.Add(startPoint2);
                 linePoints.Add(endPoint2);
-              //  using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-              //  {
-              //      using var g = panelTransactionDiagram.CreateGraphics();
-              //      g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
-              //      g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
-              //  }
-                // inputs 
+                // ------------- inputs on diagram
                 int NumberOfInputLines = Convert.ToInt32(transaction.Vin.Count());
                 int YInputsStep = 0;
                 int YInputsPos = 0;
@@ -4058,13 +4050,9 @@ namespace SATSuma
                     Point endPoint4 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
                     linePoints.Add(startPoint4);
                     linePoints.Add(endPoint4);
-                   // using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
-                   // using var g = panelTransactionDiagram.CreateGraphics();
-                   // g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
-                   // g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
                     YInputsPos += YInputsStep;
                 }
-                // outputs
+                // --------------- outputs on diagram
                 int NumberOfOutputLines = Convert.ToInt32(transaction.Vout.Count());
                 int YOutputsStep = 0;
                 int YOutputsPos = 0;
@@ -4097,10 +4085,6 @@ namespace SATSuma
                     Point endPoint6 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
                     linePoints.Add(startPoint6);
                     linePoints.Add(endPoint6);
-                    //using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
-                    //using var g = panelTransactionDiagram.CreateGraphics();
-                    //g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
-                    //g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
                     YOutputsPos += YOutputsStep;
                 }
                 // Trigger a repaint of the form
@@ -4137,12 +4121,12 @@ namespace SATSuma
             }
         }
 
-        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
+        // draw all the lines on the transaction diagram from the previously stored list.
+        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e) 
         {
-            // Create a new pen with the desired color
             Pen pen = new Pen(Color.FromArgb(106, 72, 9));
 
-            // Iterate over the list of points and draw lines between them
+            // Iterate over the stored list of points and draw lines between them
             for (int i = 0; i < linePoints.Count - 1; i += 2)
             {
                 e.Graphics.DrawLine(pen, linePoints[i], linePoints[i + 1]);
@@ -4150,7 +4134,7 @@ namespace SATSuma
         }
         #endregion
         
-        #region BLOCK LIST STUFF
+#region BLOCK LIST STUFF
 
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {

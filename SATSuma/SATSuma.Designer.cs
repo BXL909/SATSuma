@@ -366,9 +366,10 @@
             this.panel22 = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
             this.panelTransaction = new System.Windows.Forms.Panel();
+            this.lblInvalidTransaction = new System.Windows.Forms.Label();
             this.panel24 = new System.Windows.Forms.Panel();
             this.listViewTransactionInputs = new System.Windows.Forms.ListView();
-            this.panel23 = new System.Windows.Forms.Panel();
+            this.panelTransactionHeadline = new System.Windows.Forms.Panel();
             this.label113 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
             this.lblTransactionVersion = new System.Windows.Forms.Label();
@@ -378,6 +379,7 @@
             this.label128 = new System.Windows.Forms.Label();
             this.lblTransactionLockTime = new System.Windows.Forms.Label();
             this.panelTransactionDiagram = new System.Windows.Forms.Panel();
+            this.lblTotalOutputValue = new System.Windows.Forms.Label();
             this.lblTotalInputValue = new System.Windows.Forms.Label();
             this.lblCoinbase = new System.Windows.Forms.Label();
             this.panelTransactionMiddle = new System.Windows.Forms.Panel();
@@ -391,7 +393,6 @@
             this.lblTransactionOutputCount = new System.Windows.Forms.Label();
             this.textBoxTransactionID = new System.Windows.Forms.TextBox();
             this.label136 = new System.Windows.Forms.Label();
-            this.lblTotalOutputValue = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -418,7 +419,7 @@
             this.panel22.SuspendLayout();
             this.panelTransaction.SuspendLayout();
             this.panel24.SuspendLayout();
-            this.panel23.SuspendLayout();
+            this.panelTransactionHeadline.SuspendLayout();
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
             this.SuspendLayout();
@@ -5001,8 +5002,9 @@
             // panelTransaction
             // 
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
+            this.panelTransaction.Controls.Add(this.lblInvalidTransaction);
             this.panelTransaction.Controls.Add(this.panel24);
-            this.panelTransaction.Controls.Add(this.panel23);
+            this.panelTransaction.Controls.Add(this.panelTransactionHeadline);
             this.panelTransaction.Controls.Add(this.panelTransactionDiagram);
             this.panelTransaction.Controls.Add(this.textBoxTransactionID);
             this.panelTransaction.Controls.Add(this.label136);
@@ -5011,6 +5013,16 @@
             this.panelTransaction.Size = new System.Drawing.Size(773, 556);
             this.panelTransaction.TabIndex = 172;
             this.panelTransaction.Visible = false;
+            // 
+            // lblInvalidTransaction
+            // 
+            this.lblInvalidTransaction.AutoSize = true;
+            this.lblInvalidTransaction.Location = new System.Drawing.Point(606, 6);
+            this.lblInvalidTransaction.Name = "lblInvalidTransaction";
+            this.lblInvalidTransaction.Size = new System.Drawing.Size(182, 15);
+            this.lblInvalidTransaction.TabIndex = 198;
+            this.lblInvalidTransaction.Text = "Invalid or does not exist";
+            this.lblInvalidTransaction.Visible = false;
             // 
             // panel24
             // 
@@ -5045,24 +5057,25 @@
             this.listViewTransactionInputs.UseCompatibleStateImageBehavior = false;
             this.listViewTransactionInputs.View = System.Windows.Forms.View.Details;
             // 
-            // panel23
+            // panelTransactionHeadline
             // 
-            this.panel23.BackColor = System.Drawing.Color.Transparent;
-            this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
-            this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel23.Controls.Add(this.label113);
-            this.panel23.Controls.Add(this.label98);
-            this.panel23.Controls.Add(this.lblTransactionVersion);
-            this.panel23.Controls.Add(this.lblTransactionBlockHeight);
-            this.panel23.Controls.Add(this.label126);
-            this.panel23.Controls.Add(this.lblTransactionBlockTime);
-            this.panel23.Controls.Add(this.label128);
-            this.panel23.Controls.Add(this.lblTransactionLockTime);
-            this.panel23.Location = new System.Drawing.Point(7, 35);
-            this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(669, 23);
-            this.panel23.TabIndex = 196;
+            this.panelTransactionHeadline.BackColor = System.Drawing.Color.Transparent;
+            this.panelTransactionHeadline.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelTransactionHeadline.BackgroundImage")));
+            this.panelTransactionHeadline.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelTransactionHeadline.Controls.Add(this.label113);
+            this.panelTransactionHeadline.Controls.Add(this.label98);
+            this.panelTransactionHeadline.Controls.Add(this.lblTransactionVersion);
+            this.panelTransactionHeadline.Controls.Add(this.lblTransactionBlockHeight);
+            this.panelTransactionHeadline.Controls.Add(this.label126);
+            this.panelTransactionHeadline.Controls.Add(this.lblTransactionBlockTime);
+            this.panelTransactionHeadline.Controls.Add(this.label128);
+            this.panelTransactionHeadline.Controls.Add(this.lblTransactionLockTime);
+            this.panelTransactionHeadline.Location = new System.Drawing.Point(7, 35);
+            this.panelTransactionHeadline.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panelTransactionHeadline.Name = "panelTransactionHeadline";
+            this.panelTransactionHeadline.Size = new System.Drawing.Size(669, 23);
+            this.panelTransactionHeadline.TabIndex = 196;
+            this.panelTransactionHeadline.Visible = false;
             // 
             // label113
             // 
@@ -5175,6 +5188,19 @@
             this.panelTransactionDiagram.Name = "panelTransactionDiagram";
             this.panelTransactionDiagram.Size = new System.Drawing.Size(753, 384);
             this.panelTransactionDiagram.TabIndex = 170;
+            this.panelTransactionDiagram.Visible = false;
+            this.panelTransactionDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionDiagram_Paint);
+            // 
+            // lblTotalOutputValue
+            // 
+            this.lblTotalOutputValue.AutoSize = true;
+            this.lblTotalOutputValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblTotalOutputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalOutputValue.Location = new System.Drawing.Point(318, 264);
+            this.lblTotalOutputValue.Name = "lblTotalOutputValue";
+            this.lblTotalOutputValue.Size = new System.Drawing.Size(136, 18);
+            this.lblTotalOutputValue.TabIndex = 170;
+            this.lblTotalOutputValue.Text = "totalOutputValue";
             // 
             // lblTotalInputValue
             // 
@@ -5317,6 +5343,7 @@
             this.textBoxTransactionID.Name = "textBoxTransactionID";
             this.textBoxTransactionID.Size = new System.Drawing.Size(479, 25);
             this.textBoxTransactionID.TabIndex = 7;
+            this.textBoxTransactionID.TextChanged += new System.EventHandler(this.TextBoxTransactionID_TextChanged);
             this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxTransactionID_KeyPress);
             // 
             // label136
@@ -5329,17 +5356,6 @@
             this.label136.Size = new System.Drawing.Size(152, 20);
             this.label136.TabIndex = 6;
             this.label136.Text = "Enter transaction ID";
-            // 
-            // lblTotalOutputValue
-            // 
-            this.lblTotalOutputValue.AutoSize = true;
-            this.lblTotalOutputValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblTotalOutputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalOutputValue.Location = new System.Drawing.Point(318, 264);
-            this.lblTotalOutputValue.Name = "lblTotalOutputValue";
-            this.lblTotalOutputValue.Size = new System.Drawing.Size(136, 18);
-            this.lblTotalOutputValue.TabIndex = 170;
-            this.lblTotalOutputValue.Text = "totalOutputValue";
             // 
             // SATSuma
             // 
@@ -5441,8 +5457,8 @@
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
             this.panel24.ResumeLayout(false);
-            this.panel23.ResumeLayout(false);
-            this.panel23.PerformLayout();
+            this.panelTransactionHeadline.ResumeLayout(false);
+            this.panelTransactionHeadline.PerformLayout();
             this.panelTransactionDiagram.ResumeLayout(false);
             this.panelTransactionDiagram.PerformLayout();
             this.panelTransactionMiddle.ResumeLayout(false);
@@ -5809,12 +5825,13 @@
         private System.Windows.Forms.Label label136;
         private System.Windows.Forms.Panel panelTransactionDiagram;
         private System.Windows.Forms.Panel panelTransactionMiddle;
-        private System.Windows.Forms.Panel panel23;
+        private System.Windows.Forms.Panel panelTransactionHeadline;
         private System.Windows.Forms.Panel panel24;
         private System.Windows.Forms.ListView listViewTransactionInputs;
         private System.Windows.Forms.Label lblCoinbase;
         private System.Windows.Forms.Label lblTotalInputValue;
         private System.Windows.Forms.Label lblTotalOutputValue;
+        private System.Windows.Forms.Label lblInvalidTransaction;
     }
 }
 

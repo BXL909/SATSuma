@@ -17,10 +17,10 @@
  * Stuff to do:
  * further testing of own node connection, then add to settings once tested, with warning it might be much slower
  * bring the address screen within the Group1timertick? Might not be practical/useful
- * better/more error handling everywhere
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
- * validation of user input of transaction ID
+ * replace as many fields as possible on dashboards with selected node versions
+ * move all line drawing to the paint event somehow
  */
 
 #region Using
@@ -96,6 +96,7 @@ namespace SATSuma
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         private string storedLastSeenBlockNumber = "0";
+        private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
         bool btnShowAllAddressTXWasEnabled = true;
@@ -136,15 +137,55 @@ namespace SATSuma
 
         private void Form1_Load(object sender, EventArgs e) // on form loading
         {
-            UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
-            StartTheClocksTicking(); // start all the timers
-            textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+            try
             {
-                textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
-            });
-            CheckBlockchainExplorerApiStatus();
-            mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
-            btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
+                using (WebClient client = new WebClient())
+                {
+                    string BlockTipURL = NodeURL + "blocks/tip/height";
+                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                    lblBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockNumber.Text = BlockTip;
+                    });
+                }
+                UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
+                StartTheClocksTicking(); // start all the timers
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
+                });
+                CheckBlockchainExplorerApiStatus();
+                mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
+                btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Form1_Load, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Form1_Load, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Form1_Load, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "Form1_Load, " + ex.Message;
+                });
+            }
         }
 #endregion
 
@@ -210,8 +251,49 @@ namespace SATSuma
 
         private void TimerAPIGroup1_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
         {
-            ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-            UpdateAPIGroup1DataFields(); // fetch data and populate fields
+            try
+            {
+                ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
+                                             // get current block height before anything else
+                using (WebClient client = new WebClient())
+                {
+                    string BlockTipURL = NodeURL + "blocks/tip/height";
+                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                    lblBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockNumber.Text = BlockTip;
+                    });
+                }
+                UpdateAPIGroup1DataFields(); // fetch data and populate fields
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, " + ex.Message;
+                });
+            }
         }
 
 #endregion
@@ -325,10 +407,10 @@ namespace SATSuma
                             {
                                 lblAvgNoTransactions.Text = avgNoTransactions;
                             });
-                            lblBlockNumber.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockNumber.Text = blockNumber;
-                            });
+//                            lblBlockNumber.Invoke((MethodInvoker)delegate
+//                            {
+//                                lblBlockNumber.Text = blockNumber;
+//                            });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = blockReward;
@@ -386,10 +468,10 @@ namespace SATSuma
                             {
                                 lblAvgNoTransactions.Text = "disabled";
                             });
-                            lblBlockNumber.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockNumber.Text = "disabled";
-                            });
+//                            lblBlockNumber.Invoke((MethodInvoker)delegate
+//                            {
+//                                lblBlockNumber.Text = "disabled";
+//                            });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = "disabled";
@@ -3706,6 +3788,56 @@ namespace SATSuma
             }
         }
 
+        private async void TextBoxTransactionID_TextChanged(object sender, EventArgs e)
+        {
+            string transactionIdToValidate = textBoxTransactionID.Text;
+            if (ValidateTransactionId(transactionIdToValidate)) // check if the entered string is valid
+            {
+                bool exists = await TransactionExists(transactionIdToValidate); // then check if it actually exists
+                if (exists)
+                {
+                    lblInvalidTransaction.Visible = false;
+                    panelTransactionHeadline.Visible = true;
+                    panelTransactionDiagram.Visible = true;
+                    LookupTransaction();
+                }
+                else
+                {
+                    panelTransactionHeadline.Visible = false;
+                    panelTransactionDiagram.Visible = false;
+                    lblInvalidTransaction.Visible = true;
+                    
+                }
+            }
+            else
+            {
+                panelTransactionHeadline.Visible = false;
+                panelTransactionDiagram.Visible = false;
+                lblInvalidTransaction.Visible = true;
+            }
+        }
+
+        private bool ValidateTransactionId(string transactionId) // checks if transaction ID is in a valid format
+        {
+            try
+            {
+                uint256 txId = uint256.Parse(transactionId);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> TransactionExists(string transactionId) // checks if the valid transaction ID actually exists
+        {
+            string url = NodeURL + "tx/" + transactionId;
+            using HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            return response.IsSuccessStatusCode;
+        }
+
         private async void LookupTransaction()
         {
             try
@@ -3747,6 +3879,7 @@ namespace SATSuma
         {
             try
             {
+                linePoints.Clear();
                 //panelTransactionDiagram.Invalidate();
                 //            DisableEnableLoadingAnimation("enable"); // start the loading animation
                 //            DisableEnableButtons("disable"); // disable buttons during operation
@@ -3825,7 +3958,7 @@ namespace SATSuma
                 lblTotalInputValue.Invoke((MethodInvoker)delegate
                 {
                     lblTotalInputValue.Text = decTotalBitcoinIn.ToString();
-                    lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - 140, (panelTransactionDiagram.Size.Height / 2) + 3);
+                    lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValue.Width / 2) - 95, (panelTransactionDiagram.Size.Height / 2) + 3);
                 });
                 long totalValueOut = 0;
                 foreach (TransactionVout vout in transaction.Vout)
@@ -3837,7 +3970,7 @@ namespace SATSuma
                 lblTotalOutputValue.Invoke((MethodInvoker)delegate
                 {
                     lblTotalOutputValue.Text = decTotalBitcoinOut.ToString();
-                    lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 140 - lblTotalOutputValue.Width, (panelTransactionDiagram.Size.Height / 2) + 3);
+                    lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 95 - (lblTotalOutputValue.Width / 2), (panelTransactionDiagram.Size.Height / 2) + 3);
                 });
 
                 lblTransactionFee.Invoke((MethodInvoker)delegate
@@ -3876,12 +4009,22 @@ namespace SATSuma
                         lblCoinbase.Text = "";
                     });
                 }
-                using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
-                {
-                    using var g = panelTransactionDiagram.CreateGraphics();
-                    g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
-                    g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
-                }
+                // central horizontal
+                Point startPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
+                Point endPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                linePoints.Add(startPoint1);
+                linePoints.Add(endPoint1);
+                // vertical line up to fees
+                Point startPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2);
+                Point endPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100);
+                linePoints.Add(startPoint2);
+                linePoints.Add(endPoint2);
+              //  using (Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1))
+              //  {
+              //      using var g = panelTransactionDiagram.CreateGraphics();
+              //      g.DrawLine(pen, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2); // central horizontal
+              //      g.DrawLine(pen, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2, panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100); // vertical line up to fees
+              //  }
                 // inputs 
                 int NumberOfInputLines = Convert.ToInt32(transaction.Vin.Count());
                 int YInputsStep = 0;
@@ -3907,10 +4050,18 @@ namespace SATSuma
                     {
                         break;
                     }
-                    using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
-                    using var g = panelTransactionDiagram.CreateGraphics();
-                    g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
-                    g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
+                    Point startPoint3 = new Point(10, YInputsPos);
+                    Point endPoint3 = new Point(100, YInputsPos);
+                    linePoints.Add(startPoint3);
+                    linePoints.Add(endPoint3);
+                    Point startPoint4 = new Point(100, YInputsPos);
+                    Point endPoint4 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
+                    linePoints.Add(startPoint4);
+                    linePoints.Add(endPoint4);
+                   // using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+                   // using var g = panelTransactionDiagram.CreateGraphics();
+                   // g.DrawLine(pen, 10, YInputsPos, 100, YInputsPos);
+                   // g.DrawLine(pen, 100, YInputsPos, (panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
                     YInputsPos += YInputsStep;
                 }
                 // outputs
@@ -3938,12 +4089,23 @@ namespace SATSuma
                     {
                         break;
                     }
-                    using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
-                    using var g = panelTransactionDiagram.CreateGraphics();
-                    g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
-                    g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                    Point startPoint5 = new Point(panelTransactionDiagram.Size.Width - 10, YOutputsPos);
+                    Point endPoint5 = new Point(panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    linePoints.Add(startPoint5);
+                    linePoints.Add(endPoint5);
+                    Point startPoint6 = new Point(panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    Point endPoint6 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                    linePoints.Add(startPoint6);
+                    linePoints.Add(endPoint6);
+                    //using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+                    //using var g = panelTransactionDiagram.CreateGraphics();
+                    //g.DrawLine(pen, panelTransactionDiagram.Size.Width - 10, YOutputsPos, panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    //g.DrawLine(pen, panelTransactionDiagram.Size.Width - 100, YOutputsPos, (panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
                     YOutputsPos += YOutputsStep;
                 }
+                // Trigger a repaint of the form
+                this.Invalidate();
+
             }
             catch (WebException ex)
             {
@@ -3974,9 +4136,21 @@ namespace SATSuma
                 });
             }
         }
-#endregion
 
-#region BLOCK LIST STUFF
+        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
+        {
+            // Create a new pen with the desired color
+            Pen pen = new Pen(Color.FromArgb(106, 72, 9));
+
+            // Iterate over the list of points and draw lines between them
+            for (int i = 0; i < linePoints.Count - 1; i += 2)
+            {
+                e.Graphics.DrawLine(pen, linePoints[i], linePoints[i + 1]);
+            }
+        }
+        #endregion
+        
+        #region BLOCK LIST STUFF
 
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -5724,6 +5898,7 @@ namespace SATSuma
         }
 
         #endregion
+
 
     }
     //==============================================================================================================================================================================================

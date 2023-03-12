@@ -1,6 +1,6 @@
 ﻿namespace SATSuma
 {
-    partial class settingsScreen
+    partial class SettingsScreen
     {
         /// <summary>
         /// Required designer variable.

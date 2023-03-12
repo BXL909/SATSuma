@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SATSuma
 {
-    public partial class settingsScreen : Form
+    public partial class SettingsScreen : Form
     {
         private bool hasAPISelectorComboBoxJustBeenPainted = true;
         public bool BitcoinExplorerEndpointsEnabled { get; set; }
@@ -25,14 +25,14 @@ namespace SATSuma
         public string NodeURL { get; set; }
         public int APIGroup1RefreshInMinsSelection { get; set; } = 1;
         public int APIGroup2RefreshInHoursSelection { get; set; } = 24;
-        public static settingsScreen Instance { get; private set; }
+        public static SettingsScreen Instance { get; private set; }
         
         public static void CreateInstance()
         {
-            Instance ??= new settingsScreen();
+            Instance ??= new SettingsScreen();
         }
 
-        public settingsScreen()
+        public SettingsScreen()
         {
             InitializeComponent();
             comboAPISelectorForQueries.SelectedIndex = 1;

@@ -19,7 +19,7 @@ namespace SATSuma
             InitializeComponent();
         }
 
-        private void helpScreen_Load(object sender, EventArgs e)
+        private void HelpScreen_Load(object sender, EventArgs e)
         {
             panel1.VerticalScroll.Visible = false;
             if (((SATSuma)this.Owner).GetPanelBlock().Visible == true)
@@ -54,7 +54,7 @@ namespace SATSuma
             }
         }
 
-        private void helpScreen_Paint(object sender, PaintEventArgs e)
+        private void HelpScreen_Paint(object sender, PaintEventArgs e)
         {
 
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
@@ -66,12 +66,12 @@ namespace SATSuma
             textBox.Height = textSize.Height;
         }
 
-        private void textBoxHelpText_TextChanged(object sender, EventArgs e)
+        private void TextBoxHelpText_TextChanged(object sender, EventArgs e)
         {
             ResizeTextBox(textBoxHelpText);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             // Set the focus to the TextBox control
             textBoxHelpText.Focus();
@@ -80,7 +80,7 @@ namespace SATSuma
             SendKeys.Send("{UP}");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             // Set the focus to the TextBox control
             textBoxHelpText.Focus();
@@ -89,7 +89,7 @@ namespace SATSuma
             SendKeys.Send("{DOWN}");
         }
 
-        private void btnHelp_Click(object sender, EventArgs e)
+        private void BtnHelp_Click(object sender, EventArgs e)
         {
             // Set the focus to the TextBox control
             //textBoxHelpText.Focus();
@@ -103,7 +103,7 @@ namespace SATSuma
         private bool downButtonPressed = false;
         private bool upButtonPressed = false;
 
-        private void btnHelpTextDown_MouseDown(object sender, MouseEventArgs e)
+        private void BtnHelpTextDown_MouseDown(object sender, MouseEventArgs e)
         {
 
             isButtonPressed = true;
@@ -111,7 +111,7 @@ namespace SATSuma
             timer1.Start();
         }
 
-        private void btnHelpTextUp_MouseDown(object sender, MouseEventArgs e)
+        private void BtnHelpTextUp_MouseDown(object sender, MouseEventArgs e)
         {
 
             isButtonPressed = true;
@@ -119,7 +119,7 @@ namespace SATSuma
             timer1.Start();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             if (isButtonPressed)
             {   if (downButtonPressed)
@@ -145,7 +145,7 @@ namespace SATSuma
             }
         }
 
-        private void btnHelpTextDown_MouseUp(object sender, MouseEventArgs e)
+        private void BtnHelpTextDown_MouseUp(object sender, MouseEventArgs e)
         {
             isButtonPressed = false;
             downButtonPressed = false;
@@ -153,7 +153,7 @@ namespace SATSuma
             timer1.Interval = 50; // reset the interval to its original value
         }
 
-        private void btnHelpTextUp_MouseUp(object sender, MouseEventArgs e)
+        private void BtnHelpTextUp_MouseUp(object sender, MouseEventArgs e)
         {
             isButtonPressed = false;
             upButtonPressed = false;

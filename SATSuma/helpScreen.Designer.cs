@@ -80,7 +80,7 @@
             this.textBoxHelpText.Size = new System.Drawing.Size(495, 675);
             this.textBoxHelpText.TabIndex = 201;
             this.textBoxHelpText.TabStop = false;
-            this.textBoxHelpText.TextChanged += new System.EventHandler(this.textBoxHelpText_TextChanged);
+            this.textBoxHelpText.TextChanged += new System.EventHandler(this.TextBoxHelpText_TextChanged);
             // 
             // btnExit
             // 
@@ -130,14 +130,14 @@
             this.btnHelpTextDown.Text = "▼";
             this.btnHelpTextDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelpTextDown.UseVisualStyleBackColor = false;
-            this.btnHelpTextDown.Click += new System.EventHandler(this.btnHelp_Click);
-            this.btnHelpTextDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnHelpTextDown_MouseDown);
-            this.btnHelpTextDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnHelpTextDown_MouseUp);
+            this.btnHelpTextDown.Click += new System.EventHandler(this.BtnHelp_Click);
+            this.btnHelpTextDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextDown_MouseDown);
+            this.btnHelpTextDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextDown_MouseUp);
             // 
             // timer1
             // 
             this.timer1.Interval = 50;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // panel2
             // 
@@ -165,8 +165,8 @@
             this.btnHelpTextUp.Text = "▲";
             this.btnHelpTextUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelpTextUp.UseVisualStyleBackColor = false;
-            this.btnHelpTextUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnHelpTextUp_MouseDown);
-            this.btnHelpTextUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnHelpTextUp_MouseUp);
+            this.btnHelpTextUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextUp_MouseDown);
+            this.btnHelpTextUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextUp_MouseUp);
             // 
             // helpScreen
             // 
@@ -185,8 +185,8 @@
             this.MaximizeBox = false;
             this.Name = "helpScreen";
             this.Text = "helpScreen";
-            this.Load += new System.EventHandler(this.helpScreen_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.helpScreen_Paint);
+            this.Load += new System.EventHandler(this.HelpScreen_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.HelpScreen_Paint);
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
             this.panel1.ResumeLayout(false);

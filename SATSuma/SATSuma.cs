@@ -20,7 +20,8 @@
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
- * remove calls to view transaction from blocks or address as they already happen on transaction id textchange. Instead just show/hide relevant panels after passing the tx id
+ * test button enable/disable on block list screen in all scenarios
+ * connect transaction screen back to address screen via listviews
  */
 
 #region Using
@@ -2642,38 +2643,6 @@ namespace SATSuma
             {
                 textBoxTransactionID.Text = TransactionIDFromRow;
             });
-            try
-            {
-                LookupTransaction();
-            }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click, JSON parsing error: " + ex.Message;
-                });
-            }
-            catch (Exception ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewTransactionFromAddress_Click: " + ex.Message;
-                });
-            }
             //show the transaction screen
             BtnMenuTransaction_Click(sender, e);
         }
@@ -3707,7 +3676,6 @@ namespace SATSuma
                 {
                     textBoxTransactionID.Text = TransactionIDFromRow;
                 });
-                LookupTransaction();
                 //show the transaction screen
                 BtnMenuTransaction_Click(sender, e);
             }
@@ -3799,20 +3767,25 @@ namespace SATSuma
                     lblInvalidTransaction.Visible = false;
                     panelTransactionHeadline.Visible = true;
                     panelTransactionDiagram.Visible = true;
+                    panel27.Visible = true;
+                    panel28.Visible = true;
                     LookupTransaction();
                 }
                 else
                 {
                     panelTransactionHeadline.Visible = false;
                     panelTransactionDiagram.Visible = false;
+                    panel27.Visible = false;
+                    panel28.Visible = false;
                     lblInvalidTransaction.Visible = true;
-                    
                 }
             }
             else
             {
                 panelTransactionHeadline.Visible = false;
                 panelTransactionDiagram.Visible = false;
+                panel27.Visible = false;
+                panel28.Visible = false;
                 lblInvalidTransaction.Visible = true;
             }
         }
@@ -4087,6 +4060,126 @@ namespace SATSuma
                     linePoints.Add(endPoint6);
                     YOutputsPos += YOutputsStep;
                 }
+
+
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                // Inputs listview
+                listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                {
+                    listViewTransactionInputs.Items.Clear(); // remove any data that may be there already
+                });
+                listViewTransactionInputs.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewTransactionInputs, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewTransactionInputs.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewTransactionInputs.Columns.Add(" Address", 225);
+                    });
+                }
+
+                if (listViewTransactionInputs.Columns.Count == 1)
+                {
+                    listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewTransactionInputs.Columns.Add("Amount", 120);
+                    });
+                }
+
+                List<TransactionVinPrevout> prevouts = new List<TransactionVinPrevout>();
+
+                foreach (TransactionVin vin in transaction.Vin)
+                {
+                    prevouts.Add(vin.Prevout);
+                }
+
+                foreach (TransactionVinPrevout prevout in prevouts)
+                {
+                    string InputAddress = Convert.ToString(prevout.Scriptpubkey_address);
+                    ListViewItem item = new ListViewItem(InputAddress); // create new row
+                    string InputValue = Convert.ToString(prevout.Value);
+                    decimal DecInputValue = ConvertSatsToBitcoin(InputValue);
+                    item.SubItems.Add(DecInputValue.ToString());
+                    listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewTransactionInputs.Items.Add(item); // add row
+                    });
+                }
+                // Get the height of each item to set height of whole listview
+                int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
+                int itemCount = listViewTransactionInputs.Items.Count; // Get the number of items in the ListBox
+                int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                listViewTransactionInputs.Height = listBoxHeight; // Set the height of the ListBox
+                panel23.VerticalScroll.Value = 0;
+                panel23.VerticalScroll.Minimum = 0;
+
+                // Outputs listview
+                listViewTransactionOutputs.Invoke((MethodInvoker)delegate
+                {
+                    listViewTransactionOutputs.Items.Clear(); // remove any data that may be there already
+                });
+                listViewTransactionOutputs.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewTransactionOutputs, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewTransactionOutputs.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewTransactionOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewTransactionOutputs.Columns.Add(" Address", 225);
+                    });
+                }
+
+                if (listViewTransactionOutputs.Columns.Count == 1)
+                {
+                    listViewTransactionOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        // If not, add the column header
+                        listViewTransactionOutputs.Columns.Add("Amount", 120);
+                    });
+                }
+
+                List<TransactionVout> vouts = new List<TransactionVout>();
+
+                foreach (TransactionVout vout in transaction.Vout)
+                {
+                    vouts.Add(vout);
+                }
+
+                foreach (TransactionVout vout in vouts)
+                {
+                    string OutputAddress = Convert.ToString(vout.Scriptpubkey_address);
+                    ListViewItem item = new ListViewItem(OutputAddress); // create new row
+                    string OutputValue = Convert.ToString(vout.Value);
+                    decimal DecOutputValue = ConvertSatsToBitcoin(OutputValue);
+                    item.SubItems.Add(DecOutputValue.ToString());
+                    listViewTransactionOutputs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewTransactionOutputs.Items.Add(item); // add row
+                    });
+                }
+                // Get the height of each item to set height of whole listview
+                int rowHeightout = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                int itemCountout = listViewTransactionOutputs.Items.Count; // Get the number of items in the ListBox
+                int listBoxHeightout = (itemCountout + 2) * rowHeightout; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                listViewTransactionOutputs.Height = listBoxHeightout; // Set the height of the ListBox
+                panel26.VerticalScroll.Value = 0;
+                panel26.VerticalScroll.Minimum = 0;
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
                 // Trigger a repaint of the form
                 this.Invalidate();
 
@@ -4121,6 +4214,162 @@ namespace SATSuma
             }
         }
 
+        private void ListViewTransactionInputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < 225) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 225;
+                }
+                if (listViewTransactionInputs.Columns[e.ColumnIndex].Width > 345) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 345;
+                }
+            }
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < 120) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 120;
+                }
+            }
+        }
+
+        private void ListViewTransactionOutputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < 225) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 225;
+                }
+                if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width > 345) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 345;
+                }
+            }
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < 120) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 120;
+                }
+            }
+        }
+
+        private void ListViewTransactionInputs_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            Color headerColor = Color.FromArgb(50, 50, 50);
+            SolidBrush brush = new SolidBrush(headerColor);
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            // Change text color and alignment
+            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
+            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
+        private void ListViewTransactionOutputs_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            Color headerColor = Color.FromArgb(50, 50, 50);
+            SolidBrush brush = new SolidBrush(headerColor);
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            // Change text color and alignment
+            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
+            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
+        private void ListViewTransactionInputs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (text[0] == '+') // if the string is a change to an amount and positive
+            {
+                e.SubItem.ForeColor = Color.OliveDrab; // make it green
+
+            }
+            else
+            if (text[0] == '-') // if the string is a change to an amount and negative
+            {
+                e.SubItem.ForeColor = Color.IndianRed; // make it red
+            }
+
+            var font = listViewTransactionInputs.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
+        private void ListViewTransactionOutputs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (text[0] == '+') // if the string is a change to an amount and positive
+            {
+                e.SubItem.ForeColor = Color.OliveDrab; // make it green
+
+            }
+            else
+            if (text[0] == '-') // if the string is a change to an amount and negative
+            {
+                e.SubItem.ForeColor = Color.IndianRed; // make it red
+            }
+
+            var font = listViewTransactionOutputs.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
         // draw all the lines on the transaction diagram from the previously stored list.
         private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e) 
         {
@@ -4132,8 +4381,165 @@ namespace SATSuma
                 e.Graphics.DrawLine(pen, linePoints[i], linePoints[i + 1]);
             }
         }
+
+        private void BtnTransactionInputsDown_Click(object sender, EventArgs e)
+        {
+            if (panel23.VerticalScroll.Value < panel23.VerticalScroll.Maximum)
+            {
+                panel23.VerticalScroll.Value++;
+            }
+            
+        }
+
+        private void BtnTransactionOutputsDown_Click(object sender, EventArgs e)
+        {
+            if (panel26.VerticalScroll.Value < panel26.VerticalScroll.Maximum)
+            {
+                panel26.VerticalScroll.Value++;
+            }
+                
+        }
+
+        private bool isInputButtonPressed = false;
+        private bool InputDownButtonPressed = false;
+        private bool InputUpButtonPressed = false;
+        private bool isOutputButtonPressed = false;
+        private bool OutputDownButtonPressed = false;
+        private bool OutputUpButtonPressed = false;
+
+        private void BtnTransactionInputsDown_MouseDown(object sender, MouseEventArgs e)
+        {
+            isInputButtonPressed = true;
+            InputDownButtonPressed = true;
+            TXInScrollTimer.Start();
+        }
+
+        private void BtnTransactionOutputsDown_MouseDown(object sender, MouseEventArgs e)
+        {
+            isOutputButtonPressed = true;
+            OutputDownButtonPressed = true;
+            TXOutScrollTimer.Start();
+        }
+
+        private void BtnTransactionInputsDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            isInputButtonPressed = false;
+            InputDownButtonPressed = false;
+            TXInScrollTimer.Stop();
+            TXInScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void BtnTransactionOutputsDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            isOutputButtonPressed = false;
+            OutputDownButtonPressed = false;
+            TXOutScrollTimer.Stop();
+            TXOutScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (isInputButtonPressed)
+            {
+                if (InputDownButtonPressed)
+                {
+                    if (panel23.VerticalScroll.Value < panel23.VerticalScroll.Maximum - 4)
+                    {
+                        panel23.VerticalScroll.Value = panel23.VerticalScroll.Value + 4;
+                    }
+                    TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+                else if (InputUpButtonPressed)
+                {
+                    if (panel23.VerticalScroll.Value > panel23.VerticalScroll.Minimum + 4)
+                    {
+                        panel23.VerticalScroll.Value = panel23.VerticalScroll.Value - 4;
+                    }
+                    TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+            }
+            else
+            {
+                TXInScrollTimer.Stop();
+            }
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (isOutputButtonPressed)
+            {
+                if (OutputDownButtonPressed)
+                {
+                    if (panel26.VerticalScroll.Value < panel26.VerticalScroll.Maximum - 4)
+                    {
+                        panel26.VerticalScroll.Value = panel26.VerticalScroll.Value + 4;
+                    }
+                    TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+                else if (OutputUpButtonPressed)
+                {
+                    if (panel26.VerticalScroll.Value > panel26.VerticalScroll.Minimum + 4)
+                    {
+                        panel26.VerticalScroll.Value = panel26.VerticalScroll.Value - 4;
+                    }
+                    TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+            }
+            else
+            {
+                TXOutScrollTimer.Stop();
+            }
+        }
+
+        private void btnTransactionInputsUp_Click(object sender, EventArgs e)
+        {
+            if (panel23.VerticalScroll.Value > panel23.VerticalScroll.Minimum)
+            {
+                panel23.VerticalScroll.Value--;
+            }
+            
+        }
+
+        private void btnTransactionOutputsUp_Click(object sender, EventArgs e)
+        {
+            if (panel26.VerticalScroll.Value > panel26.VerticalScroll.Minimum)
+            {
+                panel26.VerticalScroll.Value--;
+            }
+                
+        }
+
+        private void btnTransactionInputsUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            isInputButtonPressed = true;
+            InputUpButtonPressed = true;
+            TXInScrollTimer.Start();
+        }
+
+        private void btnTransactionOutputsUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            isOutputButtonPressed = true;
+            OutputUpButtonPressed = true;
+            TXOutScrollTimer.Start();
+        }
+
+        private void btnTransactionInputsUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            isInputButtonPressed = false;
+            InputUpButtonPressed = false;
+            TXInScrollTimer.Stop();
+            TXInScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void btnTransactionOutputsUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            isOutputButtonPressed = false;
+            OutputUpButtonPressed = false;
+            TXOutScrollTimer.Stop();
+            TXOutScrollTimer.Interval = 50; // reset the interval to its original value
+        }
         #endregion
-        
+
 #region BLOCK LIST STUFF
 
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
@@ -5700,10 +6106,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
-                settingsScreen.CreateInstance();
-                settingsScreen.Instance.ShowDialog();
+                SettingsScreen.CreateInstance();
+                SettingsScreen.Instance.ShowDialog();
                 // read all fields from the settings screen and set variables for use on the main form
-                if (settingsScreen.Instance.BitcoinExplorerEndpointsEnabled)
+                if (SettingsScreen.Instance.BitcoinExplorerEndpointsEnabled)
                 {
                     RunBitcoinExplorerEndpointAPI = true;
                 }
@@ -5711,7 +6117,7 @@ namespace SATSuma
                 {
                     RunBitcoinExplorerEndpointAPI = false;
                 }
-                if (settingsScreen.Instance.BlockchainInfoEndpointsEnabled)
+                if (SettingsScreen.Instance.BlockchainInfoEndpointsEnabled)
                 {
                     RunBlockchainInfoEndpointAPI = true;
                 }
@@ -5719,7 +6125,7 @@ namespace SATSuma
                 {
                     RunBlockchainInfoEndpointAPI = false;
                 }
-                if (settingsScreen.Instance.BitcoinExplorerOrgJSONEnabled)
+                if (SettingsScreen.Instance.BitcoinExplorerOrgJSONEnabled)
                 {
                     RunBitcoinExplorerOrgJSONAPI = true;
                 }
@@ -5727,7 +6133,7 @@ namespace SATSuma
                 {
                     RunBitcoinExplorerOrgJSONAPI = false;
                 }
-                if (settingsScreen.Instance.BlockchainInfoJSONEnabled)
+                if (SettingsScreen.Instance.BlockchainInfoJSONEnabled)
                 {
                     RunBlockchainInfoJSONAPI = true;
                 }
@@ -5735,7 +6141,7 @@ namespace SATSuma
                 {
                     RunBlockchainInfoJSONAPI = false;
                 }
-                if (settingsScreen.Instance.CoingeckoComJSONEnabled)
+                if (SettingsScreen.Instance.CoingeckoComJSONEnabled)
                 {
                     RunCoingeckoComJSONAPI = true;
                 }
@@ -5743,7 +6149,7 @@ namespace SATSuma
                 {
                     RunCoingeckoComJSONAPI = false;
                 }
-                if (settingsScreen.Instance.BlockchairComJSONEnabled)
+                if (SettingsScreen.Instance.BlockchairComJSONEnabled)
                 {
                     RunBlockchairComJSONAPI = true;
                 }
@@ -5751,7 +6157,7 @@ namespace SATSuma
                 {
                     RunBlockchairComJSONAPI = false;
                 }
-                if (settingsScreen.Instance.MempoolSpaceLightningJSONEnabled)
+                if (SettingsScreen.Instance.MempoolSpaceLightningJSONEnabled)
                 {
                     RunMempoolSpaceLightningAPI = true;
                 }
@@ -5759,17 +6165,17 @@ namespace SATSuma
                 {
                     RunMempoolSpaceLightningAPI = false;
                 }
-                if (settingsScreen.Instance.NodeURL != NodeURL)
+                if (SettingsScreen.Instance.NodeURL != NodeURL)
                 {
-                    NodeURL = settingsScreen.Instance.NodeURL;
+                    NodeURL = SettingsScreen.Instance.NodeURL;
                     _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
                 }
                 CheckBlockchainExplorerApiStatus();
 
-                if (APIGroup1DisplayTimerIntervalSecsConstant != (settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
+                if (APIGroup1DisplayTimerIntervalSecsConstant != (SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
                 {
-                    APIGroup1DisplayTimerIntervalSecsConstant = settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
-                    intAPIGroup1TimerIntervalMillisecsConstant = ((settingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
+                    APIGroup1DisplayTimerIntervalSecsConstant = SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
+                    intAPIGroup1TimerIntervalMillisecsConstant = ((SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
                     timerAPIGroup1.Stop();
                     timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
@@ -5880,15 +6286,13 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
-
         #endregion
-
 
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 
-    #region CLASSES
+#region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService

@@ -5115,9 +5115,9 @@
             this.btnTransactionInputsUp.Text = "▲";
             this.btnTransactionInputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionInputsUp.UseVisualStyleBackColor = false;
-            this.btnTransactionInputsUp.Click += new System.EventHandler(this.btnTransactionInputsUp_Click);
-            this.btnTransactionInputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnTransactionInputsUp_MouseDown);
-            this.btnTransactionInputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnTransactionInputsUp_MouseUp);
+            this.btnTransactionInputsUp.Click += new System.EventHandler(this.BtnTransactionInputsUp_Click);
+            this.btnTransactionInputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseDown);
+            this.btnTransactionInputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseUp);
             // 
             // lblInvalidTransaction
             // 
@@ -5432,7 +5432,7 @@
             // TXInScrollTimer
             // 
             this.TXInScrollTimer.Interval = 50;
-            this.TXInScrollTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.TXInScrollTimer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // panel24
             // 
@@ -5472,9 +5472,9 @@
             this.btnTransactionOutputsUp.Text = "▲";
             this.btnTransactionOutputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionOutputsUp.UseVisualStyleBackColor = false;
-            this.btnTransactionOutputsUp.Click += new System.EventHandler(this.btnTransactionOutputsUp_Click);
-            this.btnTransactionOutputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnTransactionOutputsUp_MouseDown);
-            this.btnTransactionOutputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnTransactionOutputsUp_MouseUp);
+            this.btnTransactionOutputsUp.Click += new System.EventHandler(this.BtnTransactionOutputsUp_Click);
+            this.btnTransactionOutputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseDown);
+            this.btnTransactionOutputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseUp);
             // 
             // btnTransactionOutputsDown
             // 
@@ -5538,7 +5538,7 @@
             // TXOutScrollTimer
             // 
             this.TXOutScrollTimer.Interval = 50;
-            this.TXOutScrollTimer.Tick += new System.EventHandler(this.timer2_Tick);
+            this.TXOutScrollTimer.Tick += new System.EventHandler(this.Timer2_Tick);
             // 
             // panel27
             // 

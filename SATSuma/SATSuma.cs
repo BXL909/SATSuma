@@ -4061,12 +4061,6 @@ namespace SATSuma
                     YOutputsPos += YOutputsStep;
                 }
 
-
-
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
                 // Inputs listview
                 listViewTransactionInputs.Invoke((MethodInvoker)delegate
                 {
@@ -4174,11 +4168,6 @@ namespace SATSuma
                 listViewTransactionOutputs.Height = listBoxHeightout; // Set the height of the ListBox
                 panel26.VerticalScroll.Value = 0;
                 panel26.VerticalScroll.Minimum = 0;
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
                 // Trigger a repaint of the form
                 this.Invalidate();
@@ -4437,7 +4426,7 @@ namespace SATSuma
             TXOutScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             if (isInputButtonPressed)
             {
@@ -4464,7 +4453,7 @@ namespace SATSuma
             }
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void Timer2_Tick(object sender, EventArgs e)
         {
             if (isOutputButtonPressed)
             {
@@ -4491,39 +4480,37 @@ namespace SATSuma
             }
         }
 
-        private void btnTransactionInputsUp_Click(object sender, EventArgs e)
+        private void BtnTransactionInputsUp_Click(object sender, EventArgs e)
         {
             if (panel23.VerticalScroll.Value > panel23.VerticalScroll.Minimum)
             {
                 panel23.VerticalScroll.Value--;
             }
-            
         }
 
-        private void btnTransactionOutputsUp_Click(object sender, EventArgs e)
+        private void BtnTransactionOutputsUp_Click(object sender, EventArgs e)
         {
             if (panel26.VerticalScroll.Value > panel26.VerticalScroll.Minimum)
             {
                 panel26.VerticalScroll.Value--;
             }
-                
         }
 
-        private void btnTransactionInputsUp_MouseDown(object sender, MouseEventArgs e)
+        private void BtnTransactionInputsUp_MouseDown(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = true;
             InputUpButtonPressed = true;
             TXInScrollTimer.Start();
         }
 
-        private void btnTransactionOutputsUp_MouseDown(object sender, MouseEventArgs e)
+        private void BtnTransactionOutputsUp_MouseDown(object sender, MouseEventArgs e)
         {
             isOutputButtonPressed = true;
             OutputUpButtonPressed = true;
             TXOutScrollTimer.Start();
         }
 
-        private void btnTransactionInputsUp_MouseUp(object sender, MouseEventArgs e)
+        private void BtnTransactionInputsUp_MouseUp(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = false;
             InputUpButtonPressed = false;
@@ -4531,7 +4518,7 @@ namespace SATSuma
             TXInScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
-        private void btnTransactionOutputsUp_MouseUp(object sender, MouseEventArgs e)
+        private void BtnTransactionOutputsUp_MouseUp(object sender, MouseEventArgs e)
         {
             isOutputButtonPressed = false;
             OutputUpButtonPressed = false;
@@ -6195,7 +6182,7 @@ namespace SATSuma
         {
             try
             {
-                var modalWindow = new helpScreen
+                var modalWindow = new HelpScreen
                 {
                     Owner = this, // Set the parent window as the owner of the modal window
                     StartPosition = FormStartPosition.CenterParent // Set the start position to center of parent

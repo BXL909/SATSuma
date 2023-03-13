@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace SATSuma
 {
-    public partial class helpScreen : Form
+    public partial class HelpScreen : Form
     {
-        public helpScreen()
+        public HelpScreen()
         {
             InitializeComponent();
         }
@@ -50,7 +50,7 @@ namespace SATSuma
             if (((SATSuma)this.Owner).GetPanelTransaction().Visible == true)
             {
                 lblHelpHeading.Text = "Transaction";
-                textBoxHelpText.Text = "";
+                textBoxHelpText.Text = "Shows all inputs and outputs for the provided transaction ID. \r\n\r\nDefinitions:\r\n\r\nIncluded in block - The block number in which this transaction was added to the blockchain.\r\n\r\nBlock time - the tme and date that the block containing the transaction was mined.\r\n\r\nLock time - the lock time sets the earliest time at which a transaction can be mined into a block.\r\n\r\nVersion - Each transaction is prefixed by a four-byte transaction version number which tells Bitcoin peers and miners which set of rules to use to validate it.\r\n\r\nInputs - the total number of inputs in the transaction and their total value.\r\n\r\nOutputs - the total number of outputs in the transaction and their total value.\r\n\r\nFee - the miner fee paid for this transaction.\r\n\r\nSize - the size of the transaction in bytes.\r\n\r\nWeight - measures the size of a transaction in terms of the resources required to propagate and validate it. Measured in Million Weight Units (MWU).\r\n\r\nTransaction inputs (table) - List all the inputs to a transaction, showing the sending addresses and amounts.\r\n\r\nTransaction outputs (table) - List all the outputs to a transaction, showing the receiving addresses and amounts.";
             }
         }
 

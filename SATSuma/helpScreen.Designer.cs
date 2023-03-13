@@ -1,6 +1,6 @@
 ﻿namespace SATSuma
 {
-    partial class helpScreen
+    partial class HelpScreen
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(helpScreen));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HelpScreen));
             this.panel22 = new System.Windows.Forms.Panel();
             this.lblHelpHeading = new System.Windows.Forms.Label();
             this.textBoxHelpText = new System.Windows.Forms.TextBox();

@@ -22,6 +22,7 @@
  * replace as many fields as possible on dashboards with selected node versions
  * test button enable/disable on block list screen in all scenarios
  * connect transaction screen back to address screen via listviews
+ * check 'first' button after reaching end of block transactions screen (and all other ends of lists)
  */
 
 #region Using
@@ -3853,6 +3854,8 @@ namespace SATSuma
             try
             {
                 linePoints.Clear();
+                btnViewAddressFromTXInput.Visible = false;
+                btnViewAddressFromTXOutput.Visible = false;
                 //panelTransactionDiagram.Invalidate();
                 //            DisableEnableLoadingAnimation("enable"); // start the loading animation
                 //            DisableEnableButtons("disable"); // disable buttons during operation
@@ -4203,6 +4206,121 @@ namespace SATSuma
             }
         }
 
+
+        private void ListViewTransactionInputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewTransactionInputs.Items)
+                {
+                    if (item.Selected)
+                    {
+                        item.ForeColor = Color.White; // address
+                        btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
+                        });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                    }
+                }
+                btnViewAddressFromTXInput.Visible = anySelected;
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged: " + ex.Message;
+                });
+            }
+        }
+
+        private void ListViewTransactionOutputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewTransactionOutputs.Items)
+                {
+                    if (item.Selected)
+                    {
+                        item.ForeColor = Color.White; // address
+                        btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y - 2);
+                        });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                    }
+                }
+                btnViewAddressFromTXOutput.Visible = anySelected;
+                
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged: " + ex.Message;
+                });
+            }
+            
+        }
+
+
+
+
+
+
         private void ListViewTransactionInputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -4357,6 +4475,12 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
+            if (panel26.VerticalScroll.Value == 0)
+            {
+                panel26.VerticalScroll.Value = ScrollBackToHere;
+            }
+
+            
         }
 
         // draw all the lines on the transaction diagram from the previously stored list.
@@ -6273,13 +6397,14 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
-        #endregion
 
+
+        #endregion
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 
-#region CLASSES
+    #region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService

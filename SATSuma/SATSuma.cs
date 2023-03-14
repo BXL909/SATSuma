@@ -118,8 +118,8 @@ namespace SATSuma
         bool btnNewer15BlocksWasEnabled = false;
         bool btnOlder15BlocksWasEnabled = true;
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
-        private int TransactionOutputsScrollPosition = 0;
-        private int TransactionInputsScrollPosition = 0;
+        private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -4013,6 +4013,17 @@ namespace SATSuma
                     YInputsPos = (panelTransactionDiagram.Size.Height / 2);
                 }
 
+                if (NumberOfInputLines > 4)
+                {
+                    btnTransactionInputDown.Visible = true;
+                    btnTransactionInputsUp.Visible = true;
+                }
+                else
+                {
+                    btnTransactionInputDown.Visible = false;
+                    btnTransactionInputsUp.Visible = false;
+                }
+
                 foreach (var vin in transaction.Vin)
                 {
                     if (YInputsPos >= panelTransactionDiagram.Height)
@@ -4046,6 +4057,17 @@ namespace SATSuma
                 {
                     YOutputsStep = (panelTransactionDiagram.Size.Height / 2) - 20;
                     YOutputsPos = (panelTransactionDiagram.Size.Height / 2);
+                }
+
+                if (NumberOfOutputLines > 4)
+                {
+                    btnTransactionOutputsDown.Visible = true;
+                    btnTransactionOutputsUp.Visible = true;
+                }
+                else
+                {
+                    btnTransactionOutputsDown.Visible = false;
+                    btnTransactionOutputsUp.Visible = false;
                 }
 
                 foreach (var vout in transaction.Vout)
@@ -6508,7 +6530,7 @@ namespace SATSuma
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
 
-    #region CLASSES
+#region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
@@ -6852,7 +6874,7 @@ namespace SATSuma
         //    public string scriptpubkey_address { get; set; }
         public string Value { get; set; }
     }
-    #endregion
+#endregion
 
 }
 //==================================================================================================================================================================================================

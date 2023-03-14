@@ -5112,7 +5112,7 @@
             this.btnTransactionOutputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTransactionOutputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTransactionOutputsUp.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionOutputsUp.Location = new System.Drawing.Point(1, 1);
+            this.btnTransactionOutputsUp.Location = new System.Drawing.Point(5, 1);
             this.btnTransactionOutputsUp.Name = "btnTransactionOutputsUp";
             this.btnTransactionOutputsUp.Size = new System.Drawing.Size(20, 20);
             this.btnTransactionOutputsUp.TabIndex = 210;
@@ -5134,7 +5134,7 @@
             this.btnTransactionOutputsDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTransactionOutputsDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTransactionOutputsDown.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionOutputsDown.Location = new System.Drawing.Point(1, 77);
+            this.btnTransactionOutputsDown.Location = new System.Drawing.Point(5, 84);
             this.btnTransactionOutputsDown.Name = "btnTransactionOutputsDown";
             this.btnTransactionOutputsDown.Size = new System.Drawing.Size(20, 20);
             this.btnTransactionOutputsDown.TabIndex = 211;
@@ -5166,7 +5166,7 @@
             this.btnTransactionInputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTransactionInputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTransactionInputsUp.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionInputsUp.Location = new System.Drawing.Point(1, 1);
+            this.btnTransactionInputsUp.Location = new System.Drawing.Point(5, 1);
             this.btnTransactionInputsUp.Name = "btnTransactionInputsUp";
             this.btnTransactionInputsUp.Size = new System.Drawing.Size(20, 20);
             this.btnTransactionInputsUp.TabIndex = 210;
@@ -5188,7 +5188,7 @@
             this.btnTransactionInputDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTransactionInputDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTransactionInputDown.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionInputDown.Location = new System.Drawing.Point(1, 77);
+            this.btnTransactionInputDown.Location = new System.Drawing.Point(5, 84);
             this.btnTransactionInputDown.Name = "btnTransactionInputDown";
             this.btnTransactionInputDown.Size = new System.Drawing.Size(20, 20);
             this.btnTransactionInputDown.TabIndex = 211;

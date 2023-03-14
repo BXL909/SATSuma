@@ -376,10 +376,10 @@
             this.panel24 = new System.Windows.Forms.Panel();
             this.btnTransactionInputsUp = new System.Windows.Forms.Button();
             this.btnTransactionInputDown = new System.Windows.Forms.Button();
-            this.panel26 = new System.Windows.Forms.Panel();
+            this.panelTransactionOutputs = new System.Windows.Forms.Panel();
             this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
             this.listViewTransactionOutputs = new System.Windows.Forms.ListView();
-            this.panel23 = new System.Windows.Forms.Panel();
+            this.panelTransactionInputs = new System.Windows.Forms.Panel();
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.listViewTransactionInputs = new System.Windows.Forms.ListView();
             this.lblInvalidTransaction = new System.Windows.Forms.Label();
@@ -438,8 +438,8 @@
             this.panel28.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel24.SuspendLayout();
-            this.panel26.SuspendLayout();
-            this.panel23.SuspendLayout();
+            this.panelTransactionOutputs.SuspendLayout();
+            this.panelTransactionInputs.SuspendLayout();
             this.panelTransactionHeadline.SuspendLayout();
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
@@ -5027,8 +5027,8 @@
             this.panelTransaction.Controls.Add(this.panel28);
             this.panelTransaction.Controls.Add(this.panel25);
             this.panelTransaction.Controls.Add(this.panel24);
-            this.panelTransaction.Controls.Add(this.panel26);
-            this.panelTransaction.Controls.Add(this.panel23);
+            this.panelTransaction.Controls.Add(this.panelTransactionOutputs);
+            this.panelTransaction.Controls.Add(this.panelTransactionInputs);
             this.panelTransaction.Controls.Add(this.lblInvalidTransaction);
             this.panelTransaction.Controls.Add(this.panelTransactionHeadline);
             this.panelTransaction.Controls.Add(this.panelTransactionDiagram);
@@ -5200,15 +5200,16 @@
             this.btnTransactionInputDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseDown);
             this.btnTransactionInputDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseUp);
             // 
-            // panel26
+            // panelTransactionOutputs
             // 
-            this.panel26.AutoScroll = true;
-            this.panel26.Controls.Add(this.btnViewAddressFromTXOutput);
-            this.panel26.Controls.Add(this.listViewTransactionOutputs);
-            this.panel26.Location = new System.Drawing.Point(388, 451);
-            this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(363, 104);
-            this.panel26.TabIndex = 214;
+            this.panelTransactionOutputs.AutoScroll = true;
+            this.panelTransactionOutputs.Controls.Add(this.btnViewAddressFromTXOutput);
+            this.panelTransactionOutputs.Controls.Add(this.listViewTransactionOutputs);
+            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 451);
+            this.panelTransactionOutputs.Name = "panelTransactionOutputs";
+            this.panelTransactionOutputs.Size = new System.Drawing.Size(363, 104);
+            this.panelTransactionOutputs.TabIndex = 214;
+            this.panelTransactionOutputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionOutputs_Paint);
             // 
             // btnViewAddressFromTXOutput
             // 
@@ -5228,6 +5229,7 @@
             this.btnViewAddressFromTXOutput.Text = "▶️";
             this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXOutput.Visible = false;
+            this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
             // 
             // listViewTransactionOutputs
             // 
@@ -5258,15 +5260,16 @@
             this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
             this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
             // 
-            // panel23
+            // panelTransactionInputs
             // 
-            this.panel23.AutoScroll = true;
-            this.panel23.Controls.Add(this.btnViewAddressFromTXInput);
-            this.panel23.Controls.Add(this.listViewTransactionInputs);
-            this.panel23.Location = new System.Drawing.Point(10, 451);
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(363, 104);
-            this.panel23.TabIndex = 212;
+            this.panelTransactionInputs.AutoScroll = true;
+            this.panelTransactionInputs.Controls.Add(this.btnViewAddressFromTXInput);
+            this.panelTransactionInputs.Controls.Add(this.listViewTransactionInputs);
+            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 451);
+            this.panelTransactionInputs.Name = "panelTransactionInputs";
+            this.panelTransactionInputs.Size = new System.Drawing.Size(363, 104);
+            this.panelTransactionInputs.TabIndex = 212;
+            this.panelTransactionInputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionInputs_Paint);
             // 
             // btnViewAddressFromTXInput
             // 
@@ -5286,6 +5289,7 @@
             this.btnViewAddressFromTXInput.Text = "▶️";
             this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXInput.Visible = false;
+            this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
             // 
             // listViewTransactionInputs
             // 
@@ -5741,8 +5745,8 @@
             this.panel28.PerformLayout();
             this.panel25.ResumeLayout(false);
             this.panel24.ResumeLayout(false);
-            this.panel26.ResumeLayout(false);
-            this.panel23.ResumeLayout(false);
+            this.panelTransactionOutputs.ResumeLayout(false);
+            this.panelTransactionInputs.ResumeLayout(false);
             this.panelTransactionHeadline.ResumeLayout(false);
             this.panelTransactionHeadline.PerformLayout();
             this.panelTransactionDiagram.ResumeLayout(false);
@@ -6119,13 +6123,13 @@
         private System.Windows.Forms.ListView listViewTransactionInputs;
         private System.Windows.Forms.Button btnTransactionInputsUp;
         private System.Windows.Forms.Button btnTransactionInputDown;
-        public System.Windows.Forms.Panel panel23;
+        public System.Windows.Forms.Panel panelTransactionInputs;
         private System.Windows.Forms.Timer TXInScrollTimer;
         private System.Windows.Forms.Panel panel24;
         private System.Windows.Forms.Panel panel25;
         private System.Windows.Forms.Button btnTransactionOutputsUp;
         private System.Windows.Forms.Button btnTransactionOutputsDown;
-        public System.Windows.Forms.Panel panel26;
+        public System.Windows.Forms.Panel panelTransactionOutputs;
         private System.Windows.Forms.ListView listViewTransactionOutputs;
         private System.Windows.Forms.Timer TXOutScrollTimer;
         private System.Windows.Forms.Panel panel28;

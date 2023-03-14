@@ -21,7 +21,6 @@
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * test button enable/disable on block list screen in all scenarios
- * connect transaction screen back to address screen via listviews
  * check 'first' button after reaching end of block transactions screen (and all other ends of lists)
  */
 
@@ -119,6 +118,8 @@ namespace SATSuma
         bool btnNewer15BlocksWasEnabled = false;
         bool btnOlder15BlocksWasEnabled = true;
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
+        private int TransactionOutputsScrollPosition = 0;
+        private int TransactionInputsScrollPosition = 0;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -4115,8 +4116,8 @@ namespace SATSuma
                 int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
 
                 listViewTransactionInputs.Height = listBoxHeight; // Set the height of the ListBox
-                panel23.VerticalScroll.Value = 0;
-                panel23.VerticalScroll.Minimum = 0;
+                panelTransactionInputs.VerticalScroll.Value = 0;
+                panelTransactionInputs.VerticalScroll.Minimum = 0;
 
                 // Outputs listview
                 listViewTransactionOutputs.Invoke((MethodInvoker)delegate
@@ -4169,8 +4170,8 @@ namespace SATSuma
                 int listBoxHeightout = (itemCountout + 2) * rowHeightout; // Calculate the height of the ListBox (the extra 2 gives room for the header)
 
                 listViewTransactionOutputs.Height = listBoxHeightout; // Set the height of the ListBox
-                panel26.VerticalScroll.Value = 0;
-                panel26.VerticalScroll.Minimum = 0;
+                panelTransactionOutputs.VerticalScroll.Value = 0;
+                panelTransactionOutputs.VerticalScroll.Minimum = 0;
 
                 // Trigger a repaint of the form
                 this.Invalidate();
@@ -4205,7 +4206,6 @@ namespace SATSuma
                 });
             }
         }
-
 
         private void ListViewTransactionInputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -4259,12 +4259,11 @@ namespace SATSuma
                 });
             }
         }
-
+        
         private void ListViewTransactionOutputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
             {
-                
                 bool anySelected = false;
                 foreach (ListViewItem item in listViewTransactionOutputs.Items)
                 {
@@ -4283,7 +4282,6 @@ namespace SATSuma
                     }
                 }
                 btnViewAddressFromTXOutput.Visible = anySelected;
-                
             }
             catch (WebException ex)
             {
@@ -4313,13 +4311,7 @@ namespace SATSuma
                     lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged: " + ex.Message;
                 });
             }
-            
         }
-
-
-
-
-
 
         private void ListViewTransactionInputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -4475,10 +4467,7 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
-            if (panel26.VerticalScroll.Value == 0)
-            {
-                panel26.VerticalScroll.Value = ScrollBackToHere;
-            }
+
 
             
         }
@@ -4497,20 +4486,18 @@ namespace SATSuma
 
         private void BtnTransactionInputsDown_Click(object sender, EventArgs e)
         {
-            if (panel23.VerticalScroll.Value < panel23.VerticalScroll.Maximum)
+            if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum)
             {
-                panel23.VerticalScroll.Value++;
+                panelTransactionInputs.VerticalScroll.Value++;
             }
-            
         }
 
         private void BtnTransactionOutputsDown_Click(object sender, EventArgs e)
         {
-            if (panel26.VerticalScroll.Value < panel26.VerticalScroll.Maximum)
+            if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum)
             {
-                panel26.VerticalScroll.Value++;
+                panelTransactionOutputs.VerticalScroll.Value++;
             }
-                
         }
 
         private bool isInputButtonPressed = false;
@@ -4529,6 +4516,7 @@ namespace SATSuma
 
         private void BtnTransactionOutputsDown_MouseDown(object sender, MouseEventArgs e)
         {
+            //scrollPosition = new Point(panel26.HorizontalScroll.Value, panel26.VerticalScroll.Value);
             isOutputButtonPressed = true;
             OutputDownButtonPressed = true;
             TXOutScrollTimer.Start();
@@ -4548,6 +4536,7 @@ namespace SATSuma
             OutputDownButtonPressed = false;
             TXOutScrollTimer.Stop();
             TXOutScrollTimer.Interval = 50; // reset the interval to its original value
+
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -4556,17 +4545,19 @@ namespace SATSuma
             {
                 if (InputDownButtonPressed)
                 {
-                    if (panel23.VerticalScroll.Value < panel23.VerticalScroll.Maximum - 4)
+                    if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum - 4)
                     {
-                        panel23.VerticalScroll.Value = panel23.VerticalScroll.Value + 4;
+                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value + 4;
+                        TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
                 else if (InputUpButtonPressed)
                 {
-                    if (panel23.VerticalScroll.Value > panel23.VerticalScroll.Minimum + 4)
+                    if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum + 4)
                     {
-                        panel23.VerticalScroll.Value = panel23.VerticalScroll.Value - 4;
+                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value - 4;
+                        TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
@@ -4583,17 +4574,19 @@ namespace SATSuma
             {
                 if (OutputDownButtonPressed)
                 {
-                    if (panel26.VerticalScroll.Value < panel26.VerticalScroll.Maximum - 4)
+                    if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum - 4)
                     {
-                        panel26.VerticalScroll.Value = panel26.VerticalScroll.Value + 4;
+                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value + 4;
+                        TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
                 else if (OutputUpButtonPressed)
                 {
-                    if (panel26.VerticalScroll.Value > panel26.VerticalScroll.Minimum + 4)
+                    if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum + 4)
                     {
-                        panel26.VerticalScroll.Value = panel26.VerticalScroll.Value - 4;
+                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value - 4;
+                        TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
@@ -4606,17 +4599,17 @@ namespace SATSuma
 
         private void BtnTransactionInputsUp_Click(object sender, EventArgs e)
         {
-            if (panel23.VerticalScroll.Value > panel23.VerticalScroll.Minimum)
+            if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum)
             {
-                panel23.VerticalScroll.Value--;
+                panelTransactionInputs.VerticalScroll.Value--;
             }
         }
 
         private void BtnTransactionOutputsUp_Click(object sender, EventArgs e)
         {
-            if (panel26.VerticalScroll.Value > panel26.VerticalScroll.Minimum)
+            if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum)
             {
-                panel26.VerticalScroll.Value--;
+                panelTransactionOutputs.VerticalScroll.Value--;
             }
         }
 
@@ -4649,7 +4642,116 @@ namespace SATSuma
             TXOutScrollTimer.Stop();
             TXOutScrollTimer.Interval = 50; // reset the interval to its original value
         }
-        #endregion
+
+        private void BtnViewAddressFromTXInput_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //assign address to text box on address panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
+                // Get the first subitem in the selected item 
+                string SelectedAddress = selectedItem.SubItems[0].Text;
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    textboxSubmittedAddress.Text = SelectedAddress;
+                });
+                //show the address screen
+                BtnMenuAddress_Click(sender, e);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click: " + ex.Message;
+                });
+            }
+
+        }
+
+        private void BtnViewAddressFromTXOutput_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //assign address to text box on address panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
+                // Get the first subitem in the selected item 
+                string SelectedAddress = selectedItem.SubItems[0].Text;
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    textboxSubmittedAddress.Text = SelectedAddress;
+                });
+                //show the address screen
+                BtnMenuAddress_Click(sender, e);
+            }
+            catch (WebException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, Web exception: " + ex.Message;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, HTTP Request error: " + ex.Message;
+                });
+            }
+            catch (JsonException ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, JSON parsing error: " + ex.Message;
+                });
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click: " + ex.Message;
+                });
+            }
+        }
+
+        private void PanelTransactionInputs_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
+            {
+                panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+            }
+        }
+
+        private void PanelTransactionOutputs_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
+            {
+                panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+            }
+        }
+#endregion
 
 #region BLOCK LIST STUFF
 
@@ -6399,7 +6501,9 @@ namespace SATSuma
         }
 
 
+
         #endregion
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
@@ -6754,5 +6858,3 @@ namespace SATSuma
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================
 //==================================================================================================================================================================================================
-
-

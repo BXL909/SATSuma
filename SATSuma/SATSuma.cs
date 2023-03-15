@@ -15,13 +15,12 @@
 ────██──██─────
 
  * Stuff to do:
- * further testing of own node connection, then add to settings once tested, with warning it might be much slower
+ * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
- * test button enable/disable on block list screen in all scenarios
- * check 'first' button after reaching end of block transactions screen (and all other ends of lists)
+ * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  */
 
 #region Using
@@ -90,9 +89,9 @@ namespace SATSuma
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private TransactionsForAddressService _transactionsForAddressService;
-        private readonly BlockDataService _blockService;
-        private readonly TransactionService _transactionService;
-        private readonly TransactionsForBlockService _transactionsForBlockService;
+        private BlockDataService _blockService;
+        private TransactionService _transactionService;
+        private TransactionsForBlockService _transactionsForBlockService;
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
@@ -3383,8 +3382,19 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-                                                   // Get the last seen transaction ID from the list view
-                TotalBlockTransactionRowsAdded -= 50;
+                                                   
+                                                   
+                if (TotalBlockTransactionRowsAdded % 25 == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
+                {
+                    TotalBlockTransactionRowsAdded -= 50;
+                }
+                else // otherwise we subtract the odd amount (only happens at end of list) and another 25 to be able to go back to the previous page.
+                {
+                    int closestMultipleOf25 = TotalBlockTransactionRowsAdded - (TotalBlockTransactionRowsAdded % 25); 
+                    int firstNumberBeforeIt = closestMultipleOf25 - 25;
+                    TotalBlockTransactionRowsAdded = firstNumberBeforeIt;
+                }
+                
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
                                                                                                  // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
@@ -4419,16 +4429,6 @@ namespace SATSuma
         {
             var text = e.SubItem.Text;
 
-            if (text[0] == '+') // if the string is a change to an amount and positive
-            {
-                e.SubItem.ForeColor = Color.OliveDrab; // make it green
-
-            }
-            else
-            if (text[0] == '-') // if the string is a change to an amount and negative
-            {
-                e.SubItem.ForeColor = Color.IndianRed; // make it red
-            }
 
             var font = listViewTransactionInputs.Font;
             var columnWidth = e.Header.Width;
@@ -4457,16 +4457,6 @@ namespace SATSuma
         {
             var text = e.SubItem.Text;
 
-            if (text[0] == '+') // if the string is a change to an amount and positive
-            {
-                e.SubItem.ForeColor = Color.OliveDrab; // make it green
-
-            }
-            else
-            if (text[0] == '-') // if the string is a change to an amount and negative
-            {
-                e.SubItem.ForeColor = Color.IndianRed; // make it red
-            }
 
             var font = listViewTransactionOutputs.Font;
             var columnWidth = e.Header.Width;
@@ -4952,13 +4942,9 @@ namespace SATSuma
             {
                 textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                 {
-                    textBoxBlockHeightToStartListFrom.Text = "0";
+                    textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
                 });
             }
-            if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
-            {
-            }
-            
         }
 
         private async void LookupBlockList()
@@ -4968,11 +4954,7 @@ namespace SATSuma
                 btnViewBlockFromBlockList.Visible = false;
                 btnViewTransactionsFromBlockList.Visible = false;
                 var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
-                //            DisableEnableLoadingAnimation("enable"); // start the loading animation
-                //            DisableEnableButtons("disable"); // disable buttons during operation
-                await GetFifteenBlocksForBlockList(blockNumber); // overkill on this occasion, because we're only interested in one block, but this gets us the data
-                                                                 //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                                                                 //            DisableEnableButtons("enable"); // enable buttons after operation is complete
+                await GetFifteenBlocksForBlockList(blockNumber);
             }
             catch (WebException ex)
             {
@@ -5347,11 +5329,11 @@ namespace SATSuma
                             });
                         }
                         string blockNumber = item.SubItems[1].Text;
-                        DisableEnableLoadingAnimation("enable"); // start the loading animation
-                        DisableEnableButtons("disable"); // disable buttons during operation
+                        //DisableEnableLoadingAnimation("enable"); // start the loading animation
+                        //DisableEnableButtons("disable"); // disable buttons during operation
                         var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
-                        DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                        DisableEnableButtons("enable"); // enable buttons after operation is complete
+                        //DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                        //DisableEnableButtons("enable"); // enable buttons after operation is complete
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                         List<string> blocklist = blocks.Select(t => t.Height).ToList();
                         lblBlockListBlockTime.Invoke((MethodInvoker)delegate
@@ -6228,6 +6210,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
@@ -6240,7 +6223,14 @@ namespace SATSuma
                     {
                         textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
                     });
-                    LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
+                   // DisableEnableLoadingAnimation("enable"); // start the loading animation
+                   // DisableEnableButtons("disable"); // disable buttons during operation
+                    LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
+                   // DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                   // DisableEnableButtons("enable"); // enable buttons after operation is complete
+
+
+
                 }
             }
             catch (WebException ex)
@@ -6404,7 +6394,10 @@ namespace SATSuma
                 {
                     NodeURL = SettingsScreen.Instance.NodeURL;
                     _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-                }
+                    _blockService = new BlockDataService(NodeURL);
+                    _transactionService = new TransactionService(NodeURL);
+                    _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+    }
                 CheckBlockchainExplorerApiStatus();
 
                 if (APIGroup1DisplayTimerIntervalSecsConstant != (SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency

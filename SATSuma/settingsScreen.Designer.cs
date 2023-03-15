@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsScreen));
             this.btnExitSettings = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -53,6 +54,9 @@
             this.lblActiveNode = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxCustomAPI = new System.Windows.Forms.TextBox();
+            this.lblURLWarning = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIGroup1)).BeginInit();
             this.panel4.SuspendLayout();
@@ -323,13 +327,16 @@
             // panel4
             // 
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.lblURLWarning);
+            this.panel4.Controls.Add(this.textBoxCustomAPI);
+            this.panel4.Controls.Add(this.label5);
             this.panel4.Controls.Add(this.lblNodeStatusLight);
             this.panel4.Controls.Add(this.comboAPISelectorForQueries);
             this.panel4.Controls.Add(this.lblActiveNode);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(12, 373);
+            this.panel4.Location = new System.Drawing.Point(387, 50);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(353, 128);
+            this.panel4.Size = new System.Drawing.Size(353, 339);
             this.panel4.TabIndex = 24;
             // 
             // lblNodeStatusLight
@@ -338,7 +345,7 @@
             this.lblNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNodeStatusLight.ForeColor = System.Drawing.Color.Silver;
-            this.lblNodeStatusLight.Location = new System.Drawing.Point(97, 99);
+            this.lblNodeStatusLight.Location = new System.Drawing.Point(94, 162);
             this.lblNodeStatusLight.Name = "lblNodeStatusLight";
             this.lblNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblNodeStatusLight.TabIndex = 138;
@@ -355,7 +362,8 @@
             this.comboAPISelectorForQueries.ImeMode = System.Windows.Forms.ImeMode.HangulFull;
             this.comboAPISelectorForQueries.Items.AddRange(new object[] {
             "blockstream.info",
-            "mempool.space"});
+            "mempool.space",
+            "own/custom"});
             this.comboAPISelectorForQueries.Location = new System.Drawing.Point(18, 63);
             this.comboAPISelectorForQueries.Name = "comboAPISelectorForQueries";
             this.comboAPISelectorForQueries.Size = new System.Drawing.Size(319, 26);
@@ -369,7 +377,7 @@
             this.lblActiveNode.BackColor = System.Drawing.Color.Transparent;
             this.lblActiveNode.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblActiveNode.ForeColor = System.Drawing.Color.Gray;
-            this.lblActiveNode.Location = new System.Drawing.Point(18, 101);
+            this.lblActiveNode.Location = new System.Drawing.Point(15, 164);
             this.lblActiveNode.Name = "lblActiveNode";
             this.lblActiveNode.Size = new System.Drawing.Size(84, 15);
             this.lblActiveNode.TabIndex = 139;
@@ -396,7 +404,7 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(344, 9);
+            this.btnExit.Location = new System.Drawing.Point(716, 9);
             this.btnExit.Margin = new System.Windows.Forms.Padding(0);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(24, 24);
@@ -406,20 +414,53 @@
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.UseVisualStyleBackColor = false;
             // 
-            // settingsScreen
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Silver;
+            this.label5.Location = new System.Drawing.Point(15, 195);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(319, 140);
+            this.label5.TabIndex = 140;
+            this.label5.Text = resources.GetString("label5.Text");
+            // 
+            // textBoxCustomAPI
+            // 
+            this.textBoxCustomAPI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxCustomAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCustomAPI.Enabled = false;
+            this.textBoxCustomAPI.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxCustomAPI.ForeColor = System.Drawing.Color.Silver;
+            this.textBoxCustomAPI.Location = new System.Drawing.Point(18, 103);
+            this.textBoxCustomAPI.Name = "textBoxCustomAPI";
+            this.textBoxCustomAPI.Size = new System.Drawing.Size(319, 25);
+            this.textBoxCustomAPI.TabIndex = 141;
+            this.textBoxCustomAPI.TextChanged += new System.EventHandler(this.TextBoxCustomAPI_TextChanged);
+            // 
+            // lblURLWarning
+            // 
+            this.lblURLWarning.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
+            this.lblURLWarning.Location = new System.Drawing.Point(18, 135);
+            this.lblURLWarning.Name = "lblURLWarning";
+            this.lblURLWarning.Size = new System.Drawing.Size(319, 20);
+            this.lblURLWarning.TabIndex = 142;
+            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            // 
+            // SettingsScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExitSettings;
-            this.ClientSize = new System.Drawing.Size(377, 553);
+            this.ClientSize = new System.Drawing.Size(757, 559);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.btnExitSettings);
             this.Font = new System.Drawing.Font("Consolas", 7.8F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "settingsScreen";
+            this.Name = "SettingsScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "settingsScreen";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsScreen_FormClosing);
@@ -460,5 +501,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label lblBlockchainInfoJSON;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxCustomAPI;
+        private System.Windows.Forms.Label lblURLWarning;
     }
 }

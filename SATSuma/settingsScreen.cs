@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -222,15 +224,30 @@ namespace SATSuma
             {
                 if (comboAPISelectorForQueries.SelectedIndex == 0)
                 {
+                    textBoxCustomAPI.Enabled = false;
+                    lblURLWarning.ForeColor = Color.Gray;
                     NodeURL = "https://blockstream.info/api/";
                 }
                 if (comboAPISelectorForQueries.SelectedIndex == 1)
                 {
-                NodeURL = "https://mempool.space/api/";
+                    textBoxCustomAPI.Enabled = false;
+                    lblURLWarning.ForeColor = Color.Gray;
+                    NodeURL = "https://mempool.space/api/";
+                }
+                if (comboAPISelectorForQueries.SelectedIndex == 2)
+                {
+                    textBoxCustomAPI.Enabled = true;
+                    textBoxCustomAPI.Focus();
                 }
                 CheckBlockchainExplorerApiStatus();
             }
             hasAPISelectorComboBoxJustBeenPainted = false; // ignored first event now
+        }
+
+        private void TextBoxCustomAPI_TextChanged(object sender, EventArgs e)
+        {
+            NodeURL = textBoxCustomAPI.Text;
+            CheckBlockchainExplorerApiStatus();
         }
 
         private async void CheckBlockchainExplorerApiStatus()
@@ -252,7 +269,41 @@ namespace SATSuma
                 {
                     pingAddress = "mempool.space";
                     NodeURL = "https://mempool.space/api/";
+                }
+ 
+                
+                
+                if (textBoxCustomAPI.Enabled == true) 
+                {
+                    // get the contents of the textbox
+                    string url = textBoxCustomAPI.Text;
 
+                    // create a regex pattern to match URLs
+                    string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                    // create a regex object
+                    Regex regex = new Regex(pattern);
+
+                    // use the regex object to match the contents of the textbox
+                    if (regex.IsMatch(url)) // (at least partially) valid url
+                    {
+                        lblURLWarning.ForeColor = Color.Gray;
+                        NodeURL = textBoxCustomAPI.Text;
+                        // get the hostname from the URL
+                        // parse the URL to extract the hostname
+                        Uri uri = new Uri(NodeURL);
+                        string hostname = uri.Host;
+
+                        // resolve the hostname to an IP address
+                        IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                        IPAddress ipAddress = hostEntry.AddressList[0];
+                        pingAddress = ipAddress.ToString();
+                    }
+                    else
+                    {
+                        lblURLWarning.ForeColor = Color.IndianRed;
+                        return;
+                    }
                 }
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
@@ -263,10 +314,18 @@ namespace SATSuma
                     {
                         displayNodeName = "Blockstream";
                     }
-                    if (NodeURL == "https://mempool.space/api/")
+                    else
                     {
-                        displayNodeName = "Mempool.space";
+                        if (NodeURL == "https://mempool.space/api/")
+                        {
+                            displayNodeName = "Mempool.space";
+                        }
+                        else
+                        {
+                            displayNodeName = NodeURL;
+                        }
                     }
+                    
                     lblActiveNode.Text = displayNodeName + " status";
                 }
                 else
@@ -278,10 +337,18 @@ namespace SATSuma
                     {
                         displayNodeName = "Blockstream";
                     }
-                    if (NodeURL == "https://mempool.space/api/")
+                    else
                     {
-                        displayNodeName = "Mempool.space";
+                        if (NodeURL == "https://mempool.space/api/")
+                        {
+                            displayNodeName = "Mempool.space";
+                        }
+                        else
+                        {
+                            displayNodeName = NodeURL;
+                        }
                     }
+                    
                     lblActiveNode.Text = displayNodeName + " status";
                 }
             }
@@ -302,6 +369,7 @@ namespace SATSuma
             }
             lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
         }
+
 
     }
 }

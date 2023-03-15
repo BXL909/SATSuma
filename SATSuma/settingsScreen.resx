@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label5.Text" xml:space="preserve">
+    <value>Selecting 'own/custom' requires the URL to your own or third-party installation of mempool.space (e.g http://umbrel.local:3006/api/). Note that pointing to an installation on a slow device (e.g Raspberry Pi) can seriously affect response times.</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*  
 ────██──██─────     _____      _______ _____                       
 ███████████▄───    / ____|  /\|__   __/ ____|                      
 ──███████████▄─   | (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
@@ -7,7 +7,7 @@
 ──███────▄███▀─   |_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
 ──█████████▀───  
 ──███████████▄─  Version history 🍊
-──███─────▀████  0.1 This takes over where 'Statamoto' left off. More realistic version numbers this time! And hopefully a much more useful application 
+──███─────▀████  0.1 This takes over where 'Statamoto' left off. More realistic version numbers this time! And hopefully a much more useful application  
 ──███───────███  
 ──███─────▄████  
 ──████████████─  
@@ -62,7 +62,7 @@ using Panel = System.Windows.Forms.Panel;
 using System.Windows.Documents;
 using System.Reflection.Emit;
 using Control = System.Windows.Forms.Control;
-#endregion
+#endregion 
 
 namespace SATSuma
 {
@@ -162,31 +162,7 @@ namespace SATSuma
             }
             catch (WebException ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Form1_Load, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Form1_Load, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Form1_Load, JSON parsing error: " + ex.Message;
-                });
-            }
-            catch (Exception ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Form1_Load, " + ex.Message;
-                });
+                HandleException(ex, "Form1_Load");
             }
         }
 #endregion
@@ -237,7 +213,7 @@ namespace SATSuma
                 }
             }
            
-            if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh...
+            if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh, clear error alert symblol & error message
             {
                 lblAlert.Invoke((MethodInvoker)delegate
                 {
@@ -259,42 +235,25 @@ namespace SATSuma
                                              // get current block height before anything else
                 using (WebClient client = new WebClient())
                 {
-                    string BlockTipURL = NodeURL + "blocks/tip/height";
-                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                    lblBlockNumber.Invoke((MethodInvoker)delegate
+                    try
                     {
-                        lblBlockNumber.Text = BlockTip;
-                    });
+                        string BlockTipURL = NodeURL + "blocks/tip/height";
+                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                        lblBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockNumber.Text = BlockTip;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "BlockchainInfoEndpointsRefresh");
+                    }
                 }
                 UpdateAPIGroup1DataFields(); // fetch data and populate fields
             }
             catch (WebException ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, JSON parsing error: " + ex.Message;
-                });
-            }
-            catch (Exception ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TimerAPIGroup1_Tick, " + ex.Message;
-                });
+                HandleException(ex, "TimerAPIGroup1_Tick");
             }
         }
 
@@ -386,14 +345,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task1)");
                     }
                 });
 
@@ -409,10 +361,6 @@ namespace SATSuma
                             {
                                 lblAvgNoTransactions.Text = avgNoTransactions;
                             });
-//                            lblBlockNumber.Invoke((MethodInvoker)delegate
-//                            {
-//                                lblBlockNumber.Text = blockNumber;
-//                            });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = blockReward;
@@ -470,10 +418,6 @@ namespace SATSuma
                             {
                                 lblAvgNoTransactions.Text = "disabled";
                             });
-//                            lblBlockNumber.Invoke((MethodInvoker)delegate
-//                            {
-//                                lblBlockNumber.Text = "disabled";
-//                            });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockReward.Text = "disabled";
@@ -528,14 +472,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task2)");
                     }
                 });
 
@@ -638,14 +575,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task3)");
                     }
                 });
 
@@ -698,14 +628,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task4)");
                     }
                 });
 
@@ -760,14 +683,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task5)");
                     }
                 });
 
@@ -954,14 +870,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task6)");
                     }
                 });
 
@@ -1026,14 +935,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task7)");
                     }
                 });
 
@@ -1092,14 +994,7 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        lblAlert.Invoke((MethodInvoker)delegate
-                        {
-                            lblAlert.Text = "⚠️";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = ex.Message; // move returned error to the error message label on the form
-                        });
+                        HandleException(ex, "UpdateAPIGroup1DataFields(Task8)");
                     }
                 });
 
@@ -1109,10 +1004,6 @@ namespace SATSuma
                 if (errorOccurred)
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    // lblAlert.Invoke((MethodInvoker)delegate
-                    // {
-                    //     lblAlert.Text = "⚠️";
-                    // });
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblStatusLight.ForeColor = Color.Red;
@@ -1121,9 +1012,9 @@ namespace SATSuma
                     {
                         lblStatusLight.Text = "🔴"; // red light
                     });
-                    lblStatusMessPart1.Invoke((MethodInvoker)delegate
+                    lblRefreshSuccessOrFailMessage.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusMessPart1.Text = "One or more fields failed to update";
+                        lblRefreshSuccessOrFailMessage.Text = "One or more fields failed to update";
                     });
                 }
             }
@@ -1138,46 +1029,17 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
+                string priceUSD = client.DownloadString("https://bitcoinexploder.org/api/price/usd"); // 1 bitcoin = ? usd
                 string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
                 string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
                 string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
                 string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
                 return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BitcoinExplorerOrgEndpointsRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0");
         }
 
@@ -1206,39 +1068,10 @@ namespace SATSuma
                 twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
                 return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BlockchainInfoEndpointsRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
@@ -1266,39 +1099,10 @@ namespace SATSuma
 
                 return (aliases, capacities);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "MempoolSpaceLiquidityRankingJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return (new List<string>(), new List<string>());
         }
 
@@ -1320,39 +1124,10 @@ namespace SATSuma
 
                 return (aliases, channels);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "MempoolSpaceConnectivityRankingJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return (new List<string>(), new List<string>());
         }
 
@@ -1380,39 +1155,10 @@ namespace SATSuma
                 unknownCapacity = Convert.ToString(dblUnknownCapacity);
                 return (clearnetCapacity, torCapacity, unknownCapacity);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "MempoolSpaceCapacityBreakdownJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0");
         }
 
@@ -1443,39 +1189,10 @@ namespace SATSuma
                 var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
                 return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "MempoolSpaceLightningJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
@@ -1512,39 +1229,10 @@ namespace SATSuma
                 nextBlockTotalFees = Convert.ToString(roundedValue);
                 return (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BitcoinExplorerOrgJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
 
@@ -1578,39 +1266,10 @@ namespace SATSuma
                 var nextretarget = (string)data4["nextretarget"];
                 return (n_tx, size, nextretarget);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BlockchainInfoJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0");
         }
 
@@ -1637,39 +1296,10 @@ namespace SATSuma
                 var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
                 return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "CoingeckoComJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0");
         }
 
@@ -1688,39 +1318,10 @@ namespace SATSuma
                 var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
                 return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BlockchairComHalvingJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0", "0");
         }
 
@@ -1737,39 +1338,10 @@ namespace SATSuma
                 var blockchain_size = (string)data["data"]["blockchain_size"];
                 return (hodling_addresses, blocks_24h, nodes, blockchain_size);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = ex.Message;
-                });
+                HandleException(ex, "BlockchairComJSONRefresh");
             }
-
-            lblAlert.Invoke((MethodInvoker)delegate
-            {
-                lblAlert.Text = "⚠️";
-            });
             return ("0", "0", "0", "0");
         }
 
@@ -1888,14 +1460,7 @@ namespace SATSuma
                 }
                 catch (Exception ex)
                 {
-                    lblAlert.Invoke((MethodInvoker)delegate
-                    {
-                        lblAlert.Text = "⚠️";
-                    });
-                    lblErrorMessage.Invoke((MethodInvoker)delegate
-                    {
-                        lblErrorMessage.Text = "Error getting address balance: " + ex.Message;
-                    });
+                    HandleException(ex, "TboxSubmittedAddress_TextChanged (Error getting address balance)");
                     return;
                 }
                 string lastSeenTxId = ""; // start from the top of the JSON (most recent tx)
@@ -1905,14 +1470,7 @@ namespace SATSuma
                 }
                 catch (Exception ex)
                 {
-                    lblAlert.Invoke((MethodInvoker)delegate
-                    {
-                        lblAlert.Text = "⚠️";
-                    });
-                    lblErrorMessage.Invoke((MethodInvoker)delegate
-                    {
-                        lblErrorMessage.Text = "Error getting first batch of transactions for address: " + ex.Message;
-                    });
+                    HandleException(ex, "TboxSubmittedAddress_TextChanged (Error getting first batch of transactions for address)");
                     return;
                 }
             }
@@ -2189,33 +1747,9 @@ namespace SATSuma
                     });
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetAddressBalance, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetAddressBalance, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetAddressBalance, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetAddressBalance " + ex.Message;
-                });
+                HandleException(ex, "GetAddressBalance");
             }
         }
 
@@ -2432,33 +1966,9 @@ namespace SATSuma
                     btnNextAddressTransactions.Focus();
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForAddress, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForAddress, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForAddress, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForAddress: " + ex.Message;
-                });
+                HandleException(ex, "GetTransactionsForAddress");
             }
         }
 
@@ -2600,33 +2110,9 @@ namespace SATSuma
             {
                 LookupBlock();
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewBlockFromAddress, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewBlockFromAddress, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewBlockFromAddress, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewBlockFromAddress: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewBlockFromAddress_Click");
             }
             //show the block screen
             BtnMenuBlock_Click(sender, e);
@@ -2646,23 +2132,6 @@ namespace SATSuma
             });
             //show the transaction screen
             BtnMenuTransaction_Click(sender, e);
-        }
-
-        //=============================================================================================================
-        //--------------- OVERRIDE COLOURS FOR LISTVIEW HEADINGS ------------------------------------------------------
-        private void ListViewAddressTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
-            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
         }
 
         //=============================================================================================================
@@ -2957,33 +2426,9 @@ namespace SATSuma
                 });
                 e.Handled = true;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "TextBoxSubmittedBlockNumber_KeyPress: " + ex.Message;
-                });
+                HandleException(ex, "TextBoxSubmittedBlockNumber_KeyPress");
             }
         }
 
@@ -3048,33 +2493,9 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("disable"); // stop the loading animation
                 DisableEnableButtons("enable"); // enable buttons after operation is complete
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlock, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlock, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlock, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlock: " + ex.Message;
-                });
+                HandleException(ex, "LookupBlock");
             }
         }
 
@@ -3148,33 +2569,9 @@ namespace SATSuma
                     lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
                 });
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocks, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocks, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocks, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocks: " + ex.Message;
-                });
+                HandleException(ex, "GetFifteenBlocks");
             }
         }
 
@@ -3300,33 +2697,9 @@ namespace SATSuma
                     });
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForBlock, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForBlock, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForBlock, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransactionsForBlock: " + ex.Message;
-                });
+                HandleException(ex, "GetTransactionsForBlocks");
             }
         }
 
@@ -3345,33 +2718,9 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlockTransactions_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlockTransactions_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnNextBlockTransactions_Click");
             }
         }
 
@@ -3402,33 +2751,9 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlockTransactions_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnPreviousBlockTransactions_Click");
             }
         }
 
@@ -3443,33 +2768,9 @@ namespace SATSuma
                 });
                 LookupBlock();
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlock_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlock_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlock_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnPreviousBlock_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnPreviousBlock_Click");
             }
         }
 
@@ -3484,33 +2785,9 @@ namespace SATSuma
                 });
                 LookupBlock();
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlock_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlock_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlock_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNextBlock_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnNextBlock_Click");
             }
         }
 
@@ -3537,33 +2814,9 @@ namespace SATSuma
                 }
                 btnViewTransactionFromBlock.Visible = anySelected;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockTransactions_ItemSelectionChanged: " + ex.Message;
-                });
+                HandleException(ex, "ListViewBlockTransactions_ItemSelectionChanged");
             }
         }
 
@@ -3621,21 +2874,6 @@ namespace SATSuma
             }
         }
 
-        private void ListViewBlockTransactions_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
-            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
-        }
-
         private void ListViewBlockTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
@@ -3691,33 +2929,9 @@ namespace SATSuma
                 //show the transaction screen
                 BtnMenuTransaction_Click(sender, e);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionFromBlock_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewTransactionFromBlock_Click");
             }
         }
 
@@ -3738,33 +2952,9 @@ namespace SATSuma
                     return;
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxTransactionID_KeyPress: " + ex.Message;
-                });
+                HandleException(ex, "TextBoxTransactionID_KeyPress");
             }
         }
 
@@ -3830,33 +3020,9 @@ namespace SATSuma
                 string submittedTransactionID = textBoxTransactionID.Text;
                 await GetTransaction(submittedTransactionID);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupTransaction, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupTransaction, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupTransaction, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupTransaction: " + ex.Message;
-                });
+                HandleException(ex, "LookupTransaction");
             }
         }
 
@@ -4209,33 +3375,9 @@ namespace SATSuma
                 this.Invalidate();
 
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransaction, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransaction, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransaction, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetTransaction: " + ex.Message;
-                });
+                HandleException(ex, "GetTransaction");
             }
         }
 
@@ -4262,33 +3404,9 @@ namespace SATSuma
                 }
                 btnViewAddressFromTXInput.Visible = anySelected;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged: " + ex.Message;
-                });
+                HandleException(ex, "ListViewTransactionInputs_ItemSelectionChanged");
             }
         }
         
@@ -4315,33 +3433,9 @@ namespace SATSuma
                 }
                 btnViewAddressFromTXOutput.Visible = anySelected;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewTransactionInputs_ItemSelectionChanged: " + ex.Message;
-                });
+                HandleException(ex, "ListViewTransactionOutputs_ItemSelectionChanged");
             }
         }
 
@@ -4393,36 +3487,6 @@ namespace SATSuma
                     e.NewWidth = 120;
                 }
             }
-        }
-
-        private void ListViewTransactionInputs_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
-            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
-        }
-
-        private void ListViewTransactionOutputs_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
-            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
         }
 
         private void ListViewTransactionInputs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
@@ -4479,9 +3543,6 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
-
-
-            
         }
 
         // draw all the lines on the transaction diagram from the previously stored list.
@@ -4671,35 +3732,10 @@ namespace SATSuma
                 //show the address screen
                 BtnMenuAddress_Click(sender, e);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewAddressFromTXInput_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewAddressFromTXInput_Click");
             }
-
         }
 
         private void BtnViewAddressFromTXOutput_Click(object sender, EventArgs e)
@@ -4718,33 +3754,9 @@ namespace SATSuma
                 //show the address screen
                 BtnMenuAddress_Click(sender, e);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnViewAddressFromTXOutput_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewAddressFromTXOutput_Click");
             }
         }
 
@@ -4905,33 +3917,9 @@ namespace SATSuma
                 });
                 e.Handled = true;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "textBoxBlockHeightToStartListFrom_KeyPress: " + ex.Message;
-                });
+                HandleException(ex, "TextBoxBlockHeightToStartListFrom_KeyPress");
             }
         }
 
@@ -4956,33 +3944,9 @@ namespace SATSuma
                 var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
                 await GetFifteenBlocksForBlockList(blockNumber);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlockList, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlockList, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlockList, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "LookupBlockList: " + ex.Message;
-                });
+                HandleException(ex, "LookupBlockList");
             }
         }
 
@@ -5150,33 +4114,9 @@ namespace SATSuma
                     });
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "GetFifteenBlocksForBlockList: " + ex.Message;
-                });
+                HandleException(ex, "GetFifteenBlocksForBlockList");
             }
         }
 
@@ -5191,33 +4131,9 @@ namespace SATSuma
                 btnViewBlockFromBlockList.Visible = false;
                 btnViewTransactionsFromBlockList.Visible = false;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnOlder15Blocks_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnOlder15Blocks_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnOlder15Blocks_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnOlder15Blocks_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnOlder15Blocks_Click");
             }
         }
 
@@ -5232,51 +4148,10 @@ namespace SATSuma
                 btnViewBlockFromBlockList.Visible = false;
                 btnViewTransactionsFromBlockList.Visible = false;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNewer15Blocks_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNewer15Blocks_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNewer15Blocks_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnNewer15Blocks_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnNewer15Blocks_Click");
             }
-        }
-
-        private void ListViewBlockList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
-            e.Graphics.FillRectangle(brush, e.Bounds);
-            // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
-            StringFormat format = new StringFormat
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
-            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
-            
         }
 
         private void ListViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
@@ -5429,33 +4304,9 @@ namespace SATSuma
                 btnViewBlockFromBlockList.Visible = anySelected;
                 btnViewTransactionsFromBlockList.Visible = anySelected;
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "listViewBlockList_ItemSelectionChanged: " + ex.Message;
-                });
+                HandleException(ex, "ListViewBlockList_ItemSelectionChanged");
             }
 
         }
@@ -5478,33 +4329,9 @@ namespace SATSuma
                 //show the block screen
                 BtnMenuBlock_Click(sender, e);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewTransactionsFromBlockList_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewTransactionsFromBlockList_Click");
             }
         }
 
@@ -5526,33 +4353,9 @@ namespace SATSuma
                 //show the block screen
                 BtnMenuBlock_Click(sender, e);
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnViewBlockFromBlockList_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnViewBlockFromBlockList_Click");
             }
         }
 
@@ -5655,13 +4458,75 @@ namespace SATSuma
             }
             
         }
-#endregion
+        #endregion
 
 #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
-        //====================== GENERIC STUFF =========================================================================================================================================================
+        //====================== COMMON CODE ++=========================================================================================================================================================
+
+        //=============================================================================================================
+        //--------------- ERROR HANDLER -------------------------------------------------------------------------------
+
+        private void HandleException(Exception ex, string methodName)
+        {
+            string errorMessage;
+            if (ex is WebException)
+            {
+                errorMessage = $"Web exception in {methodName}: {ex.Message}";
+            }
+            else if (ex is HttpRequestException)
+            {
+                errorMessage = $"HTTP Request error in {methodName}: {ex.Message}";
+            }
+            else if (ex is JsonException)
+            {
+                errorMessage = $"JSON parsing error in {methodName}: {ex.Message}";
+            }
+            else
+            {
+                errorMessage = $"Error in {methodName}: {ex.Message}";
+            }
+
+            lblErrorMessage.Invoke((MethodInvoker)delegate
+            {
+                lblErrorMessage.Text = errorMessage;
+            });
+            ShowAlertSymbol();
+        }
+
+        //=============================================================================================================
+        //--------------- SHOW ALERT SYMBOL -------------------------------------------------------------------------------
+
+        private void ShowAlertSymbol()
+        {
+            lblAlert.Invoke((MethodInvoker)delegate
+            {
+                lblAlert.Text = "⚠️";
+            });
+        }
+
+
+        //=============================================================================================================
+        //--------------- OVERRIDE COLOURS FOR LISTVIEW HEADINGS ------------------------------------------------------
+
+        private void AllListViews_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            Color headerColor = Color.FromArgb(50, 50, 50);
+            SolidBrush brush = new SolidBrush(headerColor);
+            e.Graphics.FillRectangle(brush, e.Bounds);
+            // Change text color and alignment
+            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Near,
+                LineAlignment = StringAlignment.Center
+            };
+            e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+        }
+
         //=============================================================================================================
         //-------------------- CONVERT SATS TO BITCOIN ----------------------------------------------------------------
+
         private decimal ConvertSatsToBitcoin(string numerics)
         {
             decimal number = decimal.Parse(numerics);
@@ -5774,10 +4639,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "DisableEnableLoadingAnimation: " + ex.Message;
-                });
+                HandleException(ex, "DisableEnableLoadingAnimation");
             }
         }
 
@@ -5798,15 +4660,12 @@ namespace SATSuma
                 }
                 lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
                 {
-                    lblElapsedSinceUpdate.Location = new Point(lblStatusMessPart1.Location.X + lblStatusMessPart1.Width, lblElapsedSinceUpdate.Location.Y);
+                    lblElapsedSinceUpdate.Location = new Point(lblRefreshSuccessOrFailMessage.Location.X + lblRefreshSuccessOrFailMessage.Width, lblElapsedSinceUpdate.Location.Y);
                 });
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "UpdateOnScreenCountdownAndFlashLights: " + ex.Message;
-                });
+                HandleException(ex, "UpdateOnScreenCountdownAndFlashLights");
             }
         }
 
@@ -5834,10 +4693,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "ChangeStatusLights: " + ex.Message;
-                });
+                HandleException(ex, "ChangeStatusLights");
             }
         }
 
@@ -5864,9 +4720,9 @@ namespace SATSuma
             {
                 lblStatusLight.Text = "🟢"; // circle/light
             });
-            lblStatusMessPart1.Invoke((MethodInvoker)delegate
+            lblRefreshSuccessOrFailMessage.Invoke((MethodInvoker)delegate
             {
-                lblStatusMessPart1.Text = "Data updated successfully";
+                lblRefreshSuccessOrFailMessage.Text = "Data updated successfully";
             });
             intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset the timer
             intDisplaySecondsElapsedSinceUpdate = 0; // reset the seconds since last refresh
@@ -6009,10 +4865,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnMenuSplash_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnMenuSplash_Click");
             }
         }
 
@@ -6166,33 +5019,9 @@ namespace SATSuma
                 textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
                 LookupBlock();
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "lblBlockNumber_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "lblBlockNumber_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "lblBlockNumber_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "lblBlockNumber_Click: " + ex.Message;
-                });
+                HandleException(ex, "LblBlockNumber_Click");
             }
         }
 
@@ -6233,33 +5062,9 @@ namespace SATSuma
 
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuBlockList_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuBlockList_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuBlockList_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuBlockList_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnMenuBlockList_Click");
             }
         }
 
@@ -6293,33 +5098,9 @@ namespace SATSuma
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
                 }
             }
-            catch (WebException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuTransaction_Click, Web exception: " + ex.Message;
-                });
-            }
-            catch (HttpRequestException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuTransaction_Click, HTTP Request error: " + ex.Message;
-                });
-            }
-            catch (JsonException ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuTransaction_Click, JSON parsing error: " + ex.Message;
-                });
-            }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnMenuTransaction_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnMenuTransaction_Click");
             }
         }
 
@@ -6412,10 +5193,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "BtnMenuSettings_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnMenuSettings_Click");
             }
         }
 
@@ -6432,10 +5210,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "btnHelp_Click: " + ex.Message;
-                });
+                HandleException(ex, "BtnHelp_Click");
             }
         }
 
@@ -6501,10 +5276,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "UpdateOnScreenClock: " + ex.Message;
-                });
+                HandleException(ex, "UpdateOnScreenClock");
             }
         }
 
@@ -6515,14 +5287,10 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
 
-
-
         #endregion
-
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
-
 #region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
@@ -6868,7 +5636,6 @@ namespace SATSuma
         public string Value { get; set; }
     }
 #endregion
-
 }
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

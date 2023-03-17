@@ -16,6 +16,9 @@
 
  * Stuff to do:
  * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
+ * support testnet
+ * bookmarks
+ * xpubs
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
@@ -68,7 +71,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-#region INITIALISE
+        #region INITIALISE
         //=============================================================================================================
         //---------------------------INITIALISE------------------------------------------------------------------------
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
@@ -165,9 +168,9 @@ namespace SATSuma
                 HandleException(ex, "Form1_Load");
             }
         }
-#endregion
+        #endregion
 
-#region CLOCK TICK EVENTS
+        #region CLOCK TICK EVENTS
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
@@ -257,9 +260,9 @@ namespace SATSuma
             }
         }
 
-#endregion
+        #endregion
 
-#region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
+        #region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
         //==============================================================================================================================================================================================
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
         //=============================================================================================================
@@ -1370,9 +1373,9 @@ namespace SATSuma
             e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2), lblMedFeeRate.Left, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2));
             e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
         }
-#endregion
+        #endregion
 
-#region ADDRESS SCREEN STUFF
+        #region ADDRESS SCREEN STUFF
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
         //=============================================================================================================
@@ -2284,9 +2287,9 @@ namespace SATSuma
             label63.Visible = false;
             listViewAddressTransactions.Visible = false;
         }
-#endregion
+        #endregion
 
-#region BLOCK SCREEN STUFF
+        #region BLOCK SCREEN STUFF
         //==============================================================================================================================================================================================
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
         //=============================================================================================================
@@ -2937,7 +2940,7 @@ namespace SATSuma
 
         #endregion
 
-#region TRANSACTION STUFF
+        #region TRANSACTION STUFF
 
         private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -3775,10 +3778,9 @@ namespace SATSuma
                 panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
             }
         }
-#endregion
+        #endregion
 
-#region BLOCK LIST STUFF
-
+        #region BLOCK LIST STUFF
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -4475,7 +4477,6 @@ namespace SATSuma
 
         private async void LookupXpub()
         {
-            //string submittedXpub = "xpub6BnoNKXeyEL6hSmb786gM4iS7Q24b75C3UoSTNGR9pLooYdqnUz1vf9vpVvNjpfvbpMRtJB6d9BMVd86Vfu12yHc5DHEto9pyx3WGZAjSBZ";
             string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
             ExtPubKey extPubKey = ExtPubKey.Parse(submittedXpub, Network.Main);
@@ -4483,18 +4484,21 @@ namespace SATSuma
             BitcoinExtPubKey bitcoinExtPubKey = new BitcoinExtPubKey(extPubKey, Network.Main);
 
             // derive a list of 1000 addresses from the xpub
+            string path = "m/0/{0}";
             List<BitcoinAddress> addresses = new List<BitcoinAddress>();
             for (int i = 0; i < 1000; i++)
             {
-                var scriptPubKey = bitcoinExtPubKey.Derive((uint)i).ScriptPubKey;
+                var pubkey = extPubKey.Derive(KeyPath.Parse(string.Format(path, i)));
+                var scriptPubKey = pubkey.ScriptPubKey;
                 BitcoinAddress address;
                 if (scriptPubKey.IsScriptType(ScriptType.P2WPKH))
                 {
-                    address = new BitcoinWitPubKeyAddress(scriptPubKey.Hash.ToString(), Network.Main);
+                    address = new BitcoinWitPubKeyAddress(pubkey.PubKey.WitHash, Network.Main);
                 }
                 else if (scriptPubKey.IsScriptType(ScriptType.P2PKH))
                 {
-                    address = new BitcoinPubKeyAddress(scriptPubKey.Hash.ToString(), Network.Main);
+                    var witProgram = PayToWitPubKeyHashTemplate.Instance.ExtractScriptPubKeyParameters(scriptPubKey);
+                    address = new BitcoinWitPubKeyAddress(witProgram, Network.Main);
                 }
                 else if (scriptPubKey.IsScriptType(ScriptType.P2SH))
                 {
@@ -4546,11 +4550,6 @@ namespace SATSuma
                 }
             }
         }
-
-
-
-
-
         #endregion
 
         #region REUSEABLE STUFF
@@ -4920,9 +4919,9 @@ namespace SATSuma
             });
         }
 
-#endregion
+        #endregion
 
-#region GENERAL FORM NAVIGATION AND CONTROLS
+        #region GENERAL FORM NAVIGATION AND CONTROLS
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
 
@@ -5380,10 +5379,9 @@ namespace SATSuma
         {
             return this.panelTransaction;
         }
-#endregion
+        #endregion
 
-#region MISC UI STUFF
-
+        #region MISC UI STUFF
         //=============================================================================================================
         //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
         private void UpdateOnScreenClock()
@@ -5423,12 +5421,7 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
-
-
-
         #endregion
-
-
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================

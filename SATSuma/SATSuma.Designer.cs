@@ -5819,7 +5819,7 @@
             this.label144.AutoSize = true;
             this.label144.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label144.ForeColor = System.Drawing.Color.Silver;
-            this.label144.Location = new System.Drawing.Point(250, 5);
+            this.label144.Location = new System.Drawing.Point(654, 6);
             this.label144.Name = "label144";
             this.label144.Size = new System.Drawing.Size(44, 20);
             this.label144.TabIndex = 9;
@@ -5829,7 +5829,7 @@
             // 
             this.label145.AutoSize = true;
             this.label145.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label145.Location = new System.Drawing.Point(295, 7);
+            this.label145.Location = new System.Drawing.Point(699, 8);
             this.label145.Name = "label145";
             this.label145.Size = new System.Drawing.Size(64, 18);
             this.label145.TabIndex = 8;
@@ -5844,7 +5844,7 @@
             this.textBoxSubmittedXpub.Location = new System.Drawing.Point(61, 3);
             this.textBoxSubmittedXpub.MaxLength = 200;
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
-            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(153, 25);
+            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(577, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 

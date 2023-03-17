@@ -256,7 +256,7 @@ namespace SATSuma
             try
             {
                 Ping pingSender = new Ping();
-                string pingAddress = null;
+                string pingAddress = "";
                 if (NodeURL == "https://blockstream.info/api/")
                 {
                     pingAddress = "blockstream.info";
@@ -265,7 +265,7 @@ namespace SATSuma
                 {
                     pingAddress = "mempool.space";
                 }
-                if (NodeURL == null)
+                if (NodeURL == "")
                 {
                     pingAddress = "mempool.space";
                     NodeURL = "https://mempool.space/api/";

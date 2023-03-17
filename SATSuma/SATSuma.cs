@@ -1029,7 +1029,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                string priceUSD = client.DownloadString("https://bitcoinexploder.org/api/price/usd"); // 1 bitcoin = ? usd
+                string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
                 string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
                 string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
                 string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
@@ -4460,7 +4460,100 @@ namespace SATSuma
         }
         #endregion
 
-#region REUSEABLE STUFF
+        #region XPUB STUFF
+
+        private void TextBoxSubmittedXpub_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                // Submit button was pressed
+                LookupXpub();
+                e.Handled = true;
+                return;
+            }
+        }
+
+        private async void LookupXpub()
+        {
+            //string submittedXpub = "xpub6BnoNKXeyEL6hSmb786gM4iS7Q24b75C3UoSTNGR9pLooYdqnUz1vf9vpVvNjpfvbpMRtJB6d9BMVd86Vfu12yHc5DHEto9pyx3WGZAjSBZ";
+            string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
+
+            ExtPubKey extPubKey = ExtPubKey.Parse(submittedXpub, Network.Main);
+            // create a BitcoinExtPubKey object from the xpub string
+            BitcoinExtPubKey bitcoinExtPubKey = new BitcoinExtPubKey(extPubKey, Network.Main);
+
+            // derive a list of 1000 addresses from the xpub
+            List<BitcoinAddress> addresses = new List<BitcoinAddress>();
+            for (int i = 0; i < 1000; i++)
+            {
+                var scriptPubKey = bitcoinExtPubKey.Derive((uint)i).ScriptPubKey;
+                BitcoinAddress address;
+                if (scriptPubKey.IsScriptType(ScriptType.P2WPKH))
+                {
+                    address = new BitcoinWitPubKeyAddress(scriptPubKey.Hash.ToString(), Network.Main);
+                }
+                else if (scriptPubKey.IsScriptType(ScriptType.P2PKH))
+                {
+                    address = new BitcoinPubKeyAddress(scriptPubKey.Hash.ToString(), Network.Main);
+                }
+                else if (scriptPubKey.IsScriptType(ScriptType.P2SH))
+                {
+                    address = new BitcoinScriptAddress(scriptPubKey.Hash, Network.Main);
+                }
+                else
+                {
+                    // Unsupported script type
+                    continue;
+                }
+                addresses.Add(address);
+            }
+
+            // query the blockchain to get the balance for each address
+            foreach (BitcoinAddress address in addresses)
+            {
+                var request = "address/" + address;
+                var RequestURL = NodeURL + request;
+                var client = new HttpClient();
+                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                if (!response.IsSuccessStatusCode)
+                {
+                    lblNodeStatusLight.ForeColor = Color.Red;
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = "Disconnected/error";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                    });
+                    return;
+                }
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var addressData = JObject.Parse(jsonData);
+
+                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+
+                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
+
+                if (confirmedUnspentResult > 0)
+                {
+                    Console.WriteLine($"Address {address.ToString()} has a balance of {ConfirmedUnspent} BTC.");
+                }
+            }
+        }
+
+
+
+
+
+        #endregion
+
+        #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
 
@@ -4840,7 +4933,7 @@ namespace SATSuma
             {
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 216;
+                    panelMenu.Height = 240;
                 });
             }
             else
@@ -4908,6 +5001,7 @@ namespace SATSuma
             {
                 panelMenu.Height = 24;
             });
+            btnMenuXpub.Enabled = true;
             btnMenuAddress.Enabled = true;
             btnMenuTransaction.Enabled = true;
             btnMenuBitcoinDashboard.Enabled = false;
@@ -4922,6 +5016,7 @@ namespace SATSuma
             panelBlock.Visible = false;
             panelTransaction.Visible = false;
             panelBitcoinDashboard.Visible = true;
+            panelXpub.Visible = false;
             this.ResumeLayout();
         }
 
@@ -4931,6 +5026,7 @@ namespace SATSuma
             {
                 panelMenu.Height = 24;
             });
+            btnMenuXpub.Enabled = true;
             btnMenuAddress.Enabled = true;
             btnMenuTransaction.Enabled = true;
             btnMenuBitcoinDashboard.Enabled = true;
@@ -4944,6 +5040,7 @@ namespace SATSuma
             panelAddress.Visible = false;
             panelBlock.Visible = false;
             panelTransaction.Visible = false;
+            panelXpub.Visible = false;
             panelLightningDashboard.Visible = true;
             this.ResumeLayout();
         }
@@ -4954,6 +5051,7 @@ namespace SATSuma
             {
                 panelMenu.Height = 24;
             });
+            btnMenuXpub.Enabled = true;
             btnMenuAddress.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuBlockList.Enabled = true;
@@ -4965,6 +5063,7 @@ namespace SATSuma
             panelLightningDashboard.Visible = false;
             panelBlock.Visible = false;
             panelTransaction.Visible = false;
+            panelXpub.Visible = false;
             panelAddress.Visible = true;
         }
 
@@ -4974,6 +5073,7 @@ namespace SATSuma
             {
                 panelMenu.Height = 24;
             });
+            btnMenuXpub.Enabled = true;
             btnMenuBlock.Enabled = false;
             btnMenuTransaction.Enabled = true;
             btnMenuAddress.Enabled = true;
@@ -4985,7 +5085,38 @@ namespace SATSuma
             panelLightningDashboard.Visible = false;
             panelAddress.Visible = false;
             panelTransaction.Visible = false;
+            panelXpub.Visible = false;
             panelBlock.Visible = true;
+            if (textBoxSubmittedBlockNumber.Text == "")
+            {
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                });
+                LookupBlock(); // fetch all the block data automatically for the initial view. 
+            }
+        }
+
+        private void BtnMenuXpub_Click(object sender, EventArgs e)
+        {
+            panelMenu.Invoke((MethodInvoker)delegate
+            {
+                panelMenu.Height = 24;
+            });
+            btnMenuXpub.Enabled = false;
+            btnMenuBlock.Enabled = true;
+            btnMenuTransaction.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
+            panelBlockList.Visible = false;
+            panelBitcoinDashboard.Visible = false;
+            panelLightningDashboard.Visible = false;
+            panelAddress.Visible = false;
+            panelTransaction.Visible = false;
+            panelBlock.Visible = false;
+            panelXpub.Visible = true;
             if (textBoxSubmittedBlockNumber.Text == "")
             {
                 textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -5004,6 +5135,7 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuBlock.Enabled = false;
@@ -5015,6 +5147,7 @@ namespace SATSuma
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
+                panelXpub.Visible = false;
                 panelBlock.Visible = true;
                 textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
                 LookupBlock();
@@ -5034,6 +5167,7 @@ namespace SATSuma
                     panelMenu.Height = 24;
                 });
                 btnMenuBlockList.Enabled = false;
+                btnMenuXpub.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -5045,6 +5179,7 @@ namespace SATSuma
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
+                panelXpub.Visible = false;
                 panelBlockList.Visible = true;
                 if (textBoxBlockHeightToStartListFrom.Text == "")
                 {
@@ -5077,6 +5212,7 @@ namespace SATSuma
                     panelMenu.Height = 24;
                 });
                 btnMenuTransaction.Enabled = false;
+                btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -5088,6 +5224,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlockList.Visible = false;
+                panelXpub.Visible = false;
                 panelTransaction.Visible = true;
                 if (textBoxBlockHeightToStartListFrom.Text == "")
                 {
@@ -5287,11 +5424,15 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
 
+
+
         #endregion
+
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
-#region CLASSES
+    #region CLASSES
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
@@ -5636,7 +5777,7 @@ namespace SATSuma
         public string Value { get; set; }
     }
 #endregion
-}
+} 
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================
 //==================================================================================================================================================================================================

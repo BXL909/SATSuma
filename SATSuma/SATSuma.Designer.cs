@@ -417,11 +417,14 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label123 = new System.Windows.Forms.Label();
-            this.label124 = new System.Windows.Forms.Label();
+            this.lblSegwitAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
             this.label144 = new System.Windows.Forms.Label();
             this.label145 = new System.Windows.Forms.Label();
             this.textBoxSubmittedXpub = new System.Windows.Forms.TextBox();
             this.label146 = new System.Windows.Forms.Label();
+            this.label111 = new System.Windows.Forms.Label();
+            this.lblLegacyAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
+            this.label114 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -5680,13 +5683,16 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.label114);
+            this.panelXpub.Controls.Add(this.label111);
+            this.panelXpub.Controls.Add(this.lblLegacyAddressesWithNonZeroBalance);
             this.panelXpub.Controls.Add(this.button3);
             this.panelXpub.Controls.Add(this.listView1);
             this.panelXpub.Controls.Add(this.label121);
             this.panelXpub.Controls.Add(this.button4);
             this.panelXpub.Controls.Add(this.button5);
             this.panelXpub.Controls.Add(this.label123);
-            this.panelXpub.Controls.Add(this.label124);
+            this.panelXpub.Controls.Add(this.lblSegwitAddressesWithNonZeroBalance);
             this.panelXpub.Controls.Add(this.label144);
             this.panelXpub.Controls.Add(this.label145);
             this.panelXpub.Controls.Add(this.textBoxSubmittedXpub);
@@ -5797,22 +5803,22 @@
             this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label123.ForeColor = System.Drawing.Color.Silver;
             this.label123.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label123.Location = new System.Drawing.Point(-1, 34);
+            this.label123.Location = new System.Drawing.Point(1, 224);
             this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(220, 17);
+            this.label123.Size = new System.Drawing.Size(244, 17);
             this.label123.TabIndex = 153;
-            this.label123.Text = "Addresses with non-zero balance";
+            this.label123.Text = "Segwit addresses (non-zero balance)";
             // 
-            // label124
+            // lblSegwitAddressesWithNonZeroBalance
             // 
-            this.label124.AutoSize = true;
-            this.label124.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label124.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label124.Location = new System.Drawing.Point(-3, 49);
-            this.label124.Name = "label124";
-            this.label124.Size = new System.Drawing.Size(87, 23);
-            this.label124.TabIndex = 152;
-            this.label124.Text = "no data";
+            this.lblSegwitAddressesWithNonZeroBalance.AutoSize = true;
+            this.lblSegwitAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitAddressesWithNonZeroBalance.Location = new System.Drawing.Point(-1, 239);
+            this.lblSegwitAddressesWithNonZeroBalance.Name = "lblSegwitAddressesWithNonZeroBalance";
+            this.lblSegwitAddressesWithNonZeroBalance.Size = new System.Drawing.Size(87, 23);
+            this.lblSegwitAddressesWithNonZeroBalance.TabIndex = 152;
+            this.lblSegwitAddressesWithNonZeroBalance.Text = "no data";
             // 
             // label144
             // 
@@ -5858,6 +5864,42 @@
             this.label146.Size = new System.Drawing.Size(47, 20);
             this.label146.TabIndex = 6;
             this.label146.Text = "Xpub";
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label111.ForeColor = System.Drawing.Color.Silver;
+            this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label111.Location = new System.Drawing.Point(2, 267);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(247, 17);
+            this.label111.TabIndex = 167;
+            this.label111.Text = "Legacy addresses (non-zero balance)";
+            // 
+            // lblLegacyAddressesWithNonZeroBalance
+            // 
+            this.lblLegacyAddressesWithNonZeroBalance.AutoSize = true;
+            this.lblLegacyAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLegacyAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLegacyAddressesWithNonZeroBalance.Location = new System.Drawing.Point(0, 282);
+            this.lblLegacyAddressesWithNonZeroBalance.Name = "lblLegacyAddressesWithNonZeroBalance";
+            this.lblLegacyAddressesWithNonZeroBalance.Size = new System.Drawing.Size(87, 23);
+            this.lblLegacyAddressesWithNonZeroBalance.TabIndex = 166;
+            this.lblLegacyAddressesWithNonZeroBalance.Text = "no data";
+            // 
+            // label114
+            // 
+            this.label114.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label114.ForeColor = System.Drawing.Color.Silver;
+            this.label114.Location = new System.Drawing.Point(-1, 42);
+            this.label114.Name = "label114";
+            this.label114.Size = new System.Drawing.Size(252, 133);
+            this.label114.TabIndex = 168;
+            this.label114.Text = "Xpub queries are only available with your own installation of mempool.space on yo" +
+    "ur own node. Enter the URL to your node here (e.g http://umbrel.local:3006/api/)" +
+    "";
             // 
             // SATSuma
             // 
@@ -6368,11 +6410,14 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label123;
-        private System.Windows.Forms.Label label124;
+        private System.Windows.Forms.Label lblSegwitAddressesWithNonZeroBalance;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Label label145;
         private System.Windows.Forms.TextBox textBoxSubmittedXpub;
         private System.Windows.Forms.Label label146;
+        private System.Windows.Forms.Label label111;
+        private System.Windows.Forms.Label lblLegacyAddressesWithNonZeroBalance;
+        private System.Windows.Forms.Label label114;
     }
 }
 

@@ -265,7 +265,7 @@ namespace SATSuma
                 {
                     pingAddress = "mempool.space";
                 }
-                if (NodeURL == "")
+                if (NodeURL == "" || NodeURL == null)
                 {
                     pingAddress = "mempool.space";
                     NodeURL = "https://mempool.space/api/";
@@ -273,7 +273,7 @@ namespace SATSuma
  
                 
                 
-                if (textBoxCustomAPI.Enabled == true) 
+        /*        if (textBoxCustomAPI.Text != "") 
                 {
                     // get the contents of the textbox
                     string url = textBoxCustomAPI.Text;
@@ -305,6 +305,7 @@ namespace SATSuma
                         return;
                     }
                 }
+        */
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
                 {

@@ -4477,46 +4477,34 @@ namespace SATSuma
 
         private async void LookupXpub()
         {
+            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy P2PKH
+            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
+            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
+            // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
+
+            int segwitAddressesWithNonZeroBalance = 0;
+            int legacyAddressesWithNonZeroBalance = 0;
+            int consecutiveAddressesWithZeroBalance = 0;
+            List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
+            List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
+
             string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
-
-            ExtPubKey extPubKey = ExtPubKey.Parse(submittedXpub, Network.Main);
-            // create a BitcoinExtPubKey object from the xpub string
-            BitcoinExtPubKey bitcoinExtPubKey = new BitcoinExtPubKey(extPubKey, Network.Main);
-
-            // derive a list of 1000 addresses from the xpub
-            string path = "m/0/{0}";
-            List<BitcoinAddress> addresses = new List<BitcoinAddress>();
-            for (int i = 0; i < 1000; i++)
+            
+            // ------- SEGWIT
+            for (uint i = 0; i < 100; i++)
             {
-                var pubkey = extPubKey.Derive(KeyPath.Parse(string.Format(path, i)));
-                var scriptPubKey = pubkey.ScriptPubKey;
-                BitcoinAddress address;
-                if (scriptPubKey.IsScriptType(ScriptType.P2WPKH))
-                {
-                    address = new BitcoinWitPubKeyAddress(pubkey.PubKey.WitHash, Network.Main);
-                }
-                else if (scriptPubKey.IsScriptType(ScriptType.P2PKH))
-                {
-                    var witProgram = PayToWitPubKeyHashTemplate.Instance.ExtractScriptPubKeyParameters(scriptPubKey);
-                    address = new BitcoinWitPubKeyAddress(witProgram, Network.Main);
-                }
-                else if (scriptPubKey.IsScriptType(ScriptType.P2SH))
-                {
-                    address = new BitcoinScriptAddress(scriptPubKey.Hash, Network.Main);
-                }
-                else
-                {
-                    // Unsupported script type
-                    continue;
-                }
-                addresses.Add(address);
+                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                uint index = i; // increment the index for each iteration
+                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
+                segwitAddresses.Add(BitcoinAddress);
+                Console.WriteLine(BitcoinAddress);
             }
 
-            // query the blockchain to get the balance for each address
-            foreach (BitcoinAddress address in addresses)
+            // query the balance for each address
+            foreach (BitcoinAddress address in segwitAddresses)
             {
                 var request = "address/" + address;
-                var RequestURL = NodeURL + request;
+                var RequestURL = "http://umbrel.local:3006/api/" + request;
                 var client = new HttpClient();
                 var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                 if (!response.IsSuccessStatusCode)
@@ -4546,9 +4534,89 @@ namespace SATSuma
 
                 if (confirmedUnspentResult > 0)
                 {
+                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
+                    segwitAddressesWithNonZeroBalance++; 
                     Console.WriteLine($"Address {address.ToString()} has a balance of {ConfirmedUnspent} BTC.");
                 }
+                else
+                {
+                    consecutiveAddressesWithZeroBalance++;
+                    Console.WriteLine($"{consecutiveAddressesWithZeroBalance}");
+                    if (consecutiveAddressesWithZeroBalance > 10) // assume that there are no more non-zero balance addresses after this point
+                    {
+                        break;
+                    }
+                }
             }
+            lblSegwitAddressesWithNonZeroBalance.Text = Convert.ToString(segwitAddressesWithNonZeroBalance);
+
+
+
+            // ------- LEGACY
+            for (uint i = 0; i < 100; i++)
+            {
+                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                uint index = i; // increment the index for each iteration
+                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
+                legacyAddresses.Add(BitcoinAddress);
+                Console.WriteLine(BitcoinAddress);
+            }
+
+            // query the balance for each address
+            foreach (BitcoinAddress address in legacyAddresses)
+            {
+                var request = "address/" + address;
+                var RequestURL = "http://umbrel.local:3006/api/" + request;
+                var client = new HttpClient();
+                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                if (!response.IsSuccessStatusCode)
+                {
+                    lblNodeStatusLight.ForeColor = Color.Red;
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = "Disconnected/error";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                    });
+                    return;
+                }
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var addressData = JObject.Parse(jsonData);
+
+                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+
+                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
+
+                if (confirmedUnspentResult > 0)
+                {
+                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
+                    legacyAddressesWithNonZeroBalance++;
+                    Console.WriteLine($"Address {address.ToString()} has a balance of {ConfirmedUnspent} BTC.");
+                }
+                else
+                {
+                    consecutiveAddressesWithZeroBalance++;
+                    Console.WriteLine($"{consecutiveAddressesWithZeroBalance}");
+                    if (consecutiveAddressesWithZeroBalance > 10) // assume that there are no more non-zero balance addresses after this point
+                    {
+                        break;
+                    }
+                }
+            }
+            lblLegacyAddressesWithNonZeroBalance.Text = Convert.ToString(legacyAddressesWithNonZeroBalance);
+
+
+
+
+
+
         }
         #endregion
 

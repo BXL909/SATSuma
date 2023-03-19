@@ -411,20 +411,33 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
+            this.label121 = new System.Windows.Forms.Label();
+            this.lblXpubConfirmedUnspent = new System.Windows.Forms.Label();
+            this.panel29 = new System.Windows.Forms.Panel();
+            this.label127 = new System.Windows.Forms.Label();
+            this.label129 = new System.Windows.Forms.Label();
+            this.lblXpubConfirmedSpent = new System.Windows.Forms.Label();
+            this.label133 = new System.Windows.Forms.Label();
+            this.lblXpubConfirmedReceived = new System.Windows.Forms.Label();
+            this.panel26 = new System.Windows.Forms.Panel();
+            this.label124 = new System.Windows.Forms.Label();
+            this.lblXpubStatus = new System.Windows.Forms.Label();
+            this.label119 = new System.Windows.Forms.Label();
+            this.lblSegwitP2SHAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
+            this.panel23 = new System.Windows.Forms.Panel();
+            this.label117 = new System.Windows.Forms.Label();
+            this.textBoxMempoolURL = new System.Windows.Forms.TextBox();
+            this.label114 = new System.Windows.Forms.Label();
+            this.label111 = new System.Windows.Forms.Label();
+            this.lblLegacyAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.label121 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label123 = new System.Windows.Forms.Label();
             this.lblSegwitAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
-            this.label144 = new System.Windows.Forms.Label();
-            this.label145 = new System.Windows.Forms.Label();
             this.textBoxSubmittedXpub = new System.Windows.Forms.TextBox();
             this.label146 = new System.Windows.Forms.Label();
-            this.label111 = new System.Windows.Forms.Label();
-            this.lblLegacyAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
-            this.label114 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -460,6 +473,9 @@
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
             this.panelXpub.SuspendLayout();
+            this.panel29.SuspendLayout();
+            this.panel26.SuspendLayout();
+            this.panel23.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -5683,18 +5699,28 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.label121);
+            this.panelXpub.Controls.Add(this.lblXpubConfirmedUnspent);
+            this.panelXpub.Controls.Add(this.panel29);
+            this.panelXpub.Controls.Add(this.label129);
+            this.panelXpub.Controls.Add(this.lblXpubConfirmedSpent);
+            this.panelXpub.Controls.Add(this.label133);
+            this.panelXpub.Controls.Add(this.lblXpubConfirmedReceived);
+            this.panelXpub.Controls.Add(this.panel26);
+            this.panelXpub.Controls.Add(this.lblXpubStatus);
+            this.panelXpub.Controls.Add(this.label119);
+            this.panelXpub.Controls.Add(this.lblSegwitP2SHAddressesWithNonZeroBalance);
+            this.panelXpub.Controls.Add(this.panel23);
+            this.panelXpub.Controls.Add(this.textBoxMempoolURL);
             this.panelXpub.Controls.Add(this.label114);
             this.panelXpub.Controls.Add(this.label111);
             this.panelXpub.Controls.Add(this.lblLegacyAddressesWithNonZeroBalance);
             this.panelXpub.Controls.Add(this.button3);
             this.panelXpub.Controls.Add(this.listView1);
-            this.panelXpub.Controls.Add(this.label121);
             this.panelXpub.Controls.Add(this.button4);
             this.panelXpub.Controls.Add(this.button5);
             this.panelXpub.Controls.Add(this.label123);
             this.panelXpub.Controls.Add(this.lblSegwitAddressesWithNonZeroBalance);
-            this.panelXpub.Controls.Add(this.label144);
-            this.panelXpub.Controls.Add(this.label145);
             this.panelXpub.Controls.Add(this.textBoxSubmittedXpub);
             this.panelXpub.Controls.Add(this.label146);
             this.panelXpub.Location = new System.Drawing.Point(21, 188);
@@ -5702,6 +5728,237 @@
             this.panelXpub.Size = new System.Drawing.Size(773, 556);
             this.panelXpub.TabIndex = 199;
             this.panelXpub.Visible = false;
+            // 
+            // label121
+            // 
+            this.label121.AutoSize = true;
+            this.label121.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label121.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label121.ForeColor = System.Drawing.Color.Silver;
+            this.label121.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label121.Location = new System.Drawing.Point(2, 493);
+            this.label121.Name = "label121";
+            this.label121.Size = new System.Drawing.Size(199, 17);
+            this.label121.TabIndex = 208;
+            this.label121.Text = "Confirmed unspent (balance)";
+            // 
+            // lblXpubConfirmedUnspent
+            // 
+            this.lblXpubConfirmedUnspent.AutoSize = true;
+            this.lblXpubConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblXpubConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(0, 508);
+            this.lblXpubConfirmedUnspent.Name = "lblXpubConfirmedUnspent";
+            this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedUnspent.TabIndex = 207;
+            this.lblXpubConfirmedUnspent.Text = "0";
+            // 
+            // panel29
+            // 
+            this.panel29.BackColor = System.Drawing.Color.Transparent;
+            this.panel29.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel29.BackgroundImage")));
+            this.panel29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel29.Controls.Add(this.label127);
+            this.panel29.Location = new System.Drawing.Point(4, 375);
+            this.panel29.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel29.Name = "panel29";
+            this.panel29.Size = new System.Drawing.Size(242, 23);
+            this.panel29.TabIndex = 206;
+            // 
+            // label127
+            // 
+            this.label127.AutoSize = true;
+            this.label127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label127.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label127.ForeColor = System.Drawing.Color.Silver;
+            this.label127.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label127.Location = new System.Drawing.Point(3, 2);
+            this.label127.Name = "label127";
+            this.label127.Size = new System.Drawing.Size(44, 17);
+            this.label127.TabIndex = 153;
+            this.label127.Text = "Totals";
+            // 
+            // label129
+            // 
+            this.label129.AutoSize = true;
+            this.label129.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label129.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label129.ForeColor = System.Drawing.Color.Silver;
+            this.label129.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label129.Location = new System.Drawing.Point(4, 448);
+            this.label129.Name = "label129";
+            this.label129.Size = new System.Drawing.Size(116, 17);
+            this.label129.TabIndex = 205;
+            this.label129.Text = "Confirmed spent";
+            // 
+            // lblXpubConfirmedSpent
+            // 
+            this.lblXpubConfirmedSpent.AutoSize = true;
+            this.lblXpubConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(2, 463);
+            this.lblXpubConfirmedSpent.Name = "lblXpubConfirmedSpent";
+            this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedSpent.TabIndex = 204;
+            this.lblXpubConfirmedSpent.Text = "0";
+            // 
+            // label133
+            // 
+            this.label133.AutoSize = true;
+            this.label133.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label133.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label133.ForeColor = System.Drawing.Color.Silver;
+            this.label133.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label133.Location = new System.Drawing.Point(3, 405);
+            this.label133.Name = "label133";
+            this.label133.Size = new System.Drawing.Size(137, 17);
+            this.label133.TabIndex = 203;
+            this.label133.Text = "Confirmed received";
+            // 
+            // lblXpubConfirmedReceived
+            // 
+            this.lblXpubConfirmedReceived.AutoSize = true;
+            this.lblXpubConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblXpubConfirmedReceived.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(1, 420);
+            this.lblXpubConfirmedReceived.Name = "lblXpubConfirmedReceived";
+            this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedReceived.TabIndex = 202;
+            this.lblXpubConfirmedReceived.Text = "0";
+            // 
+            // panel26
+            // 
+            this.panel26.BackColor = System.Drawing.Color.Transparent;
+            this.panel26.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel26.BackgroundImage")));
+            this.panel26.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel26.Controls.Add(this.label124);
+            this.panel26.Location = new System.Drawing.Point(1, 78);
+            this.panel26.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel26.Name = "panel26";
+            this.panel26.Size = new System.Drawing.Size(242, 23);
+            this.panel26.TabIndex = 199;
+            // 
+            // label124
+            // 
+            this.label124.AutoSize = true;
+            this.label124.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label124.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label124.ForeColor = System.Drawing.Color.Silver;
+            this.label124.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label124.Location = new System.Drawing.Point(3, 2);
+            this.label124.Name = "label124";
+            this.label124.Size = new System.Drawing.Size(46, 17);
+            this.label124.TabIndex = 153;
+            this.label124.Text = "Status";
+            // 
+            // lblXpubStatus
+            // 
+            this.lblXpubStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblXpubStatus.Location = new System.Drawing.Point(0, 102);
+            this.lblXpubStatus.Name = "lblXpubStatus";
+            this.lblXpubStatus.Size = new System.Drawing.Size(243, 107);
+            this.lblXpubStatus.TabIndex = 201;
+            // 
+            // label119
+            // 
+            this.label119.AutoSize = true;
+            this.label119.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label119.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label119.ForeColor = System.Drawing.Color.Silver;
+            this.label119.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label119.Location = new System.Drawing.Point(4, 329);
+            this.label119.Name = "label119";
+            this.label119.Size = new System.Drawing.Size(85, 17);
+            this.label119.TabIndex = 200;
+            this.label119.Text = "Segwit P2SH";
+            // 
+            // lblSegwitP2SHAddressesWithNonZeroBalance
+            // 
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.AutoSize = true;
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.Location = new System.Drawing.Point(2, 344);
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.Name = "lblSegwitP2SHAddressesWithNonZeroBalance";
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.TabIndex = 199;
+            this.lblSegwitP2SHAddressesWithNonZeroBalance.Text = "0";
+            // 
+            // panel23
+            // 
+            this.panel23.BackColor = System.Drawing.Color.Transparent;
+            this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
+            this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel23.Controls.Add(this.label117);
+            this.panel23.Location = new System.Drawing.Point(6, 211);
+            this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel23.Name = "panel23";
+            this.panel23.Size = new System.Drawing.Size(242, 23);
+            this.panel23.TabIndex = 198;
+            // 
+            // label117
+            // 
+            this.label117.AutoSize = true;
+            this.label117.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label117.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label117.ForeColor = System.Drawing.Color.Silver;
+            this.label117.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label117.Location = new System.Drawing.Point(3, 2);
+            this.label117.Name = "label117";
+            this.label117.Size = new System.Drawing.Size(220, 17);
+            this.label117.TabIndex = 153;
+            this.label117.Text = "Addresses with non-zero balance";
+            // 
+            // textBoxMempoolURL
+            // 
+            this.textBoxMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxMempoolURL.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxMempoolURL.Location = new System.Drawing.Point(478, 2);
+            this.textBoxMempoolURL.MaxLength = 200;
+            this.textBoxMempoolURL.Name = "textBoxMempoolURL";
+            this.textBoxMempoolURL.Size = new System.Drawing.Size(272, 25);
+            this.textBoxMempoolURL.TabIndex = 169;
+            this.textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.textBoxMempoolURL_TextChanged);
+            this.textBoxMempoolURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
+            this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMempoolURL_KeyPress);
+            this.textBoxMempoolURL.Leave += new System.EventHandler(this.textBoxMempoolURL_Leave);
+            // 
+            // label114
+            // 
+            this.label114.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label114.ForeColor = System.Drawing.Color.Silver;
+            this.label114.Location = new System.Drawing.Point(-1, 1);
+            this.label114.Name = "label114";
+            this.label114.Size = new System.Drawing.Size(511, 25);
+            this.label114.TabIndex = 168;
+            this.label114.Text = "Path to mempool.space installtion on full node*";
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label111.ForeColor = System.Drawing.Color.Silver;
+            this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label111.Location = new System.Drawing.Point(6, 284);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(120, 17);
+            this.label111.TabIndex = 167;
+            this.label111.Text = "Legacy addresses";
+            // 
+            // lblLegacyAddressesWithNonZeroBalance
+            // 
+            this.lblLegacyAddressesWithNonZeroBalance.AutoSize = true;
+            this.lblLegacyAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLegacyAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLegacyAddressesWithNonZeroBalance.Location = new System.Drawing.Point(4, 299);
+            this.lblLegacyAddressesWithNonZeroBalance.Name = "lblLegacyAddressesWithNonZeroBalance";
+            this.lblLegacyAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
+            this.lblLegacyAddressesWithNonZeroBalance.TabIndex = 166;
+            this.lblLegacyAddressesWithNonZeroBalance.Text = "0";
             // 
             // button3
             // 
@@ -5733,32 +5990,19 @@
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.HideSelection = false;
             this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(250, 36);
+            this.listView1.Location = new System.Drawing.Point(250, 74);
             this.listView1.Margin = new System.Windows.Forms.Padding(0);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.OwnerDraw = true;
             this.listView1.Scrollable = false;
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(499, 476);
+            this.listView1.Size = new System.Drawing.Size(499, 438);
             this.listView1.SmallImageList = this.imageListUpDownArrows;
             this.listView1.TabIndex = 164;
             this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // label121
-            // 
-            this.label121.AutoSize = true;
-            this.label121.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label121.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label121.ForeColor = System.Drawing.Color.Silver;
-            this.label121.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label121.Location = new System.Drawing.Point(248, 512);
-            this.label121.Name = "label121";
-            this.label121.Size = new System.Drawing.Size(139, 17);
-            this.label121.TabIndex = 157;
-            this.label121.Text = "Transactions n-n of n";
             // 
             // button4
             // 
@@ -5803,43 +6047,22 @@
             this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label123.ForeColor = System.Drawing.Color.Silver;
             this.label123.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label123.Location = new System.Drawing.Point(1, 224);
+            this.label123.Location = new System.Drawing.Point(5, 241);
             this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(244, 17);
+            this.label123.Size = new System.Drawing.Size(117, 17);
             this.label123.TabIndex = 153;
-            this.label123.Text = "Segwit addresses (non-zero balance)";
+            this.label123.Text = "Segwit addresses";
             // 
             // lblSegwitAddressesWithNonZeroBalance
             // 
             this.lblSegwitAddressesWithNonZeroBalance.AutoSize = true;
             this.lblSegwitAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitAddressesWithNonZeroBalance.Location = new System.Drawing.Point(-1, 239);
+            this.lblSegwitAddressesWithNonZeroBalance.Location = new System.Drawing.Point(3, 256);
             this.lblSegwitAddressesWithNonZeroBalance.Name = "lblSegwitAddressesWithNonZeroBalance";
-            this.lblSegwitAddressesWithNonZeroBalance.Size = new System.Drawing.Size(87, 23);
+            this.lblSegwitAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
             this.lblSegwitAddressesWithNonZeroBalance.TabIndex = 152;
-            this.lblSegwitAddressesWithNonZeroBalance.Text = "no data";
-            // 
-            // label144
-            // 
-            this.label144.AutoSize = true;
-            this.label144.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label144.ForeColor = System.Drawing.Color.Silver;
-            this.label144.Location = new System.Drawing.Point(654, 6);
-            this.label144.Name = "label144";
-            this.label144.Size = new System.Drawing.Size(44, 20);
-            this.label144.TabIndex = 9;
-            this.label144.Text = "Hash";
-            // 
-            // label145
-            // 
-            this.label145.AutoSize = true;
-            this.label145.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label145.Location = new System.Drawing.Point(699, 8);
-            this.label145.Name = "label145";
-            this.label145.Size = new System.Drawing.Size(64, 18);
-            this.label145.TabIndex = 8;
-            this.label145.Text = "no data";
+            this.lblSegwitAddressesWithNonZeroBalance.Text = "0";
             // 
             // textBoxSubmittedXpub
             // 
@@ -5847,10 +6070,10 @@
             this.textBoxSubmittedXpub.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSubmittedXpub.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSubmittedXpub.ForeColor = System.Drawing.Color.White;
-            this.textBoxSubmittedXpub.Location = new System.Drawing.Point(61, 3);
+            this.textBoxSubmittedXpub.Location = new System.Drawing.Point(63, 36);
             this.textBoxSubmittedXpub.MaxLength = 200;
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
-            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(577, 25);
+            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(704, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 
@@ -5859,47 +6082,11 @@
             this.label146.AutoSize = true;
             this.label146.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label146.ForeColor = System.Drawing.Color.Silver;
-            this.label146.Location = new System.Drawing.Point(-3, 5);
+            this.label146.Location = new System.Drawing.Point(-1, 38);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(47, 20);
             this.label146.TabIndex = 6;
             this.label146.Text = "Xpub";
-            // 
-            // label111
-            // 
-            this.label111.AutoSize = true;
-            this.label111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label111.ForeColor = System.Drawing.Color.Silver;
-            this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label111.Location = new System.Drawing.Point(2, 267);
-            this.label111.Name = "label111";
-            this.label111.Size = new System.Drawing.Size(247, 17);
-            this.label111.TabIndex = 167;
-            this.label111.Text = "Legacy addresses (non-zero balance)";
-            // 
-            // lblLegacyAddressesWithNonZeroBalance
-            // 
-            this.lblLegacyAddressesWithNonZeroBalance.AutoSize = true;
-            this.lblLegacyAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblLegacyAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacyAddressesWithNonZeroBalance.Location = new System.Drawing.Point(0, 282);
-            this.lblLegacyAddressesWithNonZeroBalance.Name = "lblLegacyAddressesWithNonZeroBalance";
-            this.lblLegacyAddressesWithNonZeroBalance.Size = new System.Drawing.Size(87, 23);
-            this.lblLegacyAddressesWithNonZeroBalance.TabIndex = 166;
-            this.lblLegacyAddressesWithNonZeroBalance.Text = "no data";
-            // 
-            // label114
-            // 
-            this.label114.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label114.ForeColor = System.Drawing.Color.Silver;
-            this.label114.Location = new System.Drawing.Point(-1, 42);
-            this.label114.Name = "label114";
-            this.label114.Size = new System.Drawing.Size(252, 133);
-            this.label114.TabIndex = 168;
-            this.label114.Text = "Xpub queries are only available with your own installation of mempool.space on yo" +
-    "ur own node. Enter the URL to your node here (e.g http://umbrel.local:3006/api/)" +
-    "";
             // 
             // SATSuma
             // 
@@ -6016,6 +6203,12 @@
             this.panelTransactionMiddle.ResumeLayout(false);
             this.panelXpub.ResumeLayout(false);
             this.panelXpub.PerformLayout();
+            this.panel29.ResumeLayout(false);
+            this.panel29.PerformLayout();
+            this.panel26.ResumeLayout(false);
+            this.panel26.PerformLayout();
+            this.panel23.ResumeLayout(false);
+            this.panel23.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6406,18 +6599,31 @@
         private System.Windows.Forms.Panel panelXpub;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Label label121;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label123;
         private System.Windows.Forms.Label lblSegwitAddressesWithNonZeroBalance;
-        private System.Windows.Forms.Label label144;
-        private System.Windows.Forms.Label label145;
         private System.Windows.Forms.TextBox textBoxSubmittedXpub;
         private System.Windows.Forms.Label label146;
         private System.Windows.Forms.Label label111;
         private System.Windows.Forms.Label lblLegacyAddressesWithNonZeroBalance;
         private System.Windows.Forms.Label label114;
+        private System.Windows.Forms.Panel panel23;
+        private System.Windows.Forms.Label label117;
+        private System.Windows.Forms.TextBox textBoxMempoolURL;
+        private System.Windows.Forms.Label label119;
+        private System.Windows.Forms.Label lblSegwitP2SHAddressesWithNonZeroBalance;
+        private System.Windows.Forms.Label lblXpubStatus;
+        private System.Windows.Forms.Panel panel26;
+        private System.Windows.Forms.Label label124;
+        private System.Windows.Forms.Label label121;
+        private System.Windows.Forms.Label lblXpubConfirmedUnspent;
+        private System.Windows.Forms.Panel panel29;
+        private System.Windows.Forms.Label label127;
+        private System.Windows.Forms.Label label129;
+        private System.Windows.Forms.Label lblXpubConfirmedSpent;
+        private System.Windows.Forms.Label label133;
+        private System.Windows.Forms.Label lblXpubConfirmedReceived;
     }
 }
 

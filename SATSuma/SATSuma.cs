@@ -65,7 +65,9 @@ using Panel = System.Windows.Forms.Panel;
 using System.Windows.Documents;
 using System.Reflection.Emit;
 using Control = System.Windows.Forms.Control;
-#endregion 
+using TextBox = System.Windows.Forms.TextBox;
+
+#endregion
 
 namespace SATSuma
 {
@@ -4469,7 +4471,11 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
                 LookupXpub();
+                DisableEnableLoadingAnimation("disable"); // start the loading animation
+                DisableEnableButtons("enable"); // disable buttons during operation
                 e.Handled = true;
                 return;
             }
@@ -4477,32 +4483,44 @@ namespace SATSuma
 
         private async void LookupXpub()
         {
-            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy P2PKH
-            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
-            //var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
             // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
+            
             int segwitAddressesWithNonZeroBalance = 0;
             int legacyAddressesWithNonZeroBalance = 0;
+            int segwitP2SHAddressesWithNonZeroBalance = 0;
             int consecutiveAddressesWithZeroBalance = 0;
+            double segwitAddressesConfirmedUnspentBalance = 0;
+            double legacyAddressesConfirmedUnspentBalance = 0;
+            double segwitP2SHAddressesConfirmedUnspentBalance = 0;
+            double xpubTotalConfirmedReceived = 0;
+            double xpubTotalConfirmedSpent = 0;
+            double xpubTotalConfirmedUnspent = 0;
+
+            int checkingAddressCount = 1;
             List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
             List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
+            List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
 
             string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
             
             // ------- SEGWIT
-            for (uint i = 0; i < 100; i++)
+            for (uint i = 0; i < 500; i++)
             {
+                lblXpubStatus.Text = "Deriving 500 Segwit addresses";
                 var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                 uint index = i; // increment the index for each iteration
                 var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
                 segwitAddresses.Add(BitcoinAddress);
-                Console.WriteLine(BitcoinAddress);
+                
             }
-
+            
             // query the balance for each address
-            foreach (BitcoinAddress address in segwitAddresses)
+            foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of addresses with a balance)
             {
+                string truncatedAddressForDisplay = address.ToString().Substring(0,10) + "...";
+               
+                lblXpubStatus.Text = "Deriving 500 Segwit addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
                 var request = "address/" + address;
                 var RequestURL = "http://umbrel.local:3006/api/" + request;
                 var client = new HttpClient();
@@ -4528,43 +4546,53 @@ namespace SATSuma
                 string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
 
                 var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                xpubTotalConfirmedReceived = xpubTotalConfirmedReceived + confirmedReceivedForCalc;
+
                 var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                xpubTotalConfirmedSpent = xpubTotalConfirmedSpent + confirmedSpentForCalc;
+
                 var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+                xpubTotalConfirmedUnspent = xpubTotalConfirmedUnspent + confirmedUnspentResult; 
                 string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
 
                 if (confirmedUnspentResult > 0)
                 {
                     consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
-                    segwitAddressesWithNonZeroBalance++; 
-                    Console.WriteLine($"Address {address.ToString()} has a balance of {ConfirmedUnspent} BTC.");
+                    segwitAddressesWithNonZeroBalance++;
+                    segwitAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+                    lblSegwitAddressesWithNonZeroBalance.Text = Convert.ToString(segwitAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(segwitAddressesConfirmedUnspentBalance)) + ")";
                 }
                 else
                 {
                     consecutiveAddressesWithZeroBalance++;
-                    Console.WriteLine($"{consecutiveAddressesWithZeroBalance}");
-                    if (consecutiveAddressesWithZeroBalance > 10) // assume that there are no more non-zero balance addresses after this point
+                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
                     {
                         break;
                     }
                 }
+                checkingAddressCount++;
             }
-            lblSegwitAddressesWithNonZeroBalance.Text = Convert.ToString(segwitAddressesWithNonZeroBalance);
 
-
+            consecutiveAddressesWithZeroBalance = 0;
+            checkingAddressCount = 1;
 
             // ------- LEGACY
-            for (uint i = 0; i < 100; i++)
+            for (uint i = 0; i < 500; i++)
             {
+                lblXpubStatus.Text = "Deriving 500 Legacy addresses";
                 var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                 uint index = i; // increment the index for each iteration
                 var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
                 legacyAddresses.Add(BitcoinAddress);
-                Console.WriteLine(BitcoinAddress);
+                
             }
 
             // query the balance for each address
-            foreach (BitcoinAddress address in legacyAddresses)
+            foreach (BitcoinAddress address in legacyAddresses)  // (we break when we run out of addresses with a balance)
             {
+                string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+
+                lblXpubStatus.Text = "Deriving 500 Legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
                 var request = "address/" + address;
                 var RequestURL = "http://umbrel.local:3006/api/" + request;
                 var client = new HttpClient();
@@ -4598,25 +4626,97 @@ namespace SATSuma
                 {
                     consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
                     legacyAddressesWithNonZeroBalance++;
-                    Console.WriteLine($"Address {address.ToString()} has a balance of {ConfirmedUnspent} BTC.");
+                    legacyAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+                    lblLegacyAddressesWithNonZeroBalance.Text = Convert.ToString(legacyAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(legacyAddressesConfirmedUnspentBalance)) + ")";
                 }
                 else
                 {
                     consecutiveAddressesWithZeroBalance++;
-                    Console.WriteLine($"{consecutiveAddressesWithZeroBalance}");
-                    if (consecutiveAddressesWithZeroBalance > 10) // assume that there are no more non-zero balance addresses after this point
+                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
                     {
                         break;
                     }
                 }
+                checkingAddressCount++;
             }
-            lblLegacyAddressesWithNonZeroBalance.Text = Convert.ToString(legacyAddressesWithNonZeroBalance);
 
+            consecutiveAddressesWithZeroBalance = 0;
+            checkingAddressCount = 1;
 
+            // ------- SEGWIT P2SH
+            for (uint i = 0; i < 500; i++)
+            {
+                lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses";
+                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                uint index = i; // increment the index for each iteration
+                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
+                segwitP2SHAddresses.Add(BitcoinAddress);
 
+            }
 
+            // query the balance for each address
+            foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
+            {
+                string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
 
+                lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
 
+                var request = "address/" + address;
+                var RequestURL = "http://umbrel.local:3006/api/" + request;
+                var client = new HttpClient();
+                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                if (!response.IsSuccessStatusCode)
+                {
+                    lblNodeStatusLight.ForeColor = Color.Red;
+                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    {
+                        lblActiveNode.Text = "Disconnected/error";
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                    });
+                    return;
+                }
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var addressData = JObject.Parse(jsonData);
+
+                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+
+                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
+
+                if (confirmedUnspentResult > 0)
+                {
+                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
+                    segwitP2SHAddressesWithNonZeroBalance++;
+                    segwitP2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+                    lblSegwitP2SHAddressesWithNonZeroBalance.Text = Convert.ToString(segwitP2SHAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(segwitP2SHAddressesConfirmedUnspentBalance)) + ")";
+                }
+                else
+                {
+                    consecutiveAddressesWithZeroBalance++;
+                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
+                    {
+                        break;
+                    }
+                }
+                checkingAddressCount++;
+
+            }
+            
+            consecutiveAddressesWithZeroBalance = 0;
+            checkingAddressCount = 1;
+
+            lblXpubStatus.Text = "Finished scanning addresses";
+            lblXpubConfirmedReceived.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedReceived)));
+            lblXpubConfirmedSpent.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedSpent)));
+            lblXpubConfirmedUnspent.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)));
+            
         }
         #endregion
 
@@ -5490,6 +5590,51 @@ namespace SATSuma
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
         #endregion
+
+        private bool isExampleTextDisplayed = true;
+
+        private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.Text = "";
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+        private void textBoxMempoolURL_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxMempoolURL.Text))
+            {
+                textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxMempoolURL.ForeColor = Color.Gray;
+                isExampleTextDisplayed = true;
+            }
+        }
+
+        private void textBoxMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+        private void textBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.Text = "";
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+
+
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
@@ -5837,7 +5982,9 @@ namespace SATSuma
         //    public string scriptpubkey_address { get; set; }
         public string Value { get; set; }
     }
-#endregion
+    #endregion
+
+
 } 
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

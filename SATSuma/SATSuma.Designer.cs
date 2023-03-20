@@ -5784,13 +5784,13 @@
             this.progressBarCheckAllAddressTypes.TabIndex = 210;
             this.progressBarCheckAllAddressTypes.Visible = false;
             // 
-            // ProgressBarCheckEachAddressType
+            // progressBarCheckEachAddressType
             // 
             this.progressBarCheckEachAddressType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBarCheckEachAddressType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.progressBarCheckEachAddressType.Location = new System.Drawing.Point(0, 168);
             this.progressBarCheckEachAddressType.Maximum = 20;
-            this.progressBarCheckEachAddressType.Name = "ProgressBarCheckEachAddressType";
+            this.progressBarCheckEachAddressType.Name = "progressBarCheckEachAddressType";
             this.progressBarCheckEachAddressType.Size = new System.Drawing.Size(241, 1);
             this.progressBarCheckEachAddressType.TabIndex = 209;
             this.progressBarCheckEachAddressType.Visible = false;
@@ -6072,6 +6072,7 @@
             this.listViewXpubAddresses.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewXpubAddresses_ColumnWidthChanging);
             this.listViewXpubAddresses.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewXpubAddresses.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewXpubAddresses_DrawSubItem);
+            this.listViewXpubAddresses.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewXpubAddresses_ItemSelectionChanged);
             // 
             // label123
             // 

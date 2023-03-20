@@ -52,6 +52,11 @@ namespace SATSuma
                 lblHelpHeading.Text = "Transaction";
                 textBoxHelpText.Text = "Shows all inputs and outputs for the provided transaction ID. \r\n\r\nDefinitions:\r\n\r\nIncluded in block - The block number in which this transaction was added to the blockchain.\r\n\r\nBlock time - the tme and date that the block containing the transaction was mined.\r\n\r\nLock time - the lock time sets the earliest time at which a transaction can be mined into a block.\r\n\r\nVersion - Each transaction is prefixed by a four-byte transaction version number which tells Bitcoin peers and miners which set of rules to use to validate it.\r\n\r\nInputs - the total number of inputs in the transaction and their total value.\r\n\r\nOutputs - the total number of outputs in the transaction and their total value.\r\n\r\nFee - the miner fee paid for this transaction.\r\n\r\nSize - the size of the transaction in bytes.\r\n\r\nWeight - measures the size of a transaction in terms of the resources required to propagate and validate it. Measured in Million Weight Units (MWU).\r\n\r\nTransaction inputs (table) - List all the inputs to a transaction, showing the sending addresses and amounts.\r\n\r\nTransaction outputs (table) - List all the outputs to a transaction, showing the receiving addresses and amounts.";
             }
+            if (((SATSuma)this.Owner).GetPanelXpub().Visible == true)
+            {
+                lblHelpHeading.Text = "Xpub";
+                textBoxHelpText.Text = "Shows all used addresses associated with a provided Xpub. Generates the first 500 addresses for Segwit, Legacy and Segwit P2SH address types, then checks each in turn to find all used addresses, along with their total amounts received, spent and unspent. After 20 consecutive unused addresses it is assumed that all used addresses have been found.\r\n\r\nThis feature can only be used by connecting to your own node. This feature is only available by connecting to your own full node running a local installation of mempool.space. The provided Xpub is not sent or stored anywhere (unless you choose to add to favourites).";
+            }
         }
 
         private void HelpScreen_Paint(object sender, PaintEventArgs e)

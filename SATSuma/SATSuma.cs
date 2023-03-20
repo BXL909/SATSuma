@@ -25,7 +25,8 @@
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * scroller for the xpub screen (may need extra panel)
  * validation of node and xpub textboxes
- * xpub select row event handler
+ * xpub select row event handler - disable address button if address is unused
+ * xpub help text definitions
  */
 
 #region Using
@@ -5268,6 +5269,35 @@ namespace SATSuma
             progressBarCheckEachAddressType.Visible = false;
             timerHideProgressBars.Stop();
         }
+
+        private void listViewXpubAddresses_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewXpubAddresses.Items)
+                {
+                    if (item.Selected)
+                    {
+                        item.ForeColor = Color.White; // address
+                        btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+                        {
+                            btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 2);
+                        });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                    }
+                }
+                btnViewAddressFromXpub.Visible = anySelected;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewXpubAddresses_ItemSelectionChanged");
+            }
+        }
         #endregion
 
         #region REUSEABLE STUFF
@@ -6097,6 +6127,11 @@ namespace SATSuma
         {
             return this.panelTransaction;
         }
+
+        public Panel GetPanelXpub() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelXpub;
+        }
         #endregion
 
         #region MISC UI STUFF
@@ -6139,6 +6174,7 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
+
 
         #endregion
 

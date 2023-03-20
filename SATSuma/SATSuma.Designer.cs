@@ -411,6 +411,11 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
+            this.lblLegacyUsedAddresses = new System.Windows.Forms.Label();
+            this.lblSegwitP2SHUsedAddresses = new System.Windows.Forms.Label();
+            this.lblSegwitUsedAddresses = new System.Windows.Forms.Label();
+            this.progressBarCheckAllAddressTypes = new System.Windows.Forms.ProgressBar();
+            this.progressBarCheckEachAddressType = new System.Windows.Forms.ProgressBar();
             this.label121 = new System.Windows.Forms.Label();
             this.lblXpubConfirmedUnspent = new System.Windows.Forms.Label();
             this.panel29 = new System.Windows.Forms.Panel();
@@ -423,21 +428,20 @@
             this.label124 = new System.Windows.Forms.Label();
             this.lblXpubStatus = new System.Windows.Forms.Label();
             this.label119 = new System.Windows.Forms.Label();
-            this.lblSegwitP2SHAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
+            this.lblSegwitP2SHSummary = new System.Windows.Forms.Label();
             this.panel23 = new System.Windows.Forms.Panel();
             this.label117 = new System.Windows.Forms.Label();
             this.textBoxMempoolURL = new System.Windows.Forms.TextBox();
             this.label114 = new System.Windows.Forms.Label();
             this.label111 = new System.Windows.Forms.Label();
-            this.lblLegacyAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.lblLegacySummary = new System.Windows.Forms.Label();
+            this.btnViewAddressFromXpub = new System.Windows.Forms.Button();
+            this.listViewXpubAddresses = new System.Windows.Forms.ListView();
             this.label123 = new System.Windows.Forms.Label();
-            this.lblSegwitAddressesWithNonZeroBalance = new System.Windows.Forms.Label();
+            this.lblSegwitSummary = new System.Windows.Forms.Label();
             this.textBoxSubmittedXpub = new System.Windows.Forms.TextBox();
             this.label146 = new System.Windows.Forms.Label();
+            this.timerHideProgressBars = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -5699,6 +5703,11 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.lblLegacyUsedAddresses);
+            this.panelXpub.Controls.Add(this.lblSegwitP2SHUsedAddresses);
+            this.panelXpub.Controls.Add(this.lblSegwitUsedAddresses);
+            this.panelXpub.Controls.Add(this.progressBarCheckAllAddressTypes);
+            this.panelXpub.Controls.Add(this.progressBarCheckEachAddressType);
             this.panelXpub.Controls.Add(this.label121);
             this.panelXpub.Controls.Add(this.lblXpubConfirmedUnspent);
             this.panelXpub.Controls.Add(this.panel29);
@@ -5709,18 +5718,16 @@
             this.panelXpub.Controls.Add(this.panel26);
             this.panelXpub.Controls.Add(this.lblXpubStatus);
             this.panelXpub.Controls.Add(this.label119);
-            this.panelXpub.Controls.Add(this.lblSegwitP2SHAddressesWithNonZeroBalance);
+            this.panelXpub.Controls.Add(this.lblSegwitP2SHSummary);
             this.panelXpub.Controls.Add(this.panel23);
             this.panelXpub.Controls.Add(this.textBoxMempoolURL);
             this.panelXpub.Controls.Add(this.label114);
             this.panelXpub.Controls.Add(this.label111);
-            this.panelXpub.Controls.Add(this.lblLegacyAddressesWithNonZeroBalance);
-            this.panelXpub.Controls.Add(this.button3);
-            this.panelXpub.Controls.Add(this.listView1);
-            this.panelXpub.Controls.Add(this.button4);
-            this.panelXpub.Controls.Add(this.button5);
+            this.panelXpub.Controls.Add(this.lblLegacySummary);
+            this.panelXpub.Controls.Add(this.btnViewAddressFromXpub);
+            this.panelXpub.Controls.Add(this.listViewXpubAddresses);
             this.panelXpub.Controls.Add(this.label123);
-            this.panelXpub.Controls.Add(this.lblSegwitAddressesWithNonZeroBalance);
+            this.panelXpub.Controls.Add(this.lblSegwitSummary);
             this.panelXpub.Controls.Add(this.textBoxSubmittedXpub);
             this.panelXpub.Controls.Add(this.label146);
             this.panelXpub.Location = new System.Drawing.Point(21, 188);
@@ -5729,14 +5736,73 @@
             this.panelXpub.TabIndex = 199;
             this.panelXpub.Visible = false;
             // 
+            // lblLegacyUsedAddresses
+            // 
+            this.lblLegacyUsedAddresses.AutoSize = true;
+            this.lblLegacyUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLegacyUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(57, 285);
+            this.lblLegacyUsedAddresses.Name = "lblLegacyUsedAddresses";
+            this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(16, 18);
+            this.lblLegacyUsedAddresses.TabIndex = 213;
+            this.lblLegacyUsedAddresses.Text = "0";
+            this.lblLegacyUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblLegacyUsedAddresses_Paint);
+            // 
+            // lblSegwitP2SHUsedAddresses
+            // 
+            this.lblSegwitP2SHUsedAddresses.AutoSize = true;
+            this.lblSegwitP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(95, 329);
+            this.lblSegwitP2SHUsedAddresses.Name = "lblSegwitP2SHUsedAddresses";
+            this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitP2SHUsedAddresses.TabIndex = 212;
+            this.lblSegwitP2SHUsedAddresses.Text = "0";
+            this.lblSegwitP2SHUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblSegwitP2SHUsedAddresses_Paint);
+            // 
+            // lblSegwitUsedAddresses
+            // 
+            this.lblSegwitUsedAddresses.AutoSize = true;
+            this.lblSegwitUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(57, 241);
+            this.lblSegwitUsedAddresses.Name = "lblSegwitUsedAddresses";
+            this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitUsedAddresses.TabIndex = 211;
+            this.lblSegwitUsedAddresses.Text = "0";
+            this.lblSegwitUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblSegwitUsedAddresses_Paint);
+            // 
+            // progressBarCheckAllAddressTypes
+            // 
+            this.progressBarCheckAllAddressTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.progressBarCheckAllAddressTypes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.progressBarCheckAllAddressTypes.Location = new System.Drawing.Point(0, 182);
+            this.progressBarCheckAllAddressTypes.Maximum = 60;
+            this.progressBarCheckAllAddressTypes.Name = "progressBarCheckAllAddressTypes";
+            this.progressBarCheckAllAddressTypes.Size = new System.Drawing.Size(241, 1);
+            this.progressBarCheckAllAddressTypes.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBarCheckAllAddressTypes.TabIndex = 210;
+            this.progressBarCheckAllAddressTypes.Visible = false;
+            // 
+            // ProgressBarCheckEachAddressType
+            // 
+            this.progressBarCheckEachAddressType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.progressBarCheckEachAddressType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.progressBarCheckEachAddressType.Location = new System.Drawing.Point(0, 168);
+            this.progressBarCheckEachAddressType.Maximum = 20;
+            this.progressBarCheckEachAddressType.Name = "ProgressBarCheckEachAddressType";
+            this.progressBarCheckEachAddressType.Size = new System.Drawing.Size(241, 1);
+            this.progressBarCheckEachAddressType.TabIndex = 209;
+            this.progressBarCheckEachAddressType.Visible = false;
+            // 
             // label121
             // 
             this.label121.AutoSize = true;
             this.label121.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label121.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label121.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label121.ForeColor = System.Drawing.Color.Silver;
             this.label121.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label121.Location = new System.Drawing.Point(2, 493);
+            this.label121.Location = new System.Drawing.Point(0, 493);
             this.label121.Name = "label121";
             this.label121.Size = new System.Drawing.Size(199, 17);
             this.label121.TabIndex = 208;
@@ -5746,10 +5812,10 @@
             // 
             this.lblXpubConfirmedUnspent.AutoSize = true;
             this.lblXpubConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblXpubConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(0, 508);
+            this.lblXpubConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(0, 512);
             this.lblXpubConfirmedUnspent.Name = "lblXpubConfirmedUnspent";
-            this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedUnspent.TabIndex = 207;
             this.lblXpubConfirmedUnspent.Text = "0";
             // 
@@ -5759,7 +5825,7 @@
             this.panel29.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel29.BackgroundImage")));
             this.panel29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel29.Controls.Add(this.label127);
-            this.panel29.Location = new System.Drawing.Point(4, 375);
+            this.panel29.Location = new System.Drawing.Point(0, 375);
             this.panel29.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel29.Name = "panel29";
             this.panel29.Size = new System.Drawing.Size(242, 23);
@@ -5782,10 +5848,10 @@
             // 
             this.label129.AutoSize = true;
             this.label129.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label129.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label129.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label129.ForeColor = System.Drawing.Color.Silver;
             this.label129.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label129.Location = new System.Drawing.Point(4, 448);
+            this.label129.Location = new System.Drawing.Point(0, 448);
             this.label129.Name = "label129";
             this.label129.Size = new System.Drawing.Size(116, 17);
             this.label129.TabIndex = 205;
@@ -5795,10 +5861,10 @@
             // 
             this.lblXpubConfirmedSpent.AutoSize = true;
             this.lblXpubConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(2, 463);
+            this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(0, 467);
             this.lblXpubConfirmedSpent.Name = "lblXpubConfirmedSpent";
-            this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedSpent.TabIndex = 204;
             this.lblXpubConfirmedSpent.Text = "0";
             // 
@@ -5806,10 +5872,10 @@
             // 
             this.label133.AutoSize = true;
             this.label133.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label133.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label133.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label133.ForeColor = System.Drawing.Color.Silver;
             this.label133.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label133.Location = new System.Drawing.Point(3, 405);
+            this.label133.Location = new System.Drawing.Point(0, 405);
             this.label133.Name = "label133";
             this.label133.Size = new System.Drawing.Size(137, 17);
             this.label133.TabIndex = 203;
@@ -5819,10 +5885,10 @@
             // 
             this.lblXpubConfirmedReceived.AutoSize = true;
             this.lblXpubConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblXpubConfirmedReceived.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(1, 420);
+            this.lblXpubConfirmedReceived.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(0, 424);
             this.lblXpubConfirmedReceived.Name = "lblXpubConfirmedReceived";
-            this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(21, 23);
+            this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedReceived.TabIndex = 202;
             this.lblXpubConfirmedReceived.Text = "0";
             // 
@@ -5854,35 +5920,35 @@
             // lblXpubStatus
             // 
             this.lblXpubStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblXpubStatus.Location = new System.Drawing.Point(0, 102);
+            this.lblXpubStatus.ForeColor = System.Drawing.Color.Gray;
+            this.lblXpubStatus.Location = new System.Drawing.Point(0, 110);
             this.lblXpubStatus.Name = "lblXpubStatus";
-            this.lblXpubStatus.Size = new System.Drawing.Size(243, 107);
+            this.lblXpubStatus.Size = new System.Drawing.Size(243, 99);
             this.lblXpubStatus.TabIndex = 201;
             // 
             // label119
             // 
             this.label119.AutoSize = true;
             this.label119.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label119.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label119.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label119.ForeColor = System.Drawing.Color.Silver;
             this.label119.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label119.Location = new System.Drawing.Point(4, 329);
+            this.label119.Location = new System.Drawing.Point(0, 329);
             this.label119.Name = "label119";
             this.label119.Size = new System.Drawing.Size(85, 17);
             this.label119.TabIndex = 200;
             this.label119.Text = "Segwit P2SH";
             // 
-            // lblSegwitP2SHAddressesWithNonZeroBalance
+            // lblSegwitP2SHSummary
             // 
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.AutoSize = true;
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.Location = new System.Drawing.Point(2, 344);
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.Name = "lblSegwitP2SHAddressesWithNonZeroBalance";
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.TabIndex = 199;
-            this.lblSegwitP2SHAddressesWithNonZeroBalance.Text = "0";
+            this.lblSegwitP2SHSummary.AutoSize = true;
+            this.lblSegwitP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(0, 348);
+            this.lblSegwitP2SHSummary.Name = "lblSegwitP2SHSummary";
+            this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitP2SHSummary.TabIndex = 199;
+            this.lblSegwitP2SHSummary.Text = "0";
             // 
             // panel23
             // 
@@ -5890,7 +5956,7 @@
             this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
             this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel23.Controls.Add(this.label117);
-            this.panel23.Location = new System.Drawing.Point(6, 211);
+            this.panel23.Location = new System.Drawing.Point(0, 211);
             this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel23.Name = "panel23";
             this.panel23.Size = new System.Drawing.Size(242, 23);
@@ -5905,9 +5971,9 @@
             this.label117.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label117.Location = new System.Drawing.Point(3, 2);
             this.label117.Name = "label117";
-            this.label117.Size = new System.Drawing.Size(220, 17);
+            this.label117.Size = new System.Drawing.Size(108, 17);
             this.label117.TabIndex = 153;
-            this.label117.Text = "Addresses with non-zero balance";
+            this.label117.Text = "Used addresses ";
             // 
             // textBoxMempoolURL
             // 
@@ -5921,16 +5987,16 @@
             this.textBoxMempoolURL.Size = new System.Drawing.Size(272, 25);
             this.textBoxMempoolURL.TabIndex = 169;
             this.textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-            this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.textBoxMempoolURL_TextChanged);
+            this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
             this.textBoxMempoolURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
-            this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMempoolURL_KeyPress);
-            this.textBoxMempoolURL.Leave += new System.EventHandler(this.textBoxMempoolURL_Leave);
+            this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxMempoolURL_KeyPress);
+            this.textBoxMempoolURL.Leave += new System.EventHandler(this.TextBoxMempoolURL_Leave);
             // 
             // label114
             // 
             this.label114.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label114.ForeColor = System.Drawing.Color.Silver;
-            this.label114.Location = new System.Drawing.Point(-1, 1);
+            this.label114.Location = new System.Drawing.Point(0, 1);
             this.label114.Name = "label114";
             this.label114.Size = new System.Drawing.Size(511, 25);
             this.label114.TabIndex = 168;
@@ -5940,129 +6006,96 @@
             // 
             this.label111.AutoSize = true;
             this.label111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label111.ForeColor = System.Drawing.Color.Silver;
             this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label111.Location = new System.Drawing.Point(6, 284);
+            this.label111.Location = new System.Drawing.Point(0, 284);
             this.label111.Name = "label111";
-            this.label111.Size = new System.Drawing.Size(120, 17);
+            this.label111.Size = new System.Drawing.Size(54, 17);
             this.label111.TabIndex = 167;
-            this.label111.Text = "Legacy addresses";
+            this.label111.Text = "Legacy";
             // 
-            // lblLegacyAddressesWithNonZeroBalance
+            // lblLegacySummary
             // 
-            this.lblLegacyAddressesWithNonZeroBalance.AutoSize = true;
-            this.lblLegacyAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblLegacyAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacyAddressesWithNonZeroBalance.Location = new System.Drawing.Point(4, 299);
-            this.lblLegacyAddressesWithNonZeroBalance.Name = "lblLegacyAddressesWithNonZeroBalance";
-            this.lblLegacyAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
-            this.lblLegacyAddressesWithNonZeroBalance.TabIndex = 166;
-            this.lblLegacyAddressesWithNonZeroBalance.Text = "0";
+            this.lblLegacySummary.AutoSize = true;
+            this.lblLegacySummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLegacySummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLegacySummary.Location = new System.Drawing.Point(0, 303);
+            this.lblLegacySummary.Name = "lblLegacySummary";
+            this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
+            this.lblLegacySummary.TabIndex = 166;
+            this.lblLegacySummary.Text = "0";
             // 
-            // button3
+            // btnViewAddressFromXpub
             // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(376, 178);
-            this.button3.Margin = new System.Windows.Forms.Padding(0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(20, 15);
-            this.button3.TabIndex = 165;
-            this.button3.Text = "▶️";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Visible = false;
+            this.btnViewAddressFromXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromXpub.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromXpub.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromXpub.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromXpub.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromXpub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromXpub.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewAddressFromXpub.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromXpub.Location = new System.Drawing.Point(376, 178);
+            this.btnViewAddressFromXpub.Margin = new System.Windows.Forms.Padding(0);
+            this.btnViewAddressFromXpub.Name = "btnViewAddressFromXpub";
+            this.btnViewAddressFromXpub.Size = new System.Drawing.Size(20, 15);
+            this.btnViewAddressFromXpub.TabIndex = 165;
+            this.btnViewAddressFromXpub.Text = "▶️";
+            this.btnViewAddressFromXpub.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromXpub.Visible = false;
             // 
-            // listView1
+            // listViewXpubAddresses
             // 
-            this.listView1.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.HideSelection = false;
-            this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(250, 74);
-            this.listView1.Margin = new System.Windows.Forms.Padding(0);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.OwnerDraw = true;
-            this.listView1.Scrollable = false;
-            this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(499, 438);
-            this.listView1.SmallImageList = this.imageListUpDownArrows;
-            this.listView1.TabIndex = 164;
-            this.listView1.TabStop = false;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(616, 533);
-            this.button4.Margin = new System.Windows.Forms.Padding(1);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(68, 22);
-            this.button4.TabIndex = 156;
-            this.button4.Text = "◁ prev";
-            this.button4.UseVisualStyleBackColor = false;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button5.FlatAppearance.BorderSize = 0;
-            this.button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(691, 533);
-            this.button5.Margin = new System.Windows.Forms.Padding(1);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(60, 22);
-            this.button5.TabIndex = 155;
-            this.button5.Text = "▷ next";
-            this.button5.UseVisualStyleBackColor = false;
+            this.listViewXpubAddresses.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewXpubAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewXpubAddresses.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewXpubAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewXpubAddresses.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewXpubAddresses.FullRowSelect = true;
+            this.listViewXpubAddresses.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewXpubAddresses.HideSelection = false;
+            this.listViewXpubAddresses.LabelWrap = false;
+            this.listViewXpubAddresses.Location = new System.Drawing.Point(250, 74);
+            this.listViewXpubAddresses.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewXpubAddresses.MultiSelect = false;
+            this.listViewXpubAddresses.Name = "listViewXpubAddresses";
+            this.listViewXpubAddresses.OwnerDraw = true;
+            this.listViewXpubAddresses.Scrollable = false;
+            this.listViewXpubAddresses.ShowGroups = false;
+            this.listViewXpubAddresses.Size = new System.Drawing.Size(499, 438);
+            this.listViewXpubAddresses.SmallImageList = this.imageListUpDownArrows;
+            this.listViewXpubAddresses.TabIndex = 164;
+            this.listViewXpubAddresses.TabStop = false;
+            this.listViewXpubAddresses.UseCompatibleStateImageBehavior = false;
+            this.listViewXpubAddresses.View = System.Windows.Forms.View.Details;
+            this.listViewXpubAddresses.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewXpubAddresses_ColumnWidthChanging);
+            this.listViewXpubAddresses.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewXpubAddresses.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewXpubAddresses_DrawSubItem);
             // 
             // label123
             // 
             this.label123.AutoSize = true;
             this.label123.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label123.ForeColor = System.Drawing.Color.Silver;
             this.label123.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label123.Location = new System.Drawing.Point(5, 241);
+            this.label123.Location = new System.Drawing.Point(0, 241);
             this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(117, 17);
+            this.label123.Size = new System.Drawing.Size(51, 17);
             this.label123.TabIndex = 153;
-            this.label123.Text = "Segwit addresses";
+            this.label123.Text = "Segwit";
             // 
-            // lblSegwitAddressesWithNonZeroBalance
+            // lblSegwitSummary
             // 
-            this.lblSegwitAddressesWithNonZeroBalance.AutoSize = true;
-            this.lblSegwitAddressesWithNonZeroBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSegwitAddressesWithNonZeroBalance.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitAddressesWithNonZeroBalance.Location = new System.Drawing.Point(3, 256);
-            this.lblSegwitAddressesWithNonZeroBalance.Name = "lblSegwitAddressesWithNonZeroBalance";
-            this.lblSegwitAddressesWithNonZeroBalance.Size = new System.Drawing.Size(21, 23);
-            this.lblSegwitAddressesWithNonZeroBalance.TabIndex = 152;
-            this.lblSegwitAddressesWithNonZeroBalance.Text = "0";
+            this.lblSegwitSummary.AutoSize = true;
+            this.lblSegwitSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitSummary.Location = new System.Drawing.Point(0, 260);
+            this.lblSegwitSummary.Name = "lblSegwitSummary";
+            this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitSummary.TabIndex = 152;
+            this.lblSegwitSummary.Text = "0";
             // 
             // textBoxSubmittedXpub
             // 
@@ -6073,7 +6106,7 @@
             this.textBoxSubmittedXpub.Location = new System.Drawing.Point(63, 36);
             this.textBoxSubmittedXpub.MaxLength = 200;
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
-            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(704, 25);
+            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(687, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 
@@ -6082,11 +6115,16 @@
             this.label146.AutoSize = true;
             this.label146.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label146.ForeColor = System.Drawing.Color.Silver;
-            this.label146.Location = new System.Drawing.Point(-1, 38);
+            this.label146.Location = new System.Drawing.Point(0, 38);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(47, 20);
             this.label146.TabIndex = 6;
             this.label146.Text = "Xpub";
+            // 
+            // timerHideProgressBars
+            // 
+            this.timerHideProgressBars.Interval = 2000;
+            this.timerHideProgressBars.Tick += new System.EventHandler(this.timerHideProgressBars_Tick);
             // 
             // SATSuma
             // 
@@ -6597,22 +6635,20 @@
         private System.Windows.Forms.Button btnViewAddressFromTXInput;
         private System.Windows.Forms.Button btnMenuXpub;
         private System.Windows.Forms.Panel panelXpub;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnViewAddressFromXpub;
+        private System.Windows.Forms.ListView listViewXpubAddresses;
         private System.Windows.Forms.Label label123;
-        private System.Windows.Forms.Label lblSegwitAddressesWithNonZeroBalance;
+        private System.Windows.Forms.Label lblSegwitSummary;
         private System.Windows.Forms.TextBox textBoxSubmittedXpub;
         private System.Windows.Forms.Label label146;
         private System.Windows.Forms.Label label111;
-        private System.Windows.Forms.Label lblLegacyAddressesWithNonZeroBalance;
+        private System.Windows.Forms.Label lblLegacySummary;
         private System.Windows.Forms.Label label114;
         private System.Windows.Forms.Panel panel23;
         private System.Windows.Forms.Label label117;
         private System.Windows.Forms.TextBox textBoxMempoolURL;
         private System.Windows.Forms.Label label119;
-        private System.Windows.Forms.Label lblSegwitP2SHAddressesWithNonZeroBalance;
+        private System.Windows.Forms.Label lblSegwitP2SHSummary;
         private System.Windows.Forms.Label lblXpubStatus;
         private System.Windows.Forms.Panel panel26;
         private System.Windows.Forms.Label label124;
@@ -6624,6 +6660,12 @@
         private System.Windows.Forms.Label lblXpubConfirmedSpent;
         private System.Windows.Forms.Label label133;
         private System.Windows.Forms.Label lblXpubConfirmedReceived;
+        private System.Windows.Forms.ProgressBar progressBarCheckEachAddressType;
+        private System.Windows.Forms.ProgressBar progressBarCheckAllAddressTypes;
+        private System.Windows.Forms.Label lblSegwitUsedAddresses;
+        private System.Windows.Forms.Label lblLegacyUsedAddresses;
+        private System.Windows.Forms.Label lblSegwitP2SHUsedAddresses;
+        private System.Windows.Forms.Timer timerHideProgressBars;
     }
 }
 

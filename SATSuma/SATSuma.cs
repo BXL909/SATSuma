@@ -18,12 +18,14 @@
  * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * support testnet
  * bookmarks
- * xpubs
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
+ * scroller for the xpub screen (may need extra panel)
+ * validation of node and xpub textboxes
+ * xpub select row event handler
  */
 
 #region Using
@@ -4471,11 +4473,7 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
                 LookupXpub();
-                DisableEnableLoadingAnimation("disable"); // start the loading animation
-                DisableEnableButtons("enable"); // disable buttons during operation
                 e.Handled = true;
                 return;
             }
@@ -4483,240 +4481,792 @@ namespace SATSuma
 
         private async void LookupXpub()
         {
-            // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
-
-            
-            int segwitAddressesWithNonZeroBalance = 0;
-            int legacyAddressesWithNonZeroBalance = 0;
-            int segwitP2SHAddressesWithNonZeroBalance = 0;
-            int consecutiveAddressesWithZeroBalance = 0;
-            double segwitAddressesConfirmedUnspentBalance = 0;
-            double legacyAddressesConfirmedUnspentBalance = 0;
-            double segwitP2SHAddressesConfirmedUnspentBalance = 0;
-            double xpubTotalConfirmedReceived = 0;
-            double xpubTotalConfirmedSpent = 0;
-            double xpubTotalConfirmedUnspent = 0;
-
-            int checkingAddressCount = 1;
-            List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
-            List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
-            List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
-
-            string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
-            
-            // ------- SEGWIT
-            for (uint i = 0; i < 500; i++)
+            try
             {
-                lblXpubStatus.Text = "Deriving 500 Segwit addresses";
-                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                uint index = i; // increment the index for each iteration
-                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
-                segwitAddresses.Add(BitcoinAddress);
-                
-            }
-            
-            // query the balance for each address
-            foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of addresses with a balance)
-            {
-                string truncatedAddressForDisplay = address.ToString().Substring(0,10) + "...";
-               
-                lblXpubStatus.Text = "Deriving 500 Segwit addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
-                var request = "address/" + address;
-                var RequestURL = "http://umbrel.local:3006/api/" + request;
-                var client = new HttpClient();
-                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                if (!response.IsSuccessStatusCode)
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+
+                // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
+
+                int MaxNumberOfConsecutiveUnusedAddresses = 20;
+                int segwitAddressesWithNonZeroBalance = 0;
+                int legacyAddressesWithNonZeroBalance = 0;
+                int segwitP2SHAddressesWithNonZeroBalance = 0;
+                int consecutiveUnusedAddressesForType = 0;
+                int totalUnusedAddresses = 0;
+                int usedSegwitAddresses = 0;
+                int usedLegacyAddresses = 0;
+                int usedSegwitP2SHAddresses = 0;
+                double segwitAddressesConfirmedUnspentBalance = 0;
+                double legacyAddressesConfirmedUnspentBalance = 0;
+                double segwitP2SHAddressesConfirmedUnspentBalance = 0;
+                double segwitTotalConfirmedReceived = 0;
+                double legacyTotalConfirmedReceived = 0;
+                double segwitP2SHTotalConfirmedReceived = 0;
+                double segwitTotalConfirmedSpent = 0;
+                double legacyTotalConfirmedSpent = 0;
+                double segwitP2SHTotalConfirmedSpent = 0;
+                double xpubTotalConfirmedReceived = 0;
+                double xpubTotalConfirmedSpent = 0;
+                double xpubTotalConfirmedUnspent = 0;
+
+                int checkingAddressCount = 1;
+                List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
+                List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
+                List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
+
+                progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses;
+                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 3;
+
+                progressBarCheckAllAddressTypes.Visible = true;
+                progressBarCheckEachAddressType.Visible = true;
+
+                string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
+
+                //LIST VIEW
+                listViewXpubAddresses.Invoke((MethodInvoker)delegate
                 {
-                    lblNodeStatusLight.ForeColor = Color.Red;
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    listViewXpubAddresses.Items.Clear(); // remove any data that may be there already
+                });
+                listViewXpubAddresses.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewXpubAddresses, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewXpubAddresses.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblActiveNode.Text = "Disconnected/error";
+                        listViewXpubAddresses.Columns.Add(" Address", 150);
                     });
-                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                }
+
+                if (listViewXpubAddresses.Columns.Count == 1)
+                {
+                    // If not, add the column header
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                        listViewXpubAddresses.Columns.Add("TX's", 50);
                     });
-                    return;
                 }
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var addressData = JObject.Parse(jsonData);
 
-                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
-
-                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                xpubTotalConfirmedReceived = xpubTotalConfirmedReceived + confirmedReceivedForCalc;
-
-                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                xpubTotalConfirmedSpent = xpubTotalConfirmedSpent + confirmedSpentForCalc;
-
-                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-                xpubTotalConfirmedUnspent = xpubTotalConfirmedUnspent + confirmedUnspentResult; 
-                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
-
-                if (confirmedUnspentResult > 0)
+                if (listViewXpubAddresses.Columns.Count == 2)
                 {
-                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
-                    segwitAddressesWithNonZeroBalance++;
-                    segwitAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-                    lblSegwitAddressesWithNonZeroBalance.Text = Convert.ToString(segwitAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(segwitAddressesConfirmedUnspentBalance)) + ")";
-                }
-                else
-                {
-                    consecutiveAddressesWithZeroBalance++;
-                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
+                    // If not, add the column header
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        break;
+                        listViewXpubAddresses.Columns.Add("Received", 100);
+                    });
+                }
+                if (listViewXpubAddresses.Columns.Count == 3)
+                {
+                    // If not, add the column header
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        listViewXpubAddresses.Columns.Add("Spent", 100);
+                    });
+                }
+                if (listViewXpubAddresses.Columns.Count == 4)
+                {
+                    // If not, add the column header
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        listViewXpubAddresses.Columns.Add("Unspent", 100);
+                    });
+                }
+
+                // ------- SEGWIT
+                for (uint i = 0; i < 500; i++)
+                {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Segwit addresses";
+                    });
+                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                    uint index = i; // increment the index for each iteration
+                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
+                    segwitAddresses.Add(BitcoinAddress);
+                }
+
+                // query the balance for each address
+                foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of addresses with a balance)
+                {
+                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Segwit addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                    });
+                    var request = "address/" + address;
+                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var client = new HttpClient();
+                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblNodeStatusLight.ForeColor = Color.Red;
+                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        {
+                            lblActiveNode.Text = "Disconnected/error";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                        });
+                        return;
                     }
-                }
-                checkingAddressCount++;
-            }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var addressData = JObject.Parse(jsonData);
 
-            consecutiveAddressesWithZeroBalance = 0;
-            checkingAddressCount = 1;
+                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
 
-            // ------- LEGACY
-            for (uint i = 0; i < 500; i++)
-            {
-                lblXpubStatus.Text = "Deriving 500 Legacy addresses";
-                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                uint index = i; // increment the index for each iteration
-                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
-                legacyAddresses.Add(BitcoinAddress);
-                
-            }
+                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
 
-            // query the balance for each address
-            foreach (BitcoinAddress address in legacyAddresses)  // (we break when we run out of addresses with a balance)
-            {
-                string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
 
-                lblXpubStatus.Text = "Deriving 500 Legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
-                var request = "address/" + address;
-                var RequestURL = "http://umbrel.local:3006/api/" + request;
-                var client = new HttpClient();
-                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                if (!response.IsSuccessStatusCode)
-                {
-                    lblNodeStatusLight.ForeColor = Color.Red;
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                    item.SubItems.Add(ConfirmedReceived.ToString());
+                    item.SubItems.Add(ConfirmedSpent.ToString());
+                    item.SubItems.Add(ConfirmedUnspent.ToString());
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblActiveNode.Text = "Disconnected/error";
+                        listViewXpubAddresses.Items.Add(item); // add row
                     });
-                    lblErrorMessage.Invoke((MethodInvoker)delegate
+
+                    string segwitTotalConfirmedReceivedDisplay = "";
+                    string segwitTotalConfirmedSpentDisplay = "";
+                    string segwitAddressesConfirmedUnspentBalanceDisplay = "";
+
+                    if (confirmedReceivedForCalc == 0)
                     {
-                        lblErrorMessage.Text = "Node offline/disconnected: ";
-                    });
-                    return;
-                }
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var addressData = JObject.Parse(jsonData);
+                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                        totalUnusedAddresses++; // overall count of unused addresses
 
-                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
-
-                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
-
-                if (confirmedUnspentResult > 0)
-                {
-                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
-                    legacyAddressesWithNonZeroBalance++;
-                    legacyAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-                    lblLegacyAddressesWithNonZeroBalance.Text = Convert.ToString(legacyAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(legacyAddressesConfirmedUnspentBalance)) + ")";
-                }
-                else
-                {
-                    consecutiveAddressesWithZeroBalance++;
-                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
-                    {
-                        break;
+                        // progress bar for this address type
+                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        {
+                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                        }
+                        else
+                        {
+                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                        }
+                        // progress bar for all address types
+                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                        {
+                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                        }
+                        else
+                        {
+                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                        }
+                        // assume there are no more used addresses at this point
+                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        {
+                            break;
+                        }
                     }
-                }
-                checkingAddressCount++;
-            }
-
-            consecutiveAddressesWithZeroBalance = 0;
-            checkingAddressCount = 1;
-
-            // ------- SEGWIT P2SH
-            for (uint i = 0; i < 500; i++)
-            {
-                lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses";
-                var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                uint index = i; // increment the index for each iteration
-                var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
-                segwitP2SHAddresses.Add(BitcoinAddress);
-
-            }
-
-            // query the balance for each address
-            foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
-            {
-                string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
-
-                lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive with non-zero balance: " + consecutiveAddressesWithZeroBalance;
-
-                var request = "address/" + address;
-                var RequestURL = "http://umbrel.local:3006/api/" + request;
-                var client = new HttpClient();
-                var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                if (!response.IsSuccessStatusCode)
-                {
-                    lblNodeStatusLight.ForeColor = Color.Red;
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    else
                     {
-                        lblActiveNode.Text = "Disconnected/error";
-                    });
-                    lblErrorMessage.Invoke((MethodInvoker)delegate
-                    {
-                        lblErrorMessage.Text = "Node offline/disconnected: ";
-                    });
-                    return;
-                }
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var addressData = JObject.Parse(jsonData);
-
-                string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
-
-                var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-                string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString();
-
-                if (confirmedUnspentResult > 0)
-                {
-                    consecutiveAddressesWithZeroBalance = 0; // reset count of consecutive addresses with no balance now that we've found one
-                    segwitP2SHAddressesWithNonZeroBalance++;
-                    segwitP2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-                    lblSegwitP2SHAddressesWithNonZeroBalance.Text = Convert.ToString(segwitP2SHAddressesWithNonZeroBalance) + " (" + ConvertSatsToBitcoin(Convert.ToString(segwitP2SHAddressesConfirmedUnspentBalance)) + ")";
-                }
-                else
-                {
-                    consecutiveAddressesWithZeroBalance++;
-                    if (consecutiveAddressesWithZeroBalance > 20) // assume that there are no more non-zero balance addresses after this point
-                    {
-                        break;
+                        usedSegwitAddresses++;
                     }
+
+                    if (confirmedReceivedForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        segwitTotalConfirmedReceived += confirmedReceivedForCalc;
+                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                    }
+
+                    if (confirmedSpentForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        segwitTotalConfirmedSpent += confirmedSpentForCalc;
+                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                    }
+
+                    if (confirmedUnspentResult > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                        segwitAddressesWithNonZeroBalance++;
+                        segwitAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                    }
+                    checkingAddressCount++;
+                    lblSegwitUsedAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used addresses";
+                    });
+                    // format values before displaying them in the summary
+                    if (segwitTotalConfirmedReceived > 0)
+                    {
+                        segwitTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedReceived)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitTotalConfirmedReceivedDisplay = "0";
+                    }
+
+                    if (segwitTotalConfirmedSpent > 0)
+                    {
+                        segwitTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedSpent)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitTotalConfirmedSpentDisplay = "0";
+                    }
+
+                    if (segwitAddressesConfirmedUnspentBalance > 0)
+                    {
+                        segwitAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitAddressesConfirmedUnspentBalanceDisplay = "0";
+                    }
+                    lblSegwitSummary.Invoke((MethodInvoker)delegate
+                    {
+                        lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + "," + segwitTotalConfirmedSpentDisplay + "," + segwitAddressesConfirmedUnspentBalanceDisplay;
+                    });
                 }
-                checkingAddressCount++;
 
+                progressBarCheckEachAddressType.Value = 0;
+                consecutiveUnusedAddressesForType = 0;
+                checkingAddressCount = 1;
+
+                // ------- LEGACY
+                for (uint i = 0; i < 500; i++)
+                {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Legacy addresses";
+                    });
+                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                    uint index = i; // increment the index for each iteration
+                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
+                    legacyAddresses.Add(BitcoinAddress);
+                }
+
+                // query the balance for each address
+                foreach (BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
+                {
+                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                    });
+                    var request = "address/" + address;
+                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var client = new HttpClient();
+                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblNodeStatusLight.ForeColor = Color.Red;
+                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        {
+                            lblActiveNode.Text = "Disconnected/error";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                        });
+                        return;
+                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var addressData = JObject.Parse(jsonData);
+
+                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                    item.SubItems.Add(ConfirmedReceived.ToString());
+                    item.SubItems.Add(ConfirmedSpent.ToString());
+                    item.SubItems.Add(ConfirmedUnspent.ToString());
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        listViewXpubAddresses.Items.Add(item); // add row
+                    });
+
+                    string legacyTotalConfirmedReceivedDisplay = "";
+                    string legacyTotalConfirmedSpentDisplay = "";
+                    string legacyAddressesConfirmedUnspentBalanceDisplay = "";
+
+                    if (confirmedReceivedForCalc == 0)
+                    {
+                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                        totalUnusedAddresses++; // overall count of unused addresses
+
+                        // progress bar for this address type
+                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        {
+                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                        }
+                        else
+                        {
+                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                        }
+                        // progress bar for all address types
+                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                        {
+                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                        }
+                        else
+                        {
+                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                        }
+                        // assume there are no more used addresses at this point
+                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        usedLegacyAddresses++;
+                    }
+
+                    if (confirmedReceivedForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        legacyTotalConfirmedReceived += confirmedReceivedForCalc;
+                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                    }
+
+                    if (confirmedSpentForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        legacyTotalConfirmedSpent += confirmedSpentForCalc;
+                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                    }
+
+                    if (confirmedUnspentResult > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                        legacyAddressesWithNonZeroBalance++;
+                        legacyAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                    }
+                    checkingAddressCount++;
+                    lblLegacyUsedAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used addresses";
+                    });
+                    // format values before displaying them in the summary
+                    if (legacyTotalConfirmedReceived > 0)
+                    {
+                        legacyTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedReceived)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        legacyTotalConfirmedReceivedDisplay = "0";
+                    }
+
+                    if (legacyTotalConfirmedSpent > 0)
+                    {
+                        legacyTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedSpent)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        legacyTotalConfirmedSpentDisplay = "0";
+                    }
+
+                    if (legacyAddressesConfirmedUnspentBalance > 0)
+                    {
+                        legacyAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        legacyAddressesConfirmedUnspentBalanceDisplay = "0";
+                    }
+                    lblLegacySummary.Invoke((MethodInvoker)delegate
+                    {
+                        lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + "," + legacyTotalConfirmedSpentDisplay + "," + legacyAddressesConfirmedUnspentBalanceDisplay;
+                    });
+                }
+
+                consecutiveUnusedAddressesForType = 0;
+                checkingAddressCount = 1;
+
+                // ------- SEGWIT P2SH
+                for (uint i = 0; i < 500; i++)
+                {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses";
+                    });
+                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                    uint index = i; // increment the index for each iteration
+                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
+                    segwitP2SHAddresses.Add(BitcoinAddress);
+                }
+
+                // query the balance for each address
+                foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
+                {
+                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                    });
+                    var request = "address/" + address;
+                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var client = new HttpClient();
+                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblNodeStatusLight.ForeColor = Color.Red;
+                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        {
+                            lblActiveNode.Text = "Disconnected/error";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                        });
+                        return;
+                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var addressData = JObject.Parse(jsonData);
+
+                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                    item.SubItems.Add(ConfirmedReceived.ToString());
+                    item.SubItems.Add(ConfirmedSpent.ToString());
+                    item.SubItems.Add(ConfirmedUnspent.ToString());
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        listViewXpubAddresses.Items.Add(item); // add row
+                    });
+
+                    string segwitP2SHTotalConfirmedReceivedDisplay = "";
+                    string segwitP2SHTotalConfirmedSpentDisplay = "";
+                    string segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "";
+
+                    if (confirmedReceivedForCalc == 0)
+                    {
+                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                        totalUnusedAddresses++; // overall count of unused addresses
+
+                        // progress bar for this address type
+                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        {
+                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                        }
+                        else
+                        {
+                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                        }
+                        // progress bar for all address types
+                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                        {
+                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                        }
+                        else
+                        {
+                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                        }
+                        // assume there are no more used addresses at this point
+                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        usedSegwitP2SHAddresses++;
+                    }
+
+                    if (confirmedReceivedForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        segwitP2SHTotalConfirmedReceived += confirmedReceivedForCalc;
+                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                    }
+
+                    if (confirmedSpentForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        segwitP2SHTotalConfirmedSpent += confirmedSpentForCalc;
+                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                    }
+
+                    if (confirmedUnspentResult > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                        segwitP2SHAddressesWithNonZeroBalance++;
+                        segwitP2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                    }
+                    checkingAddressCount++;
+                    lblSegwitP2SHUsedAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used addresses";
+                    });
+                    // format values before displaying them in the summary
+                    if (segwitP2SHTotalConfirmedReceived > 0)
+                    {
+                        segwitP2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedReceived)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitP2SHTotalConfirmedReceivedDisplay = "0";
+                    }
+
+                    if (segwitP2SHTotalConfirmedSpent > 0)
+                    {
+                        segwitP2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedSpent)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitP2SHTotalConfirmedSpentDisplay = "0";
+                    }
+
+                    if (segwitP2SHAddressesConfirmedUnspentBalance > 0)
+                    {
+                        segwitP2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "0";
+                    }
+                    lblSegwitP2SHSummary.Invoke((MethodInvoker)delegate
+                    {
+                        lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + "," + segwitP2SHTotalConfirmedSpentDisplay + "," + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
+                    });
+                }
+
+                consecutiveUnusedAddressesForType = 0;
+                checkingAddressCount = 1;
+
+                lblXpubStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubStatus.Text = "Finished scanning addresses";
+                });
+                lblXpubConfirmedReceived.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedReceived)).ToString("0.00000000");
+                });
+                lblXpubConfirmedSpent.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedSpent)).ToString("0.00000000");
+                });
+                lblXpubConfirmedUnspent.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)).ToString("0.00000000");
+                });
+                DisableEnableLoadingAnimation("disable"); // start the loading animation
+                DisableEnableButtons("enable"); // disable buttons during operation
+                timerHideProgressBars.Start();
             }
-            
-            consecutiveAddressesWithZeroBalance = 0;
-            checkingAddressCount = 1;
+            catch (Exception ex)
+            {
+                HandleException(ex, "LookupXpub");
+    }
+}
 
-            lblXpubStatus.Text = "Finished scanning addresses";
-            lblXpubConfirmedReceived.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedReceived)));
-            lblXpubConfirmedSpent.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedSpent)));
-            lblXpubConfirmedUnspent.Text = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)));
-            
+        private void ListViewXpubAddresses_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (e.ColumnIndex == 2)
+            {
+                if (text != "0.00000000")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
+                }
+            }
+            if (e.ColumnIndex == 3)
+            {
+                if (text != "0.00000000")
+                {
+                    e.SubItem.ForeColor = Color.IndianRed; // make it red
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (text != "0.00000000")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
+                }
+            }
+
+            var font = listViewXpubAddresses.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
+        private bool isExampleTextDisplayed = true;
+
+        private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.Text = "";
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxMempoolURL_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxMempoolURL.Text))
+            {
+                textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxMempoolURL.ForeColor = Color.Gray;
+                isExampleTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isExampleTextDisplayed)
+            {
+                textBoxMempoolURL.Text = "";
+                textBoxMempoolURL.ForeColor = Color.White;
+                isExampleTextDisplayed = false;
+            }
+        }
+
+        private void LblSegwitUsedAddresses_Paint(object sender, PaintEventArgs e)
+        {
+            lblSegwitUsedAddresses.Location = new Point(label123.Location.X + label123.Width, label123.Location.Y);
+        }
+
+        private void LblLegacyUsedAddresses_Paint(object sender, PaintEventArgs e)
+        {
+            lblLegacyUsedAddresses.Location = new Point(label111.Location.X + label111.Width, label111.Location.Y);
+        }
+
+        private void LblSegwitP2SHUsedAddresses_Paint(object sender, PaintEventArgs e)
+        {
+            lblSegwitP2SHUsedAddresses.Location = new Point(label119.Location.X + label119.Width, label119.Location.Y);
+        }
+
+        private void ListViewXpubAddresses_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 150) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 150;
+                }
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 460) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 460;
+                }
+
+                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+                {
+                    btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - 6, btnViewAddressFromXpub.Location.Y);
+                });
+            }
+
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 50;
+                }
+            }
+            if (e.ColumnIndex == 2)
+            {
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 250;
+                }
+            }
+            if (e.ColumnIndex == 3)
+            {
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 250;
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 250;
+                }
+            }
+        }
+
+        private void timerHideProgressBars_Tick(object sender, EventArgs e)
+        {
+            progressBarCheckAllAddressTypes.Visible = false;
+            progressBarCheckEachAddressType.Visible = false;
+            timerHideProgressBars.Stop();
         }
         #endregion
 
@@ -5589,50 +6139,8 @@ namespace SATSuma
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
         }
+
         #endregion
-
-        private bool isExampleTextDisplayed = true;
-
-        private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
-        {
-            if (isExampleTextDisplayed)
-            {
-                textBoxMempoolURL.Text = "";
-                textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
-            }
-        }
-
-        private void textBoxMempoolURL_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxMempoolURL.Text))
-            {
-                textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                textBoxMempoolURL.ForeColor = Color.Gray;
-                isExampleTextDisplayed = true;
-            }
-        }
-
-        private void textBoxMempoolURL_TextChanged(object sender, EventArgs e)
-        {
-            if (isExampleTextDisplayed)
-            {
-                textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
-            }
-        }
-
-        private void textBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (isExampleTextDisplayed)
-            {
-                textBoxMempoolURL.Text = "";
-                textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
-            }
-        }
-
-
 
 
     }
@@ -5983,7 +6491,119 @@ namespace SATSuma
         public string Value { get; set; }
     }
     #endregion
+    public class WaterMarkTextBox : TextBox
+    {
+        private Font oldFont = null;
+        private Boolean waterMarkTextEnabled = false;
 
+        #region Attributes 
+        private Color _waterMarkColor = Color.Gray;
+        public Color WaterMarkColor
+        {
+            get { return _waterMarkColor; }
+            set
+            {
+                _waterMarkColor = value; Invalidate();/*thanks to Bernhard Elbl
+                                                              for Invalidate()*/
+            }
+        }
+
+        private string _waterMarkText = "Water Mark";
+        public string WaterMarkText
+        {
+            get { return _waterMarkText; }
+            set { _waterMarkText = value; Invalidate(); }
+        }
+        #endregion
+
+        //Default constructor
+        public WaterMarkTextBox()
+        {
+            JoinEvents(true);
+        }
+
+        //Override OnCreateControl ... thanks to  "lpgray .. codeproject guy"
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+            WaterMark_Toggel(null, null);
+        }
+
+        //Override OnPaint
+        protected override void OnPaint(PaintEventArgs args)
+        {
+            // Use the same font that was defined in base class
+            System.Drawing.Font drawFont = new System.Drawing.Font(Font.FontFamily,
+                Font.Size, Font.Style, Font.Unit);
+            //Create new brush with gray color or 
+            SolidBrush drawBrush = new SolidBrush(WaterMarkColor);//use Water mark color
+            //Draw Text or WaterMark
+            args.Graphics.DrawString((waterMarkTextEnabled ? WaterMarkText : Text),
+                drawFont, drawBrush, new PointF(0.0F, 0.0F));
+            base.OnPaint(args);
+        }
+
+        private void JoinEvents(Boolean join)
+        {
+            if (join)
+            {
+                this.TextChanged += new System.EventHandler(this.WaterMark_Toggel);
+                this.LostFocus += new System.EventHandler(this.WaterMark_Toggel);
+                this.FontChanged += new System.EventHandler(this.WaterMark_FontChanged);
+                //No one of the above events will start immeddiatlly 
+                //TextBox control still in constructing, so,
+                //Font object (for example) couldn't be catched from within
+                //WaterMark_Toggle
+                //So, call WaterMark_Toggel through OnCreateControl after TextBox
+                //is totally created
+                //No doupt, it will be only one time call
+
+                //Old solution uses Timer.Tick event to check Create property
+            }
+        }
+
+        private void WaterMark_Toggel(object sender, EventArgs args)
+        {
+            if (this.Text.Length <= 0)
+                EnableWaterMark();
+            else
+                DisbaleWaterMark();
+        }
+
+        private void EnableWaterMark()
+        {
+            //Save current font until returning the UserPaint style to false (NOTE:
+            //It is a try and error advice)
+            oldFont = new System.Drawing.Font(Font.FontFamily, Font.Size, Font.Style,
+               Font.Unit);
+            //Enable OnPaint event handler
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.waterMarkTextEnabled = true;
+            //Triger OnPaint immediatly
+            Refresh();
+        }
+
+        private void DisbaleWaterMark()
+        {
+            //Disbale OnPaint event handler
+            this.waterMarkTextEnabled = false;
+            this.SetStyle(ControlStyles.UserPaint, false);
+            //Return back oldFont if existed
+            if (oldFont != null)
+                this.Font = new System.Drawing.Font(oldFont.FontFamily, oldFont.Size,
+                    oldFont.Style, oldFont.Unit);
+        }
+
+        private void WaterMark_FontChanged(object sender, EventArgs args)
+        {
+            if (waterMarkTextEnabled)
+            {
+                oldFont = new System.Drawing.Font(Font.FontFamily, Font.Size, Font.Style,
+                    Font.Unit);
+                Refresh();
+            }
+        }
+    }
 
 } 
 //==================================================================================================================================================================================================

@@ -23,9 +23,7 @@
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
- * scroller for the xpub screen (may need extra panel)
  * validation of node and xpub textboxes
- * xpub select row event handler - disable address button if address is unused
  * xpub help text definitions
  */
 
@@ -40,6 +38,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Security.Policy;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
@@ -69,6 +68,8 @@ using System.Windows.Documents;
 using System.Reflection.Emit;
 using Control = System.Windows.Forms.Control;
 using TextBox = System.Windows.Forms.TextBox;
+using System.Security.AccessControl;
+
 
 #endregion
 
@@ -127,6 +128,7 @@ namespace SATSuma
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -3620,7 +3622,7 @@ namespace SATSuma
 
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void TXInTimer_Tick(object sender, EventArgs e)
         {
             if (isInputButtonPressed)
             {
@@ -3649,7 +3651,7 @@ namespace SATSuma
             }
         }
 
-        private void Timer2_Tick(object sender, EventArgs e)
+        private void TXOutTimer_Tick(object sender, EventArgs e)
         {
             if (isOutputButtonPressed)
             {
@@ -4537,7 +4539,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add(" Address", 150);
+                        listViewXpubAddresses.Columns.Add(" Address", 130);
                     });
                 }
 
@@ -4546,7 +4548,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("TX's", 50);
+                        listViewXpubAddresses.Columns.Add("TX's", 35);
                     });
                 }
 
@@ -4636,6 +4638,14 @@ namespace SATSuma
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
 
+                    // Get the height of each item to set height of whole listview
+                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                    panelXpubContainer.VerticalScroll.Minimum = 0;
+
                     string segwitTotalConfirmedReceivedDisplay = "";
                     string segwitTotalConfirmedSpentDisplay = "";
                     string segwitAddressesConfirmedUnspentBalanceDisplay = "";
@@ -4657,7 +4667,8 @@ namespace SATSuma
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
-                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            progressBarCheckAllAddressTypes.Value = consecutiveUnusedAddressesForType;
                         }
                         else
                         {
@@ -4799,6 +4810,14 @@ namespace SATSuma
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
 
+                    // Get the height of each item to set height of whole listview
+                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                    panelXpubContainer.VerticalScroll.Minimum = 0;
+
                     string legacyTotalConfirmedReceivedDisplay = "";
                     string legacyTotalConfirmedSpentDisplay = "";
                     string legacyAddressesConfirmedUnspentBalanceDisplay = "";
@@ -4820,7 +4839,8 @@ namespace SATSuma
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
-                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            progressBarCheckAllAddressTypes.Value = MaxNumberOfConsecutiveUnusedAddresses + consecutiveUnusedAddressesForType;
                         }
                         else
                         {
@@ -4961,6 +4981,14 @@ namespace SATSuma
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
 
+                    // Get the height of each item to set height of whole listview
+                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                    panelXpubContainer.VerticalScroll.Minimum = 0;
+
                     string segwitP2SHTotalConfirmedReceivedDisplay = "";
                     string segwitP2SHTotalConfirmedSpentDisplay = "";
                     string segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "";
@@ -4982,7 +5010,8 @@ namespace SATSuma
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
-                            progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            progressBarCheckAllAddressTypes.Value = (2 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                         }
                         else
                         {
@@ -5081,12 +5110,13 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("disable"); // start the loading animation
                 DisableEnableButtons("enable"); // disable buttons during operation
                 timerHideProgressBars.Start();
+
             }
             catch (Exception ex)
             {
                 HandleException(ex, "LookupXpub");
-    }
-}
+            }
+        }
 
         private void ListViewXpubAddresses_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -5137,15 +5167,16 @@ namespace SATSuma
             }
         }
 
-        private bool isExampleTextDisplayed = true;
+      
+        private bool isAPIURLWatermarkTextDisplayed = true;
 
         private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
         {
-            if (isExampleTextDisplayed)
+            if (isAPIURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.Text = "";
                 textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
+                isAPIURLWatermarkTextDisplayed = false;
             }
         }
 
@@ -5155,29 +5186,29 @@ namespace SATSuma
             {
                 textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
                 textBoxMempoolURL.ForeColor = Color.Gray;
-                isExampleTextDisplayed = true;
+                isAPIURLWatermarkTextDisplayed = true;
             }
         }
 
         private void TextBoxMempoolURL_TextChanged(object sender, EventArgs e)
         {
-            if (isExampleTextDisplayed)
+            if (isAPIURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
+                isAPIURLWatermarkTextDisplayed = false;
             }
         }
 
         private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (isExampleTextDisplayed)
+            if (isAPIURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.Text = "";
                 textBoxMempoolURL.ForeColor = Color.White;
-                isExampleTextDisplayed = false;
+                isAPIURLWatermarkTextDisplayed = false;
             }
         }
-
+   
         private void LblSegwitUsedAddresses_Paint(object sender, PaintEventArgs e)
         {
             lblSegwitUsedAddresses.Location = new Point(label123.Location.X + label123.Width, label123.Location.Y);
@@ -5197,10 +5228,10 @@ namespace SATSuma
         {
             if (e.ColumnIndex == 0)
             {
-                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 150) // min width
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 130) // min width
                 {
                     e.Cancel = true;
-                    e.NewWidth = 150;
+                    e.NewWidth = 130;
                 }
                 if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 460) // max width
                 {
@@ -5216,10 +5247,10 @@ namespace SATSuma
 
             if (e.ColumnIndex == 1)
             {
-                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                if (listViewXpubAddresses.Columns[e.ColumnIndex].Width != 35) // don't allow this one to change
                 {
                     e.Cancel = true;
-                    e.NewWidth = 50;
+                    e.NewWidth = 35;
                 }
             }
             if (e.ColumnIndex == 2)
@@ -5263,14 +5294,14 @@ namespace SATSuma
             }
         }
 
-        private void timerHideProgressBars_Tick(object sender, EventArgs e)
+        private void TimerHideProgressBars_Tick(object sender, EventArgs e)
         {
             progressBarCheckAllAddressTypes.Visible = false;
             progressBarCheckEachAddressType.Visible = false;
             timerHideProgressBars.Stop();
         }
 
-        private void listViewXpubAddresses_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void ListViewXpubAddresses_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
             {
@@ -5279,11 +5310,21 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
+
                         item.ForeColor = Color.White; // address
+                        if (item.SubItems[1].Text == "0")
+                        {
+                            btnViewAddressFromXpub.Visible = false;
+                        }
+                        else
+                        { 
+                            btnViewAddressFromXpub.Visible = true;
+                        }
                         btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                         {
                             btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 2);
                         });
+
                         anySelected = true;
                     }
                     else
@@ -5291,12 +5332,103 @@ namespace SATSuma
                         item.ForeColor = Color.FromArgb(255, 153, 0); //txID
                     }
                 }
-                btnViewAddressFromXpub.Visible = anySelected;
+                //btnViewAddressFromXpub.Visible = anySelected;
             }
             catch (Exception ex)
             {
                 HandleException(ex, "listViewXpubAddresses_ItemSelectionChanged");
             }
+        }
+
+        private void PanelXpubContainer_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
+            {
+               // panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+            }
+
+        }
+
+        private void BtnXpubAddressesDown_Click(object sender, EventArgs e)
+        {
+            if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum)
+            {
+                panelXpubContainer.VerticalScroll.Value++;
+            }
+        }
+
+        private bool isXpubButtonPressed = false;
+        private bool XpubDownButtonPressed = false;
+        private bool XpubUpButtonPressed = false;
+
+        private void BtnXpubAddressesDown_MouseDown(object sender, MouseEventArgs e)
+        {
+            isXpubButtonPressed = true;
+            XpubDownButtonPressed = true;
+            XpubScrollTimer.Start();
+        }
+
+        private void BtnXpubAddressesDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            isXpubButtonPressed = false;
+            XpubDownButtonPressed = false;
+            XpubScrollTimer.Stop();
+            XpubScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void BtnXpubAddressUp_Click(object sender, EventArgs e)
+        {
+            if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum)
+            {
+                panelXpubContainer.VerticalScroll.Value--;
+            }
+        }
+
+        private void BtnXpubAddressUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            isXpubButtonPressed = true;
+            XpubUpButtonPressed = true;
+            XpubScrollTimer.Start();
+
+        }
+
+        private void BtnXpubAddressUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            isXpubButtonPressed = false;
+            XpubUpButtonPressed = false;
+            XpubScrollTimer.Stop();
+            XpubScrollTimer.Interval = 50; // reset the interval to its original value
+
+        }
+
+        private void XpubScrollTimer_Tick(object sender, EventArgs e)
+        {
+            if (isXpubButtonPressed)
+            {
+                if (XpubDownButtonPressed)
+                {
+                    if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum - 4)
+                    {
+                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 4;
+                        XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                    }
+                    XpubScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+                else if (XpubUpButtonPressed)
+                {
+                    if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum + 4)
+                    {
+                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 4;
+                        XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                    }
+                    XpubScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+            }
+            else
+            {
+                XpubScrollTimer.Stop();
+            }
+
         }
         #endregion
 
@@ -6173,12 +6305,216 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
+            if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
+            {
+                btnAddToFavorites.Enabled = true;
+            }
+            else
+            {
+                btnAddToFavorites.Enabled = false;
+            }
         }
-
 
         #endregion
 
+        //==============================================================================================================
+        //---------------------- ADD TO FAVOURITES ---------------------------------------------------------------------
+        private void BtnAddToFavorites_Click(object sender, EventArgs e)
+        {
+            if (!panelAddToFaves.Visible)
+            {
+                panelFees.Visible = false;
+                panelAddToFaves.Visible = true;
+            }
+            else
+            {
+                panelAddToFaves.Visible = false;
+                panelFees.Visible = true;
+            }
+        }
 
+        private void BtnCancelAddToFaves_Click(object sender, EventArgs e)
+        {
+            panelAddToFaves.Visible = false;
+            panelFees.Visible = true;
+        }
+
+        private void PanelAddToFaves_Paint(object sender, PaintEventArgs e)
+        {
+            
+            
+            if (panelAddress.Visible)
+            {
+                lblFaveProposalType.Text = "address";
+                lblFaveProposalData.Text = textboxSubmittedAddress.Text;
+
+            }
+            if (panelBlock.Visible)
+            {
+                lblFaveProposalType.Text = "block";
+                lblFaveProposalData.Text = textBoxSubmittedBlockNumber.Text;
+            }
+            if (panelTransaction.Visible)
+            {
+                lblFaveProposalType.Text = "transaction";
+                lblFaveProposalData.Text = textBoxTransactionID.Text;
+            }
+            if (panelXpub.Visible)
+            {
+                lblFaveProposalType.Text = "xpub";
+                lblFaveProposalData.Text = textBoxSubmittedXpub.Text;
+            }
+
+            lblFaveProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
+            lblFaveProposalData.Location = new Point(lblFaveProposalType.Location.X + lblFaveProposalType.Width, lblFaveProposalType.Location.Y);
+            lblFaveProposalData.Width = panelAddToFaves.Width - label131.Width - lblFaveProposalType.Width - 5;
+        }
+
+        private void BtnCommitToFavorites_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            bool toBeEncrypted = false;
+            if (textBoxFaveEncryptionKey.Text == "" || textBoxFaveEncryptionKey.Text == "optional encryption key")
+            {
+                toBeEncrypted = false;
+            }
+            else
+            {
+                toBeEncrypted = true;
+            }
+
+            // Create a new favorite object for the block with ID "123456"
+            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted};
+
+            // Read the existing favorites from the JSON file
+            var favorites = ReadFavoritesFromJsonFile();
+
+            // Add the new favorite to the list
+            favorites.Add(newFavorite);
+
+            // Write the updated list of favorites back to the JSON file
+            WriteFavoritesToJsonFile(favorites);
+
+            textBoxFaveProposedNote.Text = "";
+        }
+
+
+        private static List<Favorite> ReadFavoritesFromJsonFile()
+        {
+            string filePath = "favorites.json";
+
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath).Dispose();
+            }
+            // Read the contents of the JSON file into a string
+            string json = File.ReadAllText(filePath);
+
+            // Deserialize the JSON string into a list of favorite objects
+            var favorites = JsonConvert.DeserializeObject<List<Favorite>>(json);
+
+            // If the JSON file doesn't exist or is empty, return an empty list
+            favorites ??= new List<Favorite>();
+
+            return favorites;
+        }
+
+        private static void WriteFavoritesToJsonFile(List<Favorite> favorites)
+        {
+            // Serialize the list of favorite objects into a JSON string
+            string json = JsonConvert.SerializeObject(favorites);
+
+            // Write the JSON string to the favorites.json file
+            File.WriteAllText("favorites.json", json);
+        }
+
+        private void HideFavesShowFees(object sender, EventArgs e)
+        {
+            panelAddToFaves.Visible = false;
+            panelFees.Visible = true;
+        }
+
+        private bool isFaveNoteWatermarkTextDisplayed = true;
+
+        private void TextBoxFaveProposedNote_Enter(object sender, EventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.Text = "";
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
+            {
+                textBoxFaveProposedNote.Text = "optional notes";
+                textBoxFaveProposedNote.ForeColor = Color.Gray;
+                isFaveNoteWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_TextChanged(object sender, EventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.Text = "";
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private bool isEncryptionKeyWatermarkTextDisplayed = true;
+
+        private void TextBoxFaveEncryptionKey_Enter(object sender, EventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.Text = "";
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxFaveEncryptionKey.Text))
+            {
+                textBoxFaveEncryptionKey.Text = "optional encryption key";
+                textBoxFaveEncryptionKey.ForeColor = Color.Gray;
+                isEncryptionKeyWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_TextChanged(object sender, EventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.Text = "";
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
+        }
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
@@ -6527,120 +6863,15 @@ namespace SATSuma
         public string Value { get; set; }
     }
     #endregion
-    public class WaterMarkTextBox : TextBox
+
+    public class Favorite
     {
-        private Font oldFont = null;
-        private Boolean waterMarkTextEnabled = false;
-
-        #region Attributes 
-        private Color _waterMarkColor = Color.Gray;
-        public Color WaterMarkColor
-        {
-            get { return _waterMarkColor; }
-            set
-            {
-                _waterMarkColor = value; Invalidate();/*thanks to Bernhard Elbl
-                                                              for Invalidate()*/
-            }
-        }
-
-        private string _waterMarkText = "Water Mark";
-        public string WaterMarkText
-        {
-            get { return _waterMarkText; }
-            set { _waterMarkText = value; Invalidate(); }
-        }
-        #endregion
-
-        //Default constructor
-        public WaterMarkTextBox()
-        {
-            JoinEvents(true);
-        }
-
-        //Override OnCreateControl ... thanks to  "lpgray .. codeproject guy"
-        protected override void OnCreateControl()
-        {
-            base.OnCreateControl();
-            WaterMark_Toggel(null, null);
-        }
-
-        //Override OnPaint
-        protected override void OnPaint(PaintEventArgs args)
-        {
-            // Use the same font that was defined in base class
-            System.Drawing.Font drawFont = new System.Drawing.Font(Font.FontFamily,
-                Font.Size, Font.Style, Font.Unit);
-            //Create new brush with gray color or 
-            SolidBrush drawBrush = new SolidBrush(WaterMarkColor);//use Water mark color
-            //Draw Text or WaterMark
-            args.Graphics.DrawString((waterMarkTextEnabled ? WaterMarkText : Text),
-                drawFont, drawBrush, new PointF(0.0F, 0.0F));
-            base.OnPaint(args);
-        }
-
-        private void JoinEvents(Boolean join)
-        {
-            if (join)
-            {
-                this.TextChanged += new System.EventHandler(this.WaterMark_Toggel);
-                this.LostFocus += new System.EventHandler(this.WaterMark_Toggel);
-                this.FontChanged += new System.EventHandler(this.WaterMark_FontChanged);
-                //No one of the above events will start immeddiatlly 
-                //TextBox control still in constructing, so,
-                //Font object (for example) couldn't be catched from within
-                //WaterMark_Toggle
-                //So, call WaterMark_Toggel through OnCreateControl after TextBox
-                //is totally created
-                //No doupt, it will be only one time call
-
-                //Old solution uses Timer.Tick event to check Create property
-            }
-        }
-
-        private void WaterMark_Toggel(object sender, EventArgs args)
-        {
-            if (this.Text.Length <= 0)
-                EnableWaterMark();
-            else
-                DisbaleWaterMark();
-        }
-
-        private void EnableWaterMark()
-        {
-            //Save current font until returning the UserPaint style to false (NOTE:
-            //It is a try and error advice)
-            oldFont = new System.Drawing.Font(Font.FontFamily, Font.Size, Font.Style,
-               Font.Unit);
-            //Enable OnPaint event handler
-            this.SetStyle(ControlStyles.UserPaint, true);
-            this.waterMarkTextEnabled = true;
-            //Triger OnPaint immediatly
-            Refresh();
-        }
-
-        private void DisbaleWaterMark()
-        {
-            //Disbale OnPaint event handler
-            this.waterMarkTextEnabled = false;
-            this.SetStyle(ControlStyles.UserPaint, false);
-            //Return back oldFont if existed
-            if (oldFont != null)
-                this.Font = new System.Drawing.Font(oldFont.FontFamily, oldFont.Size,
-                    oldFont.Style, oldFont.Unit);
-        }
-
-        private void WaterMark_FontChanged(object sender, EventArgs args)
-        {
-            if (waterMarkTextEnabled)
-            {
-                oldFont = new System.Drawing.Font(Font.FontFamily, Font.Size, Font.Style,
-                    Font.Unit);
-                Refresh();
-            }
-        }
+        public DateTime DateAdded { get; set; }
+        public string Type { get; set; }
+        public string Data { get; set; }
+        public string Note { get; set; }
+        public bool Encrypted { get; set; }
     }
-
 } 
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

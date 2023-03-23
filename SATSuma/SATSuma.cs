@@ -6704,6 +6704,45 @@ namespace SATSuma
             }
         }
 
+        private void ListViewFavorites_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewFavorites.Items)
+                {
+                    if (item.Selected)
+                    {
+                        item.ForeColor = Color.White; 
+                        item.SubItems[2].ForeColor = Color.White;
+                        item.SubItems[3].ForeColor = Color.White;
+                        item.SubItems[4].ForeColor = Color.White;
+                        label135.Text = item.SubItems[1].Text;
+                        lblFavoriteDataInFull.Location = new Point(label135.Location.X + label135.Width, label135.Location.Y);
+                        lblFavoriteDataInFull.Text = item.SubItems[3].Text;
+                        lblFavoriteNoteInFull.Text = item.SubItems[4].Text;
+                        //    btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                        //   {
+                        //        btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
+                        //    });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[3].ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[4].ForeColor = Color.FromArgb(255, 153, 0);
+                    }
+                }
+               // btnViewAddressFromTXInput.Visible = anySelected;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewFavorites_ItemSelectionChanged");
+            }
+        }
+
         private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)

@@ -25,6 +25,7 @@
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * validation of node and xpub textboxes
  * xpub help text definitions
+ * transaction screen exceptions on all coinbase transactions (null somewhere)
  */
 
 #region Using
@@ -222,7 +223,7 @@ namespace SATSuma
                     });
                 }
             }
-           
+
             if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh, clear error alert symblol & error message
             {
                 lblAlert.Invoke((MethodInvoker)delegate
@@ -234,7 +235,7 @@ namespace SATSuma
                     lblErrorMessage.Text = "";
                 });
             }
-           
+
         }
 
         private void TimerAPIGroup1_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
@@ -278,7 +279,7 @@ namespace SATSuma
         public async void UpdateAPIGroup1DataFields()
         {
             DisableEnableLoadingAnimation("enable");
-            
+
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
@@ -2741,19 +2742,19 @@ namespace SATSuma
                 DisableEnableLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-                                                   
-                                                   
+
+
                 if (TotalBlockTransactionRowsAdded % 25 == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
                 {
                     TotalBlockTransactionRowsAdded -= 50;
                 }
                 else // otherwise we subtract the odd amount (only happens at end of list) and another 25 to be able to go back to the previous page.
                 {
-                    int closestMultipleOf25 = TotalBlockTransactionRowsAdded - (TotalBlockTransactionRowsAdded % 25); 
+                    int closestMultipleOf25 = TotalBlockTransactionRowsAdded - (TotalBlockTransactionRowsAdded % 25);
                     int firstNumberBeforeIt = closestMultipleOf25 - 25;
                     TotalBlockTransactionRowsAdded = firstNumberBeforeIt;
                 }
-                
+
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
                                                                                                  // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
@@ -2810,7 +2811,7 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-                            item.ForeColor = Color.White; // txID
+                        item.ForeColor = Color.White; // txID
                         btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                         {
                             btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y - 2);
@@ -3036,7 +3037,7 @@ namespace SATSuma
             }
         }
 
-        private async Task GetTransaction(string submittedTransactionID) 
+        private async Task GetTransaction(string submittedTransactionID)
         {
             try
             {
@@ -3154,7 +3155,7 @@ namespace SATSuma
                 {
                     lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 130 - lblTransactionOutputCount.Width, (panelTransactionDiagram.Size.Height / 2) - 15);
                 });
-                
+
                 if (transaction.Vin[0].Is_coinbase == true)
                 {
                     lblCoinbase.Invoke((MethodInvoker)delegate
@@ -3419,7 +3420,7 @@ namespace SATSuma
                 HandleException(ex, "ListViewTransactionInputs_ItemSelectionChanged");
             }
         }
-        
+
         private void ListViewTransactionOutputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -3556,7 +3557,7 @@ namespace SATSuma
         }
 
         // draw all the lines on the transaction diagram from the previously stored list.
-        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e) 
+        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
         {
             Pen pen = new Pen(Color.FromArgb(106, 72, 9));
 
@@ -3934,7 +3935,7 @@ namespace SATSuma
 
         private void TextBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
         {
-            
+
             if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
             {
                 textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -4430,7 +4431,7 @@ namespace SATSuma
 
         private void ListViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-            
+
             var text = e.SubItem.Text;
 
             if (text[0] == '+') // if the string is a change to an amount and positive
@@ -4465,7 +4466,7 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
-            
+
         }
         #endregion
 
@@ -5167,7 +5168,7 @@ namespace SATSuma
             }
         }
 
-      
+
         private bool isAPIURLWatermarkTextDisplayed = true;
 
         private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
@@ -5208,7 +5209,7 @@ namespace SATSuma
                 isAPIURLWatermarkTextDisplayed = false;
             }
         }
-   
+
         private void LblSegwitUsedAddresses_Paint(object sender, PaintEventArgs e)
         {
             lblSegwitUsedAddresses.Location = new Point(label123.Location.X + label123.Width, label123.Location.Y);
@@ -5317,7 +5318,7 @@ namespace SATSuma
                             btnViewAddressFromXpub.Visible = false;
                         }
                         else
-                        { 
+                        {
                             btnViewAddressFromXpub.Visible = true;
                         }
                         btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
@@ -5344,7 +5345,7 @@ namespace SATSuma
         {
             if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
             {
-               // panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+                // panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
             }
 
         }
@@ -5812,7 +5813,7 @@ namespace SATSuma
             {
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 240;
+                    panelMenu.Height = 264;
                 });
             }
             else
@@ -5876,133 +5877,170 @@ namespace SATSuma
 
         private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Invoke((MethodInvoker)delegate
+            try
             {
-                panelMenu.Height = 24;
-            });
-            btnMenuXpub.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = false;
-            btnMenuBlockList.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            btnMenuBlock.Enabled = true;
-            this.DoubleBuffered = true;
-            this.SuspendLayout();
-            panelBlockList.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelBitcoinDashboard.Visible = true;
-            panelXpub.Visible = false;
-            this.ResumeLayout();
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuFavorites.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = false;
+                btnMenuBlockList.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                this.DoubleBuffered = true;
+                this.SuspendLayout();
+                panelFavorites.Visible = false;
+                panelBlockList.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelBlock.Visible = false;
+                panelTransaction.Visible = false;
+                panelBitcoinDashboard.Visible = true;
+                panelXpub.Visible = false;
+                this.ResumeLayout();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuBitcoinDashboard_Click");
+            }
         }
 
         private void BtnMenuLightningDashboard_Click(object sender, EventArgs e)
         {
-            panelMenu.Invoke((MethodInvoker)delegate
+            try
             {
-                panelMenu.Height = 24;
-            });
-            btnMenuXpub.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuBlockList.Enabled = true;
-            btnMenuBlock.Enabled = true;
-            btnMenuLightningDashboard.Enabled = false;
-            this.DoubleBuffered = true;
-            this.SuspendLayout();
-            panelBitcoinDashboard.Visible = false;
-            panelBlockList.Visible = false;
-            panelAddress.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelXpub.Visible = false;
-            panelLightningDashboard.Visible = true;
-            this.ResumeLayout();
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuFavorites.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuLightningDashboard.Enabled = false;
+                this.DoubleBuffered = true;
+                this.SuspendLayout();
+                panelBitcoinDashboard.Visible = false;
+                panelFavorites.Visible = false;
+                panelBlockList.Visible = false;
+                panelAddress.Visible = false;
+                panelBlock.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelLightningDashboard.Visible = true;
+                this.ResumeLayout();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuLightningDashboard_Click");
+            }
         }
 
         private void BtnMenuAddress_Click(object sender, EventArgs e)
         {
-            panelMenu.Invoke((MethodInvoker)delegate
+            try
             {
-                panelMenu.Height = 24;
-            });
-            btnMenuXpub.Enabled = true;
-            btnMenuAddress.Enabled = false;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBlockList.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuBlock.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBitcoinDashboard.Visible = false;
-            panelBlockList.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelXpub.Visible = false;
-            panelAddress.Visible = true;
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuAddress.Enabled = false;
+                btnMenuTransaction.Enabled = true;
+                btnMenuFavorites.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBitcoinDashboard.Visible = false;
+                panelBlockList.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelFavorites.Visible = false;
+                panelBlock.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelAddress.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuAddress_Click");
+            }
         }
 
         private void BtnMenuBlock_Click(object sender, EventArgs e)
         {
-            panelMenu.Invoke((MethodInvoker)delegate
+            try
             {
-                panelMenu.Height = 24;
-            });
-            btnMenuXpub.Enabled = true;
-            btnMenuBlock.Enabled = false;
-            btnMenuTransaction.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuBlockList.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBlockList.Visible = false;
-            panelBitcoinDashboard.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelTransaction.Visible = false;
-            panelXpub.Visible = false;
-            panelBlock.Visible = true;
-            if (textBoxSubmittedBlockNumber.Text == "")
-            {
-                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                    panelMenu.Height = 24;
                 });
-                LookupBlock(); // fetch all the block data automatically for the initial view. 
+                btnMenuXpub.Enabled = true;
+                btnMenuBlock.Enabled = false;
+                btnMenuFavorites.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelFavorites.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelBlock.Visible = true;
+                if (textBoxSubmittedBlockNumber.Text == "")
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                    });
+                    LookupBlock(); // fetch all the block data automatically for the initial view. 
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuBlock_Click");
             }
         }
 
         private void BtnMenuXpub_Click(object sender, EventArgs e)
         {
-            panelMenu.Invoke((MethodInvoker)delegate
+            try
             {
-                panelMenu.Height = 24;
-            });
-            btnMenuXpub.Enabled = false;
-            btnMenuBlock.Enabled = true;
-            btnMenuTransaction.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuBlockList.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            panelBlockList.Visible = false;
-            panelBitcoinDashboard.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelAddress.Visible = false;
-            panelTransaction.Visible = false;
-            panelBlock.Visible = false;
-            panelXpub.Visible = true;
-            if (textBoxSubmittedBlockNumber.Text == "")
-            {
-                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                    panelMenu.Height = 24;
                 });
-                LookupBlock(); // fetch all the block data automatically for the initial view. 
+                btnMenuXpub.Enabled = false;
+                btnMenuBlock.Enabled = true;
+                btnMenuFavorites.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelFavorites.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelBlock.Visible = false;
+                panelXpub.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuXpub_Click");
             }
         }
 
@@ -6017,12 +6055,14 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuTransaction.Enabled = true;
+                btnMenuFavorites.Enabled = true;
                 btnMenuBlock.Enabled = false;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
+                panelFavorites.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
@@ -6052,8 +6092,9 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
-
+                btnMenuFavorites.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
+                panelFavorites.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
@@ -6066,11 +6107,11 @@ namespace SATSuma
                     {
                         textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
                     });
-                   // DisableEnableLoadingAnimation("enable"); // start the loading animation
-                   // DisableEnableButtons("disable"); // disable buttons during operation
+                    // DisableEnableLoadingAnimation("enable"); // start the loading animation
+                    // DisableEnableButtons("disable"); // disable buttons during operation
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
-                   // DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                   // DisableEnableButtons("enable"); // enable buttons after operation is complete
+                                       // DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                                       // DisableEnableButtons("enable"); // enable buttons after operation is complete
 
 
 
@@ -6096,27 +6137,55 @@ namespace SATSuma
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuFavorites.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
+                panelFavorites.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlockList.Visible = false;
                 panelXpub.Visible = false;
                 panelTransaction.Visible = true;
-                if (textBoxBlockHeightToStartListFrom.Text == "")
-                {
-                    textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
-                    });
-                    LookupBlockList(); // fetch the first 15 blocks automatically for the initial view. 
-                }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BtnMenuTransaction_Click");
+            }
+        }
+
+        private void BtnMenuFavorites_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuFavorites.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                btnMenuFavorites.Enabled = false;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelFavorites.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelBlock.Visible = false;
+                panelFavorites.Visible = true;
+                SetupFavoritesScreen();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuFavorites_Click");
             }
         }
 
@@ -6194,7 +6263,7 @@ namespace SATSuma
                     _blockService = new BlockDataService(NodeURL);
                     _transactionService = new TransactionService(NodeURL);
                     _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-    }
+                }
                 CheckBlockchainExplorerApiStatus();
 
                 if (APIGroup1DisplayTimerIntervalSecsConstant != (SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
@@ -6317,6 +6386,7 @@ namespace SATSuma
 
         #endregion
 
+        #region ADD TO FAVORITES
         //==============================================================================================================
         //---------------------- ADD TO FAVOURITES ---------------------------------------------------------------------
         private void BtnAddToFavorites_Click(object sender, EventArgs e)
@@ -6341,8 +6411,8 @@ namespace SATSuma
 
         private void PanelAddToFaves_Paint(object sender, PaintEventArgs e)
         {
-            
-            
+
+
             if (panelAddress.Visible)
             {
                 lblFaveProposalType.Text = "address";
@@ -6384,7 +6454,7 @@ namespace SATSuma
             }
 
             // Create a new favorite object for the block with ID "123456"
-            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted};
+            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted };
 
             // Read the existing favorites from the JSON file
             var favorites = ReadFavoritesFromJsonFile();
@@ -6515,6 +6585,253 @@ namespace SATSuma
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
+        #endregion
+
+        #region FAVORITES STUFF
+        private void SetupFavoritesScreen()
+        {
+            try
+            {
+                var favorites = ReadFavoritesFromJsonFile();
+
+                //LIST VIEW
+                listViewFavorites.Invoke((MethodInvoker)delegate
+                {
+                    listViewFavorites.Items.Clear(); // remove any data that may be there already
+                });
+                listViewFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewFavorites, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewFavorites.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add(" Date added", 100);
+                    });
+                }
+
+                if (listViewFavorites.Columns.Count == 1)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Type", 95);
+                    });
+                }
+
+                if (listViewFavorites.Columns.Count == 2)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("", 20);
+                    });
+                }
+                if (listViewFavorites.Columns.Count == 3)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Favorite", 233);
+                    });
+                }
+                if (listViewFavorites.Columns.Count == 4)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Note", 600);
+                    });
+                }
+                // Add the items to the ListView
+                int counterAllFavorites = 0; // used to count rows in list as they're added
+                int counterBlocks = 0;
+                int counterAddresses = 0;
+                int counterXpubs = 0;
+                int counterTransactions = 0;
+
+                foreach (var favorite in favorites)
+                {
+                    ListViewItem item = new ListViewItem(Convert.ToString(favorite.DateAdded)); // create new row
+                    item.SubItems.Add(favorite.Type);
+                    if (favorite.Encrypted == true)
+                    {
+                        item.SubItems.Add("🔒");
+                    }
+                    else
+                    {
+                        item.SubItems.Add("");
+                    }
+                    item.SubItems.Add(favorite.Data);
+                    item.SubItems.Add(favorite.Note);
+
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Items.Add(item); // add row
+                    });
+
+                    if (favorite.Type == "block")
+                    {
+                        counterBlocks++;
+                    }
+                    if (favorite.Type == "address")
+                    {
+                        counterAddresses++;
+                    }
+                    if (favorite.Type == "xpub")
+                    {
+                        counterXpubs++;
+                    }
+                    if (favorite.Type == "transaction")
+                    {
+                        counterTransactions++;
+                    }
+                    counterAllFavorites++;
+                }
+                lblFaveAddressCount.Text = counterAddresses.ToString();
+                lblFaveBlocksCount.Text = counterBlocks.ToString();
+                lblFaveTransactionsCount.Text = counterTransactions.ToString();
+                lblFaveXpubsCount.Text = counterXpubs.ToString();
+                lblFaveTotalCount.Text = counterAllFavorites.ToString();
+
+                lblFaveTotalCount.Location = new Point(label144.Location.X + label144.Width, label144.Location.Y);
+                label134.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetTransactionsForBlocks");
+            }
+        }
+
+        private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 150) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 150;
+                }
+
+//                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+//                {
+//                    btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - 6, btnViewAddressFromXpub.Location.Y);
+//                });
+            }
+
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 95;
+                }
+            }
+
+
+            if (e.ColumnIndex == 2)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 20;
+                }
+            }
+
+            if (e.ColumnIndex == 3)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 400) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 400;
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 600) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 600;
+                }
+            }
+        }
+
+        private void ListViewFavorites_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (e.ColumnIndex == 1)
+            {
+                if (text == "address")
+                {
+                    e.SubItem.ForeColor = Color.DarkSlateBlue;
+                }
+                if (text == "block")
+                {
+                    e.SubItem.ForeColor = Color.PaleVioletRed;
+                }
+                if (text == "transaction")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab;
+                }
+                if (text == "xpub")
+                {
+                    e.SubItem.ForeColor = Color.Peru;
+                }
+            }
+            if (e.ColumnIndex == 2)
+            {
+                if (text == "")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.IndianRed;
+                }
+
+            }
+            var font = listViewFavorites.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
+        #endregion
+
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================

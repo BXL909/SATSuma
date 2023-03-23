@@ -283,6 +283,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label73 = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.btnMenuFavorites = new System.Windows.Forms.Button();
             this.btnMenuXpub = new System.Windows.Forms.Button();
             this.btnMenuTransaction = new System.Windows.Forms.Button();
             this.btnMenuBlockList = new System.Windows.Forms.Button();
@@ -440,13 +441,14 @@
             this.XpubScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.btnAddToFavorites = new System.Windows.Forms.Button();
             this.panelAddToFaves = new System.Windows.Forms.Panel();
+            this.panel31 = new System.Windows.Forms.Panel();
+            this.label131 = new System.Windows.Forms.Label();
+            this.lblFaveProposalType = new System.Windows.Forms.Label();
+            this.lblFaveProposalData = new System.Windows.Forms.Label();
             this.textBoxFaveEncryptionKey = new System.Windows.Forms.TextBox();
             this.textBoxFaveProposedNote = new System.Windows.Forms.TextBox();
-            this.label131 = new System.Windows.Forms.Label();
             this.btnCancelAddToFaves = new System.Windows.Forms.Button();
             this.btnCommitToFavorites = new System.Windows.Forms.Button();
-            this.lblFaveProposalData = new System.Windows.Forms.Label();
-            this.lblFaveProposalType = new System.Windows.Forms.Label();
             this.panelFees = new System.Windows.Forms.Panel();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -457,28 +459,25 @@
             this.lblFees60Mins = new System.Windows.Forms.Label();
             this.lblfeesNextBlock = new System.Windows.Forms.Label();
             this.lblFees30Mins = new System.Windows.Forms.Label();
-            this.panel31 = new System.Windows.Forms.Panel();
             this.panelFavorites = new System.Windows.Forms.Panel();
             this.panel33 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel34 = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.lblFaveBlocksCount = new System.Windows.Forms.Label();
-            this.lblFaveTransactionsCount = new System.Windows.Forms.Label();
-            this.lblFaveAddressCount = new System.Windows.Forms.Label();
-            this.panel35 = new System.Windows.Forms.Panel();
-            this.label139 = new System.Windows.Forms.Label();
-            this.label142 = new System.Windows.Forms.Label();
-            this.lblFaveXpubsCount = new System.Windows.Forms.Label();
+            this.listViewFavorites = new System.Windows.Forms.ListView();
             this.panel36 = new System.Windows.Forms.Panel();
             this.label144 = new System.Windows.Forms.Label();
-            this.label147 = new System.Windows.Forms.Label();
-            this.panel37 = new System.Windows.Forms.Panel();
-            this.label149 = new System.Windows.Forms.Label();
-            this.label151 = new System.Windows.Forms.Label();
             this.label153 = new System.Windows.Forms.Label();
+            this.lblFaveBlocksCount = new System.Windows.Forms.Label();
+            this.label151 = new System.Windows.Forms.Label();
+            this.lblFaveTransactionsCount = new System.Windows.Forms.Label();
+            this.label147 = new System.Windows.Forms.Label();
+            this.lblFaveAddressCount = new System.Windows.Forms.Label();
+            this.lblFaveXpubsCount = new System.Windows.Forms.Label();
+            this.label142 = new System.Windows.Forms.Label();
+            this.lblFaveTotalCount = new System.Windows.Forms.Label();
+            this.label134 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -520,14 +519,12 @@
             this.panel26.SuspendLayout();
             this.panel23.SuspendLayout();
             this.panelAddToFaves.SuspendLayout();
-            this.panelFees.SuspendLayout();
             this.panel31.SuspendLayout();
+            this.panelFees.SuspendLayout();
             this.panelFavorites.SuspendLayout();
             this.panel33.SuspendLayout();
             this.panel34.SuspendLayout();
-            this.panel35.SuspendLayout();
             this.panel36.SuspendLayout();
-            this.panel37.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -3930,6 +3927,7 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.panelMenu.Controls.Add(this.btnMenuFavorites);
             this.panelMenu.Controls.Add(this.btnMenuXpub);
             this.panelMenu.Controls.Add(this.btnMenuTransaction);
             this.panelMenu.Controls.Add(this.btnMenuBlockList);
@@ -3944,6 +3942,26 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(144, 24);
             this.panelMenu.TabIndex = 152;
+            // 
+            // btnMenuFavorites
+            // 
+            this.btnMenuFavorites.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuFavorites.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuFavorites.FlatAppearance.BorderSize = 0;
+            this.btnMenuFavorites.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuFavorites.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuFavorites.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuFavorites.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuFavorites.ForeColor = System.Drawing.Color.White;
+            this.btnMenuFavorites.Location = new System.Drawing.Point(0, 192);
+            this.btnMenuFavorites.Name = "btnMenuFavorites";
+            this.btnMenuFavorites.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuFavorites.TabIndex = 157;
+            this.btnMenuFavorites.TabStop = false;
+            this.btnMenuFavorites.Text = "favorites";
+            this.btnMenuFavorites.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuFavorites.UseVisualStyleBackColor = false;
+            this.btnMenuFavorites.Click += new System.EventHandler(this.BtnMenuFavorites_Click);
             // 
             // btnMenuXpub
             // 
@@ -4043,7 +4061,7 @@
             this.btnMenuSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSettings.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSettings.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSettings.Location = new System.Drawing.Point(0, 192);
+            this.btnMenuSettings.Location = new System.Drawing.Point(0, 216);
             this.btnMenuSettings.Name = "btnMenuSettings";
             this.btnMenuSettings.Size = new System.Drawing.Size(144, 24);
             this.btnMenuSettings.TabIndex = 152;
@@ -4063,7 +4081,7 @@
             this.btnMenuSplash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSplash.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSplash.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSplash.Location = new System.Drawing.Point(0, 216);
+            this.btnMenuSplash.Location = new System.Drawing.Point(0, 240);
             this.btnMenuSplash.Name = "btnMenuSplash";
             this.btnMenuSplash.Size = new System.Drawing.Size(144, 24);
             this.btnMenuSplash.TabIndex = 151;
@@ -6177,6 +6195,61 @@
             this.panelAddToFaves.Visible = false;
             this.panelAddToFaves.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelAddToFaves_Paint);
             // 
+            // panel31
+            // 
+            this.panel31.BackColor = System.Drawing.Color.Transparent;
+            this.panel31.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel31.BackgroundImage")));
+            this.panel31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel31.Controls.Add(this.label131);
+            this.panel31.Controls.Add(this.lblFaveProposalType);
+            this.panel31.Controls.Add(this.lblFaveProposalData);
+            this.panel31.Location = new System.Drawing.Point(9, 0);
+            this.panel31.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel31.Name = "panel31";
+            this.panel31.Size = new System.Drawing.Size(252, 23);
+            this.panel31.TabIndex = 200;
+            // 
+            // label131
+            // 
+            this.label131.AutoEllipsis = true;
+            this.label131.AutoSize = true;
+            this.label131.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label131.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label131.ForeColor = System.Drawing.Color.Silver;
+            this.label131.Location = new System.Drawing.Point(0, 0);
+            this.label131.Margin = new System.Windows.Forms.Padding(0);
+            this.label131.Name = "label131";
+            this.label131.Size = new System.Drawing.Size(40, 20);
+            this.label131.TabIndex = 161;
+            this.label131.Text = "Add";
+            // 
+            // lblFaveProposalType
+            // 
+            this.lblFaveProposalType.AutoEllipsis = true;
+            this.lblFaveProposalType.AutoSize = true;
+            this.lblFaveProposalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveProposalType.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveProposalType.ForeColor = System.Drawing.Color.Silver;
+            this.lblFaveProposalType.Location = new System.Drawing.Point(35, 0);
+            this.lblFaveProposalType.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFaveProposalType.Name = "lblFaveProposalType";
+            this.lblFaveProposalType.Size = new System.Drawing.Size(42, 20);
+            this.lblFaveProposalType.TabIndex = 48;
+            this.lblFaveProposalType.Text = "type";
+            // 
+            // lblFaveProposalData
+            // 
+            this.lblFaveProposalData.AutoEllipsis = true;
+            this.lblFaveProposalData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveProposalData.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveProposalData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblFaveProposalData.Location = new System.Drawing.Point(78, 0);
+            this.lblFaveProposalData.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFaveProposalData.Name = "lblFaveProposalData";
+            this.lblFaveProposalData.Size = new System.Drawing.Size(44, 20);
+            this.lblFaveProposalData.TabIndex = 51;
+            this.lblFaveProposalData.Text = "data";
+            // 
             // textBoxFaveEncryptionKey
             // 
             this.textBoxFaveEncryptionKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -6208,20 +6281,6 @@
             this.textBoxFaveProposedNote.Enter += new System.EventHandler(this.TextBoxFaveProposedNote_Enter);
             this.textBoxFaveProposedNote.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxFaveProposedNote_KeyPress);
             this.textBoxFaveProposedNote.Leave += new System.EventHandler(this.TextBoxFaveProposedNote_Leave);
-            // 
-            // label131
-            // 
-            this.label131.AutoEllipsis = true;
-            this.label131.AutoSize = true;
-            this.label131.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label131.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label131.ForeColor = System.Drawing.Color.Silver;
-            this.label131.Location = new System.Drawing.Point(0, 0);
-            this.label131.Margin = new System.Windows.Forms.Padding(0);
-            this.label131.Name = "label131";
-            this.label131.Size = new System.Drawing.Size(40, 20);
-            this.label131.TabIndex = 161;
-            this.label131.Text = "Add";
             // 
             // btnCancelAddToFaves
             // 
@@ -6260,33 +6319,6 @@
             this.btnCommitToFavorites.Text = "➕ add";
             this.btnCommitToFavorites.UseVisualStyleBackColor = false;
             this.btnCommitToFavorites.Click += new System.EventHandler(this.BtnCommitToFavorites_Click);
-            // 
-            // lblFaveProposalData
-            // 
-            this.lblFaveProposalData.AutoEllipsis = true;
-            this.lblFaveProposalData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveProposalData.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveProposalData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFaveProposalData.Location = new System.Drawing.Point(78, 0);
-            this.lblFaveProposalData.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFaveProposalData.Name = "lblFaveProposalData";
-            this.lblFaveProposalData.Size = new System.Drawing.Size(44, 20);
-            this.lblFaveProposalData.TabIndex = 51;
-            this.lblFaveProposalData.Text = "data";
-            // 
-            // lblFaveProposalType
-            // 
-            this.lblFaveProposalType.AutoEllipsis = true;
-            this.lblFaveProposalType.AutoSize = true;
-            this.lblFaveProposalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveProposalType.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveProposalType.ForeColor = System.Drawing.Color.Silver;
-            this.lblFaveProposalType.Location = new System.Drawing.Point(35, 0);
-            this.lblFaveProposalType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFaveProposalType.Name = "lblFaveProposalType";
-            this.lblFaveProposalType.Size = new System.Drawing.Size(42, 20);
-            this.lblFaveProposalType.TabIndex = 48;
-            this.lblFaveProposalType.Text = "type";
             // 
             // panelFees
             // 
@@ -6414,28 +6446,12 @@
             this.lblFees30Mins.TabIndex = 75;
             this.lblFees30Mins.Text = "?";
             // 
-            // panel31
-            // 
-            this.panel31.BackColor = System.Drawing.Color.Transparent;
-            this.panel31.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel31.BackgroundImage")));
-            this.panel31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel31.Controls.Add(this.label131);
-            this.panel31.Controls.Add(this.lblFaveProposalType);
-            this.panel31.Controls.Add(this.lblFaveProposalData);
-            this.panel31.Location = new System.Drawing.Point(9, 0);
-            this.panel31.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel31.Name = "panel31";
-            this.panel31.Size = new System.Drawing.Size(252, 23);
-            this.panel31.TabIndex = 200;
-            // 
             // panelFavorites
             // 
             this.panelFavorites.BackColor = System.Drawing.Color.Transparent;
             this.panelFavorites.Controls.Add(this.panel33);
             this.panelFavorites.Controls.Add(this.panel34);
-            this.panelFavorites.Controls.Add(this.panel35);
             this.panelFavorites.Controls.Add(this.panel36);
-            this.panelFavorites.Controls.Add(this.panel37);
             this.panelFavorites.Location = new System.Drawing.Point(21, 188);
             this.panelFavorites.Name = "panelFavorites";
             this.panelFavorites.Size = new System.Drawing.Size(773, 556);
@@ -6447,7 +6463,7 @@
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel33.Controls.Add(this.button1);
             this.panel33.Controls.Add(this.button2);
-            this.panel33.Location = new System.Drawing.Point(713, 77);
+            this.panel33.Location = new System.Drawing.Point(716, 35);
             this.panel33.Name = "panel33";
             this.panel33.Size = new System.Drawing.Size(37, 456);
             this.panel33.TabIndex = 214;
@@ -6494,10 +6510,10 @@
             // 
             this.panel34.AutoScroll = true;
             this.panel34.Controls.Add(this.button3);
-            this.panel34.Controls.Add(this.listView1);
-            this.panel34.Location = new System.Drawing.Point(250, 87);
+            this.panel34.Controls.Add(this.listViewFavorites);
+            this.panel34.Location = new System.Drawing.Point(0, 40);
             this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(500, 446);
+            this.panel34.Size = new System.Drawing.Size(750, 446);
             this.panel34.TabIndex = 213;
             // 
             // button3
@@ -6519,118 +6535,41 @@
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Visible = false;
             // 
-            // listView1
+            // listViewFavorites
             // 
-            this.listView1.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.HideSelection = false;
-            this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Margin = new System.Windows.Forms.Padding(0);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.OwnerDraw = true;
-            this.listView1.Scrollable = false;
-            this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(466, 438);
-            this.listView1.SmallImageList = this.imageListUpDownArrows;
-            this.listView1.TabIndex = 164;
-            this.listView1.TabStop = false;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // lblFaveBlocksCount
-            // 
-            this.lblFaveBlocksCount.AutoSize = true;
-            this.lblFaveBlocksCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveBlocksCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveBlocksCount.Location = new System.Drawing.Point(529, 2);
-            this.lblFaveBlocksCount.Name = "lblFaveBlocksCount";
-            this.lblFaveBlocksCount.Size = new System.Drawing.Size(16, 18);
-            this.lblFaveBlocksCount.TabIndex = 213;
-            this.lblFaveBlocksCount.Text = "0";
-            // 
-            // lblFaveTransactionsCount
-            // 
-            this.lblFaveTransactionsCount.AutoSize = true;
-            this.lblFaveTransactionsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveTransactionsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveTransactionsCount.Location = new System.Drawing.Point(593, 2);
-            this.lblFaveTransactionsCount.Name = "lblFaveTransactionsCount";
-            this.lblFaveTransactionsCount.Size = new System.Drawing.Size(16, 18);
-            this.lblFaveTransactionsCount.TabIndex = 212;
-            this.lblFaveTransactionsCount.Text = "0";
-            // 
-            // lblFaveAddressCount
-            // 
-            this.lblFaveAddressCount.AutoSize = true;
-            this.lblFaveAddressCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveAddressCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveAddressCount.Location = new System.Drawing.Point(441, 3);
-            this.lblFaveAddressCount.Name = "lblFaveAddressCount";
-            this.lblFaveAddressCount.Size = new System.Drawing.Size(16, 18);
-            this.lblFaveAddressCount.TabIndex = 211;
-            this.lblFaveAddressCount.Text = "0";
-            // 
-            // panel35
-            // 
-            this.panel35.BackColor = System.Drawing.Color.Transparent;
-            this.panel35.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel35.BackgroundImage")));
-            this.panel35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel35.Controls.Add(this.label139);
-            this.panel35.Location = new System.Drawing.Point(5, 182);
-            this.panel35.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel35.Name = "panel35";
-            this.panel35.Size = new System.Drawing.Size(242, 23);
-            this.panel35.TabIndex = 206;
-            // 
-            // label139
-            // 
-            this.label139.AutoSize = true;
-            this.label139.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label139.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label139.ForeColor = System.Drawing.Color.Silver;
-            this.label139.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label139.Location = new System.Drawing.Point(3, 2);
-            this.label139.Name = "label139";
-            this.label139.Size = new System.Drawing.Size(47, 17);
-            this.label139.TabIndex = 153;
-            this.label139.Text = "Blocks";
-            // 
-            // label142
-            // 
-            this.label142.AutoSize = true;
-            this.label142.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label142.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.label142.ForeColor = System.Drawing.Color.Silver;
-            this.label142.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label142.Location = new System.Drawing.Point(702, 4);
-            this.label142.Name = "label142";
-            this.label142.Size = new System.Drawing.Size(47, 17);
-            this.label142.TabIndex = 203;
-            this.label142.Text = "Xpubs";
-            // 
-            // lblFaveXpubsCount
-            // 
-            this.lblFaveXpubsCount.AutoSize = true;
-            this.lblFaveXpubsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFaveXpubsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFaveXpubsCount.Location = new System.Drawing.Point(691, 2);
-            this.lblFaveXpubsCount.Name = "lblFaveXpubsCount";
-            this.lblFaveXpubsCount.Size = new System.Drawing.Size(16, 18);
-            this.lblFaveXpubsCount.TabIndex = 202;
-            this.lblFaveXpubsCount.Text = "0";
+            this.listViewFavorites.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewFavorites.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewFavorites.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewFavorites.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewFavorites.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewFavorites.FullRowSelect = true;
+            this.listViewFavorites.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewFavorites.HideSelection = false;
+            this.listViewFavorites.LabelWrap = false;
+            this.listViewFavorites.Location = new System.Drawing.Point(0, 11);
+            this.listViewFavorites.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewFavorites.MultiSelect = false;
+            this.listViewFavorites.Name = "listViewFavorites";
+            this.listViewFavorites.OwnerDraw = true;
+            this.listViewFavorites.Scrollable = false;
+            this.listViewFavorites.ShowGroups = false;
+            this.listViewFavorites.Size = new System.Drawing.Size(703, 438);
+            this.listViewFavorites.SmallImageList = this.imageListUpDownArrows;
+            this.listViewFavorites.TabIndex = 164;
+            this.listViewFavorites.TabStop = false;
+            this.listViewFavorites.UseCompatibleStateImageBehavior = false;
+            this.listViewFavorites.View = System.Windows.Forms.View.Details;
+            this.listViewFavorites.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewFavorites_ColumnWidthChanging);
+            this.listViewFavorites.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewFavorites.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewFavorites_DrawSubItem);
             // 
             // panel36
             // 
             this.panel36.BackColor = System.Drawing.Color.Transparent;
             this.panel36.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel36.BackgroundImage")));
             this.panel36.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel36.Controls.Add(this.label134);
+            this.panel36.Controls.Add(this.lblFaveTotalCount);
             this.panel36.Controls.Add(this.label144);
             this.panel36.Controls.Add(this.label153);
             this.panel36.Controls.Add(this.lblFaveBlocksCount);
@@ -6654,61 +6593,11 @@
             this.label144.ForeColor = System.Drawing.Color.Silver;
             this.label144.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label144.Location = new System.Drawing.Point(3, 2);
+            this.label144.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label144.Name = "label144";
-            this.label144.Size = new System.Drawing.Size(75, 20);
+            this.label144.Size = new System.Drawing.Size(84, 20);
             this.label144.TabIndex = 153;
-            this.label144.Text = "Favorites";
-            // 
-            // label147
-            // 
-            this.label147.AutoSize = true;
-            this.label147.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label147.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.label147.ForeColor = System.Drawing.Color.Silver;
-            this.label147.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label147.Location = new System.Drawing.Point(608, 4);
-            this.label147.Name = "label147";
-            this.label147.Size = new System.Drawing.Size(86, 17);
-            this.label147.TabIndex = 200;
-            this.label147.Text = "Transactions";
-            // 
-            // panel37
-            // 
-            this.panel37.BackColor = System.Drawing.Color.Transparent;
-            this.panel37.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel37.BackgroundImage")));
-            this.panel37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel37.Controls.Add(this.label149);
-            this.panel37.Location = new System.Drawing.Point(2, 32);
-            this.panel37.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(242, 23);
-            this.panel37.TabIndex = 198;
-            // 
-            // label149
-            // 
-            this.label149.AutoSize = true;
-            this.label149.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label149.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label149.ForeColor = System.Drawing.Color.Silver;
-            this.label149.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label149.Location = new System.Drawing.Point(3, 2);
-            this.label149.Name = "label149";
-            this.label149.Size = new System.Drawing.Size(70, 17);
-            this.label149.TabIndex = 153;
-            this.label149.Text = "Addresses";
-            // 
-            // label151
-            // 
-            this.label151.AutoSize = true;
-            this.label151.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label151.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.label151.ForeColor = System.Drawing.Color.Silver;
-            this.label151.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label151.Location = new System.Drawing.Point(546, 3);
-            this.label151.Name = "label151";
-            this.label151.Size = new System.Drawing.Size(47, 17);
-            this.label151.TabIndex = 167;
-            this.label151.Text = "Blocks";
+            this.label144.Text = "Favorites (";
             // 
             // label153
             // 
@@ -6723,6 +6612,116 @@
             this.label153.TabIndex = 153;
             this.label153.Text = "Addresses";
             // 
+            // lblFaveBlocksCount
+            // 
+            this.lblFaveBlocksCount.AutoSize = true;
+            this.lblFaveBlocksCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveBlocksCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveBlocksCount.Location = new System.Drawing.Point(529, 2);
+            this.lblFaveBlocksCount.Name = "lblFaveBlocksCount";
+            this.lblFaveBlocksCount.Size = new System.Drawing.Size(16, 18);
+            this.lblFaveBlocksCount.TabIndex = 213;
+            this.lblFaveBlocksCount.Text = "0";
+            // 
+            // label151
+            // 
+            this.label151.AutoSize = true;
+            this.label151.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label151.Font = new System.Drawing.Font("Century Gothic", 7.8F);
+            this.label151.ForeColor = System.Drawing.Color.Silver;
+            this.label151.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label151.Location = new System.Drawing.Point(546, 3);
+            this.label151.Name = "label151";
+            this.label151.Size = new System.Drawing.Size(47, 17);
+            this.label151.TabIndex = 167;
+            this.label151.Text = "Blocks";
+            // 
+            // lblFaveTransactionsCount
+            // 
+            this.lblFaveTransactionsCount.AutoSize = true;
+            this.lblFaveTransactionsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveTransactionsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveTransactionsCount.Location = new System.Drawing.Point(593, 2);
+            this.lblFaveTransactionsCount.Name = "lblFaveTransactionsCount";
+            this.lblFaveTransactionsCount.Size = new System.Drawing.Size(16, 18);
+            this.lblFaveTransactionsCount.TabIndex = 212;
+            this.lblFaveTransactionsCount.Text = "0";
+            // 
+            // label147
+            // 
+            this.label147.AutoSize = true;
+            this.label147.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label147.Font = new System.Drawing.Font("Century Gothic", 7.8F);
+            this.label147.ForeColor = System.Drawing.Color.Silver;
+            this.label147.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label147.Location = new System.Drawing.Point(608, 4);
+            this.label147.Name = "label147";
+            this.label147.Size = new System.Drawing.Size(86, 17);
+            this.label147.TabIndex = 200;
+            this.label147.Text = "Transactions";
+            // 
+            // lblFaveAddressCount
+            // 
+            this.lblFaveAddressCount.AutoSize = true;
+            this.lblFaveAddressCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveAddressCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveAddressCount.Location = new System.Drawing.Point(441, 3);
+            this.lblFaveAddressCount.Name = "lblFaveAddressCount";
+            this.lblFaveAddressCount.Size = new System.Drawing.Size(16, 18);
+            this.lblFaveAddressCount.TabIndex = 211;
+            this.lblFaveAddressCount.Text = "0";
+            // 
+            // lblFaveXpubsCount
+            // 
+            this.lblFaveXpubsCount.AutoSize = true;
+            this.lblFaveXpubsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveXpubsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveXpubsCount.Location = new System.Drawing.Point(691, 2);
+            this.lblFaveXpubsCount.Name = "lblFaveXpubsCount";
+            this.lblFaveXpubsCount.Size = new System.Drawing.Size(16, 18);
+            this.lblFaveXpubsCount.TabIndex = 202;
+            this.lblFaveXpubsCount.Text = "0";
+            // 
+            // label142
+            // 
+            this.label142.AutoSize = true;
+            this.label142.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label142.Font = new System.Drawing.Font("Century Gothic", 7.8F);
+            this.label142.ForeColor = System.Drawing.Color.Silver;
+            this.label142.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label142.Location = new System.Drawing.Point(702, 4);
+            this.label142.Name = "label142";
+            this.label142.Size = new System.Drawing.Size(47, 17);
+            this.label142.TabIndex = 203;
+            this.label142.Text = "Xpubs";
+            // 
+            // lblFaveTotalCount
+            // 
+            this.lblFaveTotalCount.AutoSize = true;
+            this.lblFaveTotalCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFaveTotalCount.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFaveTotalCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblFaveTotalCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblFaveTotalCount.Location = new System.Drawing.Point(90, 2);
+            this.lblFaveTotalCount.Name = "lblFaveTotalCount";
+            this.lblFaveTotalCount.Size = new System.Drawing.Size(17, 20);
+            this.lblFaveTotalCount.TabIndex = 214;
+            this.lblFaveTotalCount.Text = "0";
+            // 
+            // label134
+            // 
+            this.label134.AutoSize = true;
+            this.label134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label134.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label134.ForeColor = System.Drawing.Color.Silver;
+            this.label134.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label134.Location = new System.Drawing.Point(108, 2);
+            this.label134.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label134.Name = "label134";
+            this.label134.Size = new System.Drawing.Size(14, 20);
+            this.label134.TabIndex = 215;
+            this.label134.Text = ")";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -6732,12 +6731,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelFavorites);
             this.Controls.Add(this.panelAddToFaves);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.btnAddToFavorites);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
@@ -6843,19 +6842,15 @@
             this.panel23.PerformLayout();
             this.panelAddToFaves.ResumeLayout(false);
             this.panelAddToFaves.PerformLayout();
-            this.panelFees.ResumeLayout(false);
-            this.panelFees.PerformLayout();
             this.panel31.ResumeLayout(false);
             this.panel31.PerformLayout();
+            this.panelFees.ResumeLayout(false);
+            this.panelFees.PerformLayout();
             this.panelFavorites.ResumeLayout(false);
             this.panel33.ResumeLayout(false);
             this.panel34.ResumeLayout(false);
-            this.panel35.ResumeLayout(false);
-            this.panel35.PerformLayout();
             this.panel36.ResumeLayout(false);
             this.panel36.PerformLayout();
-            this.panel37.ResumeLayout(false);
-            this.panel37.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7297,9 +7292,7 @@
         private System.Windows.Forms.Button button2;
         public System.Windows.Forms.Panel panel34;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Panel panel35;
-        private System.Windows.Forms.Label label139;
+        private System.Windows.Forms.ListView listViewFavorites;
         private System.Windows.Forms.Panel panel36;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Label label153;
@@ -7310,8 +7303,9 @@
         private System.Windows.Forms.Label lblFaveAddressCount;
         private System.Windows.Forms.Label lblFaveXpubsCount;
         private System.Windows.Forms.Label label142;
-        private System.Windows.Forms.Panel panel37;
-        private System.Windows.Forms.Label label149;
+        private System.Windows.Forms.Button btnMenuFavorites;
+        private System.Windows.Forms.Label label134;
+        private System.Windows.Forms.Label lblFaveTotalCount;
     }
 }
 

@@ -17,7 +17,6 @@
  * Stuff to do:
  * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * support testnet
- * bookmarks
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
@@ -27,8 +26,9 @@
  * xpub help text definitions
  * disable add to faves button when (e.g transaction screen) is yet to be populated
  * help text for favorites screen/add to faves tab
- * move orange text in block list details panel next to title labels
- * set height of buttons on listview rows to be same as height of listview row
+ * encryption of favorites
+ * sorting of favorites
+ * provide feedback/response after adding a favorite
  */
 
 #region Using
@@ -2163,11 +2163,13 @@ namespace SATSuma
                     anySelected = true;
                     BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                     {
-                        BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                        BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y);
+                        BtnViewTransactionFromAddress.Height = item.Bounds.Height;
                     });
                     BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
                     {
-                        BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y - 2);
+                        BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y);
+                        BtnViewBlockFromAddress.Height = item.Bounds.Height;
                     });
                 }
                 else
@@ -2832,7 +2834,8 @@ namespace SATSuma
                         item.ForeColor = Color.White; // txID
                         btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                         {
-                            btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y - 2);
+                            btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y);
+                            btnViewTransactionFromBlock.Height = item.Bounds.Height;
                         });
                         anySelected = true;
                     }
@@ -3455,7 +3458,8 @@ namespace SATSuma
                         item.ForeColor = Color.White; // address
                         btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                         {
-                            btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
+                            btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y);
+                            btnViewAddressFromTXInput.Height = item.Bounds.Height;
                         });
                         anySelected = true;
                     }
@@ -3484,7 +3488,8 @@ namespace SATSuma
                         item.ForeColor = Color.White; // address
                         btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                         {
-                            btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y - 2);
+                            btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y);
+                            btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                         });
                         anySelected = true;
                     }
@@ -4276,11 +4281,13 @@ namespace SATSuma
                         anySelected = true;
                         btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                         {
-                            btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y - 1);
+                            btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y);
+                            btnViewBlockFromBlockList.Height = item.Bounds.Height;
                         });
                         btnViewTransactionsFromBlockList.Invoke((MethodInvoker)delegate
                         {
-                            btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y - 1);
+                            btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y);
+                            btnViewTransactionsFromBlockList.Height = item.Bounds.Height;
                         });
                         // display block hash
                         using (WebClient client = new WebClient())
@@ -4290,6 +4297,7 @@ namespace SATSuma
                             lblBlockListBlockHash.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockListBlockHash.Text = BlockHash;
+                                lblBlockListBlockHash.Location = new Point(label90.Location.X + label90.Width, label90.Location.Y);
                             });
                         }
                         string blockNumber = item.SubItems[1].Text;
@@ -4303,6 +4311,7 @@ namespace SATSuma
                         lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
+                            lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, label91.Location.Y);
                         });
                         long sizeInBytes = blocks[0].Size;
                         string sizeString = ""; // convert display to bytes/kb/mb accordingly
@@ -4323,6 +4332,7 @@ namespace SATSuma
                         lblBlockListBlockSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockSize.Text = sizeString;
+                            lblBlockListBlockSize.Location = new Point (label105.Location.X + label105.Width, label105.Location.Y);
                         });
                         string strWeight = Convert.ToString(blocks[0].Weight);
                         decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
@@ -4330,54 +4340,66 @@ namespace SATSuma
                         lblBlockListBlockWeight.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockWeight.Text = strFormattedWeight;
+                            lblBlockListBlockWeight.Location = new Point (label103.Location.X + label103.Width, label103.Location.Y);
                         });
                         long nonceLong = Convert.ToInt64(blocks[0].Nonce);
                         lblBlockListNonce.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
+                            lblBlockListNonce.Location = new Point (label24.Location.X + label24.Width, label24.Location.Y);
                         });
                         lblBlockListMiner.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                            lblBlockListMiner.Location = new Point (label95.Location.X + label95.Width, label95.Location.Y);
                         });
                         lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
+                            lblBlockListTransactionCount.Location = new Point (label99.Location.X + label99.Width, label99.Location.Y);
                         });
                         string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
                         TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                         lblBlockListTotalFees.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalFees.Text = TotalBlockFees;
+                            lblBlockListTotalFees.Location = new Point (label88.Location.X + label88.Width, label88.Location.Y);
                         });
                         string Reward = Convert.ToString(blocks[0].Extras.Reward);
                         lblBlockListReward.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
+                            lblBlockListReward.Location = new Point (label101.Location.X + label101.Width, label101.Location.Y);
                         });
                         lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
+                            lblBlockListBlockFeeRangeAndMedianFee.Location = new Point (label93.Location.X + label93.Width, label93.Location.Y);
                         });
                         lblBlockListAverageFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
+                            lblBlockListAverageFee.Location = new Point (label97.Location.X + label97.Width, label97.Location.Y);
                         });
                         lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
+                            lblBlockListTotalInputs.Location = new Point (label89.Location.X + label89.Width, label89.Location.Y);
                         });
                         lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
+                            lblBlockListTotalOutputs.Location = new Point (label94.Location.X + label94.Width, label94.Location.Y);
                         });
                         lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].Extras.AvgTxSize);
+                            lblBlockListAverageTransactionSize.Location = new Point (label92.Location.X + label92.Width, label92.Location.Y);
                         });
                         lblBlockListVersion.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListVersion.Text = Convert.ToString(blocks[0].Version);
+                            lblBlockListVersion.Location = new Point (label96.Location.X + label96.Width, label96.Location.Y);
                         });
                         lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                         {
@@ -5431,6 +5453,7 @@ namespace SATSuma
                         btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                         {
                             btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 2);
+                            btnViewAddressFromXpub.Height = item.Bounds.Height;
                         });
 
                         anySelected = true;
@@ -5754,6 +5777,14 @@ namespace SATSuma
                         //   {
                         //        btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
                         //    });
+                        if (item.SubItems[2].Text == "🔒")
+                        {
+                            btnFavouriteUnlock.Enabled = true;
+                        }
+                        else
+                        {
+                            btnFavouriteUnlock.Enabled = false;
+                        }
                         anySelected = true;
                     }
                     else
@@ -7157,8 +7188,6 @@ namespace SATSuma
         }
 
         #endregion
-
-
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================

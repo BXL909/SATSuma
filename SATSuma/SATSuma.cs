@@ -25,7 +25,10 @@
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * validation of node and xpub textboxes
  * xpub help text definitions
- * transaction screen exceptions on all coinbase transactions (null somewhere)
+ * disable add to faves button when (e.g transaction screen) is yet to be populated
+ * help text for favorites screen/add to faves tab
+ * move orange text in block list details panel next to title labels
+ * set height of buttons on listview rows to be same as height of listview row
  */
 
 #region Using
@@ -130,6 +133,7 @@ namespace SATSuma
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        Color subItemBackColor = Color.Black;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -270,7 +274,7 @@ namespace SATSuma
 
         #endregion
 
-        #region BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF
+        #region BITCOIN AND LIGHTNING DASHBOARD SCREENS
         //==============================================================================================================================================================================================
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
         //=============================================================================================================
@@ -1383,7 +1387,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region ADDRESS SCREEN STUFF
+        #region ADDRESS SCREEN
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
         //=============================================================================================================
@@ -2202,7 +2206,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -2210,7 +2221,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewAddressTransactions.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -2297,7 +2315,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region BLOCK SCREEN STUFF
+        #region BLOCK SCREEN
         //==============================================================================================================================================================================================
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
         //=============================================================================================================
@@ -2909,7 +2927,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -2917,7 +2942,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewBlockTransactions.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -2948,7 +2980,7 @@ namespace SATSuma
 
         #endregion
 
-        #region TRANSACTION STUFF
+        #region TRANSACTION SCREEN
 
         private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -3113,7 +3145,10 @@ namespace SATSuma
                 long totalValueIn = 0;
                 foreach (TransactionVin vin in transaction.Vin)
                 {
-                    totalValueIn += vin.Prevout.Value;
+                    if (!vin.Is_coinbase)
+                    {
+                        totalValueIn += vin.Prevout.Value;
+                    }
                 }
                 string strTotalValueIn = totalValueIn.ToString(); // using ToString() instead of Convert.ToString()
                 decimal decTotalBitcoinIn = ConvertSatsToBitcoin(strTotalValueIn);
@@ -3309,15 +3344,31 @@ namespace SATSuma
 
                 foreach (TransactionVinPrevout prevout in prevouts)
                 {
-                    string InputAddress = Convert.ToString(prevout.Scriptpubkey_address);
-                    ListViewItem item = new ListViewItem(InputAddress); // create new row
-                    string InputValue = Convert.ToString(prevout.Value);
-                    decimal DecInputValue = ConvertSatsToBitcoin(InputValue);
-                    item.SubItems.Add(DecInputValue.ToString());
-                    listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                    string InputAddress = "";
+                    if (prevout != null)
                     {
-                        listViewTransactionInputs.Items.Add(item); // add row
-                    });
+                        InputAddress = Convert.ToString(prevout.Scriptpubkey_address);
+                        ListViewItem item = new ListViewItem(InputAddress); // create new row
+                        string InputValue = Convert.ToString(prevout.Value);
+                        decimal DecInputValue = ConvertSatsToBitcoin(InputValue);
+                        item.SubItems.Add(DecInputValue.ToString());
+                        listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                        {
+                            listViewTransactionInputs.Items.Add(item); // add row
+                        });
+                    }
+                    else
+                    {
+                        ListViewItem item = new ListViewItem("N/A"); // create new row
+                        item.SubItems.Add("N/A");
+                        listViewTransactionInputs.Invoke((MethodInvoker)delegate
+                        {
+                            listViewTransactionInputs.Items.Add(item); // add row
+                        });
+
+                    }
+
+
                 }
                 // Get the height of each item to set height of whole listview
                 int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
@@ -3514,7 +3565,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -3522,7 +3580,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -3542,7 +3607,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -3550,7 +3622,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewTransactionOutputs.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -3788,7 +3867,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region BLOCK LIST STUFF
+        #region BLOCK LIST SCREEN
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -4454,7 +4533,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -4462,7 +4548,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -4470,7 +4563,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region XPUB STUFF
+        #region XPUB SCREEN
 
         private void TextBoxSubmittedXpub_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -5154,7 +5247,14 @@ namespace SATSuma
                 var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                 // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+                }
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -5162,7 +5262,14 @@ namespace SATSuma
                 // Clear the background
                 var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
 
-                e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewXpubAddresses.BackColor), bounds);
+                }
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
@@ -5430,6 +5537,666 @@ namespace SATSuma
                 XpubScrollTimer.Stop();
             }
 
+        }
+        #endregion
+
+        #region FAVORITES SCREEN
+        private void SetupFavoritesScreen()
+        {
+            try
+            {
+                var favorites = ReadFavoritesFromJsonFile();
+
+                btnViewFavorite.Enabled = false;
+                btnDeleteFavorite.Enabled = false;
+                lblFavoriteDataInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblFavoriteDataInFull.Text = "";
+                });
+                lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblFavoriteNoteInFull.Text = "";
+                });
+                label138.Invoke((MethodInvoker)delegate
+                {
+                    label138.Text = "";
+                });
+                lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                {
+                    lblSelectedFavoriteType.Text = "";
+                });
+                //LIST VIEW
+                listViewFavorites.Invoke((MethodInvoker)delegate
+                {
+                    listViewFavorites.Items.Clear(); // remove any data that may be there already
+                });
+                listViewFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewFavorites, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewFavorites.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add(" Date added", 100);
+                    });
+                }
+
+                if (listViewFavorites.Columns.Count == 1)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Type", 95);
+                    });
+                }
+
+                if (listViewFavorites.Columns.Count == 2)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("", 20);
+                    });
+                }
+                if (listViewFavorites.Columns.Count == 3)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Favorite", 233);
+                    });
+                }
+                if (listViewFavorites.Columns.Count == 4)
+                {
+                    // If not, add the column header
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Columns.Add("Note", 600);
+                    });
+                }
+                // Add the items to the ListView
+                int counterAllFavorites = 0; // used to count rows in list as they're added
+                int counterBlocks = 0;
+                int counterAddresses = 0;
+                int counterXpubs = 0;
+                int counterTransactions = 0;
+
+                foreach (var favorite in favorites)
+                {
+                    ListViewItem item = new ListViewItem(Convert.ToString(favorite.DateAdded)); // create new row
+                    item.SubItems.Add(favorite.Type);
+                    if (favorite.Encrypted == true)
+                    {
+                        item.SubItems.Add("🔒");
+                    }
+                    else
+                    {
+                        item.SubItems.Add("");
+                    }
+                    item.SubItems.Add(favorite.Data);
+                    item.SubItems.Add(favorite.Note);
+
+                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    {
+                        listViewFavorites.Items.Add(item); // add row
+                    });
+
+                    if (favorite.Type == "block")
+                    {
+                        counterBlocks++;
+                    }
+                    if (favorite.Type == "address")
+                    {
+                        counterAddresses++;
+                    }
+                    if (favorite.Type == "xpub")
+                    {
+                        counterXpubs++;
+                    }
+                    if (favorite.Type == "transaction")
+                    {
+                        counterTransactions++;
+                    }
+                    counterAllFavorites++;
+                }
+                lblFaveAddressCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveAddressCount.Text = counterAddresses.ToString();
+                });
+                lblFaveBlocksCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveBlocksCount.Text = counterBlocks.ToString();
+                });
+                lblFaveTransactionsCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveTransactionsCount.Text = counterTransactions.ToString();
+                });
+                lblFaveXpubsCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveXpubsCount.Text = counterXpubs.ToString();
+                });
+                lblFaveTotalCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveTotalCount.Text = counterAllFavorites.ToString();
+                });
+
+                lblFaveTotalCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveTotalCount.Location = new Point(label144.Location.X + label144.Width, label144.Location.Y);
+                });
+                label134.Invoke((MethodInvoker)delegate
+                {
+                    label134.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetTransactionsForBlocks");
+            }
+        }
+
+        private static void DeleteFavoriteFromJsonFile(string favoriteDataToDelete)
+        {
+            // Read the existing favorites from the JSON file
+            var favorites = ReadFavoritesFromJsonFile();
+
+            // Find the index of the favorite with the specified user ID, type, and ID
+            int index = favorites.FindIndex(favorite =>
+                favorite.Data == favoriteDataToDelete);
+
+            // If a matching favorite was found, remove it from the list
+            if (index >= 0)
+            {
+                favorites.RemoveAt(index);
+
+                // Write the updated list of favorites back to the JSON file
+                WriteFavoritesToJsonFile(favorites);
+            }
+        }
+
+        private void ListViewFavorites_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                bool anySelected = false;
+                foreach (ListViewItem item in listViewFavorites.Items)
+                {
+                    if (item.Selected)
+                    {
+                        
+                        btnViewFavorite.Enabled = true;
+                        btnDeleteFavorite.Enabled = true;
+                        item.BackColor = Color.Blue;
+                        item.ForeColor = Color.White;
+                        item.SubItems[2].ForeColor = Color.White;
+                        item.SubItems[3].ForeColor = Color.White;
+                        item.SubItems[4].ForeColor = Color.White;
+                        lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                        {
+                            lblSelectedFavoriteType.Text = item.SubItems[1].Text;
+                        });
+                        label138.Invoke((MethodInvoker)delegate
+                        {
+                            label138.Text = "note";
+                        });
+                        lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                        {
+                            lblFavoriteDataInFull.Location = new Point(lblSelectedFavoriteType.Location.X + lblSelectedFavoriteType.Width, lblSelectedFavoriteType.Location.Y);
+                            lblFavoriteDataInFull.Text = item.SubItems[3].Text;
+                        });
+                        lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                        {
+                            lblFavoriteNoteInFull.Location = new Point(label138.Location.X + label138.Width, label138.Location.Y);
+                            lblFavoriteNoteInFull.Text = item.SubItems[4].Text;
+                        });
+                        //    btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                        //   {
+                        //        btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
+                        //    });
+                        anySelected = true;
+                    }
+                    else
+                    {
+                        item.ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[3].ForeColor = Color.FromArgb(255, 153, 0);
+                        item.SubItems[4].ForeColor = Color.FromArgb(255, 153, 0);
+                    }
+                }
+                // btnViewAddressFromTXInput.Visible = anySelected;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewFavorites_ItemSelectionChanged");
+            }
+        }
+
+        private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 150) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 150;
+                }
+
+                //                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+                //                {
+                //                    btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - 6, btnViewAddressFromXpub.Location.Y);
+                //                });
+            }
+
+            if (e.ColumnIndex == 1)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 95;
+                }
+            }
+
+
+            if (e.ColumnIndex == 2)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 20;
+                }
+            }
+
+            if (e.ColumnIndex == 3)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 400) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 400;
+                }
+            }
+            if (e.ColumnIndex == 4)
+            {
+                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 100;
+                }
+                if (listViewFavorites.Columns[e.ColumnIndex].Width > 600) // max width
+                {
+                    e.Cancel = true;
+                    e.NewWidth = 600;
+                }
+            }
+        }
+
+        private void ListViewFavorites_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            var text = e.SubItem.Text;
+
+            if (e.ColumnIndex == 1)
+            {
+                if (text == "address")
+                {
+                    e.SubItem.ForeColor = Color.DarkSlateBlue;
+                }
+                if (text == "block")
+                {
+                    e.SubItem.ForeColor = Color.PaleVioletRed;
+                }
+                if (text == "transaction")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab;
+                }
+                if (text == "xpub")
+                {
+                    e.SubItem.ForeColor = Color.Peru;
+                }
+            }
+            if (e.ColumnIndex == 2)
+            {
+                if (text == "")
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.IndianRed;
+                }
+
+            }
+            var font = listViewFavorites.Font;
+            var columnWidth = e.Header.Width;
+            var textWidth = TextRenderer.MeasureText(text, font).Width;
+            if (textWidth > columnWidth)
+            {
+                // Truncate the text
+                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                // Clear the background
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+                }
+                
+                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+            }
+            else if (textWidth < columnWidth)
+            {
+                // Clear the background
+                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+                }
+
+                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+            }
+        }
+
+        private void BtnViewFavorite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblSelectedFavoriteType.Text == "block")
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = lblFavoriteDataInFull.Text;
+                    });
+                    try
+                    {
+                        LookupBlock();
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "btnViewFavorite_Click");
+                    }
+                    //show the block screen
+                    BtnMenuBlock_Click(sender, e);
+                }
+                if (lblSelectedFavoriteType.Text == "address")
+                {
+                    textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                    {
+                        textboxSubmittedAddress.Text = lblFavoriteDataInFull.Text;
+                    });
+                    //show the address screen
+                    BtnMenuAddress_Click(sender, e);
+                }
+                if (lblSelectedFavoriteType.Text == "transaction")
+                {
+                    textBoxTransactionID.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxTransactionID.Text = lblFavoriteDataInFull.Text;
+                    });
+                    //show the transaction screen
+                    BtnMenuTransaction_Click(sender, e);
+                }
+                if (lblSelectedFavoriteType.Text == "xpub")
+                {
+                    textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedXpub.Text = lblFavoriteDataInFull.Text;
+                    });
+                    LookupXpub();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewFavorite_Click");
+            }
+        }
+
+        private void BtnDeleteFavorite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string favoriteDataToDelete = lblFavoriteDataInFull.Text;
+                DeleteFavoriteFromJsonFile(favoriteDataToDelete);
+                SetupFavoritesScreen();
+                lblFavoriteDataInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblFavoriteDataInFull.Text = "";
+                });
+                lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblFavoriteNoteInFull.Text = "";
+                });
+                label138.Invoke((MethodInvoker)delegate
+                {
+                    label138.Text = "";
+                });
+                lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                {
+                    lblSelectedFavoriteType.Text = "";
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnDeleteFavorite_Click");
+            }
+        }
+
+        #endregion
+
+        #region ADD TO FAVORITES TAB
+        //==============================================================================================================
+        //---------------------- ADD TO FAVOURITES ---------------------------------------------------------------------
+        private void BtnAddToFavorites_Click(object sender, EventArgs e)
+        {
+            if (!panelAddToFaves.Visible)
+            {
+                panelFees.Visible = false;
+                panelAddToFaves.Visible = true;
+            }
+            else
+            {
+                panelAddToFaves.Visible = false;
+                panelFees.Visible = true;
+            }
+        }
+
+        private void BtnCancelAddToFaves_Click(object sender, EventArgs e)
+        {
+            panelAddToFaves.Visible = false;
+            panelFees.Visible = true;
+        }
+
+        private void PanelAddToFaves_Paint(object sender, PaintEventArgs e)
+        {
+
+
+            if (panelAddress.Visible)
+            {
+                lblFaveProposalType.Text = "address";
+                lblFaveProposalData.Text = textboxSubmittedAddress.Text;
+
+            }
+            if (panelBlock.Visible)
+            {
+                lblFaveProposalType.Text = "block";
+                lblFaveProposalData.Text = textBoxSubmittedBlockNumber.Text;
+            }
+            if (panelTransaction.Visible)
+            {
+                lblFaveProposalType.Text = "transaction";
+                lblFaveProposalData.Text = textBoxTransactionID.Text;
+            }
+            if (panelXpub.Visible)
+            {
+                lblFaveProposalType.Text = "xpub";
+                lblFaveProposalData.Text = textBoxSubmittedXpub.Text;
+            }
+
+            lblFaveProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
+            lblFaveProposalData.Location = new Point(lblFaveProposalType.Location.X + lblFaveProposalType.Width, lblFaveProposalType.Location.Y);
+            lblFaveProposalData.Width = panelAddToFaves.Width - label131.Width - lblFaveProposalType.Width - 5;
+        }
+
+        private void BtnCommitToFavorites_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            bool toBeEncrypted = false;
+            if (textBoxFaveEncryptionKey.Text == "" || textBoxFaveEncryptionKey.Text == "optional encryption key")
+            {
+                toBeEncrypted = false;
+            }
+            else
+            {
+                toBeEncrypted = true;
+            }
+
+            // Create a new favorite object for the block with ID "123456"
+            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted };
+
+            // Read the existing favorites from the JSON file
+            var favorites = ReadFavoritesFromJsonFile();
+
+            // Add the new favorite to the list
+            favorites.Add(newFavorite);
+
+            // Write the updated list of favorites back to the JSON file
+            WriteFavoritesToJsonFile(favorites);
+
+            textBoxFaveProposedNote.Text = "";
+        }
+
+
+        private static List<Favorite> ReadFavoritesFromJsonFile()
+        {
+            string filePath = "favorites.json";
+
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath).Dispose();
+            }
+            // Read the contents of the JSON file into a string
+            string json = File.ReadAllText(filePath);
+
+            // Deserialize the JSON string into a list of favorite objects
+            var favorites = JsonConvert.DeserializeObject<List<Favorite>>(json);
+
+            // If the JSON file doesn't exist or is empty, return an empty list
+            favorites ??= new List<Favorite>();
+
+            return favorites;
+        }
+
+        private static void WriteFavoritesToJsonFile(List<Favorite> favorites)
+        {
+            // Serialize the list of favorite objects into a JSON string
+            string json = JsonConvert.SerializeObject(favorites);
+
+            // Write the JSON string to the favorites.json file
+            File.WriteAllText("favorites.json", json);
+        }
+
+        private void HideFavesShowFees(object sender, EventArgs e)
+        {
+            panelAddToFaves.Visible = false;
+            panelFees.Visible = true;
+        }
+
+        private bool isFaveNoteWatermarkTextDisplayed = true;
+
+        private void TextBoxFaveProposedNote_Enter(object sender, EventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.Text = "";
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
+            {
+                textBoxFaveProposedNote.Text = "optional notes";
+                textBoxFaveProposedNote.ForeColor = Color.Gray;
+                isFaveNoteWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_TextChanged(object sender, EventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveProposedNote_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isFaveNoteWatermarkTextDisplayed)
+            {
+                textBoxFaveProposedNote.Text = "";
+                textBoxFaveProposedNote.ForeColor = Color.White;
+                isFaveNoteWatermarkTextDisplayed = false;
+            }
+        }
+
+        private bool isEncryptionKeyWatermarkTextDisplayed = true;
+
+        private void TextBoxFaveEncryptionKey_Enter(object sender, EventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.Text = "";
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxFaveEncryptionKey.Text))
+            {
+                textBoxFaveEncryptionKey.Text = "optional encryption key";
+                textBoxFaveEncryptionKey.ForeColor = Color.Gray;
+                isEncryptionKeyWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_TextChanged(object sender, EventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFaveEncryptionKey_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isEncryptionKeyWatermarkTextDisplayed)
+            {
+                textBoxFaveEncryptionKey.Text = "";
+                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                isEncryptionKeyWatermarkTextDisplayed = false;
+            }
         }
         #endregion
 
@@ -6333,6 +7100,11 @@ namespace SATSuma
         {
             return this.panelXpub;
         }
+
+        public Panel GetPanelFavorites() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelFavorites;
+        }
         #endregion
 
         #region MISC UI STUFF
@@ -6386,495 +7158,20 @@ namespace SATSuma
 
         #endregion
 
-        #region ADD TO FAVORITES
-        //==============================================================================================================
-        //---------------------- ADD TO FAVOURITES ---------------------------------------------------------------------
-        private void BtnAddToFavorites_Click(object sender, EventArgs e)
-        {
-            if (!panelAddToFaves.Visible)
-            {
-                panelFees.Visible = false;
-                panelAddToFaves.Visible = true;
-            }
-            else
-            {
-                panelAddToFaves.Visible = false;
-                panelFees.Visible = true;
-            }
-        }
-
-        private void BtnCancelAddToFaves_Click(object sender, EventArgs e)
-        {
-            panelAddToFaves.Visible = false;
-            panelFees.Visible = true;
-        }
-
-        private void PanelAddToFaves_Paint(object sender, PaintEventArgs e)
-        {
-
-
-            if (panelAddress.Visible)
-            {
-                lblFaveProposalType.Text = "address";
-                lblFaveProposalData.Text = textboxSubmittedAddress.Text;
-
-            }
-            if (panelBlock.Visible)
-            {
-                lblFaveProposalType.Text = "block";
-                lblFaveProposalData.Text = textBoxSubmittedBlockNumber.Text;
-            }
-            if (panelTransaction.Visible)
-            {
-                lblFaveProposalType.Text = "transaction";
-                lblFaveProposalData.Text = textBoxTransactionID.Text;
-            }
-            if (panelXpub.Visible)
-            {
-                lblFaveProposalType.Text = "xpub";
-                lblFaveProposalData.Text = textBoxSubmittedXpub.Text;
-            }
-
-            lblFaveProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
-            lblFaveProposalData.Location = new Point(lblFaveProposalType.Location.X + lblFaveProposalType.Width, lblFaveProposalType.Location.Y);
-            lblFaveProposalData.Width = panelAddToFaves.Width - label131.Width - lblFaveProposalType.Width - 5;
-        }
-
-        private void BtnCommitToFavorites_Click(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;
-            bool toBeEncrypted = false;
-            if (textBoxFaveEncryptionKey.Text == "" || textBoxFaveEncryptionKey.Text == "optional encryption key")
-            {
-                toBeEncrypted = false;
-            }
-            else
-            {
-                toBeEncrypted = true;
-            }
-
-            // Create a new favorite object for the block with ID "123456"
-            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted };
-
-            // Read the existing favorites from the JSON file
-            var favorites = ReadFavoritesFromJsonFile();
-
-            // Add the new favorite to the list
-            favorites.Add(newFavorite);
-
-            // Write the updated list of favorites back to the JSON file
-            WriteFavoritesToJsonFile(favorites);
-
-            textBoxFaveProposedNote.Text = "";
-        }
-
-
-        private static List<Favorite> ReadFavoritesFromJsonFile()
-        {
-            string filePath = "favorites.json";
-
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath).Dispose();
-            }
-            // Read the contents of the JSON file into a string
-            string json = File.ReadAllText(filePath);
-
-            // Deserialize the JSON string into a list of favorite objects
-            var favorites = JsonConvert.DeserializeObject<List<Favorite>>(json);
-
-            // If the JSON file doesn't exist or is empty, return an empty list
-            favorites ??= new List<Favorite>();
-
-            return favorites;
-        }
-
-        private static void WriteFavoritesToJsonFile(List<Favorite> favorites)
-        {
-            // Serialize the list of favorite objects into a JSON string
-            string json = JsonConvert.SerializeObject(favorites);
-
-            // Write the JSON string to the favorites.json file
-            File.WriteAllText("favorites.json", json);
-        }
-
-        private void HideFavesShowFees(object sender, EventArgs e)
-        {
-            panelAddToFaves.Visible = false;
-            panelFees.Visible = true;
-        }
-
-        private bool isFaveNoteWatermarkTextDisplayed = true;
-
-        private void TextBoxFaveProposedNote_Enter(object sender, EventArgs e)
-        {
-            if (isFaveNoteWatermarkTextDisplayed)
-            {
-                textBoxFaveProposedNote.Text = "";
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxFaveProposedNote_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
-            {
-                textBoxFaveProposedNote.Text = "optional notes";
-                textBoxFaveProposedNote.ForeColor = Color.Gray;
-                isFaveNoteWatermarkTextDisplayed = true;
-            }
-        }
-
-        private void TextBoxFaveProposedNote_TextChanged(object sender, EventArgs e)
-        {
-            if (isFaveNoteWatermarkTextDisplayed)
-            {
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxFaveProposedNote_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (isFaveNoteWatermarkTextDisplayed)
-            {
-                textBoxFaveProposedNote.Text = "";
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
-            }
-        }
-
-        private bool isEncryptionKeyWatermarkTextDisplayed = true;
-
-        private void TextBoxFaveEncryptionKey_Enter(object sender, EventArgs e)
-        {
-            if (isEncryptionKeyWatermarkTextDisplayed)
-            {
-                textBoxFaveEncryptionKey.Text = "";
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
-                isEncryptionKeyWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxFaveEncryptionKey_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxFaveEncryptionKey.Text))
-            {
-                textBoxFaveEncryptionKey.Text = "optional encryption key";
-                textBoxFaveEncryptionKey.ForeColor = Color.Gray;
-                isEncryptionKeyWatermarkTextDisplayed = true;
-            }
-        }
-
-        private void TextBoxFaveEncryptionKey_TextChanged(object sender, EventArgs e)
-        {
-            if (isEncryptionKeyWatermarkTextDisplayed)
-            {
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
-                isEncryptionKeyWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxFaveEncryptionKey_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (isEncryptionKeyWatermarkTextDisplayed)
-            {
-                textBoxFaveEncryptionKey.Text = "";
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
-                isEncryptionKeyWatermarkTextDisplayed = false;
-            }
-        }
-        #endregion
-
-        #region FAVORITES STUFF
-        private void SetupFavoritesScreen()
-        {
-            try
-            {
-                var favorites = ReadFavoritesFromJsonFile();
-
-                //LIST VIEW
-                listViewFavorites.Invoke((MethodInvoker)delegate
-                {
-                    listViewFavorites.Items.Clear(); // remove any data that may be there already
-                });
-                listViewFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewFavorites, new object[] { true });
-
-                // Check if the column header already exists
-                if (listViewFavorites.Columns.Count == 0)
-                {
-                    // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Columns.Add(" Date added", 100);
-                    });
-                }
-
-                if (listViewFavorites.Columns.Count == 1)
-                {
-                    // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Columns.Add("Type", 95);
-                    });
-                }
-
-                if (listViewFavorites.Columns.Count == 2)
-                {
-                    // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Columns.Add("", 20);
-                    });
-                }
-                if (listViewFavorites.Columns.Count == 3)
-                {
-                    // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Columns.Add("Favorite", 233);
-                    });
-                }
-                if (listViewFavorites.Columns.Count == 4)
-                {
-                    // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Columns.Add("Note", 600);
-                    });
-                }
-                // Add the items to the ListView
-                int counterAllFavorites = 0; // used to count rows in list as they're added
-                int counterBlocks = 0;
-                int counterAddresses = 0;
-                int counterXpubs = 0;
-                int counterTransactions = 0;
-
-                foreach (var favorite in favorites)
-                {
-                    ListViewItem item = new ListViewItem(Convert.ToString(favorite.DateAdded)); // create new row
-                    item.SubItems.Add(favorite.Type);
-                    if (favorite.Encrypted == true)
-                    {
-                        item.SubItems.Add("🔒");
-                    }
-                    else
-                    {
-                        item.SubItems.Add("");
-                    }
-                    item.SubItems.Add(favorite.Data);
-                    item.SubItems.Add(favorite.Note);
-
-                    listViewFavorites.Invoke((MethodInvoker)delegate
-                    {
-                        listViewFavorites.Items.Add(item); // add row
-                    });
-
-                    if (favorite.Type == "block")
-                    {
-                        counterBlocks++;
-                    }
-                    if (favorite.Type == "address")
-                    {
-                        counterAddresses++;
-                    }
-                    if (favorite.Type == "xpub")
-                    {
-                        counterXpubs++;
-                    }
-                    if (favorite.Type == "transaction")
-                    {
-                        counterTransactions++;
-                    }
-                    counterAllFavorites++;
-                }
-                lblFaveAddressCount.Text = counterAddresses.ToString();
-                lblFaveBlocksCount.Text = counterBlocks.ToString();
-                lblFaveTransactionsCount.Text = counterTransactions.ToString();
-                lblFaveXpubsCount.Text = counterXpubs.ToString();
-                lblFaveTotalCount.Text = counterAllFavorites.ToString();
-
-                lblFaveTotalCount.Location = new Point(label144.Location.X + label144.Width, label144.Location.Y);
-                label134.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "GetTransactionsForBlocks");
-            }
-        }
-
-        private void ListViewFavorites_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            try
-            {
-                bool anySelected = false;
-                foreach (ListViewItem item in listViewFavorites.Items)
-                {
-                    if (item.Selected)
-                    {
-                        item.ForeColor = Color.White; 
-                        item.SubItems[2].ForeColor = Color.White;
-                        item.SubItems[3].ForeColor = Color.White;
-                        item.SubItems[4].ForeColor = Color.White;
-                        label135.Text = item.SubItems[1].Text;
-                        lblFavoriteDataInFull.Location = new Point(label135.Location.X + label135.Width, label135.Location.Y);
-                        lblFavoriteDataInFull.Text = item.SubItems[3].Text;
-                        lblFavoriteNoteInFull.Text = item.SubItems[4].Text;
-                        //    btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
-                        //   {
-                        //        btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y - 2);
-                        //    });
-                        anySelected = true;
-                    }
-                    else
-                    {
-                        item.ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[3].ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[4].ForeColor = Color.FromArgb(255, 153, 0);
-                    }
-                }
-               // btnViewAddressFromTXInput.Visible = anySelected;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ListViewFavorites_ItemSelectionChanged");
-            }
-        }
-
-        private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            if (e.ColumnIndex == 0)
-            {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 100;
-                }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 150) // max width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 150;
-                }
-
-//                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
-//                {
-//                    btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - 6, btnViewAddressFromXpub.Location.Y);
-//                });
-            }
-
-            if (e.ColumnIndex == 1)
-            {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 95;
-                }
-            }
-
-
-            if (e.ColumnIndex == 2)
-            {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 20;
-                }
-            }
-
-            if (e.ColumnIndex == 3)
-            {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 100;
-                }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 400) // max width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 400;
-                }
-            }
-            if (e.ColumnIndex == 4)
-            {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 100;
-                }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 600) // max width
-                {
-                    e.Cancel = true;
-                    e.NewWidth = 600;
-                }
-            }
-        }
-
-        private void ListViewFavorites_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            var text = e.SubItem.Text;
-
-            if (e.ColumnIndex == 1)
-            {
-                if (text == "address")
-                {
-                    e.SubItem.ForeColor = Color.DarkSlateBlue;
-                }
-                if (text == "block")
-                {
-                    e.SubItem.ForeColor = Color.PaleVioletRed;
-                }
-                if (text == "transaction")
-                {
-                    e.SubItem.ForeColor = Color.OliveDrab;
-                }
-                if (text == "xpub")
-                {
-                    e.SubItem.ForeColor = Color.Peru;
-                }
-            }
-            if (e.ColumnIndex == 2)
-            {
-                if (text == "")
-                {
-                    e.SubItem.ForeColor = Color.OliveDrab;
-                }
-                else
-                {
-                    e.SubItem.ForeColor = Color.IndianRed;
-                }
-
-            }
-            var font = listViewFavorites.Font;
-            var columnWidth = e.Header.Width;
-            var textWidth = TextRenderer.MeasureText(text, font).Width;
-            if (textWidth > columnWidth)
-            {
-                // Truncate the text
-                var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
-                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                // Clear the background
-                e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
-                TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-            }
-            else if (textWidth < columnWidth)
-            {
-                // Clear the background
-                var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
-
-                TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-            }
-        }
-
-        #endregion
 
     }
     //==============================================================================================================================================================================================
     //==============================================================================================================================================================================================
     #region CLASSES
+
+    public class Favorite
+    {
+        public DateTime DateAdded { get; set; }
+        public string Type { get; set; }
+        public string Data { get; set; }
+        public string Note { get; set; }
+        public bool Encrypted { get; set; }
+    }
 
     // ------------------------------------- Address Transactions -----------------------------------
     public class TransactionsForAddressService
@@ -7219,15 +7516,6 @@ namespace SATSuma
         public string Value { get; set; }
     }
     #endregion
-
-    public class Favorite
-    {
-        public DateTime DateAdded { get; set; }
-        public string Type { get; set; }
-        public string Data { get; set; }
-        public string Note { get; set; }
-        public bool Encrypted { get; set; }
-    }
 } 
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================

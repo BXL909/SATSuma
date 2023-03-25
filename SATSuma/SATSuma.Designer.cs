@@ -461,6 +461,8 @@
             this.lblFees30Mins = new System.Windows.Forms.Label();
             this.panelFavorites = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
+            this.textBoxFavoriteKey = new System.Windows.Forms.TextBox();
+            this.btnFavouriteUnlock = new System.Windows.Forms.Button();
             this.btnDeleteFavorite = new System.Windows.Forms.Button();
             this.btnViewFavorite = new System.Windows.Forms.Button();
             this.label138 = new System.Windows.Forms.Label();
@@ -468,13 +470,11 @@
             this.lblSelectedFavoriteType = new System.Windows.Forms.Label();
             this.lblFavoriteDataInFull = new System.Windows.Forms.Label();
             this.panel33 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.panel34 = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnFavoritesListDown = new System.Windows.Forms.Button();
+            this.btnFavoritesListUp = new System.Windows.Forms.Button();
+            this.panelFavoritesContainer = new System.Windows.Forms.Panel();
             this.listViewFavorites = new System.Windows.Forms.ListView();
             this.panel36 = new System.Windows.Forms.Panel();
-            this.label134 = new System.Windows.Forms.Label();
             this.lblFaveTotalCount = new System.Windows.Forms.Label();
             this.label144 = new System.Windows.Forms.Label();
             this.label153 = new System.Windows.Forms.Label();
@@ -485,7 +485,8 @@
             this.lblFaveAddressCount = new System.Windows.Forms.Label();
             this.lblFaveXpubsCount = new System.Windows.Forms.Label();
             this.label142 = new System.Windows.Forms.Label();
-            this.btnFavouriteUnlock = new System.Windows.Forms.Button();
+            this.FavoritesScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.panel34 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -532,8 +533,9 @@
             this.panelFavorites.SuspendLayout();
             this.panel32.SuspendLayout();
             this.panel33.SuspendLayout();
-            this.panel34.SuspendLayout();
+            this.panelFavoritesContainer.SuspendLayout();
             this.panel36.SuspendLayout();
+            this.panel34.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -542,7 +544,7 @@
             this.lblTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblTime.Font = new System.Drawing.Font("Technology", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.Gray;
-            this.lblTime.Location = new System.Drawing.Point(14, 65);
+            this.lblTime.Location = new System.Drawing.Point(3, 21);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(142, 55);
             this.lblTime.TabIndex = 1;
@@ -554,7 +556,7 @@
             this.lblSeconds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSeconds.Font = new System.Drawing.Font("Technology", 22.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSeconds.ForeColor = System.Drawing.Color.Gray;
-            this.lblSeconds.Location = new System.Drawing.Point(132, 82);
+            this.lblSeconds.Location = new System.Drawing.Point(121, 38);
             this.lblSeconds.Name = "lblSeconds";
             this.lblSeconds.Size = new System.Drawing.Size(47, 34);
             this.lblSeconds.TabIndex = 1;
@@ -566,7 +568,7 @@
             this.lblDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblDate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDate.ForeColor = System.Drawing.Color.Silver;
-            this.lblDate.Location = new System.Drawing.Point(20, 110);
+            this.lblDate.Location = new System.Drawing.Point(9, 66);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(157, 20);
             this.lblDate.TabIndex = 2;
@@ -578,7 +580,7 @@
             this.lblDay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblDay.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDay.ForeColor = System.Drawing.Color.Silver;
-            this.lblDay.Location = new System.Drawing.Point(20, 129);
+            this.lblDay.Location = new System.Drawing.Point(9, 85);
             this.lblDay.Name = "lblDay";
             this.lblDay.Size = new System.Drawing.Size(90, 20);
             this.lblDay.TabIndex = 3;
@@ -1091,7 +1093,7 @@
             this.label22.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.ForeColor = System.Drawing.Color.Silver;
             this.label22.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label22.Location = new System.Drawing.Point(20, 50);
+            this.label22.Location = new System.Drawing.Point(9, 6);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(84, 20);
             this.label22.TabIndex = 57;
@@ -6461,7 +6463,7 @@
             this.panelFavorites.BackColor = System.Drawing.Color.Transparent;
             this.panelFavorites.Controls.Add(this.panel32);
             this.panelFavorites.Controls.Add(this.panel33);
-            this.panelFavorites.Controls.Add(this.panel34);
+            this.panelFavorites.Controls.Add(this.panelFavoritesContainer);
             this.panelFavorites.Controls.Add(this.panel36);
             this.panelFavorites.Location = new System.Drawing.Point(21, 188);
             this.panelFavorites.Name = "panelFavorites";
@@ -6471,8 +6473,9 @@
             // 
             // panel32
             // 
-            this.panel32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.panel32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel32.Controls.Add(this.textBoxFavoriteKey);
             this.panel32.Controls.Add(this.btnFavouriteUnlock);
             this.panel32.Controls.Add(this.btnDeleteFavorite);
             this.panel32.Controls.Add(this.btnViewFavorite);
@@ -6485,6 +6488,44 @@
             this.panel32.Size = new System.Drawing.Size(748, 100);
             this.panel32.TabIndex = 215;
             // 
+            // textBoxFavoriteKey
+            // 
+            this.textBoxFavoriteKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxFavoriteKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFavoriteKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxFavoriteKey.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxFavoriteKey.Location = new System.Drawing.Point(105, 69);
+            this.textBoxFavoriteKey.MaxLength = 165;
+            this.textBoxFavoriteKey.Name = "textBoxFavoriteKey";
+            this.textBoxFavoriteKey.Size = new System.Drawing.Size(252, 25);
+            this.textBoxFavoriteKey.TabIndex = 217;
+            this.textBoxFavoriteKey.Text = "enter key to unlock";
+            this.textBoxFavoriteKey.Visible = false;
+            this.textBoxFavoriteKey.TextChanged += new System.EventHandler(this.TextBoxFavoriteKey_TextChanged);
+            this.textBoxFavoriteKey.Enter += new System.EventHandler(this.TextBoxFavoriteKey_Enter);
+            this.textBoxFavoriteKey.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxFavoriteKey_KeyPress);
+            this.textBoxFavoriteKey.Leave += new System.EventHandler(this.TextBoxFavoriteKey_Leave);
+            // 
+            // btnFavouriteUnlock
+            // 
+            this.btnFavouriteUnlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnFavouriteUnlock.Enabled = false;
+            this.btnFavouriteUnlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnFavouriteUnlock.FlatAppearance.BorderSize = 0;
+            this.btnFavouriteUnlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavouriteUnlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavouriteUnlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFavouriteUnlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFavouriteUnlock.ForeColor = System.Drawing.Color.White;
+            this.btnFavouriteUnlock.Location = new System.Drawing.Point(8, 69);
+            this.btnFavouriteUnlock.Margin = new System.Windows.Forms.Padding(1);
+            this.btnFavouriteUnlock.Name = "btnFavouriteUnlock";
+            this.btnFavouriteUnlock.Size = new System.Drawing.Size(88, 24);
+            this.btnFavouriteUnlock.TabIndex = 227;
+            this.btnFavouriteUnlock.Text = "🔓 unlock";
+            this.btnFavouriteUnlock.UseVisualStyleBackColor = false;
+            this.btnFavouriteUnlock.Click += new System.EventHandler(this.BtnFavouriteUnlock_Click);
+            // 
             // btnDeleteFavorite
             // 
             this.btnDeleteFavorite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -6496,7 +6537,7 @@
             this.btnDeleteFavorite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteFavorite.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteFavorite.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteFavorite.Location = new System.Drawing.Point(561, 73);
+            this.btnDeleteFavorite.Location = new System.Drawing.Point(557, 69);
             this.btnDeleteFavorite.Margin = new System.Windows.Forms.Padding(1);
             this.btnDeleteFavorite.Name = "btnDeleteFavorite";
             this.btnDeleteFavorite.Size = new System.Drawing.Size(88, 24);
@@ -6516,7 +6557,7 @@
             this.btnViewFavorite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewFavorite.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewFavorite.ForeColor = System.Drawing.Color.White;
-            this.btnViewFavorite.Location = new System.Drawing.Point(660, 73);
+            this.btnViewFavorite.Location = new System.Drawing.Point(651, 69);
             this.btnViewFavorite.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewFavorite.Name = "btnViewFavorite";
             this.btnViewFavorite.Size = new System.Drawing.Size(88, 24);
@@ -6532,7 +6573,7 @@
             this.label138.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label138.ForeColor = System.Drawing.Color.Silver;
             this.label138.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label138.Location = new System.Drawing.Point(-2, 24);
+            this.label138.Location = new System.Drawing.Point(2, 24);
             this.label138.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label138.Name = "label138";
             this.label138.Size = new System.Drawing.Size(43, 20);
@@ -6560,7 +6601,7 @@
             this.lblSelectedFavoriteType.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSelectedFavoriteType.ForeColor = System.Drawing.Color.Silver;
             this.lblSelectedFavoriteType.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblSelectedFavoriteType.Location = new System.Drawing.Point(-2, 4);
+            this.lblSelectedFavoriteType.Location = new System.Drawing.Point(2, 4);
             this.lblSelectedFavoriteType.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblSelectedFavoriteType.Name = "lblSelectedFavoriteType";
             this.lblSelectedFavoriteType.Size = new System.Drawing.Size(42, 20);
@@ -6583,79 +6624,66 @@
             // panel33
             // 
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel33.Controls.Add(this.button1);
-            this.panel33.Controls.Add(this.button2);
-            this.panel33.Location = new System.Drawing.Point(716, 35);
+            this.panel33.Controls.Add(this.btnFavoritesListDown);
+            this.panel33.Controls.Add(this.btnFavoritesListUp);
+            this.panel33.Location = new System.Drawing.Point(712, 27);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(37, 411);
+            this.panel33.Size = new System.Drawing.Size(36, 419);
             this.panel33.TabIndex = 214;
             // 
-            // button1
+            // btnFavoritesListDown
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(9, 381);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 24);
-            this.button1.TabIndex = 212;
-            this.button1.TabStop = false;
-            this.button1.Text = "▼";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button1.UseVisualStyleBackColor = false;
+            this.btnFavoritesListDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnFavoritesListDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnFavoritesListDown.FlatAppearance.BorderSize = 0;
+            this.btnFavoritesListDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavoritesListDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavoritesListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFavoritesListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFavoritesListDown.ForeColor = System.Drawing.Color.White;
+            this.btnFavoritesListDown.Location = new System.Drawing.Point(10, 393);
+            this.btnFavoritesListDown.Name = "btnFavoritesListDown";
+            this.btnFavoritesListDown.Size = new System.Drawing.Size(24, 24);
+            this.btnFavoritesListDown.TabIndex = 212;
+            this.btnFavoritesListDown.TabStop = false;
+            this.btnFavoritesListDown.Text = "▼";
+            this.btnFavoritesListDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnFavoritesListDown.UseVisualStyleBackColor = false;
+            this.btnFavoritesListDown.Click += new System.EventHandler(this.BtnFavoritesListDown_Click);
+            this.btnFavoritesListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnFavoritesListDown_MouseDown);
+            this.btnFavoritesListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnFavoritesListDown_MouseUp);
             // 
-            // button2
+            // btnFavoritesListUp
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(10, 9);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(24, 24);
-            this.button2.TabIndex = 214;
-            this.button2.TabStop = false;
-            this.button2.Text = "▲";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button2.UseVisualStyleBackColor = false;
+            this.btnFavoritesListUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnFavoritesListUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnFavoritesListUp.FlatAppearance.BorderSize = 0;
+            this.btnFavoritesListUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavoritesListUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnFavoritesListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFavoritesListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFavoritesListUp.ForeColor = System.Drawing.Color.White;
+            this.btnFavoritesListUp.Location = new System.Drawing.Point(10, 9);
+            this.btnFavoritesListUp.Name = "btnFavoritesListUp";
+            this.btnFavoritesListUp.Size = new System.Drawing.Size(24, 24);
+            this.btnFavoritesListUp.TabIndex = 214;
+            this.btnFavoritesListUp.TabStop = false;
+            this.btnFavoritesListUp.Text = "▲";
+            this.btnFavoritesListUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnFavoritesListUp.UseVisualStyleBackColor = false;
+            this.btnFavoritesListUp.Click += new System.EventHandler(this.BtnFavoritesListUp_Click);
+            this.btnFavoritesListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnFavoritesListUp_MouseDown);
+            this.btnFavoritesListUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnFavoritesListUp_MouseUp);
             // 
-            // panel34
+            // panelFavoritesContainer
             // 
-            this.panel34.AutoScroll = true;
-            this.panel34.Controls.Add(this.button3);
-            this.panel34.Controls.Add(this.listViewFavorites);
-            this.panel34.Location = new System.Drawing.Point(0, 40);
-            this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(750, 408);
-            this.panel34.TabIndex = 213;
-            // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(116, 36);
-            this.button3.Margin = new System.Windows.Forms.Padding(0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(20, 15);
-            this.button3.TabIndex = 165;
-            this.button3.Text = "▶️";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Visible = false;
+            this.panelFavoritesContainer.AutoScroll = true;
+            this.panelFavoritesContainer.Controls.Add(this.listViewFavorites);
+            this.panelFavoritesContainer.Location = new System.Drawing.Point(0, 37);
+            this.panelFavoritesContainer.Name = "panelFavoritesContainer";
+            this.panelFavoritesContainer.Size = new System.Drawing.Size(747, 408);
+            this.panelFavoritesContainer.TabIndex = 213;
+            this.panelFavoritesContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelFavoritesContainer_Paint);
             // 
             // listViewFavorites
             // 
@@ -6668,15 +6696,16 @@
             this.listViewFavorites.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFavorites.HideSelection = false;
             this.listViewFavorites.LabelWrap = false;
-            this.listViewFavorites.Location = new System.Drawing.Point(0, 11);
+            this.listViewFavorites.Location = new System.Drawing.Point(7, 0);
             this.listViewFavorites.Margin = new System.Windows.Forms.Padding(0);
             this.listViewFavorites.MultiSelect = false;
             this.listViewFavorites.Name = "listViewFavorites";
             this.listViewFavorites.OwnerDraw = true;
             this.listViewFavorites.Scrollable = false;
             this.listViewFavorites.ShowGroups = false;
-            this.listViewFavorites.Size = new System.Drawing.Size(703, 395);
+            this.listViewFavorites.Size = new System.Drawing.Size(703, 409);
             this.listViewFavorites.SmallImageList = this.imageListUpDownArrows;
+            this.listViewFavorites.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewFavorites.TabIndex = 164;
             this.listViewFavorites.TabStop = false;
             this.listViewFavorites.UseCompatibleStateImageBehavior = false;
@@ -6691,7 +6720,6 @@
             this.panel36.BackColor = System.Drawing.Color.Transparent;
             this.panel36.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel36.BackgroundImage")));
             this.panel36.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel36.Controls.Add(this.label134);
             this.panel36.Controls.Add(this.lblFaveTotalCount);
             this.panel36.Controls.Add(this.label144);
             this.panel36.Controls.Add(this.label153);
@@ -6708,20 +6736,6 @@
             this.panel36.Size = new System.Drawing.Size(751, 26);
             this.panel36.TabIndex = 199;
             // 
-            // label134
-            // 
-            this.label134.AutoSize = true;
-            this.label134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label134.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label134.ForeColor = System.Drawing.Color.Silver;
-            this.label134.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label134.Location = new System.Drawing.Point(108, 2);
-            this.label134.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.label134.Name = "label134";
-            this.label134.Size = new System.Drawing.Size(14, 20);
-            this.label134.TabIndex = 215;
-            this.label134.Text = ")";
-            // 
             // lblFaveTotalCount
             // 
             this.lblFaveTotalCount.AutoSize = true;
@@ -6729,7 +6743,7 @@
             this.lblFaveTotalCount.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFaveTotalCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblFaveTotalCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblFaveTotalCount.Location = new System.Drawing.Point(90, 2);
+            this.lblFaveTotalCount.Location = new System.Drawing.Point(3, 2);
             this.lblFaveTotalCount.Name = "lblFaveTotalCount";
             this.lblFaveTotalCount.Size = new System.Drawing.Size(17, 20);
             this.lblFaveTotalCount.TabIndex = 214;
@@ -6745,9 +6759,9 @@
             this.label144.Location = new System.Drawing.Point(3, 2);
             this.label144.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label144.Name = "label144";
-            this.label144.Size = new System.Drawing.Size(84, 20);
+            this.label144.Size = new System.Drawing.Size(73, 20);
             this.label144.TabIndex = 153;
-            this.label144.Text = "Favorites (";
+            this.label144.Text = "favorites";
             // 
             // label153
             // 
@@ -6845,24 +6859,23 @@
             this.label142.TabIndex = 203;
             this.label142.Text = "Xpubs";
             // 
-            // btnFavouriteUnlock
+            // FavoritesScrollTimer
             // 
-            this.btnFavouriteUnlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnFavouriteUnlock.Enabled = false;
-            this.btnFavouriteUnlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnFavouriteUnlock.FlatAppearance.BorderSize = 0;
-            this.btnFavouriteUnlock.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavouriteUnlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavouriteUnlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFavouriteUnlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFavouriteUnlock.ForeColor = System.Drawing.Color.White;
-            this.btnFavouriteUnlock.Location = new System.Drawing.Point(46, 73);
-            this.btnFavouriteUnlock.Margin = new System.Windows.Forms.Padding(1);
-            this.btnFavouriteUnlock.Name = "btnFavouriteUnlock";
-            this.btnFavouriteUnlock.Size = new System.Drawing.Size(88, 24);
-            this.btnFavouriteUnlock.TabIndex = 227;
-            this.btnFavouriteUnlock.Text = "🔓 unlock";
-            this.btnFavouriteUnlock.UseVisualStyleBackColor = false;
+            this.FavoritesScrollTimer.Interval = 50;
+            this.FavoritesScrollTimer.Tick += new System.EventHandler(this.FavoritesScrollTimer_Tick);
+            // 
+            // panel34
+            // 
+            this.panel34.BackColor = System.Drawing.Color.Transparent;
+            this.panel34.Controls.Add(this.lblSeconds);
+            this.panel34.Controls.Add(this.label22);
+            this.panel34.Controls.Add(this.lblTime);
+            this.panel34.Controls.Add(this.lblDate);
+            this.panel34.Controls.Add(this.lblDay);
+            this.panel34.Location = new System.Drawing.Point(43, 41);
+            this.panel34.Name = "panel34";
+            this.panel34.Size = new System.Drawing.Size(204, 114);
+            this.panel34.TabIndex = 216;
             // 
             // SATSuma
             // 
@@ -6873,6 +6886,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panel34);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelFavorites);
             this.Controls.Add(this.panelAddToFaves);
@@ -6894,15 +6908,10 @@
             this.Controls.Add(this.pictureBoxLoadingAnimation);
             this.Controls.Add(this.lblBlockSize);
             this.Controls.Add(this.lblTransactions);
-            this.Controls.Add(this.label22);
             this.Controls.Add(this.btnMinimise);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblBlockNumber);
             this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.lblDay);
-            this.Controls.Add(this.lblDate);
-            this.Controls.Add(this.lblSeconds);
-            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.btnMoveWindow);
             this.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
@@ -6992,9 +7001,11 @@
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
             this.panel33.ResumeLayout(false);
-            this.panel34.ResumeLayout(false);
+            this.panelFavoritesContainer.ResumeLayout(false);
             this.panel36.ResumeLayout(false);
             this.panel36.PerformLayout();
+            this.panel34.ResumeLayout(false);
+            this.panel34.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7432,11 +7443,9 @@
         private System.Windows.Forms.Panel panel31;
         private System.Windows.Forms.Panel panelFavorites;
         private System.Windows.Forms.Panel panel33;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        public System.Windows.Forms.Panel panel34;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ListView listViewFavorites;
+        private System.Windows.Forms.Button btnFavoritesListDown;
+        private System.Windows.Forms.Button btnFavoritesListUp;
+        public System.Windows.Forms.Panel panelFavoritesContainer;
         private System.Windows.Forms.Panel panel36;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Label label153;
@@ -7448,7 +7457,6 @@
         private System.Windows.Forms.Label lblFaveXpubsCount;
         private System.Windows.Forms.Label label142;
         private System.Windows.Forms.Button btnMenuFavorites;
-        private System.Windows.Forms.Label label134;
         private System.Windows.Forms.Label lblFaveTotalCount;
         private System.Windows.Forms.Panel panel32;
         private System.Windows.Forms.Button btnDeleteFavorite;
@@ -7458,6 +7466,10 @@
         private System.Windows.Forms.Label lblSelectedFavoriteType;
         private System.Windows.Forms.Label lblFavoriteDataInFull;
         private System.Windows.Forms.Button btnFavouriteUnlock;
+        private System.Windows.Forms.Timer FavoritesScrollTimer;
+        private System.Windows.Forms.ListView listViewFavorites;
+        private System.Windows.Forms.TextBox textBoxFavoriteKey;
+        private System.Windows.Forms.Panel panel34;
     }
 }
 

@@ -29,6 +29,8 @@
  * encryption of favorites
  * sorting of favorites
  * provide feedback/response after adding a favorite
+ * more checking of coinbase transactions
+ * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  */
 
 #region Using
@@ -73,6 +75,9 @@ using System.Reflection.Emit;
 using Control = System.Windows.Forms.Control;
 using TextBox = System.Windows.Forms.TextBox;
 using System.Security.AccessControl;
+using System.Collections;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 
 #endregion
@@ -133,7 +138,9 @@ namespace SATSuma
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        Color subItemBackColor = Color.Black;
+        private int FavoritesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        readonly Color subItemBackColor = Color.Black;
+
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -146,6 +153,7 @@ namespace SATSuma
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
+
             _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             _blockService = new BlockDataService(NodeURL);
             _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
@@ -165,6 +173,7 @@ namespace SATSuma
                         lblBlockNumber.Text = BlockTip;
                     });
                 }
+
                 UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
@@ -4332,7 +4341,7 @@ namespace SATSuma
                         lblBlockListBlockSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockSize.Text = sizeString;
-                            lblBlockListBlockSize.Location = new Point (label105.Location.X + label105.Width, label105.Location.Y);
+                            lblBlockListBlockSize.Location = new Point(label105.Location.X + label105.Width, label105.Location.Y);
                         });
                         string strWeight = Convert.ToString(blocks[0].Weight);
                         decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
@@ -4340,66 +4349,66 @@ namespace SATSuma
                         lblBlockListBlockWeight.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockWeight.Text = strFormattedWeight;
-                            lblBlockListBlockWeight.Location = new Point (label103.Location.X + label103.Width, label103.Location.Y);
+                            lblBlockListBlockWeight.Location = new Point(label103.Location.X + label103.Width, label103.Location.Y);
                         });
                         long nonceLong = Convert.ToInt64(blocks[0].Nonce);
                         lblBlockListNonce.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
-                            lblBlockListNonce.Location = new Point (label24.Location.X + label24.Width, label24.Location.Y);
+                            lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, label24.Location.Y);
                         });
                         lblBlockListMiner.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
-                            lblBlockListMiner.Location = new Point (label95.Location.X + label95.Width, label95.Location.Y);
+                            lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, label95.Location.Y);
                         });
                         lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
-                            lblBlockListTransactionCount.Location = new Point (label99.Location.X + label99.Width, label99.Location.Y);
+                            lblBlockListTransactionCount.Location = new Point(label99.Location.X + label99.Width, label99.Location.Y);
                         });
                         string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
                         TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                         lblBlockListTotalFees.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalFees.Text = TotalBlockFees;
-                            lblBlockListTotalFees.Location = new Point (label88.Location.X + label88.Width, label88.Location.Y);
+                            lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, label88.Location.Y);
                         });
                         string Reward = Convert.ToString(blocks[0].Extras.Reward);
                         lblBlockListReward.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-                            lblBlockListReward.Location = new Point (label101.Location.X + label101.Width, label101.Location.Y);
+                            lblBlockListReward.Location = new Point(label101.Location.X + label101.Width, label101.Location.Y);
                         });
                         lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
-                            lblBlockListBlockFeeRangeAndMedianFee.Location = new Point (label93.Location.X + label93.Width, label93.Location.Y);
+                            lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y);
                         });
                         lblBlockListAverageFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
-                            lblBlockListAverageFee.Location = new Point (label97.Location.X + label97.Width, label97.Location.Y);
+                            lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, label97.Location.Y);
                         });
                         lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
-                            lblBlockListTotalInputs.Location = new Point (label89.Location.X + label89.Width, label89.Location.Y);
+                            lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, label89.Location.Y);
                         });
                         lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
-                            lblBlockListTotalOutputs.Location = new Point (label94.Location.X + label94.Width, label94.Location.Y);
+                            lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, label94.Location.Y);
                         });
                         lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].Extras.AvgTxSize);
-                            lblBlockListAverageTransactionSize.Location = new Point (label92.Location.X + label92.Width, label92.Location.Y);
+                            lblBlockListAverageTransactionSize.Location = new Point(label92.Location.X + label92.Width, label92.Location.Y);
                         });
                         lblBlockListVersion.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListVersion.Text = Convert.ToString(blocks[0].Version);
-                            lblBlockListVersion.Location = new Point (label96.Location.X + label96.Width, label96.Location.Y);
+                            lblBlockListVersion.Location = new Point(label96.Location.X + label96.Width, label96.Location.Y);
                         });
                         lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                         {
@@ -5594,7 +5603,7 @@ namespace SATSuma
                     listViewFavorites.Items.Clear(); // remove any data that may be there already
                 });
                 listViewFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewFavorites, new object[] { true });
-
+                //panelFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, panelFavorites, new object[] { true });
                 // Check if the column header already exists
                 if (listViewFavorites.Columns.Count == 0)
                 {
@@ -5665,6 +5674,14 @@ namespace SATSuma
                         listViewFavorites.Items.Add(item); // add row
                     });
 
+                    // Get the height of each item to set height of whole listview
+                    int rowHeight = listViewFavorites.Margin.Vertical + listViewFavorites.Padding.Vertical + listViewFavorites.GetItemRect(0).Height;
+                    int itemCount = listViewFavorites.Items.Count; // Get the number of items in the ListBox
+                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                    listViewFavorites.Height = listBoxHeight; // Set the height of the ListBox
+
+
                     if (favorite.Type == "block")
                     {
                         counterBlocks++;
@@ -5683,35 +5700,58 @@ namespace SATSuma
                     }
                     counterAllFavorites++;
                 }
-                lblFaveAddressCount.Invoke((MethodInvoker)delegate
+
+
+                lblFaveXpubsCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveAddressCount.Text = counterAddresses.ToString();
+                    lblFaveXpubsCount.Text = counterXpubs.ToString();
+                    lblFaveXpubsCount.Location = new Point(label142.Location.X - lblFaveXpubsCount.Width, label142.Location.Y);
                 });
-                lblFaveBlocksCount.Invoke((MethodInvoker)delegate
+                label147.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveBlocksCount.Text = counterBlocks.ToString();
+                    label147.Location = new Point(lblFaveXpubsCount.Location.X - label147.Width, lblFaveXpubsCount.Location.Y);
                 });
                 lblFaveTransactionsCount.Invoke((MethodInvoker)delegate
                 {
                     lblFaveTransactionsCount.Text = counterTransactions.ToString();
+                    lblFaveTransactionsCount.Location = new Point(label147.Location.X - lblFaveTransactionsCount.Width, label147.Location.Y);
                 });
-                lblFaveXpubsCount.Invoke((MethodInvoker)delegate
+                label151.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveXpubsCount.Text = counterXpubs.ToString();
+                    label151.Location = new Point(lblFaveTransactionsCount.Location.X - label151.Width, lblFaveTransactionsCount.Location.Y);
                 });
+                lblFaveBlocksCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveBlocksCount.Text = counterBlocks.ToString();
+                    lblFaveBlocksCount.Location = new Point(label151.Location.X - lblFaveBlocksCount.Width, label151.Location.Y);
+                });
+                label153.Invoke((MethodInvoker)delegate
+                {
+                    label153.Location = new Point(lblFaveBlocksCount.Location.X - label153.Width, lblFaveBlocksCount.Location.Y);
+                });
+                lblFaveAddressCount.Invoke((MethodInvoker)delegate
+                {
+                    lblFaveAddressCount.Text = counterAddresses.ToString();
+                    lblFaveAddressCount.Location = new Point(label153.Location.X - lblFaveAddressCount.Width, label153.Location.Y);
+                });
+
+
+
                 lblFaveTotalCount.Invoke((MethodInvoker)delegate
                 {
                     lblFaveTotalCount.Text = counterAllFavorites.ToString();
                 });
 
-                lblFaveTotalCount.Invoke((MethodInvoker)delegate
+
+                label144.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveTotalCount.Location = new Point(label144.Location.X + label144.Width, label144.Location.Y);
+                    label144.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
                 });
-                label134.Invoke((MethodInvoker)delegate
-                {
-                    label134.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
-                });
+                //panelFavorites.VerticalScroll.Value = 0;
+                //panelFavorites.VerticalScroll.Minimum = 0;
+
+                // Trigger a repaint of the form
+                //this.Invalidate();
             }
             catch (Exception ex)
             {
@@ -5740,6 +5780,8 @@ namespace SATSuma
 
         private void ListViewFavorites_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+
+            textBoxFavoriteKey.Visible = false;
             try
             {
                 bool anySelected = false;
@@ -5747,7 +5789,7 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-                        
+                        item.EnsureVisible();
                         btnViewFavorite.Enabled = true;
                         btnDeleteFavorite.Enabled = true;
                         item.BackColor = Color.Blue;
@@ -5795,12 +5837,14 @@ namespace SATSuma
                         item.SubItems[4].ForeColor = Color.FromArgb(255, 153, 0);
                     }
                 }
-                // btnViewAddressFromTXInput.Visible = anySelected;
+
+
             }
             catch (Exception ex)
             {
                 HandleException(ex, "ListViewFavorites_ItemSelectionChanged");
             }
+
         }
 
         private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -5923,7 +5967,7 @@ namespace SATSuma
                 {
                     e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
                 }
-                
+
                 TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
             }
             else if (textWidth < columnWidth)
@@ -6028,6 +6072,139 @@ namespace SATSuma
             }
         }
 
+        private void BtnFavoritesListDown_Click(object sender, EventArgs e)
+        {
+            if (panelFavoritesContainer.VerticalScroll.Value < panelFavoritesContainer.VerticalScroll.Maximum)
+            {
+                panelFavoritesContainer.VerticalScroll.Value++;
+            }
+        }
+
+        private bool isFavoritesButtonPressed = false;
+        private bool FavoritesDownButtonPressed = false;
+        private bool FavoritesUpButtonPressed = false;
+
+        private void BtnFavoritesListDown_MouseDown(object sender, MouseEventArgs e)
+        {
+            isFavoritesButtonPressed = true;
+            FavoritesDownButtonPressed = true;
+            FavoritesScrollTimer.Start();
+        }
+
+        private void BtnFavoritesListDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            isFavoritesButtonPressed = false;
+            FavoritesDownButtonPressed = false;
+            FavoritesScrollTimer.Stop();
+            FavoritesScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void BtnFavoritesListUp_Click(object sender, EventArgs e)
+        {
+            if (panelFavoritesContainer.VerticalScroll.Value > panelFavoritesContainer.VerticalScroll.Minimum)
+            {
+                panelFavoritesContainer.VerticalScroll.Value--;
+            }
+        }
+
+        private void BtnFavoritesListUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            isFavoritesButtonPressed = true;
+            FavoritesUpButtonPressed = true;
+            FavoritesScrollTimer.Start();
+        }
+
+        private void BtnFavoritesListUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            isFavoritesButtonPressed = false;
+            FavoritesUpButtonPressed = false;
+            FavoritesScrollTimer.Stop();
+            FavoritesScrollTimer.Interval = 50; // reset the interval to its original value
+        }
+
+        private void FavoritesScrollTimer_Tick(object sender, EventArgs e)
+        {
+            if (isFavoritesButtonPressed)
+            {
+                if (FavoritesDownButtonPressed)
+                {
+                    if (panelFavoritesContainer.VerticalScroll.Value < panelFavoritesContainer.VerticalScroll.Maximum - 4)
+                    {
+                        panelFavoritesContainer.VerticalScroll.Value = panelFavoritesContainer.VerticalScroll.Value + 4;
+                        FavoritesScrollPosition = panelFavoritesContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                    }
+                    FavoritesScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+                else if (FavoritesUpButtonPressed)
+                {
+                    if (panelFavoritesContainer.VerticalScroll.Value > panelFavoritesContainer.VerticalScroll.Minimum + 4)
+                    {
+                        panelFavoritesContainer.VerticalScroll.Value = panelFavoritesContainer.VerticalScroll.Value - 4;
+                        FavoritesScrollPosition = panelFavoritesContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                    }
+                    FavoritesScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                }
+            }
+            else
+            {
+                FavoritesScrollTimer.Stop();
+            }
+        }
+
+        private bool isFavoriteKeyWatermarkTextDisplayed = true;
+
+        private void TextBoxFavoriteKey_Enter(object sender, EventArgs e)
+        {
+            if (isFavoriteKeyWatermarkTextDisplayed)
+            {
+                textBoxFavoriteKey.Text = "";
+                textBoxFavoriteKey.ForeColor = Color.White;
+                isFavoriteKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFavoriteKey_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isFavoriteKeyWatermarkTextDisplayed)
+            {
+                textBoxFavoriteKey.Text = "";
+                textBoxFavoriteKey.ForeColor = Color.White;
+                isFavoriteKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxFavoriteKey_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
+            {
+                textBoxFavoriteKey.Text = "optional notes";
+                textBoxFavoriteKey.ForeColor = Color.Gray;
+                isFavoriteKeyWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxFavoriteKey_TextChanged(object sender, EventArgs e)
+        {
+            if (isFavoriteKeyWatermarkTextDisplayed)
+            {
+                textBoxFavoriteKey.ForeColor = Color.White;
+                isFavoriteKeyWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void BtnFavouriteUnlock_Click(object sender, EventArgs e)
+        {
+            textBoxFavoriteKey.Visible = true;
+        }
+
+        private void PanelFavoritesContainer_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewFavorite.Enabled)
+            {
+                panelFavoritesContainer.VerticalScroll.Value = FavoritesScrollPosition;
+
+            }
+        }
         #endregion
 
         #region ADD TO FAVORITES TAB
@@ -7187,365 +7364,375 @@ namespace SATSuma
             }
         }
 
+
+
+
+
+
+
+
+        #endregion
+
+ 
+        //==============================================================================================================================================================================================
+        //==============================================================================================================================================================================================
+        #region CLASSES
+
+        public class Favorite
+        {
+            public DateTime DateAdded { get; set; }
+            public string Type { get; set; }
+            public string Data { get; set; }
+            public string Note { get; set; }
+            public bool Encrypted { get; set; }
+        }
+
+        // ------------------------------------- Address Transactions -----------------------------------
+        public class TransactionsForAddressService
+        {
+            private readonly string _nodeUrl;
+
+            public TransactionsForAddressService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+
+            public async Task<string> GetTransactionsForAddressAsync(string address, string mempoolConfOrAllTx, string lastSeenTxId = "")
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        if (mempoolConfOrAllTx == "chain")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+                        if (mempoolConfOrAllTx == "mempool")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs/mempool");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+                        if (mempoolConfOrAllTx == "all")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        public class AddressTransactions
+        {
+            public string Txid { get; set; }
+            public Status_AddressTransactions Status { get; set; }
+            public List<Vout_AddressTransactions> Vout { get; set; }
+            public List<Vin_AddressTransactions> Vin { get; set; }
+        }
+
+        public class Vin_AddressTransactions
+        {
+            public Prevout_AddressTransactions Prevout { get; set; }
+            public decimal Value { get; set; }
+            public decimal Amount { get; set; }
+        }
+
+        public class Prevout_AddressTransactions
+        {
+            public string Scriptpubkey_address { get; set; }
+            public decimal Value { get; set; }
+        }
+
+        public class Vout_AddressTransactions
+        {
+            public double Value { get; set; }
+            public decimal Amount { get; set; }
+            public string Scriptpubkey_address { get; set; }
+        }
+
+        public class Status_AddressTransactions
+        {
+            public int Block_height { get; set; }
+            public string Confirmed { get; set; }
+        }
+
+        // ------------------------------------- Blocks -------------------------------------------------
+        public class BlockDataService
+        {
+            private readonly string _nodeUrl;
+            public BlockDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetBlockDataAsync(string blockHeight)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/blocks/{blockHeight}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        public class Block
+        {
+            public Block_extras Extras { get; set; }
+            public string Id { get; set; }
+            public string Height { get; set; }
+            public string Version { get; set; }
+            public string Timestamp { get; set; }
+            public string Bits { get; set; }
+            public string Nonce { get; set; }
+            public string Difficulty { get; set; }
+            public string Merkle_root { get; set; }
+            public int Tx_count { get; set; }
+            public int Size { get; set; }
+            public string Weight { get; set; }
+            public string Previousblockhash { get; set; }
+        }
+
+        public class Block_extras
+        {
+            public string Reward { get; set; }
+            public string MedianFee { get; set; }
+            public int[] FeeRange { get; set; }
+            public int TotalFees { get; set; }
+            public string AvgFee { get; set; }
+            public string AvgFeeRate { get; set; }
+            public string AvgTxSize { get; set; }
+            public string TotalInputs { get; set; }
+            public string TotalOutputs { get; set; }
+            public string TotalOutputAmt { get; set; }
+            public Block_pool Pool { get; set; }
+
+        }
+
+        public class Block_pool
+        {
+            public string Name { get; set; }
+        }
+
+        // ------------------------------------- Transaction --------------------------------------------
+        public class TransactionService
+        {
+            private readonly string _nodeUrl;
+            public TransactionService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetTransactionAsync(string TransactionID)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"tx/{TransactionID}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        public class Transaction
+        {
+            public string Txid { get; set; }
+            public int Version { get; set; }
+            public int Locktime { get; set; }
+            public TransactionVin[] Vin { get; set; }
+            public TransactionVout[] Vout { get; set; }
+            public int Size { get; set; }
+            public int Weight { get; set; }
+            public int Fee { get; set; }
+            public TransactionStatus Status { get; set; }
+        }
+
+        public class TransactionStatus
+        {
+            public bool Confirmed { get; set; }
+            public int Block_height { get; set; }
+            public string Block_hash { get; set; }
+            public int Block_time { get; set; }
+        }
+
+        public class TransactionVin
+        {
+            public string Txid { get; set; }
+            public long Vout { get; set; }
+            public TransactionVinPrevout Prevout { get; set; }
+            public string Scriptsig { get; set; }
+            public string Scriptsig_asm { get; set; }
+            public string[] Witness { get; set; }
+            public bool Is_coinbase { get; set; }
+            public long Sequence { get; set; }
+            public string Inner_redeemscript_asm { get; set; }
+        }
+
+        public class TransactionVinPrevout
+        {
+            public string Scriptpubkey { get; set; }
+            public string Scriptpubkey_asm { get; set; }
+            public string Scriptpubkey_type { get; set; }
+            public string Scriptpubkey_address { get; set; }
+            public long Value { get; set; }
+        }
+
+        public class TransactionVout
+        {
+            public string Scriptpubkey { get; set; }
+            public string Scriptpubkey_asm { get; set; }
+            public string Scriptpubkey_type { get; set; }
+            public string Scriptpubkey_address { get; set; }
+            public long Value { get; set; }
+        }
+
+
+        // ------------------------------------- Block Transactions -------------------------------------
+        public class TransactionsForBlockService
+        {
+            private readonly string _nodeUrl;
+
+            public TransactionsForBlockService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+
+            public async Task<string> GetTransactionsForBlockAsync(string blockHash, string lastSeenBlockTransaction)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"block/{blockHash}/txs/{lastSeenBlockTransaction}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return null;
+            }
+        }
+
+
+        public class Block_Transactions
+        {
+            public string Txid { get; set; }
+            //      public string version { get; set; }
+            //     public string locktime { get; set; }
+            public List<Vin_BlockTransactions> Vin { get; set; }
+            public List<Vout_BlockTransactions> Vout { get; set; }
+            //      public string size { get; set; }
+            //      public string weight { get; set; }
+            public string Fee { get; set; }
+            //     public List<Status_BlockTransactions> status { get; set; }
+        }
+
+        public class Vin_BlockTransactions
+        {
+            //   public string txid { get; set; }
+            //   public string vout { get; set; }
+            //    public List<Prevout_BlockTransactions> prevout { get; set; }
+            //    public string scriptsig { get; set; }
+            //   public string scriptsig_asm { get; set; }
+            //   public List<string> witness { get; set; }
+            public string Is_coinbase { get; set; }
+            //   public string sequence { get; set; }
+        }
+
+
+        public class Prevout_BlockTransactions
+        {
+            public string Scriptpubkey { get; set; }
+            public string Scriptpubkey_asm { get; set; }
+            public string Scriptpubkey_type { get; set; }
+            public string Scriptpubkey_address { get; set; }
+            public string Value { get; set; }
+        }
+
+        public class Status_BlockTransactions
+        {
+            public string Confirmed { get; set; }
+            public string Block_height { get; set; }
+            public string Block_hash { get; set; }
+            public string Block_time { get; set; }
+        }
+
+        public class Vout_BlockTransactions
+        {
+            //     public string scriptpubkey { get; set; }
+            //     public string scriptpubkey_asm { get; set; }
+            //    public string scriptpubkey_type { get; set; }
+            //    public string scriptpubkey_address { get; set; }
+            public string Value { get; set; }
+        }
         #endregion
     }
-    //==============================================================================================================================================================================================
-    //==============================================================================================================================================================================================
-    #region CLASSES
+}
 
-    public class Favorite
-    {
-        public DateTime DateAdded { get; set; }
-        public string Type { get; set; }
-        public string Data { get; set; }
-        public string Note { get; set; }
-        public bool Encrypted { get; set; }
-    }
-
-    // ------------------------------------- Address Transactions -----------------------------------
-    public class TransactionsForAddressService
-    {
-        private readonly string _nodeUrl;
-
-        public TransactionsForAddressService(string nodeUrl)
-        {
-            _nodeUrl = nodeUrl;
-        }
-
-        public async Task<string> GetTransactionsForAddressAsync(string address, string mempoolConfOrAllTx, string lastSeenTxId = "")
-        {
-            int retryCount = 3;
-            while (retryCount > 0)
-            {
-                using var client = new HttpClient();
-                try
-                {
-                    client.BaseAddress = new Uri(_nodeUrl);
-                    if (mempoolConfOrAllTx == "chain")
-                    {
-                        var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
-                    }
-                    if (mempoolConfOrAllTx == "mempool")
-                    {
-                        var response = await client.GetAsync($"address/{address}/txs/mempool");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
-                    }
-                    if (mempoolConfOrAllTx == "all")
-                    {
-                        var response = await client.GetAsync($"address/{address}/txs");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return await response.Content.ReadAsStringAsync();
-                        }
-                    }
-
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-                catch (HttpRequestException)
-                {
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-            }
-            return string.Empty;
-        }
-    }
-
-    public class AddressTransactions
-    {
-        public string Txid { get; set; }
-        public Status_AddressTransactions Status { get; set; }
-        public List<Vout_AddressTransactions> Vout { get; set; }
-        public List<Vin_AddressTransactions> Vin { get; set; }
-    }
-
-    public class Vin_AddressTransactions
-    {
-        public Prevout_AddressTransactions Prevout { get; set; }
-        public decimal Value { get; set; }
-        public decimal Amount { get; set; }
-    }
-
-    public class Prevout_AddressTransactions
-    {
-        public string Scriptpubkey_address { get; set; }
-        public decimal Value { get; set; }
-    }
-
-    public class Vout_AddressTransactions
-    {
-        public double Value { get; set; }
-        public decimal Amount { get; set; }
-        public string Scriptpubkey_address { get; set; }
-    }
-
-    public class Status_AddressTransactions
-    {
-        public int Block_height { get; set; }
-        public string Confirmed { get; set; }
-    }
-
-    // ------------------------------------- Blocks -------------------------------------------------
-    public class BlockDataService
-    {
-        private readonly string _nodeUrl;
-        public BlockDataService(string nodeUrl)
-        {
-            _nodeUrl = nodeUrl;
-        }
-        public async Task<string> GetBlockDataAsync(string blockHeight)
-        {
-            int retryCount = 3;
-            while (retryCount > 0)
-            {
-                using var client = new HttpClient();
-                try
-                {
-                    client.BaseAddress = new Uri(_nodeUrl);
-                    var response = await client.GetAsync($"v1/blocks/{blockHeight}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return await response.Content.ReadAsStringAsync();
-                    }
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-                catch (HttpRequestException)
-                {
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-            }
-            return string.Empty;
-        }
-    }
-
-    public class Block
-    {
-        public Block_extras Extras { get; set; }
-        public string Id { get; set; }
-        public string Height { get; set; }
-        public string Version { get; set; }
-        public string Timestamp { get; set; }
-        public string Bits { get; set; }
-        public string Nonce { get; set; }
-        public string Difficulty { get; set; }
-        public string Merkle_root { get; set; }
-        public int Tx_count { get; set; }
-        public int Size { get; set; }
-        public string Weight { get; set; }
-        public string Previousblockhash { get; set; }
-    }
-
-    public class Block_extras
-    {
-        public string Reward { get; set; }
-        public string MedianFee { get; set; }
-        public int[] FeeRange { get; set; }
-        public int TotalFees { get; set; }
-        public string AvgFee { get; set; }
-        public string AvgFeeRate { get; set; }
-        public string AvgTxSize { get; set; }
-        public string TotalInputs { get; set; }
-        public string TotalOutputs { get; set; }
-        public string TotalOutputAmt { get; set; }
-        public Block_pool Pool { get; set; }
-
-    }
-
-    public class Block_pool
-    {
-        public string Name { get; set; }
-    }
-
-    // ------------------------------------- Transaction --------------------------------------------
-    public class TransactionService
-    {
-        private readonly string _nodeUrl;
-        public TransactionService(string nodeUrl)
-        {
-            _nodeUrl = nodeUrl;
-        }
-        public async Task<string> GetTransactionAsync(string TransactionID)
-        {
-            int retryCount = 3;
-            while (retryCount > 0)
-            {
-                using var client = new HttpClient();
-                try
-                {
-                    client.BaseAddress = new Uri(_nodeUrl);
-                    var response = await client.GetAsync($"tx/{TransactionID}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return await response.Content.ReadAsStringAsync();
-                    }
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-                catch (HttpRequestException)
-                {
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-            }
-            return string.Empty;
-        }
-    }
-
-    public class Transaction
-    {
-        public string Txid { get; set; }
-        public int Version { get; set; }
-        public int Locktime { get; set; }
-        public TransactionVin[] Vin { get; set; }
-        public TransactionVout[] Vout { get; set; }
-        public int Size { get; set; }
-        public int Weight { get; set; }
-        public int Fee { get; set; }
-        public TransactionStatus Status { get; set; }
-    }
-
-    public class TransactionStatus
-    {
-        public bool Confirmed { get; set; }
-        public int Block_height { get; set; }
-        public string Block_hash { get; set; }
-        public int Block_time { get; set; }
-    }
-
-    public class TransactionVin
-    {
-        public string Txid { get; set; }
-        public long Vout { get; set; }
-        public TransactionVinPrevout Prevout { get; set; }
-        public string Scriptsig { get; set; }
-        public string Scriptsig_asm { get; set; }
-        public string[] Witness { get; set; }
-        public bool Is_coinbase { get; set; }
-        public long Sequence { get; set; }
-        public string Inner_redeemscript_asm { get; set; }
-    }
-
-    public class TransactionVinPrevout
-    {
-        public string Scriptpubkey { get; set; }
-        public string Scriptpubkey_asm { get; set; }
-        public string Scriptpubkey_type { get; set; }
-        public string Scriptpubkey_address { get; set; }
-        public long Value { get; set; }
-    }
-
-    public class TransactionVout
-    {
-        public string Scriptpubkey { get; set; }
-        public string Scriptpubkey_asm { get; set; }
-        public string Scriptpubkey_type { get; set; }
-        public string Scriptpubkey_address { get; set; }
-        public long Value { get; set; }
-    }
-
-
-    // ------------------------------------- Block Transactions -------------------------------------
-    public class TransactionsForBlockService
-    {
-        private readonly string _nodeUrl;
-
-        public TransactionsForBlockService(string nodeUrl)
-        {
-            _nodeUrl = nodeUrl;
-        }
-
-        public async Task<string> GetTransactionsForBlockAsync(string blockHash, string lastSeenBlockTransaction)
-        {
-            int retryCount = 3;
-            while (retryCount > 0)
-            {
-                using var client = new HttpClient();
-                try
-                {
-                    client.BaseAddress = new Uri(_nodeUrl);
-                    var response = await client.GetAsync($"block/{blockHash}/txs/{lastSeenBlockTransaction}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return await response.Content.ReadAsStringAsync();
-                    }
-
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-                catch (HttpRequestException)
-                {
-                    retryCount--;
-                    await Task.Delay(3000);
-                }
-            }
-            return null;
-        }
-    }
-
-
-    public class Block_Transactions
-    {
-        public string Txid { get; set; }
-        //      public string version { get; set; }
-        //     public string locktime { get; set; }
-        public List<Vin_BlockTransactions> Vin { get; set; }
-        public List<Vout_BlockTransactions> Vout { get; set; }
-        //      public string size { get; set; }
-        //      public string weight { get; set; }
-        public string Fee { get; set; }
-        //     public List<Status_BlockTransactions> status { get; set; }
-    }
-
-    public class Vin_BlockTransactions
-    {
-        //   public string txid { get; set; }
-        //   public string vout { get; set; }
-        //    public List<Prevout_BlockTransactions> prevout { get; set; }
-        //    public string scriptsig { get; set; }
-        //   public string scriptsig_asm { get; set; }
-        //   public List<string> witness { get; set; }
-        public string Is_coinbase { get; set; }
-        //   public string sequence { get; set; }
-    }
-
-
-    public class Prevout_BlockTransactions
-    {
-        public string Scriptpubkey { get; set; }
-        public string Scriptpubkey_asm { get; set; }
-        public string Scriptpubkey_type { get; set; }
-        public string Scriptpubkey_address { get; set; }
-        public string Value { get; set; }
-    }
-
-    public class Status_BlockTransactions
-    {
-        public string Confirmed { get; set; }
-        public string Block_height { get; set; }
-        public string Block_hash { get; set; }
-        public string Block_time { get; set; }
-    }
-
-    public class Vout_BlockTransactions
-    {
-        //     public string scriptpubkey { get; set; }
-        //     public string scriptpubkey_asm { get; set; }
-        //    public string scriptpubkey_type { get; set; }
-        //    public string scriptpubkey_address { get; set; }
-        public string Value { get; set; }
-    }
-    #endregion
-} 
 //==================================================================================================================================================================================================
 //======================================================================================== END =====================================================================================================
 //==================================================================================================================================================================================================

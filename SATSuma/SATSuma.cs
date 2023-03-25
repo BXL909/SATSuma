@@ -28,7 +28,7 @@
  * help text for favorites screen/add to faves tab
  * encryption of favorites
  * sorting of favorites
- * provide feedback/response after adding a favorite
+ * error handling on adding a favorite to file
  * more checking of coinbase transactions
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  */
@@ -6216,6 +6216,9 @@ namespace SATSuma
             {
                 panelFees.Visible = false;
                 panelAddToFaves.Visible = true;
+                lblFavoriteSavedSuccess.Visible = false;
+                btnCommitToFavorites.Enabled = true;
+                btnCancelAddToFaves.Enabled = true;
             }
             else
             {
@@ -6274,8 +6277,19 @@ namespace SATSuma
                 toBeEncrypted = true;
             }
 
+            string favoriteNote = "";
+            if (textBoxFaveProposedNote.Text == "optional notes" || textBoxFaveProposedNote.Text == "")
+            {
+                favoriteNote = "";
+            }
+            else
+            {
+                favoriteNote = textBoxFaveProposedNote.Text;
+            }
+                
+
             // Create a new favorite object for the block with ID "123456"
-            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = textBoxFaveProposedNote.Text, Encrypted = toBeEncrypted };
+            var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = lblFaveProposalData.Text, Note = favoriteNote, Encrypted = toBeEncrypted };
 
             // Read the existing favorites from the JSON file
             var favorites = ReadFavoritesFromJsonFile();
@@ -6285,6 +6299,10 @@ namespace SATSuma
 
             // Write the updated list of favorites back to the JSON file
             WriteFavoritesToJsonFile(favorites);
+            lblFavoriteSavedSuccess.Visible = true;
+            btnCommitToFavorites.Enabled = false;
+            btnCancelAddToFaves.Enabled = false;
+            hideAddToFavoritesTimer.Start();
 
             textBoxFaveProposedNote.Text = "";
         }
@@ -6405,6 +6423,13 @@ namespace SATSuma
                 textBoxFaveEncryptionKey.ForeColor = Color.White;
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
+        }
+
+        private void hideAddToFavorites_Tick(object sender, EventArgs e)
+        {
+            panelAddToFaves.Visible = false;
+            panelFees.Visible = true;
+            hideAddToFavoritesTimer.Stop();
         }
         #endregion
 
@@ -7730,6 +7755,8 @@ namespace SATSuma
             public string Value { get; set; }
         }
         #endregion
+
+
     }
 }
 

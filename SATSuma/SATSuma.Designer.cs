@@ -441,6 +441,7 @@
             this.XpubScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.btnAddToFavorites = new System.Windows.Forms.Button();
             this.panelAddToFaves = new System.Windows.Forms.Panel();
+            this.lblFavoriteSavedSuccess = new System.Windows.Forms.Label();
             this.panel31 = new System.Windows.Forms.Panel();
             this.label131 = new System.Windows.Forms.Label();
             this.lblFaveProposalType = new System.Windows.Forms.Label();
@@ -487,6 +488,7 @@
             this.label142 = new System.Windows.Forms.Label();
             this.FavoritesScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panel34 = new System.Windows.Forms.Panel();
+            this.hideAddToFavoritesTimer = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -6194,6 +6196,7 @@
             // panelAddToFaves
             // 
             this.panelAddToFaves.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddToFaves.Controls.Add(this.lblFavoriteSavedSuccess);
             this.panelAddToFaves.Controls.Add(this.panel31);
             this.panelAddToFaves.Controls.Add(this.textBoxFaveEncryptionKey);
             this.panelAddToFaves.Controls.Add(this.textBoxFaveProposedNote);
@@ -6205,6 +6208,19 @@
             this.panelAddToFaves.TabIndex = 201;
             this.panelAddToFaves.Visible = false;
             this.panelAddToFaves.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelAddToFaves_Paint);
+            // 
+            // lblFavoriteSavedSuccess
+            // 
+            this.lblFavoriteSavedSuccess.AutoSize = true;
+            this.lblFavoriteSavedSuccess.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFavoriteSavedSuccess.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFavoriteSavedSuccess.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblFavoriteSavedSuccess.Location = new System.Drawing.Point(8, 94);
+            this.lblFavoriteSavedSuccess.Name = "lblFavoriteSavedSuccess";
+            this.lblFavoriteSavedSuccess.Size = new System.Drawing.Size(76, 20);
+            this.lblFavoriteSavedSuccess.TabIndex = 217;
+            this.lblFavoriteSavedSuccess.Text = "✔️saved";
+            this.lblFavoriteSavedSuccess.Visible = false;
             // 
             // panel31
             // 
@@ -6323,7 +6339,7 @@
             this.btnCommitToFavorites.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCommitToFavorites.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCommitToFavorites.ForeColor = System.Drawing.Color.White;
-            this.btnCommitToFavorites.Location = new System.Drawing.Point(73, 94);
+            this.btnCommitToFavorites.Location = new System.Drawing.Point(79, 94);
             this.btnCommitToFavorites.Margin = new System.Windows.Forms.Padding(1);
             this.btnCommitToFavorites.Name = "btnCommitToFavorites";
             this.btnCommitToFavorites.Size = new System.Drawing.Size(88, 22);
@@ -6876,6 +6892,11 @@
             this.panel34.Name = "panel34";
             this.panel34.Size = new System.Drawing.Size(204, 114);
             this.panel34.TabIndex = 216;
+            // 
+            // hideAddToFavoritesTimer
+            // 
+            this.hideAddToFavoritesTimer.Interval = 2000;
+            this.hideAddToFavoritesTimer.Tick += new System.EventHandler(this.hideAddToFavorites_Tick);
             // 
             // SATSuma
             // 
@@ -7470,6 +7491,8 @@
         private System.Windows.Forms.ListView listViewFavorites;
         private System.Windows.Forms.TextBox textBoxFavoriteKey;
         private System.Windows.Forms.Panel panel34;
+        private System.Windows.Forms.Label lblFavoriteSavedSuccess;
+        private System.Windows.Forms.Timer hideAddToFavoritesTimer;
     }
 }
 

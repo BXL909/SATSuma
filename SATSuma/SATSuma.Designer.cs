@@ -462,6 +462,7 @@
             this.lblFees30Mins = new System.Windows.Forms.Label();
             this.panelFavorites = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
+            this.lblDeletedMessage = new System.Windows.Forms.Label();
             this.textBoxFavoriteKey = new System.Windows.Forms.TextBox();
             this.btnFavouriteUnlock = new System.Windows.Forms.Button();
             this.btnDeleteFavorite = new System.Windows.Forms.Button();
@@ -489,6 +490,8 @@
             this.FavoritesScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panel34 = new System.Windows.Forms.Panel();
             this.hideAddToFavoritesTimer = new System.Windows.Forms.Timer(this.components);
+            this.hideDeletedFavoriteMessageTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnDecryptFavorite = new System.Windows.Forms.Button();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -5364,7 +5367,6 @@
             this.lblInvalidTransaction.Size = new System.Drawing.Size(182, 15);
             this.lblInvalidTransaction.TabIndex = 198;
             this.lblInvalidTransaction.Text = "Invalid or does not exist";
-            this.lblInvalidTransaction.Visible = false;
             // 
             // panelTransactionHeadline
             // 
@@ -6491,6 +6493,8 @@
             // 
             this.panel32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.panel32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel32.Controls.Add(this.btnDecryptFavorite);
+            this.panel32.Controls.Add(this.lblDeletedMessage);
             this.panel32.Controls.Add(this.textBoxFavoriteKey);
             this.panel32.Controls.Add(this.btnFavouriteUnlock);
             this.panel32.Controls.Add(this.btnDeleteFavorite);
@@ -6503,6 +6507,19 @@
             this.panel32.Name = "panel32";
             this.panel32.Size = new System.Drawing.Size(748, 100);
             this.panel32.TabIndex = 215;
+            // 
+            // lblDeletedMessage
+            // 
+            this.lblDeletedMessage.AutoSize = true;
+            this.lblDeletedMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDeletedMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDeletedMessage.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblDeletedMessage.Location = new System.Drawing.Point(424, 73);
+            this.lblDeletedMessage.Name = "lblDeletedMessage";
+            this.lblDeletedMessage.Size = new System.Drawing.Size(129, 20);
+            this.lblDeletedMessage.TabIndex = 217;
+            this.lblDeletedMessage.Text = "favorite deleted";
+            this.lblDeletedMessage.Visible = false;
             // 
             // textBoxFavoriteKey
             // 
@@ -6538,7 +6555,7 @@
             this.btnFavouriteUnlock.Name = "btnFavouriteUnlock";
             this.btnFavouriteUnlock.Size = new System.Drawing.Size(88, 24);
             this.btnFavouriteUnlock.TabIndex = 227;
-            this.btnFavouriteUnlock.Text = "🔓 unlock";
+            this.btnFavouriteUnlock.Text = "🔒 unlock";
             this.btnFavouriteUnlock.UseVisualStyleBackColor = false;
             this.btnFavouriteUnlock.Click += new System.EventHandler(this.BtnFavouriteUnlock_Click);
             // 
@@ -6888,7 +6905,7 @@
             this.panel34.Controls.Add(this.lblTime);
             this.panel34.Controls.Add(this.lblDate);
             this.panel34.Controls.Add(this.lblDay);
-            this.panel34.Location = new System.Drawing.Point(43, 41);
+            this.panel34.Location = new System.Drawing.Point(31, 50);
             this.panel34.Name = "panel34";
             this.panel34.Size = new System.Drawing.Size(204, 114);
             this.panel34.TabIndex = 216;
@@ -6896,7 +6913,32 @@
             // hideAddToFavoritesTimer
             // 
             this.hideAddToFavoritesTimer.Interval = 2000;
-            this.hideAddToFavoritesTimer.Tick += new System.EventHandler(this.hideAddToFavorites_Tick);
+            this.hideAddToFavoritesTimer.Tick += new System.EventHandler(this.HideAddToFavorites_Tick);
+            // 
+            // hideDeletedFavoriteMessageTimer
+            // 
+            this.hideDeletedFavoriteMessageTimer.Interval = 2000;
+            this.hideDeletedFavoriteMessageTimer.Tick += new System.EventHandler(this.HideDeletedFavoriteMessageTimer_Tick);
+            // 
+            // btnDecryptFavorite
+            // 
+            this.btnDecryptFavorite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnDecryptFavorite.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnDecryptFavorite.FlatAppearance.BorderSize = 0;
+            this.btnDecryptFavorite.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnDecryptFavorite.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnDecryptFavorite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecryptFavorite.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecryptFavorite.ForeColor = System.Drawing.Color.White;
+            this.btnDecryptFavorite.Location = new System.Drawing.Point(362, 69);
+            this.btnDecryptFavorite.Margin = new System.Windows.Forms.Padding(1);
+            this.btnDecryptFavorite.Name = "btnDecryptFavorite";
+            this.btnDecryptFavorite.Size = new System.Drawing.Size(42, 24);
+            this.btnDecryptFavorite.TabIndex = 228;
+            this.btnDecryptFavorite.Text = "🔓";
+            this.btnDecryptFavorite.UseVisualStyleBackColor = false;
+            this.btnDecryptFavorite.Visible = false;
+            this.btnDecryptFavorite.Click += new System.EventHandler(this.btnDecryptFavorite_Click);
             // 
             // SATSuma
             // 
@@ -7493,6 +7535,9 @@
         private System.Windows.Forms.Panel panel34;
         private System.Windows.Forms.Label lblFavoriteSavedSuccess;
         private System.Windows.Forms.Timer hideAddToFavoritesTimer;
+        private System.Windows.Forms.Label lblDeletedMessage;
+        private System.Windows.Forms.Timer hideDeletedFavoriteMessageTimer;
+        private System.Windows.Forms.Button btnDecryptFavorite;
     }
 }
 

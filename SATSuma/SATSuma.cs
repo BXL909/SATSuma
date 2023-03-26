@@ -23,11 +23,13 @@
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * validation of node and xpub textboxes
+ * more address type support on xpub screen (eg taproot)
  * xpub help text definitions
- * help text for favorites screen/add to faves tab
- * sorting of favorites
+ * help text for bookmarks screen/add to bookmarks tab
+ * sorting of bookmarks
  * more checking of coinbase transactions
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
+ * hide all xpub controls when invalid xpub
  */
 
 #region Using
@@ -124,7 +126,7 @@ namespace SATSuma
         bool BtnViewTransactionFromAddressWasEnabled = false;
         bool BtnViewBlockFromAddressWasEnabled = false;
         bool btnViewBlockFromBlockListWasEnabled = false;
-        bool btnViewTransactionsFromBlockListWasEnabled = false;
+        
         bool btnPreviousBlockTransactionsWasEnabled = false;
         bool btnNextBlockTransactionsWasEnabled = false;
         bool textBoxSubmittedBlockNumberWasEnabled = true;
@@ -137,7 +139,7 @@ namespace SATSuma
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int FavoritesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
 
 
@@ -166,19 +168,20 @@ namespace SATSuma
                 using (WebClient client = new WebClient())
                 {
                     string BlockTipURL = NodeURL + "blocks/tip/height";
-                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     lblBlockNumber.Invoke((MethodInvoker)delegate
                     {
                         lblBlockNumber.Text = BlockTip;
                     });
                 }
-
+                
                 UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
-                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
-                {
-                    textboxSubmittedAddress.Text = "bc1qnymv08yth53u4zfyqxfjp5wu0kxl3d57pka0q7"; // initial value for testing purposes
-                });
+                //setup block list screen
+                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
+                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
+                //setup address screen
+                AddressInvalidHideControls(); // initially address textbox is empty so hide the controls
                 CheckBlockchainExplorerApiStatus();
                 mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
                 btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
@@ -1444,25 +1447,19 @@ namespace SATSuma
         //--------------- VALIDATE BITCOIN ADDRESS,GENERATE QR, BALANCE, TX, ETC---------------------------------------
         private async void TboxSubmittedAddress_TextChanged(object sender, EventArgs e)
         {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
+
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalAddressTransactionRowsAdded = 0;
 
-            if (textboxSubmittedAddress.Text == "")
-            {
-                AddressInvalidHideControls();
-            }
-            else
-            {
-                AddressValidShowControls();
-            }
             string addressString = textboxSubmittedAddress.Text; //user entered address
             string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
+                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+                AddressValidShowControls();
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
                     lblAddressType.Text = addressType + " address";
@@ -1496,6 +1493,9 @@ namespace SATSuma
                     HandleException(ex, "TboxSubmittedAddress_TextChanged (Error getting first batch of transactions for address)");
                     return;
                 }
+                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+
             }
             else
             {
@@ -1534,11 +1534,10 @@ namespace SATSuma
                 lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
                 {
                     lblAddressConfirmedUnspentOutputs.Text = string.Empty;
-                });
+                }); 
                 AddressInvalidHideControls();
             }
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+
         }
 
         //=============================================================================================================
@@ -2310,18 +2309,43 @@ namespace SATSuma
             label67.Visible = true;
             label63.Visible = true;
             listViewAddressTransactions.Visible = true;
+            lblAddressConfirmedUnspent.Visible = true;
+            lblAddressConfirmedUnspentOutputs.Visible = true;
+            lblAddressConfirmedTransactionCount.Visible = true;
+            lblAddressConfirmedReceived.Visible = true;
+            lblAddressConfirmedReceivedOutputs.Visible = true;
+            lblAddressConfirmedSpent.Visible = true;
+            lblAddressConfirmedSpentOutputs.Visible = true;
+            btnShowAllTX.Visible = true;
+            btnShowConfirmedTX.Visible = true;
+            btnShowUnconfirmedTX.Visible = true;
+            lblAddressType.Visible = true;
         }
 
         private void AddressInvalidHideControls() // hide all address related controls
         {
-            btnNextAddressTransactions.Visible = false;
-            btnFirstAddressTransaction.Visible = false;
-            lblAddressTXPositionInList.Visible = false;
-            label59.Visible = false;
-            label61.Visible = false;
-            label67.Visible = false;
-            label63.Visible = false;
-            listViewAddressTransactions.Visible = false;
+            if (lblAddressType.Visible)
+            {
+                btnNextAddressTransactions.Visible = false;
+                btnFirstAddressTransaction.Visible = false;
+                lblAddressTXPositionInList.Visible = false;
+                label59.Visible = false;
+                label61.Visible = false;
+                label67.Visible = false;
+                label63.Visible = false;
+                listViewAddressTransactions.Visible = false;
+                lblAddressConfirmedUnspent.Visible = false;
+                lblAddressConfirmedUnspentOutputs.Visible = false;
+                lblAddressConfirmedTransactionCount.Visible = false;
+                lblAddressConfirmedReceived.Visible = false;
+                lblAddressConfirmedReceivedOutputs.Visible = false;
+                lblAddressConfirmedSpent.Visible = false;
+                lblAddressConfirmedSpentOutputs.Visible = false;
+                btnShowAllTX.Visible = false;
+                btnShowConfirmedTX.Visible = false;
+                btnShowUnconfirmedTX.Visible = false;
+                lblAddressType.Visible = false;
+            }
         }
         #endregion
 
@@ -3025,6 +3049,12 @@ namespace SATSuma
                     panelTransactionDiagram.Visible = true;
                     panel27.Visible = true;
                     panel28.Visible = true;
+                    btnTransactionInputsUp.Visible = true;
+                    btnTransactionInputDown.Visible = true;
+                    btnTransactionOutputsUp.Visible = true;
+                    btnTransactionOutputsDown.Visible = true;
+                    listViewTransactionInputs.Visible = true;
+                    listViewTransactionOutputs.Visible = true;
                     LookupTransaction();
                 }
                 else
@@ -3033,6 +3063,12 @@ namespace SATSuma
                     panelTransactionDiagram.Visible = false;
                     panel27.Visible = false;
                     panel28.Visible = false;
+                    btnTransactionInputsUp.Visible = false;
+                    btnTransactionInputDown.Visible = false;
+                    btnTransactionOutputsUp.Visible = false;
+                    btnTransactionOutputsDown.Visible = false;
+                    listViewTransactionInputs.Visible = false;
+                    listViewTransactionOutputs.Visible = false;
                     lblInvalidTransaction.Visible = true;
                 }
             }
@@ -3042,6 +3078,12 @@ namespace SATSuma
                 panelTransactionDiagram.Visible = false;
                 panel27.Visible = false;
                 panel28.Visible = false;
+                btnTransactionInputsUp.Visible = false;
+                btnTransactionInputDown.Visible = false;
+                btnTransactionOutputsUp.Visible = false;
+                btnTransactionOutputsDown.Visible = false;
+                listViewTransactionInputs.Visible = false;
+                listViewTransactionOutputs.Visible = false;
                 lblInvalidTransaction.Visible = true;
             }
         }
@@ -4042,7 +4084,6 @@ namespace SATSuma
             try
             {
                 btnViewBlockFromBlockList.Visible = false;
-                btnViewTransactionsFromBlockList.Visible = false;
                 var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
                 await GetFifteenBlocksForBlockList(blockNumber);
             }
@@ -4231,7 +4272,6 @@ namespace SATSuma
                 // Get 15 more blocks starting from the current block height minus the number we've already seen
                 await GetFifteenBlocksForBlockList(blockNumber);
                 btnViewBlockFromBlockList.Visible = false;
-                btnViewTransactionsFromBlockList.Visible = false;
             }
             catch (Exception ex)
             {
@@ -4248,7 +4288,6 @@ namespace SATSuma
                 // Get 15 more blocks starting from the current block height minus the number we've already seen
                 await GetFifteenBlocksForBlockList(blockNumber);
                 btnViewBlockFromBlockList.Visible = false;
-                btnViewTransactionsFromBlockList.Visible = false;
             }
             catch (Exception ex)
             {
@@ -4283,7 +4322,6 @@ namespace SATSuma
                     if (item.Selected)
                     {
                         btnViewBlockFromBlockList.Enabled = true;
-                        btnViewTransactionsFromBlockList.Enabled = true;
                         item.SubItems[1].ForeColor = Color.White; // Block number
                         item.SubItems[2].ForeColor = Color.White; // TX count
                         anySelected = true;
@@ -4291,11 +4329,6 @@ namespace SATSuma
                         {
                             btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y);
                             btnViewBlockFromBlockList.Height = item.Bounds.Height;
-                        });
-                        btnViewTransactionsFromBlockList.Invoke((MethodInvoker)delegate
-                        {
-                            btnViewTransactionsFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width + listViewBlockList.Columns[2].Width - btnViewBlockFromBlockList.Width - 10, item.Position.Y + listViewBlockList.Location.Y);
-                            btnViewTransactionsFromBlockList.Height = item.Bounds.Height;
                         });
                         // display block hash
                         using (WebClient client = new WebClient())
@@ -4421,7 +4454,6 @@ namespace SATSuma
                     }
                 }
                 btnViewBlockFromBlockList.Visible = anySelected;
-                btnViewTransactionsFromBlockList.Visible = anySelected;
             }
             catch (Exception ex)
             {
@@ -4430,31 +4462,7 @@ namespace SATSuma
 
         }
 
-        private void BtnViewTransactionsFromBlockList_Click(object sender, EventArgs e)  // this and btnViewBlockFromBlockList_Click do exactly the same. They both exist for UI only
-        {
-            try
-            {
-                //assign block number to text box on block panel
-                // Get the selected item
-                ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
-                // Get the second subitem in the selected item (index 1)
-                string submittedBlockNumber = selectedItem.SubItems[1].Text;
-                // Set the text of the textBoxSubmittedBlockNumber control
-                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
-                });
-                LookupBlock();
-                //show the block screen
-                BtnMenuBlock_Click(sender, e);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnViewTransactionsFromBlockList_Click");
-            }
-        }
-
-        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)  // this and btnViewTransactionsFromBlockList_Click do exactly the same. They both exist for UI only
+        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)  
         {
             try
             {
@@ -5564,94 +5572,93 @@ namespace SATSuma
         }
         #endregion
 
-        #region FAVORITES SCREEN
-        private void SetupFavoritesScreen()
+        #region BOOKMARKS SCREEN
+        private void SetupBookmarksScreen()
         {
             try
             {
-                var favorites = ReadFavoritesFromJsonFile();
+                var bookmarks = ReadBookmarksFromJsonFile();
 
-                btnViewFavorite.Enabled = false;
-                btnDeleteFavorite.Enabled = false;
-                lblDeletedMessage.Location = new Point(btnDeleteFavorite.Location.X - lblDeletedMessage.Width, lblDeletedMessage.Location.Y);
-                lblFavoriteDataInFull.Invoke((MethodInvoker)delegate
+                btnViewBookmark.Enabled = false;
+                btnDeleteBookmark.Enabled = false;
+                lblDeletedMessage.Location = new Point(btnDeleteBookmark.Location.X - lblDeletedMessage.Width, lblDeletedMessage.Location.Y);
+                lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
-                    lblFavoriteDataInFull.Text = "";
+                    lblBookmarkDataInFull.Text = "";
                 });
-                lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                lblBookmarkNoteInFull.Invoke((MethodInvoker)delegate
                 {
-                    lblFavoriteNoteInFull.Text = "";
+                    lblBookmarkNoteInFull.Text = "";
                 });
                 label138.Invoke((MethodInvoker)delegate
                 {
                     label138.Text = "";
                 });
-                lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
                 {
-                    lblSelectedFavoriteType.Text = "";
+                    lblSelectedBookmarkType.Text = "";
                 });
                 //LIST VIEW
-                listViewFavorites.Invoke((MethodInvoker)delegate
+                listViewBookmarks.Invoke((MethodInvoker)delegate
                 {
-                    listViewFavorites.Items.Clear(); // remove any data that may be there already
+                    listViewBookmarks.Items.Clear(); // remove any data that may be there already
                 });
-                listViewFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewFavorites, new object[] { true });
-                //panelFavorites.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, panelFavorites, new object[] { true });
+                listViewBookmarks.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBookmarks, new object[] { true });
                 // Check if the column header already exists
-                if (listViewFavorites.Columns.Count == 0)
+                if (listViewBookmarks.Columns.Count == 0)
                 {
                     // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Columns.Add(" Date added", 100);
+                        listViewBookmarks.Columns.Add(" Date added", 100);
                     });
                 }
 
-                if (listViewFavorites.Columns.Count == 1)
+                if (listViewBookmarks.Columns.Count == 1)
                 {
                     // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Columns.Add("Type", 95);
+                        listViewBookmarks.Columns.Add("Type", 95);
                     });
                 }
 
-                if (listViewFavorites.Columns.Count == 2)
+                if (listViewBookmarks.Columns.Count == 2)
                 {
                     // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Columns.Add("", 20);
+                        listViewBookmarks.Columns.Add("", 20);
                     });
                 }
-                if (listViewFavorites.Columns.Count == 3)
+                if (listViewBookmarks.Columns.Count == 3)
                 {
                     // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Columns.Add("Favorite", 233);
+                        listViewBookmarks.Columns.Add("Bookmark", 233);
                     });
                 }
-                if (listViewFavorites.Columns.Count == 4)
+                if (listViewBookmarks.Columns.Count == 4)
                 {
                     // If not, add the column header
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Columns.Add("Note", 600);
+                        listViewBookmarks.Columns.Add("Note", 600);
                     });
                 }
                 // Add the items to the ListView
-                int counterAllFavorites = 0; // used to count rows in list as they're added
+                int counterAllBookmarks = 0; // used to count rows in list as they're added
                 int counterBlocks = 0;
                 int counterAddresses = 0;
                 int counterXpubs = 0;
                 int counterTransactions = 0;
 
-                foreach (var favorite in favorites)
+                foreach (var bookmark in bookmarks)
                 {
-                    ListViewItem item = new ListViewItem(Convert.ToString(favorite.DateAdded)); // create new row
-                    item.SubItems.Add(favorite.Type);
-                    if (favorite.Encrypted == true)
+                    ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
+                    item.SubItems.Add(bookmark.Type);
+                    if (bookmark.Encrypted == true)
                     {
                         item.SubItems.Add("🔒");
                     }
@@ -5659,152 +5666,157 @@ namespace SATSuma
                     {
                         item.SubItems.Add("");
                     }
-                    item.SubItems.Add(favorite.Data);
-                    item.SubItems.Add(favorite.Note);
+                    item.SubItems.Add(bookmark.Data);
+                    item.SubItems.Add(bookmark.Note);
 
-                    listViewFavorites.Invoke((MethodInvoker)delegate
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewFavorites.Items.Add(item); // add row
+                        listViewBookmarks.Items.Add(item); // add row
                     });
 
                     // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewFavorites.Margin.Vertical + listViewFavorites.Padding.Vertical + listViewFavorites.GetItemRect(0).Height;
-                    int itemCount = listViewFavorites.Items.Count; // Get the number of items in the ListBox
+                    int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
+                    int itemCount = listViewBookmarks.Items.Count; // Get the number of items in the ListBox
                     int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
 
-                    listViewFavorites.Height = listBoxHeight; // Set the height of the ListBox
+                    listViewBookmarks.Height = listBoxHeight; // Set the height of the ListBox
 
-                    if (favorite.Type == "block")
+                    if (bookmark.Type == "block")
                     {
                         counterBlocks++;
                     }
-                    if (favorite.Type == "address")
+                    if (bookmark.Type == "address")
                     {
                         counterAddresses++;
                     }
-                    if (favorite.Type == "xpub")
+                    if (bookmark.Type == "xpub")
                     {
                         counterXpubs++;
                     }
-                    if (favorite.Type == "transaction")
+                    if (bookmark.Type == "transaction")
                     {
                         counterTransactions++;
                     }
-                    counterAllFavorites++;
+                    counterAllBookmarks++;
                 }
 
-                lblFaveXpubsCount.Invoke((MethodInvoker)delegate
+                lblBookmarkXpubsCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveXpubsCount.Text = counterXpubs.ToString();
-                    lblFaveXpubsCount.Location = new Point(label142.Location.X - lblFaveXpubsCount.Width, label142.Location.Y);
+                    lblBookmarkXpubsCount.Text = counterXpubs.ToString();
+                    lblBookmarkXpubsCount.Location = new Point(label142.Location.X - lblBookmarkXpubsCount.Width, label142.Location.Y);
                 });
                 label147.Invoke((MethodInvoker)delegate
                 {
-                    label147.Location = new Point(lblFaveXpubsCount.Location.X - label147.Width, lblFaveXpubsCount.Location.Y);
+                    label147.Location = new Point(lblBookmarkXpubsCount.Location.X - label147.Width, lblBookmarkXpubsCount.Location.Y);
                 });
-                lblFaveTransactionsCount.Invoke((MethodInvoker)delegate
+                lblBookmarkTransactionsCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveTransactionsCount.Text = counterTransactions.ToString();
-                    lblFaveTransactionsCount.Location = new Point(label147.Location.X - lblFaveTransactionsCount.Width, label147.Location.Y);
+                    lblBookmarkTransactionsCount.Text = counterTransactions.ToString();
+                    lblBookmarkTransactionsCount.Location = new Point(label147.Location.X - lblBookmarkTransactionsCount.Width, label147.Location.Y);
                 });
                 label151.Invoke((MethodInvoker)delegate
                 {
-                    label151.Location = new Point(lblFaveTransactionsCount.Location.X - label151.Width, lblFaveTransactionsCount.Location.Y);
+                    label151.Location = new Point(lblBookmarkTransactionsCount.Location.X - label151.Width, lblBookmarkTransactionsCount.Location.Y);
                 });
-                lblFaveBlocksCount.Invoke((MethodInvoker)delegate
+                lblBookmarkBlocksCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveBlocksCount.Text = counterBlocks.ToString();
-                    lblFaveBlocksCount.Location = new Point(label151.Location.X - lblFaveBlocksCount.Width, label151.Location.Y);
+                    lblBookmarkBlocksCount.Text = counterBlocks.ToString();
+                    lblBookmarkBlocksCount.Location = new Point(label151.Location.X - lblBookmarkBlocksCount.Width, label151.Location.Y);
                 });
                 label153.Invoke((MethodInvoker)delegate
                 {
-                    label153.Location = new Point(lblFaveBlocksCount.Location.X - label153.Width, lblFaveBlocksCount.Location.Y);
+                    label153.Location = new Point(lblBookmarkBlocksCount.Location.X - label153.Width, lblBookmarkBlocksCount.Location.Y);
                 });
-                lblFaveAddressCount.Invoke((MethodInvoker)delegate
+                lblBookmarkAddressCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveAddressCount.Text = counterAddresses.ToString();
-                    lblFaveAddressCount.Location = new Point(label153.Location.X - lblFaveAddressCount.Width, label153.Location.Y);
+                    lblBookmarkAddressCount.Text = counterAddresses.ToString();
+                    lblBookmarkAddressCount.Location = new Point(label153.Location.X - lblBookmarkAddressCount.Width, label153.Location.Y);
                 });
 
-                lblFaveTotalCount.Invoke((MethodInvoker)delegate
+                lblBookmarkTotalCount.Invoke((MethodInvoker)delegate
                 {
-                    lblFaveTotalCount.Text = counterAllFavorites.ToString();
+                    lblBookmarkTotalCount.Text = counterAllBookmarks.ToString();
                 });
 
 
                 label144.Invoke((MethodInvoker)delegate
                 {
-                    label144.Location = new Point(lblFaveTotalCount.Location.X + lblFaveTotalCount.Width, lblFaveTotalCount.Location.Y);
+                    label144.Location = new Point(lblBookmarkTotalCount.Location.X + lblBookmarkTotalCount.Width, lblBookmarkTotalCount.Location.Y);
                 });
             }
             catch (Exception ex)
             {
-                HandleException(ex, "SetupFavoritesScreen");
+                HandleException(ex, "SetupBookmarksScreen");
             }
         }
 
-        private static void DeleteFavoriteFromJsonFile(string favoriteDataToDelete)
+        private static void DeleteBookmarkFromJsonFile(string bookmarkDataToDelete)
         {
-            // Read the existing favorites from the JSON file
-            var favorites = ReadFavoritesFromJsonFile();
+            // Read the existing bookmarks from the JSON file
+            var bookmarks = ReadBookmarksFromJsonFile();
 
-            // Find the index of the favorite with the specified user ID, type, and ID
-            int index = favorites.FindIndex(favorite =>
-                favorite.Data == favoriteDataToDelete);
+            // Find the index of the bookmark with the specified data
+            int index = bookmarks.FindIndex(bookmark =>
+                bookmark.Data == bookmarkDataToDelete);
 
-            // If a matching favorite was found, remove it from the list
+            // If a matching bookmark was found, remove it from the list
             if (index >= 0)
             {
-                favorites.RemoveAt(index);
+                bookmarks.RemoveAt(index);
 
-                // Write the updated list of favorites back to the JSON file
-                WriteFavoritesToJsonFile(favorites);
+                // Write the updated list of bookmarks back to the JSON file
+                WriteBookmarksToJsonFile(bookmarks);
             }
         }
 
-        private void ListViewFavorites_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        string bookmarkDataInFullPreserved = string.Empty;
+        string bookmarkNoteInFullPreserved = string.Empty;
+
+        private void ListViewBookmarks_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
 
-            textBoxFavoriteKey.Visible = false;
+            textBoxBookmarkKey.Visible = false;
             try
             {
-                foreach (ListViewItem item in listViewFavorites.Items)
+                foreach (ListViewItem item in listViewBookmarks.Items)
                 {
                     if (item.Selected)
                     {
                         item.EnsureVisible();
-                        btnViewFavorite.Enabled = true;
-                        btnDeleteFavorite.Enabled = true;
+                        btnViewBookmark.Enabled = true;
+                        btnDeleteBookmark.Enabled = true;
                         item.BackColor = Color.Blue;
                         item.ForeColor = Color.White;
                         item.SubItems[2].ForeColor = Color.White;
                         item.SubItems[3].ForeColor = Color.White;
                         item.SubItems[4].ForeColor = Color.White;
-                        lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                        lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
                         {
-                            lblSelectedFavoriteType.Text = item.SubItems[1].Text;
+                            lblSelectedBookmarkType.Text = item.SubItems[1].Text;
                         });
                         label138.Invoke((MethodInvoker)delegate
                         {
                             label138.Text = "note";
                         });
-                        lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                        lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
                         {
-                            lblFavoriteDataInFull.Location = new Point(lblSelectedFavoriteType.Location.X + lblSelectedFavoriteType.Width, lblSelectedFavoriteType.Location.Y);
-                            lblFavoriteDataInFull.Text = item.SubItems[3].Text;
+                            lblBookmarkDataInFull.Location = new Point(lblSelectedBookmarkType.Location.X + lblSelectedBookmarkType.Width, lblSelectedBookmarkType.Location.Y);
+                            lblBookmarkDataInFull.Text = item.SubItems[3].Text;
+                            bookmarkDataInFullPreserved = item.SubItems[3].Text;
                         });
-                        lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                        lblBookmarkNoteInFull.Invoke((MethodInvoker)delegate
                         {
-                            lblFavoriteNoteInFull.Location = new Point(label138.Location.X + label138.Width, label138.Location.Y);
-                            lblFavoriteNoteInFull.Text = item.SubItems[4].Text;
+                            lblBookmarkNoteInFull.Location = new Point(label138.Location.X + label138.Width, label138.Location.Y);
+                            lblBookmarkNoteInFull.Text = item.SubItems[4].Text;
+                            bookmarkNoteInFullPreserved = item.SubItems[4].Text;
                         });
                         if (item.SubItems[2].Text == "🔒")
                         {
-                            btnFavouriteUnlock.Enabled = true;
+                            btnBookmarkUnlock.Enabled = true;
                         }
                         else
                         {
-                            btnFavouriteUnlock.Enabled = false;
+                            btnBookmarkUnlock.Enabled = false;
                         }
                     }
                     else
@@ -5818,20 +5830,20 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "ListViewFavorites_ItemSelectionChanged");
+                HandleException(ex, "ListViewBookmarks_ItemSelectionChanged");
             }
         }
 
-        private void ListViewFavorites_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void ListViewBookmarks_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
                 {
                     e.Cancel = true;
                     e.NewWidth = 100;
                 }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 150) // max width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width > 150) // max width
                 {
                     e.Cancel = true;
                     e.NewWidth = 150;
@@ -5840,7 +5852,7 @@ namespace SATSuma
 
             if (e.ColumnIndex == 1)
             {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
                 {
                     e.Cancel = true;
                     e.NewWidth = 95;
@@ -5850,7 +5862,7 @@ namespace SATSuma
 
             if (e.ColumnIndex == 2)
             {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
                 {
                     e.Cancel = true;
                     e.NewWidth = 20;
@@ -5859,12 +5871,12 @@ namespace SATSuma
 
             if (e.ColumnIndex == 3)
             {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
                 {
                     e.Cancel = true;
                     e.NewWidth = 100;
                 }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 400) // max width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width > 400) // max width
                 {
                     e.Cancel = true;
                     e.NewWidth = 400;
@@ -5872,12 +5884,12 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 4)
             {
-                if (listViewFavorites.Columns[e.ColumnIndex].Width < 100) // min width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
                 {
                     e.Cancel = true;
                     e.NewWidth = 100;
                 }
-                if (listViewFavorites.Columns[e.ColumnIndex].Width > 600) // max width
+                if (listViewBookmarks.Columns[e.ColumnIndex].Width > 600) // max width
                 {
                     e.Cancel = true;
                     e.NewWidth = 600;
@@ -5885,7 +5897,7 @@ namespace SATSuma
             }
         }
 
-        private void ListViewFavorites_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void ListViewBookmarks_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             try
             {
@@ -5922,7 +5934,7 @@ namespace SATSuma
                     }
 
                 }
-                var font = listViewFavorites.Font;
+                var font = listViewBookmarks.Font;
                 var columnWidth = e.Header.Width;
                 var textWidth = TextRenderer.MeasureText(text, font).Width;
                 if (textWidth > columnWidth)
@@ -5937,7 +5949,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBookmarks.BackColor), bounds);
                     }
 
                     TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
@@ -5953,7 +5965,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewFavorites.BackColor), bounds);
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBookmarks.BackColor), bounds);
                     }
 
                     TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
@@ -5961,19 +5973,19 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "ListViewFavorites_DrawSubItem");
+                HandleException(ex, "ListViewBookmarks_DrawSubItem");
             }
         }
 
-        private void BtnViewFavorite_Click(object sender, EventArgs e)
+        private void BtnViewBookmark_Click(object sender, EventArgs e)
         {
             try
             {
-                if (lblSelectedFavoriteType.Text == "block")
+                if (lblSelectedBookmarkType.Text == "block")
                 {
                     textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
                     {
-                        textBoxSubmittedBlockNumber.Text = lblFavoriteDataInFull.Text;
+                        textBoxSubmittedBlockNumber.Text = lblBookmarkDataInFull.Text;
                     });
                     try
                     {
@@ -5981,298 +5993,299 @@ namespace SATSuma
                     }
                     catch (Exception ex)
                     {
-                        HandleException(ex, "btnViewFavorite_Click");
+                        HandleException(ex, "btnViewBookmark_Click");
                     }
                     //show the block screen
                     BtnMenuBlock_Click(sender, e);
                 }
-                if (lblSelectedFavoriteType.Text == "address")
+                if (lblSelectedBookmarkType.Text == "address")
                 {
                     textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                     {
-                        textboxSubmittedAddress.Text = lblFavoriteDataInFull.Text;
+                        textboxSubmittedAddress.Text = lblBookmarkDataInFull.Text;
                     });
                     //show the address screen
                     BtnMenuAddress_Click(sender, e);
                 }
-                if (lblSelectedFavoriteType.Text == "transaction")
+                if (lblSelectedBookmarkType.Text == "transaction")
                 {
                     textBoxTransactionID.Invoke((MethodInvoker)delegate
                     {
-                        textBoxTransactionID.Text = lblFavoriteDataInFull.Text;
+                        textBoxTransactionID.Text = lblBookmarkDataInFull.Text;
                     });
                     //show the transaction screen
                     BtnMenuTransaction_Click(sender, e);
                 }
-                if (lblSelectedFavoriteType.Text == "xpub")
+                if (lblSelectedBookmarkType.Text == "xpub")
                 {
                     textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
                     {
-                        textBoxSubmittedXpub.Text = lblFavoriteDataInFull.Text;
+                        textBoxSubmittedXpub.Text = lblBookmarkDataInFull.Text;
                     });
                     LookupXpub();
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BtnViewFavorite_Click");
+                HandleException(ex, "BtnViewBookmark_Click");
             }
         }
 
-        private void BtnDeleteFavorite_Click(object sender, EventArgs e)
+        private void BtnDeleteBoookmark_Click(object sender, EventArgs e)
         {
             try
             {
-                string favoriteDataToDelete = lblFavoriteDataInFull.Text;
-                DeleteFavoriteFromJsonFile(favoriteDataToDelete);
+                string bookmarkDataToDelete = lblBookmarkDataInFull.Text;
+                DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
                 lblDeletedMessage.Visible = true;
-                hideDeletedFavoriteMessageTimer.Start();
-                SetupFavoritesScreen();
-                lblFavoriteDataInFull.Invoke((MethodInvoker)delegate
+                hideDeletedBookmarkMessageTimer.Start();
+                SetupBookmarksScreen();
+                lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
-                    lblFavoriteDataInFull.Text = "";
+                    lblBookmarkDataInFull.Text = "";
                 });
-                lblFavoriteNoteInFull.Invoke((MethodInvoker)delegate
+                lblBookmarkNoteInFull.Invoke((MethodInvoker)delegate
                 {
-                    lblFavoriteNoteInFull.Text = "";
+                    lblBookmarkNoteInFull.Text = "";
                 });
                 label138.Invoke((MethodInvoker)delegate
                 {
                     label138.Text = "";
                 });
-                lblSelectedFavoriteType.Invoke((MethodInvoker)delegate
+                lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
                 {
-                    lblSelectedFavoriteType.Text = "";
+                    lblSelectedBookmarkType.Text = "";
                 });
             }
             catch (Exception ex)
             {
-                HandleException(ex, "btnDeleteFavorite_Click");
+                HandleException(ex, "btnDeleteBookmark_Click");
             }
         }
 
-        private void BtnDecryptFavorite_Click(object sender, EventArgs e)
+        private void BtnDecryptBookmark_Click(object sender, EventArgs e)
         {
 
-            string decryptedFavoriteData = Decrypt(lblFavoriteDataInFull.Text, textBoxFavoriteKey.Text);
-            string decryptedFavoriteNote = Decrypt(lblFavoriteNoteInFull.Text, textBoxFavoriteKey.Text);
-            lblFavoriteDataInFull.Text = decryptedFavoriteData;
-            lblFavoriteNoteInFull.Text = decryptedFavoriteNote;
+            string decryptedBookmarkData = Decrypt(bookmarkDataInFullPreserved, textBoxBookmarkKey.Text);
+            string decryptedBookmarkNote = Decrypt(bookmarkNoteInFullPreserved, textBoxBookmarkKey.Text);
+            lblBookmarkDataInFull.Text = decryptedBookmarkData;
+            lblBookmarkNoteInFull.Text = decryptedBookmarkNote;
+            textBoxBookmarkKey.Text = "";
         }
 
-        private void BtnFavoritesListDown_Click(object sender, EventArgs e)
+        private void BtnBookmarksListDown_Click(object sender, EventArgs e)
         {
-            if (panelFavoritesContainer.VerticalScroll.Value < panelFavoritesContainer.VerticalScroll.Maximum)
+            if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum)
             {
-                panelFavoritesContainer.VerticalScroll.Value++;
+                panelBookmarksContainer.VerticalScroll.Value++;
             }
         }
 
-        private bool isFavoritesButtonPressed = false;
-        private bool FavoritesDownButtonPressed = false;
-        private bool FavoritesUpButtonPressed = false;
+        private bool isBookmarksButtonPressed = false;
+        private bool bookmarksDownButtonPressed = false;
+        private bool bookmarksUpButtonPressed = false;
 
-        private void BtnFavoritesListDown_MouseDown(object sender, MouseEventArgs e)
+        private void BtnBookmarksListDown_MouseDown(object sender, MouseEventArgs e)
         {
-            isFavoritesButtonPressed = true;
-            FavoritesDownButtonPressed = true;
-            FavoritesScrollTimer.Start();
+            isBookmarksButtonPressed = true;
+            bookmarksDownButtonPressed = true;
+            BookmarksScrollTimer.Start();
         }
 
-        private void BtnFavoritesListDown_MouseUp(object sender, MouseEventArgs e)
+        private void BtnBookmarksListDown_MouseUp(object sender, MouseEventArgs e)
         {
-            isFavoritesButtonPressed = false;
-            FavoritesDownButtonPressed = false;
-            FavoritesScrollTimer.Stop();
-            FavoritesScrollTimer.Interval = 50; // reset the interval to its original value
+            isBookmarksButtonPressed = false;
+            bookmarksDownButtonPressed = false;
+            BookmarksScrollTimer.Stop();
+            BookmarksScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
-        private void BtnFavoritesListUp_Click(object sender, EventArgs e)
+        private void BtnBookmarksListUp_Click(object sender, EventArgs e)
         {
-            if (panelFavoritesContainer.VerticalScroll.Value > panelFavoritesContainer.VerticalScroll.Minimum)
+            if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum)
             {
-                panelFavoritesContainer.VerticalScroll.Value--;
+                panelBookmarksContainer.VerticalScroll.Value--;
             }
         }
 
-        private void BtnFavoritesListUp_MouseDown(object sender, MouseEventArgs e)
+        private void BtnBookmarksListUp_MouseDown(object sender, MouseEventArgs e)
         {
-            isFavoritesButtonPressed = true;
-            FavoritesUpButtonPressed = true;
-            FavoritesScrollTimer.Start();
+            isBookmarksButtonPressed = true;
+            bookmarksUpButtonPressed = true;
+            BookmarksScrollTimer.Start();
         }
 
-        private void BtnFavoritesListUp_MouseUp(object sender, MouseEventArgs e)
+        private void BtnBookmarksListUp_MouseUp(object sender, MouseEventArgs e)
         {
-            isFavoritesButtonPressed = false;
-            FavoritesUpButtonPressed = false;
-            FavoritesScrollTimer.Stop();
-            FavoritesScrollTimer.Interval = 50; // reset the interval to its original value
+            isBookmarksButtonPressed = false;
+            bookmarksUpButtonPressed = false;
+            BookmarksScrollTimer.Stop();
+            BookmarksScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
-        private void FavoritesScrollTimer_Tick(object sender, EventArgs e)
+        private void BookmarksScrollTimer_Tick(object sender, EventArgs e)
         {
-            if (isFavoritesButtonPressed)
+            if (isBookmarksButtonPressed)
             {
-                if (FavoritesDownButtonPressed)
+                if (bookmarksDownButtonPressed)
                 {
-                    if (panelFavoritesContainer.VerticalScroll.Value < panelFavoritesContainer.VerticalScroll.Maximum - 4)
+                    if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum - 4)
                     {
-                        panelFavoritesContainer.VerticalScroll.Value = panelFavoritesContainer.VerticalScroll.Value + 4;
-                        FavoritesScrollPosition = panelFavoritesContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value + 4;
+                        bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    FavoritesScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    BookmarksScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
-                else if (FavoritesUpButtonPressed)
+                else if (bookmarksUpButtonPressed)
                 {
-                    if (panelFavoritesContainer.VerticalScroll.Value > panelFavoritesContainer.VerticalScroll.Minimum + 4)
+                    if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum + 4)
                     {
-                        panelFavoritesContainer.VerticalScroll.Value = panelFavoritesContainer.VerticalScroll.Value - 4;
-                        FavoritesScrollPosition = panelFavoritesContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value - 4;
+                        bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    FavoritesScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    BookmarksScrollTimer.Interval = 2; // set a faster interval while the button is held down
                 }
             }
             else
             {
-                FavoritesScrollTimer.Stop();
+                BookmarksScrollTimer.Stop();
             }
         }
 
-        private bool isFavoriteKeyWatermarkTextDisplayed = true;
+        private bool isBookmarkKeyWatermarkTextDisplayed = true;
 
-        private void TextBoxFavoriteKey_Enter(object sender, EventArgs e)
+        private void TextBoxBookmarkKey_Enter(object sender, EventArgs e)
         {
-            if (isFavoriteKeyWatermarkTextDisplayed)
+            if (isBookmarkKeyWatermarkTextDisplayed)
             {
-                textBoxFavoriteKey.Text = "";
-                textBoxFavoriteKey.ForeColor = Color.White;
-                isFavoriteKeyWatermarkTextDisplayed = false;
+                textBoxBookmarkKey.Text = "";
+                textBoxBookmarkKey.ForeColor = Color.White;
+                isBookmarkKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFavoriteKey_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxBookmarkKey_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (isFavoriteKeyWatermarkTextDisplayed)
+            if (isBookmarkKeyWatermarkTextDisplayed)
             {
-                textBoxFavoriteKey.Text = "";
-                textBoxFavoriteKey.ForeColor = Color.White;
-                isFavoriteKeyWatermarkTextDisplayed = false;
+                textBoxBookmarkKey.Text = "";
+                textBoxBookmarkKey.ForeColor = Color.White;
+                isBookmarkKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFavoriteKey_Leave(object sender, EventArgs e)
+        private void TextBoxBookmarkKey_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
+            if (string.IsNullOrWhiteSpace(textBoxBookmarkProposedNote.Text))
             {
-                textBoxFavoriteKey.Text = "enter key to unlock";
-                textBoxFavoriteKey.ForeColor = Color.Gray;
-                isFavoriteKeyWatermarkTextDisplayed = true;
+                textBoxBookmarkKey.Text = "enter key to unlock";
+                textBoxBookmarkKey.ForeColor = Color.Gray;
+                isBookmarkKeyWatermarkTextDisplayed = true;
             }
         }
 
-        private void TextBoxFavoriteKey_TextChanged(object sender, EventArgs e)
+        private void TextBoxBookmarkKey_TextChanged(object sender, EventArgs e)
         {
-            if (isFavoriteKeyWatermarkTextDisplayed)
+            if (isBookmarkKeyWatermarkTextDisplayed)
             {
-                textBoxFavoriteKey.ForeColor = Color.White;
-                isFavoriteKeyWatermarkTextDisplayed = false;
+                textBoxBookmarkKey.ForeColor = Color.White;
+                isBookmarkKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void BtnFavouriteUnlock_Click(object sender, EventArgs e)
+        private void BtnBookmarkUnlock_Click(object sender, EventArgs e)
         {
-            if (textBoxFavoriteKey.Visible)
+            if (textBoxBookmarkKey.Visible)
             {
-                textBoxFavoriteKey.Visible = false;
-                btnDecryptFavorite.Visible = false;
+                textBoxBookmarkKey.Visible = false;
+                btnDecryptBookmark.Visible = false;
             }
             else
             {
-                textBoxFavoriteKey.Visible = true;
-                btnDecryptFavorite.Visible = true;
+                textBoxBookmarkKey.Visible = true;
+                btnDecryptBookmark.Visible = true;
             }
         }
 
-        private void PanelFavoritesContainer_Paint(object sender, PaintEventArgs e)
+        private void PanelBookmarksContainer_Paint(object sender, PaintEventArgs e)
         {
-            if (btnViewFavorite.Enabled)
+            if (btnViewBookmark.Enabled)
             {
-                panelFavoritesContainer.VerticalScroll.Value = FavoritesScrollPosition;
+                panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
 
             }
         }
         #endregion
 
-        #region ADD TO FAVORITES TAB
+        #region ADD TO BOOKMARKS TAB
         //==============================================================================================================
-        //---------------------- ADD TO FAVOURITES ---------------------------------------------------------------------
-        private void BtnAddToFavorites_Click(object sender, EventArgs e)
+        //---------------------- ADD TO BOOKMARKS ---------------------------------------------------------------------
+        private void BtnAddToBookmarks_Click(object sender, EventArgs e)
         {
-            if (!panelAddToFaves.Visible)
+            if (!panelAddToBookmarks.Visible)
             {
                 panelFees.Visible = false;
-                panelAddToFaves.Visible = true;
-                lblFavoriteSavedSuccess.Visible = false;
-                btnCommitToFavorites.Enabled = true;
-                btnCancelAddToFaves.Enabled = true;
+                panelAddToBookmarks.Visible = true;
+                lblBookmarkSavedSuccess.Visible = false;
+                btnCommitToBookmarks.Enabled = true;
+                btnCancelAddToBookmarks.Enabled = true;
             }
             else
             {
-                panelAddToFaves.Visible = false;
+                panelAddToBookmarks.Visible = false;
                 panelFees.Visible = true;
             }
         }
 
-        private void BtnCancelAddToFaves_Click(object sender, EventArgs e)
+        private void BtnCancelAddToBookmarks_Click(object sender, EventArgs e)
         {
-            panelAddToFaves.Visible = false;
+            panelAddToBookmarks.Visible = false;
             panelFees.Visible = true;
         }
 
-        private void PanelAddToFaves_Paint(object sender, PaintEventArgs e)
+        private void PanelAddToBookmarks_Paint(object sender, PaintEventArgs e)
         {
             try
             {
                 if (panelAddress.Visible)
                 {
-                    lblFaveProposalType.Text = "address";
-                    lblFaveProposalData.Text = textboxSubmittedAddress.Text;
+                    lblBookmarkProposalType.Text = "address";
+                    lblBookmarkProposalData.Text = textboxSubmittedAddress.Text;
 
                 }
                 if (panelBlock.Visible)
                 {
-                    lblFaveProposalType.Text = "block";
-                    lblFaveProposalData.Text = textBoxSubmittedBlockNumber.Text;
+                    lblBookmarkProposalType.Text = "block";
+                    lblBookmarkProposalData.Text = textBoxSubmittedBlockNumber.Text;
                 }
                 if (panelTransaction.Visible)
                 {
-                    lblFaveProposalType.Text = "transaction";
-                    lblFaveProposalData.Text = textBoxTransactionID.Text;
+                    lblBookmarkProposalType.Text = "transaction";
+                    lblBookmarkProposalData.Text = textBoxTransactionID.Text;
                 }
                 if (panelXpub.Visible)
                 {
-                    lblFaveProposalType.Text = "xpub";
-                    lblFaveProposalData.Text = textBoxSubmittedXpub.Text;
+                    lblBookmarkProposalType.Text = "xpub";
+                    lblBookmarkProposalData.Text = textBoxSubmittedXpub.Text;
                 }
 
-                lblFaveProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
-                lblFaveProposalData.Location = new Point(lblFaveProposalType.Location.X + lblFaveProposalType.Width, lblFaveProposalType.Location.Y);
-                lblFaveProposalData.Width = panelAddToFaves.Width - label131.Width - lblFaveProposalType.Width - 5;
+                lblBookmarkProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
+                lblBookmarkProposalData.Location = new Point(lblBookmarkProposalType.Location.X + lblBookmarkProposalType.Width, lblBookmarkProposalType.Location.Y);
+                lblBookmarkProposalData.Width = panelAddToBookmarks.Width - label131.Width - lblBookmarkProposalType.Width - 5;
             }
             catch (Exception ex)
             {
-                HandleException(ex, "PanelAddToFaves_Paint");
+                HandleException(ex, "PanelAddToBookmarks_Paint");
             }
         }
 
-        private void BtnCommitToFavorites_Click(object sender, EventArgs e)
+        private void BtnCommitToBookmarks_Click(object sender, EventArgs e)
         {
             try
             {
                 DateTime today = DateTime.Today;
                 bool toBeEncrypted = false;
-                if (textBoxFaveEncryptionKey.Text == "" || textBoxFaveEncryptionKey.Text == "optional encryption key")
+                if (textBoxBookmarkEncryptionKey.Text == "" || textBoxBookmarkEncryptionKey.Text == "optional encryption key")
                 {
                     toBeEncrypted = false;
                 }
@@ -6281,60 +6294,60 @@ namespace SATSuma
                     toBeEncrypted = true;
                 }
 
-                string favoriteNote;
-                if (textBoxFaveProposedNote.Text == "optional notes" || textBoxFaveProposedNote.Text == "")
+                string bookmarkNote;
+                if (textBoxBookmarkProposedNote.Text == "optional notes" || textBoxBookmarkProposedNote.Text == "")
                 {
-                    favoriteNote = "";
+                    bookmarkNote = "";
                 }
                 else
                 {
-                    favoriteNote = textBoxFaveProposedNote.Text;
+                    bookmarkNote = textBoxBookmarkProposedNote.Text;
                 }
 
-                string favoriteData;
+                string bookmarkData;
                 if (toBeEncrypted)
                 {
-                    // Encrypt the new favorite using the encryption key
-                    string encryptionKey = textBoxFaveEncryptionKey.Text;
-                    string unencryptedFavoriteData = lblFaveProposalData.Text;
-                    string unencryptedFavoriteNote = favoriteNote;
-                    string encryptedFavoriteData = Encrypt(unencryptedFavoriteData, encryptionKey);
-                    string encryptedFavoriteNote = Encrypt(unencryptedFavoriteNote, encryptionKey);
-                    favoriteNote = encryptedFavoriteNote;
-                    favoriteData = encryptedFavoriteData;
+                    // Encrypt the new bookmark using the encryption key
+                    string encryptionKey = textBoxBookmarkEncryptionKey.Text;
+                    string unencryptedBookmarkData = lblBookmarkProposalData.Text;
+                    string unencryptedBookmarkNote = bookmarkNote;
+                    string encryptedBookmarkData = Encrypt(unencryptedBookmarkData, encryptionKey);
+                    string encryptedBookmarkNote = Encrypt(unencryptedBookmarkNote, encryptionKey);
+                    bookmarkNote = encryptedBookmarkNote;
+                    bookmarkData = encryptedBookmarkData;
                 }
                 else
                 {
-                    favoriteData = lblFaveProposalData.Text;
+                    bookmarkData = lblBookmarkProposalData.Text;
                 }
 
-                var newFavorite = new Favorite { DateAdded = today, Type = lblFaveProposalType.Text, Data = favoriteData, Note = favoriteNote, Encrypted = toBeEncrypted };
+                var newBookmark = new Bookmark { DateAdded = today, Type = lblBookmarkProposalType.Text, Data = bookmarkData, Note = bookmarkNote, Encrypted = toBeEncrypted };
 
-                // Read the existing favorites from the JSON file
-                var favorites = ReadFavoritesFromJsonFile();
+                // Read the existing bookmarks from the JSON file
+                var bookmarks = ReadBookmarksFromJsonFile();
 
-                // Add the new favorite to the list
-                favorites.Add(newFavorite);
+                // Add the new bookmark to the list
+                bookmarks.Add(newBookmark);
 
-                // Write the updated list of favorites back to the JSON file
-                WriteFavoritesToJsonFile(favorites);
-                lblFavoriteSavedSuccess.Visible = true;
-                btnCommitToFavorites.Enabled = false;
-                btnCancelAddToFaves.Enabled = false;
-                hideAddToFavoritesTimer.Start();
+                // Write the updated list of bookmarks back to the JSON file
+                WriteBookmarksToJsonFile(bookmarks);
+                lblBookmarkSavedSuccess.Visible = true;
+                btnCommitToBookmarks.Enabled = false;
+                btnCancelAddToBookmarks.Enabled = false;
+                hideAddToBookmarksTimer.Start();
 
-                textBoxFaveProposedNote.Text = "";
+                textBoxBookmarkProposedNote.Text = "";
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BtnCommitToFavorites_Click");
+                HandleException(ex, "BtnCommitToBookmarks_Click");
             }
         }
 
 
-        private static List<Favorite> ReadFavoritesFromJsonFile()
+        private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
-            string filePath = "favorites.json";
+            string filePath = "bookmarks.json";
 
             if (!File.Exists(filePath))
             {
@@ -6343,123 +6356,123 @@ namespace SATSuma
             // Read the contents of the JSON file into a string
             string json = File.ReadAllText(filePath);
 
-            // Deserialize the JSON string into a list of favorite objects
-            var favorites = JsonConvert.DeserializeObject<List<Favorite>>(json);
+            // Deserialize the JSON string into a list of bookmark objects
+            var bookmarks = JsonConvert.DeserializeObject<List<Bookmark>>(json);
 
             // If the JSON file doesn't exist or is empty, return an empty list
-            favorites ??= new List<Favorite>();
+            bookmarks ??= new List<Bookmark>();
 
-            return favorites;
+            return bookmarks;
         }
 
-        private static void WriteFavoritesToJsonFile(List<Favorite> favorites)
+        private static void WriteBookmarksToJsonFile(List<Bookmark> bookmarks)
         {
-            // Serialize the list of favorite objects into a JSON string
-            string json = JsonConvert.SerializeObject(favorites);
+            // Serialize the list of bookmark objects into a JSON string
+            string json = JsonConvert.SerializeObject(bookmarks);
 
-            // Write the JSON string to the favorites.json file
-            File.WriteAllText("favorites.json", json);
+            // Write the JSON string to the bookmarks.json file
+            File.WriteAllText("bookmarks.json", json);
         }
 
-        private void HideFavesShowFees(object sender, EventArgs e)
+        private void HideBookmarksShowFees(object sender, EventArgs e)
         {
-            panelAddToFaves.Visible = false;
+            panelAddToBookmarks.Visible = false;
             panelFees.Visible = true;
         }
 
-        private bool isFaveNoteWatermarkTextDisplayed = true;
+        private bool isBookmarkNoteWatermarkTextDisplayed = true;
 
-        private void TextBoxFaveProposedNote_Enter(object sender, EventArgs e)
+        private void TextBoxBookmarkProposedNote_Enter(object sender, EventArgs e)
         {
-            if (isFaveNoteWatermarkTextDisplayed)
+            if (isBookmarkNoteWatermarkTextDisplayed)
             {
-                textBoxFaveProposedNote.Text = "";
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
+                textBoxBookmarkProposedNote.Text = "";
+                textBoxBookmarkProposedNote.ForeColor = Color.White;
+                isBookmarkNoteWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFaveProposedNote_Leave(object sender, EventArgs e)
+        private void TextBoxBookmarkProposedNote_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBoxFaveProposedNote.Text))
+            if (string.IsNullOrWhiteSpace(textBoxBookmarkProposedNote.Text))
             {
-                textBoxFaveProposedNote.Text = "optional notes";
-                textBoxFaveProposedNote.ForeColor = Color.Gray;
-                isFaveNoteWatermarkTextDisplayed = true;
+                textBoxBookmarkProposedNote.Text = "optional notes";
+                textBoxBookmarkProposedNote.ForeColor = Color.Gray;
+                isBookmarkNoteWatermarkTextDisplayed = true;
             }
         }
 
-        private void TextBoxFaveProposedNote_TextChanged(object sender, EventArgs e)
+        private void TextBoxBookmarkProposedNote_TextChanged(object sender, EventArgs e)
         {
-            if (isFaveNoteWatermarkTextDisplayed)
+            if (isBookmarkNoteWatermarkTextDisplayed)
             {
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
+                textBoxBookmarkProposedNote.ForeColor = Color.White;
+                isBookmarkNoteWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFaveProposedNote_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxBookmarkProposedNote_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (isFaveNoteWatermarkTextDisplayed)
+            if (isBookmarkNoteWatermarkTextDisplayed)
             {
-                textBoxFaveProposedNote.Text = "";
-                textBoxFaveProposedNote.ForeColor = Color.White;
-                isFaveNoteWatermarkTextDisplayed = false;
+                textBoxBookmarkProposedNote.Text = "";
+                textBoxBookmarkProposedNote.ForeColor = Color.White;
+                isBookmarkNoteWatermarkTextDisplayed = false;
             }
         }
 
         private bool isEncryptionKeyWatermarkTextDisplayed = true;
 
-        private void TextBoxFaveEncryptionKey_Enter(object sender, EventArgs e)
+        private void TextBoxBookmarkEncryptionKey_Enter(object sender, EventArgs e)
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
             {
-                textBoxFaveEncryptionKey.Text = "";
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                textBoxBookmarkEncryptionKey.Text = "";
+                textBoxBookmarkEncryptionKey.ForeColor = Color.White;
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFaveEncryptionKey_Leave(object sender, EventArgs e)
+        private void TextBoxBookmarkEncryptionKey_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBoxFaveEncryptionKey.Text))
+            if (string.IsNullOrWhiteSpace(textBoxBookmarkEncryptionKey.Text))
             {
-                textBoxFaveEncryptionKey.Text = "optional encryption key";
-                textBoxFaveEncryptionKey.ForeColor = Color.Gray;
+                textBoxBookmarkEncryptionKey.Text = "optional encryption key";
+                textBoxBookmarkEncryptionKey.ForeColor = Color.Gray;
                 isEncryptionKeyWatermarkTextDisplayed = true;
             }
         }
 
-        private void TextBoxFaveEncryptionKey_TextChanged(object sender, EventArgs e)
+        private void TextBoxBookmarkEncryptionKey_TextChanged(object sender, EventArgs e)
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
             {
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                textBoxBookmarkEncryptionKey.ForeColor = Color.White;
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void TextBoxFaveEncryptionKey_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxBookmarkEncryptionKey_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
             {
-                textBoxFaveEncryptionKey.Text = "";
-                textBoxFaveEncryptionKey.ForeColor = Color.White;
+                textBoxBookmarkEncryptionKey.Text = "";
+                textBoxBookmarkEncryptionKey.ForeColor = Color.White;
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
 
-        private void HideAddToFavorites_Tick(object sender, EventArgs e)
+        private void HideAddToBookmarks_Tick(object sender, EventArgs e)
         {
-            panelAddToFaves.Visible = false;
+            panelAddToBookmarks.Visible = false;
             panelFees.Visible = true;
-            hideAddToFavoritesTimer.Stop();
+            hideAddToBookmarksTimer.Stop();
         }
 
-        private void HideDeletedFavoriteMessageTimer_Tick(object sender, EventArgs e)
+        private void HideDeletedBookmarkMessageTimer_Tick(object sender, EventArgs e)
         {
             lblDeletedMessage.Visible = false;
-            hideDeletedFavoriteMessageTimer.Stop();
+            hideDeletedBookmarkMessageTimer.Stop();
         }
         #endregion
 
@@ -6582,7 +6595,6 @@ namespace SATSuma
                 BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
                 BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
                 btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
-                btnViewTransactionsFromBlockListWasEnabled = btnViewTransactionsFromBlockList.Enabled;
                 btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
                 btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
                 textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
@@ -6602,7 +6614,6 @@ namespace SATSuma
                 BtnViewTransactionFromAddress.Enabled = false;
                 BtnViewBlockFromAddress.Enabled = false;
                 btnViewBlockFromBlockList.Enabled = false;
-                btnViewTransactionsFromBlockList.Enabled = false;
                 btnPreviousBlockTransactions.Enabled = false;
                 btnNextBlockTransactions.Enabled = false;
                 textboxSubmittedAddress.Enabled = false;
@@ -6625,7 +6636,6 @@ namespace SATSuma
                 BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                 BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                 btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
-                btnViewTransactionsFromBlockList.Enabled = btnViewTransactionsFromBlockListWasEnabled;
                 btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
                 btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
                 btnNextBlock.Enabled = btnNextBlockWasEnabled;
@@ -6946,14 +6956,14 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuTransaction.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = false;
                 btnMenuBlockList.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
@@ -6981,14 +6991,14 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuLightningDashboard.Enabled = false;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
                 panelBitcoinDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelBlockList.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
@@ -7014,7 +7024,7 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = false;
                 btnMenuTransaction.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
@@ -7022,7 +7032,7 @@ namespace SATSuma
                 panelBitcoinDashboard.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
@@ -7044,7 +7054,7 @@ namespace SATSuma
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlock.Enabled = false;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -7052,7 +7062,7 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
@@ -7083,7 +7093,7 @@ namespace SATSuma
                 });
                 btnMenuXpub.Enabled = false;
                 btnMenuBlock.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -7092,7 +7102,7 @@ namespace SATSuma
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlock.Visible = false;
@@ -7115,14 +7125,14 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuTransaction.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuBlock.Enabled = false;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
@@ -7152,9 +7162,9 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
@@ -7197,12 +7207,12 @@ namespace SATSuma
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlockList.Visible = false;
@@ -7215,7 +7225,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuFavorites_Click(object sender, EventArgs e)
+        private void BtnMenuBookmarks_Click(object sender, EventArgs e)
         {
             try
             {
@@ -7226,26 +7236,26 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuTransaction.Enabled = true;
-                btnMenuFavorites.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
-                btnMenuFavorites.Enabled = false;
+                btnMenuBookmarks.Enabled = false;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
-                panelFavorites.Visible = false;
+                panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
-                panelFavorites.Visible = true;
-                SetupFavoritesScreen();
+                panelBookmarks.Visible = true;
+                SetupBookmarksScreen();
             }
             catch (Exception ex)
             {
-                HandleException(ex, "btnMenuFavorites_Click");
+                HandleException(ex, "btnMenuBookmarks_Click");
             }
         }
 
@@ -7394,9 +7404,9 @@ namespace SATSuma
             return this.panelXpub;
         }
 
-        public Panel GetPanelFavorites() // enables help screen to get state (visible) of panel to determine which help text to show
+        public Panel GetPanelBookmarks() // enables help screen to get state (visible) of panel to determine which help text to show
         {
-            return this.panelFavorites;
+            return this.panelBookmarks;
         }
         #endregion
 
@@ -7443,32 +7453,32 @@ namespace SATSuma
             {
                if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
                 {
-                    btnAddToFavorites.Enabled = true;
+                    btnAddToBookmarks.Enabled = true;
                 }
                if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
                 {
-                    btnAddToFavorites.Enabled = false;
+                    btnAddToBookmarks.Enabled = false;
                 }
                if (panelBlock.Visible && lblBlockHash.Text != "")
                 {
-                    btnAddToFavorites.Enabled = true;
+                    btnAddToBookmarks.Enabled = true;
                 }
                 if (panelBlock.Visible && lblBlockHash.Text == "")
                 {
-                    btnAddToFavorites.Enabled = false;
+                    btnAddToBookmarks.Enabled = false;
                 }
                 if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
                 {
-                    btnAddToFavorites.Enabled = true;
+                    btnAddToBookmarks.Enabled = true;
                 }
                 if (panelTransaction.Visible && lblInvalidTransaction.Visible)
                 {
-                    btnAddToFavorites.Enabled = false;
+                    btnAddToBookmarks.Enabled = false;
                 }
             }
             else
             {
-                btnAddToFavorites.Enabled = false;
+                btnAddToBookmarks.Enabled = false;
             }
         }
 
@@ -7483,7 +7493,7 @@ namespace SATSuma
 
         #region CLASSES
 
-        public class Favorite
+        public class Bookmark
         {
             public DateTime DateAdded { get; set; }
             public string Type { get; set; }
@@ -7838,7 +7848,3 @@ namespace SATSuma
         #endregion
     }
 }
-
-//==================================================================================================================================================================================================
-//======================================================================================== END =====================================================================================================
-//==================================================================================================================================================================================================

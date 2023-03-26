@@ -55,11 +55,11 @@ namespace SATSuma
             if (((SATSuma)this.Owner).GetPanelXpub().Visible == true)
             {
                 lblHelpHeading.Text = "Xpub";
-                textBoxHelpText.Text = "Shows all used addresses associated with a provided Xpub. Generates the first 500 addresses for Segwit, Legacy and Segwit P2SH address types, then checks each in turn to find all used addresses, along with their total amounts received, spent and unspent. After 20 consecutive unused addresses it is assumed that all used addresses have been found.\r\n\r\nThis feature can only be used by connecting to your own node. This feature is only available by connecting to your own full node running a local installation of mempool.space. The provided Xpub is not sent or stored anywhere (unless you choose to add to favourites).";
+                textBoxHelpText.Text = "Shows all used addresses associated with a provided Xpub. Generates the first 500 addresses for Segwit, Legacy and Segwit P2SH address types, then checks each in turn to find all used addresses, along with their total amounts received, spent and unspent. After 20 consecutive unused addresses it is assumed that all used addresses have been found.\r\n\r\nThis feature can only be used by connecting to your own node. This feature is only available by connecting to your own full node running a local installation of mempool.space. The provided Xpub is not sent or stored anywhere (unless you choose to bookmark it).";
             }
-            if (((SATSuma)this.Owner).GetPanelFavorites().Visible == true)
+            if (((SATSuma)this.Owner).GetPanelBookmarks().Visible == true)
             {
-                lblHelpHeading.Text = "Favorites";
+                lblHelpHeading.Text = "Bookmarks";
                 textBoxHelpText.Text = "Still needs writing.";
             }
 

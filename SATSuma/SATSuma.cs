@@ -42,7 +42,7 @@
  * xpub help text definitions
  * help text for bookmarks screen/add to bookmarks tab
  * sorting of bookmarks
- * bug - from tx screen, view a coinbase transaction and try to click on the address that received the reward.
+ * BUG - from tx screen, view a coinbase transaction and try to click on the address that received the reward (null prevout)
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  * hide all xpub controls when invalid xpub
  * clear and refresh xpub screen when switching to/from testnet
@@ -1913,9 +1913,12 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
                         .Where(v => v.Scriptpubkey_address == addressString)
                         .Sum(v => v.Value);
-                    balanceChangeVin = (decimal)transaction.Vin // value of all inputs where address is the provided address
-                        .Where(v => v.Prevout.Scriptpubkey_address == addressString)
-                        .Sum(v => v.Prevout.Value);
+                    //    balanceChangeVin = (decimal)transaction.Vin // value of all inputs where address is the provided address
+                    //        .Where(v => v.Prevout.Scriptpubkey_address == addressString)
+                    //        .Sum(v => v.Prevout.Value);
+                    balanceChangeVin = (decimal)transaction.Vin
+    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == addressString)
+    .Sum(v => v.Prevout.Value);
                     balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
                     string balanceChangeString = balanceChange.ToString();
                     balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
@@ -3505,7 +3508,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                             .Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
                             .ToArray();
                         string ascii = Encoding.ASCII.GetString(bytes);
-                        OutputAddress = "OP RETURN: " + ascii;
+                        OutputAddress = "OP_RETURN: " + ascii;
                     }
                     
                     ListViewItem item = new ListViewItem(OutputAddress); // create new row

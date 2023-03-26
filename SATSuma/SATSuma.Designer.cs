@@ -6938,7 +6938,7 @@
             this.btnDecryptFavorite.Text = "🔓";
             this.btnDecryptFavorite.UseVisualStyleBackColor = false;
             this.btnDecryptFavorite.Visible = false;
-            this.btnDecryptFavorite.Click += new System.EventHandler(this.btnDecryptFavorite_Click);
+            this.btnDecryptFavorite.Click += new System.EventHandler(this.BtnDecryptFavorite_Click);
             // 
             // SATSuma
             // 

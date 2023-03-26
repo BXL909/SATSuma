@@ -25,7 +25,6 @@
  * validation of node and xpub textboxes
  * xpub help text definitions
  * help text for favorites screen/add to faves tab
- * encryption of favorites not working properly yet
  * sorting of favorites
  * more checking of coinbase transactions
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
@@ -6052,6 +6051,15 @@ namespace SATSuma
             }
         }
 
+        private void BtnDecryptFavorite_Click(object sender, EventArgs e)
+        {
+
+            string decryptedFavoriteData = Decrypt(lblFavoriteDataInFull.Text, textBoxFavoriteKey.Text);
+            string decryptedFavoriteNote = Decrypt(lblFavoriteNoteInFull.Text, textBoxFavoriteKey.Text);
+            lblFavoriteDataInFull.Text = decryptedFavoriteData;
+            lblFavoriteNoteInFull.Text = decryptedFavoriteNote;
+        }
+
         private void BtnFavoritesListDown_Click(object sender, EventArgs e)
         {
             if (panelFavoritesContainer.VerticalScroll.Value < panelFavoritesContainer.VerticalScroll.Maximum)
@@ -6458,6 +6466,36 @@ namespace SATSuma
         #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
+
+        // Method to encrypt a string using SHA-256
+        private string Encrypt(string input, string key)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            using var sha256 = new SHA256Managed();
+            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
+            byte[] encryptedBytes = new byte[inputBytes.Length];
+            for (int i = 0; i < inputBytes.Length; i++)
+            {
+                encryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
+            }
+            return Convert.ToBase64String(encryptedBytes);
+        }
+
+        // Method to decrypt a string using SHA-256
+        private string Decrypt(string input, string key)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] inputBytes = Convert.FromBase64String(input);
+            using var sha256 = new SHA256Managed();
+            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
+            byte[] decryptedBytes = new byte[inputBytes.Length];
+            for (int i = 0; i < inputBytes.Length; i++)
+            {
+                decryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
+            }
+            return Encoding.UTF8.GetString(decryptedBytes);
+        }
 
         //=============================================================================================================
         //--------------- ERROR HANDLER -------------------------------------------------------------------------------
@@ -7798,49 +7836,6 @@ namespace SATSuma
         }
 
         #endregion
-
-        // Method to encrypt a string using SHA-256
-        private string Encrypt(string input, string key)
-        {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-            using (var sha256 = new SHA256Managed())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(keyBytes);
-                byte[] encryptedBytes = new byte[inputBytes.Length];
-                for (int i = 0; i < inputBytes.Length; i++)
-                {
-                    encryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
-                }
-                return Convert.ToBase64String(encryptedBytes);
-            }
-        }
-
-        // Method to decrypt a string using SHA-256
-        private string Decrypt(string input, string key)
-        {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-            byte[] inputBytes = Convert.FromBase64String(input);
-            using (var sha256 = new SHA256Managed())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(keyBytes);
-                byte[] decryptedBytes = new byte[inputBytes.Length];
-                for (int i = 0; i < inputBytes.Length; i++)
-                {
-                    decryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
-                }
-                return Encoding.UTF8.GetString(decryptedBytes);
-            }
-        }
-
-        private void btnDecryptFavorite_Click(object sender, EventArgs e)
-        {
-
-            string decryptedFavoriteData = Decrypt(lblFavoriteDataInFull.Text, textBoxFavoriteKey.Text);
-            string decryptedFavoriteNote = Decrypt(lblFavoriteNoteInFull.Text, textBoxFavoriteKey.Text);
-            lblFavoriteDataInFull.Text = decryptedFavoriteData;
-            lblFavoriteNoteInFull.Text = decryptedFavoriteNote;
-        }
     }
 }
 

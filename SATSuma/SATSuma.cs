@@ -1,22 +1,37 @@
 ﻿/*  
-────██──██─────     _____      _______ _____                       
-███████████▄───    / ____|  /\|__   __/ ____|                      
-──███████████▄─   | (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
-──███────▀████─    \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
-──███──────███─    ____) / ____ \| |  ____) | |_| | | | | | | (_| |
-──███────▄███▀─   |_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-──█████████▀───  
-──███████████▄─  Version history 🍊
-──███─────▀████  0.1 This takes over where 'Statamoto' left off. More realistic version numbers this time! And hopefully a much more useful application  
-──███───────███  
-──███─────▄████  
-──████████████─  
-████████████▀──  
-────██──██─────
+ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣴⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  _____      _______ _____                       
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ / ____|  /\|__   __/ ____|                      
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
+⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
+⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠛⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
+⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⠇⠀⠉⠉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠉⠛⠛⠿⠿⡏⠀⠀⠀⣾⣿⡿⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀A Bitcoin explorer, Xpub viewer, bitcoin & lightning
+⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠃⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀dashboard with the ability to create encryted 
+⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀bookmarks and notes for addresses, blocks, xpubs and
+⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣶⣦⣤⣀⡀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀transactions. Xpub queries will only work on the 
+⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄user's own node. Keys to unlock encrypted bookmarks
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇are not stored anywhere and are uncrecoverable. The
+⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠘⠿⠿⢿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿bookmarks file is bookmarks.json, in the installation
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿directory.
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣴⣶⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠐⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿Version history 🍊
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⢿⡿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇0.1 this work in progress
+⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃
+⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀
+⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀
+⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⣾⣿⣿⠀⠀⠀⢠⣤⣄⣀⣀⣀⣀⣤⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀
+⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⡇⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣦⣾⣿⣿⡀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠻⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
  * Stuff to do:
  * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
- * support testnet
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * check whether there are any UI scaling issues
  * handle tabbing and focus better
@@ -27,9 +42,10 @@
  * xpub help text definitions
  * help text for bookmarks screen/add to bookmarks tab
  * sorting of bookmarks
- * more checking of coinbase transactions
+ * bug - from tx screen, view a coinbase transaction and try to click on the address that received the reward.
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  * hide all xpub controls when invalid xpub
+ * clear and refresh xpub screen when switching to/from testnet
  */
 
 #region Using
@@ -79,8 +95,9 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using static SATSuma.SATSuma;
 using System.Security.Cryptography;
-
-
+using static System.Net.WebRequestMethods;
+using System.Diagnostics.Eventing.Reader;
+using System.Text.RegularExpressions;
 #endregion
 
 namespace SATSuma
@@ -141,7 +158,6 @@ namespace SATSuma
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
-
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -1407,7 +1423,16 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
         {
             try
             {
-                BitcoinAddress bitcoinAddress = BitcoinAddress.Create(address, Network.Main);
+                BitcoinAddress bitcoinAddress;
+                if (NodeURL == "https://mempool.space/api/")
+                {
+                    bitcoinAddress = BitcoinAddress.Create(address, Network.Main);
+                }
+                else
+                {
+                     bitcoinAddress = BitcoinAddress.Create(address, Network.TestNet);
+                }
+                
                 if (bitcoinAddress is BitcoinPubKeyAddress)
                 {
                     return "P2PKH (legacy)"; // Legacy P2PKH
@@ -3467,7 +3492,22 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
 
                 foreach (TransactionVout vout in vouts)
                 {
-                    string OutputAddress = Convert.ToString(vout.Scriptpubkey_address);
+                    string OutputAddress;
+                    if (vout.Scriptpubkey_address != "" && vout.Scriptpubkey_address != null)  // display address
+                    {
+                        OutputAddress = Convert.ToString(vout.Scriptpubkey_address);
+                    }
+                    else // display OP RETURN after converting hex to ascii
+                    {
+                        string input = vout.Scriptpubkey_asm;
+                        string hex = Regex.Match(input, @"\b([0-9A-Fa-f]{2})+\b").Value;
+                        byte[] bytes = Enumerable.Range(0, hex.Length / 2)
+                            .Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
+                            .ToArray();
+                        string ascii = Encoding.ASCII.GetString(bytes);
+                        OutputAddress = "OP RETURN: " + ascii;
+                    }
+                    
                     ListViewItem item = new ListViewItem(OutputAddress); // create new row
                     string OutputValue = Convert.ToString(vout.Value);
                     decimal DecOutputValue = ConvertSatsToBitcoin(OutputValue);
@@ -3506,12 +3546,20 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     if (item.Selected)
                     {
                         item.ForeColor = Color.White; // address
-                        btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                        if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
                         {
-                            btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y);
-                            btnViewAddressFromTXInput.Height = item.Bounds.Height;
-                        });
-                        anySelected = true;
+                            btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewAddressFromTXInput.Visible = true;
+                                btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y);
+                                btnViewAddressFromTXInput.Height = item.Bounds.Height;
+                            });
+                            anySelected = true;
+                        }
+                        else
+                        {
+                            btnViewAddressFromTXInput.Visible = false;
+                        }
                     }
                     else
                     {
@@ -3519,6 +3567,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     }
                 }
                 btnViewAddressFromTXInput.Visible = anySelected;
+                    
             }
             catch (Exception ex)
             {
@@ -3536,12 +3585,20 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     if (item.Selected)
                     {
                         item.ForeColor = Color.White; // address
-                        btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
+                        if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
                         {
-                            btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y);
-                            btnViewAddressFromTXOutput.Height = item.Bounds.Height;
-                        });
-                        anySelected = true;
+                            btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewAddressFromTXOutput.Visible = true;
+                                btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y);
+                                btnViewAddressFromTXOutput.Height = item.Bounds.Height;
+                            });
+                            anySelected = true;
+                        }
+                        else
+                        {
+                            btnViewAddressFromTXOutput.Visible = false;
+                        }
                     }
                     else
                     {
@@ -6349,12 +6406,12 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
         {
             string filePath = "bookmarks.json";
 
-            if (!File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath))
             {
-                File.Create(filePath).Dispose();
+                System.IO.File.Create(filePath).Dispose();
             }
             // Read the contents of the JSON file into a string
-            string json = File.ReadAllText(filePath);
+            string json = System.IO.File.ReadAllText(filePath);
 
             // Deserialize the JSON string into a list of bookmark objects
             var bookmarks = JsonConvert.DeserializeObject<List<Bookmark>>(json);
@@ -6371,7 +6428,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
             string json = JsonConvert.SerializeObject(bookmarks);
 
             // Write the JSON string to the bookmarks.json file
-            File.WriteAllText("bookmarks.json", json);
+            System.IO.File.WriteAllText("bookmarks.json", json);
         }
 
         private void HideBookmarksShowFees(object sender, EventArgs e)
@@ -6780,11 +6837,11 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
             {
                 Ping pingSender = new Ping();
                 string pingAddress = null;
-                if (NodeURL == "https://blockstream.info/api/")
-                {
-                    pingAddress = "blockstream.info";
-                }
                 if (NodeURL == "https://mempool.space/api/")
+                {
+                    pingAddress = "mempool.space";
+                }
+                if (NodeURL == "https://mempool.space/testnet/api/")
                 {
                     pingAddress = "mempool.space";
                 }
@@ -6801,13 +6858,13 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         lblNodeStatusLight.ForeColor = Color.OliveDrab;
                     });
                     var displayNodeName = "";
-                    if (NodeURL == "https://blockstream.info/api/")
-                    {
-                        displayNodeName = "Blockstream";
-                    }
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Mempool.space";
+                        displayNodeName = "Mainnet";
+                    }
+                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    {
+                        displayNodeName = "Testnet";
                     }
                     lblActiveNode.Invoke((MethodInvoker)delegate
                     {
@@ -6822,13 +6879,13 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         lblNodeStatusLight.ForeColor = Color.Red;
                     });
                     var displayNodeName = "";
-                    if (NodeURL == "https://blockstream.info/api/")
-                    {
-                        displayNodeName = "Blockstream";
-                    }
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Mempool.space";
+                        displayNodeName = "Mainnet";
+                    }
+                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    {
+                        displayNodeName = "Testnet";
                     }
                     lblActiveNode.Invoke((MethodInvoker)delegate
                     {
@@ -6844,13 +6901,13 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     lblNodeStatusLight.ForeColor = Color.Red;
                 });
                 var displayNodeName = "";
-                if (NodeURL == "https://blockstream.info/api/")
-                {
-                    displayNodeName = "Blockstream";
-                }
                 if (NodeURL == "https://mempool.space/api/")
                 {
-                    displayNodeName = "Mempool.space";
+                    displayNodeName = "Mainnet";
+                }
+                if (NodeURL == "https://mempool.space/testnet/api/")
+                {
+                    displayNodeName = "Testnet";
                 }
                 lblActiveNode.Invoke((MethodInvoker)delegate
                 {
@@ -7333,6 +7390,10 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     _blockService = new BlockDataService(NodeURL);
                     _transactionService = new TransactionService(NodeURL);
                     _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+                    LookupBlockList(); // refresh the block list screen
+                    LookupBlock(); // refresh the block screen
+                    textboxSubmittedAddress.Text = ""; //erase and refresh address screen
+                    textBoxTransactionID.Text = ""; //erase and refresh transaction screen
                 }
                 CheckBlockchainExplorerApiStatus();
 
@@ -7585,6 +7646,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
             public double Value { get; set; }
             public decimal Amount { get; set; }
             public string Scriptpubkey_address { get; set; }
+            public string Scriptpubkey_asm { get; set; }
         }
 
         public class Status_AddressTransactions

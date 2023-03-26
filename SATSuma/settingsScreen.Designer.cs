@@ -49,14 +49,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.lblBlockchainInfoJSON = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.lblURLWarning = new System.Windows.Forms.Label();
+            this.textBoxCustomAPI = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.lblNodeStatusLight = new System.Windows.Forms.Label();
             this.comboAPISelectorForQueries = new System.Windows.Forms.ComboBox();
             this.lblActiveNode = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBoxCustomAPI = new System.Windows.Forms.TextBox();
-            this.lblURLWarning = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIGroup1)).BeginInit();
             this.panel4.SuspendLayout();
@@ -339,6 +339,39 @@
             this.panel4.Size = new System.Drawing.Size(353, 339);
             this.panel4.TabIndex = 24;
             // 
+            // lblURLWarning
+            // 
+            this.lblURLWarning.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
+            this.lblURLWarning.Location = new System.Drawing.Point(18, 135);
+            this.lblURLWarning.Name = "lblURLWarning";
+            this.lblURLWarning.Size = new System.Drawing.Size(319, 20);
+            this.lblURLWarning.TabIndex = 142;
+            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            // 
+            // textBoxCustomAPI
+            // 
+            this.textBoxCustomAPI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxCustomAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCustomAPI.Enabled = false;
+            this.textBoxCustomAPI.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxCustomAPI.ForeColor = System.Drawing.Color.Silver;
+            this.textBoxCustomAPI.Location = new System.Drawing.Point(18, 103);
+            this.textBoxCustomAPI.Name = "textBoxCustomAPI";
+            this.textBoxCustomAPI.Size = new System.Drawing.Size(319, 25);
+            this.textBoxCustomAPI.TabIndex = 141;
+            this.textBoxCustomAPI.TextChanged += new System.EventHandler(this.TextBoxCustomAPI_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Silver;
+            this.label5.Location = new System.Drawing.Point(15, 195);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(319, 140);
+            this.label5.TabIndex = 140;
+            this.label5.Text = resources.GetString("label5.Text");
+            // 
             // lblNodeStatusLight
             // 
             this.lblNodeStatusLight.AutoSize = true;
@@ -361,8 +394,8 @@
             this.comboAPISelectorForQueries.FormattingEnabled = true;
             this.comboAPISelectorForQueries.ImeMode = System.Windows.Forms.ImeMode.HangulFull;
             this.comboAPISelectorForQueries.Items.AddRange(new object[] {
-            "blockstream.info",
-            "mempool.space",
+            "Mainnet",
+            "Testnet",
             "own/custom"});
             this.comboAPISelectorForQueries.Location = new System.Drawing.Point(18, 63);
             this.comboAPISelectorForQueries.Name = "comboAPISelectorForQueries";
@@ -413,39 +446,6 @@
             this.btnExit.Text = "❌";
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.UseVisualStyleBackColor = false;
-            // 
-            // label5
-            // 
-            this.label5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Silver;
-            this.label5.Location = new System.Drawing.Point(15, 195);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(319, 140);
-            this.label5.TabIndex = 140;
-            this.label5.Text = resources.GetString("label5.Text");
-            // 
-            // textBoxCustomAPI
-            // 
-            this.textBoxCustomAPI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxCustomAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCustomAPI.Enabled = false;
-            this.textBoxCustomAPI.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomAPI.ForeColor = System.Drawing.Color.Silver;
-            this.textBoxCustomAPI.Location = new System.Drawing.Point(18, 103);
-            this.textBoxCustomAPI.Name = "textBoxCustomAPI";
-            this.textBoxCustomAPI.Size = new System.Drawing.Size(319, 25);
-            this.textBoxCustomAPI.TabIndex = 141;
-            this.textBoxCustomAPI.TextChanged += new System.EventHandler(this.TextBoxCustomAPI_TextChanged);
-            // 
-            // lblURLWarning
-            // 
-            this.lblURLWarning.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
-            this.lblURLWarning.Location = new System.Drawing.Point(18, 135);
-            this.lblURLWarning.Name = "lblURLWarning";
-            this.lblURLWarning.Size = new System.Drawing.Size(319, 20);
-            this.lblURLWarning.TabIndex = 142;
-            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
             // 
             // SettingsScreen
             // 

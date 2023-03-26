@@ -37,7 +37,7 @@ namespace SATSuma
         public SettingsScreen()
         {
             InitializeComponent();
-            comboAPISelectorForQueries.SelectedIndex = 1;
+            comboAPISelectorForQueries.SelectedIndex = 0;
             
         }
 
@@ -205,11 +205,11 @@ namespace SATSuma
             }
             if (comboAPISelectorForQueries.SelectedIndex == 0)
             {
-                NodeURL = "https://blockstream.info/api/";
+                NodeURL = "https://mempool.space/api/";
             }
             if (comboAPISelectorForQueries.SelectedIndex == 1)
             {
-                NodeURL = "https://mempool.space/api/";
+                NodeURL = "https://mempool.space/testnet/api/";
             }
         }
 
@@ -226,13 +226,13 @@ namespace SATSuma
                 {
                     textBoxCustomAPI.Enabled = false;
                     lblURLWarning.ForeColor = Color.Gray;
-                    NodeURL = "https://blockstream.info/api/";
+                    NodeURL = "https://mempool.space/api/";
                 }
                 if (comboAPISelectorForQueries.SelectedIndex == 1)
                 {
                     textBoxCustomAPI.Enabled = false;
                     lblURLWarning.ForeColor = Color.Gray;
-                    NodeURL = "https://mempool.space/api/";
+                    NodeURL = "https://mempool.space/testnet/api/";
                 }
                 if (comboAPISelectorForQueries.SelectedIndex == 2)
                 {
@@ -257,9 +257,9 @@ namespace SATSuma
             {
                 Ping pingSender = new Ping();
                 string pingAddress = "";
-                if (NodeURL == "https://blockstream.info/api/")
+                if (NodeURL == "https://mempool.space/testnet/api/")
                 {
-                    pingAddress = "blockstream.info";
+                    pingAddress = "mempool.space";
                 }
                 if (NodeURL == "https://mempool.space/api/")
                 {
@@ -311,15 +311,15 @@ namespace SATSuma
                 {
                     lblNodeStatusLight.ForeColor = Color.Lime;
                     var displayNodeName = "";
-                    if (NodeURL == "https://blockstream.info/api/")
+                    if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Blockstream";
+                        displayNodeName = "Mainnet";
                     }
                     else
                     {
-                        if (NodeURL == "https://mempool.space/api/")
+                        if (NodeURL == "https://mempool.space/testnet/api/")
                         {
-                            displayNodeName = "Mempool.space";
+                            displayNodeName = "Testnet";
                         }
                         else
                         {
@@ -334,15 +334,15 @@ namespace SATSuma
                     // API is not online
                     lblNodeStatusLight.ForeColor = Color.Red;
                     var displayNodeName = "";
-                    if (NodeURL == "https://blockstream.info/api/")
+                    if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Blockstream";
+                        displayNodeName = "Mainnet";
                     }
                     else
                     {
-                        if (NodeURL == "https://mempool.space/api/")
+                        if (NodeURL == "https://mempool.space/testnet/api/")
                         {
-                            displayNodeName = "Mempool.space";
+                            displayNodeName = "Testnet";
                         }
                         else
                         {
@@ -358,13 +358,13 @@ namespace SATSuma
                 // API is not online
                 lblNodeStatusLight.ForeColor = Color.Red;
                 var displayNodeName = "";
-                if (NodeURL == "https://blockstream.info/api/")
-                {
-                    displayNodeName = "Blockstream";
-                }
                 if (NodeURL == "https://mempool.space/api/")
                 {
-                    displayNodeName = "Mempool.space";
+                    displayNodeName = "Mainnet";
+                }
+                if (NodeURL == "https://mempool.space/testnet/api/")
+                {
+                    displayNodeName = "Testnet";
                 }
                 lblActiveNode.Text = displayNodeName + " status";
             }

@@ -1,34 +1,34 @@
 ﻿/*  
- ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣴⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ / ____|  /\|__   __/ ____|                      
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
-⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
-⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠛⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⠇⠀⠉⠉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀
-⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠉⠛⠛⠿⠿⡏⠀⠀⠀⣾⣿⡿⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀A Bitcoin explorer, Xpub viewer, bitcoin & lightning
-⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠃⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀dashboard with the ability to create encryted 
-⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀bookmarks and notes for addresses, blocks, xpubs and
-⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣶⣦⣤⣀⡀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀transactions. Xpub queries will only work on the 
-⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄user's own node. Keys to unlock encrypted bookmarks
-⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇are not stored anywhere and are uncrecoverable. The
-⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠘⠿⠿⢿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿bookmarks file is bookmarks.json, in the installation
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿directory.
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣴⣶⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠐⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿Version history 🍊
-⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⢿⡿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇0.1 this work in progress
-⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃
-⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀
-⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀
-⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⣾⣿⣿⠀⠀⠀⢠⣤⣄⣀⣀⣀⣀⣤⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀
-⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⡇⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀
-⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣦⣾⣿⣿⡀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠻⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣴⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀  _____      _______ _____                       
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀ / ____|  /\|__   __/ ____|                      
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
+⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀ ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
+⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠛⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀ ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
+⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⠇⠀⠉⠉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠀ ⠀
+⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠉⠉⠛⠛⠿⠿⡏⠀⠀⠀⣾⣿⡿⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀ A Bitcoin explorer, Xpub viewer, bitcoin & lightning
+⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠃⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀ dashboard with the ability to create encryted 
+⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀ bookmarks and notes for addresses, blocks, xpubs and
+⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣶⣦⣤⣀⡀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀ transactions. Xpub queries will only work on the 
+⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄ user's own node. Keys to unlock encrypted bookmarks
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇ are not stored anywhere and are uncrecoverable. The
+⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠘⠿⠿⢿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ bookmarks file is bookmarks.json, in the installation
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ directory.
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⣴⣶⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠐⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ 
+⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ Version history 🍊
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⢿⡿⠁⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇ 0.1 this work in progress
+⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃ 
+⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀ 
+⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀ 
+⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⣾⣿⣿⠀⠀⠀⢠⣤⣄⣀⣀⣀⣀⣤⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀ 
+⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⢰⣿⣿⡇⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣦⣾⣿⣿⡀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠻⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 
  * Stuff to do:
  * further work on own node connection (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
@@ -42,7 +42,6 @@
  * xpub help text definitions
  * help text for bookmarks screen/add to bookmarks tab
  * sorting of bookmarks
- * BUG - from tx screen, view a coinbase transaction and try to click on the address that received the reward (null prevout)
  * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  * hide all xpub controls when invalid xpub
  * clear and refresh xpub screen when switching to/from testnet
@@ -184,7 +183,7 @@ namespace SATSuma
                 using (WebClient client = new WebClient())
                 {
                     string BlockTipURL = NodeURL + "blocks/tip/height";
-string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     lblBlockNumber.Invoke((MethodInvoker)delegate
                     {
                         lblBlockNumber.Text = BlockTip;
@@ -1913,12 +1912,9 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
                         .Where(v => v.Scriptpubkey_address == addressString)
                         .Sum(v => v.Value);
-                    //    balanceChangeVin = (decimal)transaction.Vin // value of all inputs where address is the provided address
-                    //        .Where(v => v.Prevout.Scriptpubkey_address == addressString)
-                    //        .Sum(v => v.Prevout.Value);
                     balanceChangeVin = (decimal)transaction.Vin
-    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == addressString)
-    .Sum(v => v.Prevout.Value);
+                        .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == addressString)
+                        .Sum(v => v.Prevout.Value);
                     balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
                     string balanceChangeString = balanceChange.ToString();
                     balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
@@ -3164,14 +3160,51 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                 //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
                 //            DisableEnableButtons("enable"); // enable buttons after operation is complete
                 var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
-                lblTransactionVersion.Invoke((MethodInvoker)delegate
+                lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                 {
-                    lblTransactionVersion.Text = Convert.ToString(transaction.Version);
+                    lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
+                    lblTransactionBlockHeight.Location = new Point(label113.Location.X + label113.Width, label113.Location.Y);
+                });
+                label126.Invoke((MethodInvoker)delegate
+                {
+                    label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + 6, lblTransactionBlockHeight.Location.Y);
+                });
+                long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
+                lblTransactionBlockTime.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
+                    lblTransactionBlockTime.Location = new Point(label126.Location.X + label126.Width, label126.Location.Y);
+                });
+                label125.Invoke((MethodInvoker)delegate
+                {
+                    label125.Location = new Point(lblTransactionBlockTime.Location.X + lblTransactionBlockTime.Width + 6, lblTransactionBlockTime.Location.Y);
+                });
+                lblTransactionConfirmations.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionConfirmations.Text = Convert.ToString(Convert.ToInt32(lblBlockNumber.Text) - Convert.ToInt32(lblTransactionBlockHeight.Text));
+                    lblTransactionConfirmations.Location = new Point(label125.Location.X + label125.Width, label125.Location.Y);
+                });
+
+                label128.Invoke((MethodInvoker)delegate
+                {
+                    label128.Location = new Point(lblTransactionConfirmations.Location.X + lblTransactionConfirmations.Width + 6, lblTransactionConfirmations.Location.Y);
                 });
                 lblTransactionLockTime.Invoke((MethodInvoker)delegate
                 {
                     lblTransactionLockTime.Text = Convert.ToString(transaction.Locktime);
+                    lblTransactionLockTime.Location = new Point(label128.Location.X + label128.Width, label128.Location.Y);
                 });
+                label98.Invoke((MethodInvoker)delegate
+                {
+                    label98.Location = new Point(lblTransactionLockTime.Location.X + lblTransactionLockTime.Width + 6, lblTransactionLockTime.Location.Y);
+                });
+                lblTransactionVersion.Invoke((MethodInvoker)delegate
+                {
+                    lblTransactionVersion.Text = Convert.ToString(transaction.Version);
+                    lblTransactionVersion.Location = new Point(label98.Location.X + label98.Width, label98.Location.Y);
+                });
+
                 lblTransactionSize.Invoke((MethodInvoker)delegate
                 {
                     lblTransactionSize.Text = Convert.ToString(transaction.Size) + " bytes";
@@ -3184,16 +3217,8 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                 {
                     lblTransactionFee.Text = Convert.ToString(transaction.Fee);
                 });
-                lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
-                {
-                    lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
-                });
-                long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
-                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
-                lblTransactionBlockTime.Invoke((MethodInvoker)delegate
-                {
-                    lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
-                });
+
+
                 if (transaction.Vin.Count() == 1)
                 {
                     lblTransactionInputCount.Invoke((MethodInvoker)delegate
@@ -5641,7 +5666,6 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
 
                 btnViewBookmark.Enabled = false;
                 btnDeleteBookmark.Enabled = false;
-                lblDeletedMessage.Location = new Point(btnDeleteBookmark.Location.X - lblDeletedMessage.Width, lblDeletedMessage.Location.Y);
                 lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
                     lblBookmarkDataInFull.Text = "";
@@ -5707,6 +5731,14 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         listViewBookmarks.Columns.Add("Note", 600);
                     });
                 }
+                if (listViewBookmarks.Columns.Count == 5)
+                {
+                    // If not, add the column header
+                    listViewBookmarks.Invoke((MethodInvoker)delegate
+                    {
+                        listViewBookmarks.Columns.Add("HiddenColumn", 600); //used to store the KeyCheck string.
+                    });
+                }
                 // Add the items to the ListView
                 int counterAllBookmarks = 0; // used to count rows in list as they're added
                 int counterBlocks = 0;
@@ -5728,7 +5760,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     }
                     item.SubItems.Add(bookmark.Data);
                     item.SubItems.Add(bookmark.Note);
-
+                    item.SubItems.Add(bookmark.KeyCheck);
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
                         listViewBookmarks.Items.Add(item); // add row
@@ -5798,6 +5830,10 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     lblBookmarkTotalCount.Text = counterAllBookmarks.ToString();
                 });
 
+                lblBookmarkTotalCount.Invoke((MethodInvoker)delegate
+                {
+                    lblBookmarkStatusMessage.Location = new Point(btnDecryptBookmark.Location.X + btnDecryptBookmark.Width + 10, lblBookmarkStatusMessage.Location.Y);
+                });
 
                 label144.Invoke((MethodInvoker)delegate
                 {
@@ -5831,13 +5867,14 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
 
         string bookmarkDataInFullPreserved = string.Empty;
         string bookmarkNoteInFullPreserved = string.Empty;
+        string bookmarkKeyCheckPreserved = string.Empty;
 
         private void ListViewBookmarks_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-
-            textBoxBookmarkKey.Visible = false;
             try
             {
+                textBoxBookmarkKey.Visible = false;
+                btnDecryptBookmark.Visible = false;
                 foreach (ListViewItem item in listViewBookmarks.Items)
                 {
                     if (item.Selected)
@@ -5873,10 +5910,13 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         if (item.SubItems[2].Text == "🔒")
                         {
                             btnBookmarkUnlock.Enabled = true;
+                            bookmarkKeyCheckPreserved = item.SubItems[5].Text;
+                            btnViewBookmark.Enabled = false;
                         }
                         else
                         {
                             btnBookmarkUnlock.Enabled = false;
+                            btnViewBookmark.Enabled = true;
                         }
                     }
                     else
@@ -6097,8 +6137,10 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
             {
                 string bookmarkDataToDelete = lblBookmarkDataInFull.Text;
                 DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
-                lblDeletedMessage.Visible = true;
-                hideDeletedBookmarkMessageTimer.Start();
+                lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
+                lblBookmarkStatusMessage.Text = "bookmark deleted";
+                lblBookmarkStatusMessage.Visible = true;
+                hideBookmarkStatusMessageTimer.Start();
                 SetupBookmarksScreen();
                 lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
@@ -6125,12 +6167,28 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
 
         private void BtnDecryptBookmark_Click(object sender, EventArgs e)
         {
-
             string decryptedBookmarkData = Decrypt(bookmarkDataInFullPreserved, textBoxBookmarkKey.Text);
             string decryptedBookmarkNote = Decrypt(bookmarkNoteInFullPreserved, textBoxBookmarkKey.Text);
-            lblBookmarkDataInFull.Text = decryptedBookmarkData;
-            lblBookmarkNoteInFull.Text = decryptedBookmarkNote;
-            textBoxBookmarkKey.Text = "";
+            string decryptedBookmarkKeyCheck = Decrypt(bookmarkKeyCheckPreserved, textBoxBookmarkKey.Text);
+            if (decryptedBookmarkKeyCheck == "21m") // correct key
+            {
+                lblBookmarkDataInFull.Text = decryptedBookmarkData;
+                lblBookmarkNoteInFull.Text = decryptedBookmarkNote;
+                textBoxBookmarkKey.Text = "";
+                lblBookmarkStatusMessage.ForeColor = Color.OliveDrab;
+                lblBookmarkStatusMessage.Text = "bookmark unlocked";
+                lblBookmarkStatusMessage.Visible = true;
+                hideBookmarkStatusMessageTimer.Start();
+                btnViewBookmark.Enabled = true;
+            }
+            else // wrong key
+            {
+                lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
+                lblBookmarkStatusMessage.Text = "incorrect key";
+                lblBookmarkStatusMessage.Visible = true;
+                hideBookmarkStatusMessageTimer.Start();
+                btnViewBookmark.Enabled = false;
+            }
         }
 
         private void BtnBookmarksListDown_Click(object sender, EventArgs e)
@@ -6365,23 +6423,27 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                 }
 
                 string bookmarkData;
+                string keyCheck = "21m";
                 if (toBeEncrypted)
                 {
                     // Encrypt the new bookmark using the encryption key
                     string encryptionKey = textBoxBookmarkEncryptionKey.Text;
                     string unencryptedBookmarkData = lblBookmarkProposalData.Text;
                     string unencryptedBookmarkNote = bookmarkNote;
+                    string unencryptedKeyCheck = "21m";
+                    string encryptedKeyCheck = Encrypt(unencryptedKeyCheck, encryptionKey);
                     string encryptedBookmarkData = Encrypt(unencryptedBookmarkData, encryptionKey);
                     string encryptedBookmarkNote = Encrypt(unencryptedBookmarkNote, encryptionKey);
                     bookmarkNote = encryptedBookmarkNote;
                     bookmarkData = encryptedBookmarkData;
+                    keyCheck = encryptedKeyCheck;
                 }
                 else
                 {
                     bookmarkData = lblBookmarkProposalData.Text;
                 }
 
-                var newBookmark = new Bookmark { DateAdded = today, Type = lblBookmarkProposalType.Text, Data = bookmarkData, Note = bookmarkNote, Encrypted = toBeEncrypted };
+                var newBookmark = new Bookmark { DateAdded = today, Type = lblBookmarkProposalType.Text, Data = bookmarkData, Note = bookmarkNote, Encrypted = toBeEncrypted, KeyCheck = keyCheck};
 
                 // Read the existing bookmarks from the JSON file
                 var bookmarks = ReadBookmarksFromJsonFile();
@@ -6531,8 +6593,8 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
 
         private void HideDeletedBookmarkMessageTimer_Tick(object sender, EventArgs e)
         {
-            lblDeletedMessage.Visible = false;
-            hideDeletedBookmarkMessageTimer.Stop();
+            lblBookmarkStatusMessage.Visible = false;
+            hideBookmarkStatusMessageTimer.Stop();
         }
         #endregion
 
@@ -7564,6 +7626,7 @@ string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
             public string Data { get; set; }
             public string Note { get; set; }
             public bool Encrypted { get; set; }
+            public string KeyCheck { get; set; }
         }
 
         // ------------------------------------- Address Transactions -----------------------------------

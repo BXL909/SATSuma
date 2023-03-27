@@ -60,7 +60,7 @@ namespace SATSuma
             if (((SATSuma)this.Owner).GetPanelBookmarks().Visible == true)
             {
                 lblHelpHeading.Text = "Bookmarks";
-                textBoxHelpText.Text = "Still needs writing.";
+                textBoxHelpText.Text = "Adding bookmarks\r\n\r\nAny address, xpub, block or transaction can be bookmarked. The 🧡 button will open a tab to add the currently viewed item as a bookmark. An optional note or description can also be added. Bookmarks are stored in a bookmarks.json file in the SATSuma installation directory. This file can be accessed only by people who have access to your computer. You can encrypt your bookmarks and notes using SHA-256 by supplying an optional encryption key. This key is not stored anywhere and there is no way to recover it. Each bookmark has its own individual key, so you need to provide a key for every bookmark you want encrypted.\r\n\r\nViewing and deleting bookmarks\r\n\r\nThe bookmarks screen shows all currently saved bookmarks, along with the time and date they were created. A red 🔒 means that the bookmark is encrypted and will need the key provided before it can be viewed properly.\r\nPress the 'view' button to go to the appropriate page to see that bookmark and the 'delete' button to instantly delete it.";
             }
 
         }

@@ -32,7 +32,6 @@ Version history 🍊
  * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
  * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
- * disable all vertical scroll buttons when not needed
  */
 
 #region Using

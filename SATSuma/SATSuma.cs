@@ -29,7 +29,6 @@ Version history 🍊
  * more address type support on xpub screen (eg taproot)
  * xpub help text definitions
  * sorting of bookmarks
- * fix unsymmetrical appearance of tx diagram when v large numbers of in/outputs
  * hide all xpub controls when invalid xpub
  * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
@@ -3317,11 +3316,11 @@ namespace SATSuma
                 linePoints.Add(endPoint2);
                 // ------------- inputs on diagram
                 int NumberOfInputLines = Convert.ToInt32(transaction.Vin.Count());
-                int YInputsStep = 0;
-                int YInputsPos = 0;
+                decimal YInputsStep = 0;
+                decimal YInputsPos = 0;
                 if (NumberOfInputLines > 1)
                 {
-                    YInputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
+                    YInputsStep = (decimal)(panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
                     YInputsPos = 10;
                     if (NumberOfInputLines > panelTransactionDiagram.Height)
                     {
@@ -3351,11 +3350,11 @@ namespace SATSuma
                     {
                         break;
                     }
-                    Point startPoint3 = new Point(10, YInputsPos);
-                    Point endPoint3 = new Point(100, YInputsPos);
+                    Point startPoint3 = new Point(10, Convert.ToInt32(YInputsPos));
+                    Point endPoint3 = new Point(100, Convert.ToInt32(YInputsPos));
                     linePoints.Add(startPoint3);
                     linePoints.Add(endPoint3);
-                    Point startPoint4 = new Point(100, YInputsPos);
+                    Point startPoint4 = new Point(100, Convert.ToInt32(YInputsPos));
                     Point endPoint4 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
                     linePoints.Add(startPoint4);
                     linePoints.Add(endPoint4);
@@ -3363,15 +3362,16 @@ namespace SATSuma
                 }
                 // --------------- outputs on diagram
                 int NumberOfOutputLines = Convert.ToInt32(transaction.Vout.Count());
-                int YOutputsStep = 0;
-                int YOutputsPos = 0;
+                decimal YOutputsStep = 0;
+                decimal YOutputsPos = 0;
                 if (NumberOfOutputLines > 1)
                 {
-                    YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
+                    //YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
+                    YOutputsStep = (decimal)(panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
                     YOutputsPos = 10;
                     if (NumberOfOutputLines > panelTransactionDiagram.Height)
                     {
-                        YOutputsStep = 1;
+                       // YOutputsStep = 1;
                     }
                 }
                 else
@@ -3397,11 +3397,11 @@ namespace SATSuma
                     {
                         break;
                     }
-                    Point startPoint5 = new Point(panelTransactionDiagram.Size.Width - 10, YOutputsPos);
-                    Point endPoint5 = new Point(panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    Point startPoint5 = new Point(panelTransactionDiagram.Size.Width - 10, Convert.ToInt32(YOutputsPos));
+                    Point endPoint5 = new Point(panelTransactionDiagram.Size.Width - 100, Convert.ToInt32(YOutputsPos));
                     linePoints.Add(startPoint5);
                     linePoints.Add(endPoint5);
-                    Point startPoint6 = new Point(panelTransactionDiagram.Size.Width - 100, YOutputsPos);
+                    Point startPoint6 = new Point(panelTransactionDiagram.Size.Width - 100, Convert.ToInt32(YOutputsPos));
                     Point endPoint6 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
                     linePoints.Add(startPoint6);
                     linePoints.Add(endPoint6);

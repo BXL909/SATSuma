@@ -25,13 +25,14 @@ Version history 🍊
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
- * validation of node and xpub textboxes
+ * validation of node textbox on xpub screen
  * more address type support on xpub screen (eg taproot)
  * xpub help text definitions
  * sorting of bookmarks
- * hide all xpub controls when invalid xpub
  * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
+ * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
+ * disable all vertical scroll buttons when not needed
  */
 
 #region Using
@@ -3322,10 +3323,6 @@ namespace SATSuma
                 {
                     YInputsStep = (decimal)(panelTransactionDiagram.Size.Height - 20) / (NumberOfInputLines - 1);
                     YInputsPos = 10;
-                    if (NumberOfInputLines > panelTransactionDiagram.Height)
-                    {
-                        YInputsStep = 1;
-                    }
                 }
                 else
                 {
@@ -3366,13 +3363,8 @@ namespace SATSuma
                 decimal YOutputsPos = 0;
                 if (NumberOfOutputLines > 1)
                 {
-                    //YOutputsStep = (panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
                     YOutputsStep = (decimal)(panelTransactionDiagram.Size.Height - 20) / (NumberOfOutputLines - 1);
                     YOutputsPos = 10;
-                    if (NumberOfOutputLines > panelTransactionDiagram.Height)
-                    {
-                       // YOutputsStep = 1;
-                    }
                 }
                 else
                 {
@@ -3464,10 +3456,7 @@ namespace SATSuma
                         {
                             listViewTransactionInputs.Items.Add(item); // add row
                         });
-
                     }
-
-
                 }
                 // Get the height of each item to set height of whole listview
                 int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
@@ -4685,9 +4674,16 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
-                LookupXpub();
-                e.Handled = true;
-                return;
+                if (xpubValid) 
+                {
+                    LookupXpub();
+                    e.Handled = true;
+                    return;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
 
@@ -4732,6 +4728,27 @@ namespace SATSuma
 
                 progressBarCheckAllAddressTypes.Visible = true;
                 progressBarCheckEachAddressType.Visible = true;
+
+                panel26.Visible = true;
+                lblXpubStatus.Visible = true;
+                panel23.Visible = true;
+                label123.Visible = true;
+                lblSegwitUsedAddresses.Visible = true;
+                lblSegwitSummary.Visible = true;
+                label111.Visible = true;
+                lblLegacyUsedAddresses.Visible = true;
+                lblLegacySummary.Visible = true;
+                label119.Visible = true;
+                lblSegwitP2SHUsedAddresses.Visible = true;
+                lblSegwitP2SHSummary.Visible = true;
+                panel29.Visible = true;
+                label133.Visible = true;
+                lblXpubConfirmedReceived.Visible = true;
+                label129.Visible = true;
+                lblXpubConfirmedSpent.Visible = true;
+                label121.Visible = true;
+                lblXpubConfirmedUnspent.Visible = true;
+                listViewXpubAddresses.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
@@ -4846,6 +4863,16 @@ namespace SATSuma
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
+                    if (listViewXpubAddresses.Items.Count > 23)
+                    {
+                        btnXpubAddressUp.Visible = true;
+                        btnXpubAddressesDown.Visible = true;
+                    }
+                    else
+                    {
+                        btnXpubAddressUp.Visible = false;
+                        btnXpubAddressesDown.Visible = false;
+                    }
 
                     // Get the height of each item to set height of whole listview
                     int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
@@ -5018,6 +5045,16 @@ namespace SATSuma
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
+                    if (listViewXpubAddresses.Items.Count > 23)
+                    {
+                        btnXpubAddressUp.Visible = true;
+                        btnXpubAddressesDown.Visible = true;
+                    }
+                    else
+                    {
+                        btnXpubAddressUp.Visible = false;
+                        btnXpubAddressesDown.Visible = false;
+                    }
 
                     // Get the height of each item to set height of whole listview
                     int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
@@ -5189,6 +5226,16 @@ namespace SATSuma
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
                     });
+                    if (listViewXpubAddresses.Items.Count > 23)
+                    {
+                        btnXpubAddressUp.Visible = true;
+                        btnXpubAddressesDown.Visible = true;
+                    }
+                    else
+                    {
+                        btnXpubAddressUp.Visible = false;
+                        btnXpubAddressesDown.Visible = false;
+                    }
 
                     // Get the height of each item to set height of whole listview
                     int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
@@ -5325,6 +5372,58 @@ namespace SATSuma
             {
                 HandleException(ex, "LookupXpub");
             }
+        }
+
+        private bool xpubValid = false;
+
+        private void textBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxSubmittedXpub.Text == "")
+            {
+                lblValidXpubIndicator.Text = "";
+            }
+            xpubValid = false;
+            panel26.Visible = false;
+            lblXpubStatus.Visible = false;
+            panel23.Visible = false;
+            label123.Visible = false;
+            lblSegwitUsedAddresses.Visible = false;
+            lblSegwitSummary.Visible = false;
+            label111.Visible = false;
+            lblLegacyUsedAddresses.Visible = false;
+            lblLegacySummary.Visible = false;
+            label119.Visible = false;
+            lblSegwitP2SHUsedAddresses.Visible = false;
+            lblSegwitP2SHSummary.Visible = false;
+            panel29.Visible = false;
+            label133.Visible = false;
+            lblXpubConfirmedReceived.Visible = false;
+            label129.Visible = false;
+            lblXpubConfirmedSpent.Visible = false;
+            label121.Visible = false;
+            lblXpubConfirmedUnspent.Visible = false;
+            btnXpubAddressUp.Visible = false;
+            btnXpubAddressesDown.Visible = false;
+            listViewXpubAddresses.Visible = false;
+
+            // validate the inputted xpub before proceeding
+            try
+            {
+                string xpubString = textBoxSubmittedXpub.Text;
+                BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
+                PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
+            }
+            catch
+            {
+                xpubValid = false;
+                lblValidXpubIndicator.ForeColor = Color.IndianRed;
+                lblValidXpubIndicator.Text = "✖️ Invalid Xpub";
+                return;
+            }
+            xpubValid = true;
+            lblValidXpubIndicator.ForeColor = Color.OliveDrab;
+            lblValidXpubIndicator.Text = "✔️ valid Xpub";
+            LookupXpub();
         }
 
         private void ListViewXpubAddresses_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
@@ -5553,19 +5652,10 @@ namespace SATSuma
                         item.ForeColor = Color.FromArgb(255, 153, 0); //txID
                     }
                 }
-                //btnViewAddressFromXpub.Visible = anySelected;
             }
             catch (Exception ex)
             {
                 HandleException(ex, "listViewXpubAddresses_ItemSelectionChanged");
-            }
-        }
-
-        private void PanelXpubContainer_Paint(object sender, PaintEventArgs e)
-        {
-            if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
-            {
-                // panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
             }
         }
 
@@ -5646,6 +5736,13 @@ namespace SATSuma
             {
                 XpubScrollTimer.Stop();
             }
+        }
+
+        private void panelXpub_Paint(object sender, PaintEventArgs e)
+        {
+            textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
+            textBoxMempoolURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxMempoolURL.Location.Y);
+            lblValidXpubIndicator.Location = new Point(textBoxSubmittedXpub.Location.X + textBoxSubmittedXpub.Width, lblValidXpubIndicator.Location.Y);
         }
         #endregion
 
@@ -5757,6 +5854,18 @@ namespace SATSuma
                     {
                         listViewBookmarks.Items.Add(item); // add row
                     });
+
+                    if (listViewBookmarks.Items.Count > 21)
+                    {
+                        btnBookmarksListUp.Visible = true;
+                        btnBookmarksListDown.Visible = true;
+                    }
+                    else
+                    {
+                        btnBookmarksListUp.Visible = false;
+                        btnBookmarksListDown.Visible = false;
+
+                    }
 
                     // Get the height of each item to set height of whole listview
                     int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
@@ -7986,6 +8095,7 @@ namespace SATSuma
             //    public string scriptpubkey_address { get; set; }
             public string Value { get; set; }
         }
+
 
 
         #endregion

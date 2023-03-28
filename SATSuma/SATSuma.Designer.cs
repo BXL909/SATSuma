@@ -284,6 +284,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label73 = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.btnMenuHelp = new System.Windows.Forms.Button();
             this.btnMenuBookmarks = new System.Windows.Forms.Button();
             this.btnMenuXpub = new System.Windows.Forms.Button();
             this.btnMenuTransaction = new System.Windows.Forms.Button();
@@ -475,8 +476,8 @@
             this.lblSelectedBookmarkType = new System.Windows.Forms.Label();
             this.lblBookmarkDataInFull = new System.Windows.Forms.Label();
             this.panel33 = new System.Windows.Forms.Panel();
-            this.btnFavoritesListDown = new System.Windows.Forms.Button();
-            this.btnFavoritesListUp = new System.Windows.Forms.Button();
+            this.btnBookmarksListDown = new System.Windows.Forms.Button();
+            this.btnBookmarksListUp = new System.Windows.Forms.Button();
             this.panelBookmarksContainer = new System.Windows.Forms.Panel();
             this.listViewBookmarks = new System.Windows.Forms.ListView();
             this.panel36 = new System.Windows.Forms.Panel();
@@ -494,7 +495,7 @@
             this.panel34 = new System.Windows.Forms.Panel();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
-            this.btnMenuHelp = new System.Windows.Forms.Button();
+            this.lblValidXpubIndicator = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -724,7 +725,7 @@
             this.lblErrorMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Gray;
-            this.lblErrorMessage.Location = new System.Drawing.Point(28, 746);
+            this.lblErrorMessage.Location = new System.Drawing.Point(28, 743);
             this.lblErrorMessage.Name = "lblErrorMessage";
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 15);
             this.lblErrorMessage.TabIndex = 40;
@@ -735,7 +736,7 @@
             this.lblAlert.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAlert.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAlert.ForeColor = System.Drawing.Color.Gold;
-            this.lblAlert.Location = new System.Drawing.Point(6, 742);
+            this.lblAlert.Location = new System.Drawing.Point(6, 739);
             this.lblAlert.Name = "lblAlert";
             this.lblAlert.Size = new System.Drawing.Size(0, 22);
             this.lblAlert.TabIndex = 41;
@@ -3992,6 +3993,26 @@
             this.panelMenu.Size = new System.Drawing.Size(144, 24);
             this.panelMenu.TabIndex = 152;
             // 
+            // btnMenuHelp
+            // 
+            this.btnMenuHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuHelp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuHelp.FlatAppearance.BorderSize = 0;
+            this.btnMenuHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuHelp.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
+            this.btnMenuHelp.Location = new System.Drawing.Point(0, 264);
+            this.btnMenuHelp.Name = "btnMenuHelp";
+            this.btnMenuHelp.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuHelp.TabIndex = 158;
+            this.btnMenuHelp.TabStop = false;
+            this.btnMenuHelp.Text = "documentation";
+            this.btnMenuHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuHelp.UseVisualStyleBackColor = false;
+            this.btnMenuHelp.Click += new System.EventHandler(this.btnMenuHelp_Click);
+            // 
             // btnMenuBookmarks
             // 
             this.btnMenuBookmarks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -5722,6 +5743,7 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.lblValidXpubIndicator);
             this.panelXpub.Controls.Add(this.textBoxMempoolURL);
             this.panelXpub.Controls.Add(this.panel30);
             this.panelXpub.Controls.Add(this.panelXpubContainer);
@@ -5755,6 +5777,7 @@
             this.panelXpub.TabIndex = 199;
             this.panelXpub.Visible = false;
             this.panelXpub.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
+            this.panelXpub.Paint += new System.Windows.Forms.PaintEventHandler(this.panelXpub_Paint);
             // 
             // textBoxMempoolURL
             // 
@@ -5762,9 +5785,9 @@
             this.textBoxMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxMempoolURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxMempoolURL.Location = new System.Drawing.Point(474, 5);
+            this.textBoxMempoolURL.Location = new System.Drawing.Point(424, 0);
             this.textBoxMempoolURL.Name = "textBoxMempoolURL";
-            this.textBoxMempoolURL.Size = new System.Drawing.Size(276, 25);
+            this.textBoxMempoolURL.Size = new System.Drawing.Size(325, 25);
             this.textBoxMempoolURL.TabIndex = 200;
             this.textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
             this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
@@ -5777,7 +5800,7 @@
             this.panel30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel30.Controls.Add(this.btnXpubAddressesDown);
             this.panel30.Controls.Add(this.btnXpubAddressUp);
-            this.panel30.Location = new System.Drawing.Point(713, 77);
+            this.panel30.Location = new System.Drawing.Point(713, 68);
             this.panel30.Name = "panel30";
             this.panel30.Size = new System.Drawing.Size(37, 456);
             this.panel30.TabIndex = 214;
@@ -5800,6 +5823,7 @@
             this.btnXpubAddressesDown.Text = "▼";
             this.btnXpubAddressesDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnXpubAddressesDown.UseVisualStyleBackColor = false;
+            this.btnXpubAddressesDown.Visible = false;
             this.btnXpubAddressesDown.Click += new System.EventHandler(this.BtnXpubAddressesDown_Click);
             this.btnXpubAddressesDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressesDown_MouseDown);
             this.btnXpubAddressesDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressesDown_MouseUp);
@@ -5822,6 +5846,7 @@
             this.btnXpubAddressUp.Text = "▲";
             this.btnXpubAddressUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnXpubAddressUp.UseVisualStyleBackColor = false;
+            this.btnXpubAddressUp.Visible = false;
             this.btnXpubAddressUp.Click += new System.EventHandler(this.BtnXpubAddressUp_Click);
             this.btnXpubAddressUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressUp_MouseDown);
             this.btnXpubAddressUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressUp_MouseUp);
@@ -5831,11 +5856,10 @@
             this.panelXpubContainer.AutoScroll = true;
             this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
             this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
-            this.panelXpubContainer.Location = new System.Drawing.Point(250, 87);
+            this.panelXpubContainer.Location = new System.Drawing.Point(250, 78);
             this.panelXpubContainer.Name = "panelXpubContainer";
             this.panelXpubContainer.Size = new System.Drawing.Size(500, 446);
             this.panelXpubContainer.TabIndex = 213;
-            this.panelXpubContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpubContainer_Paint);
             // 
             // btnViewAddressFromXpub
             // 
@@ -5895,6 +5919,7 @@
             this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblLegacyUsedAddresses.TabIndex = 213;
             this.lblLegacyUsedAddresses.Text = "0";
+            this.lblLegacyUsedAddresses.Visible = false;
             this.lblLegacyUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblLegacyUsedAddresses_Paint);
             // 
             // lblSegwitP2SHUsedAddresses
@@ -5907,6 +5932,7 @@
             this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHUsedAddresses.TabIndex = 212;
             this.lblSegwitP2SHUsedAddresses.Text = "0";
+            this.lblSegwitP2SHUsedAddresses.Visible = false;
             this.lblSegwitP2SHUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblSegwitP2SHUsedAddresses_Paint);
             // 
             // lblSegwitUsedAddresses
@@ -5919,6 +5945,7 @@
             this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitUsedAddresses.TabIndex = 211;
             this.lblSegwitUsedAddresses.Text = "0";
+            this.lblSegwitUsedAddresses.Visible = false;
             this.lblSegwitUsedAddresses.Paint += new System.Windows.Forms.PaintEventHandler(this.LblSegwitUsedAddresses_Paint);
             // 
             // progressBarCheckAllAddressTypes
@@ -5956,6 +5983,7 @@
             this.label121.Size = new System.Drawing.Size(199, 17);
             this.label121.TabIndex = 208;
             this.label121.Text = "Confirmed unspent (balance)";
+            this.label121.Visible = false;
             // 
             // lblXpubConfirmedUnspent
             // 
@@ -5967,6 +5995,7 @@
             this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedUnspent.TabIndex = 207;
             this.lblXpubConfirmedUnspent.Text = "0";
+            this.lblXpubConfirmedUnspent.Visible = false;
             // 
             // panel29
             // 
@@ -5979,6 +6008,7 @@
             this.panel29.Name = "panel29";
             this.panel29.Size = new System.Drawing.Size(242, 23);
             this.panel29.TabIndex = 206;
+            this.panel29.Visible = false;
             // 
             // label127
             // 
@@ -6005,6 +6035,7 @@
             this.label129.Size = new System.Drawing.Size(116, 17);
             this.label129.TabIndex = 205;
             this.label129.Text = "Confirmed spent";
+            this.label129.Visible = false;
             // 
             // lblXpubConfirmedSpent
             // 
@@ -6016,6 +6047,7 @@
             this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedSpent.TabIndex = 204;
             this.lblXpubConfirmedSpent.Text = "0";
+            this.lblXpubConfirmedSpent.Visible = false;
             // 
             // label133
             // 
@@ -6029,6 +6061,7 @@
             this.label133.Size = new System.Drawing.Size(137, 17);
             this.label133.TabIndex = 203;
             this.label133.Text = "Confirmed received";
+            this.label133.Visible = false;
             // 
             // lblXpubConfirmedReceived
             // 
@@ -6040,6 +6073,7 @@
             this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedReceived.TabIndex = 202;
             this.lblXpubConfirmedReceived.Text = "0";
+            this.lblXpubConfirmedReceived.Visible = false;
             // 
             // panel26
             // 
@@ -6052,6 +6086,7 @@
             this.panel26.Name = "panel26";
             this.panel26.Size = new System.Drawing.Size(242, 23);
             this.panel26.TabIndex = 199;
+            this.panel26.Visible = false;
             // 
             // label124
             // 
@@ -6074,6 +6109,7 @@
             this.lblXpubStatus.Name = "lblXpubStatus";
             this.lblXpubStatus.Size = new System.Drawing.Size(243, 99);
             this.lblXpubStatus.TabIndex = 201;
+            this.lblXpubStatus.Visible = false;
             // 
             // label119
             // 
@@ -6087,6 +6123,7 @@
             this.label119.Size = new System.Drawing.Size(85, 17);
             this.label119.TabIndex = 200;
             this.label119.Text = "Segwit P2SH";
+            this.label119.Visible = false;
             // 
             // lblSegwitP2SHSummary
             // 
@@ -6098,6 +6135,7 @@
             this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHSummary.TabIndex = 199;
             this.lblSegwitP2SHSummary.Text = "0";
+            this.lblSegwitP2SHSummary.Visible = false;
             // 
             // panel23
             // 
@@ -6110,6 +6148,7 @@
             this.panel23.Name = "panel23";
             this.panel23.Size = new System.Drawing.Size(242, 23);
             this.panel23.TabIndex = 198;
+            this.panel23.Visible = false;
             // 
             // label117
             // 
@@ -6126,11 +6165,12 @@
             // 
             // label114
             // 
+            this.label114.AutoSize = true;
             this.label114.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label114.ForeColor = System.Drawing.Color.Silver;
             this.label114.Location = new System.Drawing.Point(0, 1);
             this.label114.Name = "label114";
-            this.label114.Size = new System.Drawing.Size(511, 25);
+            this.label114.Size = new System.Drawing.Size(350, 20);
             this.label114.TabIndex = 168;
             this.label114.Text = "Path to mempool.space installtion on full node*";
             // 
@@ -6146,6 +6186,7 @@
             this.label111.Size = new System.Drawing.Size(54, 17);
             this.label111.TabIndex = 167;
             this.label111.Text = "Legacy";
+            this.label111.Visible = false;
             // 
             // lblLegacySummary
             // 
@@ -6157,6 +6198,7 @@
             this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
             this.lblLegacySummary.TabIndex = 166;
             this.lblLegacySummary.Text = "0";
+            this.lblLegacySummary.Visible = false;
             // 
             // label123
             // 
@@ -6170,6 +6212,7 @@
             this.label123.Size = new System.Drawing.Size(51, 17);
             this.label123.TabIndex = 153;
             this.label123.Text = "Segwit";
+            this.label123.Visible = false;
             // 
             // lblSegwitSummary
             // 
@@ -6181,6 +6224,7 @@
             this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitSummary.TabIndex = 152;
             this.lblSegwitSummary.Text = "0";
+            this.lblSegwitSummary.Visible = false;
             // 
             // textBoxSubmittedXpub
             // 
@@ -6188,11 +6232,12 @@
             this.textBoxSubmittedXpub.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSubmittedXpub.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSubmittedXpub.ForeColor = System.Drawing.Color.White;
-            this.textBoxSubmittedXpub.Location = new System.Drawing.Point(63, 36);
+            this.textBoxSubmittedXpub.Location = new System.Drawing.Point(63, 31);
             this.textBoxSubmittedXpub.MaxLength = 200;
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
-            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(687, 25);
+            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(580, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
+            this.textBoxSubmittedXpub.TextChanged += new System.EventHandler(this.textBoxSubmittedXpub_TextChanged);
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 
             // label146
@@ -6200,7 +6245,7 @@
             this.label146.AutoSize = true;
             this.label146.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label146.ForeColor = System.Drawing.Color.Silver;
-            this.label146.Location = new System.Drawing.Point(0, 38);
+            this.label146.Location = new System.Drawing.Point(0, 33);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(47, 20);
             this.label146.TabIndex = 6;
@@ -6718,56 +6763,56 @@
             // panel33
             // 
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel33.Controls.Add(this.btnFavoritesListDown);
-            this.panel33.Controls.Add(this.btnFavoritesListUp);
+            this.panel33.Controls.Add(this.btnBookmarksListDown);
+            this.panel33.Controls.Add(this.btnBookmarksListUp);
             this.panel33.Location = new System.Drawing.Point(712, 27);
             this.panel33.Name = "panel33";
             this.panel33.Size = new System.Drawing.Size(36, 419);
             this.panel33.TabIndex = 214;
             // 
-            // btnFavoritesListDown
+            // btnBookmarksListDown
             // 
-            this.btnFavoritesListDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnFavoritesListDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnFavoritesListDown.FlatAppearance.BorderSize = 0;
-            this.btnFavoritesListDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavoritesListDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavoritesListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFavoritesListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFavoritesListDown.ForeColor = System.Drawing.Color.White;
-            this.btnFavoritesListDown.Location = new System.Drawing.Point(10, 393);
-            this.btnFavoritesListDown.Name = "btnFavoritesListDown";
-            this.btnFavoritesListDown.Size = new System.Drawing.Size(24, 24);
-            this.btnFavoritesListDown.TabIndex = 212;
-            this.btnFavoritesListDown.TabStop = false;
-            this.btnFavoritesListDown.Text = "▼";
-            this.btnFavoritesListDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnFavoritesListDown.UseVisualStyleBackColor = false;
-            this.btnFavoritesListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
-            this.btnFavoritesListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
-            this.btnFavoritesListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseUp);
+            this.btnBookmarksListDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBookmarksListDown.FlatAppearance.BorderSize = 0;
+            this.btnBookmarksListDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnBookmarksListDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
+            this.btnBookmarksListDown.Location = new System.Drawing.Point(10, 393);
+            this.btnBookmarksListDown.Name = "btnBookmarksListDown";
+            this.btnBookmarksListDown.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListDown.TabIndex = 212;
+            this.btnBookmarksListDown.TabStop = false;
+            this.btnBookmarksListDown.Text = "▼";
+            this.btnBookmarksListDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBookmarksListDown.UseVisualStyleBackColor = false;
+            this.btnBookmarksListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
+            this.btnBookmarksListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
+            this.btnBookmarksListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseUp);
             // 
-            // btnFavoritesListUp
+            // btnBookmarksListUp
             // 
-            this.btnFavoritesListUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnFavoritesListUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnFavoritesListUp.FlatAppearance.BorderSize = 0;
-            this.btnFavoritesListUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavoritesListUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnFavoritesListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFavoritesListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFavoritesListUp.ForeColor = System.Drawing.Color.White;
-            this.btnFavoritesListUp.Location = new System.Drawing.Point(10, 9);
-            this.btnFavoritesListUp.Name = "btnFavoritesListUp";
-            this.btnFavoritesListUp.Size = new System.Drawing.Size(24, 24);
-            this.btnFavoritesListUp.TabIndex = 214;
-            this.btnFavoritesListUp.TabStop = false;
-            this.btnFavoritesListUp.Text = "▲";
-            this.btnFavoritesListUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnFavoritesListUp.UseVisualStyleBackColor = false;
-            this.btnFavoritesListUp.Click += new System.EventHandler(this.BtnBookmarksListUp_Click);
-            this.btnFavoritesListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseDown);
-            this.btnFavoritesListUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseUp);
+            this.btnBookmarksListUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBookmarksListUp.FlatAppearance.BorderSize = 0;
+            this.btnBookmarksListUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnBookmarksListUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(10, 9);
+            this.btnBookmarksListUp.Name = "btnBookmarksListUp";
+            this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListUp.TabIndex = 214;
+            this.btnBookmarksListUp.TabStop = false;
+            this.btnBookmarksListUp.Text = "▲";
+            this.btnBookmarksListUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBookmarksListUp.UseVisualStyleBackColor = false;
+            this.btnBookmarksListUp.Click += new System.EventHandler(this.BtnBookmarksListUp_Click);
+            this.btnBookmarksListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseDown);
+            this.btnBookmarksListUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseUp);
             // 
             // panelBookmarksContainer
             // 
@@ -6981,25 +7026,16 @@
             this.hideBookmarkStatusMessageTimer.Interval = 2000;
             this.hideBookmarkStatusMessageTimer.Tick += new System.EventHandler(this.HideDeletedBookmarkMessageTimer_Tick);
             // 
-            // btnMenuHelp
+            // lblValidXpubIndicator
             // 
-            this.btnMenuHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuHelp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuHelp.FlatAppearance.BorderSize = 0;
-            this.btnMenuHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenuHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuHelp.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
-            this.btnMenuHelp.Location = new System.Drawing.Point(0, 264);
-            this.btnMenuHelp.Name = "btnMenuHelp";
-            this.btnMenuHelp.Size = new System.Drawing.Size(144, 24);
-            this.btnMenuHelp.TabIndex = 158;
-            this.btnMenuHelp.TabStop = false;
-            this.btnMenuHelp.Text = "documentation";
-            this.btnMenuHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnMenuHelp.UseVisualStyleBackColor = false;
-            this.btnMenuHelp.Click += new System.EventHandler(this.btnMenuHelp_Click);
+            this.lblValidXpubIndicator.AutoSize = true;
+            this.lblValidXpubIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblValidXpubIndicator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblValidXpubIndicator.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblValidXpubIndicator.Location = new System.Drawing.Point(648, 33);
+            this.lblValidXpubIndicator.Name = "lblValidXpubIndicator";
+            this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 20);
+            this.lblValidXpubIndicator.TabIndex = 218;
             // 
             // SATSuma
             // 
@@ -7010,16 +7046,16 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panel34);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.btnAddToBookmarks);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.btnHelp);
@@ -7568,8 +7604,8 @@
         private System.Windows.Forms.Panel panel31;
         private System.Windows.Forms.Panel panelBookmarks;
         private System.Windows.Forms.Panel panel33;
-        private System.Windows.Forms.Button btnFavoritesListDown;
-        private System.Windows.Forms.Button btnFavoritesListUp;
+        private System.Windows.Forms.Button btnBookmarksListDown;
+        private System.Windows.Forms.Button btnBookmarksListUp;
         public System.Windows.Forms.Panel panelBookmarksContainer;
         private System.Windows.Forms.Panel panel36;
         private System.Windows.Forms.Label label144;
@@ -7604,6 +7640,7 @@
         private System.Windows.Forms.Label lblTransactionConfirmations;
         private System.Windows.Forms.Label label125;
         private System.Windows.Forms.Button btnMenuHelp;
+        private System.Windows.Forms.Label lblValidXpubIndicator;
     }
 }
 

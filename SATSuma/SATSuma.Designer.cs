@@ -377,6 +377,8 @@
             this.listViewTransactionInputs = new System.Windows.Forms.ListView();
             this.lblInvalidTransaction = new System.Windows.Forms.Label();
             this.panelTransactionHeadline = new System.Windows.Forms.Panel();
+            this.lblTransactionConfirmations = new System.Windows.Forms.Label();
+            this.label125 = new System.Windows.Forms.Label();
             this.label113 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
             this.lblTransactionVersion = new System.Windows.Forms.Label();
@@ -492,8 +494,7 @@
             this.panel34 = new System.Windows.Forms.Panel();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
-            this.label125 = new System.Windows.Forms.Label();
-            this.lblTransactionConfirmations = new System.Windows.Forms.Label();
+            this.btnMenuHelp = new System.Windows.Forms.Button();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -3062,6 +3063,7 @@
             this.panelAddress.TabIndex = 90;
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
+            this.panelAddress.Paint += new System.Windows.Forms.PaintEventHandler(this.panelAddress_Paint);
             // 
             // panel35
             // 
@@ -3069,7 +3071,7 @@
             this.panel35.Controls.Add(this.textboxSubmittedAddress);
             this.panel35.Location = new System.Drawing.Point(1, 3);
             this.panel35.Name = "panel35";
-            this.panel35.Size = new System.Drawing.Size(684, 30);
+            this.panel35.Size = new System.Drawing.Size(750, 30);
             this.panel35.TabIndex = 148;
             // 
             // label58
@@ -3092,7 +3094,7 @@
             this.textboxSubmittedAddress.Location = new System.Drawing.Point(177, 0);
             this.textboxSubmittedAddress.MaxLength = 80;
             this.textboxSubmittedAddress.Name = "textboxSubmittedAddress";
-            this.textboxSubmittedAddress.Size = new System.Drawing.Size(578, 25);
+            this.textboxSubmittedAddress.Size = new System.Drawing.Size(573, 25);
             this.textboxSubmittedAddress.TabIndex = 2;
             this.textboxSubmittedAddress.TextChanged += new System.EventHandler(this.TboxSubmittedAddress_TextChanged);
             // 
@@ -3973,6 +3975,7 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.panelMenu.Controls.Add(this.btnMenuHelp);
             this.panelMenu.Controls.Add(this.btnMenuBookmarks);
             this.panelMenu.Controls.Add(this.btnMenuXpub);
             this.panelMenu.Controls.Add(this.btnMenuTransaction);
@@ -5402,6 +5405,30 @@
             this.panelTransactionHeadline.TabIndex = 196;
             this.panelTransactionHeadline.Visible = false;
             // 
+            // lblTransactionConfirmations
+            // 
+            this.lblTransactionConfirmations.AutoSize = true;
+            this.lblTransactionConfirmations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTransactionConfirmations.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransactionConfirmations.Location = new System.Drawing.Point(388, -1);
+            this.lblTransactionConfirmations.Name = "lblTransactionConfirmations";
+            this.lblTransactionConfirmations.Size = new System.Drawing.Size(64, 18);
+            this.lblTransactionConfirmations.TabIndex = 171;
+            this.lblTransactionConfirmations.Text = "no data";
+            // 
+            // label125
+            // 
+            this.label125.AutoSize = true;
+            this.label125.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label125.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label125.ForeColor = System.Drawing.Color.Silver;
+            this.label125.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label125.Location = new System.Drawing.Point(291, 1);
+            this.label125.Name = "label125";
+            this.label125.Size = new System.Drawing.Size(99, 17);
+            this.label125.TabIndex = 170;
+            this.label125.Text = "Confirmations";
+            // 
             // label113
             // 
             this.label113.AutoSize = true;
@@ -6542,14 +6569,14 @@
             this.btnDecryptBookmark.Visible = false;
             this.btnDecryptBookmark.Click += new System.EventHandler(this.BtnDecryptBookmark_Click);
             // 
-            // lblDeletedMessage
+            // lblBookmarkStatusMessage
             // 
             this.lblBookmarkStatusMessage.AutoSize = true;
             this.lblBookmarkStatusMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBookmarkStatusMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkStatusMessage.ForeColor = System.Drawing.Color.IndianRed;
             this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(424, 73);
-            this.lblBookmarkStatusMessage.Name = "lblDeletedMessage";
+            this.lblBookmarkStatusMessage.Name = "lblBookmarkStatusMessage";
             this.lblBookmarkStatusMessage.Size = new System.Drawing.Size(145, 20);
             this.lblBookmarkStatusMessage.TabIndex = 217;
             this.lblBookmarkStatusMessage.Text = "bookmark deleted";
@@ -6949,34 +6976,30 @@
             this.hideAddToBookmarksTimer.Interval = 2000;
             this.hideAddToBookmarksTimer.Tick += new System.EventHandler(this.HideAddToBookmarks_Tick);
             // 
-            // hideDeletedBookmarkMessageTimer
+            // hideBookmarkStatusMessageTimer
             // 
             this.hideBookmarkStatusMessageTimer.Interval = 2000;
             this.hideBookmarkStatusMessageTimer.Tick += new System.EventHandler(this.HideDeletedBookmarkMessageTimer_Tick);
             // 
-            // label125
+            // btnMenuHelp
             // 
-            this.label125.AutoSize = true;
-            this.label125.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label125.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label125.ForeColor = System.Drawing.Color.Silver;
-            this.label125.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label125.Location = new System.Drawing.Point(291, 1);
-            this.label125.Name = "label125";
-            this.label125.Size = new System.Drawing.Size(99, 17);
-            this.label125.TabIndex = 170;
-            this.label125.Text = "Confirmations";
-            // 
-            // lblTransactionConfirmations
-            // 
-            this.lblTransactionConfirmations.AutoSize = true;
-            this.lblTransactionConfirmations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTransactionConfirmations.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransactionConfirmations.Location = new System.Drawing.Point(388, -1);
-            this.lblTransactionConfirmations.Name = "lblTransactionConfirmations";
-            this.lblTransactionConfirmations.Size = new System.Drawing.Size(64, 18);
-            this.lblTransactionConfirmations.TabIndex = 171;
-            this.lblTransactionConfirmations.Text = "no data";
+            this.btnMenuHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuHelp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuHelp.FlatAppearance.BorderSize = 0;
+            this.btnMenuHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuHelp.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
+            this.btnMenuHelp.Location = new System.Drawing.Point(0, 264);
+            this.btnMenuHelp.Name = "btnMenuHelp";
+            this.btnMenuHelp.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuHelp.TabIndex = 158;
+            this.btnMenuHelp.TabStop = false;
+            this.btnMenuHelp.Text = "documentation";
+            this.btnMenuHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuHelp.UseVisualStyleBackColor = false;
+            this.btnMenuHelp.Click += new System.EventHandler(this.btnMenuHelp_Click);
             // 
             // SATSuma
             // 
@@ -6987,12 +7010,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panel34);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.btnAddToBookmarks);
@@ -7580,6 +7603,7 @@
         private System.Windows.Forms.Panel panel35;
         private System.Windows.Forms.Label lblTransactionConfirmations;
         private System.Windows.Forms.Label label125;
+        private System.Windows.Forms.Button btnMenuHelp;
     }
 }
 

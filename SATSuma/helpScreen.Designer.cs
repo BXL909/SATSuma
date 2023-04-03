@@ -39,6 +39,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnHelpTextUp = new System.Windows.Forms.Button();
+            this.comboBoxSelectHelp = new System.Windows.Forms.ComboBox();
             this.panel22.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +53,7 @@
             this.panel22.Location = new System.Drawing.Point(10, 10);
             this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(443, 23);
+            this.panel22.Size = new System.Drawing.Size(526, 23);
             this.panel22.TabIndex = 198;
             // 
             // lblHelpHeading
@@ -98,7 +99,6 @@
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(30, 30);
             this.btnExit.TabIndex = 202;
-            this.btnExit.TabStop = false;
             this.btnExit.Text = "❌";
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.UseVisualStyleBackColor = false;
@@ -168,13 +168,36 @@
             this.btnHelpTextUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextUp_MouseDown);
             this.btnHelpTextUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextUp_MouseUp);
             // 
-            // helpScreen
+            // comboBoxSelectHelp
+            // 
+            this.comboBoxSelectHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboBoxSelectHelp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSelectHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxSelectHelp.ForeColor = System.Drawing.Color.Silver;
+            this.comboBoxSelectHelp.FormattingEnabled = true;
+            this.comboBoxSelectHelp.Items.AddRange(new object[] {
+            "Recent blocks",
+            "Block",
+            "Address",
+            "Transaction",
+            "Xpub",
+            "Bitcoin stats",
+            "Lightning stats",
+            "Bookmarks"});
+            this.comboBoxSelectHelp.Location = new System.Drawing.Point(15, 775);
+            this.comboBoxSelectHelp.Name = "comboBoxSelectHelp";
+            this.comboBoxSelectHelp.Size = new System.Drawing.Size(169, 24);
+            this.comboBoxSelectHelp.TabIndex = 210;
+            this.comboBoxSelectHelp.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // HelpScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(584, 784);
+            this.ClientSize = new System.Drawing.Size(584, 811);
+            this.Controls.Add(this.comboBoxSelectHelp);
             this.Controls.Add(this.btnHelpTextUp);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnHelpTextDown);
@@ -183,7 +206,7 @@
             this.Controls.Add(this.panel22);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
-            this.Name = "helpScreen";
+            this.Name = "HelpScreen";
             this.Text = "helpScreen";
             this.Load += new System.EventHandler(this.HelpScreen_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.HelpScreen_Paint);
@@ -205,5 +228,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnHelpTextUp;
+        private System.Windows.Forms.ComboBox comboBoxSelectHelp;
     }
 }

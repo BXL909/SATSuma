@@ -35,55 +35,64 @@ namespace SATSuma
             {
                 ((SATSuma)this.Owner).GetPanelMenu().Height = 24; // close menu on calling window
                 lblHelpHeading.Text = "Documentation";
-                textBoxHelpText.Text = "🍊 SATSuma" + "\r\n\r\n" + "🍊 Block\r\n\r\n" + blockHelpText + "\r\n\r\n" + "🍊 Recent blocks\r\n\r\n" + blockListHelpText + "\r\n\r\n" + "🍊 Address\r\n\r\n" + addressHelpText + "\r\n\r\n" + "🍊 Bitcoin dashboard\r\n\r\n" + bitcoinDashboardHelpText + "\r\n\r\n" + "🍊 Lightning dashboard\r\n\r\n" + lightningDashboardHelpText + "\r\n\r\n" + "🍊 Transaction\r\n\r\n" + transactionHelpText + "\r\n\r\n" + "🍊 Xpub\r\n\r\n" + xpubHelpText + "\r\n\r\n" + "🍊 Bookmarks\r\n\r\n" + bookmarksHelpText;
+                textBoxHelpText.Text = "🍊 SATSuma" + "\r\n\r\nA Bitcoin explorer, Xpub viewer, bitcoin & lightning dashboard with the ability to create encryted bookmarks and notes for addresses, blocks, xpubs and transactions. Xpub queries will only work on the user's own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. The bookmarks file is bookmarks.json, in the installation directory.";
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelBlock().Visible == true)
             {
                 lblHelpHeading.Text = "Block";
                 textBoxHelpText.Text = blockHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelBlockList().Visible == true)
             {
                 lblHelpHeading.Text = "Blocks";
                 textBoxHelpText.Text = blockListHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelAddress().Visible == true)
             {
                 lblHelpHeading.Text = "Address";
                 textBoxHelpText.Text = addressHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelBitcoinDashboard().Visible == true)
             {
-                lblHelpHeading.Text = "Bitcoin dashboard";
+                lblHelpHeading.Text = "Bitcoin stats";
                 textBoxHelpText.Text = bitcoinDashboardHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelLightningDashboard().Visible == true)
             {
-                lblHelpHeading.Text = "Lightning dashboard";
+                lblHelpHeading.Text = "Lightning stats";
                 textBoxHelpText.Text = lightningDashboardHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelTransaction().Visible == true)
             {
                 lblHelpHeading.Text = "Transaction";
                 textBoxHelpText.Text = transactionHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelXpub().Visible == true)
             {
                 lblHelpHeading.Text = "Xpub";
                 textBoxHelpText.Text = xpubHelpText;
+                btnExit.Focus();
             }
             else
             if (((SATSuma)this.Owner).GetPanelBookmarks().Visible == true)
             {
                 lblHelpHeading.Text = "Bookmarks";
                 textBoxHelpText.Text = bookmarksHelpText;
+                btnExit.Focus();
             }
 
         }
@@ -193,6 +202,50 @@ namespace SATSuma
             upButtonPressed = false;
             timer1.Stop();
             timer1.Interval = 50; // reset the interval to its original value
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxSelectHelp.SelectedIndex == 0)
+            {
+                lblHelpHeading.Text = "Blocks";
+                textBoxHelpText.Text = blockListHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 1)
+            {
+                lblHelpHeading.Text = "Block";
+                textBoxHelpText.Text = blockHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 2)
+            {
+                lblHelpHeading.Text = "Address";
+                textBoxHelpText.Text = addressHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 3)
+            {
+                lblHelpHeading.Text = "Transaction";
+                textBoxHelpText.Text = transactionHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 4)
+            {
+                lblHelpHeading.Text = "Xpub";
+                textBoxHelpText.Text = xpubHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 5)
+            {
+                lblHelpHeading.Text = "Bitcoin stats";
+                textBoxHelpText.Text = bitcoinDashboardHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 6)
+            {
+                lblHelpHeading.Text = "Lightning stats";
+                textBoxHelpText.Text = lightningDashboardHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 7)
+            {
+                lblHelpHeading.Text = "Bookmarks";
+                textBoxHelpText.Text = bookmarksHelpText;
+            }
         }
     }
 }

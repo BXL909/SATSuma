@@ -406,6 +406,7 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
+            this.lblValidXpubIndicator = new System.Windows.Forms.Label();
             this.textBoxMempoolURL = new System.Windows.Forms.TextBox();
             this.panel30 = new System.Windows.Forms.Panel();
             this.btnXpubAddressesDown = new System.Windows.Forms.Button();
@@ -495,7 +496,6 @@
             this.panel34 = new System.Windows.Forms.Panel();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
-            this.lblValidXpubIndicator = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -3064,7 +3064,7 @@
             this.panelAddress.TabIndex = 90;
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
-            this.panelAddress.Paint += new System.Windows.Forms.PaintEventHandler(this.panelAddress_Paint);
+            this.panelAddress.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelAddress_Paint);
             // 
             // panel35
             // 
@@ -4011,7 +4011,7 @@
             this.btnMenuHelp.Text = "documentation";
             this.btnMenuHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuHelp.UseVisualStyleBackColor = false;
-            this.btnMenuHelp.Click += new System.EventHandler(this.btnMenuHelp_Click);
+            this.btnMenuHelp.Click += new System.EventHandler(this.BtnMenuHelp_Click);
             // 
             // btnMenuBookmarks
             // 
@@ -5777,7 +5777,18 @@
             this.panelXpub.TabIndex = 199;
             this.panelXpub.Visible = false;
             this.panelXpub.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
-            this.panelXpub.Paint += new System.Windows.Forms.PaintEventHandler(this.panelXpub_Paint);
+            this.panelXpub.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpub_Paint);
+            // 
+            // lblValidXpubIndicator
+            // 
+            this.lblValidXpubIndicator.AutoSize = true;
+            this.lblValidXpubIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblValidXpubIndicator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblValidXpubIndicator.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblValidXpubIndicator.Location = new System.Drawing.Point(648, 33);
+            this.lblValidXpubIndicator.Name = "lblValidXpubIndicator";
+            this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 20);
+            this.lblValidXpubIndicator.TabIndex = 218;
             // 
             // textBoxMempoolURL
             // 
@@ -5955,7 +5966,7 @@
             this.progressBarCheckAllAddressTypes.Location = new System.Drawing.Point(0, 182);
             this.progressBarCheckAllAddressTypes.Maximum = 60;
             this.progressBarCheckAllAddressTypes.Name = "progressBarCheckAllAddressTypes";
-            this.progressBarCheckAllAddressTypes.Size = new System.Drawing.Size(241, 1);
+            this.progressBarCheckAllAddressTypes.Size = new System.Drawing.Size(220, 1);
             this.progressBarCheckAllAddressTypes.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarCheckAllAddressTypes.TabIndex = 210;
             this.progressBarCheckAllAddressTypes.Visible = false;
@@ -5967,7 +5978,7 @@
             this.progressBarCheckEachAddressType.Location = new System.Drawing.Point(0, 168);
             this.progressBarCheckEachAddressType.Maximum = 20;
             this.progressBarCheckEachAddressType.Name = "progressBarCheckEachAddressType";
-            this.progressBarCheckEachAddressType.Size = new System.Drawing.Size(241, 1);
+            this.progressBarCheckEachAddressType.Size = new System.Drawing.Size(220, 1);
             this.progressBarCheckEachAddressType.TabIndex = 209;
             this.progressBarCheckEachAddressType.Visible = false;
             // 
@@ -6237,7 +6248,7 @@
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
             this.textBoxSubmittedXpub.Size = new System.Drawing.Size(580, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
-            this.textBoxSubmittedXpub.TextChanged += new System.EventHandler(this.textBoxSubmittedXpub_TextChanged);
+            this.textBoxSubmittedXpub.TextChanged += new System.EventHandler(this.TextBoxSubmittedXpub_TextChanged);
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 
             // label146
@@ -7026,17 +7037,6 @@
             this.hideBookmarkStatusMessageTimer.Interval = 2000;
             this.hideBookmarkStatusMessageTimer.Tick += new System.EventHandler(this.HideDeletedBookmarkMessageTimer_Tick);
             // 
-            // lblValidXpubIndicator
-            // 
-            this.lblValidXpubIndicator.AutoSize = true;
-            this.lblValidXpubIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblValidXpubIndicator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblValidXpubIndicator.ForeColor = System.Drawing.Color.OliveDrab;
-            this.lblValidXpubIndicator.Location = new System.Drawing.Point(648, 33);
-            this.lblValidXpubIndicator.Name = "lblValidXpubIndicator";
-            this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 20);
-            this.lblValidXpubIndicator.TabIndex = 218;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -7046,8 +7046,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelTransaction);

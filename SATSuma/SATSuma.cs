@@ -21,18 +21,16 @@ Version history 🍊
  * Stuff to do:
  * further work on own node connection outside of the xpub screen (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
- * check whether there are any UI scaling issues
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
- * validation of node textbox on xpub screen
+ * validation of node textbox on xpub screen (xpub queries are currently hardcoded to my umbrel.local address!)
  * more address type support on xpub screen (eg taproot)
  * xpub help text definitions
  * sorting of bookmarks
  * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
  * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
- * stop disabling buttons during an xpub scan, except those on the xpub screen
  */
 
 #region Using
@@ -2360,7 +2358,7 @@ namespace SATSuma
             }
         }
 
-        private void panelAddress_Paint(object sender, PaintEventArgs e)
+        private void PanelAddress_Paint(object sender, PaintEventArgs e)
         {
             textboxSubmittedAddress.Location = new Point(label58.Location.X + label58.Width, textboxSubmittedAddress.Location.Y);
             textboxSubmittedAddress.Width = panel35.Width - textboxSubmittedAddress.Location.X;
@@ -4691,9 +4689,7 @@ namespace SATSuma
         {
             try
             {
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
-
+                textBoxSubmittedXpub.Enabled = false;
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
                 int MaxNumberOfConsecutiveUnusedAddresses = 20;
@@ -5363,8 +5359,7 @@ namespace SATSuma
                 {
                     lblXpubConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)).ToString("0.00000000");
                 });
-                DisableEnableLoadingAnimation("disable"); // start the loading animation
-                DisableEnableButtons("enable"); // disable buttons during operation
+                textBoxSubmittedXpub.Enabled = true;
                 timerHideProgressBars.Start();
 
             }
@@ -5376,7 +5371,7 @@ namespace SATSuma
 
         private bool xpubValid = false;
 
-        private void textBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
+        private void TextBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
         {
             if (textBoxSubmittedXpub.Text == "")
             {
@@ -5738,7 +5733,7 @@ namespace SATSuma
             }
         }
 
-        private void panelXpub_Paint(object sender, PaintEventArgs e)
+        private void PanelXpub_Paint(object sender, PaintEventArgs e)
         {
             textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
             textBoxMempoolURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxMempoolURL.Location.Y);
@@ -6893,7 +6888,6 @@ namespace SATSuma
             {
                 if (enableOrDisableAnimation == "enable")
                 {
-
                     //start the loading animation
                     pictureBoxLoadingAnimation.Enabled = true;
                 }
@@ -7118,7 +7112,7 @@ namespace SATSuma
             }
         }
 
-        private void btnMenuHelp_Click(object sender, EventArgs e)
+        private void BtnMenuHelp_Click(object sender, EventArgs e)
         {
             try
             {
@@ -7724,20 +7718,20 @@ namespace SATSuma
                 {
                     btnAddToBookmarks.Enabled = false;
                 }
+                if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
+                { 
+                    btnAddToBookmarks.Enabled = false;
+                }
+                if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
+                {
+                    btnAddToBookmarks.Enabled = true;
+                }
             }
             else
             {
                 btnAddToBookmarks.Enabled = false;
             }
         }
-
-        
-
-
-
-
-
-
         #endregion
 
         #region CLASSES

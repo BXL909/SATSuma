@@ -32,6 +32,7 @@ Version history 🍊
  * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
  * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
+ * stop disabling buttons during an xpub scan, except those on the xpub screen
  */
 
 #region Using
@@ -2634,7 +2635,7 @@ namespace SATSuma
                 });
                 lblBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                 {
-                    lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
+                    lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
                 });
                 lblBlockAverageFee.Invoke((MethodInvoker)delegate
                 {
@@ -4261,9 +4262,9 @@ namespace SATSuma
                     decimal sizeInMB = block.Size;
                     sizeInMB /= 1000000;
                     item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
-                    string feerange = Convert.ToString(block.Extras.FeeRange[0]) + "-" + Convert.ToString(block.Extras.FeeRange[6]);
+                    string feerange = Convert.ToString(Convert.ToInt32(block.Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(block.Extras.FeeRange[6]));
                     item.SubItems.Add(feerange.ToString());
-                    string medFee = "~" + block.Extras.MedianFee;
+                    string medFee = Convert.ToString("~" + Convert.ToInt32(block.Extras.MedianFee));
                     item.SubItems.Add(medFee.ToString());
                     string RewardInSats = Convert.ToString(block.Extras.Reward);
                     decimal RewardInBTC = ConvertSatsToBitcoin(RewardInSats);
@@ -7898,8 +7899,8 @@ namespace SATSuma
         public class Block_extras
         {
             public string Reward { get; set; }
-            public string MedianFee { get; set; }
-            public int[] FeeRange { get; set; }
+            public decimal MedianFee { get; set; }
+            public decimal[] FeeRange { get; set; }
             public int TotalFees { get; set; }
             public string AvgFee { get; set; }
             public string AvgFeeRate { get; set; }

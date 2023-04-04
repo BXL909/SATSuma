@@ -29,7 +29,6 @@ Version history 🍊
  * xpub help text definitions
  * sorting of bookmarks
  * write the intro/help page text
- * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
  */
 
 #region Using
@@ -4914,6 +4913,8 @@ namespace SATSuma
                     else
                     {
                         usedSegwitAddresses++;
+                        consecutiveUnusedAddressesForType = 0;  //
+                        totalUnusedAddresses = 0;  //
                     }
 
                     if (confirmedReceivedForCalc > 0)
@@ -5096,6 +5097,8 @@ namespace SATSuma
                     else
                     {
                         usedLegacyAddresses++;
+                        consecutiveUnusedAddressesForType = 0;  //
+                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses;  // this is the second address type, so reset to account for that, rather than 0
                     }
 
                     if (confirmedReceivedForCalc > 0)
@@ -5277,6 +5280,8 @@ namespace SATSuma
                     else
                     {
                         usedSegwitP2SHAddresses++;
+                        consecutiveUnusedAddressesForType = 0;  //
+                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses * 2;  // this is the third address type, so reset to account for that, rather than 0
                     }
 
                     if (confirmedReceivedForCalc > 0)

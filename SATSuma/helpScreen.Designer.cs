@@ -188,7 +188,7 @@
             this.comboBoxSelectHelp.Name = "comboBoxSelectHelp";
             this.comboBoxSelectHelp.Size = new System.Drawing.Size(169, 24);
             this.comboBoxSelectHelp.TabIndex = 210;
-            this.comboBoxSelectHelp.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBoxSelectHelp.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelectHelp_SelectedIndexChanged);
             // 
             // HelpScreen
             // 

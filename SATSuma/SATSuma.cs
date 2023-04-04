@@ -28,7 +28,6 @@ Version history 🍊
  * more address type support on xpub screen (eg taproot)
  * xpub help text definitions
  * sorting of bookmarks
- * clear and refresh xpub screen when switching to/from testnet
  * write the intro/help page text
  * xpub overall progress bar on legacy xpub test data needs to 'rewind' after 'gaps' in addresses have been found. Otherwise reaches 100% too soon.
  */
@@ -659,7 +658,7 @@ namespace SATSuma
                     }
                 });
 
-                Task task5 = Task.Run(() => // call CoinGecko.com JSON
+/*                Task task5 = Task.Run(() => // call CoinGecko.com JSON
                 {
                     try
                     {
@@ -713,7 +712,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateAPIGroup1DataFields(Task5)");
                     }
                 });
-
+*/
                 Task task6 = Task.Run(() => //call mempool.space lightning JSON
                 {
                     try
@@ -1025,7 +1024,7 @@ namespace SATSuma
                     }
                 });
 
-                await Task.WhenAll(task1, task2, task3, task4, task5, task6, task7, task8);
+                await Task.WhenAll(task1, task2, task3, task4, task6, task7, task8);
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
@@ -1300,14 +1299,14 @@ namespace SATSuma
             return ("0", "0", "0");
         }
 
-        //-----CoinGecko JSON
+        /*//-----CoinGecko JSON
         private (string ath, string athDate, string athDifference, string twentyFourHourHigh, string twentyFourHourLow) CoingeckoComJSONRefresh()
         {
             try
             {
                 using WebClient client = new WebClient();
                 // ATH & 24hr data
-                var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+                var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=1&page=1&sparkline=false");
                 var data5 = JArray.Parse(response5);
                 var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
                 var ath = (string)btcData["ath"];  // all time high value of btc in usd
@@ -1328,7 +1327,7 @@ namespace SATSuma
                 HandleException(ex, "CoingeckoComJSONRefresh");
             }
             return ("0", "0", "0", "0", "0");
-        }
+        }*/
 
         //-----Blockchair JSON
         private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
@@ -7571,6 +7570,7 @@ namespace SATSuma
                     LookupBlock(); // refresh the block screen
                     textboxSubmittedAddress.Text = ""; //erase and refresh address screen
                     textBoxTransactionID.Text = ""; //erase and refresh transaction screen
+                    textBoxSubmittedXpub.Text = ""; //erase and refresh xpub screen
                 }
                 CheckBlockchainExplorerApiStatus();
 

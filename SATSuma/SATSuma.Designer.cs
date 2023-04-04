@@ -489,6 +489,9 @@
             this.panel34 = new System.Windows.Forms.Panel();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
+            this.lblNowViewing = new System.Windows.Forms.Label();
+            this.lblXpubNodeStatusLight = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -3911,7 +3914,7 @@
             this.btnMenuHelp.Size = new System.Drawing.Size(144, 24);
             this.btnMenuHelp.TabIndex = 158;
             this.btnMenuHelp.TabStop = false;
-            this.btnMenuHelp.Text = "documentation";
+            this.btnMenuHelp.Text = "help";
             this.btnMenuHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuHelp.UseVisualStyleBackColor = false;
             this.btnMenuHelp.Click += new System.EventHandler(this.BtnMenuHelp_Click);
@@ -5646,6 +5649,8 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.label18);
+            this.panelXpub.Controls.Add(this.lblXpubNodeStatusLight);
             this.panelXpub.Controls.Add(this.lblValidXpubIndicator);
             this.panelXpub.Controls.Add(this.textBoxMempoolURL);
             this.panelXpub.Controls.Add(this.panel30);
@@ -5707,6 +5712,7 @@
             this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
             this.textBoxMempoolURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
             this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxMempoolURL_KeyPress);
+            this.textBoxMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxMempoolURL_KeyUp);
             this.textBoxMempoolURL.Leave += new System.EventHandler(this.TextBoxMempoolURL_Leave);
             // 
             // panel30
@@ -6144,6 +6150,7 @@
             // 
             this.textBoxSubmittedXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBoxSubmittedXpub.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSubmittedXpub.Enabled = false;
             this.textBoxSubmittedXpub.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSubmittedXpub.ForeColor = System.Drawing.Color.White;
             this.textBoxSubmittedXpub.Location = new System.Drawing.Point(63, 31);
@@ -6151,6 +6158,7 @@
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
             this.textBoxSubmittedXpub.Size = new System.Drawing.Size(580, 25);
             this.textBoxSubmittedXpub.TabIndex = 7;
+            this.textBoxSubmittedXpub.Text = "Provide a valid url to mempool.space on your full node first";
             this.textBoxSubmittedXpub.TextChanged += new System.EventHandler(this.TextBoxSubmittedXpub_TextChanged);
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
             // 
@@ -6940,6 +6948,41 @@
             this.hideBookmarkStatusMessageTimer.Interval = 2000;
             this.hideBookmarkStatusMessageTimer.Tick += new System.EventHandler(this.HideDeletedBookmarkMessageTimer_Tick);
             // 
+            // lblNowViewing
+            // 
+            this.lblNowViewing.AutoSize = true;
+            this.lblNowViewing.BackColor = System.Drawing.Color.Transparent;
+            this.lblNowViewing.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNowViewing.ForeColor = System.Drawing.Color.Gray;
+            this.lblNowViewing.Location = new System.Drawing.Point(120, 11);
+            this.lblNowViewing.Name = "lblNowViewing";
+            this.lblNowViewing.Size = new System.Drawing.Size(124, 21);
+            this.lblNowViewing.TabIndex = 217;
+            this.lblNowViewing.Text = "- now viewing";
+            // 
+            // lblXpubNodeStatusLight
+            // 
+            this.lblXpubNodeStatusLight.AutoSize = true;
+            this.lblXpubNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblXpubNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXpubNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblXpubNodeStatusLight.Location = new System.Drawing.Point(649, 33);
+            this.lblXpubNodeStatusLight.Name = "lblXpubNodeStatusLight";
+            this.lblXpubNodeStatusLight.Size = new System.Drawing.Size(23, 18);
+            this.lblXpubNodeStatusLight.TabIndex = 219;
+            this.lblXpubNodeStatusLight.Text = "🟢";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.Silver;
+            this.label18.Location = new System.Drawing.Point(678, 31);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(160, 20);
+            this.label18.TabIndex = 220;
+            this.label18.Text = "invalid / node offline";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -6949,8 +6992,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.lblNowViewing);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMenu);
@@ -7537,6 +7581,9 @@
         private System.Windows.Forms.Label label125;
         private System.Windows.Forms.Button btnMenuHelp;
         private System.Windows.Forms.Label lblValidXpubIndicator;
+        private System.Windows.Forms.Label lblNowViewing;
+        private System.Windows.Forms.Label lblXpubNodeStatusLight;
+        private System.Windows.Forms.Label label18;
     }
 }
 

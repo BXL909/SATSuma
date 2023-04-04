@@ -273,7 +273,7 @@ namespace SATSuma
  
                 
                 
-        /*        if (textBoxCustomAPI.Text != "") 
+                if (textBoxCustomAPI.Text != "") 
                 {
                     // get the contents of the textbox
                     string url = textBoxCustomAPI.Text;
@@ -305,7 +305,7 @@ namespace SATSuma
                         return;
                     }
                 }
-        */
+        
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
                 {

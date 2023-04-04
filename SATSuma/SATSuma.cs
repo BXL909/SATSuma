@@ -24,11 +24,9 @@ Version history 🍊
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
- * validation of node textbox on xpub screen (xpub queries are currently hardcoded to my umbrel.local address!)
  * more address type support on xpub screen (eg taproot)
- * xpub help text definitions
  * sorting of bookmarks
- * write the intro/help page text
+ * save user settings (xpub node in particular)
  */
 
 #region Using
@@ -153,7 +151,6 @@ namespace SATSuma
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
-
             _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
             _blockService = new BlockDataService(NodeURL);
             _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
@@ -4690,7 +4687,7 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = false;
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
-                int MaxNumberOfConsecutiveUnusedAddresses = 20;
+                int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
                 int segwitAddressesWithNonZeroBalance = 0;
                 int legacyAddressesWithNonZeroBalance = 0;
                 int segwitP2SHAddressesWithNonZeroBalance = 0;
@@ -4699,6 +4696,7 @@ namespace SATSuma
                 int usedSegwitAddresses = 0;
                 int usedLegacyAddresses = 0;
                 int usedSegwitP2SHAddresses = 0;
+                int numberOfAddressesChecked = 0;
                 double segwitAddressesConfirmedUnspentBalance = 0;
                 double legacyAddressesConfirmedUnspentBalance = 0;
                 double segwitP2SHAddressesConfirmedUnspentBalance = 0;
@@ -4712,6 +4710,7 @@ namespace SATSuma
                 double xpubTotalConfirmedSpent = 0;
                 double xpubTotalConfirmedUnspent = 0;
 
+                numberOfAddressesChecked = 0;
                 int checkingAddressCount = 1;
                 List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
                 List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
@@ -4819,7 +4818,7 @@ namespace SATSuma
                         lblXpubStatus.Text = "Deriving 500 Segwit addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
-                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var RequestURL = textBoxMempoolURL.Text + request;
                     var client = new HttpClient();
                     var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                     if (!response.IsSuccessStatusCode)
@@ -4856,6 +4855,7 @@ namespace SATSuma
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
+                        numberOfAddressesChecked++;
                     });
                     if (listViewXpubAddresses.Items.Count > 23)
                     {
@@ -5040,6 +5040,7 @@ namespace SATSuma
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
+                        numberOfAddressesChecked++;
                     });
                     if (listViewXpubAddresses.Items.Count > 23)
                     {
@@ -5223,6 +5224,7 @@ namespace SATSuma
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Items.Add(item); // add row
+                        numberOfAddressesChecked++;
                     });
                     if (listViewXpubAddresses.Items.Count > 23)
                     {
@@ -5349,7 +5351,7 @@ namespace SATSuma
 
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubStatus.Text = "Finished scanning addresses";
+                    lblXpubStatus.Text = "Finished scanning addresses\r\n" + numberOfAddressesChecked + " addresses checked";
                 });
                 lblXpubConfirmedReceived.Invoke((MethodInvoker)delegate
                 {
@@ -5520,6 +5522,8 @@ namespace SATSuma
             }
         }
 
+        private string previousXpubNodeStringToCompare = "";
+
         private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (isAPIURLWatermarkTextDisplayed)
@@ -5527,6 +5531,10 @@ namespace SATSuma
                 textBoxMempoolURL.Text = "";
                 textBoxMempoolURL.ForeColor = Color.White;
                 isAPIURLWatermarkTextDisplayed = false;
+            }
+            else
+            {
+                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
             }
         }
 
@@ -5544,6 +5552,83 @@ namespace SATSuma
         {
             lblSegwitP2SHUsedAddresses.Location = new Point(label119.Location.X + label119.Width, label119.Location.Y);
         }
+
+        private string xpubNodeURL = "";
+
+        private async void CheckXpubNodeIsOnline()
+        {
+            using var client = new HttpClient();
+            try
+            {
+                Ping pingSender = new Ping();
+                string pingAddress = "";
+
+
+                if (textBoxMempoolURL.Text != "")
+                {
+                    // get the contents of the textbox
+                    string url = textBoxMempoolURL.Text;
+
+                    // create a regex pattern to match URLs
+                    string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                    // create a regex object
+                    Regex regex = new Regex(pattern);
+
+                    // use the regex object to match the contents of the textbox
+                    if (regex.IsMatch(url)) // (at least partially) valid url
+                    {
+                        try
+                        {
+                            xpubNodeURL = textBoxMempoolURL.Text;
+                            // get the hostname from the URL
+                            // parse the URL to extract the hostname
+                            Uri uri = new Uri(xpubNodeURL);
+                            string hostname = uri.Host;
+
+                            // resolve the hostname to an IP address
+                            IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                            IPAddress ipAddress = hostEntry.AddressList[0];
+                            pingAddress = ipAddress.ToString();
+                        }
+                        catch
+                        {
+                            lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                            label18.Text = "invalid / node offline";
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        label18.Text = "invalid / node offline";
+                        return;
+                    }
+                }
+
+                PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                if (reply.Status == IPStatus.Success)
+                {
+                    lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                    label18.Text = "node online";
+                    textBoxSubmittedXpub.Text = "";
+                    textBoxSubmittedXpub.Enabled = true;
+                }
+                else
+                {
+                    // API is not online
+                    lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                    label18.Text = "invalid / node offline";
+                }
+            }
+            catch (HttpRequestException)
+            {
+                // API is not online
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+            }
+        }
+
 
         private void ListViewXpubAddresses_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -5734,6 +5819,19 @@ namespace SATSuma
             else
             {
                 XpubScrollTimer.Stop();
+            }
+        }
+
+        private void textBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (previousXpubNodeStringToCompare != textBoxMempoolURL.Text)
+            {
+                textBoxSubmittedXpub.Enabled = false;
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+                textBoxSubmittedXpub.Text = "Provide a valid url to mempool.space on your full node first";
+                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
+                CheckXpubNodeIsOnline();
             }
         }
 
@@ -7697,45 +7795,73 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
+            lblNowViewing.Location = new Point(label73.Location.X + label73.Width - 5, label73.Location.Y);
+            lblXpubNodeStatusLight.Location = new Point(textBoxMempoolURL.Location.X + textBoxMempoolURL.Width, textBoxMempoolURL.Location.Y + 4);
+            label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxMempoolURL.Location.Y);
             if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
             {
                if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
                 {
                     btnAddToBookmarks.Enabled = true;
+                    lblNowViewing.Text = "- Address";
                 }
                if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
                 {
                     btnAddToBookmarks.Enabled = false;
+                    lblNowViewing.Text = "- Address";
                 }
                if (panelBlock.Visible && lblBlockHash.Text != "")
                 {
                     btnAddToBookmarks.Enabled = true;
+                    lblNowViewing.Text = "- Block";
                 }
                 if (panelBlock.Visible && lblBlockHash.Text == "")
                 {
                     btnAddToBookmarks.Enabled = false;
+                    lblNowViewing.Text = "- Block";
                 }
                 if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
                 {
                     btnAddToBookmarks.Enabled = true;
+                    lblNowViewing.Text = "- Transaction";
                 }
                 if (panelTransaction.Visible && lblInvalidTransaction.Visible)
                 {
                     btnAddToBookmarks.Enabled = false;
+                    lblNowViewing.Text = "- Transaction";
                 }
                 if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
                 { 
                     btnAddToBookmarks.Enabled = false;
+                    lblNowViewing.Text = "- Xpub";
                 }
                 if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
                 {
                     btnAddToBookmarks.Enabled = true;
+                    lblNowViewing.Text = "- Xpub";
                 }
             }
             else
             {
+                if (panelBitcoinDashboard.Visible)
+                {
+                    lblNowViewing.Text = "- Bitcoin dashboard";
+                }
+                if (panelLightningDashboard.Visible)
+                {
+                    lblNowViewing.Text = "- Lightning dashboard";
+                }
+                if (panelBlockList.Visible)
+                {
+                    lblNowViewing.Text = "- Blocks";
+                }
+                if (panelBookmarks.Visible)
+                {
+                    lblNowViewing.Text = "- Bookmarks";
+                }
                 btnAddToBookmarks.Enabled = false;
             }
+            
         }
         #endregion
 
@@ -8098,5 +8224,8 @@ namespace SATSuma
 
 
         #endregion
+
+        
+
     }
 }

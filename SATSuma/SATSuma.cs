@@ -26,7 +26,7 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * more address type support on xpub screen (eg taproot)
  * sorting of bookmarks
- * save user settings (xpub node in particular)
+ * save user settings (xpub node in particular). Prevent going to bookmarked xpub until node is connected somehow.
  */
 
 #region Using
@@ -134,6 +134,8 @@ namespace SATSuma
         bool btnNewer15BlocksWasEnabled = false;
         bool btnOlder15BlocksWasEnabled = true;
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
+        bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
+        string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
@@ -170,7 +172,22 @@ namespace SATSuma
                         lblBlockNumber.Text = BlockTip;
                     });
                 }
-                
+
+                // check if there is a node address saved in the bookmarks file
+                var bookmarks = ReadBookmarksFromJsonFile();
+                foreach (var bookmark in bookmarks)
+                {
+                    if (bookmark.Type == "node")
+                    {
+                        textBoxMempoolURL.Text = bookmark.Data; // move node url string to the form
+                        CheckXpubNodeIsOnline();
+                        nodeURLInFile = bookmark.Data;
+                        nodeURLAlreadySavedInFile = true;
+                        break;
+                    }
+                    nodeURLAlreadySavedInFile = false;
+                }
+
                 UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
                 //setup block list screen
@@ -5611,6 +5628,46 @@ namespace SATSuma
                 {
                     lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
+
+                    /////////////////////////////////
+                    // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
+                    DateTime today = DateTime.Today;
+                    string bookmarkData;
+                    string keyCheck = "21m";
+                    bookmarkData = textBoxMempoolURL.Text;
+                    var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                    if (!nodeURLAlreadySavedInFile)
+                    {
+
+                        // Read the existing bookmarks from the JSON file
+                        var bookmarks = ReadBookmarksFromJsonFile();
+
+                        // Add the new bookmark to the list
+                        bookmarks.Add(newBookmark);
+
+                        // Write the updated list of bookmarks back to the JSON file
+                        WriteBookmarksToJsonFile(bookmarks);
+                        nodeURLAlreadySavedInFile = true;
+                        nodeURLInFile = bookmarkData;
+                    }
+                    else
+                    { 
+                        if (nodeURLInFile != textBoxMempoolURL.Text)
+                        {
+                            //delete the currently saved node url
+                            DeleteBookmarkFromJsonFile(nodeURLInFile);
+                            // Read the existing bookmarks from the JSON file
+                            var bookmarks = ReadBookmarksFromJsonFile();
+                            // Add the new bookmark to the list
+                            bookmarks.Add(newBookmark);
+                            // Write the updated list of bookmarks back to the JSON file
+                            WriteBookmarksToJsonFile(bookmarks);
+                            nodeURLAlreadySavedInFile = true;
+                            nodeURLInFile = bookmarkData;
+                        }
+                    }
+                    //////////////////////////////////////
+
                     textBoxSubmittedXpub.Text = "";
                     textBoxSubmittedXpub.Enabled = true;
                 }
@@ -8224,8 +8281,6 @@ namespace SATSuma
 
 
         #endregion
-
-        
 
     }
 }

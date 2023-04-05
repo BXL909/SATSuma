@@ -5991,60 +5991,63 @@ namespace SATSuma
 
                 foreach (var bookmark in bookmarks)
                 {
-                    ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
-                    item.SubItems.Add(bookmark.Type);
-                    if (bookmark.Encrypted == true)
+                    if (bookmark.Type != "node")
                     {
-                        item.SubItems.Add("🔒");
-                    }
-                    else
-                    {
-                        item.SubItems.Add("");
-                    }
-                    item.SubItems.Add(bookmark.Data);
-                    item.SubItems.Add(bookmark.Note);
-                    item.SubItems.Add(bookmark.KeyCheck);
-                    listViewBookmarks.Invoke((MethodInvoker)delegate
-                    {
-                        listViewBookmarks.Items.Add(item); // add row
-                    });
+                        ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
+                        item.SubItems.Add(bookmark.Type);
+                        if (bookmark.Encrypted == true)
+                        {
+                            item.SubItems.Add("🔒");
+                        }
+                        else
+                        {
+                            item.SubItems.Add("");
+                        }
+                        item.SubItems.Add(bookmark.Data);
+                        item.SubItems.Add(bookmark.Note);
+                        item.SubItems.Add(bookmark.KeyCheck);
+                        listViewBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            listViewBookmarks.Items.Add(item); // add row
+                        });
 
-                    if (listViewBookmarks.Items.Count > 21)
-                    {
-                        btnBookmarksListUp.Visible = true;
-                        btnBookmarksListDown.Visible = true;
-                    }
-                    else
-                    {
-                        btnBookmarksListUp.Visible = false;
-                        btnBookmarksListDown.Visible = false;
+                        if (listViewBookmarks.Items.Count > 21)
+                        {
+                            btnBookmarksListUp.Visible = true;
+                            btnBookmarksListDown.Visible = true;
+                        }
+                        else
+                        {
+                            btnBookmarksListUp.Visible = false;
+                            btnBookmarksListDown.Visible = false;
 
-                    }
+                        }
 
-                    // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
-                    int itemCount = listViewBookmarks.Items.Count; // Get the number of items in the ListBox
-                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+                        // Get the height of each item to set height of whole listview
+                        int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
+                        int itemCount = listViewBookmarks.Items.Count; // Get the number of items in the ListBox
+                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
 
-                    listViewBookmarks.Height = listBoxHeight; // Set the height of the ListBox
+                        listViewBookmarks.Height = listBoxHeight; // Set the height of the ListBox
 
-                    if (bookmark.Type == "block")
-                    {
-                        counterBlocks++;
+                        if (bookmark.Type == "block")
+                        {
+                            counterBlocks++;
+                        }
+                        if (bookmark.Type == "address")
+                        {
+                            counterAddresses++;
+                        }
+                        if (bookmark.Type == "xpub")
+                        {
+                            counterXpubs++;
+                        }
+                        if (bookmark.Type == "transaction")
+                        {
+                            counterTransactions++;
+                        }
+                        counterAllBookmarks++;
                     }
-                    if (bookmark.Type == "address")
-                    {
-                        counterAddresses++;
-                    }
-                    if (bookmark.Type == "xpub")
-                    {
-                        counterXpubs++;
-                    }
-                    if (bookmark.Type == "transaction")
-                    {
-                        counterTransactions++;
-                    }
-                    counterAllBookmarks++;
                 }
 
                 lblBookmarkXpubsCount.Invoke((MethodInvoker)delegate
@@ -6135,7 +6138,16 @@ namespace SATSuma
                     if (item.Selected)
                     {
                         item.EnsureVisible();
-                        btnViewBookmark.Enabled = true;
+                        if (label18.Text == "node online")
+                        {
+                            btnViewBookmark.Enabled = true;
+                        }
+                        else
+                        {
+                            lblAlert.Text = "⚠️";
+                            lblErrorMessage.Text = "a url to a connected full node must be provided on the Xpub screen before the selected Xpub can be viewed.";
+                        }
+                        
                         btnDeleteBookmark.Enabled = true;
                         item.BackColor = Color.Blue;
                         item.ForeColor = Color.White;

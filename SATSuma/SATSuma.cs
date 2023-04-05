@@ -26,7 +26,6 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * more address type support on xpub screen (eg taproot)
  * sorting of bookmarks
- * save user settings (xpub node in particular). Prevent going to bookmarked xpub until node is connected somehow.
  */
 
 #region Using

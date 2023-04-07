@@ -4678,6 +4678,9 @@ namespace SATSuma
         #endregion
 
         #region XPUB SCREEN
+
+        private bool xpubValid = false;
+
         private void TextBoxSubmittedXpub_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\r')
@@ -4693,7 +4696,8 @@ namespace SATSuma
                 {
                     return;
                 }
-            }
+            } 
+
         }
 
         private async void LookupXpub()
@@ -4701,6 +4705,7 @@ namespace SATSuma
             try
             {
                 textBoxSubmittedXpub.Enabled = false;
+                textBoxMempoolURL.Enabled = false;
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
                 int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
@@ -5382,6 +5387,7 @@ namespace SATSuma
                     lblXpubConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)).ToString("0.00000000");
                 });
                 textBoxSubmittedXpub.Enabled = true;
+                textBoxMempoolURL.Enabled = true;
                 timerHideProgressBars.Start();
 
             }
@@ -5390,8 +5396,6 @@ namespace SATSuma
                 HandleException(ex, "LookupXpub");
             }
         }
-
-        private bool xpubValid = false;
 
         private void TextBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
         {
@@ -5430,11 +5434,12 @@ namespace SATSuma
                 BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
                 PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
             }
-            catch
+            catch 
             {
                 xpubValid = false;
                 lblValidXpubIndicator.ForeColor = Color.IndianRed;
                 lblValidXpubIndicator.Text = "✖️ Invalid Xpub";
+                
                 return;
             }
             xpubValid = true;
@@ -5667,8 +5672,9 @@ namespace SATSuma
                     }
                     //////////////////////////////////////
 
-                    textBoxSubmittedXpub.Text = "";
+                   // textBoxSubmittedXpub.Text = "";
                     textBoxSubmittedXpub.Enabled = true;
+                    //textBoxSubmittedXpub.Focus();
                 }
                 else
                 {
@@ -5885,7 +5891,7 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = false;
                 lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 label18.Text = "invalid / node offline";
-                textBoxSubmittedXpub.Text = "Provide a valid url to mempool.space on your full node first";
+                textBoxSubmittedXpub.Text = "";
                 previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
                 CheckXpubNodeIsOnline();
             }
@@ -6388,7 +6394,7 @@ namespace SATSuma
                     {
                         textBoxSubmittedXpub.Text = lblBookmarkDataInFull.Text;
                     });
-                    LookupXpub();
+                    BtnMenuXpub_Click(sender, e);
                 }
             }
             catch (Exception ex)

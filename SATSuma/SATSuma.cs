@@ -20,12 +20,11 @@ Version history 🍊
 
  * Stuff to do:
  * further work on own node connection outside of the xpub screen (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
- * bring the address screen and block list screen within the Group1timertick? Might not be practical/useful
  * handle tabbing and focus better
  * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
- * more address type support on xpub screen (eg taproot)
- * sorting of bookmarks
+ * Taproot support on xpub screen
+ * sorting of bookmarks?
  */
 
 #region Using
@@ -78,6 +77,7 @@ using System.Security.Cryptography;
 using static System.Net.WebRequestMethods;
 using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
+
 #endregion
 
 namespace SATSuma
@@ -123,7 +123,6 @@ namespace SATSuma
         bool BtnViewTransactionFromAddressWasEnabled = false;
         bool BtnViewBlockFromAddressWasEnabled = false;
         bool btnViewBlockFromBlockListWasEnabled = false;
-        
         bool btnPreviousBlockTransactionsWasEnabled = false;
         bool btnNextBlockTransactionsWasEnabled = false;
         bool textBoxSubmittedBlockNumberWasEnabled = true;
@@ -187,7 +186,7 @@ namespace SATSuma
                     nodeURLAlreadySavedInFile = false;
                 }
 
-                UpdateAPIGroup1DataFields(); // setting them now avoids waiting a whole minute for the first refresh
+                UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
                 //setup block list screen
                 textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
@@ -287,7 +286,7 @@ namespace SATSuma
                         HandleException(ex, "BlockchainInfoEndpointsRefresh");
                     }
                 }
-                UpdateAPIGroup1DataFields(); // fetch data and populate fields
+                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields
             }
             catch (WebException ex)
             {
@@ -300,52 +299,120 @@ namespace SATSuma
         #region BITCOIN AND LIGHTNING DASHBOARD SCREENS
         //==============================================================================================================================================================================================
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
-        //=============================================================================================================
-        //-------------------------UPDATE FORM FIELDS------------------------------------------------------------------
 
-        public async void UpdateAPIGroup1DataFields()
+        public async void UpdateBitcoinAndLightningDashboards()
         {
-            DisableEnableLoadingAnimation("enable");
+            ToggleLoadingAnimation("enable");
 
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
-                Task task1 = Task.Run(() =>  // call bitcoinexplorer.org endpoints and populate the fields on the form
+
+                Task task0 = Task.Run(async () => // mempool.space api's
+                {
+                    // current block size and transaction count
+                    try
+                    {
+                        var blocksJson = await _blockService.GetBlockDataAsync(lblBlockNumber.Text); 
+                        var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                        lblTransactions.Invoke((MethodInvoker)delegate
+                        {
+                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count) + " transactions";
+                        });
+                        long sizeInBytes = blocks[0].Size;
+                        string sizeString; // convert display to bytes/kb/mb accordingly
+                        if (sizeInBytes < 1000)
+                        {
+                            sizeString = $"{sizeInBytes} bytes";
+                        }
+                        else if (sizeInBytes < 1000 * 1000)
+                        {
+                            double sizeInKB = (double)sizeInBytes / 1000;
+                            sizeString = $"{sizeInKB:N2} KB";
+                        }
+                        else
+                        {
+                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                            sizeString = $"{sizeInMB:N2} MB";
+                        }
+                        lblBlockSize.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockSize.Text = sizeString;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
+                    }
+
+                    // difficulty adjustment
+                    try
+                    { 
+                    var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment(); 
+                        lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
+                        {
+                            lblDifficultyAdjEst.Text = difficultyChange + "%";
+                        });
+                        lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
+                        {
+                            lblBlockListNextDifficultyAdjustment.Text = difficultyChange + "%";
+                        });
+                        lblNextDiffAdjBlock.Invoke((MethodInvoker)delegate
+                        {
+                            lblNextDiffAdjBlock.Text = nextRetargetHeight;
+                        });
+                        lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                        {
+                            lblBlockListNextDiffAdjBlock.Text = nextRetargetHeight;
+                        });
+                        decimal AvgTimeBetweenBlocks = (Convert.ToDecimal(timeAvg) / 1000) / 60;
+                        int minutes = (int)AvgTimeBetweenBlocks;
+                        int seconds = (int)((AvgTimeBetweenBlocks - minutes) * 60);
+                        string timeString = $"{minutes} mins {seconds} secs";
+                        lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
+                        {
+                            lblAvgTimeBetweenBlocks.Text = timeString;
+                        });
+                        lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // (Blocks list)
+                        {
+                            lblBlockListAvgTimeBetweenBlocks.Text = timeString;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Getting difficulty adjustment)");
+                    }
+
+                    // transactions in mempool
+                    try
+                    {
+                        var (txCount, vSize, totalFees) = GetMempool(); 
+                        string txInMempool = txCount;
+                        lblTXInMempool.Invoke((MethodInvoker)delegate
+                        {
+                            lblTXInMempool.Text = txInMempool;
+                        });
+                        lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
+                        {
+                            lblBlockListTXInMempool.Text = txInMempool;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateAPIGroup1DataFields(GetMempool)");
+                    }
+
+                });
+                Task task1 = Task.Run(() =>  // bitcoinexplorer.org JSON for market data
                 {
                     try
                     {
                         if (RunBitcoinExplorerEndpointAPI)
                         {
-                            var (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool) = BitcoinExplorerOrgEndpointsRefresh();
-                            // move returned data to the labels on the form
-                            lblPriceUSD.Invoke((MethodInvoker)delegate
-                            {
-                                lblPriceUSD.Text = priceUSD;
-                            });
-                            lblMoscowTime.Invoke((MethodInvoker)delegate
-                            {
-                                lblMoscowTime.Text = moscowTime;
-                            });
-                            lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                            {
-                                lblMarketCapUSD.Text = marketCapUSD;
-                            });
-                            lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
-                            {
-                                lblDifficultyAdjEst.Text = difficultyAdjEst;
-                            });
-                            lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // Blocks list
-                            {
-                                lblBlockListNextDifficultyAdjustment.Text = difficultyAdjEst;
-                            });
-                            lblTXInMempool.Invoke((MethodInvoker)delegate
-                            {
-                                lblTXInMempool.Text = txInMempool;
-                            });
-                            lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
-                            {
-                                lblBlockListTXInMempool.Text = txInMempool;
-                            });
+                            GetMarketData();
                         }
                         else
                         {
@@ -353,6 +420,7 @@ namespace SATSuma
                             {
                                 lblPriceUSD.Text = "disabled";
                             });
+
                             lblMoscowTime.Invoke((MethodInvoker)delegate
                             {
                                 lblMoscowTime.Text = "disabled";
@@ -361,40 +429,22 @@ namespace SATSuma
                             {
                                 lblMarketCapUSD.Text = "disabled";
                             });
-                            lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
-                            {
-                                lblDifficultyAdjEst.Text = "disabled";
-                            });
-                            lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // Blocks list
-                            {
-                                lblBlockListNextDifficultyAdjustment.Text = "disabled";
-                            });
-                            lblTXInMempool.Invoke((MethodInvoker)delegate
-                            {
-                                lblTXInMempool.Text = "disabled";
-                            });
-                            lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
-                            {
-                                lblBlockListTXInMempool.Text = "disabled";
-                            });
                         }
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task1)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task1)");
                     }
                 });
-
-                Task task2 = Task.Run(() => // call blockchain.info endpoints and populate the fields on the form
+                Task task2 = Task.Run(() => // blockchain.info endpoints 
                 {
                     try
                     {
                         if (RunBlockchainInfoEndpointAPI)
                         {
                             var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
-                            // move returned data to the labels on the form
                             lblAvgNoTransactions.Invoke((MethodInvoker)delegate
                             {
                                 lblAvgNoTransactions.Text = avgNoTransactions;
@@ -409,7 +459,7 @@ namespace SATSuma
                             {
                                 lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
                             });
-                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListBlockReward.Text = blockReward;
                             });
@@ -417,17 +467,9 @@ namespace SATSuma
                             {
                                 lblEstHashrate.Text = estHashrate;
                             });
-                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListEstHashRate.Text = estHashrate;
-                            });
-                            lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
-                            {
-                                lblAvgTimeBetweenBlocks.Text = avgTimeBetweenBlocks;
-                            });
-                            lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListAvgTimeBetweenBlocks.Text = avgTimeBetweenBlocks;
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
@@ -437,7 +479,7 @@ namespace SATSuma
                             {
                                 lblHashesToSolve.Text = hashesToSolve;
                             });
-                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
                             });
@@ -460,7 +502,7 @@ namespace SATSuma
                             {
                                 lblBlockReward.Text = "disabled";
                             });
-                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListBlockReward.Text = "disabled";
                             });
@@ -472,14 +514,6 @@ namespace SATSuma
                             {
                                 lblEstHashrate.Text = "disabled";
                             });
-                            lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
-                            {
-                                lblAvgTimeBetweenBlocks.Text = "disabled";
-                            });
-                            lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListAvgTimeBetweenBlocks.Text = "disabled";
-                            });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
                                 lblBTCInCirc.Text = "disabled";
@@ -488,7 +522,7 @@ namespace SATSuma
                             {
                                 lblHashesToSolve.Text = "disabled";
                             });
-                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListAttemptsToSolveBlock.Text = "disabled";
                             });
@@ -500,7 +534,7 @@ namespace SATSuma
                             {
                                 lbl24HourBTCSent.Text = "disabled";
                             });
-                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // Blocks list
+                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
                                 lblBlockListEstHashRate.Text = "disabled";
                             });
@@ -510,11 +544,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task2)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task2)");
                     }
                 });
-
-                Task task3 = Task.Run(() => // call Bitcoinexplorer.org JSON
+                Task task3 = Task.Run(() => // Bitcoinexplorer.org JSON
                 {
                     try
                     {
@@ -606,126 +639,16 @@ namespace SATSuma
                             {
                                 lblBlockListTotalFeesInNextBlock.Text = "disabled";
                             });
-
                         }
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task3)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task3)");
                     }
                 });
-
-                Task task4 = Task.Run(() => //call blockchain.info JSON
-                {
-                    try
-                    {
-                        if (RunBlockchainInfoJSONAPI)
-                        {
-                            var (n_tx, size, nextretarget) = BlockchainInfoJSONRefresh();
-                            // move returned data to the labels on the form
-                            lblTransactions.Invoke((MethodInvoker)delegate
-                            {
-                                lblTransactions.Text = n_tx;
-                            });
-                            lblBlockSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockSize.Text = size;
-                            });
-                            lblNextDifficultyChange.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextDifficultyChange.Text = nextretarget;
-                            });
-                            lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListNextDiffAdjBlock.Text = nextretarget;
-                            });
-                        }
-                        else
-                        {
-                            lblTransactions.Invoke((MethodInvoker)delegate
-                            {
-                                lblTransactions.Text = "disabled";
-                            });
-                            lblBlockSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockSize.Text = "disabled";
-                            });
-                            lblNextDifficultyChange.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextDifficultyChange.Text = "disabled";
-                            });
-                            lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListNextDiffAdjBlock.Text = "disabled";
-                            });
-                        }
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task4)");
-                    }
-                });
-
-/*                Task task5 = Task.Run(() => // call CoinGecko.com JSON
-                {
-                    try
-                    {
-                        if (RunCoingeckoComJSONAPI)
-                        {
-                            var (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow) = CoingeckoComJSONRefresh();
-                            // move returned data to the labels on the form
-                            lblATH.Invoke((MethodInvoker)delegate
-                            {
-                                lblATH.Text = ath;
-                            });
-                            lblATHDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblATHDate.Location = new Point(lblATH.Location.X + lblATH.Width, lblATHDate.Location.Y); // place the ATH date according to the width of the ATH (future proofed for hyperbitcoinization!)
-                                lblATHDate.Text = "(" + athDate + ")";
-                            });
-                            lblATHDifference.Invoke((MethodInvoker)delegate
-                            {
-                                lblATHDifference.Text = athDifference;
-                            });
-                            lbl24HrHigh.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HrHigh.Text = twentyFourHourHigh + " / " + twentyFourHourLow;
-                            });
-                        }
-                        else
-                        {
-                            lblATH.Invoke((MethodInvoker)delegate
-                            {
-                                lblATH.Text = "disabled";
-                            });
-                            lblATHDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblATHDate.Location = new Point(lblATH.Location.X + lblATH.Width, lblATHDate.Location.Y); // place the ATH date according to the width of the ATH (future proofed for hyperbitcoinization!)
-                                lblATHDate.Text = "(" + "disabled" + ")";
-                            });
-                            lblATHDifference.Invoke((MethodInvoker)delegate
-                            {
-                                lblATHDifference.Text = "disabled";
-                            });
-                            lbl24HrHigh.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HrHigh.Text = "disabled";
-                            });
-                        }
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task5)");
-                    }
-                });
-*/
-                Task task6 = Task.Run(() => //call mempool.space lightning JSON
+                Task task6 = Task.Run(() => // mempool.space lightning JSON
                 {
                     try
                     {
@@ -908,17 +831,16 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task6)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task6)");
                     }
                 });
-
-                Task task7 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
+                Task task7 = Task.Run(() =>  // blockchair.com JSON for chain stats
                 {
                     try
                     {
                         if (RunBlockchairComJSONAPI)
                         {
-                            var result7 = BlockchairComJSONRefresh();
+                            var result7 = BlockchairComChainStatsJSONRefresh();
                             int hodling_addresses = int.Parse(result7.hodling_addresses);
                             if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                             {
@@ -973,11 +895,10 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task7)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task7)");
                     }
                 });
-
-                Task task8 = Task.Run(() =>  // call blockchair.com endpoints and populate the fields on the form
+                Task task8 = Task.Run(() =>  // blockchair.com JSON for halving stats
                 {
                     try
                     {
@@ -1032,11 +953,11 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(Task8)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task8)");
                     }
                 });
 
-                await Task.WhenAll(task1, task2, task3, task4, task6, task7, task8);
+                await Task.WhenAll(task0, task1, task2, task3, task6, task7, task8);
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
@@ -1056,29 +977,115 @@ namespace SATSuma
                     });
                 }
             }
-            DisableEnableLoadingAnimation("disable");
+            ToggleLoadingAnimation("disable");
         }
 
         //=============================================================================================================
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
-        //------BitcoinExplorer and BlockchainInfo endpoints 
-        private (string priceUSD, string moscowTime, string marketCapUSD, string difficultyAdjEst, string txInMempool) BitcoinExplorerOrgEndpointsRefresh()
+        
+        private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) GetDifficultyAdjustment()
         {
             try
             {
                 using WebClient client = new WebClient();
-                string priceUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd"); // 1 bitcoin = ? usd
-                string moscowTime = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/sats"); // 1 usd = ? sats
-                string marketCapUSD = client.DownloadString("https://bitcoinexplorer.org/api/price/usd/marketcap"); // bitcoin market cap in usd
-                string difficultyAdjEst = client.DownloadString("https://bitcoinexplorer.org/api/mining/diff-adj-estimate") + "%"; // difficulty adjustment as a percentage
-                string txInMempool = client.DownloadString("https://bitcoinexplorer.org/api/mempool/count"); // total number of transactions in the mempool
-                return (priceUSD, moscowTime, marketCapUSD, difficultyAdjEst, txInMempool);
+                var response = client.DownloadString("https://mempool.space/api/v1/difficulty-adjustment");
+                var data = JObject.Parse(response);
+                string progressPercent = Convert.ToString(data["progressPercent"]);
+                decimal difficultyChangeFull = (decimal)data["difficultyChange"];
+                string difficultyChange = Math.Round(difficultyChangeFull, 2).ToString();
+                string estimatedRetargetDate = Convert.ToString(data["estimatedRetargetDate"]);
+                string remainingBlocks = Convert.ToString(data["remainingBlocks"]);
+                string remainingTime = Convert.ToString(data["remainingTime"]);
+                string previousRetarget = Convert.ToString(data["previousRetarget"]);
+                string nextRetargetHeight = Convert.ToString(data["nextRetargetHeight"]);
+                string timeAvg = Convert.ToString(data["timeAvg"]);
+                string timeOffset = Convert.ToString(data["timeOffset"]);
+                return (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset);
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BitcoinExplorerOrgEndpointsRefresh");
+                HandleException(ex, "BitcoinExplorerOrgGetPrice");
             }
-            return ("0", "0", "0", "0", "0");
+            return ("error", "error", "error", "error", "error", "error", "error", "error", "error");
+        }
+
+        private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
+                var data = JObject.Parse(response);
+                string priceUSD = Convert.ToString(data["usd"]);
+                string priceGBP = Convert.ToString(data["gbp"]);
+                string priceEUR = Convert.ToString(data["eur"]);
+                string priceXAU = Convert.ToString(data["xau"]);
+                return (priceUSD, priceGBP, priceEUR, priceXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BitcoinExplorerOrgGetPrice");
+            }
+            return ("error", "error", "error", "error");
+        }
+
+        private (string mCapUSD, string mCapGBP, string mCapEUR, string mCapXAU) BitcoinExplorerOrgGetMarketCap()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://bitcoinexplorer.org/api/price/marketcap");
+                var data = JObject.Parse(response);
+                string mCapUSD = Convert.ToString(data["usd"]);
+                string mCapGBP = Convert.ToString(data["gbp"]);
+                string mCapEUR = Convert.ToString(data["eur"]);
+                string mCapXAU = Convert.ToString(data["xau"]);
+                return (mCapUSD, mCapGBP, mCapEUR, mCapXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BitcoinExplorerOrgGetMarketCap");
+            }
+            return ("error", "error", "error", "error");
+        }
+
+        private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://bitcoinexplorer.org/api/price/sats");
+                var data = JObject.Parse(response);
+                string satsUSD = Convert.ToString(data["usd"]);
+                string satsGBP = Convert.ToString(data["gbp"]);
+                string satsEUR = Convert.ToString(data["eur"]);
+                string satsXAU = Convert.ToString(data["xau"]);
+                return (satsUSD, satsGBP, satsEUR, satsXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BitcoinExplorerOrgGetMoscowTime");
+            }
+            return ("error", "error", "error", "error");
+        }
+
+        private (string txCount, string vSize, string totalFees) GetMempool()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/mempool");
+                var data = JObject.Parse(response);
+                string txCount = Convert.ToString(data["count"]);
+                string vSize = Convert.ToString(data["vsize"]);
+                string totalFees = Convert.ToString(data["total_fee"]);
+                return (txCount, vSize, totalFees);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetMempool");
+            }
+            return ("error", "error", "error");
         }
 
         private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string btcInCirc, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoEndpointsRefresh()
@@ -1113,7 +1120,6 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        //-----Mempool Lighting JSON
         private (List<string> aliases, List<string> capacities) MempoolSpaceLiquidityRankingJSONRefresh()
         {
             try
@@ -1159,7 +1165,6 @@ namespace SATSuma
                     aliases.Add((string)data[i]["alias"]);
                     channels.Add((string)data[i]["channels"]);
                 }
-
                 return (aliases, channels);
             }
             catch (Exception ex)
@@ -1234,7 +1239,6 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        //-----BitcoinExplorer JSON
         private (string nextBlockFee, string thirtyMinFee, string sixtyMinFee, string oneDayFee, string txInNextBlock, string nextBlockMinFee, string nextBlockMaxFee, string nextBlockTotalFees) BitcoinExplorerOrgJSONRefresh()
         {
             try
@@ -1274,74 +1278,6 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        //-----BlockchainInfo JSON
-        private (string n_tx, string size, string nextretarget) BlockchainInfoJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                // LATEST BLOCK
-                string jsonurl = "https://blockchain.info/rawblock/";  // use this...
-                string blockNumberUrl = "https://blockchain.info/q/getblockcount";
-                string blocknumber = client.DownloadString(blockNumberUrl); //combined with the result of that (we can't rely on already knowing the latest block number)
-                string finalurl = jsonurl + blocknumber; // to create a url we can use to get the JSON of the latest block
-                string size;
-                var response3 = client.DownloadString(finalurl);
-                var data3 = JObject.Parse(response3);
-                var n_tx = (string)data3["n_tx"] + " transactions";  // number of transactions
-                var sizeInKB = ((double)data3["size"] / 1000); // size in bytes divided by 1000 to get kb
-                if (sizeInKB < 1024) // if less than 1MB
-                {
-                    size = sizeInKB + " KB block size";
-                }
-                else // if more than 1MB
-                {
-                    size = Convert.ToString(Math.Round((sizeInKB / 1000), 2)) + "MB block size";
-                }
-                // NEXT DIFFICULTY ADJUSTMENT BLOCK
-                var response4 = client.DownloadString("https://api.blockchain.info/stats");
-                var data4 = JObject.Parse(response4);
-                var nextretarget = (string)data4["nextretarget"];
-                return (n_tx, size, nextretarget);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BlockchainInfoJSONRefresh");
-            }
-            return ("0", "0", "0");
-        }
-
-        /*//-----CoinGecko JSON
-        private (string ath, string athDate, string athDifference, string twentyFourHourHigh, string twentyFourHourLow) CoingeckoComJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                // ATH & 24hr data
-                var response5 = client.DownloadString("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=1&page=1&sparkline=false");
-                var data5 = JArray.Parse(response5);
-                var btcData = data5.Where(x => (string)x["symbol"] == "btc").FirstOrDefault();
-                var ath = (string)btcData["ath"];  // all time high value of btc in usd
-                var athDate = (string)btcData["ath_date"]; // date of the all time high
-                DateTime date = DateTime.Parse(athDate); // change it to dd MMM yyyy format
-                string strATHDate = date.ToString("dd MMM yyyy");
-                athDate = strATHDate;
-                double doubleathDifference = (double)btcData["ath_change_percentage"]; // percentage change from ATH to multiple decimal places
-                string formattedAthDifference = doubleathDifference.ToString("0.00"); // round it to 2 decimal places before sending it back
-                string athDifference = Convert.ToString(formattedAthDifference);
-
-                var twentyFourHourHigh = (string)btcData["high_24h"]; // highest value of btc in usd over last 24 hours
-                var twentyFourHourLow = (string)btcData["low_24h"]; // lowest value of btc in usd over last 24 hours
-                return (ath, athDate, athDifference, twentyFourHourHigh, twentyFourHourLow);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "CoingeckoComJSONRefresh");
-            }
-            return ("0", "0", "0", "0", "0");
-        }*/
-
-        //-----Blockchair JSON
         private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
         {
             try
@@ -1363,7 +1299,7 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0");
         }
 
-        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComJSONRefresh()
+        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComChainStatsJSONRefresh()
         {
             try
             {
@@ -1381,6 +1317,90 @@ namespace SATSuma
                 HandleException(ex, "BlockchairComJSONRefresh");
             }
             return ("0", "0", "0", "0");
+        }
+
+        private void BtnUSD_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = false;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            GetMarketData();
+        }
+
+        private void BtnEUR_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = false;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            GetMarketData();
+        }
+
+        private void BtnGBP_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = false;
+            btnXAU.Enabled = true;
+            GetMarketData();
+        }
+
+        private void BtnXAU_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = false;
+            GetMarketData();
+        }
+
+        private void GetMarketData()
+        {
+            var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+            var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
+            var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+            string price = "";
+            string mCap = "";
+            string satsPerUnit = "";
+            if (!btnUSD.Enabled)
+            {
+                price = "$" + priceUSD;
+                mCap = "$" + mCapUSD;
+                satsPerUnit = "$" + satsUSD;
+            }
+            if (!btnEUR.Enabled)
+            {
+                price = "€" + priceEUR;
+                mCap = "€" + mCapEUR;
+                satsPerUnit = "€" + satsEUR;
+            }
+            if (!btnGBP.Enabled)
+            {
+                price = "£" + priceGBP;
+                mCap = "£" + mCapGBP;
+                satsPerUnit = "£" + satsGBP;
+            }
+            if (!btnXAU.Enabled)
+            {
+                price = "🪙" + priceXAU;
+                mCap = "🪙" + mCapXAU;
+                satsPerUnit = "🪙" + satsXAU;
+            }
+            lblPriceUSD.Invoke((MethodInvoker)delegate
+            {
+                lblPriceUSD.Text = price;
+            });
+
+            lblMarketCapUSD.Invoke((MethodInvoker)delegate
+            {
+                lblMarketCapUSD.Text = mCap;
+            });
+
+            lblMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblMoscowTime.Text = satsPerUnit;
+            });
         }
 
         //=============================================================================================================
@@ -1478,7 +1498,7 @@ namespace SATSuma
             string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 AddressValidShowControls();
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
@@ -1515,7 +1535,7 @@ namespace SATSuma
                     return;
                 }
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                ToggleLoadingAnimation("disable"); // stop the loading animation
 
             }
             else
@@ -2017,7 +2037,7 @@ namespace SATSuma
 
         private async void BtnGetNextTransactionsForAddress(object sender, EventArgs e)
         {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            ToggleLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
@@ -2033,14 +2053,14 @@ namespace SATSuma
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            ToggleLoadingAnimation("disable"); // stop the loading animation
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
         }
 
         private async void BtnFirstTransactionForAddress_Click(object sender, EventArgs e)
         {
-            DisableEnableLoadingAnimation("enable"); // start the loading animation
+            ToggleLoadingAnimation("enable"); // start the loading animation
             DisableEnableButtons("disable"); // disable buttons during operation
             if (PartOfAnAllAddressTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
             {
@@ -2057,7 +2077,7 @@ namespace SATSuma
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
             DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-            DisableEnableLoadingAnimation("disable"); // stop the loading animation
+            ToggleLoadingAnimation("disable"); // stop the loading animation
         }
 
         private void BtnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
@@ -2575,12 +2595,12 @@ namespace SATSuma
                 }
 
                 var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 await GetFifteenBlocks(blockNumber);
                 string BlockHashToGetTransactionsFor = lblBlockHash.Text;
                 await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                ToggleLoadingAnimation("disable"); // stop the loading animation
                 DisableEnableButtons("enable"); // enable buttons after operation is complete
             }
             catch (Exception ex)
@@ -2797,7 +2817,7 @@ namespace SATSuma
         {
             try
             {
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
                                                    // Get the last seen transaction ID from the list view
@@ -2805,7 +2825,7 @@ namespace SATSuma
                                                                                                  // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
             catch (Exception ex)
@@ -2818,7 +2838,7 @@ namespace SATSuma
         {
             try
             {
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
 
@@ -2838,7 +2858,7 @@ namespace SATSuma
                                                                                                  // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
             catch (Exception ex)
@@ -4173,12 +4193,12 @@ namespace SATSuma
         {
             try
             {
-                DisableEnableLoadingAnimation("enable"); // start the loading animation
+                ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
 
                 var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
 
-                DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                ToggleLoadingAnimation("disable"); // stop the loading animation
                 DisableEnableButtons("enable"); // enable buttons after operation is complete
 
                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
@@ -4697,7 +4717,6 @@ namespace SATSuma
                     return;
                 }
             } 
-
         }
 
         private async void LookupXpub()
@@ -4816,6 +4835,12 @@ namespace SATSuma
                         listViewXpubAddresses.Columns.Add("Unspent", 100);
                     });
                 }
+
+
+
+                // ------ TAPROOT :(
+
+
 
                 // ------- SEGWIT
                 for (uint i = 0; i < 500; i++)
@@ -5884,7 +5909,7 @@ namespace SATSuma
             }
         }
 
-        private void textBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
         {
             if (previousXpubNodeStringToCompare != textBoxMempoolURL.Text)
             {
@@ -7058,7 +7083,7 @@ namespace SATSuma
         //=============================================================================================================
         //------------------------DISABLE/ENABLE THE LOADING ANIMATION-------------------------------------------------
 
-        private void DisableEnableLoadingAnimation(string enableOrDisableAnimation)
+        private void ToggleLoadingAnimation(string enableOrDisableAnimation)
         {
             try
             {
@@ -7521,39 +7546,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "BtnMenuXpub_Click");
-            }
-        }
-
-        private void LblBlockNumber_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlock.Enabled = false;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelAddress.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelBlock.Visible = true;
-                textBoxSubmittedBlockNumber.Text = lblBlockNumber.Text; // overwrite whatever is in block screen textbox with the current block height.
-                LookupBlock();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "LblBlockNumber_Click");
             }
         }
 
@@ -8298,6 +8290,5 @@ namespace SATSuma
 
 
         #endregion
-
     }
 }

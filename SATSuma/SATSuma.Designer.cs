@@ -99,7 +99,7 @@
             this.panel7 = new System.Windows.Forms.Panel();
             this.label80 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.lblNextDifficultyChange = new System.Windows.Forms.Label();
+            this.lblNextDiffAdjBlock = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblHashesToSolve = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -492,6 +492,10 @@
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
             this.lblNowViewing = new System.Windows.Forms.Label();
+            this.btnUSD = new System.Windows.Forms.Button();
+            this.btnEUR = new System.Windows.Forms.Button();
+            this.btnGBP = new System.Windows.Forms.Button();
+            this.btnXAU = new System.Windows.Forms.Button();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -631,7 +635,6 @@
             this.lblBlockNumber.TabIndex = 5;
             this.lblBlockNumber.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockNumber, "Click to view this block");
-            this.lblBlockNumber.Click += new System.EventHandler(this.LblBlockNumber_Click);
             // 
             // timerAPIGroup1
             // 
@@ -1164,7 +1167,7 @@
             this.panelBitcoinDashboard.Controls.Add(this.panel7);
             this.panelBitcoinDashboard.Controls.Add(this.label9);
             this.panelBitcoinDashboard.Controls.Add(this.lblNodes);
-            this.panelBitcoinDashboard.Controls.Add(this.lblNextDifficultyChange);
+            this.panelBitcoinDashboard.Controls.Add(this.lblNextDiffAdjBlock);
             this.panelBitcoinDashboard.Controls.Add(this.label8);
             this.panelBitcoinDashboard.Controls.Add(this.lblHashesToSolve);
             this.panelBitcoinDashboard.Controls.Add(this.lblHalveningSecondsRemaining);
@@ -1318,6 +1321,10 @@
             this.panel6.BackColor = System.Drawing.Color.Transparent;
             this.panel6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel6.BackgroundImage")));
             this.panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel6.Controls.Add(this.btnXAU);
+            this.panel6.Controls.Add(this.btnGBP);
+            this.panel6.Controls.Add(this.btnEUR);
+            this.panel6.Controls.Add(this.btnUSD);
             this.panel6.Controls.Add(this.label79);
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
@@ -1442,14 +1449,14 @@
             // 
             // lblNextDifficultyChange
             // 
-            this.lblNextDifficultyChange.AutoSize = true;
-            this.lblNextDifficultyChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblNextDifficultyChange.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNextDifficultyChange.Location = new System.Drawing.Point(3, 365);
-            this.lblNextDifficultyChange.Name = "lblNextDifficultyChange";
-            this.lblNextDifficultyChange.Size = new System.Drawing.Size(80, 22);
-            this.lblNextDifficultyChange.TabIndex = 212;
-            this.lblNextDifficultyChange.Text = "no data";
+            this.lblNextDiffAdjBlock.AutoSize = true;
+            this.lblNextDiffAdjBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblNextDiffAdjBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNextDiffAdjBlock.Location = new System.Drawing.Point(3, 365);
+            this.lblNextDiffAdjBlock.Name = "lblNextDifficultyChange";
+            this.lblNextDiffAdjBlock.Size = new System.Drawing.Size(80, 22);
+            this.lblNextDiffAdjBlock.TabIndex = 212;
+            this.lblNextDiffAdjBlock.Text = "no data";
             // 
             // label8
             // 
@@ -5735,7 +5742,7 @@
             this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
             this.textBoxMempoolURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
             this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxMempoolURL_KeyPress);
-            this.textBoxMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxMempoolURL_KeyUp);
+            this.textBoxMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxMempoolURL_KeyUp);
             this.textBoxMempoolURL.Leave += new System.EventHandler(this.TextBoxMempoolURL_Leave);
             // 
             // panel30
@@ -6982,6 +6989,91 @@
             this.lblNowViewing.TabIndex = 217;
             this.lblNowViewing.Text = "- now viewing";
             // 
+            // btnUSD
+            // 
+            this.btnUSD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnUSD.Enabled = false;
+            this.btnUSD.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnUSD.FlatAppearance.BorderSize = 0;
+            this.btnUSD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnUSD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnUSD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUSD.Font = new System.Drawing.Font("Century Gothic", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUSD.ForeColor = System.Drawing.Color.White;
+            this.btnUSD.Location = new System.Drawing.Point(146, 0);
+            this.btnUSD.Margin = new System.Windows.Forms.Padding(0);
+            this.btnUSD.Name = "btnUSD";
+            this.btnUSD.Size = new System.Drawing.Size(40, 20);
+            this.btnUSD.TabIndex = 218;
+            this.btnUSD.TabStop = false;
+            this.btnUSD.Text = "USD";
+            this.btnUSD.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUSD.UseVisualStyleBackColor = false;
+            this.btnUSD.Click += new System.EventHandler(this.BtnUSD_Click);
+            // 
+            // btnEUR
+            // 
+            this.btnEUR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnEUR.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnEUR.FlatAppearance.BorderSize = 0;
+            this.btnEUR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnEUR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnEUR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEUR.Font = new System.Drawing.Font("Century Gothic", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEUR.ForeColor = System.Drawing.Color.White;
+            this.btnEUR.Location = new System.Drawing.Point(190, 0);
+            this.btnEUR.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEUR.Name = "btnEUR";
+            this.btnEUR.Size = new System.Drawing.Size(40, 20);
+            this.btnEUR.TabIndex = 219;
+            this.btnEUR.TabStop = false;
+            this.btnEUR.Text = "EUR";
+            this.btnEUR.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnEUR.UseVisualStyleBackColor = false;
+            this.btnEUR.Click += new System.EventHandler(this.BtnEUR_Click);
+            // 
+            // btnGBP
+            // 
+            this.btnGBP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnGBP.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnGBP.FlatAppearance.BorderSize = 0;
+            this.btnGBP.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnGBP.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnGBP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGBP.Font = new System.Drawing.Font("Century Gothic", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGBP.ForeColor = System.Drawing.Color.White;
+            this.btnGBP.Location = new System.Drawing.Point(234, 0);
+            this.btnGBP.Margin = new System.Windows.Forms.Padding(0);
+            this.btnGBP.Name = "btnGBP";
+            this.btnGBP.Size = new System.Drawing.Size(40, 20);
+            this.btnGBP.TabIndex = 220;
+            this.btnGBP.TabStop = false;
+            this.btnGBP.Text = "GBP";
+            this.btnGBP.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnGBP.UseVisualStyleBackColor = false;
+            this.btnGBP.Click += new System.EventHandler(this.BtnGBP_Click);
+            // 
+            // btnXAU
+            // 
+            this.btnXAU.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnXAU.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnXAU.FlatAppearance.BorderSize = 0;
+            this.btnXAU.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnXAU.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnXAU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXAU.Font = new System.Drawing.Font("Century Gothic", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXAU.ForeColor = System.Drawing.Color.White;
+            this.btnXAU.Location = new System.Drawing.Point(278, 0);
+            this.btnXAU.Margin = new System.Windows.Forms.Padding(0);
+            this.btnXAU.Name = "btnXAU";
+            this.btnXAU.Size = new System.Drawing.Size(40, 20);
+            this.btnXAU.TabIndex = 221;
+            this.btnXAU.TabStop = false;
+            this.btnXAU.Text = "XAU";
+            this.btnXAU.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnXAU.UseVisualStyleBackColor = false;
+            this.btnXAU.Click += new System.EventHandler(this.BtnXAU_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -6991,9 +7083,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.lblNowViewing);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMenu);
@@ -7354,7 +7446,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label lblAvgNoTransactions;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label lblNextDifficultyChange;
+        private System.Windows.Forms.Label lblNextDiffAdjBlock;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label lblHashesToSolve;
         private System.Windows.Forms.Label label7;
@@ -7583,6 +7675,10 @@
         private System.Windows.Forms.Label lblNowViewing;
         private System.Windows.Forms.Label lblXpubNodeStatusLight;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button btnUSD;
+        private System.Windows.Forms.Button btnEUR;
+        private System.Windows.Forms.Button btnXAU;
+        private System.Windows.Forms.Button btnGBP;
     }
 }
 

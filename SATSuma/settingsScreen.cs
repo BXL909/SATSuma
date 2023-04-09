@@ -20,8 +20,6 @@ namespace SATSuma
         public bool BitcoinExplorerEndpointsEnabled { get; set; }
         public bool BlockchainInfoEndpointsEnabled { get; set; }
         public bool BitcoinExplorerOrgJSONEnabled { get; set; }
-        public bool BlockchainInfoJSONEnabled { get; set; }
-        public bool CoingeckoComJSONEnabled { get; set; }
         public bool BlockchairComJSONEnabled { get; set; }
         public bool MempoolSpaceLightningJSONEnabled { get; set; }
         public string NodeURL { get; set; }
@@ -89,34 +87,6 @@ namespace SATSuma
             }
         }
 
-        private void LblBlockchainInfoJSON_Click(object sender, EventArgs e)
-        {
-            if (lblBlockchainInfoJSON.Text == "✔️")
-            {
-                lblBlockchainInfoJSON.ForeColor = Color.Red;
-                lblBlockchainInfoJSON.Text = "❌";
-            }
-            else
-            {
-                lblBlockchainInfoJSON.ForeColor = Color.Green;
-                lblBlockchainInfoJSON.Text = "✔️";
-            }
-        }
-
-        private void LblCoingeckoComJSON_Click(object sender, EventArgs e)
-        {
-            if (lblCoingeckoComJSON.Text == "✔️")
-            {
-                lblCoingeckoComJSON.ForeColor = Color.Red;
-                lblCoingeckoComJSON.Text = "❌";
-            }
-            else
-            {
-                lblCoingeckoComJSON.ForeColor = Color.Green;
-                lblCoingeckoComJSON.Text = "✔️";
-            }
-        }
-
         private void LblBlockchairComJSON_Click(object sender, EventArgs e)
         {
             if (lblBlockchairComJSON.Text == "✔️")
@@ -170,22 +140,6 @@ namespace SATSuma
             else
             {
                 BitcoinExplorerOrgJSONEnabled = false;
-            }
-            if (lblBlockchainInfoJSON.Text == "✔️")
-            {
-                BlockchainInfoJSONEnabled = true;
-            }
-            else
-            {
-                BlockchainInfoJSONEnabled = false;
-            }
-            if (lblCoingeckoComJSON.Text == "✔️")
-            {
-                CoingeckoComJSONEnabled = true;
-            }
-            else
-            {
-                CoingeckoComJSONEnabled = false;
             }
             if (lblBlockchairComJSON.Text == "✔️")
             {

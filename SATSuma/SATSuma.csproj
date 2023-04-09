@@ -74,6 +74,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BetterListViewExpress-net35, Version=3.15.0.0, Culture=neutral, PublicKeyToken=e6c91a3add447be2, processorArchitecture=MSIL" />
+    <Reference Include="ColorProgressBar">
+      <HintPath>C:\Users\ben90.DESKTOP-KI3LU8K\Desktop\ColorProgressBar\ColorProgressBar\bin\Release\ColorProgressBar.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNetCore.Connections.Abstractions, Version=7.0.4.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Connections.Abstractions.7.0.4\lib\net462\Microsoft.AspNetCore.Connections.Abstractions.dll</HintPath>
     </Reference>
@@ -352,6 +355,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\titleBGLongerOrangeFlipped.png" />
     <None Include="Resources\titleBGLongerOrange.png" />
     <None Include="Resources\tinylogo1.png" />
     <None Include="Resources\tinylogo.png" />

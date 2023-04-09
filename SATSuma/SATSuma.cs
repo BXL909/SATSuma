@@ -21,7 +21,6 @@ Version history 🍊
  * Stuff to do:
  * further work on own node connection outside of the xpub screen (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * handle tabbing and focus better
- * replace as many fields as possible on dashboards with selected node versions
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
@@ -94,8 +93,6 @@ namespace SATSuma
         private bool RunBitcoinExplorerEndpointAPI = true;
         private bool RunBlockchainInfoEndpointAPI = true;
         private bool RunBitcoinExplorerOrgJSONAPI = true;
-        private bool RunBlockchainInfoJSONAPI = true;
-        private bool RunCoingeckoComJSONAPI = true;
         private bool RunBlockchairComJSONAPI = true;
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
@@ -349,7 +346,16 @@ namespace SATSuma
                     // difficulty adjustment
                     try
                     { 
-                    var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment(); 
+                    var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment();
+                        decimal progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
+                        string truncatedPercent = string.Format("{0:F2}%", progressValue2 * 100); // truncate to two decimal places
+                        
+                        lblProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate
+                        {
+                            lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
+                        });
+                        decimal progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
+                        progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
                         lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
                         {
                             lblDifficultyAdjEst.Text = difficultyChange + "%";
@@ -357,6 +363,17 @@ namespace SATSuma
                         lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
                             lblBlockListNextDifficultyAdjustment.Text = difficultyChange + "%";
+                        });
+                        lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlocksUntilDiffAdj.Text = remainingBlocks.ToString();
+                        });
+                        long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
+                        DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
+                        string formattedDate = retargetDate.ToString("yyyy-MM-dd");
+                        lblEstDiffAdjDate.Invoke((MethodInvoker)delegate
+                        {
+                            lblEstDiffAdjDate.Text = formattedDate;
                         });
                         lblNextDiffAdjBlock.Invoke((MethodInvoker)delegate
                         {
@@ -909,6 +926,8 @@ namespace SATSuma
                             {
                                 lblHalveningBlock.Text = halveningBlock + " / " + blocksLeft;
                             });
+                            int progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
+                            progressBarProgressToHalving.Value = progressBarValue;
                             lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                             {
                                 lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
@@ -4782,6 +4801,8 @@ namespace SATSuma
                 label121.Visible = true;
                 lblXpubConfirmedUnspent.Visible = true;
                 listViewXpubAddresses.Visible = true;
+                lblCheckAllAddressTypesCount.Visible = true;
+                lblCheckEachAddressTypeCount.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
@@ -4940,6 +4961,10 @@ namespace SATSuma
                         {
                             progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
                         }
+                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                        });
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
@@ -4950,6 +4975,10 @@ namespace SATSuma
                         {
                             progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
                         }
+                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                        });
                         // assume there are no more used addresses at this point
                         if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
                         {
@@ -5125,6 +5154,10 @@ namespace SATSuma
                         {
                             progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
                         }
+                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                        });
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
@@ -5135,6 +5168,11 @@ namespace SATSuma
                         {
                             progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
                         }
+                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                        });
+
                         // assume there are no more used addresses at this point
                         if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
                         {
@@ -5309,6 +5347,10 @@ namespace SATSuma
                         {
                             progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
                         }
+                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                        });
                         // progress bar for all address types
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
@@ -5319,6 +5361,11 @@ namespace SATSuma
                         {
                             progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
                         }
+                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                        });
+
                         // assume there are no more used addresses at this point
                         if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
                         {
@@ -5640,6 +5687,7 @@ namespace SATSuma
                         catch
                         {
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                            label18.ForeColor = Color.IndianRed;
                             label18.Text = "invalid / node offline";
                             return;
                         }
@@ -5647,6 +5695,7 @@ namespace SATSuma
                     else
                     {
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        label18.ForeColor = Color.IndianRed;
                         label18.Text = "invalid / node offline";
                         return;
                     }
@@ -5656,6 +5705,7 @@ namespace SATSuma
                 if (reply.Status == IPStatus.Success)
                 {
                     lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                    label18.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
 
                     /////////////////////////////////
@@ -5791,6 +5841,9 @@ namespace SATSuma
         {
             progressBarCheckAllAddressTypes.Visible = false;
             progressBarCheckEachAddressType.Visible = false;
+            lblCheckAllAddressTypesCount.Visible = false;
+            lblCheckEachAddressTypeCount.Visible = false;
+
             timerHideProgressBars.Stop();
         }
 
@@ -7696,22 +7749,6 @@ namespace SATSuma
                 {
                     RunBitcoinExplorerOrgJSONAPI = false;
                 }
-                if (SettingsScreen.Instance.BlockchainInfoJSONEnabled)
-                {
-                    RunBlockchainInfoJSONAPI = true;
-                }
-                else
-                {
-                    RunBlockchainInfoJSONAPI = false;
-                }
-                if (SettingsScreen.Instance.CoingeckoComJSONEnabled)
-                {
-                    RunCoingeckoComJSONAPI = true;
-                }
-                else
-                {
-                    RunCoingeckoComJSONAPI = false;
-                }
                 if (SettingsScreen.Instance.BlockchairComJSONEnabled)
                 {
                     RunBlockchairComJSONAPI = true;
@@ -8288,7 +8325,14 @@ namespace SATSuma
         }
 
 
-
+        public static class DateTimeExtensions
+        {
+            public static DateTime FromUnixTimeMilliseconds(long milliseconds)
+            {
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+                return dateTimeOffset.UtcDateTime;
+            }
+        }
         #endregion
     }
 }

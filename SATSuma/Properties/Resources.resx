@@ -127,4 +127,7 @@
   <data name="titleBGLongerOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="titleBGLongerOrangeFlipped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\titleBGLongerOrangeFlipped.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

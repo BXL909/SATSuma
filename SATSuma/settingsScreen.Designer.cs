@@ -43,11 +43,7 @@
             this.lblBitcoinExplorerEndpoints = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lblBlockchainInfoEndpoints = new System.Windows.Forms.Label();
-            this.lblCoingeckoComJSON = new System.Windows.Forms.Label();
             this.lblBlockchainExplorerJSON = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.lblBlockchainInfoJSON = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.lblURLWarning = new System.Windows.Forms.Label();
             this.textBoxCustomAPI = new System.Windows.Forms.TextBox();
@@ -104,11 +100,7 @@
             this.panel3.Controls.Add(this.lblBitcoinExplorerEndpoints);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.lblBlockchainInfoEndpoints);
-            this.panel3.Controls.Add(this.lblCoingeckoComJSON);
             this.panel3.Controls.Add(this.lblBlockchainExplorerJSON);
-            this.panel3.Controls.Add(this.label10);
-            this.panel3.Controls.Add(this.label8);
-            this.panel3.Controls.Add(this.lblBlockchainInfoJSON);
             this.panel3.Controls.Add(this.label1);
             this.panel3.Location = new System.Drawing.Point(12, 50);
             this.panel3.Name = "panel3";
@@ -261,19 +253,6 @@
             this.lblBlockchainInfoEndpoints.Text = "✔️";
             this.lblBlockchainInfoEndpoints.Click += new System.EventHandler(this.LblBlockchainInfoEndpoints_Click);
             // 
-            // lblCoingeckoComJSON
-            // 
-            this.lblCoingeckoComJSON.AutoSize = true;
-            this.lblCoingeckoComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblCoingeckoComJSON.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblCoingeckoComJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblCoingeckoComJSON.Location = new System.Drawing.Point(41, 183);
-            this.lblCoingeckoComJSON.Name = "lblCoingeckoComJSON";
-            this.lblCoingeckoComJSON.Size = new System.Drawing.Size(23, 18);
-            this.lblCoingeckoComJSON.TabIndex = 33;
-            this.lblCoingeckoComJSON.Text = "✔️";
-            this.lblCoingeckoComJSON.Click += new System.EventHandler(this.LblCoingeckoComJSON_Click);
-            // 
             // lblBlockchainExplorerJSON
             // 
             this.lblBlockchainExplorerJSON.AutoSize = true;
@@ -286,43 +265,6 @@
             this.lblBlockchainExplorerJSON.TabIndex = 29;
             this.lblBlockchainExplorerJSON.Text = "✔️";
             this.lblBlockchainExplorerJSON.Click += new System.EventHandler(this.LblBlockchainExplorerJSON_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label10.ForeColor = System.Drawing.Color.Silver;
-            this.label10.Location = new System.Drawing.Point(69, 184);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(152, 18);
-            this.label10.TabIndex = 32;
-            this.label10.Text = "coingecko.com JSON";
-            this.label10.Click += new System.EventHandler(this.LblCoingeckoComJSON_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label8.ForeColor = System.Drawing.Color.Silver;
-            this.label8.Location = new System.Drawing.Point(69, 159);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(168, 18);
-            this.label8.TabIndex = 30;
-            this.label8.Text = "blockchain.info JSON";
-            this.label8.Click += new System.EventHandler(this.LblBlockchainInfoJSON_Click);
-            // 
-            // lblBlockchainInfoJSON
-            // 
-            this.lblBlockchainInfoJSON.AutoSize = true;
-            this.lblBlockchainInfoJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblBlockchainInfoJSON.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockchainInfoJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchainInfoJSON.Location = new System.Drawing.Point(41, 158);
-            this.lblBlockchainInfoJSON.Name = "lblBlockchainInfoJSON";
-            this.lblBlockchainInfoJSON.Size = new System.Drawing.Size(23, 18);
-            this.lblBlockchainInfoJSON.TabIndex = 31;
-            this.lblBlockchainInfoJSON.Text = "✔️";
-            this.lblBlockchainInfoJSON.Click += new System.EventHandler(this.LblBlockchainInfoJSON_Click);
             // 
             // panel4
             // 
@@ -495,11 +437,7 @@
         private System.Windows.Forms.Label lblBitcoinExplorerEndpoints;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblBlockchainInfoEndpoints;
-        private System.Windows.Forms.Label lblCoingeckoComJSON;
         private System.Windows.Forms.Label lblBlockchainExplorerJSON;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label lblBlockchainInfoJSON;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxCustomAPI;

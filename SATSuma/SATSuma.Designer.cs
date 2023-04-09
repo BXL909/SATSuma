@@ -37,7 +37,7 @@
             this.timer1Sec = new System.Windows.Forms.Timer(this.components);
             this.btnExit = new System.Windows.Forms.Button();
             this.lblBlockNumber = new System.Windows.Forms.Label();
-            this.timerAPIGroup1 = new System.Windows.Forms.Timer(this.components);
+            this.timerAPIRefreshPeriod = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.btnMinimise = new System.Windows.Forms.Button();
             this.btnMoveWindow = new System.Windows.Forms.Button();
@@ -462,6 +462,8 @@
             this.btnCancelAddToBookmarks = new System.Windows.Forms.Button();
             this.btnCommitToBookmarks = new System.Windows.Forms.Button();
             this.panelFees = new System.Windows.Forms.Panel();
+            this.panel40 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -500,17 +502,18 @@
             this.label142 = new System.Windows.Forms.Label();
             this.BookmarksScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panel34 = new System.Windows.Forms.Panel();
+            this.panel38 = new System.Windows.Forms.Panel();
+            this.label26 = new System.Windows.Forms.Label();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
             this.lblNowViewing = new System.Windows.Forms.Label();
             this.fontDialog2 = new System.Windows.Forms.FontDialog();
             this.panel37 = new System.Windows.Forms.Panel();
-            this.panel38 = new System.Windows.Forms.Panel();
-            this.label26 = new System.Windows.Forms.Label();
             this.panel39 = new System.Windows.Forms.Panel();
             this.label22 = new System.Windows.Forms.Label();
-            this.panel40 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblP2SHUsedAddresses = new System.Windows.Forms.Label();
+            this.label135 = new System.Windows.Forms.Label();
+            this.lblP2SHSummary = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -555,16 +558,16 @@
             this.panelAddToBookmarks.SuspendLayout();
             this.panel31.SuspendLayout();
             this.panelFees.SuspendLayout();
+            this.panel40.SuspendLayout();
             this.panelBookmarks.SuspendLayout();
             this.panel32.SuspendLayout();
             this.panel33.SuspendLayout();
             this.panelBookmarksContainer.SuspendLayout();
             this.panel36.SuspendLayout();
             this.panel34.SuspendLayout();
-            this.panel37.SuspendLayout();
             this.panel38.SuspendLayout();
+            this.panel37.SuspendLayout();
             this.panel39.SuspendLayout();
-            this.panel40.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -660,10 +663,10 @@
             this.lblBlockNumber.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockNumber, "Click to view this block");
             // 
-            // timerAPIGroup1
+            // timerAPIRefreshPeriod
             // 
-            this.timerAPIGroup1.Interval = 60000;
-            this.timerAPIGroup1.Tick += new System.EventHandler(this.TimerAPIGroup1_Tick);
+            this.timerAPIRefreshPeriod.Interval = 60000;
+            this.timerAPIRefreshPeriod.Tick += new System.EventHandler(this.TimerAPIRefreshPeriod_Tick);
             // 
             // btnMinimise
             // 
@@ -5853,6 +5856,9 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.lblP2SHUsedAddresses);
+            this.panelXpub.Controls.Add(this.label135);
+            this.panelXpub.Controls.Add(this.lblP2SHSummary);
             this.panelXpub.Controls.Add(this.lblCheckAllAddressTypesCount);
             this.panelXpub.Controls.Add(this.lblCheckEachAddressTypeCount);
             this.panelXpub.Controls.Add(this.progressBarCheckAllAddressTypes);
@@ -6119,7 +6125,7 @@
             this.lblLegacyUsedAddresses.AutoSize = true;
             this.lblLegacyUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblLegacyUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(57, 285);
+            this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(57, 270);
             this.lblLegacyUsedAddresses.Name = "lblLegacyUsedAddresses";
             this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblLegacyUsedAddresses.TabIndex = 213;
@@ -6132,7 +6138,7 @@
             this.lblSegwitP2SHUsedAddresses.AutoSize = true;
             this.lblSegwitP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(95, 329);
+            this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(95, 309);
             this.lblSegwitP2SHUsedAddresses.Name = "lblSegwitP2SHUsedAddresses";
             this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHUsedAddresses.TabIndex = 212;
@@ -6145,7 +6151,7 @@
             this.lblSegwitUsedAddresses.AutoSize = true;
             this.lblSegwitUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(57, 241);
+            this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(57, 231);
             this.lblSegwitUsedAddresses.Name = "lblSegwitUsedAddresses";
             this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitUsedAddresses.TabIndex = 211;
@@ -6185,7 +6191,7 @@
             this.panel29.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel29.BackgroundImage")));
             this.panel29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel29.Controls.Add(this.label127);
-            this.panel29.Location = new System.Drawing.Point(0, 375);
+            this.panel29.Location = new System.Drawing.Point(0, 385);
             this.panel29.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel29.Name = "panel29";
             this.panel29.Size = new System.Drawing.Size(242, 23);
@@ -6212,7 +6218,7 @@
             this.label129.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label129.ForeColor = System.Drawing.Color.Silver;
             this.label129.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label129.Location = new System.Drawing.Point(0, 448);
+            this.label129.Location = new System.Drawing.Point(0, 453);
             this.label129.Name = "label129";
             this.label129.Size = new System.Drawing.Size(116, 17);
             this.label129.TabIndex = 205;
@@ -6224,7 +6230,7 @@
             this.lblXpubConfirmedSpent.AutoSize = true;
             this.lblXpubConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(0, 467);
+            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(0, 472);
             this.lblXpubConfirmedSpent.Name = "lblXpubConfirmedSpent";
             this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedSpent.TabIndex = 204;
@@ -6238,7 +6244,7 @@
             this.label133.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label133.ForeColor = System.Drawing.Color.Silver;
             this.label133.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label133.Location = new System.Drawing.Point(0, 405);
+            this.label133.Location = new System.Drawing.Point(0, 415);
             this.label133.Name = "label133";
             this.label133.Size = new System.Drawing.Size(137, 17);
             this.label133.TabIndex = 203;
@@ -6250,7 +6256,7 @@
             this.lblXpubConfirmedReceived.AutoSize = true;
             this.lblXpubConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedReceived.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(0, 424);
+            this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(0, 434);
             this.lblXpubConfirmedReceived.Name = "lblXpubConfirmedReceived";
             this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedReceived.TabIndex = 202;
@@ -6289,7 +6295,7 @@
             this.lblXpubStatus.ForeColor = System.Drawing.Color.Gray;
             this.lblXpubStatus.Location = new System.Drawing.Point(0, 110);
             this.lblXpubStatus.Name = "lblXpubStatus";
-            this.lblXpubStatus.Size = new System.Drawing.Size(243, 99);
+            this.lblXpubStatus.Size = new System.Drawing.Size(243, 92);
             this.lblXpubStatus.TabIndex = 201;
             this.lblXpubStatus.Visible = false;
             // 
@@ -6300,11 +6306,11 @@
             this.label119.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label119.ForeColor = System.Drawing.Color.Silver;
             this.label119.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label119.Location = new System.Drawing.Point(0, 329);
+            this.label119.Location = new System.Drawing.Point(0, 309);
             this.label119.Name = "label119";
-            this.label119.Size = new System.Drawing.Size(85, 17);
+            this.label119.Size = new System.Drawing.Size(95, 17);
             this.label119.TabIndex = 200;
-            this.label119.Text = "Segwit P2SH";
+            this.label119.Text = "P2SH-P2WPKH";
             this.label119.Visible = false;
             // 
             // lblSegwitP2SHSummary
@@ -6312,11 +6318,12 @@
             this.lblSegwitP2SHSummary.AutoSize = true;
             this.lblSegwitP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(0, 348);
+            this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(0, 328);
             this.lblSegwitP2SHSummary.Name = "lblSegwitP2SHSummary";
             this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHSummary.TabIndex = 199;
             this.lblSegwitP2SHSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblSegwitP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
             this.lblSegwitP2SHSummary.Visible = false;
             // 
             // panel23
@@ -6325,7 +6332,7 @@
             this.panel23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel23.BackgroundImage")));
             this.panel23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel23.Controls.Add(this.label117);
-            this.panel23.Location = new System.Drawing.Point(0, 211);
+            this.panel23.Location = new System.Drawing.Point(0, 201);
             this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel23.Name = "panel23";
             this.panel23.Size = new System.Drawing.Size(242, 23);
@@ -6363,11 +6370,11 @@
             this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label111.ForeColor = System.Drawing.Color.Silver;
             this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label111.Location = new System.Drawing.Point(0, 284);
+            this.label111.Location = new System.Drawing.Point(0, 269);
             this.label111.Name = "label111";
-            this.label111.Size = new System.Drawing.Size(54, 17);
+            this.label111.Size = new System.Drawing.Size(95, 17);
             this.label111.TabIndex = 167;
-            this.label111.Text = "Legacy";
+            this.label111.Text = "P2PKH legacy";
             this.label111.Visible = false;
             // 
             // lblLegacySummary
@@ -6375,11 +6382,12 @@
             this.lblLegacySummary.AutoSize = true;
             this.lblLegacySummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblLegacySummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacySummary.Location = new System.Drawing.Point(0, 303);
+            this.lblLegacySummary.Location = new System.Drawing.Point(0, 288);
             this.lblLegacySummary.Name = "lblLegacySummary";
             this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
             this.lblLegacySummary.TabIndex = 166;
             this.lblLegacySummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblLegacySummary, "Conf.received, Conf.spent, Conf.unspent");
             this.lblLegacySummary.Visible = false;
             // 
             // label123
@@ -6389,11 +6397,11 @@
             this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label123.ForeColor = System.Drawing.Color.Silver;
             this.label123.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label123.Location = new System.Drawing.Point(0, 241);
+            this.label123.Location = new System.Drawing.Point(0, 231);
             this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(51, 17);
+            this.label123.Size = new System.Drawing.Size(158, 17);
             this.label123.TabIndex = 153;
-            this.label123.Text = "Segwit";
+            this.label123.Text = "P2WPKH Bech32 SegWit";
             this.label123.Visible = false;
             // 
             // lblSegwitSummary
@@ -6401,11 +6409,12 @@
             this.lblSegwitSummary.AutoSize = true;
             this.lblSegwitSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitSummary.Location = new System.Drawing.Point(0, 260);
+            this.lblSegwitSummary.Location = new System.Drawing.Point(0, 250);
             this.lblSegwitSummary.Name = "lblSegwitSummary";
             this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitSummary.TabIndex = 152;
             this.lblSegwitSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblSegwitSummary, "Conf.received, Conf.spent, Conf.unspent");
             this.lblSegwitSummary.Visible = false;
             // 
             // textBoxSubmittedXpub
@@ -6635,6 +6644,32 @@
             this.panelFees.Name = "panelFees";
             this.panelFees.Size = new System.Drawing.Size(261, 114);
             this.panelFees.TabIndex = 202;
+            // 
+            // panel40
+            // 
+            this.panel40.BackColor = System.Drawing.Color.Transparent;
+            this.panel40.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel40.BackgroundImage")));
+            this.panel40.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel40.Controls.Add(this.label1);
+            this.panel40.Location = new System.Drawing.Point(0, 0);
+            this.panel40.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel40.Name = "panel40";
+            this.panel40.Size = new System.Drawing.Size(202, 23);
+            this.panel40.TabIndex = 208;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Silver;
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label1.Location = new System.Drawing.Point(3, 2);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(179, 20);
+            this.label1.TabIndex = 153;
+            this.label1.Text = "On-chain fees (sats/vB)";
             // 
             // label29
             // 
@@ -7188,6 +7223,32 @@
             this.panel34.Size = new System.Drawing.Size(202, 114);
             this.panel34.TabIndex = 216;
             // 
+            // panel38
+            // 
+            this.panel38.BackColor = System.Drawing.Color.Transparent;
+            this.panel38.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel38.BackgroundImage")));
+            this.panel38.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel38.Controls.Add(this.label26);
+            this.panel38.Location = new System.Drawing.Point(0, 0);
+            this.panel38.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel38.Name = "panel38";
+            this.panel38.Size = new System.Drawing.Size(202, 23);
+            this.panel38.TabIndex = 207;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label26.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.ForeColor = System.Drawing.Color.Silver;
+            this.label26.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label26.Location = new System.Drawing.Point(3, 2);
+            this.label26.Margin = new System.Windows.Forms.Padding(0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(84, 20);
+            this.label26.TabIndex = 153;
+            this.label26.Text = "Local time";
+            // 
             // hideAddToBookmarksTimer
             // 
             this.hideAddToBookmarksTimer.Interval = 2000;
@@ -7223,32 +7284,6 @@
             this.panel37.Size = new System.Drawing.Size(202, 114);
             this.panel37.TabIndex = 217;
             // 
-            // panel38
-            // 
-            this.panel38.BackColor = System.Drawing.Color.Transparent;
-            this.panel38.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel38.BackgroundImage")));
-            this.panel38.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel38.Controls.Add(this.label26);
-            this.panel38.Location = new System.Drawing.Point(0, 0);
-            this.panel38.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(202, 23);
-            this.panel38.TabIndex = 207;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label26.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label26.ForeColor = System.Drawing.Color.Silver;
-            this.label26.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label26.Location = new System.Drawing.Point(3, 2);
-            this.label26.Margin = new System.Windows.Forms.Padding(0);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(84, 20);
-            this.label26.TabIndex = 153;
-            this.label26.Text = "Local time";
-            // 
             // panel39
             // 
             this.panel39.BackColor = System.Drawing.Color.Transparent;
@@ -7275,31 +7310,44 @@
             this.label22.TabIndex = 153;
             this.label22.Text = "Current block height";
             // 
-            // panel40
+            // lblP2SHUsedAddresses
             // 
-            this.panel40.BackColor = System.Drawing.Color.Transparent;
-            this.panel40.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel40.BackgroundImage")));
-            this.panel40.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel40.Controls.Add(this.label1);
-            this.panel40.Location = new System.Drawing.Point(0, 0);
-            this.panel40.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(202, 23);
-            this.panel40.TabIndex = 208;
+            this.lblP2SHUsedAddresses.AutoSize = true;
+            this.lblP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(40, 347);
+            this.lblP2SHUsedAddresses.Name = "lblP2SHUsedAddresses";
+            this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
+            this.lblP2SHUsedAddresses.TabIndex = 236;
+            this.lblP2SHUsedAddresses.Text = "0";
+            this.lblP2SHUsedAddresses.Visible = false;
             // 
-            // label1
+            // label135
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Silver;
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label1.Location = new System.Drawing.Point(3, 2);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(179, 20);
-            this.label1.TabIndex = 153;
-            this.label1.Text = "On-chain fees (sats/vB)";
+            this.label135.AutoSize = true;
+            this.label135.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label135.Font = new System.Drawing.Font("Century Gothic", 7.8F);
+            this.label135.ForeColor = System.Drawing.Color.Silver;
+            this.label135.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label135.Location = new System.Drawing.Point(0, 347);
+            this.label135.Name = "label135";
+            this.label135.Size = new System.Drawing.Size(38, 17);
+            this.label135.TabIndex = 235;
+            this.label135.Text = "P2SH";
+            this.label135.Visible = false;
+            // 
+            // lblP2SHSummary
+            // 
+            this.lblP2SHSummary.AutoSize = true;
+            this.lblP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblP2SHSummary.Location = new System.Drawing.Point(0, 366);
+            this.lblP2SHSummary.Name = "lblP2SHSummary";
+            this.lblP2SHSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblP2SHSummary.TabIndex = 234;
+            this.lblP2SHSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
+            this.lblP2SHSummary.Visible = false;
             // 
             // SATSuma
             // 
@@ -7421,6 +7469,8 @@
             this.panel31.PerformLayout();
             this.panelFees.ResumeLayout(false);
             this.panelFees.PerformLayout();
+            this.panel40.ResumeLayout(false);
+            this.panel40.PerformLayout();
             this.panelBookmarks.ResumeLayout(false);
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
@@ -7430,14 +7480,12 @@
             this.panel36.PerformLayout();
             this.panel34.ResumeLayout(false);
             this.panel34.PerformLayout();
-            this.panel37.ResumeLayout(false);
-            this.panel37.PerformLayout();
             this.panel38.ResumeLayout(false);
             this.panel38.PerformLayout();
+            this.panel37.ResumeLayout(false);
+            this.panel37.PerformLayout();
             this.panel39.ResumeLayout(false);
             this.panel39.PerformLayout();
-            this.panel40.ResumeLayout(false);
-            this.panel40.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7452,7 +7500,7 @@
         private System.Windows.Forms.Timer timer1Sec;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label lblBlockNumber;
-        private System.Windows.Forms.Timer timerAPIGroup1;
+        private System.Windows.Forms.Timer timerAPIRefreshPeriod;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.Button btnMinimise;
         private System.Windows.Forms.Button btnMoveWindow;
@@ -7926,6 +7974,9 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Panel panel40;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblP2SHUsedAddresses;
+        private System.Windows.Forms.Label label135;
+        private System.Windows.Forms.Label lblP2SHSummary;
     }
 }
 

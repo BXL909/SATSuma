@@ -87,7 +87,7 @@ namespace SATSuma
         //=============================================================================================================
         //---------------------------INITIALISE------------------------------------------------------------------------
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
-        private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api group1 refresh
+        private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api refreshes
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
         // booleans used to say whether to run individual API's or not. All on/true by default.
         private bool RunBitcoinExplorerEndpointAPI = true;
@@ -154,7 +154,7 @@ namespace SATSuma
             _transactionService = new TransactionService(NodeURL);
         }
 
-        private void Form1_Load(object sender, EventArgs e) // on form loading
+        private void Form1_Load(object sender, EventArgs e) 
         {
             try
             {
@@ -209,9 +209,9 @@ namespace SATSuma
             intDisplayCountdownToRefresh = (APIGroup1RefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
             APIGroup1DisplayTimerIntervalSecsConstant = (APIGroup1RefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
             intAPIGroup1TimerIntervalMillisecsConstant = ((APIGroup1RefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
-            timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant; // set the timer interval
+            timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant; // set the timer interval
             timer1Sec.Start(); // timer used to refresh the clock values
-            timerAPIGroup1.Start(); // timer used to refresh most btc data
+            timerAPIRefreshPeriod.Start(); // used to trigger API refreshes
         }
 
         private void Timer1Sec_Tick(object sender, EventArgs e) // update the calendar time and date
@@ -258,15 +258,13 @@ namespace SATSuma
                     lblErrorMessage.Text = "";
                 });
             }
-
         }
 
-        private void TimerAPIGroup1_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
+        private void TimerAPIRefreshPeriod_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
         {
             try
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-                                             // get current block height before anything else
                 using (WebClient client = new WebClient())
                 {
                     try
@@ -287,7 +285,7 @@ namespace SATSuma
             }
             catch (WebException ex)
             {
-                HandleException(ex, "TimerAPIGroup1_Tick");
+                HandleException(ex, "TimerAPIRefreshPeriod_Tick");
             }
         }
 
@@ -4750,21 +4748,26 @@ namespace SATSuma
                 int segwitAddressesWithNonZeroBalance = 0;
                 int legacyAddressesWithNonZeroBalance = 0;
                 int segwitP2SHAddressesWithNonZeroBalance = 0;
+                int P2SHAddressesWithNonZeroBalance = 0;
                 int consecutiveUnusedAddressesForType = 0;
                 int totalUnusedAddresses = 0;
                 int usedSegwitAddresses = 0;
                 int usedLegacyAddresses = 0;
                 int usedSegwitP2SHAddresses = 0;
+                int usedP2SHAddresses = 0;
                 int numberOfAddressesChecked = 0;
                 double segwitAddressesConfirmedUnspentBalance = 0;
                 double legacyAddressesConfirmedUnspentBalance = 0;
                 double segwitP2SHAddressesConfirmedUnspentBalance = 0;
+                double P2SHAddressesConfirmedUnspentBalance = 0;
                 double segwitTotalConfirmedReceived = 0;
                 double legacyTotalConfirmedReceived = 0;
                 double segwitP2SHTotalConfirmedReceived = 0;
+                double P2SHTotalConfirmedReceived = 0;
                 double segwitTotalConfirmedSpent = 0;
                 double legacyTotalConfirmedSpent = 0;
                 double segwitP2SHTotalConfirmedSpent = 0;
+                double P2SHTotalConfirmedSpent = 0;
                 double xpubTotalConfirmedReceived = 0;
                 double xpubTotalConfirmedSpent = 0;
                 double xpubTotalConfirmedUnspent = 0;
@@ -4774,9 +4777,10 @@ namespace SATSuma
                 List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
                 List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
                 List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
+                List<BitcoinAddress> P2SHAddresses = new List<BitcoinAddress>();
 
                 progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses;
-                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 3;
+                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 4;
 
                 progressBarCheckAllAddressTypes.Visible = true;
                 progressBarCheckEachAddressType.Visible = true;
@@ -4803,6 +4807,9 @@ namespace SATSuma
                 listViewXpubAddresses.Visible = true;
                 lblCheckAllAddressTypesCount.Visible = true;
                 lblCheckEachAddressTypeCount.Visible = true;
+                label135.Visible = true;
+                lblP2SHSummary.Visible = true;
+                lblP2SHUsedAddresses.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
@@ -4863,12 +4870,12 @@ namespace SATSuma
 
 
 
-                // ------- SEGWIT
+                // ------- P2WPKH (Bech32 SegWit)
                 for (uint i = 0; i < 500; i++)
                 {
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Segwit addresses";
+                        lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses";
                     });
                     var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                     uint index = i; // increment the index for each iteration
@@ -4882,7 +4889,7 @@ namespace SATSuma
                     string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Segwit addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                        lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
                     var RequestURL = textBoxMempoolURL.Text + request;
@@ -4977,7 +4984,7 @@ namespace SATSuma
                         }
                         lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                         {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
                         });
                         // assume there are no more used addresses at this point
                         if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
@@ -5017,7 +5024,7 @@ namespace SATSuma
                     checkingAddressCount++;
                     lblSegwitUsedAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used addresses";
+                        lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used";
                     });
                     // format values before displaying them in the summary
                     if (segwitTotalConfirmedReceived > 0)
@@ -5056,12 +5063,12 @@ namespace SATSuma
                 consecutiveUnusedAddressesForType = 0;
                 checkingAddressCount = 1;
 
-                // ------- LEGACY
+                // ------- P2PKH legacy
                 for (uint i = 0; i < 500; i++)
                 {
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Legacy addresses";
+                        lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
                     });
                     var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                     uint index = i; // increment the index for each iteration
@@ -5075,7 +5082,7 @@ namespace SATSuma
                     string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                        lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
                     var RequestURL = "http://umbrel.local:3006/api/" + request;
@@ -5170,7 +5177,7 @@ namespace SATSuma
                         }
                         lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                         {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
                         });
 
                         // assume there are no more used addresses at this point
@@ -5211,7 +5218,7 @@ namespace SATSuma
                     checkingAddressCount++;
                     lblLegacyUsedAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used addresses";
+                        lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used";
                     });
                     // format values before displaying them in the summary
                     if (legacyTotalConfirmedReceived > 0)
@@ -5249,12 +5256,12 @@ namespace SATSuma
                 consecutiveUnusedAddressesForType = 0;
                 checkingAddressCount = 1;
 
-                // ------- SEGWIT P2SH
+                // ------- P2SH-P2WPKH
                 for (uint i = 0; i < 500; i++)
                 {
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses";
+                        lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses";
                     });
                     var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                     uint index = i; // increment the index for each iteration
@@ -5268,7 +5275,7 @@ namespace SATSuma
                     string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                     lblXpubStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubStatus.Text = "Deriving 500 Segwit P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                        lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
                     var RequestURL = "http://umbrel.local:3006/api/" + request;
@@ -5363,7 +5370,7 @@ namespace SATSuma
                         }
                         lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                         {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 3).ToString();
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
                         });
 
                         // assume there are no more used addresses at this point
@@ -5404,7 +5411,7 @@ namespace SATSuma
                     checkingAddressCount++;
                     lblSegwitP2SHUsedAddresses.Invoke((MethodInvoker)delegate
                     {
-                        lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used addresses";
+                        lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used";
                     });
                     // format values before displaying them in the summary
                     if (segwitP2SHTotalConfirmedReceived > 0)
@@ -5441,6 +5448,214 @@ namespace SATSuma
 
                 consecutiveUnusedAddressesForType = 0;
                 checkingAddressCount = 1;
+
+
+
+
+
+                
+                // ------- P2SH
+                for (uint i = 0; i < 500; i++)
+                {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2SH addresses";
+                    });
+                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                    uint index = i; // increment the index for each iteration
+                    var redeemScript = pubkey.Derive(0).Derive(index).PubKey.ScriptPubKey;
+                    var scriptPubKey = redeemScript.Hash.ScriptPubKey;
+                    var BitcoinAddress = scriptPubKey.GetDestinationAddress(Network.Main);
+                    P2SHAddresses.Add(BitcoinAddress);
+                }
+
+                // query the balance for each address
+                foreach (BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
+                {
+                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                    });
+                    var request = "address/" + address;
+                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var client = new HttpClient();
+                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblNodeStatusLight.ForeColor = Color.Red;
+                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        {
+                            lblActiveNode.Text = "Disconnected/error";
+                        });
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                        });
+                        return;
+                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var addressData = JObject.Parse(jsonData);
+
+                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                    item.SubItems.Add(ConfirmedReceived.ToString());
+                    item.SubItems.Add(ConfirmedSpent.ToString());
+                    item.SubItems.Add(ConfirmedUnspent.ToString());
+                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        listViewXpubAddresses.Items.Add(item); // add row
+                        numberOfAddressesChecked++;
+                    });
+                    if (listViewXpubAddresses.Items.Count > 23)
+                    {
+                        btnXpubAddressUp.Visible = true;
+                        btnXpubAddressesDown.Visible = true;
+                    }
+                    else
+                    {
+                        btnXpubAddressUp.Visible = false;
+                        btnXpubAddressesDown.Visible = false;
+                    }
+
+                    // Get the height of each item to set height of whole listview
+                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                    panelXpubContainer.VerticalScroll.Minimum = 0;
+
+                    string P2SHTotalConfirmedReceivedDisplay = "";
+                    string P2SHTotalConfirmedSpentDisplay = "";
+                    string P2SHAddressesConfirmedUnspentBalanceDisplay = "";
+
+                    if (confirmedReceivedForCalc == 0)
+                    {
+                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                        totalUnusedAddresses++; // overall count of unused addresses
+
+                        // progress bar for this address type
+                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        {
+                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                        }
+                        else
+                        {
+                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                        }
+                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                        });
+                        // progress bar for all address types
+                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                        {
+                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                            progressBarCheckAllAddressTypes.Value = (2 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                        }
+                        else
+                        {
+                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                        }
+                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
+                        });
+
+                        // assume there are no more used addresses at this point
+                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        usedP2SHAddresses++;
+                        consecutiveUnusedAddressesForType = 0;  //
+                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses * 3;  // this is the fourth address type, so reset to account for that, rather than 0
+                    }
+
+                    if (confirmedReceivedForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        P2SHTotalConfirmedReceived += confirmedReceivedForCalc;
+                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                    }
+
+                    if (confirmedSpentForCalc > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        P2SHTotalConfirmedSpent += confirmedSpentForCalc;
+                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                    }
+
+                    if (confirmedUnspentResult > 0)
+                    {
+                        consecutiveUnusedAddressesForType = 0;
+                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                        P2SHAddressesWithNonZeroBalance++;
+                        P2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                    }
+                    checkingAddressCount++;
+                    lblP2SHUsedAddresses.Invoke((MethodInvoker)delegate
+                    {
+                        lblP2SHUsedAddresses.Text = Convert.ToString(usedP2SHAddresses) + " used";
+                    });
+                    // format values before displaying them in the summary
+                    if (P2SHTotalConfirmedReceived > 0)
+                    {
+                        P2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedReceived)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        P2SHTotalConfirmedReceivedDisplay = "0";
+                    }
+
+                    if (P2SHTotalConfirmedSpent > 0)
+                    {
+                        P2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedSpent)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        P2SHTotalConfirmedSpentDisplay = "0";
+                    }
+
+                    if (P2SHAddressesConfirmedUnspentBalance > 0)
+                    {
+                        P2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                    }
+                    else
+                    {
+                        P2SHAddressesConfirmedUnspentBalanceDisplay = "0";
+                    }
+                    lblP2SHSummary.Invoke((MethodInvoker)delegate
+                    {
+                        lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + "," + P2SHTotalConfirmedSpentDisplay + "," + P2SHAddressesConfirmedUnspentBalanceDisplay;
+                    });
+                }
+
+                consecutiveUnusedAddressesForType = 0;
+                checkingAddressCount = 1;
+                
+
+
+
+
+
+
+
 
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
@@ -5498,6 +5713,9 @@ namespace SATSuma
             btnXpubAddressUp.Visible = false;
             btnXpubAddressesDown.Visible = false;
             listViewXpubAddresses.Visible = false;
+            label135.Visible = false;
+            lblP2SHSummary.Visible = false;
+            lblP2SHUsedAddresses.Visible = false;
 
             // validate the inputted xpub before proceeding
             try
@@ -7785,9 +8003,9 @@ namespace SATSuma
                     APIGroup1DisplayTimerIntervalSecsConstant = SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
                     intAPIGroup1TimerIntervalMillisecsConstant = ((SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    timerAPIGroup1.Stop();
-                    timerAPIGroup1.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
-                    timerAPIGroup1.Start();
+                    timerAPIRefreshPeriod.Stop();
+                    timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
+                    timerAPIRefreshPeriod.Start();
                 }
             }
             catch (Exception ex)

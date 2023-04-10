@@ -74,6 +74,10 @@
             this.lblBlockListNextDifficultyAdjustment = new System.Windows.Forms.Label();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
+            this.lblSegwitP2SHSummary = new System.Windows.Forms.Label();
+            this.lblLegacySummary = new System.Windows.Forms.Label();
+            this.lblSegwitSummary = new System.Windows.Forms.Label();
+            this.lblP2SHSummary = new System.Windows.Forms.Label();
             this.lblBlockchainSize = new System.Windows.Forms.Label();
             this.lblTransactions = new System.Windows.Forms.Label();
             this.lblBlockSize = new System.Windows.Forms.Label();
@@ -300,8 +304,12 @@
             this.btnMenuBitcoinDashboard = new System.Windows.Forms.Button();
             this.btnMenuLightningDashboard = new System.Windows.Forms.Button();
             this.panelBlockList = new System.Windows.Forms.Panel();
-            this.label122 = new System.Windows.Forms.Label();
+            this.progressBarBlockListHalvingProgress = new ColorProgressBar.ColorProgressBar();
+            this.progressBarBlockListNextDiffAdj = new ColorProgressBar.ColorProgressBar();
+            this.label16 = new System.Windows.Forms.Label();
+            this.lblBlockListProgressNextDiffAdjPercentage = new System.Windows.Forms.Label();
             this.lblBlockListHalvingBlockAndRemaining = new System.Windows.Forms.Label();
+            this.label122 = new System.Windows.Forms.Label();
             this.label120 = new System.Windows.Forms.Label();
             this.lblBlockListBlockReward = new System.Windows.Forms.Label();
             this.label118 = new System.Windows.Forms.Label();
@@ -409,6 +417,8 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
+            this.lblP2SHUsedAddresses = new System.Windows.Forms.Label();
+            this.label135 = new System.Windows.Forms.Label();
             this.lblCheckAllAddressTypesCount = new System.Windows.Forms.Label();
             this.lblCheckEachAddressTypeCount = new System.Windows.Forms.Label();
             this.progressBarCheckAllAddressTypes = new ColorProgressBar.ColorProgressBar();
@@ -438,14 +448,11 @@
             this.label124 = new System.Windows.Forms.Label();
             this.lblXpubStatus = new System.Windows.Forms.Label();
             this.label119 = new System.Windows.Forms.Label();
-            this.lblSegwitP2SHSummary = new System.Windows.Forms.Label();
             this.panel23 = new System.Windows.Forms.Panel();
             this.label117 = new System.Windows.Forms.Label();
             this.label114 = new System.Windows.Forms.Label();
             this.label111 = new System.Windows.Forms.Label();
-            this.lblLegacySummary = new System.Windows.Forms.Label();
             this.label123 = new System.Windows.Forms.Label();
-            this.lblSegwitSummary = new System.Windows.Forms.Label();
             this.textBoxSubmittedXpub = new System.Windows.Forms.TextBox();
             this.label146 = new System.Windows.Forms.Label();
             this.timerHideProgressBars = new System.Windows.Forms.Timer(this.components);
@@ -511,9 +518,6 @@
             this.panel37 = new System.Windows.Forms.Panel();
             this.panel39 = new System.Windows.Forms.Panel();
             this.label22 = new System.Windows.Forms.Label();
-            this.lblP2SHUsedAddresses = new System.Windows.Forms.Label();
-            this.label135 = new System.Windows.Forms.Label();
-            this.lblP2SHSummary = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -1123,6 +1127,58 @@
             this.lblBlocksUntilDiffAdj.TabIndex = 225;
             this.lblBlocksUntilDiffAdj.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlocksUntilDiffAdj, "(estimated)");
+            // 
+            // lblSegwitP2SHSummary
+            // 
+            this.lblSegwitP2SHSummary.AutoSize = true;
+            this.lblSegwitP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(0, 328);
+            this.lblSegwitP2SHSummary.Name = "lblSegwitP2SHSummary";
+            this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitP2SHSummary.TabIndex = 199;
+            this.lblSegwitP2SHSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblSegwitP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
+            this.lblSegwitP2SHSummary.Visible = false;
+            // 
+            // lblLegacySummary
+            // 
+            this.lblLegacySummary.AutoSize = true;
+            this.lblLegacySummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLegacySummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLegacySummary.Location = new System.Drawing.Point(0, 288);
+            this.lblLegacySummary.Name = "lblLegacySummary";
+            this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
+            this.lblLegacySummary.TabIndex = 166;
+            this.lblLegacySummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblLegacySummary, "Conf.received, Conf.spent, Conf.unspent");
+            this.lblLegacySummary.Visible = false;
+            // 
+            // lblSegwitSummary
+            // 
+            this.lblSegwitSummary.AutoSize = true;
+            this.lblSegwitSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSegwitSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSegwitSummary.Location = new System.Drawing.Point(0, 250);
+            this.lblSegwitSummary.Name = "lblSegwitSummary";
+            this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblSegwitSummary.TabIndex = 152;
+            this.lblSegwitSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblSegwitSummary, "Conf.received, Conf.spent, Conf.unspent");
+            this.lblSegwitSummary.Visible = false;
+            // 
+            // lblP2SHSummary
+            // 
+            this.lblP2SHSummary.AutoSize = true;
+            this.lblP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblP2SHSummary.Location = new System.Drawing.Point(0, 366);
+            this.lblP2SHSummary.Name = "lblP2SHSummary";
+            this.lblP2SHSummary.Size = new System.Drawing.Size(16, 18);
+            this.lblP2SHSummary.TabIndex = 234;
+            this.lblP2SHSummary.Text = "0";
+            this.toolTip1.SetToolTip(this.lblP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
+            this.lblP2SHSummary.Visible = false;
             // 
             // lblBlockchainSize
             // 
@@ -4366,8 +4422,12 @@
             // panelBlockList
             // 
             this.panelBlockList.BackColor = System.Drawing.Color.Transparent;
-            this.panelBlockList.Controls.Add(this.label122);
+            this.panelBlockList.Controls.Add(this.progressBarBlockListHalvingProgress);
+            this.panelBlockList.Controls.Add(this.progressBarBlockListNextDiffAdj);
+            this.panelBlockList.Controls.Add(this.label16);
+            this.panelBlockList.Controls.Add(this.lblBlockListProgressNextDiffAdjPercentage);
             this.panelBlockList.Controls.Add(this.lblBlockListHalvingBlockAndRemaining);
+            this.panelBlockList.Controls.Add(this.label122);
             this.panelBlockList.Controls.Add(this.label120);
             this.panelBlockList.Controls.Add(this.lblBlockListBlockReward);
             this.panelBlockList.Controls.Add(this.label118);
@@ -4410,6 +4470,71 @@
             this.panelBlockList.TabIndex = 172;
             this.panelBlockList.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // progressBarBlockListHalvingProgress
+            // 
+            this.progressBarBlockListHalvingProgress.BarColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(121)))), ((int)(((byte)(0)))));
+            this.progressBarBlockListHalvingProgress.BorderColor = System.Drawing.Color.Transparent;
+            this.progressBarBlockListHalvingProgress.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+            this.progressBarBlockListHalvingProgress.ForeColor = System.Drawing.Color.Black;
+            this.progressBarBlockListHalvingProgress.Location = new System.Drawing.Point(3, 475);
+            this.progressBarBlockListHalvingProgress.Maximum = 210000;
+            this.progressBarBlockListHalvingProgress.Minimum = 0;
+            this.progressBarBlockListHalvingProgress.Name = "progressBarBlockListHalvingProgress";
+            this.progressBarBlockListHalvingProgress.Size = new System.Drawing.Size(100, 8);
+            this.progressBarBlockListHalvingProgress.Step = 10;
+            this.progressBarBlockListHalvingProgress.TabIndex = 236;
+            this.progressBarBlockListHalvingProgress.Value = 0;
+            // 
+            // progressBarBlockListNextDiffAdj
+            // 
+            this.progressBarBlockListNextDiffAdj.BarColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(121)))), ((int)(((byte)(0)))));
+            this.progressBarBlockListNextDiffAdj.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.progressBarBlockListNextDiffAdj.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+            this.progressBarBlockListNextDiffAdj.ForeColor = System.Drawing.Color.Black;
+            this.progressBarBlockListNextDiffAdj.Location = new System.Drawing.Point(3, 367);
+            this.progressBarBlockListNextDiffAdj.Maximum = 100;
+            this.progressBarBlockListNextDiffAdj.Minimum = 0;
+            this.progressBarBlockListNextDiffAdj.Name = "progressBarBlockListNextDiffAdj";
+            this.progressBarBlockListNextDiffAdj.Size = new System.Drawing.Size(100, 8);
+            this.progressBarBlockListNextDiffAdj.Step = 10;
+            this.progressBarBlockListNextDiffAdj.TabIndex = 235;
+            this.progressBarBlockListNextDiffAdj.Value = 0;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label16.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.Silver;
+            this.label16.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label16.Location = new System.Drawing.Point(0, 347);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(238, 20);
+            this.label16.TabIndex = 234;
+            this.label16.Text = "Progress to difficulty adjustment";
+            // 
+            // lblBlockListProgressNextDiffAdjPercentage
+            // 
+            this.lblBlockListProgressNextDiffAdjPercentage.AutoSize = true;
+            this.lblBlockListProgressNextDiffAdjPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListProgressNextDiffAdjPercentage.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListProgressNextDiffAdjPercentage.Location = new System.Drawing.Point(107, 365);
+            this.lblBlockListProgressNextDiffAdjPercentage.Name = "lblBlockListProgressNextDiffAdjPercentage";
+            this.lblBlockListProgressNextDiffAdjPercentage.Size = new System.Drawing.Size(56, 15);
+            this.lblBlockListProgressNextDiffAdjPercentage.TabIndex = 233;
+            this.lblBlockListProgressNextDiffAdjPercentage.Text = "no data";
+            // 
+            // lblBlockListHalvingBlockAndRemaining
+            // 
+            this.lblBlockListHalvingBlockAndRemaining.AutoSize = true;
+            this.lblBlockListHalvingBlockAndRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListHalvingBlockAndRemaining.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockListHalvingBlockAndRemaining.Location = new System.Drawing.Point(109, 472);
+            this.lblBlockListHalvingBlockAndRemaining.Name = "lblBlockListHalvingBlockAndRemaining";
+            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(56, 15);
+            this.lblBlockListHalvingBlockAndRemaining.TabIndex = 231;
+            this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
+            // 
             // label122
             // 
             this.label122.AutoSize = true;
@@ -4417,22 +4542,11 @@
             this.label122.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label122.ForeColor = System.Drawing.Color.Silver;
             this.label122.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label122.Location = new System.Drawing.Point(0, 419);
+            this.label122.Location = new System.Drawing.Point(0, 455);
             this.label122.Name = "label122";
             this.label122.Size = new System.Drawing.Size(196, 20);
             this.label122.TabIndex = 227;
             this.label122.Text = "Halving block / remaining";
-            // 
-            // lblBlockListHalvingBlockAndRemaining
-            // 
-            this.lblBlockListHalvingBlockAndRemaining.AutoSize = true;
-            this.lblBlockListHalvingBlockAndRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockListHalvingBlockAndRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListHalvingBlockAndRemaining.Location = new System.Drawing.Point(0, 434);
-            this.lblBlockListHalvingBlockAndRemaining.Name = "lblBlockListHalvingBlockAndRemaining";
-            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(80, 22);
-            this.lblBlockListHalvingBlockAndRemaining.TabIndex = 226;
-            this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
             // 
             // label120
             // 
@@ -4441,7 +4555,7 @@
             this.label120.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label120.ForeColor = System.Drawing.Color.Silver;
             this.label120.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label120.Location = new System.Drawing.Point(0, 383);
+            this.label120.Location = new System.Drawing.Point(0, 419);
             this.label120.Name = "label120";
             this.label120.Size = new System.Drawing.Size(147, 20);
             this.label120.TabIndex = 225;
@@ -4452,7 +4566,7 @@
             this.lblBlockListBlockReward.AutoSize = true;
             this.lblBlockListBlockReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 398);
+            this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 434);
             this.lblBlockListBlockReward.Name = "lblBlockListBlockReward";
             this.lblBlockListBlockReward.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListBlockReward.TabIndex = 224;
@@ -4465,7 +4579,7 @@
             this.label118.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label118.ForeColor = System.Drawing.Color.Silver;
             this.label118.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label118.Location = new System.Drawing.Point(0, 347);
+            this.label118.Location = new System.Drawing.Point(0, 383);
             this.label118.Name = "label118";
             this.label118.Size = new System.Drawing.Size(181, 20);
             this.label118.TabIndex = 223;
@@ -4476,7 +4590,7 @@
             this.lblBlockListEstHashRate.AutoSize = true;
             this.lblBlockListEstHashRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListEstHashRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockListEstHashRate.Location = new System.Drawing.Point(0, 362);
+            this.lblBlockListEstHashRate.Location = new System.Drawing.Point(0, 398);
             this.lblBlockListEstHashRate.Name = "lblBlockListEstHashRate";
             this.lblBlockListEstHashRate.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListEstHashRate.TabIndex = 222;
@@ -5899,6 +6013,32 @@
             this.panelXpub.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelXpub.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpub_Paint);
             // 
+            // lblP2SHUsedAddresses
+            // 
+            this.lblP2SHUsedAddresses.AutoSize = true;
+            this.lblP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(40, 347);
+            this.lblP2SHUsedAddresses.Name = "lblP2SHUsedAddresses";
+            this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
+            this.lblP2SHUsedAddresses.TabIndex = 236;
+            this.lblP2SHUsedAddresses.Text = "0";
+            this.lblP2SHUsedAddresses.Visible = false;
+            // 
+            // label135
+            // 
+            this.label135.AutoSize = true;
+            this.label135.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label135.Font = new System.Drawing.Font("Century Gothic", 7.8F);
+            this.label135.ForeColor = System.Drawing.Color.Silver;
+            this.label135.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label135.Location = new System.Drawing.Point(0, 347);
+            this.label135.Name = "label135";
+            this.label135.Size = new System.Drawing.Size(38, 17);
+            this.label135.TabIndex = 235;
+            this.label135.Text = "P2SH";
+            this.label135.Visible = false;
+            // 
             // lblCheckAllAddressTypesCount
             // 
             this.lblCheckAllAddressTypesCount.AutoSize = true;
@@ -6313,19 +6453,6 @@
             this.label119.Text = "P2SH-P2WPKH";
             this.label119.Visible = false;
             // 
-            // lblSegwitP2SHSummary
-            // 
-            this.lblSegwitP2SHSummary.AutoSize = true;
-            this.lblSegwitP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSegwitP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(0, 328);
-            this.lblSegwitP2SHSummary.Name = "lblSegwitP2SHSummary";
-            this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
-            this.lblSegwitP2SHSummary.TabIndex = 199;
-            this.lblSegwitP2SHSummary.Text = "0";
-            this.toolTip1.SetToolTip(this.lblSegwitP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
-            this.lblSegwitP2SHSummary.Visible = false;
-            // 
             // panel23
             // 
             this.panel23.BackColor = System.Drawing.Color.Transparent;
@@ -6377,19 +6504,6 @@
             this.label111.Text = "P2PKH legacy";
             this.label111.Visible = false;
             // 
-            // lblLegacySummary
-            // 
-            this.lblLegacySummary.AutoSize = true;
-            this.lblLegacySummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblLegacySummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacySummary.Location = new System.Drawing.Point(0, 288);
-            this.lblLegacySummary.Name = "lblLegacySummary";
-            this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
-            this.lblLegacySummary.TabIndex = 166;
-            this.lblLegacySummary.Text = "0";
-            this.toolTip1.SetToolTip(this.lblLegacySummary, "Conf.received, Conf.spent, Conf.unspent");
-            this.lblLegacySummary.Visible = false;
-            // 
             // label123
             // 
             this.label123.AutoSize = true;
@@ -6403,19 +6517,6 @@
             this.label123.TabIndex = 153;
             this.label123.Text = "P2WPKH Bech32 SegWit";
             this.label123.Visible = false;
-            // 
-            // lblSegwitSummary
-            // 
-            this.lblSegwitSummary.AutoSize = true;
-            this.lblSegwitSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSegwitSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitSummary.Location = new System.Drawing.Point(0, 250);
-            this.lblSegwitSummary.Name = "lblSegwitSummary";
-            this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
-            this.lblSegwitSummary.TabIndex = 152;
-            this.lblSegwitSummary.Text = "0";
-            this.toolTip1.SetToolTip(this.lblSegwitSummary, "Conf.received, Conf.spent, Conf.unspent");
-            this.lblSegwitSummary.Visible = false;
             // 
             // textBoxSubmittedXpub
             // 
@@ -7310,45 +7411,6 @@
             this.label22.TabIndex = 153;
             this.label22.Text = "Current block height";
             // 
-            // lblP2SHUsedAddresses
-            // 
-            this.lblP2SHUsedAddresses.AutoSize = true;
-            this.lblP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(40, 347);
-            this.lblP2SHUsedAddresses.Name = "lblP2SHUsedAddresses";
-            this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
-            this.lblP2SHUsedAddresses.TabIndex = 236;
-            this.lblP2SHUsedAddresses.Text = "0";
-            this.lblP2SHUsedAddresses.Visible = false;
-            // 
-            // label135
-            // 
-            this.label135.AutoSize = true;
-            this.label135.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label135.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.label135.ForeColor = System.Drawing.Color.Silver;
-            this.label135.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label135.Location = new System.Drawing.Point(0, 347);
-            this.label135.Name = "label135";
-            this.label135.Size = new System.Drawing.Size(38, 17);
-            this.label135.TabIndex = 235;
-            this.label135.Text = "P2SH";
-            this.label135.Visible = false;
-            // 
-            // lblP2SHSummary
-            // 
-            this.lblP2SHSummary.AutoSize = true;
-            this.lblP2SHSummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblP2SHSummary.Location = new System.Drawing.Point(0, 366);
-            this.lblP2SHSummary.Name = "lblP2SHSummary";
-            this.lblP2SHSummary.Size = new System.Drawing.Size(16, 18);
-            this.lblP2SHSummary.TabIndex = 234;
-            this.lblP2SHSummary.Text = "0";
-            this.toolTip1.SetToolTip(this.lblP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
-            this.lblP2SHSummary.Visible = false;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -7358,15 +7420,15 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panel37);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panel34);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelFees);
@@ -7787,7 +7849,6 @@
         private System.Windows.Forms.Panel panel22;
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.Label label122;
-        private System.Windows.Forms.Label lblBlockListHalvingBlockAndRemaining;
         private System.Windows.Forms.Label label120;
         private System.Windows.Forms.Label lblBlockListBlockReward;
         private System.Windows.Forms.Label label118;
@@ -7977,6 +8038,11 @@
         private System.Windows.Forms.Label lblP2SHUsedAddresses;
         private System.Windows.Forms.Label label135;
         private System.Windows.Forms.Label lblP2SHSummary;
+        private ColorProgressBar.ColorProgressBar progressBarBlockListHalvingProgress;
+        private ColorProgressBar.ColorProgressBar progressBarBlockListNextDiffAdj;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label lblBlockListProgressNextDiffAdjPercentage;
+        private System.Windows.Forms.Label lblBlockListHalvingBlockAndRemaining;
     }
 }
 

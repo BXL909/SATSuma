@@ -24,6 +24,10 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
+ * find P2SH xpub to test with
+ * bug - xpub list jumps to top when row selected
+ * bug - P2SH-P2WPKH addresses show no amounts on xpub screen
+ * bug - view address button from xpub screen
  */
 
 #region Using
@@ -97,7 +101,7 @@ namespace SATSuma
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
 #pragma warning disable IDE0044 // Add readonly modifier
-        private int APIGroup1RefreshFrequency = 1; // mins. Default value 1. Initial value only
+        private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
 #pragma warning restore IDE0044 // Add readonly modifier
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
@@ -206,9 +210,9 @@ namespace SATSuma
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
         {
-            intDisplayCountdownToRefresh = (APIGroup1RefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
-            APIGroup1DisplayTimerIntervalSecsConstant = (APIGroup1RefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
-            intAPIGroup1TimerIntervalMillisecsConstant = ((APIGroup1RefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
+            intDisplayCountdownToRefresh = (APIRefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
+            APIGroup1DisplayTimerIntervalSecsConstant = (APIRefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
+            intAPIGroup1TimerIntervalMillisecsConstant = ((APIRefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
             timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant; // set the timer interval
             timer1Sec.Start(); // timer used to refresh the clock values
             timerAPIRefreshPeriod.Start(); // used to trigger API refreshes
@@ -352,8 +356,13 @@ namespace SATSuma
                         {
                             lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
                         });
+                        lblBlockListProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate //Block List
+                        {
+                            lblBlockListProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
+                        });
                         decimal progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
                         progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
+                        progressBarBlockListNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range - Block List
                         lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
                         {
                             lblDifficultyAdjEst.Text = difficultyChange + "%";
@@ -926,6 +935,7 @@ namespace SATSuma
                             });
                             int progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
                             progressBarProgressToHalving.Value = progressBarValue;
+                            progressBarBlockListHalvingProgress.Value = progressBarValue;
                             lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                             {
                                 lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
@@ -4866,7 +4876,12 @@ namespace SATSuma
 
 
 
+
+
                 // ------ TAPROOT :(
+
+
+
 
 
 
@@ -5562,7 +5577,7 @@ namespace SATSuma
                         if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                         {
                             //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
-                            progressBarCheckAllAddressTypes.Value = (2 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                            progressBarCheckAllAddressTypes.Value = (3 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                         }
                         else
                         {

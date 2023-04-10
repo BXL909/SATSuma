@@ -25,9 +25,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * bug - xpub list jumps to top when row selected
  * bug - P2SH-P2WPKH addresses show no amounts on xpub screen
- * bug - view address button from xpub screen
  */
 
 #region Using
@@ -6088,21 +6086,22 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-
+                        btnViewAddressFromXpub.Visible = true;
                         item.ForeColor = Color.White; // address
                         if (item.SubItems[1].Text == "0")
                         {
-                            btnViewAddressFromXpub.Visible = false;
+                            btnViewAddressFromXpub.Enabled = false;
                         }
                         else
                         {
-                            btnViewAddressFromXpub.Visible = true;
+                            btnViewAddressFromXpub.Enabled = true;
                         }
                         btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                         {
                             btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 2);
                             btnViewAddressFromXpub.Height = item.Bounds.Height;
                         });
+                        
                     }
                     else
                     {
@@ -6213,6 +6212,36 @@ namespace SATSuma
             textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
             textBoxMempoolURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxMempoolURL.Location.Y);
             lblValidXpubIndicator.Location = new Point(textBoxSubmittedXpub.Location.X + textBoxSubmittedXpub.Width, lblValidXpubIndicator.Location.Y);
+        }
+
+        private void PanelXpubContainer_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
+            {
+                panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+            }
+        }
+
+        private void BtnViewAddressFromXpub_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //assign address to text box on address panel
+                // Get the selected item
+                ListViewItem selectedItem = listViewXpubAddresses.SelectedItems[0];
+                // Get the first subitem in the selected item 
+                string SelectedAddress = selectedItem.SubItems[0].Text;
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    textboxSubmittedAddress.Text = SelectedAddress;
+                });
+                //show the address screen
+                BtnMenuAddress_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnViewAddressFromXpub_Click");
+            }
         }
         #endregion
 
@@ -8567,5 +8596,6 @@ namespace SATSuma
             }
         }
         #endregion
+
     }
 }

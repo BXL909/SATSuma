@@ -6211,6 +6211,7 @@
             this.panelXpubContainer.Name = "panelXpubContainer";
             this.panelXpubContainer.Size = new System.Drawing.Size(500, 446);
             this.panelXpubContainer.TabIndex = 213;
+            this.panelXpubContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpubContainer_Paint);
             // 
             // btnViewAddressFromXpub
             // 
@@ -6230,6 +6231,7 @@
             this.btnViewAddressFromXpub.Text = "▶️";
             this.btnViewAddressFromXpub.UseVisualStyleBackColor = false;
             this.btnViewAddressFromXpub.Visible = false;
+            this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
             // 
             // listViewXpubAddresses
             // 
@@ -6242,7 +6244,7 @@
             this.listViewXpubAddresses.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewXpubAddresses.HideSelection = false;
             this.listViewXpubAddresses.LabelWrap = false;
-            this.listViewXpubAddresses.Location = new System.Drawing.Point(0, 0);
+            this.listViewXpubAddresses.Location = new System.Drawing.Point(1, 1);
             this.listViewXpubAddresses.Margin = new System.Windows.Forms.Padding(0);
             this.listViewXpubAddresses.MultiSelect = false;
             this.listViewXpubAddresses.Name = "listViewXpubAddresses";
@@ -7420,10 +7422,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panel37);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);

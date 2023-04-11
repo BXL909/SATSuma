@@ -25,7 +25,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * bug - P2SH-P2WPKH addresses show no amounts on xpub screen
+ * bug - P2SH-P2WPKH addresses now show amounts on xpub screen but only 10tx at a time are returned by own node... still need to loop until there are no more
  */
 
 #region Using
@@ -104,6 +104,7 @@ namespace SATSuma
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private TransactionsForAddressService _transactionsForAddressService;
+        private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
         private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
@@ -5098,7 +5099,7 @@ namespace SATSuma
                         lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
-                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var RequestURL = textBoxMempoolURL.Text + request;
                     var client = new HttpClient();
                     var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                     if (!response.IsSuccessStatusCode)
@@ -5291,7 +5292,7 @@ namespace SATSuma
                         lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
-                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var RequestURL = textBoxMempoolURL.Text + request;
                     var client = new HttpClient();
                     var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                     if (!response.IsSuccessStatusCode)
@@ -5310,20 +5311,51 @@ namespace SATSuma
                     var jsonData = await response.Content.ReadAsStringAsync();
                     var addressData = JObject.Parse(jsonData);
 
-                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
 
-                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+
+
+                    // local installation of mempool.space doesn't return amounts for this type of address, so we'll get them ourselves (ONLY 10 TX RETURNED AT A TIME>>> STILL NEED TO LOOP UNTIL THERE ARE NO MORE TX FOR THE ADDRESS)
+                    string lastSeenTxId = "";
+                    decimal TotalInForAllTXOnThisAddress = 0;
+                    decimal TotalOutForAllTXOnThisAddress = 0;
+                    _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                    var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                    var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                    List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                    TotalInForAllTXOnThisAddress = 0;
+                    TotalOutForAllTXOnThisAddress = 0;
+                    //intConfirmedTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                    foreach (AddressTransactions transaction in transactions)
+                    {
+                        decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                        decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                        balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                            .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                            .Sum(v => v.Value);
+                        balanceChangeVin = (decimal)transaction.Vin
+                            .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                            .Sum(v => v.Prevout.Value);
+                        TotalInForAllTXOnThisAddress += balanceChangeVin;
+                        TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                            
+
+                    }
+                    
+
+                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                    string ConfirmedReceived = Convert.ToString(TotalInForAllTXOnThisAddress.ToString("0.00000000"));
+                    string ConfirmedSpent = Convert.ToString(TotalOutForAllTXOnThisAddress.ToString("0.00000000"));
+
+                    var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
+                    var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
                     var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
 
                     string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
 
                     ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
                     item.SubItems.Add(ConfirmedTransactionCount.ToString());
-                    item.SubItems.Add(ConfirmedReceived.ToString());
-                    item.SubItems.Add(ConfirmedSpent.ToString());
+                    item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedReceived.ToString()).ToString("0.00000000"));
+                    item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedSpent.ToString()).ToString("0.00000000"));
                     item.SubItems.Add(ConfirmedUnspent.ToString());
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
@@ -5491,7 +5523,7 @@ namespace SATSuma
                         lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                     });
                     var request = "address/" + address;
-                    var RequestURL = "http://umbrel.local:3006/api/" + request;
+                    var RequestURL = textBoxMempoolURL.Text + request;
                     var client = new HttpClient();
                     var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                     if (!response.IsSuccessStatusCode)
@@ -8264,6 +8296,62 @@ namespace SATSuma
                         if (mempoolConfOrAllTx == "chain")
                         {
                             var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+                        if (mempoolConfOrAllTx == "mempool")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs/mempool");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+                        if (mempoolConfOrAllTx == "all")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                        }
+
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        public class TransactionsForXpubAddressService
+        {
+            private readonly string _nodeUrl;
+
+            public TransactionsForXpubAddressService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+
+            public async Task<string> GetTransactionsForXpubAddressAsync(string address, string mempoolConfOrAllTx, string lastSeenTxId = "")
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        if (mempoolConfOrAllTx == "chain")
+                        {
+                            var response = await client.GetAsync($"address/{address}/txs/{lastSeenTxId}");
                             if (response.IsSuccessStatusCode)
                             {
                                 return await response.Content.ReadAsStringAsync();

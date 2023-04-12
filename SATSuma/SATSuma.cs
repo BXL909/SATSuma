@@ -5314,6 +5314,52 @@ namespace SATSuma
 
 
 
+
+
+                    // local installation of mempool.space doesn't return amounts for this type of address, so we'll get them ourselves (ONLY 10 TX RETURNED AT A TIME>>> STILL NEED TO LOOP UNTIL THERE ARE NO MORE TX FOR THE ADDRESS)
+                    string lastSeenTxId = "";
+                    decimal TotalInForAllTXOnThisAddress = 0;
+                    decimal TotalOutForAllTXOnThisAddress = 0;
+                    int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                    int txProcessedForThisAddress = 0;
+
+
+                    while (txProcessedForThisAddress != totalTXForAddress)
+                    {
+                        _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                        var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                        var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                        List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                       // TotalInForAllTXOnThisAddress = 0;
+                       // TotalOutForAllTXOnThisAddress = 0;
+                        //intConfirmedTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        foreach (AddressTransactions transaction in transactions)
+                        {
+                            decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                            decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                            balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                                .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                                .Sum(v => v.Value);
+                            balanceChangeVin = (decimal)transaction.Vin
+                                .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                                .Sum(v => v.Prevout.Value);
+                            TotalInForAllTXOnThisAddress += balanceChangeVin;
+                            TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                            txProcessedForThisAddress++;
+                        }
+                        if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                        {
+                            lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                        }
+                        else
+                        {
+                            lastSeenTxId = "";
+                        }
+                    }
+
+
+
+/*
                     // local installation of mempool.space doesn't return amounts for this type of address, so we'll get them ourselves (ONLY 10 TX RETURNED AT A TIME>>> STILL NEED TO LOOP UNTIL THERE ARE NO MORE TX FOR THE ADDRESS)
                     string lastSeenTxId = "";
                     decimal TotalInForAllTXOnThisAddress = 0;
@@ -5337,10 +5383,12 @@ namespace SATSuma
                             .Sum(v => v.Prevout.Value);
                         TotalInForAllTXOnThisAddress += balanceChangeVin;
                         TotalOutForAllTXOnThisAddress += balanceChangeVout;
-                            
-
                     }
-                    
+*/
+
+
+
+
 
                     string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                     string ConfirmedReceived = Convert.ToString(TotalInForAllTXOnThisAddress.ToString("0.00000000"));
@@ -8351,11 +8399,23 @@ namespace SATSuma
                         client.BaseAddress = new Uri(_nodeUrl);
                         if (mempoolConfOrAllTx == "chain")
                         {
-                            var response = await client.GetAsync($"address/{address}/txs/{lastSeenTxId}");
-                            if (response.IsSuccessStatusCode)
+                            if (lastSeenTxId == "")
                             {
-                                return await response.Content.ReadAsStringAsync();
+                                var response = await client.GetAsync($"address/{address}/txs/{lastSeenTxId}");
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    return await response.Content.ReadAsStringAsync();
+                                }
                             }
+                            else
+                            {
+                                var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    return await response.Content.ReadAsStringAsync();
+                                }
+                            }
+                            
                         }
                         if (mempoolConfOrAllTx == "mempool")
                         {

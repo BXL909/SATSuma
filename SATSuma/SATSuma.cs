@@ -25,7 +25,8 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * bug - P2SH-P2WPKH addresses now show amounts on xpub screen but only 10tx at a time are returned by own node... still need to loop until there are no more
+ * xpub screen - allow user to choose number of derivation paths to check
+ * speed up scrolling everywhere
  */
 
 #region Using
@@ -4788,8 +4789,11 @@ namespace SATSuma
                 List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
                 List<BitcoinAddress> P2SHAddresses = new List<BitcoinAddress>();
 
+                int DerivationPath = 0;
+                int NumberOfDerivationPathsToCheck = Convert.ToInt32(numberUpDownDerivationPathsToCheck.Value);
+
                 progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses;
-                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 4;
+                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 4 * NumberOfDerivationPathsToCheck;
 
                 progressBarCheckAllAddressTypes.Visible = true;
                 progressBarCheckEachAddressType.Visible = true;
@@ -4875,880 +4879,1040 @@ namespace SATSuma
 
 
 
+                // -------------------------------------------------------- TAPROOT :(
 
-
-                // ------ TAPROOT :(
-
-
-
-
-
-
-                // ------- P2WPKH (Bech32 SegWit)
-                for (uint i = 0; i < 500; i++)
-                {
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                // -------------------------------------------------------- P2WPKH (Bech32 SegWit)
+                while (DerivationPath != NumberOfDerivationPathsToCheck)
+                { 
+                    for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses";
-                    });
-                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                    uint index = i; // increment the index for each iteration
-                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
-                    segwitAddresses.Add(BitcoinAddress);
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses";
+                        });
+                        var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                        uint index = i; // increment the index for each iteration
+                        var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
+                        segwitAddresses.Add(BitcoinAddress);
+                    }
+
+                    // query the balance for each address
+                    foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of used addresses)
+                    {
+                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                        });
+                        var request = "address/" + address;
+                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var client = new HttpClient();
+                        var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            lblNodeStatusLight.ForeColor = Color.Red;
+                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            {
+                                lblActiveNode.Text = "Disconnected/error";
+                            });
+                            lblErrorMessage.Invoke((MethodInvoker)delegate
+                            {
+                                lblErrorMessage.Text = "Node offline/disconnected: ";
+                            });
+                            return;
+                        }
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var addressData = JObject.Parse(jsonData);
+
+
+
+
+
+
+
+                        // transactions for the address
+                        string lastSeenTxId = "";
+                        decimal TotalInForAllTXOnThisAddress = 0;
+                        decimal TotalOutForAllTXOnThisAddress = 0;
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int txProcessedForThisAddress = 0;
+
+                        while (txProcessedForThisAddress != totalTXForAddress)
+                        {
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                            List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                            foreach (AddressTransactions transaction in transactions)
+                            {
+                                decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                                decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                                balanceChangeVin = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                                    .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Value);
+                                balanceChangeVout = (decimal)transaction.Vin
+                                    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Prevout.Value);
+                                TotalInForAllTXOnThisAddress += balanceChangeVin;
+                                TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                                txProcessedForThisAddress++;
+                            }
+                            if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                            {
+                                lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                            }
+                            else
+                            {
+                                lastSeenTxId = "";
+                            }
+                        }
+
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
+                        string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
+
+                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
+                        var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+
+
+
+
+
+
+
+                        ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                        item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                        item.SubItems.Add(ConfirmedReceived.ToString());
+                        item.SubItems.Add(ConfirmedSpent.ToString());
+                        item.SubItems.Add(ConfirmedUnspent.ToString());
+                        listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            listViewXpubAddresses.Items.Add(item); // add row
+                            numberOfAddressesChecked++;
+                        });
+                        if (listViewXpubAddresses.Items.Count > 23)
+                        {
+                            btnXpubAddressUp.Visible = true;
+                            btnXpubAddressesDown.Visible = true;
+                        }
+                        else
+                        {
+                            btnXpubAddressUp.Visible = false;
+                            btnXpubAddressesDown.Visible = false;
+                        }
+
+                        // Get the height of each item to set height of whole listview
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                        listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                        panelXpubContainer.VerticalScroll.Minimum = 0;
+
+                        string segwitTotalConfirmedReceivedDisplay = "";
+                        string segwitTotalConfirmedSpentDisplay = "";
+                        string segwitAddressesConfirmedUnspentBalanceDisplay = "";
+
+                        if (confirmedReceivedForCalc == 0)
+                        {
+                            consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                            totalUnusedAddresses++; // overall count of unused addresses
+
+                            // progress bar for this address type
+                            if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                            {
+                                progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            }
+                            lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                            });
+                            // progress bar for all address types
+                            if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                            {
+                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                                progressBarCheckAllAddressTypes.Value = (DerivationPath * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            }
+                            lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                            });
+                            // assume there are no more used addresses at this point
+                            if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            usedSegwitAddresses++;
+                            consecutiveUnusedAddressesForType = 0;  //
+                            totalUnusedAddresses = DerivationPath * MaxNumberOfConsecutiveUnusedAddresses;  //
+                        }
+
+                        if (confirmedReceivedForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            segwitTotalConfirmedReceived += confirmedReceivedForCalc;
+                            xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                        }
+
+                        if (confirmedSpentForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            segwitTotalConfirmedSpent += confirmedSpentForCalc;
+                            xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                        }
+
+                        if (confirmedUnspentResult > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                            segwitAddressesWithNonZeroBalance++;
+                            segwitAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                        }
+                        checkingAddressCount++;
+                        lblSegwitUsedAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used";
+                        });
+                        // format values before displaying them in the summary
+                        if (segwitTotalConfirmedReceived > 0)
+                        {
+                            segwitTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedReceived)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitTotalConfirmedReceivedDisplay = "0";
+                        }
+
+                        if (segwitTotalConfirmedSpent > 0)
+                        {
+                            segwitTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedSpent)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitTotalConfirmedSpentDisplay = "0";
+                        }
+
+                        if (segwitAddressesConfirmedUnspentBalance > 0)
+                        {
+                            segwitAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitAddressesConfirmedUnspentBalanceDisplay = "0";
+                        }
+                        lblSegwitSummary.Invoke((MethodInvoker)delegate
+                        {
+                            lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + "," + segwitTotalConfirmedSpentDisplay + "," + segwitAddressesConfirmedUnspentBalanceDisplay;
+                        });
+                    }
+
+                    progressBarCheckEachAddressType.Value = 0;
+                    consecutiveUnusedAddressesForType = 0;
+                    checkingAddressCount = 1;
+                    DerivationPath++;
+                    segwitAddresses.Clear();
+                    
                 }
+                DerivationPath = 0;
 
-                // query the balance for each address
-                foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of addresses with a balance)
+                // -------------------------------------------------------- P2PKH legacy
+                while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
-                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
-                    });
-                    var request = "address/" + address;
-                    var RequestURL = textBoxMempoolURL.Text + request;
-                    var client = new HttpClient();
-                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblActiveNode.Text = "Disconnected/error";
+                            lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
                         });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                        uint index = i; // increment the index for each iteration
+                        var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
+                        legacyAddresses.Add(BitcoinAddress);
+                    }
+
+                    // query the balance for each address
+                    foreach (BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
+                    {
+                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                            lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
-                        return;
-                    }
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var addressData = JObject.Parse(jsonData);
-
-                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
-                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
-                    item.SubItems.Add(ConfirmedReceived.ToString());
-                    item.SubItems.Add(ConfirmedSpent.ToString());
-                    item.SubItems.Add(ConfirmedUnspent.ToString());
-                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        listViewXpubAddresses.Items.Add(item); // add row
-                        numberOfAddressesChecked++;
-                    });
-                    if (listViewXpubAddresses.Items.Count > 23)
-                    {
-                        btnXpubAddressUp.Visible = true;
-                        btnXpubAddressesDown.Visible = true;
-                    }
-                    else
-                    {
-                        btnXpubAddressUp.Visible = false;
-                        btnXpubAddressesDown.Visible = false;
-                    }
-
-                    // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
-                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
-                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
-
-                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
-                    panelXpubContainer.VerticalScroll.Minimum = 0;
-
-                    string segwitTotalConfirmedReceivedDisplay = "";
-                    string segwitTotalConfirmedSpentDisplay = "";
-                    string segwitAddressesConfirmedUnspentBalanceDisplay = "";
-
-                    if (confirmedReceivedForCalc == 0)
-                    {
-                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
-                        totalUnusedAddresses++; // overall count of unused addresses
-
-                        // progress bar for this address type
-                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        var request = "address/" + address;
+                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var client = new HttpClient();
+                        var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                        if (!response.IsSuccessStatusCode)
                         {
-                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            lblNodeStatusLight.ForeColor = Color.Red;
+                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            {
+                                lblActiveNode.Text = "Disconnected/error";
+                            });
+                            lblErrorMessage.Invoke((MethodInvoker)delegate
+                            {
+                                lblErrorMessage.Text = "Node offline/disconnected: ";
+                            });
+                            return;
+                        }
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var addressData = JObject.Parse(jsonData);
+
+
+
+
+
+                        // transactions for the address
+                        string lastSeenTxId = "";
+                        decimal TotalInForAllTXOnThisAddress = 0;
+                        decimal TotalOutForAllTXOnThisAddress = 0;
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int txProcessedForThisAddress = 0;
+
+                        while (txProcessedForThisAddress != totalTXForAddress)
+                        {
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                            List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                            foreach (AddressTransactions transaction in transactions)
+                            {
+                                decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                                decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                                balanceChangeVin = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                                    .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Value);
+                                balanceChangeVout = (decimal)transaction.Vin
+                                    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Prevout.Value);
+                                TotalInForAllTXOnThisAddress += balanceChangeVin;
+                                TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                                txProcessedForThisAddress++;
+                            }
+                            if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                            {
+                                lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                            }
+                            else
+                            {
+                                lastSeenTxId = "";
+                            }
+                        }
+
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
+                        string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
+
+                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
+                        var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+
+
+
+
+
+
+
+
+
+
+                        /*
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                        string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                        var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+                        */
+
+                        ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                        item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                        item.SubItems.Add(ConfirmedReceived.ToString());
+                        item.SubItems.Add(ConfirmedSpent.ToString());
+                        item.SubItems.Add(ConfirmedUnspent.ToString());
+                        listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            listViewXpubAddresses.Items.Add(item); // add row
+                            numberOfAddressesChecked++;
+                        });
+                        if (listViewXpubAddresses.Items.Count > 23)
+                        {
+                            btnXpubAddressUp.Visible = true;
+                            btnXpubAddressesDown.Visible = true;
                         }
                         else
                         {
-                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            btnXpubAddressUp.Visible = false;
+                            btnXpubAddressesDown.Visible = false;
                         }
-                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+
+                        // Get the height of each item to set height of whole listview
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                        listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                        panelXpubContainer.VerticalScroll.Minimum = 0;
+
+                        string legacyTotalConfirmedReceivedDisplay = "";
+                        string legacyTotalConfirmedSpentDisplay = "";
+                        string legacyAddressesConfirmedUnspentBalanceDisplay = "";
+
+                        if (confirmedReceivedForCalc == 0)
                         {
-                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
-                        });
-                        // progress bar for all address types
-                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
-                        {
-                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
-                            progressBarCheckAllAddressTypes.Value = consecutiveUnusedAddressesForType;
+                            consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                            totalUnusedAddresses++; // overall count of unused addresses
+
+                            // progress bar for this address type
+                            if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                            {
+                                progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            }
+                            lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                            });
+                            // progress bar for all address types
+                            if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                            {
+                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                                progressBarCheckAllAddressTypes.Value = ((NumberOfDerivationPathsToCheck + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            }
+                            lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                            });
+
+                            // assume there are no more used addresses at this point
+                            if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                            {
+                                break;
+                            }
                         }
                         else
                         {
-                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            usedLegacyAddresses++;
+                            consecutiveUnusedAddressesForType = 0;  //
+                            totalUnusedAddresses = (NumberOfDerivationPathsToCheck + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the second address type, so reset to account for that, rather than 0
                         }
-                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+
+                        if (confirmedReceivedForCalc > 0)
                         {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
+                            consecutiveUnusedAddressesForType = 0;
+                            legacyTotalConfirmedReceived += confirmedReceivedForCalc;
+                            xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                        }
+
+                        if (confirmedSpentForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            legacyTotalConfirmedSpent += confirmedSpentForCalc;
+                            xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                        }
+
+                        if (confirmedUnspentResult > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                            legacyAddressesWithNonZeroBalance++;
+                            legacyAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                        }
+                        checkingAddressCount++;
+                        lblLegacyUsedAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used";
                         });
-                        // assume there are no more used addresses at this point
-                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        // format values before displaying them in the summary
+                        if (legacyTotalConfirmedReceived > 0)
                         {
-                            break;
+                            legacyTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedReceived)).ToString("0.00000000");
                         }
-                    }
-                    else
-                    {
-                        usedSegwitAddresses++;
-                        consecutiveUnusedAddressesForType = 0;  //
-                        totalUnusedAddresses = 0;  //
+                        else
+                        {
+                            legacyTotalConfirmedReceivedDisplay = "0";
+                        }
+
+                        if (legacyTotalConfirmedSpent > 0)
+                        {
+                            legacyTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedSpent)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            legacyTotalConfirmedSpentDisplay = "0";
+                        }
+
+                        if (legacyAddressesConfirmedUnspentBalance > 0)
+                        {
+                            legacyAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            legacyAddressesConfirmedUnspentBalanceDisplay = "0";
+                        }
+                        lblLegacySummary.Invoke((MethodInvoker)delegate
+                        {
+                            lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + "," + legacyTotalConfirmedSpentDisplay + "," + legacyAddressesConfirmedUnspentBalanceDisplay;
+                        });
                     }
 
-                    if (confirmedReceivedForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        segwitTotalConfirmedReceived += confirmedReceivedForCalc;
-                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
-                    }
-
-                    if (confirmedSpentForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        segwitTotalConfirmedSpent += confirmedSpentForCalc;
-                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
-                    }
-
-                    if (confirmedUnspentResult > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
-                        segwitAddressesWithNonZeroBalance++;
-                        segwitAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-
-                    }
-                    checkingAddressCount++;
-                    lblSegwitUsedAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used";
-                    });
-                    // format values before displaying them in the summary
-                    if (segwitTotalConfirmedReceived > 0)
-                    {
-                        segwitTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedReceived)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitTotalConfirmedReceivedDisplay = "0";
-                    }
-
-                    if (segwitTotalConfirmedSpent > 0)
-                    {
-                        segwitTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitTotalConfirmedSpent)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitTotalConfirmedSpentDisplay = "0";
-                    }
-
-                    if (segwitAddressesConfirmedUnspentBalance > 0)
-                    {
-                        segwitAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitAddressesConfirmedUnspentBalance)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitAddressesConfirmedUnspentBalanceDisplay = "0";
-                    }
-                    lblSegwitSummary.Invoke((MethodInvoker)delegate
-                    {
-                        lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + "," + segwitTotalConfirmedSpentDisplay + "," + segwitAddressesConfirmedUnspentBalanceDisplay;
-                    });
+                    progressBarCheckEachAddressType.Value = 0;
+                    consecutiveUnusedAddressesForType = 0;
+                    checkingAddressCount = 1;
+                    DerivationPath++;
+                    legacyAddresses.Clear();
                 }
+                DerivationPath = 0;
 
-                progressBarCheckEachAddressType.Value = 0;
-                consecutiveUnusedAddressesForType = 0;
-                checkingAddressCount = 1;
-
-                // ------- P2PKH legacy
-                for (uint i = 0; i < 500; i++)
+                // -------------------------------------------------------- P2SH-P2WPKH
+                while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
-                    });
-                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                    uint index = i; // increment the index for each iteration
-                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
-                    legacyAddresses.Add(BitcoinAddress);
-                }
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses";
+                        });
+                        var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                        uint index = i; // increment the index for each iteration
+                        var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
+                        segwitP2SHAddresses.Add(BitcoinAddress);
+                    }
 
-                // query the balance for each address
-                foreach (BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
+                    // query the balance for each address
+                    foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
+                    {
+                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                        });
+                        var request = "address/" + address;
+                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var client = new HttpClient();
+                        var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            lblNodeStatusLight.ForeColor = Color.Red;
+                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            {
+                                lblActiveNode.Text = "Disconnected/error";
+                            });
+                            lblErrorMessage.Invoke((MethodInvoker)delegate
+                            {
+                                lblErrorMessage.Text = "Node offline/disconnected: ";
+                            });
+                            return;
+                        }
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var addressData = JObject.Parse(jsonData);
+
+
+
+
+
+
+                        // transactions for the address
+                        string lastSeenTxId = "";
+                        decimal TotalInForAllTXOnThisAddress = 0;
+                        decimal TotalOutForAllTXOnThisAddress = 0;
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int txProcessedForThisAddress = 0;
+
+                        while (txProcessedForThisAddress != totalTXForAddress)
+                        {
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                            List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                            foreach (AddressTransactions transaction in transactions)
+                            {
+                                decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                                decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                                balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                                    .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Value);
+                                balanceChangeVin = (decimal)transaction.Vin
+                                    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Prevout.Value);
+                                TotalInForAllTXOnThisAddress += balanceChangeVin;
+                                TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                                txProcessedForThisAddress++;
+                            }
+                            if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                            {
+                                lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                            }
+                            else
+                            {
+                                lastSeenTxId = "";
+                            }
+                        }
+
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = Convert.ToString(TotalInForAllTXOnThisAddress.ToString("0.00000000"));
+                        string ConfirmedSpent = Convert.ToString(TotalOutForAllTXOnThisAddress.ToString("0.00000000"));
+
+                        var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
+                        var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+                    
+
+                        ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                        item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                        item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedReceived.ToString()).ToString("0.00000000"));
+                        item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedSpent.ToString()).ToString("0.00000000"));
+                        item.SubItems.Add(ConfirmedUnspent.ToString());
+                        listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            listViewXpubAddresses.Items.Add(item); // add row
+                            numberOfAddressesChecked++;
+                        });
+                        if (listViewXpubAddresses.Items.Count > 23)
+                        {
+                            btnXpubAddressUp.Visible = true;
+                            btnXpubAddressesDown.Visible = true;
+                        }
+                        else
+                        {
+                            btnXpubAddressUp.Visible = false;
+                            btnXpubAddressesDown.Visible = false;
+                        }
+
+                        // Get the height of each item to set height of whole listview
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                        listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                        panelXpubContainer.VerticalScroll.Minimum = 0;
+
+                        string segwitP2SHTotalConfirmedReceivedDisplay = "";
+                        string segwitP2SHTotalConfirmedSpentDisplay = "";
+                        string segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "";
+
+                        if (confirmedReceivedForCalc == 0)
+                        {
+                            consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                            totalUnusedAddresses++; // overall count of unused addresses
+
+                            // progress bar for this address type
+                            if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                            {
+                                progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            }
+                            lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                            });
+                            // progress bar for all address types
+                            if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                            {
+                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                                progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            }
+                            lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                            });
+
+                            // assume there are no more used addresses at this point
+                            if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            usedSegwitP2SHAddresses++;
+                            consecutiveUnusedAddressesForType = 0;  //
+                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the third address type, so reset to account for that, rather than 0
+                        }
+
+                        if (confirmedReceivedForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            segwitP2SHTotalConfirmedReceived += confirmedReceivedForCalc;
+                            xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                        }
+
+                        if (confirmedSpentForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            segwitP2SHTotalConfirmedSpent += confirmedSpentForCalc;
+                            xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                        }
+
+                        if (confirmedUnspentResult > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                            segwitP2SHAddressesWithNonZeroBalance++;
+                            segwitP2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                        }
+                        checkingAddressCount++;
+                        lblSegwitP2SHUsedAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used";
+                        });
+                        // format values before displaying them in the summary
+                        if (segwitP2SHTotalConfirmedReceived > 0)
+                        {
+                            segwitP2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedReceived)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitP2SHTotalConfirmedReceivedDisplay = "0";
+                        }
+
+                        if (segwitP2SHTotalConfirmedSpent > 0)
+                        {
+                            segwitP2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedSpent)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitP2SHTotalConfirmedSpentDisplay = "0";
+                        }
+
+                        if (segwitP2SHAddressesConfirmedUnspentBalance > 0)
+                        {
+                            segwitP2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "0";
+                        }
+                        lblSegwitP2SHSummary.Invoke((MethodInvoker)delegate
+                        {
+                            lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + "," + segwitP2SHTotalConfirmedSpentDisplay + "," + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
+                        });
+                    }
+
+                    progressBarCheckEachAddressType.Value = 0;
+                    consecutiveUnusedAddressesForType = 0;
+                    checkingAddressCount = 1;
+                    DerivationPath++;
+                    segwitP2SHAddresses.Clear();
+                }
+                DerivationPath = 0;
+
+                // -------------------------------------------------------- P2SH
+                while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
-                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
-                    });
-                    var request = "address/" + address;
-                    var RequestURL = textBoxMempoolURL.Text + request;
-                    var client = new HttpClient();
-                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        lblActiveNode.Invoke((MethodInvoker)delegate
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblActiveNode.Text = "Disconnected/error";
+                            lblXpubStatus.Text = "Deriving P2SH addresses";
                         });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
+                        uint index = i; // increment the index for each iteration
+                        var redeemScript = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.ScriptPubKey;
+                        var scriptPubKey = redeemScript.Hash.ScriptPubKey;
+                        var BitcoinAddress = scriptPubKey.GetDestinationAddress(Network.Main);
+                        P2SHAddresses.Add(BitcoinAddress);
+                    }
+
+                    // query the balance for each address
+                    foreach (BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
+                    {
+                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblErrorMessage.Text = "Node offline/disconnected: ";
+                            lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
-                        return;
-                    }
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var addressData = JObject.Parse(jsonData);
-
-                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
-                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
-                    item.SubItems.Add(ConfirmedReceived.ToString());
-                    item.SubItems.Add(ConfirmedSpent.ToString());
-                    item.SubItems.Add(ConfirmedUnspent.ToString());
-                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        listViewXpubAddresses.Items.Add(item); // add row
-                        numberOfAddressesChecked++;
-                    });
-                    if (listViewXpubAddresses.Items.Count > 23)
-                    {
-                        btnXpubAddressUp.Visible = true;
-                        btnXpubAddressesDown.Visible = true;
-                    }
-                    else
-                    {
-                        btnXpubAddressUp.Visible = false;
-                        btnXpubAddressesDown.Visible = false;
-                    }
-
-                    // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
-                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
-                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
-
-                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
-                    panelXpubContainer.VerticalScroll.Minimum = 0;
-
-                    string legacyTotalConfirmedReceivedDisplay = "";
-                    string legacyTotalConfirmedSpentDisplay = "";
-                    string legacyAddressesConfirmedUnspentBalanceDisplay = "";
-
-                    if (confirmedReceivedForCalc == 0)
-                    {
-                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
-                        totalUnusedAddresses++; // overall count of unused addresses
-
-                        // progress bar for this address type
-                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                        var request = "address/" + address;
+                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var client = new HttpClient();
+                        var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
+                        if (!response.IsSuccessStatusCode)
                         {
-                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            lblNodeStatusLight.ForeColor = Color.Red;
+                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            {
+                                lblActiveNode.Text = "Disconnected/error";
+                            });
+                            lblErrorMessage.Invoke((MethodInvoker)delegate
+                            {
+                                lblErrorMessage.Text = "Node offline/disconnected: ";
+                            });
+                            return;
+                        }
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var addressData = JObject.Parse(jsonData);
+
+
+
+
+                        // transactions for the address
+                        string lastSeenTxId = "";
+                        decimal TotalInForAllTXOnThisAddress = 0;
+                        decimal TotalOutForAllTXOnThisAddress = 0;
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int txProcessedForThisAddress = 0;
+
+                        while (txProcessedForThisAddress != totalTXForAddress)
+                        {
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
+                            var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                            List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                            foreach (AddressTransactions transaction in transactions)
+                            {
+                                decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                                decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
+                                balanceChangeVin = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                                    .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Value);
+                                balanceChangeVout = (decimal)transaction.Vin
+                                    .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
+                                    .Sum(v => v.Prevout.Value);
+                                TotalInForAllTXOnThisAddress += balanceChangeVin;
+                                TotalOutForAllTXOnThisAddress += balanceChangeVout;
+                                txProcessedForThisAddress++;
+                            }
+                            if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                            {
+                                lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                            }
+                            else
+                            {
+                                lastSeenTxId = "";
+                            }
+                        }
+
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
+                        string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
+
+                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
+                        var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+
+
+
+
+
+
+                        /*
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
+                        string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
+
+                        var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
+
+                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
+                        */
+
+                        ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
+                        item.SubItems.Add(ConfirmedTransactionCount.ToString());
+                        item.SubItems.Add(ConfirmedReceived.ToString());
+                        item.SubItems.Add(ConfirmedSpent.ToString());
+                        item.SubItems.Add(ConfirmedUnspent.ToString());
+                        listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            listViewXpubAddresses.Items.Add(item); // add row
+                            numberOfAddressesChecked++;
+                        });
+                        if (listViewXpubAddresses.Items.Count > 23)
+                        {
+                            btnXpubAddressUp.Visible = true;
+                            btnXpubAddressesDown.Visible = true;
                         }
                         else
                         {
-                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            btnXpubAddressUp.Visible = false;
+                            btnXpubAddressesDown.Visible = false;
                         }
-                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+
+                        // Get the height of each item to set height of whole listview
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
+                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                        listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
+                        panelXpubContainer.VerticalScroll.Minimum = 0;
+
+                        string P2SHTotalConfirmedReceivedDisplay = "";
+                        string P2SHTotalConfirmedSpentDisplay = "";
+                        string P2SHAddressesConfirmedUnspentBalanceDisplay = "";
+
+                        if (confirmedReceivedForCalc == 0)
                         {
-                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
-                        });
-                        // progress bar for all address types
-                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
-                        {
-                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
-                            progressBarCheckAllAddressTypes.Value = MaxNumberOfConsecutiveUnusedAddresses + consecutiveUnusedAddressesForType;
+                            consecutiveUnusedAddressesForType++; // unused addresses for this type of address
+                            totalUnusedAddresses++; // overall count of unused addresses
+
+                            // progress bar for this address type
+                            if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
+                            {
+                                progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
+                            }
+                            lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                            });
+                            // progress bar for all address types
+                            if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
+                            {
+                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
+                                progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                            }
+                            else
+                            {
+                                progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            }
+                            lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                            });
+
+                            // assume there are no more used addresses at this point
+                            if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                            {
+                                break;
+                            }
                         }
                         else
                         {
-                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
+                            usedP2SHAddresses++;
+                            consecutiveUnusedAddressesForType = 0;  //
+                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the fourth address type, so reset to account for that, rather than 0
                         }
-                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+
+                        if (confirmedReceivedForCalc > 0)
                         {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
+                            consecutiveUnusedAddressesForType = 0;
+                            P2SHTotalConfirmedReceived += confirmedReceivedForCalc;
+                            xpubTotalConfirmedReceived += confirmedReceivedForCalc;
+                        }
+
+                        if (confirmedSpentForCalc > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            P2SHTotalConfirmedSpent += confirmedSpentForCalc;
+                            xpubTotalConfirmedSpent += confirmedSpentForCalc;
+                        }
+
+                        if (confirmedUnspentResult > 0)
+                        {
+                            consecutiveUnusedAddressesForType = 0;
+                            xpubTotalConfirmedUnspent += confirmedUnspentResult;
+                            P2SHAddressesWithNonZeroBalance++;
+                            P2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
+
+                        }
+                        checkingAddressCount++;
+                        lblP2SHUsedAddresses.Invoke((MethodInvoker)delegate
+                        {
+                            lblP2SHUsedAddresses.Text = Convert.ToString(usedP2SHAddresses) + " used";
                         });
-
-                        // assume there are no more used addresses at this point
-                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
+                        // format values before displaying them in the summary
+                        if (P2SHTotalConfirmedReceived > 0)
                         {
-                            break;
+                            P2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedReceived)).ToString("0.00000000");
                         }
-                    }
-                    else
-                    {
-                        usedLegacyAddresses++;
-                        consecutiveUnusedAddressesForType = 0;  //
-                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses;  // this is the second address type, so reset to account for that, rather than 0
+                        else
+                        {
+                            P2SHTotalConfirmedReceivedDisplay = "0";
+                        }
+
+                        if (P2SHTotalConfirmedSpent > 0)
+                        {
+                            P2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedSpent)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            P2SHTotalConfirmedSpentDisplay = "0";
+                        }
+
+                        if (P2SHAddressesConfirmedUnspentBalance > 0)
+                        {
+                            P2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
+                        }
+                        else
+                        {
+                            P2SHAddressesConfirmedUnspentBalanceDisplay = "0";
+                        }
+                        lblP2SHSummary.Invoke((MethodInvoker)delegate
+                        {
+                            lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + "," + P2SHTotalConfirmedSpentDisplay + "," + P2SHAddressesConfirmedUnspentBalanceDisplay;
+                        });
                     }
 
-                    if (confirmedReceivedForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        legacyTotalConfirmedReceived += confirmedReceivedForCalc;
-                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
-                    }
-
-                    if (confirmedSpentForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        legacyTotalConfirmedSpent += confirmedSpentForCalc;
-                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
-                    }
-
-                    if (confirmedUnspentResult > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
-                        legacyAddressesWithNonZeroBalance++;
-                        legacyAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-
-                    }
-                    checkingAddressCount++;
-                    lblLegacyUsedAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used";
-                    });
-                    // format values before displaying them in the summary
-                    if (legacyTotalConfirmedReceived > 0)
-                    {
-                        legacyTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedReceived)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        legacyTotalConfirmedReceivedDisplay = "0";
-                    }
-
-                    if (legacyTotalConfirmedSpent > 0)
-                    {
-                        legacyTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyTotalConfirmedSpent)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        legacyTotalConfirmedSpentDisplay = "0";
-                    }
-
-                    if (legacyAddressesConfirmedUnspentBalance > 0)
-                    {
-                        legacyAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(legacyAddressesConfirmedUnspentBalance)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        legacyAddressesConfirmedUnspentBalanceDisplay = "0";
-                    }
-                    lblLegacySummary.Invoke((MethodInvoker)delegate
-                    {
-                        lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + "," + legacyTotalConfirmedSpentDisplay + "," + legacyAddressesConfirmedUnspentBalanceDisplay;
-                    });
+                    progressBarCheckEachAddressType.Value = 0;
+                    consecutiveUnusedAddressesForType = 0;
+                    checkingAddressCount = 1;
+                    DerivationPath++;
+                    P2SHAddresses.Clear();
                 }
-
-                consecutiveUnusedAddressesForType = 0;
-                checkingAddressCount = 1;
-
-                // ------- P2SH-P2WPKH
-                for (uint i = 0; i < 500; i++)
-                {
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses";
-                    });
-                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                    uint index = i; // increment the index for each iteration
-                    var BitcoinAddress = pubkey.Derive(0).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
-                    segwitP2SHAddresses.Add(BitcoinAddress);
-                }
-
-                // query the balance for each address
-                foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
-                {
-                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
-                    });
-                    var request = "address/" + address;
-                    var RequestURL = textBoxMempoolURL.Text + request;
-                    var client = new HttpClient();
-                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        lblActiveNode.Invoke((MethodInvoker)delegate
-                        {
-                            lblActiveNode.Text = "Disconnected/error";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = "Node offline/disconnected: ";
-                        });
-                        return;
-                    }
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var addressData = JObject.Parse(jsonData);
-
-
-
-
-
-
-                    // local installation of mempool.space doesn't return amounts for this type of address, so we'll get them ourselves (ONLY 10 TX RETURNED AT A TIME>>> STILL NEED TO LOOP UNTIL THERE ARE NO MORE TX FOR THE ADDRESS)
-                    string lastSeenTxId = "";
-                    decimal TotalInForAllTXOnThisAddress = 0;
-                    decimal TotalOutForAllTXOnThisAddress = 0;
-                    int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                    int txProcessedForThisAddress = 0;
-
-
-                    while (txProcessedForThisAddress != totalTXForAddress)
-                    {
-                        _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
-                        var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
-                        var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                        List<string> txIds = transactions.Select(t => t.Txid).ToList();
-                       // TotalInForAllTXOnThisAddress = 0;
-                       // TotalOutForAllTXOnThisAddress = 0;
-                        //intConfirmedTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                        foreach (AddressTransactions transaction in transactions)
-                        {
-                            decimal balanceChangeVin = 0; // will hold net result of inputs to this address
-                            decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
-                            balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
-                                .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
-                                .Sum(v => v.Value);
-                            balanceChangeVin = (decimal)transaction.Vin
-                                .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
-                                .Sum(v => v.Prevout.Value);
-                            TotalInForAllTXOnThisAddress += balanceChangeVin;
-                            TotalOutForAllTXOnThisAddress += balanceChangeVout;
-                            txProcessedForThisAddress++;
-                        }
-                        if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
-                        {
-                            lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
-                        }
-                        else
-                        {
-                            lastSeenTxId = "";
-                        }
-                    }
-
-
-
-/*
-                    // local installation of mempool.space doesn't return amounts for this type of address, so we'll get them ourselves (ONLY 10 TX RETURNED AT A TIME>>> STILL NEED TO LOOP UNTIL THERE ARE NO MORE TX FOR THE ADDRESS)
-                    string lastSeenTxId = "";
-                    decimal TotalInForAllTXOnThisAddress = 0;
-                    decimal TotalOutForAllTXOnThisAddress = 0;
-                    _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
-                    var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
-                    var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                    List<string> txIds = transactions.Select(t => t.Txid).ToList();
-                    TotalInForAllTXOnThisAddress = 0;
-                    TotalOutForAllTXOnThisAddress = 0;
-                    //intConfirmedTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                    foreach (AddressTransactions transaction in transactions)
-                    {
-                        decimal balanceChangeVin = 0; // will hold net result of inputs to this address
-                        decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
-                        balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
-                            .Where(v => v.Scriptpubkey_address == Convert.ToString(address))
-                            .Sum(v => v.Value);
-                        balanceChangeVin = (decimal)transaction.Vin
-                            .Where(v => v.Prevout != null && v.Prevout.Scriptpubkey_address == Convert.ToString(address))
-                            .Sum(v => v.Prevout.Value);
-                        TotalInForAllTXOnThisAddress += balanceChangeVin;
-                        TotalOutForAllTXOnThisAddress += balanceChangeVout;
-                    }
-*/
-
-
-
-
-
-                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                    string ConfirmedReceived = Convert.ToString(TotalInForAllTXOnThisAddress.ToString("0.00000000"));
-                    string ConfirmedSpent = Convert.ToString(TotalOutForAllTXOnThisAddress.ToString("0.00000000"));
-
-                    var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
-                    var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
-                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
-                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
-                    item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedReceived.ToString()).ToString("0.00000000"));
-                    item.SubItems.Add(ConvertSatsToBitcoin(ConfirmedSpent.ToString()).ToString("0.00000000"));
-                    item.SubItems.Add(ConfirmedUnspent.ToString());
-                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        listViewXpubAddresses.Items.Add(item); // add row
-                        numberOfAddressesChecked++;
-                    });
-                    if (listViewXpubAddresses.Items.Count > 23)
-                    {
-                        btnXpubAddressUp.Visible = true;
-                        btnXpubAddressesDown.Visible = true;
-                    }
-                    else
-                    {
-                        btnXpubAddressUp.Visible = false;
-                        btnXpubAddressesDown.Visible = false;
-                    }
-
-                    // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
-                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
-                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
-
-                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
-                    panelXpubContainer.VerticalScroll.Minimum = 0;
-
-                    string segwitP2SHTotalConfirmedReceivedDisplay = "";
-                    string segwitP2SHTotalConfirmedSpentDisplay = "";
-                    string segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "";
-
-                    if (confirmedReceivedForCalc == 0)
-                    {
-                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
-                        totalUnusedAddresses++; // overall count of unused addresses
-
-                        // progress bar for this address type
-                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
-                        {
-                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
-                        }
-                        else
-                        {
-                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
-                        }
-                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
-                        });
-                        // progress bar for all address types
-                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
-                        {
-                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
-                            progressBarCheckAllAddressTypes.Value = (2 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
-                        }
-                        else
-                        {
-                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
-                        }
-                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
-                        });
-
-                        // assume there are no more used addresses at this point
-                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        usedSegwitP2SHAddresses++;
-                        consecutiveUnusedAddressesForType = 0;  //
-                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses * 2;  // this is the third address type, so reset to account for that, rather than 0
-                    }
-
-                    if (confirmedReceivedForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        segwitP2SHTotalConfirmedReceived += confirmedReceivedForCalc;
-                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
-                    }
-
-                    if (confirmedSpentForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        segwitP2SHTotalConfirmedSpent += confirmedSpentForCalc;
-                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
-                    }
-
-                    if (confirmedUnspentResult > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
-                        segwitP2SHAddressesWithNonZeroBalance++;
-                        segwitP2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-
-                    }
-                    checkingAddressCount++;
-                    lblSegwitP2SHUsedAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used";
-                    });
-                    // format values before displaying them in the summary
-                    if (segwitP2SHTotalConfirmedReceived > 0)
-                    {
-                        segwitP2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedReceived)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitP2SHTotalConfirmedReceivedDisplay = "0";
-                    }
-
-                    if (segwitP2SHTotalConfirmedSpent > 0)
-                    {
-                        segwitP2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHTotalConfirmedSpent)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitP2SHTotalConfirmedSpentDisplay = "0";
-                    }
-
-                    if (segwitP2SHAddressesConfirmedUnspentBalance > 0)
-                    {
-                        segwitP2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(segwitP2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "0";
-                    }
-                    lblSegwitP2SHSummary.Invoke((MethodInvoker)delegate
-                    {
-                        lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + "," + segwitP2SHTotalConfirmedSpentDisplay + "," + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
-                    });
-                }
-
-                consecutiveUnusedAddressesForType = 0;
-                checkingAddressCount = 1;
-
-
-
-
-
-                
-                // ------- P2SH
-                for (uint i = 0; i < 500; i++)
-                {
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubStatus.Text = "Deriving P2SH addresses";
-                    });
-                    var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
-                    uint index = i; // increment the index for each iteration
-                    var redeemScript = pubkey.Derive(0).Derive(index).PubKey.ScriptPubKey;
-                    var scriptPubKey = redeemScript.Hash.ScriptPubKey;
-                    var BitcoinAddress = scriptPubKey.GetDestinationAddress(Network.Main);
-                    P2SHAddresses.Add(BitcoinAddress);
-                }
-
-                // query the balance for each address
-                foreach (BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
-                {
-                    string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
-                    lblXpubStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
-                    });
-                    var request = "address/" + address;
-                    var RequestURL = textBoxMempoolURL.Text + request;
-                    var client = new HttpClient();
-                    var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        lblNodeStatusLight.ForeColor = Color.Red;
-                        lblActiveNode.Invoke((MethodInvoker)delegate
-                        {
-                            lblActiveNode.Text = "Disconnected/error";
-                        });
-                        lblErrorMessage.Invoke((MethodInvoker)delegate
-                        {
-                            lblErrorMessage.Text = "Node offline/disconnected: ";
-                        });
-                        return;
-                    }
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var addressData = JObject.Parse(jsonData);
-
-                    string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                    string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                    string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                    var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                    var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                    var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                    string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-                    ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
-                    item.SubItems.Add(ConfirmedTransactionCount.ToString());
-                    item.SubItems.Add(ConfirmedReceived.ToString());
-                    item.SubItems.Add(ConfirmedSpent.ToString());
-                    item.SubItems.Add(ConfirmedUnspent.ToString());
-                    listViewXpubAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        listViewXpubAddresses.Items.Add(item); // add row
-                        numberOfAddressesChecked++;
-                    });
-                    if (listViewXpubAddresses.Items.Count > 23)
-                    {
-                        btnXpubAddressUp.Visible = true;
-                        btnXpubAddressesDown.Visible = true;
-                    }
-                    else
-                    {
-                        btnXpubAddressUp.Visible = false;
-                        btnXpubAddressesDown.Visible = false;
-                    }
-
-                    // Get the height of each item to set height of whole listview
-                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
-                    int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
-                    int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
-
-                    listViewXpubAddresses.Height = listBoxHeight; // Set the height of the ListBox
-                    panelXpubContainer.VerticalScroll.Minimum = 0;
-
-                    string P2SHTotalConfirmedReceivedDisplay = "";
-                    string P2SHTotalConfirmedSpentDisplay = "";
-                    string P2SHAddressesConfirmedUnspentBalanceDisplay = "";
-
-                    if (confirmedReceivedForCalc == 0)
-                    {
-                        consecutiveUnusedAddressesForType++; // unused addresses for this type of address
-                        totalUnusedAddresses++; // overall count of unused addresses
-
-                        // progress bar for this address type
-                        if (consecutiveUnusedAddressesForType < progressBarCheckEachAddressType.Maximum)
-                        {
-                            progressBarCheckEachAddressType.Value = consecutiveUnusedAddressesForType;
-                        }
-                        else
-                        {
-                            progressBarCheckEachAddressType.Value = progressBarCheckEachAddressType.Maximum;
-                        }
-                        lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
-                        });
-                        // progress bar for all address types
-                        if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
-                        {
-                            //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
-                            progressBarCheckAllAddressTypes.Value = (3 * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
-                        }
-                        else
-                        {
-                            progressBarCheckAllAddressTypes.Value = progressBarCheckAllAddressTypes.Maximum;
-                        }
-                        lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4).ToString();
-                        });
-
-                        // assume there are no more used addresses at this point
-                        if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        usedP2SHAddresses++;
-                        consecutiveUnusedAddressesForType = 0;  //
-                        totalUnusedAddresses = MaxNumberOfConsecutiveUnusedAddresses * 3;  // this is the fourth address type, so reset to account for that, rather than 0
-                    }
-
-                    if (confirmedReceivedForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        P2SHTotalConfirmedReceived += confirmedReceivedForCalc;
-                        xpubTotalConfirmedReceived += confirmedReceivedForCalc;
-                    }
-
-                    if (confirmedSpentForCalc > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        P2SHTotalConfirmedSpent += confirmedSpentForCalc;
-                        xpubTotalConfirmedSpent += confirmedSpentForCalc;
-                    }
-
-                    if (confirmedUnspentResult > 0)
-                    {
-                        consecutiveUnusedAddressesForType = 0;
-                        xpubTotalConfirmedUnspent += confirmedUnspentResult;
-                        P2SHAddressesWithNonZeroBalance++;
-                        P2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-
-                    }
-                    checkingAddressCount++;
-                    lblP2SHUsedAddresses.Invoke((MethodInvoker)delegate
-                    {
-                        lblP2SHUsedAddresses.Text = Convert.ToString(usedP2SHAddresses) + " used";
-                    });
-                    // format values before displaying them in the summary
-                    if (P2SHTotalConfirmedReceived > 0)
-                    {
-                        P2SHTotalConfirmedReceivedDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedReceived)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        P2SHTotalConfirmedReceivedDisplay = "0";
-                    }
-
-                    if (P2SHTotalConfirmedSpent > 0)
-                    {
-                        P2SHTotalConfirmedSpentDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHTotalConfirmedSpent)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        P2SHTotalConfirmedSpentDisplay = "0";
-                    }
-
-                    if (P2SHAddressesConfirmedUnspentBalance > 0)
-                    {
-                        P2SHAddressesConfirmedUnspentBalanceDisplay = ConvertSatsToBitcoin(Convert.ToString(P2SHAddressesConfirmedUnspentBalance)).ToString("0.00000000");
-                    }
-                    else
-                    {
-                        P2SHAddressesConfirmedUnspentBalanceDisplay = "0";
-                    }
-                    lblP2SHSummary.Invoke((MethodInvoker)delegate
-                    {
-                        lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + "," + P2SHTotalConfirmedSpentDisplay + "," + P2SHAddressesConfirmedUnspentBalanceDisplay;
-                    });
-                }
-
-                consecutiveUnusedAddressesForType = 0;
-                checkingAddressCount = 1;
-                
-
-
-
-
-
-
-
+                DerivationPath = 0;
 
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
@@ -5999,7 +6163,7 @@ namespace SATSuma
                         {
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             label18.ForeColor = Color.IndianRed;
-                            label18.Text = "invalid / node offline";
+                            label18.Text = "node offline";
                             return;
                         }
                     }
@@ -6007,7 +6171,7 @@ namespace SATSuma
                     {
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         label18.ForeColor = Color.IndianRed;
-                        label18.Text = "invalid / node offline";
+                        label18.Text = "node offline";
                         return;
                     }
                 }
@@ -6256,7 +6420,7 @@ namespace SATSuma
                         panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 4;
                         XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    XpubScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
                 else if (XpubUpButtonPressed)
                 {
@@ -6265,7 +6429,7 @@ namespace SATSuma
                         panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 4;
                         XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    XpubScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
             }
             else
@@ -6323,6 +6487,15 @@ namespace SATSuma
                 HandleException(ex, "btnViewAddressFromXpub_Click");
             }
         }
+
+        private void numberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
+        {
+            if (numberUpDownDerivationPathsToCheck.Value > 100)
+            {
+                numberUpDownDerivationPathsToCheck.Value = 100;
+            }
+        }
+
         #endregion
 
         #region BOOKMARKS SCREEN
@@ -8379,6 +8552,7 @@ namespace SATSuma
             }
         }
 
+        // ------------------------------------- Address Transactions (for xpub screen) -----------------------------------
         public class TransactionsForXpubAddressService
         {
             private readonly string _nodeUrl;
@@ -8417,23 +8591,6 @@ namespace SATSuma
                             }
                             
                         }
-                        if (mempoolConfOrAllTx == "mempool")
-                        {
-                            var response = await client.GetAsync($"address/{address}/txs/mempool");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
-                        }
-                        if (mempoolConfOrAllTx == "all")
-                        {
-                            var response = await client.GetAsync($"address/{address}/txs");
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
-                        }
-
                         retryCount--;
                         await Task.Delay(3000);
                     }

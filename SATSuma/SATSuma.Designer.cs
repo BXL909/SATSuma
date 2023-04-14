@@ -417,6 +417,7 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
+            this.label139 = new System.Windows.Forms.Label();
             this.lblP2SHUsedAddresses = new System.Windows.Forms.Label();
             this.label135 = new System.Windows.Forms.Label();
             this.lblCheckAllAddressTypesCount = new System.Windows.Forms.Label();
@@ -518,6 +519,7 @@
             this.panel37 = new System.Windows.Forms.Panel();
             this.panel39 = new System.Windows.Forms.Panel();
             this.label22 = new System.Windows.Forms.Label();
+            this.numberUpDownDerivationPathsToCheck = new System.Windows.Forms.NumericUpDown();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -572,6 +574,7 @@
             this.panel38.SuspendLayout();
             this.panel37.SuspendLayout();
             this.panel39.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberUpDownDerivationPathsToCheck)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -5970,6 +5973,8 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpub.Controls.Add(this.numberUpDownDerivationPathsToCheck);
+            this.panelXpub.Controls.Add(this.label139);
             this.panelXpub.Controls.Add(this.lblP2SHUsedAddresses);
             this.panelXpub.Controls.Add(this.label135);
             this.panelXpub.Controls.Add(this.lblP2SHSummary);
@@ -6012,6 +6017,17 @@
             this.panelXpub.Visible = false;
             this.panelXpub.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelXpub.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpub_Paint);
+            // 
+            // label139
+            // 
+            this.label139.AutoSize = true;
+            this.label139.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label139.ForeColor = System.Drawing.Color.Silver;
+            this.label139.Location = new System.Drawing.Point(578, 0);
+            this.label139.Name = "label139";
+            this.label139.Size = new System.Drawing.Size(129, 20);
+            this.label139.TabIndex = 237;
+            this.label139.Text = "Derivation paths";
             // 
             // lblP2SHUsedAddresses
             // 
@@ -6135,9 +6151,9 @@
             this.textBoxMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxMempoolURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxMempoolURL.Location = new System.Drawing.Point(424, 0);
+            this.textBoxMempoolURL.Location = new System.Drawing.Point(200, 0);
             this.textBoxMempoolURL.Name = "textBoxMempoolURL";
-            this.textBoxMempoolURL.Size = new System.Drawing.Size(325, 25);
+            this.textBoxMempoolURL.Size = new System.Drawing.Size(213, 25);
             this.textBoxMempoolURL.TabIndex = 200;
             this.textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
             this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
@@ -6488,9 +6504,9 @@
             this.label114.ForeColor = System.Drawing.Color.Silver;
             this.label114.Location = new System.Drawing.Point(0, 1);
             this.label114.Name = "label114";
-            this.label114.Size = new System.Drawing.Size(350, 20);
+            this.label114.Size = new System.Drawing.Size(213, 20);
             this.label114.TabIndex = 168;
-            this.label114.Text = "Path to mempool.space installtion on full node*";
+            this.label114.Text = "Path to mempool.space API";
             // 
             // label111
             // 
@@ -7413,6 +7429,28 @@
             this.label22.TabIndex = 153;
             this.label22.Text = "Current block height";
             // 
+            // numberUpDownDerivationPathsToCheck
+            // 
+            this.numberUpDownDerivationPathsToCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.numberUpDownDerivationPathsToCheck.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberUpDownDerivationPathsToCheck.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numberUpDownDerivationPathsToCheck.ForeColor = System.Drawing.Color.White;
+            this.numberUpDownDerivationPathsToCheck.Location = new System.Drawing.Point(691, 0);
+            this.numberUpDownDerivationPathsToCheck.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numberUpDownDerivationPathsToCheck.Name = "numberUpDownDerivationPathsToCheck";
+            this.numberUpDownDerivationPathsToCheck.Size = new System.Drawing.Size(57, 25);
+            this.numberUpDownDerivationPathsToCheck.TabIndex = 218;
+            this.numberUpDownDerivationPathsToCheck.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numberUpDownDerivationPathsToCheck.Validating += new System.ComponentModel.CancelEventHandler(this.numberUpDownDerivationPathsToCheck_Validating);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -7423,6 +7461,7 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panel37);
@@ -7435,7 +7474,6 @@
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.btnAddToBookmarks);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.btnHelp);
             this.Controls.Add(this.panel22);
             this.Controls.Add(this.panelLightningDashboard);
@@ -7550,6 +7588,7 @@
             this.panel37.PerformLayout();
             this.panel39.ResumeLayout(false);
             this.panel39.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberUpDownDerivationPathsToCheck)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -8045,6 +8084,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label lblBlockListProgressNextDiffAdjPercentage;
         private System.Windows.Forms.Label lblBlockListHalvingBlockAndRemaining;
+        private System.Windows.Forms.Label label139;
+        private System.Windows.Forms.NumericUpDown numberUpDownDerivationPathsToCheck;
     }
 }
 

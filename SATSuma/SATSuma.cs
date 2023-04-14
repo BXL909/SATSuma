@@ -25,7 +25,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * xpub screen - allow user to choose number of derivation paths to check
  * speed up scrolling everywhere
  */
 
@@ -314,10 +313,14 @@ namespace SATSuma
                     {
                         var blocksJson = await _blockService.GetBlockDataAsync(lblBlockNumber.Text); 
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+
+                        // NEED TO HANDLE 'BLOCKS' BEING NULL HERE
                         lblTransactions.Invoke((MethodInvoker)delegate
                         {
                             lblTransactions.Text = Convert.ToString(blocks[0].Tx_count) + " transactions";
                         });
+
+
                         long sizeInBytes = blocks[0].Size;
                         string sizeString; // convert display to bytes/kb/mb accordingly
                         if (sizeInBytes < 1000)
@@ -2388,6 +2391,10 @@ namespace SATSuma
             btnShowConfirmedTX.Visible = true;
             btnShowUnconfirmedTX.Visible = true;
             lblAddressType.Visible = true;
+            panel41.Visible = true;
+            panel42.Visible = true;
+            panel43.Visible = true;
+            panel44.Visible = true;
         }
 
         private void AddressInvalidHideControls() // hide all address related controls
@@ -2413,6 +2420,10 @@ namespace SATSuma
                 btnShowConfirmedTX.Visible = false;
                 btnShowUnconfirmedTX.Visible = false;
                 lblAddressType.Visible = false;
+                panel41.Visible = false;
+                panel42.Visible = false;
+                panel43.Visible = false;
+                panel44.Visible = false;
             }
         }
 
@@ -4446,7 +4457,6 @@ namespace SATSuma
                     {
                         btnViewBlockFromBlockList.Enabled = true;
                         item.SubItems[1].ForeColor = Color.White; // Block number
-                        item.SubItems[2].ForeColor = Color.White; // TX count
                         anySelected = true;
                         btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                         {
@@ -4537,7 +4547,7 @@ namespace SATSuma
                         });
                         lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(blocks[0].Extras.FeeRange[0]) + "-" + Convert.ToString(blocks[0].Extras.FeeRange[6]) + " / " + Convert.ToString(blocks[0].Extras.MedianFee);
+                            lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
                             lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y);
                         });
                         lblBlockListAverageFee.Invoke((MethodInvoker)delegate
@@ -4823,6 +4833,8 @@ namespace SATSuma
                 label135.Visible = true;
                 lblP2SHSummary.Visible = true;
                 lblP2SHUsedAddresses.Visible = true;
+                label140.Visible = true;
+                label141.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
@@ -4896,6 +4908,8 @@ namespace SATSuma
                         segwitAddresses.Add(BitcoinAddress);
                     }
 
+                    label140.Text = "derivation path " + DerivationPath;
+
                     // query the balance for each address
                     foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of used addresses)
                     {
@@ -4923,12 +4937,6 @@ namespace SATSuma
                         }
                         var jsonData = await response.Content.ReadAsStringAsync();
                         var addressData = JObject.Parse(jsonData);
-
-
-
-
-
-
 
                         // transactions for the address
                         string lastSeenTxId = "";
@@ -4970,25 +4978,10 @@ namespace SATSuma
                         string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
-
-                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
                         var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
                         var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
                         string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-
-
-
-
-
-
 
                         ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
                         item.SubItems.Add(ConfirmedTransactionCount.ToString());
@@ -5044,7 +5037,6 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                                 progressBarCheckAllAddressTypes.Value = (DerivationPath * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                             }
                             else
@@ -5152,6 +5144,8 @@ namespace SATSuma
                         legacyAddresses.Add(BitcoinAddress);
                     }
 
+                    label140.Text = "derivation path " + DerivationPath;
+
                     // query the balance for each address
                     foreach (BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
                     {
@@ -5179,10 +5173,6 @@ namespace SATSuma
                         }
                         var jsonData = await response.Content.ReadAsStringAsync();
                         var addressData = JObject.Parse(jsonData);
-
-
-
-
 
                         // transactions for the address
                         string lastSeenTxId = "";
@@ -5224,40 +5214,10 @@ namespace SATSuma
                         string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
-
-                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
                         var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
                         var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
                         string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-
-
-
-
-
-
-
-
-
-
-                        /*
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                        string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                        string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                        var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-                        */
 
                         ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
                         item.SubItems.Add(ConfirmedTransactionCount.ToString());
@@ -5313,7 +5273,6 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                                 progressBarCheckAllAddressTypes.Value = ((NumberOfDerivationPathsToCheck + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                             }
                             else
@@ -5421,6 +5380,8 @@ namespace SATSuma
                         segwitP2SHAddresses.Add(BitcoinAddress);
                     }
 
+                    label140.Text = "derivation path " + DerivationPath;
+
                     // query the balance for each address
                     foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
@@ -5448,11 +5409,6 @@ namespace SATSuma
                         }
                         var jsonData = await response.Content.ReadAsStringAsync();
                         var addressData = JObject.Parse(jsonData);
-
-
-
-
-
 
                         // transactions for the address
                         string lastSeenTxId = "";
@@ -5556,7 +5512,6 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                                 progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                             }
                             else
@@ -5666,6 +5621,8 @@ namespace SATSuma
                         P2SHAddresses.Add(BitcoinAddress);
                     }
 
+                    label140.Text = "derivation path " + DerivationPath;
+
                     // query the balance for each address
                     foreach (BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
@@ -5693,9 +5650,6 @@ namespace SATSuma
                         }
                         var jsonData = await response.Content.ReadAsStringAsync();
                         var addressData = JObject.Parse(jsonData);
-
-
-
 
                         // transactions for the address
                         string lastSeenTxId = "";
@@ -5737,35 +5691,10 @@ namespace SATSuma
                         string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
-
-                        //string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                        //string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                        //string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                        //var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        //var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
                         var confirmedSpentForCalc = Convert.ToDouble(TotalOutForAllTXOnThisAddress);
                         var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
                         string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-
-
-
-
-
-
-                        /*
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
-                        string ConfirmedReceived = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString("0.00000000");
-                        string ConfirmedSpent = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString("0.00000000");
-
-                        var confirmedReceivedForCalc = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var confirmedSpentForCalc = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                        var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
-
-                        string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-                        */
 
                         ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
                         item.SubItems.Add(ConfirmedTransactionCount.ToString());
@@ -5821,7 +5750,6 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                //progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                                 progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
                             }
                             else
@@ -5973,6 +5901,8 @@ namespace SATSuma
             label135.Visible = false;
             lblP2SHSummary.Visible = false;
             lblP2SHUsedAddresses.Visible = false;
+            label140.Visible = false;
+            label141.Visible = false;
 
             // validate the inputted xpub before proceeding
             try
@@ -6183,7 +6113,6 @@ namespace SATSuma
                     label18.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
 
-                    /////////////////////////////////
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
                     string bookmarkData;
@@ -6220,7 +6149,6 @@ namespace SATSuma
                             nodeURLInFile = bookmarkData;
                         }
                     }
-                    //////////////////////////////////////
 
                    // textBoxSubmittedXpub.Text = "";
                     textBoxSubmittedXpub.Enabled = true;
@@ -6318,6 +6246,8 @@ namespace SATSuma
             progressBarCheckEachAddressType.Visible = false;
             lblCheckAllAddressTypesCount.Visible = false;
             lblCheckEachAddressTypeCount.Visible = false;
+            label140.Visible = false;
+            label141.Visible = false;
 
             timerHideProgressBars.Stop();
         }
@@ -6415,18 +6345,18 @@ namespace SATSuma
             {
                 if (XpubDownButtonPressed)
                 {
-                    if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum - 4)
+                    if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum - 5)
                     {
-                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 4;
+                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 5;
                         XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
                 else if (XpubUpButtonPressed)
                 {
-                    if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum + 4)
+                    if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum + 5)
                     {
-                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 4;
+                        panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 5;
                         XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
                     XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down

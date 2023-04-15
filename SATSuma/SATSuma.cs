@@ -317,7 +317,7 @@ namespace SATSuma
                         // NEED TO HANDLE 'BLOCKS' BEING NULL HERE
                         lblTransactions.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count) + " transactions";
+                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
                         });
 
 
@@ -493,6 +493,10 @@ namespace SATSuma
                             lblEstHashrate.Invoke((MethodInvoker)delegate
                             {
                                 lblEstHashrate.Text = estHashrate;
+                            });
+                            lblHeaderHashrate.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderHashrate.Text = estHashrate;
                             });
                             lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
@@ -1355,6 +1359,10 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = true;
             btnXAU.Enabled = true;
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
             GetMarketData();
         }
 
@@ -1364,6 +1372,10 @@ namespace SATSuma
             btnEUR.Enabled = false;
             btnGBP.Enabled = true;
             btnXAU.Enabled = true;
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
             GetMarketData();
         }
 
@@ -1373,6 +1385,10 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = false;
             btnXAU.Enabled = true;
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
             GetMarketData();
         }
 
@@ -1382,6 +1398,10 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = true;
             btnXAU.Enabled = false;
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
             GetMarketData();
         }
 
@@ -1397,40 +1417,72 @@ namespace SATSuma
             {
                 price = "$" + priceUSD;
                 mCap = "$" + mCapUSD;
-                satsPerUnit = "$" + satsUSD;
+                satsPerUnit = satsUSD;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1$ / sats";
+                });
             }
             if (!btnEUR.Enabled)
             {
                 price = "€" + priceEUR;
                 mCap = "€" + mCapEUR;
-                satsPerUnit = "€" + satsEUR;
+                satsPerUnit = satsEUR;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1€ / sats";
+                });
             }
             if (!btnGBP.Enabled)
             {
                 price = "£" + priceGBP;
                 mCap = "£" + mCapGBP;
-                satsPerUnit = "£" + satsGBP;
+                satsPerUnit = satsGBP;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1£ / sats";
+                });
             }
             if (!btnXAU.Enabled)
             {
                 price = "🪙" + priceXAU;
                 mCap = "🪙" + mCapXAU;
-                satsPerUnit = "🪙" + satsXAU;
+                satsPerUnit = satsXAU;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1🪙 / sats";
+                });
             }
+            lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
             lblPriceUSD.Invoke((MethodInvoker)delegate
             {
                 lblPriceUSD.Text = price;
+                
             });
+            lblHeaderPrice.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderPrice.Text = price;
+            });
+
 
             lblMarketCapUSD.Invoke((MethodInvoker)delegate
             {
                 lblMarketCapUSD.Text = mCap;
+            });
+            lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMarketCap.Text = mCap;
             });
 
             lblMoscowTime.Invoke((MethodInvoker)delegate
             {
                 lblMoscowTime.Text = satsPerUnit;
             });
+            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMoscowTime.Text = satsPerUnit;
+            });
+
         }
 
         //=============================================================================================================
@@ -3897,21 +3949,21 @@ namespace SATSuma
             {
                 if (InputDownButtonPressed)
                 {
-                    if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum - 4)
+                    if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum - 5)
                     {
-                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value + 4;
+                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value + 5;
                         TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    TXInScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
                 else if (InputUpButtonPressed)
                 {
-                    if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum + 4)
+                    if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum + 5)
                     {
-                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value - 4;
+                        panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value - 5;
                         TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    TXInScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    TXInScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
             }
             else
@@ -3926,21 +3978,21 @@ namespace SATSuma
             {
                 if (OutputDownButtonPressed)
                 {
-                    if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum - 4)
+                    if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum - 5)
                     {
-                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value + 4;
+                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value + 5;
                         TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    TXOutScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
                 else if (OutputUpButtonPressed)
                 {
-                    if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum + 4)
+                    if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum + 5)
                     {
-                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value - 4;
+                        panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value - 5;
                         TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    TXOutScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    TXOutScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
             }
             else
@@ -4845,28 +4897,23 @@ namespace SATSuma
                 });
                 listViewXpubAddresses.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewXpubAddresses, new object[] { true });
 
-                // Check if the column header already exists
+                // Check if the column headers already
                 if (listViewXpubAddresses.Columns.Count == 0)
                 {
-                    // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Columns.Add(" Address", 130);
                     });
                 }
-
                 if (listViewXpubAddresses.Columns.Count == 1)
                 {
-                    // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Columns.Add("TX's", 35);
                     });
                 }
-
                 if (listViewXpubAddresses.Columns.Count == 2)
                 {
-                    // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Columns.Add("Received", 100);
@@ -4874,7 +4921,6 @@ namespace SATSuma
                 }
                 if (listViewXpubAddresses.Columns.Count == 3)
                 {
-                    // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Columns.Add("Spent", 100);
@@ -4882,14 +4928,11 @@ namespace SATSuma
                 }
                 if (listViewXpubAddresses.Columns.Count == 4)
                 {
-                    // If not, add the column header
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
                         listViewXpubAddresses.Columns.Add("Unspent", 100);
                     });
                 }
-
-
 
                 // -------------------------------------------------------- TAPROOT :(
 
@@ -5456,7 +5499,6 @@ namespace SATSuma
                         var confirmedUnspentResult = confirmedReceivedForCalc - confirmedSpentForCalc;
 
                         string ConfirmedUnspent = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspentResult)).ToString("0.00000000");
-                    
 
                         ListViewItem item = new ListViewItem(Convert.ToString(address)); // create new row
                         item.SubItems.Add(ConfirmedTransactionCount.ToString());
@@ -5794,7 +5836,6 @@ namespace SATSuma
                             xpubTotalConfirmedUnspent += confirmedUnspentResult;
                             P2SHAddressesWithNonZeroBalance++;
                             P2SHAddressesConfirmedUnspentBalance += confirmedUnspentResult;
-
                         }
                         checkingAddressCount++;
                         lblP2SHUsedAddresses.Invoke((MethodInvoker)delegate
@@ -5861,7 +5902,6 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxMempoolURL.Enabled = true;
                 timerHideProgressBars.Start();
-
             }
             catch (Exception ex)
             {
@@ -5931,23 +5971,23 @@ namespace SATSuma
 
             if (e.ColumnIndex == 2)
             {
-                if (text != "0.00000000")
+                if (text != "0.00000000") // received
                 {
                     e.SubItem.ForeColor = Color.OliveDrab; // make it green
                 }
             }
             if (e.ColumnIndex == 3)
             {
-                if (text != "0.00000000")
+                if (text != "0.00000000") // spent
                 {
                     e.SubItem.ForeColor = Color.IndianRed; // make it red
                 }
             }
             if (e.ColumnIndex == 4)
             {
-                if (text != "0.00000000")
+                if (text != "0.00000000") // unspent
                 {
-                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
+                    e.SubItem.ForeColor = Color.OliveDrab; // make it green if non-zero
                 }
             }
 
@@ -6168,7 +6208,6 @@ namespace SATSuma
                 label18.Text = "invalid / node offline";
             }
         }
-
 
         private void ListViewXpubAddresses_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -6418,7 +6457,7 @@ namespace SATSuma
             }
         }
 
-        private void numberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
+        private void NumberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
         {
             if (numberUpDownDerivationPathsToCheck.Value > 100)
             {
@@ -7042,21 +7081,21 @@ namespace SATSuma
             {
                 if (bookmarksDownButtonPressed)
                 {
-                    if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum - 4)
+                    if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum - 5)
                     {
-                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value + 4;
+                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value + 5;
                         bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    BookmarksScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
                 else if (bookmarksUpButtonPressed)
                 {
-                    if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum + 4)
+                    if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum + 5)
                     {
-                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value - 4;
+                        panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value - 5;
                         bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                     }
-                    BookmarksScrollTimer.Interval = 2; // set a faster interval while the button is held down
+                    BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
                 }
             }
             else
@@ -7801,6 +7840,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 288;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
             }
             else
             {
@@ -7836,12 +7879,39 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
                 splash splash = new splash(); // invoke the about/splash screen
                 splash.ShowDialog();
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BtnMenuSplash_Click");
+            }
+        }
+
+        private void BtnCurrency_Click(object sender, EventArgs e)
+        {
+            panelCurrency.BringToFront();
+            if (panelCurrency.Height == 24)
+            {
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 120;
+                });
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+            }
+            else
+            {
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
             }
         }
 
@@ -7861,6 +7931,10 @@ namespace SATSuma
             {
                 panelMenu.Height = 24; //close menu
             });
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
@@ -7876,6 +7950,10 @@ namespace SATSuma
             {
                 panelMenu.Height = 24; //close menu
             });
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
         }
 
         private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
@@ -7885,6 +7963,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -7920,6 +8002,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuTransaction.Enabled = true;
@@ -7954,6 +8040,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = false;
                 btnMenuTransaction.Enabled = true;
@@ -7984,6 +8074,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlock.Enabled = false;
@@ -8024,6 +8118,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
                 btnMenuXpub.Enabled = false;
                 btnMenuBlock.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
@@ -8055,6 +8153,10 @@ namespace SATSuma
                 {
                     panelMenu.Height = 24;
                 });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
                 btnMenuBlockList.Enabled = false;
                 btnMenuXpub.Enabled = true;
                 btnMenuTransaction.Enabled = true;
@@ -8082,9 +8184,6 @@ namespace SATSuma
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
                                        // DisableEnableLoadingAnimation("disable"); // stop the loading animation
                                        // DisableEnableButtons("enable"); // enable buttons after operation is complete
-
-
-
                 }
             }
             catch (Exception ex)
@@ -8100,6 +8199,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
                 });
                 btnMenuTransaction.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -8132,6 +8235,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -8166,6 +8273,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
                 });
                 SettingsScreen.CreateInstance();
                 SettingsScreen.Instance.ShowDialog();
@@ -8317,19 +8428,11 @@ namespace SATSuma
                 });
                 lblSeconds.Invoke((MethodInvoker)delegate
                 {
-                    lblSeconds.Text = DateTime.Now.ToString("ss");
-                });
-                lblDate.Invoke((MethodInvoker)delegate
-                {
-                    lblDate.Text = DateTime.Now.ToString("MMMM dd yyyy");
-                });
-                lblDay.Invoke((MethodInvoker)delegate
-                {
-                    lblDay.Text = DateTime.Now.ToString("dddd");
+                    lblSeconds.Text = ":" + DateTime.Now.ToString("ss");
                 });
                 lblSeconds.Invoke((MethodInvoker)delegate
                 {
-                    lblSeconds.Location = new Point(lblTime.Location.X + lblTime.Width - 10, lblSeconds.Location.Y); // place the seconds according to the width of the minutes/seconds (lblTime)
+                    lblSeconds.Location = new Point(lblTime.Location.X + lblTime.Width - 6, lblSeconds.Location.Y); // place the seconds according to the width of the minutes/seconds (lblTime)
                 });
             }
             catch (Exception ex)
@@ -8343,7 +8446,7 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
-            lblNowViewing.Location = new Point(label73.Location.X + label73.Width - 5, label73.Location.Y);
+            lblNowViewing.Location = new Point(label73.Location.X + label73.Width - 5, lblNowViewing.Location.Y);
             lblXpubNodeStatusLight.Location = new Point(textBoxMempoolURL.Location.X + textBoxMempoolURL.Width, textBoxMempoolURL.Location.Y + 4);
             label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxMempoolURL.Location.Y);
             if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
@@ -8831,6 +8934,7 @@ namespace SATSuma
             }
         }
         #endregion
+
 
     }
 }

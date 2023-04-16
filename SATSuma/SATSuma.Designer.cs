@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SATSuma));
             this.lblTime = new System.Windows.Forms.Label();
-            this.lblSeconds = new System.Windows.Forms.Label();
             this.timer1Sec = new System.Windows.Forms.Timer(this.components);
             this.btnExit = new System.Windows.Forms.Button();
             this.lblBlockNumber = new System.Windows.Forms.Label();
@@ -126,10 +125,10 @@
             this.lblHalveningBlock = new System.Windows.Forms.Label();
             this.lblBlockReward = new System.Windows.Forms.Label();
             this.lblMarketCapUSD = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblMoscowTimeLabel = new System.Windows.Forms.Label();
+            this.lblMarketCapLabel = new System.Windows.Forms.Label();
             this.lblMoscowTime = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblPriceLabel = new System.Windows.Forms.Label();
             this.lblPriceUSD = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.lblTXInMempool = new System.Windows.Forms.Label();
@@ -298,8 +297,8 @@
             this.lblSizeOfBlock = new System.Windows.Forms.Label();
             this.textBoxSubmittedBlockNumber = new System.Windows.Forms.TextBox();
             this.label60 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label73 = new System.Windows.Forms.Label();
+            this.pictureBoxSatsumaLogo = new System.Windows.Forms.PictureBox();
+            this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
             this.btnMenuHelp = new System.Windows.Forms.Button();
             this.btnMenuBookmarks = new System.Windows.Forms.Button();
@@ -380,7 +379,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.lblBlockListNonce = new System.Windows.Forms.Label();
-            this.panel22 = new System.Windows.Forms.Panel();
+            this.panelRefreshStatusBar = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
             this.panelTransaction = new System.Windows.Forms.Panel();
             this.panel27 = new System.Windows.Forms.Panel();
@@ -524,7 +523,7 @@
             this.lblBookmarkXpubsCount = new System.Windows.Forms.Label();
             this.label142 = new System.Windows.Forms.Label();
             this.BookmarksScrollTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel34 = new System.Windows.Forms.Panel();
+            this.panelHeaderPrice = new System.Windows.Forms.Panel();
             this.label77 = new System.Windows.Forms.Label();
             this.lblHeaderMarketCap = new System.Windows.Forms.Label();
             this.lblHeaderMoscowTime = new System.Windows.Forms.Label();
@@ -534,7 +533,7 @@
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
             this.lblNowViewing = new System.Windows.Forms.Label();
             this.fontDialog2 = new System.Windows.Forms.FontDialog();
-            this.panel37 = new System.Windows.Forms.Panel();
+            this.panelHeaderBlockHeight = new System.Windows.Forms.Panel();
             this.label148 = new System.Windows.Forms.Label();
             this.label149 = new System.Windows.Forms.Label();
             this.panel39 = new System.Windows.Forms.Panel();
@@ -549,6 +548,7 @@
             this.label150 = new System.Windows.Forms.Label();
             this.lblHeaderHashrate = new System.Windows.Forms.Label();
             this.lblHeaderMoscowTimeLabel = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -583,13 +583,13 @@
             this.panel48.SuspendLayout();
             this.panel47.SuspendLayout();
             this.panel46.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).BeginInit();
             this.panelMenu.SuspendLayout();
             this.panelBlockList.SuspendLayout();
             this.panel45.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel20.SuspendLayout();
-            this.panel22.SuspendLayout();
+            this.panelRefreshStatusBar.SuspendLayout();
             this.panelTransaction.SuspendLayout();
             this.panel27.SuspendLayout();
             this.panel28.SuspendLayout();
@@ -616,39 +616,30 @@
             this.panel33.SuspendLayout();
             this.panelBookmarksContainer.SuspendLayout();
             this.panel36.SuspendLayout();
-            this.panel34.SuspendLayout();
+            this.panelHeaderPrice.SuspendLayout();
             this.panel38.SuspendLayout();
-            this.panel37.SuspendLayout();
+            this.panelHeaderBlockHeight.SuspendLayout();
             this.panel39.SuspendLayout();
             this.panelCurrency.SuspendLayout();
             this.panel57.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
             // 
+            this.lblTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblTime.AutoSize = true;
             this.lblTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblTime.Font = new System.Drawing.Font("Technology", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTime.ForeColor = System.Drawing.Color.Gray;
-            this.lblTime.Location = new System.Drawing.Point(386, 14);
+            this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.lblTime.Location = new System.Drawing.Point(220, 41);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
-            this.lblTime.Size = new System.Drawing.Size(54, 22);
+            this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblTime.Size = new System.Drawing.Size(78, 22);
             this.lblTime.TabIndex = 1;
-            this.lblTime.Text = "88:88";
-            // 
-            // lblSeconds
-            // 
-            this.lblSeconds.AutoSize = true;
-            this.lblSeconds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSeconds.Font = new System.Drawing.Font("Technology", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSeconds.ForeColor = System.Drawing.Color.Gray;
-            this.lblSeconds.Location = new System.Drawing.Point(440, 14);
-            this.lblSeconds.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSeconds.Name = "lblSeconds";
-            this.lblSeconds.Size = new System.Drawing.Size(30, 22);
-            this.lblSeconds.TabIndex = 1;
-            this.lblSeconds.Text = "88";
+            this.lblTime.Text = "88:88:88";
+            this.lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // timer1Sec
             // 
@@ -1321,10 +1312,10 @@
             this.panelBitcoinDashboard.Controls.Add(this.lblHalveningBlock);
             this.panelBitcoinDashboard.Controls.Add(this.lblBlockReward);
             this.panelBitcoinDashboard.Controls.Add(this.lblMarketCapUSD);
-            this.panelBitcoinDashboard.Controls.Add(this.label5);
-            this.panelBitcoinDashboard.Controls.Add(this.label6);
+            this.panelBitcoinDashboard.Controls.Add(this.lblMoscowTimeLabel);
+            this.panelBitcoinDashboard.Controls.Add(this.lblMarketCapLabel);
             this.panelBitcoinDashboard.Controls.Add(this.lblMoscowTime);
-            this.panelBitcoinDashboard.Controls.Add(this.label4);
+            this.panelBitcoinDashboard.Controls.Add(this.lblPriceLabel);
             this.panelBitcoinDashboard.Controls.Add(this.lblNextBlockTotalFees);
             this.panelBitcoinDashboard.Controls.Add(this.lblPriceUSD);
             this.panelBitcoinDashboard.Controls.Add(this.label20);
@@ -1866,31 +1857,31 @@
             this.lblMarketCapUSD.TabIndex = 89;
             this.lblMarketCapUSD.Text = "no data";
             // 
-            // label5
+            // lblMoscowTimeLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Silver;
-            this.label5.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label5.Location = new System.Drawing.Point(272, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(93, 20);
-            this.label5.TabIndex = 88;
-            this.label5.Text = "1 USD / Sats";
+            this.lblMoscowTimeLabel.AutoSize = true;
+            this.lblMoscowTimeLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblMoscowTimeLabel.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoscowTimeLabel.ForeColor = System.Drawing.Color.Silver;
+            this.lblMoscowTimeLabel.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblMoscowTimeLabel.Location = new System.Drawing.Point(272, 22);
+            this.lblMoscowTimeLabel.Name = "lblMoscowTimeLabel";
+            this.lblMoscowTimeLabel.Size = new System.Drawing.Size(93, 20);
+            this.lblMoscowTimeLabel.TabIndex = 88;
+            this.lblMoscowTimeLabel.Text = "1 USD / Sats";
             // 
-            // label6
+            // lblMarketCapLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Silver;
-            this.label6.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label6.Location = new System.Drawing.Point(550, 22);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(139, 20);
-            this.label6.TabIndex = 90;
-            this.label6.Text = "Market cap (USD)";
+            this.lblMarketCapLabel.AutoSize = true;
+            this.lblMarketCapLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblMarketCapLabel.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMarketCapLabel.ForeColor = System.Drawing.Color.Silver;
+            this.lblMarketCapLabel.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblMarketCapLabel.Location = new System.Drawing.Point(550, 22);
+            this.lblMarketCapLabel.Name = "lblMarketCapLabel";
+            this.lblMarketCapLabel.Size = new System.Drawing.Size(139, 20);
+            this.lblMarketCapLabel.TabIndex = 90;
+            this.lblMarketCapLabel.Text = "Market cap (USD)";
             // 
             // lblMoscowTime
             // 
@@ -1903,18 +1894,18 @@
             this.lblMoscowTime.TabIndex = 87;
             this.lblMoscowTime.Text = "no data";
             // 
-            // label4
+            // lblPriceLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label4.Location = new System.Drawing.Point(3, 22);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(91, 20);
-            this.label4.TabIndex = 86;
-            this.label4.Text = "1 BTC / USD";
+            this.lblPriceLabel.AutoSize = true;
+            this.lblPriceLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPriceLabel.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPriceLabel.ForeColor = System.Drawing.Color.Silver;
+            this.lblPriceLabel.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblPriceLabel.Location = new System.Drawing.Point(3, 22);
+            this.lblPriceLabel.Name = "lblPriceLabel";
+            this.lblPriceLabel.Size = new System.Drawing.Size(91, 20);
+            this.lblPriceLabel.TabIndex = 86;
+            this.lblPriceLabel.Text = "1 BTC / USD";
             // 
             // lblPriceUSD
             // 
@@ -4262,28 +4253,28 @@
             this.label60.TabIndex = 6;
             this.label60.Text = "Enter block number";
             // 
-            // pictureBox1
+            // pictureBoxSatsumaLogo
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Image = global::SATSuma.Properties.Resources.tinylogo1;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 7);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(20, 22);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 150;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxSatsumaLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxSatsumaLogo.Image = global::SATSuma.Properties.Resources.tinylogo1;
+            this.pictureBoxSatsumaLogo.Location = new System.Drawing.Point(8, 8);
+            this.pictureBoxSatsumaLogo.Name = "pictureBoxSatsumaLogo";
+            this.pictureBoxSatsumaLogo.Size = new System.Drawing.Size(20, 22);
+            this.pictureBoxSatsumaLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxSatsumaLogo.TabIndex = 150;
+            this.pictureBoxSatsumaLogo.TabStop = false;
             // 
-            // label73
+            // lblSatsumaTitle
             // 
-            this.label73.AutoSize = true;
-            this.label73.BackColor = System.Drawing.Color.Transparent;
-            this.label73.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label73.ForeColor = System.Drawing.Color.Silver;
-            this.label73.Location = new System.Drawing.Point(34, 11);
-            this.label73.Name = "label73";
-            this.label73.Size = new System.Drawing.Size(84, 19);
-            this.label73.TabIndex = 151;
-            this.label73.Text = "SATSuma";
+            this.lblSatsumaTitle.AutoSize = true;
+            this.lblSatsumaTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblSatsumaTitle.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSatsumaTitle.ForeColor = System.Drawing.Color.Silver;
+            this.lblSatsumaTitle.Location = new System.Drawing.Point(34, 11);
+            this.lblSatsumaTitle.Name = "lblSatsumaTitle";
+            this.lblSatsumaTitle.Size = new System.Drawing.Size(84, 19);
+            this.lblSatsumaTitle.TabIndex = 151;
+            this.lblSatsumaTitle.Text = "SATSuma";
             // 
             // panelMenu
             // 
@@ -5453,19 +5444,19 @@
             this.lblBlockListNonce.TabIndex = 168;
             this.lblBlockListNonce.Text = "no data";
             // 
-            // panel22
+            // panelRefreshStatusBar
             // 
-            this.panel22.BackColor = System.Drawing.Color.Transparent;
-            this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
-            this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel22.Controls.Add(this.lblStatusLight);
-            this.panel22.Controls.Add(this.lblRefreshSuccessOrFailMessage);
-            this.panel22.Controls.Add(this.lblElapsedSinceUpdate);
-            this.panel22.Location = new System.Drawing.Point(1, 758);
-            this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(500, 23);
-            this.panel22.TabIndex = 197;
+            this.panelRefreshStatusBar.BackColor = System.Drawing.Color.Transparent;
+            this.panelRefreshStatusBar.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelRefreshStatusBar.BackgroundImage")));
+            this.panelRefreshStatusBar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelRefreshStatusBar.Controls.Add(this.lblStatusLight);
+            this.panelRefreshStatusBar.Controls.Add(this.lblRefreshSuccessOrFailMessage);
+            this.panelRefreshStatusBar.Controls.Add(this.lblElapsedSinceUpdate);
+            this.panelRefreshStatusBar.Location = new System.Drawing.Point(1, 758);
+            this.panelRefreshStatusBar.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panelRefreshStatusBar.Name = "panelRefreshStatusBar";
+            this.panelRefreshStatusBar.Size = new System.Drawing.Size(500, 23);
+            this.panelRefreshStatusBar.TabIndex = 197;
             // 
             // btnHelp
             // 
@@ -6820,7 +6811,7 @@
             this.panelAddToBookmarks.Controls.Add(this.textBoxBookmarkProposedNote);
             this.panelAddToBookmarks.Controls.Add(this.btnCancelAddToBookmarks);
             this.panelAddToBookmarks.Controls.Add(this.btnCommitToBookmarks);
-            this.panelAddToBookmarks.Location = new System.Drawing.Point(501, 60);
+            this.panelAddToBookmarks.Location = new System.Drawing.Point(501, 50);
             this.panelAddToBookmarks.Name = "panelAddToBookmarks";
             this.panelAddToBookmarks.Size = new System.Drawing.Size(261, 122);
             this.panelAddToBookmarks.TabIndex = 201;
@@ -6864,9 +6855,9 @@
             this.label131.Location = new System.Drawing.Point(0, 0);
             this.label131.Margin = new System.Windows.Forms.Padding(0);
             this.label131.Name = "label131";
-            this.label131.Size = new System.Drawing.Size(40, 20);
+            this.label131.Size = new System.Drawing.Size(82, 20);
             this.label131.TabIndex = 161;
-            this.label131.Text = "Add";
+            this.label131.Text = "Bookmark";
             // 
             // lblBookmarkProposalType
             // 
@@ -6969,6 +6960,7 @@
             // panelFees
             // 
             this.panelFees.BackColor = System.Drawing.Color.Transparent;
+            this.panelFees.Controls.Add(this.lblTime);
             this.panelFees.Controls.Add(this.lblHeaderHashrate);
             this.panelFees.Controls.Add(this.panel57);
             this.panelFees.Controls.Add(this.panel40);
@@ -6980,9 +6972,9 @@
             this.panelFees.Controls.Add(this.lblFees60Mins);
             this.panelFees.Controls.Add(this.lblfeesNextBlock);
             this.panelFees.Controls.Add(this.lblFees30Mins);
-            this.panelFees.Location = new System.Drawing.Point(501, 60);
+            this.panelFees.Location = new System.Drawing.Point(501, 50);
             this.panelFees.Name = "panelFees";
-            this.panelFees.Size = new System.Drawing.Size(261, 114);
+            this.panelFees.Size = new System.Drawing.Size(280, 114);
             this.panelFees.TabIndex = 202;
             // 
             // panel40
@@ -7065,7 +7057,7 @@
             this.lblFees1Day.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblFees1Day.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFees1Day.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees1Day.Location = new System.Drawing.Point(160, 43);
+            this.lblFees1Day.Location = new System.Drawing.Point(160, 41);
             this.lblFees1Day.Name = "lblFees1Day";
             this.lblFees1Day.Size = new System.Drawing.Size(18, 20);
             this.lblFees1Day.TabIndex = 78;
@@ -7077,7 +7069,7 @@
             this.lblFees60Mins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblFees60Mins.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFees60Mins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees60Mins.Location = new System.Drawing.Point(106, 43);
+            this.lblFees60Mins.Location = new System.Drawing.Point(106, 41);
             this.lblFees60Mins.Name = "lblFees60Mins";
             this.lblFees60Mins.Size = new System.Drawing.Size(18, 20);
             this.lblFees60Mins.TabIndex = 77;
@@ -7090,7 +7082,7 @@
             this.lblfeesNextBlock.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblfeesNextBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblfeesNextBlock.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblfeesNextBlock.Location = new System.Drawing.Point(6, 43);
+            this.lblfeesNextBlock.Location = new System.Drawing.Point(6, 41);
             this.lblfeesNextBlock.Name = "lblfeesNextBlock";
             this.lblfeesNextBlock.Size = new System.Drawing.Size(18, 20);
             this.lblfeesNextBlock.TabIndex = 76;
@@ -7102,7 +7094,7 @@
             this.lblFees30Mins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblFees30Mins.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFees30Mins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees30Mins.Location = new System.Drawing.Point(58, 43);
+            this.lblFees30Mins.Location = new System.Drawing.Point(58, 41);
             this.lblFees30Mins.Name = "lblFees30Mins";
             this.lblFees30Mins.Size = new System.Drawing.Size(18, 20);
             this.lblFees30Mins.TabIndex = 75;
@@ -7549,20 +7541,20 @@
             this.BookmarksScrollTimer.Interval = 50;
             this.BookmarksScrollTimer.Tick += new System.EventHandler(this.BookmarksScrollTimer_Tick);
             // 
-            // panel34
+            // panelHeaderPrice
             // 
-            this.panel34.BackColor = System.Drawing.Color.Transparent;
-            this.panel34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel34.Controls.Add(this.lblHeaderMoscowTimeLabel);
-            this.panel34.Controls.Add(this.lblHeaderMarketCap);
-            this.panel34.Controls.Add(this.label77);
-            this.panel34.Controls.Add(this.lblHeaderMoscowTime);
-            this.panel34.Controls.Add(this.panel38);
-            this.panel34.Controls.Add(this.lblHeaderPrice);
-            this.panel34.Location = new System.Drawing.Point(21, 60);
-            this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(202, 114);
-            this.panel34.TabIndex = 216;
+            this.panelHeaderPrice.BackColor = System.Drawing.Color.Transparent;
+            this.panelHeaderPrice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelHeaderPrice.Controls.Add(this.lblHeaderMoscowTimeLabel);
+            this.panelHeaderPrice.Controls.Add(this.lblHeaderMarketCap);
+            this.panelHeaderPrice.Controls.Add(this.label77);
+            this.panelHeaderPrice.Controls.Add(this.lblHeaderMoscowTime);
+            this.panelHeaderPrice.Controls.Add(this.panel38);
+            this.panelHeaderPrice.Controls.Add(this.lblHeaderPrice);
+            this.panelHeaderPrice.Location = new System.Drawing.Point(21, 50);
+            this.panelHeaderPrice.Name = "panelHeaderPrice";
+            this.panelHeaderPrice.Size = new System.Drawing.Size(202, 114);
+            this.panelHeaderPrice.TabIndex = 216;
             // 
             // label77
             // 
@@ -7651,20 +7643,20 @@
             this.lblNowViewing.TabIndex = 217;
             this.lblNowViewing.Text = "- now viewing";
             // 
-            // panel37
+            // panelHeaderBlockHeight
             // 
-            this.panel37.BackColor = System.Drawing.Color.Transparent;
-            this.panel37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel37.Controls.Add(this.lblTransactions);
-            this.panel37.Controls.Add(this.label148);
-            this.panel37.Controls.Add(this.label149);
-            this.panel37.Controls.Add(this.panel39);
-            this.panel37.Controls.Add(this.lblBlockNumber);
-            this.panel37.Controls.Add(this.lblBlockSize);
-            this.panel37.Location = new System.Drawing.Point(261, 60);
-            this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(202, 114);
-            this.panel37.TabIndex = 217;
+            this.panelHeaderBlockHeight.BackColor = System.Drawing.Color.Transparent;
+            this.panelHeaderBlockHeight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelHeaderBlockHeight.Controls.Add(this.lblTransactions);
+            this.panelHeaderBlockHeight.Controls.Add(this.label148);
+            this.panelHeaderBlockHeight.Controls.Add(this.label149);
+            this.panelHeaderBlockHeight.Controls.Add(this.panel39);
+            this.panelHeaderBlockHeight.Controls.Add(this.lblBlockNumber);
+            this.panelHeaderBlockHeight.Controls.Add(this.lblBlockSize);
+            this.panelHeaderBlockHeight.Location = new System.Drawing.Point(261, 50);
+            this.panelHeaderBlockHeight.Name = "panelHeaderBlockHeight";
+            this.panelHeaderBlockHeight.Size = new System.Drawing.Size(202, 114);
+            this.panelHeaderBlockHeight.TabIndex = 217;
             // 
             // label148
             // 
@@ -7894,6 +7886,17 @@
             this.lblHeaderMoscowTimeLabel.TabIndex = 212;
             this.lblHeaderMoscowTimeLabel.Text = "1$ / sats";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(21, 170);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(700, 2);
+            this.pictureBox1.TabIndex = 218;
+            this.pictureBox1.TabStop = false;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -7903,28 +7906,27 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.lblSeconds);
             this.Controls.Add(this.panelFees);
-            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.label73);
+            this.Controls.Add(this.lblSatsumaTitle);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panel37);
+            this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panel34);
+            this.Controls.Add(this.panelHeaderPrice);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.btnAddToBookmarks);
             this.Controls.Add(this.btnHelp);
-            this.Controls.Add(this.panel22);
+            this.Controls.Add(this.panelRefreshStatusBar);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pictureBoxSatsumaLogo);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.lblAlert);
             this.Controls.Add(this.pictureBoxLoadingAnimation);
@@ -8006,7 +8008,7 @@
             this.panel47.PerformLayout();
             this.panel46.ResumeLayout(false);
             this.panel46.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).EndInit();
             this.panelMenu.ResumeLayout(false);
             this.panelBlockList.ResumeLayout(false);
             this.panelBlockList.PerformLayout();
@@ -8016,8 +8018,8 @@
             this.panel13.PerformLayout();
             this.panel20.ResumeLayout(false);
             this.panel20.PerformLayout();
-            this.panel22.ResumeLayout(false);
-            this.panel22.PerformLayout();
+            this.panelRefreshStatusBar.ResumeLayout(false);
+            this.panelRefreshStatusBar.PerformLayout();
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
             this.panel27.ResumeLayout(false);
@@ -8059,17 +8061,18 @@
             this.panelBookmarksContainer.ResumeLayout(false);
             this.panel36.ResumeLayout(false);
             this.panel36.PerformLayout();
-            this.panel34.ResumeLayout(false);
-            this.panel34.PerformLayout();
+            this.panelHeaderPrice.ResumeLayout(false);
+            this.panelHeaderPrice.PerformLayout();
             this.panel38.ResumeLayout(false);
             this.panel38.PerformLayout();
-            this.panel37.ResumeLayout(false);
-            this.panel37.PerformLayout();
+            this.panelHeaderBlockHeight.ResumeLayout(false);
+            this.panelHeaderBlockHeight.PerformLayout();
             this.panel39.ResumeLayout(false);
             this.panel39.PerformLayout();
             this.panelCurrency.ResumeLayout(false);
             this.panel57.ResumeLayout(false);
             this.panel57.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -8078,7 +8081,6 @@
         #endregion
 
         private System.Windows.Forms.Label lblTime;
-        private System.Windows.Forms.Label lblSeconds;
         private System.Windows.Forms.Timer timer1Sec;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label lblBlockNumber;
@@ -8113,11 +8115,11 @@
         private System.Windows.Forms.Label lbl24HourTransCount;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label lblTXInMempool;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblMarketCapLabel;
         private System.Windows.Forms.Label lblMarketCapUSD;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblMoscowTimeLabel;
         private System.Windows.Forms.Label lblMoscowTime;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblPriceLabel;
         private System.Windows.Forms.Label lblPriceUSD;
         private System.Windows.Forms.Panel panelLightningDashboard;
         private System.Windows.Forms.Label label38;
@@ -8251,8 +8253,8 @@
         private System.Windows.Forms.Button btnViewTransactionFromBlock;
         private System.Windows.Forms.Label lblTotalFees;
         private System.Windows.Forms.Label lblNonce;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.PictureBox pictureBoxSatsumaLogo;
+        private System.Windows.Forms.Label lblSatsumaTitle;
         private System.Windows.Forms.Panel panelMenu;
         private System.Windows.Forms.Button btnMenuSettings;
         private System.Windows.Forms.Button btnMenuSplash;
@@ -8356,7 +8358,7 @@
         private System.Windows.Forms.Panel panel15;
         private System.Windows.Forms.Panel panel16;
         private System.Windows.Forms.Panel panel21;
-        private System.Windows.Forms.Panel panel22;
+        private System.Windows.Forms.Panel panelRefreshStatusBar;
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.Label label122;
         private System.Windows.Forms.Label label120;
@@ -8507,7 +8509,7 @@
         private System.Windows.Forms.Timer BookmarksScrollTimer;
         private System.Windows.Forms.ListView listViewBookmarks;
         private System.Windows.Forms.TextBox textBoxBookmarkKey;
-        private System.Windows.Forms.Panel panel34;
+        private System.Windows.Forms.Panel panelHeaderPrice;
         private System.Windows.Forms.Label lblBookmarkSavedSuccess;
         private System.Windows.Forms.Timer hideAddToBookmarksTimer;
         private System.Windows.Forms.Label lblBookmarkStatusMessage;
@@ -8534,7 +8536,7 @@
         private ColorProgressBar.ColorProgressBar progressBarCheckAllAddressTypes;
         private System.Windows.Forms.Label lblCheckEachAddressTypeCount;
         private System.Windows.Forms.Label lblCheckAllAddressTypesCount;
-        private System.Windows.Forms.Panel panel37;
+        private System.Windows.Forms.Panel panelHeaderBlockHeight;
         private System.Windows.Forms.Panel panel38;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Panel panel39;
@@ -8596,6 +8598,7 @@
         private System.Windows.Forms.Label label150;
         private System.Windows.Forms.Label lblHeaderHashrate;
         private System.Windows.Forms.Label lblHeaderMoscowTimeLabel;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

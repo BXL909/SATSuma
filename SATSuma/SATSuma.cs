@@ -25,7 +25,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * speed up scrolling everywhere
  */
 
 #region Using
@@ -1420,7 +1419,19 @@ namespace SATSuma
                 satsPerUnit = satsUSD;
                 lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderMoscowTimeLabel.Text = "1$ / sats";
+                    lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 USD / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / USD";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (USD)";
                 });
             }
             if (!btnEUR.Enabled)
@@ -1430,7 +1441,19 @@ namespace SATSuma
                 satsPerUnit = satsEUR;
                 lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderMoscowTimeLabel.Text = "1€ / sats";
+                    lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 EUR / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / EUR";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (EUR)";
                 });
             }
             if (!btnGBP.Enabled)
@@ -1440,7 +1463,19 @@ namespace SATSuma
                 satsPerUnit = satsGBP;
                 lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderMoscowTimeLabel.Text = "1£ / sats";
+                    lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 GBP / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / GBP";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (GBP)";
                 });
             }
             if (!btnXAU.Enabled)
@@ -1450,10 +1485,25 @@ namespace SATSuma
                 satsPerUnit = satsXAU;
                 lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderMoscowTimeLabel.Text = "1🪙 / sats";
+                    lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 XAU / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / XAU";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (XAU)";
                 });
             }
-            lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
+            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
+            });
             lblPriceUSD.Invoke((MethodInvoker)delegate
             {
                 lblPriceUSD.Text = price;
@@ -8424,16 +8474,10 @@ namespace SATSuma
             {
                 lblTime.Invoke((MethodInvoker)delegate
                 {
-                    lblTime.Text = DateTime.Now.ToString("HH:mm");
+                    lblTime.Text = DateTime.Now.ToString("HH:mm:ss");
+                    lblTime.Location = new Point(285 - lblTime.Width, lblTime.Location.Y);
                 });
-                lblSeconds.Invoke((MethodInvoker)delegate
-                {
-                    lblSeconds.Text = ":" + DateTime.Now.ToString("ss");
-                });
-                lblSeconds.Invoke((MethodInvoker)delegate
-                {
-                    lblSeconds.Location = new Point(lblTime.Location.X + lblTime.Width - 6, lblSeconds.Location.Y); // place the seconds according to the width of the minutes/seconds (lblTime)
-                });
+
             }
             catch (Exception ex)
             {
@@ -8446,7 +8490,7 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
-            lblNowViewing.Location = new Point(label73.Location.X + label73.Width - 5, lblNowViewing.Location.Y);
+            lblNowViewing.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width - 5, lblNowViewing.Location.Y);
             lblXpubNodeStatusLight.Location = new Point(textBoxMempoolURL.Location.X + textBoxMempoolURL.Width, textBoxMempoolURL.Location.Y + 4);
             label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxMempoolURL.Location.Y);
             if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
@@ -8934,7 +8978,5 @@ namespace SATSuma
             }
         }
         #endregion
-
-
     }
 }

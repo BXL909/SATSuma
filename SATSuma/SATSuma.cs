@@ -8490,7 +8490,6 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
-            lblNowViewing.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width - 5, lblNowViewing.Location.Y);
             lblXpubNodeStatusLight.Location = new Point(textBoxMempoolURL.Location.X + textBoxMempoolURL.Width, textBoxMempoolURL.Location.Y + 4);
             label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxMempoolURL.Location.Y);
             if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
@@ -8498,61 +8497,61 @@ namespace SATSuma
                if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
                 {
                     btnAddToBookmarks.Enabled = true;
-                    lblNowViewing.Text = "- Address";
+                    lblNowViewing.Text = "Address";
                 }
                if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
                 {
                     btnAddToBookmarks.Enabled = false;
-                    lblNowViewing.Text = "- Address";
+                    lblNowViewing.Text = "Address";
                 }
                if (panelBlock.Visible && lblBlockHash.Text != "")
                 {
                     btnAddToBookmarks.Enabled = true;
-                    lblNowViewing.Text = "- Block";
+                    lblNowViewing.Text = "Block";
                 }
                 if (panelBlock.Visible && lblBlockHash.Text == "")
                 {
                     btnAddToBookmarks.Enabled = false;
-                    lblNowViewing.Text = "- Block";
+                    lblNowViewing.Text = "Block";
                 }
                 if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
                 {
                     btnAddToBookmarks.Enabled = true;
-                    lblNowViewing.Text = "- Transaction";
+                    lblNowViewing.Text = "Transaction";
                 }
                 if (panelTransaction.Visible && lblInvalidTransaction.Visible)
                 {
                     btnAddToBookmarks.Enabled = false;
-                    lblNowViewing.Text = "- Transaction";
+                    lblNowViewing.Text = "Transaction";
                 }
                 if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
                 { 
                     btnAddToBookmarks.Enabled = false;
-                    lblNowViewing.Text = "- Xpub";
+                    lblNowViewing.Text = "Xpub";
                 }
                 if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
                 {
                     btnAddToBookmarks.Enabled = true;
-                    lblNowViewing.Text = "- Xpub";
+                    lblNowViewing.Text = "Xpub";
                 }
             }
             else
             {
                 if (panelBitcoinDashboard.Visible)
                 {
-                    lblNowViewing.Text = "- Bitcoin dashboard";
+                    lblNowViewing.Text = "Bitcoin dashboard";
                 }
                 if (panelLightningDashboard.Visible)
                 {
-                    lblNowViewing.Text = "- Lightning dashboard";
+                    lblNowViewing.Text = "Lightning dashboard";
                 }
                 if (panelBlockList.Visible)
                 {
-                    lblNowViewing.Text = "- Blocks";
+                    lblNowViewing.Text = "Blocks";
                 }
                 if (panelBookmarks.Visible)
                 {
-                    lblNowViewing.Text = "- Bookmarks";
+                    lblNowViewing.Text = "Bookmarks";
                 }
                 btnAddToBookmarks.Enabled = false;
             }

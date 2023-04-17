@@ -177,6 +177,7 @@ namespace SATSuma
                     if (bookmark.Type == "node")
                     {
                         textBoxMempoolURL.Text = bookmark.Data; // move node url string to the form
+                        textBoxSettingsMempoolURL.Text = bookmark.Data; // and to the settings screen
                         CheckXpubNodeIsOnline();
                         nodeURLInFile = bookmark.Data;
                         nodeURLAlreadySavedInFile = true;
@@ -184,6 +185,8 @@ namespace SATSuma
                     }
                     nodeURLAlreadySavedInFile = false;
                 }
+
+                comboAPISelectorForQueries.SelectedIndex = 0; //initial value of combobox for selecting query API on settings screen
 
                 UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
@@ -6079,15 +6082,15 @@ namespace SATSuma
         }
 
 
-        private bool isAPIURLWatermarkTextDisplayed = true;
+        private bool isTextBoxMempoolURLWatermarkTextDisplayed = true;
 
         private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
         {
-            if (isAPIURLWatermarkTextDisplayed)
+            if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.Text = "";
                 textBoxMempoolURL.ForeColor = Color.White;
-                isAPIURLWatermarkTextDisplayed = false;
+                isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
         }
 
@@ -6097,16 +6100,16 @@ namespace SATSuma
             {
                 textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
                 textBoxMempoolURL.ForeColor = Color.Gray;
-                isAPIURLWatermarkTextDisplayed = true;
+                isTextBoxMempoolURLWatermarkTextDisplayed = true;
             }
         }
 
         private void TextBoxMempoolURL_TextChanged(object sender, EventArgs e)
         {
-            if (isAPIURLWatermarkTextDisplayed)
+            if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.ForeColor = Color.White;
-                isAPIURLWatermarkTextDisplayed = false;
+                isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
         }
 
@@ -6114,11 +6117,11 @@ namespace SATSuma
 
         private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (isAPIURLWatermarkTextDisplayed)
+            if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
                 textBoxMempoolURL.Text = "";
                 textBoxMempoolURL.ForeColor = Color.White;
-                isAPIURLWatermarkTextDisplayed = false;
+                isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
             else
             {
@@ -6182,32 +6185,42 @@ namespace SATSuma
                         catch
                         {
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                            lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             label18.ForeColor = Color.IndianRed;
+                            label161.ForeColor = Color.IndianRed;
                             label18.Text = "node offline";
+                            label161.Text = "node offline";
                             return;
                         }
                     }
                     else
                     {
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         label18.ForeColor = Color.IndianRed;
+                        label161.ForeColor = Color.IndianRed;
                         label18.Text = "node offline";
+                        label161.Text = "node offline";
                         return;
                     }
                 }
 
+                // handle this being null!
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
                 {
                     lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                    lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     label18.ForeColor = Color.OliveDrab;
+                    label161.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
-
+                    label161.Text = "node online";
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
                     string bookmarkData;
                     string keyCheck = "21m";
                     bookmarkData = textBoxMempoolURL.Text;
+                    textBoxSettingsMempoolURL.Text = bookmarkData; // write it back to the settings screen too
                     var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                     if (!nodeURLAlreadySavedInFile)
                     {
@@ -6248,14 +6261,18 @@ namespace SATSuma
                 {
                     // API is not online
                     lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                    lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                     label18.Text = "invalid / node offline";
+                    label161.Text = "invalid / node offline";
                 }
             }
             catch (HttpRequestException)
             {
                 // API is not online
                 lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 label18.Text = "invalid / node offline";
+                label161.Text = "invalid / node offline";
             }
         }
 
@@ -8026,6 +8043,7 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
                 panelBookmarks.Visible = false;
@@ -8034,8 +8052,9 @@ namespace SATSuma
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
-                panelBitcoinDashboard.Visible = true;
+                panelSettings.Visible = false;
                 panelXpub.Visible = false;
+                panelBitcoinDashboard.Visible = true;
                 this.ResumeLayout();
             }
             catch (Exception ex)
@@ -8063,6 +8082,7 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBlock.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 btnMenuLightningDashboard.Enabled = false;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
@@ -8073,6 +8093,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
+                panelSettings.Visible = false;
                 panelLightningDashboard.Visible = true;
                 this.ResumeLayout();
             }
@@ -8102,6 +8123,7 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -8109,6 +8131,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
+                panelSettings.Visible = false;
                 panelAddress.Visible = true;
             }
             catch (Exception ex)
@@ -8137,6 +8160,7 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -8144,6 +8168,7 @@ namespace SATSuma
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
+                panelSettings.Visible = false;
                 panelBlock.Visible = true;
                 if (textBoxSubmittedBlockNumber.Text == "")
                 {
@@ -8180,6 +8205,7 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -8187,6 +8213,7 @@ namespace SATSuma
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlock.Visible = false;
+                panelSettings.Visible = false;
                 panelXpub.Visible = true;
             }
             catch (Exception ex)
@@ -8215,6 +8242,7 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -8222,6 +8250,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
+                panelSettings.Visible = false;
                 panelBlockList.Visible = true;
                 if (textBoxBlockHeightToStartListFrom.Text == "")
                 {
@@ -8262,6 +8291,7 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
@@ -8270,6 +8300,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelBlockList.Visible = false;
                 panelXpub.Visible = false;
+                panelSettings.Visible = false;
                 panelTransaction.Visible = true;
             }
             catch (Exception ex)
@@ -8298,6 +8329,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuSettings2.Enabled = true;
                 btnMenuBookmarks.Enabled = false;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
@@ -8307,6 +8339,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
+                panelSettings.Visible = false;
                 panelBookmarks.Visible = true;
                 SetupBookmarksScreen();
             }
@@ -8314,6 +8347,47 @@ namespace SATSuma
             {
                 HandleException(ex, "btnMenuBookmarks_Click");
             }
+        }
+
+        private void BtnMenuSettings2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
+                btnMenuSettings2.Enabled = false;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelBookmarks.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelBlock.Visible = false;
+                panelBookmarks.Visible = false;
+                panelSettings.Visible = true;
+                SetupBookmarksScreen();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuBookmarks_Click");
+            }
+
         }
 
         private void BtnMenuSettings_Click(object sender, EventArgs e)
@@ -8552,6 +8626,10 @@ namespace SATSuma
                 if (panelBookmarks.Visible)
                 {
                     lblNowViewing.Text = "Bookmarks";
+                }
+                if (panelSettings.Visible)
+                {
+                    lblNowViewing.Text = "Settings";
                 }
                 btnAddToBookmarks.Enabled = false;
             }
@@ -8977,5 +9055,68 @@ namespace SATSuma
             }
         }
         #endregion
+
+        private bool isTextBoxSettingsMempoolURLWatermarkTextDisplayed = true;
+
+        private void TextBoxSettingsMempoolURL_Enter(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsMempoolURL.Text = "";
+                textBoxSettingsMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxSettingsMempoolURL_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxSettingsMempoolURL.Text))
+            {
+                textBoxSettingsMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxSettingsMempoolURL.ForeColor = Color.Gray;
+                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxSettingsMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxSettingsMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsMempoolURL.Text = "";
+                textBoxSettingsMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
+            }
+            else
+            {
+                previousXpubNodeStringToCompare = textBoxSettingsMempoolURL.Text;
+            }
+        }
+
+        private void TextBoxSettingsMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (previousXpubNodeStringToCompare != textBoxSettingsMempoolURL.Text)
+            {
+                textBoxSubmittedXpub.Enabled = false;
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+                label161.Text = "invalid / node offline";
+                textBoxSubmittedXpub.Text = "";
+                previousXpubNodeStringToCompare = textBoxSettingsMempoolURL.Text;
+                textBoxMempoolURL.Text = textBoxSettingsMempoolURL.Text;
+                CheckXpubNodeIsOnline();
+            }
+        }
+
+
     }
 }

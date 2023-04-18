@@ -289,12 +289,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="settingsScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="settingsScreen.Designer.cs">
-      <DependentUpon>settingsScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="splash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -311,9 +305,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="helpScreen.resx">
       <DependentUpon>helpScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="settingsScreen.resx">
-      <DependentUpon>settingsScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="splash.resx">
       <DependentUpon>splash.cs</DependentUpon>

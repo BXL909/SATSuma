@@ -25,6 +25,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
+ * test and enable testnet
  */
 
 #region Using
@@ -77,6 +78,7 @@ using System.Security.Cryptography;
 using static System.Net.WebRequestMethods;
 using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
 #endregion
 
@@ -97,16 +99,16 @@ namespace SATSuma
         private bool RunBlockchairComJSONAPI = true;
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
-#pragma warning disable IDE0044 // Add readonly modifier
-        private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
-#pragma warning restore IDE0044 // Add readonly modifier
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
+#pragma warning disable IDE0044 // Add readonly modifier
+        private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
         private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
+#pragma warning restore IDE0044 // Add readonly modifier
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
@@ -177,7 +179,7 @@ namespace SATSuma
                     if (bookmark.Type == "node")
                     {
                         textBoxMempoolURL.Text = bookmark.Data; // move node url string to the form
-                        textBoxSettingsMempoolURL.Text = bookmark.Data; // and to the settings screen
+                        textBoxSettingsXpubMempoolURL.Text = bookmark.Data; // and to the settings screen
                         CheckXpubNodeIsOnline();
                         nodeURLInFile = bookmark.Data;
                         nodeURLAlreadySavedInFile = true;
@@ -185,8 +187,6 @@ namespace SATSuma
                     }
                     nodeURLAlreadySavedInFile = false;
                 }
-
-                comboAPISelectorForQueries.SelectedIndex = 0; //initial value of combobox for selecting query API on settings screen
 
                 UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
@@ -241,14 +241,21 @@ namespace SATSuma
             if (ObtainedHalveningSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
             {
                 string secondsString = lblHalveningSecondsRemaining.Text;
-                int SecondsToHalving = int.Parse(secondsString);
-                if (SecondsToHalving > 0)
+                try
                 {
-                    SecondsToHalving--; // one second closer to the halvening!
-                    lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                    int SecondsToHalving = int.Parse(secondsString);
+                    if (SecondsToHalving > 0)
                     {
-                        lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
-                    });
+                        SecondsToHalving--; // one second closer to the halvening!
+                        lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                        {
+                            lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
+                        });
+                    }
+                }
+                catch 
+                {
+                    lblHalveningSecondsRemaining.Text = "disabled";
                 }
             }
 
@@ -316,7 +323,7 @@ namespace SATSuma
                         var blocksJson = await _blockService.GetBlockDataAsync(lblBlockNumber.Text); 
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
-                        // NEED TO HANDLE 'BLOCKS' BEING NULL HERE
+                        // !!!NEED TO HANDLE 'BLOCKS' BEING NULL HERE
                         lblTransactions.Invoke((MethodInvoker)delegate
                         {
                             lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
@@ -856,6 +863,36 @@ namespace SATSuma
                                 channelLabel.Invoke((MethodInvoker)delegate
                                 {
                                     channelLabel.Text = result7.channels[i];
+                                });
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < 10; i++)
+                            {
+                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
+                                aliasLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    aliasLabel.Text = "disabled";
+                                });
+                                System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
+                                capacityLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    capacityLabel.Text = "disabled";
+                                });
+                            }
+                            var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
+                                aliasLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    aliasLabel.Text = "disabled";
+                                });
+                                System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
+                                channelLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    channelLabel.Text = "disabled";
                                 });
                             }
                         }
@@ -1729,10 +1766,10 @@ namespace SATSuma
                 var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                 if (!response.IsSuccessStatusCode)
                 {
-                    lblNodeStatusLight.ForeColor = Color.Red;
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblActiveNode.Text = "Disconnected/error";
+                        lblSettingsCustomNodeStatus.Text = "Disconnected/error";
                     });
                     lblErrorMessage.Invoke((MethodInvoker)delegate
                     {
@@ -5020,10 +5057,10 @@ namespace SATSuma
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
-                            lblNodeStatusLight.ForeColor = Color.Red;
-                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                             {
-                                lblActiveNode.Text = "Disconnected/error";
+                                lblSettingsCustomNodeStatus.Text = "Disconnected/error";
                             });
                             lblErrorMessage.Invoke((MethodInvoker)delegate
                             {
@@ -5256,10 +5293,10 @@ namespace SATSuma
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
-                            lblNodeStatusLight.ForeColor = Color.Red;
-                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                             {
-                                lblActiveNode.Text = "Disconnected/error";
+                                lblSettingsCustomNodeStatus.Text = "Disconnected/error";
                             });
                             lblErrorMessage.Invoke((MethodInvoker)delegate
                             {
@@ -5492,10 +5529,10 @@ namespace SATSuma
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
-                            lblNodeStatusLight.ForeColor = Color.Red;
-                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                             {
-                                lblActiveNode.Text = "Disconnected/error";
+                                lblSettingsCustomNodeStatus.Text = "Disconnected/error";
                             });
                             lblErrorMessage.Invoke((MethodInvoker)delegate
                             {
@@ -5732,10 +5769,10 @@ namespace SATSuma
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
-                            lblNodeStatusLight.ForeColor = Color.Red;
-                            lblActiveNode.Invoke((MethodInvoker)delegate
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                             {
-                                lblActiveNode.Text = "Disconnected/error";
+                                lblSettingsCustomNodeStatus.Text = "Disconnected/error";
                             });
                             lblErrorMessage.Invoke((MethodInvoker)delegate
                             {
@@ -6187,9 +6224,9 @@ namespace SATSuma
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             label18.ForeColor = Color.IndianRed;
-                            label161.ForeColor = Color.IndianRed;
+                            lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
                             label18.Text = "node offline";
-                            label161.Text = "node offline";
+                            lblSettingsXpubNodeStatus.Text = "node offline";
                             return;
                         }
                     }
@@ -6198,9 +6235,9 @@ namespace SATSuma
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         label18.ForeColor = Color.IndianRed;
-                        label161.ForeColor = Color.IndianRed;
+                        lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
                         label18.Text = "node offline";
-                        label161.Text = "node offline";
+                        lblSettingsXpubNodeStatus.Text = "node offline";
                         return;
                     }
                 }
@@ -6212,15 +6249,15 @@ namespace SATSuma
                     lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     label18.ForeColor = Color.OliveDrab;
-                    label161.ForeColor = Color.OliveDrab;
+                    lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
-                    label161.Text = "node online";
+                    lblSettingsXpubNodeStatus.Text = "node online";
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
                     string bookmarkData;
                     string keyCheck = "21m";
                     bookmarkData = textBoxMempoolURL.Text;
-                    textBoxSettingsMempoolURL.Text = bookmarkData; // write it back to the settings screen too
+                    textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
                     var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                     if (!nodeURLAlreadySavedInFile)
                     {
@@ -6263,7 +6300,7 @@ namespace SATSuma
                     lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                     lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                     label18.Text = "invalid / node offline";
-                    label161.Text = "invalid / node offline";
+                    lblSettingsXpubNodeStatus.Text = "invalid / node offline";
                 }
             }
             catch (HttpRequestException)
@@ -6272,7 +6309,7 @@ namespace SATSuma
                 lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 label18.Text = "invalid / node offline";
-                label161.Text = "invalid / node offline";
+                lblSettingsXpubNodeStatus.Text = "invalid / node offline";
             }
         }
 
@@ -7499,6 +7536,516 @@ namespace SATSuma
         }
         #endregion
 
+        #region SETTINGS SCREEN
+        private bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true;
+
+        private void TextBoxSettingsXpubMempoolURL_Enter(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsXpubMempoolURL.Text = "";
+                textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxSettingsXpubMempoolURL_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxSettingsXpubMempoolURL.Text))
+            {
+                textBoxSettingsXpubMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxSettingsXpubMempoolURL.ForeColor = Color.Gray;
+                isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxSettingsXpubMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxSettingsXpubMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsXpubMempoolURL.Text = "";
+                textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = false;
+            }
+            else
+            {
+                previousXpubNodeStringToCompare = textBoxSettingsXpubMempoolURL.Text;
+            }
+        }
+
+        private void TextBoxSettingsXpubMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (previousXpubNodeStringToCompare != textBoxSettingsXpubMempoolURL.Text)
+            {
+                textBoxSubmittedXpub.Enabled = false;
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+                lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+                textBoxSubmittedXpub.Text = "";
+                previousXpubNodeStringToCompare = textBoxSettingsXpubMempoolURL.Text;
+                textBoxMempoolURL.Text = textBoxSettingsXpubMempoolURL.Text;
+                CheckXpubNodeIsOnline();
+            }
+        }
+
+        private void LblSettingsNodeMainnet_Click(object sender, EventArgs e)
+        {
+            if (lblSettingsNodeMainnet.Text == "❌")
+            {
+                lblSettingsNodeMainnet.ForeColor = Color.Green;
+                lblSettingsNodeMainnet.Text = "✔️";
+                lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeTestnet.Text = "❌";
+                lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                lblSettingsNodeCustom.Text = "❌";
+                textBoxSettingsCustomMempoolURL.Enabled = false;
+                NodeURL = "https://mempool.space/api/";
+                CheckBlockchainExplorerApiStatus();
+            }
+
+        }
+
+        private void LblSettingsNodeTestnet_Click(object sender, EventArgs e)
+        {
+            if (lblSettingsNodeTestnet.Text == "❌")
+            {
+                lblSettingsNodeTestnet.ForeColor = Color.Green;
+                lblSettingsNodeTestnet.Text = "✔️";
+                lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeMainnet.Text = "❌";
+                lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                lblSettingsNodeCustom.Text = "❌";
+                textBoxSettingsCustomMempoolURL.Enabled = false;
+                NodeURL = "https://mempool.space/testnet/api/";
+                CheckBlockchainExplorerApiStatus();
+            }
+        }
+
+        private void LblSettingsNodeCustom_Click(object sender, EventArgs e)
+        {
+            if (lblSettingsNodeCustom.Text == "❌")
+            {
+                lblSettingsNodeCustom.ForeColor = Color.Green;
+                lblSettingsNodeCustom.Text = "✔️";
+                lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeMainnet.Text = "❌";
+                lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeTestnet.Text = "❌";
+                textBoxSettingsCustomMempoolURL.Enabled = true;
+                textBoxSettingsCustomMempoolURL.Focus();
+            }
+        }
+
+        private bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
+        private string previousCustomNodeStringToCompare = "";
+
+        private void TextBoxSettingsCustomMempoolURL_Enter(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsCustomMempoolURL.Text = "";
+                textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxSettingsCustomMempoolURL.Text))
+            {
+                textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxSettingsCustomMempoolURL.ForeColor = Color.Gray;
+                isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsCustomMempoolURL.Text = "";
+                textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+            }
+            else
+            {
+                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+            lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+            CheckCustomNodeIsOnline();
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+            {
+                textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+            }
+        }
+
+        private async void CheckCustomNodeIsOnline()
+        {
+            using var client = new HttpClient();
+            try
+            {
+                Ping pingSender = new Ping();
+                string pingAddress = "";
+
+
+                if (textBoxSettingsCustomMempoolURL.Text != "")
+                {
+                    // get the contents of the textbox
+                    string url = textBoxSettingsCustomMempoolURL.Text;
+
+                    // create a regex pattern to match URLs
+                    string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                    // create a regex object
+                    Regex regex = new Regex(pattern);
+
+                    // use the regex object to match the contents of the textbox
+                    if (regex.IsMatch(url)) // (at least partially) valid url
+                    {
+                        try
+                        {
+                            NodeURL = textBoxSettingsCustomMempoolURL.Text;
+                            // get the hostname from the URL
+                            // parse the URL to extract the hostname
+                            Uri uri = new Uri(NodeURL);
+                            string hostname = uri.Host;
+
+                            // resolve the hostname to an IP address
+                            IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                            IPAddress ipAddress = hostEntry.AddressList[0];
+                            pingAddress = ipAddress.ToString();
+                        }
+                        catch
+                        {
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                            lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                            lblSettingsCustomNodeStatus.Text = "node offline";
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                        lblSettingsCustomNodeStatus.Text = "node offline";
+                        return;
+                    }
+                }
+
+                // handle this being null!
+                PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                if (reply.Status == IPStatus.Success)
+                {
+                    lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
+                    lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
+                    lblSettingsCustomNodeStatus.Text = "node online";
+                    /*
+                    // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
+                    DateTime today = DateTime.Today;
+                    string bookmarkData;
+                    string keyCheck = "21m";
+                    bookmarkData = textBoxMempoolURL.Text;
+                    textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
+                    var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                    if (!nodeURLAlreadySavedInFile)
+                    {
+
+                        // Read the existing bookmarks from the JSON file
+                        var bookmarks = ReadBookmarksFromJsonFile();
+
+                        // Add the new bookmark to the list
+                        bookmarks.Add(newBookmark);
+
+                        // Write the updated list of bookmarks back to the JSON file
+                        WriteBookmarksToJsonFile(bookmarks);
+                        nodeURLAlreadySavedInFile = true;
+                        nodeURLInFile = bookmarkData;
+                    }
+                    else
+                    {
+                        if (nodeURLInFile != textBoxMempoolURL.Text)
+                        {
+                            //delete the currently saved node url
+                            DeleteBookmarkFromJsonFile(nodeURLInFile);
+                            // Read the existing bookmarks from the JSON file
+                            var bookmarks = ReadBookmarksFromJsonFile();
+                            // Add the new bookmark to the list
+                            bookmarks.Add(newBookmark);
+                            // Write the updated list of bookmarks back to the JSON file
+                            WriteBookmarksToJsonFile(bookmarks);
+                            nodeURLAlreadySavedInFile = true;
+                            nodeURLInFile = bookmarkData;
+                        }
+                    }
+                    */
+
+                }
+                else
+                {
+                    // API is not online
+                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                }
+            }
+            catch (HttpRequestException)
+            {
+                // API is not online
+                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            }
+        }
+
+        private void LblBlockchairComJSON_Click(object sender, EventArgs e)
+        {
+            if (lblBlockchairComJSON.Text == "✔️")
+            {
+                lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                lblBlockchairComJSON.Text = "❌";
+                RunBlockchairComJSONAPI = false;
+            }
+            else
+            {
+                lblBlockchairComJSON.ForeColor = Color.Green;
+                lblBlockchairComJSON.Text = "✔️";
+                RunBlockchairComJSONAPI = true;
+            }
+        }
+
+        private void LblBitcoinExplorerEndpoints_Click(object sender, EventArgs e)
+        {
+            if (lblBitcoinExplorerEndpoints.Text == "✔️")
+            {
+                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                lblBitcoinExplorerEndpoints.Text = "❌";
+                RunBitcoinExplorerEndpointAPI = false;
+                RunBitcoinExplorerOrgJSONAPI = false;
+            }
+            else
+            {
+                lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                lblBitcoinExplorerEndpoints.Text = "✔️";
+                RunBitcoinExplorerEndpointAPI = true;
+                RunBitcoinExplorerOrgJSONAPI = true;
+            }
+        }
+
+        private void LblBlockchainInfoEndpoints_Click(object sender, EventArgs e)
+        {
+            if (lblBlockchainInfoEndpoints.Text == "✔️")
+            {
+                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                lblBlockchainInfoEndpoints.Text = "❌";
+                RunBlockchainInfoEndpointAPI = false;
+            }
+            else
+            {
+                lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                lblBlockchainInfoEndpoints.Text = "✔️";
+                RunBlockchainInfoEndpointAPI = true;
+            }
+        }
+
+        private void LblBitcoinDashboard_Click(object sender, EventArgs e)
+        {
+            if (lblBitcoinDashboard.Text == "✔️")
+            {
+                lblBitcoinDashboard.ForeColor = Color.IndianRed;
+                lblBitcoinDashboard.Text = "❌";
+                lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                lblBlockchairComJSON.Text = "❌";
+                RunBlockchairComJSONAPI = false;
+                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                lblBitcoinExplorerEndpoints.Text = "❌";
+                RunBitcoinExplorerEndpointAPI = false;
+                RunBitcoinExplorerOrgJSONAPI = false;
+                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                lblBlockchainInfoEndpoints.Text = "❌";
+                RunBlockchainInfoEndpointAPI = false;
+                lblBlockchairComJSON.Enabled = false;
+                lblBitcoinExplorerEndpoints.Enabled = false;
+                lblBlockchainInfoEndpoints.Enabled = false;
+            }
+            else
+            {
+                lblBitcoinDashboard.ForeColor = Color.Green;
+                lblBitcoinDashboard.Text = "✔️";
+                lblBlockchairComJSON.ForeColor = Color.Green;
+                lblBlockchairComJSON.Text = "✔️";
+                RunBlockchairComJSONAPI = true;
+                lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                lblBitcoinExplorerEndpoints.Text = "✔️";
+                RunBitcoinExplorerEndpointAPI = true;
+                RunBitcoinExplorerOrgJSONAPI = true;
+                lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                lblBlockchainInfoEndpoints.Text = "✔️";
+                RunBlockchainInfoEndpointAPI = true;
+                lblBlockchairComJSON.Enabled = true;
+                lblBitcoinExplorerEndpoints.Enabled = true;
+                lblBlockchainInfoEndpoints.Enabled = true;
+            }
+        }
+
+        private void LblLightningDashboard_Click(object sender, EventArgs e)
+        {
+            if (lblLightningDashboard.Text == "✔️")
+            {
+                lblMempoolLightningJSON.ForeColor = Color.Red;
+                lblMempoolLightningJSON.Text = "❌";
+                lblLightningDashboard.ForeColor = Color.Red;
+                lblLightningDashboard.Text = "❌";
+                RunMempoolSpaceLightningAPI = false;
+                lblMempoolLightningJSON.Enabled = false;
+            }
+            else
+            {
+                lblMempoolLightningJSON.ForeColor = Color.Green;
+                lblMempoolLightningJSON.Text = "✔️";
+                lblLightningDashboard.ForeColor = Color.Green;
+                lblLightningDashboard.Text = "✔️";
+                RunMempoolSpaceLightningAPI = true;
+                lblMempoolLightningJSON.Enabled = true;
+            }
+        }
+
+        private void LblMempoolLightningJSON_Click(object sender, EventArgs e)
+        {
+            if (lblMempoolLightningJSON.Text == "✔️")
+            {
+                lblMempoolLightningJSON.ForeColor = Color.Red;
+                lblMempoolLightningJSON.Text = "❌";
+                lblLightningDashboard.ForeColor = Color.Red;
+                lblLightningDashboard.Text = "❌";
+                RunMempoolSpaceLightningAPI = false;
+            }
+            else
+            {
+                lblMempoolLightningJSON.ForeColor = Color.Green;
+                lblMempoolLightningJSON.Text = "✔️";
+                lblLightningDashboard.ForeColor = Color.Green;
+                lblLightningDashboard.Text = "✔️";
+                RunMempoolSpaceLightningAPI = true;
+            }
+        }
+
+        private void NumericUpDownDashboardRefresh_ValueChanged(object sender, EventArgs e)
+        {
+            APIGroup1DisplayTimerIntervalSecsConstant = (int)numericUpDownDashboardRefresh.Value * 60;
+            intAPIGroup1TimerIntervalMillisecsConstant = (((int)numericUpDownDashboardRefresh.Value * 60) * 1000);
+            intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
+            timerAPIRefreshPeriod.Stop();
+            timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
+            timerAPIRefreshPeriod.Start();
+        }
+
+        private void BtnColorDataFields_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForDataFields = new ColorDialog();
+            colorDlgForDataFields.AllowFullOpen = true;
+            colorDlgForDataFields.AnyColor = true;
+            colorDlgForDataFields.SolidColorOnly = true;
+            colorDlgForDataFields.Color = Color.Red;
+
+            if (colorDlgForDataFields.ShowDialog() == DialogResult.OK)
+            {
+                //header
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesNextBlock, lblFees30Mins, lblFees60Mins, lblFees1Day, lblHeaderHashrate };
+                foreach (Control control in listHeaderDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //bitcoindashboard
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblHalveningBlock, lblEstimatedHalvingDate, lblHalveningSecondsRemaining, lblBlockRewardAfterHalving };
+                foreach (Control control in listBitcoinDashboardDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //lightningdashboard
+                Control[] listLightningDashboardDataFieldsToColor = { lblTotalCapacity, lblClearnetCapacity, lblTorCapacity, lblUnknownCapacity, lblNodeCount, lblTorNodes, lblClearnetNodes, lblClearnetTorNodes, lblUnannouncedNodes, lblChannelCount, lblAverageCapacity, lblAverageFeeRate, lblAverageBaseFeeMtokens, lblMedCapacity, lblMedFeeRate, lblMedBaseFeeTokens, aliasLabel1, aliasLabel2, aliasLabel3, aliasLabel4, aliasLabel5, aliasLabel6, aliasLabel7, aliasLabel8, aliasLabel9, aliasLabel10, capacityLabel1, capacityLabel2, capacityLabel3, capacityLabel4, capacityLabel5, capacityLabel6, capacityLabel7, capacityLabel8, capacityLabel9, capacityLabel10, aliasConnLabel1, aliasConnLabel2, aliasConnLabel3, aliasConnLabel4, aliasConnLabel5, aliasConnLabel6, aliasConnLabel7, aliasConnLabel8, aliasConnLabel9, aliasConnLabel10, channelLabel1, channelLabel2, channelLabel3, channelLabel4, channelLabel5, channelLabel6, channelLabel7, channelLabel8, channelLabel9, channelLabel10 };
+                foreach (Control control in listLightningDashboardDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //address
+                Control[] listAddressDataFieldsToColor = { lblAddressType, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs };
+                foreach (Control control in listAddressDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //block
+                Control[] listBlockDataFieldsToColor = { lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner };
+                foreach (Control control in listBlockDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //blocklist
+                Control[] listBlocklistDataFieldsToColor = { lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockReward, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
+                foreach (Control control in listBlocklistDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //transaction
+                Control[] listTransactionDataFieldsToColor = { lblInvalidTransaction, lblTransactionBlockHeight, lblTransactionBlockTime, lblTransactionConfirmations, lblTransactionLockTime, lblTransactionVersion, lblTransactionInputCount, lblCoinbase, lblTransactionFee, lblTransactionOutputCount, lblTransactionSize, lblTransactionWeight, lblTotalInputValue, lblTotalOutputValue };
+                foreach (Control control in listTransactionDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //xpub
+                Control[] listXpubDataFieldsToColor = { lblCheckEachAddressTypeCount, lblCheckAllAddressTypesCount, lblSegwitUsedAddresses, lblSegwitSummary, lblLegacyUsedAddresses, lblLegacySummary, lblSegwitP2SHUsedAddresses, lblSegwitP2SHSummary, lblP2SHUsedAddresses, lblP2SHSummary, lblXpubConfirmedReceived, lblXpubConfirmedSpent, lblXpubConfirmedUnspent };
+                foreach (Control control in listXpubDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //bookmarks
+                Control[] listBookmarksDataFieldsToColor = { lblBookmarkTotalCount, lblBookmarkAddressCount, lblBookmarkBlocksCount, lblBookmarkTransactionsCount, lblBookmarkXpubsCount, lblBookmarkDataInFull, lblBookmarkNoteInFull };
+                foreach (Control control in listBookmarksDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+            }
+        }
+
+        private void btnColorLabels_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForLabels = new ColorDialog();
+            colorDlgForLabels.AllowFullOpen = true;
+            colorDlgForLabels.AnyColor = true;
+            colorDlgForLabels.SolidColorOnly = true;
+            colorDlgForLabels.Color = Color.Red;
+
+            if (colorDlgForLabels.ShowDialog() == DialogResult.OK)
+            {
+                //header
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29 };
+                foreach (Control control in listHeaderLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+            }
+        }
+
+        #endregion
+
         #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
@@ -7818,9 +8365,9 @@ namespace SATSuma
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
                 {
-                    lblNodeStatusLight.Invoke((MethodInvoker)delegate
+                    lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
-                        lblNodeStatusLight.ForeColor = Color.OliveDrab;
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
                     });
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
@@ -7831,17 +8378,17 @@ namespace SATSuma
                     {
                         displayNodeName = "Testnet";
                     }
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblActiveNode.Text = displayNodeName + " status";
+                        lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
                     });
                 }
                 else
                 {
                     // API is not online
-                    lblNodeStatusLight.Invoke((MethodInvoker)delegate
+                    lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
-                        lblNodeStatusLight.ForeColor = Color.Red;
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
                     });
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
@@ -7852,18 +8399,18 @@ namespace SATSuma
                     {
                         displayNodeName = "Testnet";
                     }
-                    lblActiveNode.Invoke((MethodInvoker)delegate
+                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblActiveNode.Text = displayNodeName + " status";
+                        lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
                     });
                 }
             }
             catch (HttpRequestException)
             {
                 // API is not online
-                lblNodeStatusLight.Invoke((MethodInvoker)delegate
+                lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
-                    lblNodeStatusLight.ForeColor = Color.Red;
+                    lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
                 });
                 var displayNodeName = "";
                 if (NodeURL == "https://mempool.space/api/")
@@ -7874,9 +8421,9 @@ namespace SATSuma
                 {
                     displayNodeName = "Testnet";
                 }
-                lblActiveNode.Invoke((MethodInvoker)delegate
+                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblActiveNode.Text = displayNodeName + " status";
+                    lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
                 });
             }
             catch (Exception ex)
@@ -7886,9 +8433,9 @@ namespace SATSuma
                     lblErrorMessage.Text = "CheckBlockchainExplorerApiStatus: " + ex.Message;
                 });
             }
-            lblNodeStatusLight.Invoke((MethodInvoker)delegate
+            lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
             {
-                lblNodeStatusLight.Location = new Point(lblActiveNode.Location.X + lblActiveNode.Width, lblActiveNode.Location.Y);
+                lblSettingsCustomNodeStatusLight.Location = new Point(lblSettingsCustomNodeStatus.Location.X + lblSettingsCustomNodeStatus.Width, lblSettingsCustomNodeStatus.Location.Y);
             });
         }
 
@@ -8390,92 +8937,6 @@ namespace SATSuma
 
         }
 
-        private void BtnMenuSettings_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
-                panelCurrency.Invoke((MethodInvoker)delegate
-                {
-                    panelCurrency.Height = 24;
-                });
-                SettingsScreen.CreateInstance();
-                SettingsScreen.Instance.ShowDialog();
-                // read all fields from the settings screen and set variables for use on the main form
-                if (SettingsScreen.Instance.BitcoinExplorerEndpointsEnabled)
-                {
-                    RunBitcoinExplorerEndpointAPI = true;
-                }
-                else
-                {
-                    RunBitcoinExplorerEndpointAPI = false;
-                }
-                if (SettingsScreen.Instance.BlockchainInfoEndpointsEnabled)
-                {
-                    RunBlockchainInfoEndpointAPI = true;
-                }
-                else
-                {
-                    RunBlockchainInfoEndpointAPI = false;
-                }
-                if (SettingsScreen.Instance.BitcoinExplorerOrgJSONEnabled)
-                {
-                    RunBitcoinExplorerOrgJSONAPI = true;
-                }
-                else
-                {
-                    RunBitcoinExplorerOrgJSONAPI = false;
-                }
-                if (SettingsScreen.Instance.BlockchairComJSONEnabled)
-                {
-                    RunBlockchairComJSONAPI = true;
-                }
-                else
-                {
-                    RunBlockchairComJSONAPI = false;
-                }
-                if (SettingsScreen.Instance.MempoolSpaceLightningJSONEnabled)
-                {
-                    RunMempoolSpaceLightningAPI = true;
-                }
-                else
-                {
-                    RunMempoolSpaceLightningAPI = false;
-                }
-                if (SettingsScreen.Instance.NodeURL != NodeURL)
-                {
-                    NodeURL = SettingsScreen.Instance.NodeURL;
-                    _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-                    _blockService = new BlockDataService(NodeURL);
-                    _transactionService = new TransactionService(NodeURL);
-                    _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-                    LookupBlockList(); // refresh the block list screen
-                    LookupBlock(); // refresh the block screen
-                    textboxSubmittedAddress.Text = ""; //erase and refresh address screen
-                    textBoxTransactionID.Text = ""; //erase and refresh transaction screen
-                    textBoxSubmittedXpub.Text = ""; //erase and refresh xpub screen
-                }
-                CheckBlockchainExplorerApiStatus();
-
-                if (APIGroup1DisplayTimerIntervalSecsConstant != (SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60)) // if user has changed refresh frequency
-                {
-                    APIGroup1DisplayTimerIntervalSecsConstant = SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60;
-                    intAPIGroup1TimerIntervalMillisecsConstant = ((SettingsScreen.Instance.APIGroup1RefreshInMinsSelection * 60) * 1000);
-                    intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    timerAPIRefreshPeriod.Stop();
-                    timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
-                    timerAPIRefreshPeriod.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnMenuSettings_Click");
-            }
-        }
-
         private void BtnHelp_Click(object sender, EventArgs e) // help screen
         {
             try
@@ -8531,6 +8992,11 @@ namespace SATSuma
         public Panel GetPanelBookmarks() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelBookmarks;
+        }
+
+        public Panel GetPanelSettings() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelSettings;
         }
 
         public Panel GetPanelMenu() // enables help screen to get state (visible) of panel to determine which help text to show
@@ -9045,7 +9511,6 @@ namespace SATSuma
             public string Value { get; set; }
         }
 
-
         public static class DateTimeExtensions
         {
             public static DateTime FromUnixTimeMilliseconds(long milliseconds)
@@ -9055,68 +9520,5 @@ namespace SATSuma
             }
         }
         #endregion
-
-        private bool isTextBoxSettingsMempoolURLWatermarkTextDisplayed = true;
-
-        private void TextBoxSettingsMempoolURL_Enter(object sender, EventArgs e)
-        {
-            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
-            {
-                textBoxSettingsMempoolURL.Text = "";
-                textBoxSettingsMempoolURL.ForeColor = Color.White;
-                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxSettingsMempoolURL_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxSettingsMempoolURL.Text))
-            {
-                textBoxSettingsMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                textBoxSettingsMempoolURL.ForeColor = Color.Gray;
-                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = true;
-            }
-        }
-
-        private void TextBoxSettingsMempoolURL_TextChanged(object sender, EventArgs e)
-        {
-            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
-            {
-                textBoxSettingsMempoolURL.ForeColor = Color.White;
-                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
-            }
-        }
-
-        private void TextBoxSettingsMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (isTextBoxSettingsMempoolURLWatermarkTextDisplayed)
-            {
-                textBoxSettingsMempoolURL.Text = "";
-                textBoxSettingsMempoolURL.ForeColor = Color.White;
-                isTextBoxSettingsMempoolURLWatermarkTextDisplayed = false;
-            }
-            else
-            {
-                previousXpubNodeStringToCompare = textBoxSettingsMempoolURL.Text;
-            }
-        }
-
-        private void TextBoxSettingsMempoolURL_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (previousXpubNodeStringToCompare != textBoxSettingsMempoolURL.Text)
-            {
-                textBoxSubmittedXpub.Enabled = false;
-                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                label18.Text = "invalid / node offline";
-                label161.Text = "invalid / node offline";
-                textBoxSubmittedXpub.Text = "";
-                previousXpubNodeStringToCompare = textBoxSettingsMempoolURL.Text;
-                textBoxMempoolURL.Text = textBoxSettingsMempoolURL.Text;
-                CheckXpubNodeIsOnline();
-            }
-        }
-
-
     }
 }

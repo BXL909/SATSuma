@@ -26,6 +26,8 @@ Version history 🍊
  * sorting of bookmarks?
  * find P2SH xpub to test with
  * test and enable testnet
+ * customisable background and header backgrounds
+ * save user settings and appearance preferences
  */
 
 #region Using
@@ -140,6 +142,7 @@ namespace SATSuma
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
+        Color linesColor = Color.FromArgb(106, 72, 9);
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -1579,7 +1582,8 @@ namespace SATSuma
         //---------------------- CONNECTING LINES BETWEEN FIELDS ON LIGHTNING DASHBOARD -------------------------------
         private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
         {
-            using Pen pen = new Pen(Color.FromArgb(106, 72, 9), 1);
+            
+            using Pen pen = new Pen(linesColor, 1);
             // Capacity connecting lines
             e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
             e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
@@ -3969,7 +3973,7 @@ namespace SATSuma
         // draw all the lines on the transaction diagram from the previously stored list.
         private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
         {
-            Pen pen = new Pen(Color.FromArgb(106, 72, 9));
+            Pen pen = new Pen(linesColor);
 
             // Iterate over the stored list of points and draw lines between them
             for (int i = 0; i < linePoints.Count - 1; i += 2)
@@ -7958,13 +7962,19 @@ namespace SATSuma
             timerAPIRefreshPeriod.Start();
         }
 
+        #endregion
+
+        #region APPEARANCE SCREEN
+
         private void BtnColorDataFields_Click(object sender, EventArgs e)
         {
-            ColorDialog colorDlgForDataFields = new ColorDialog();
-            colorDlgForDataFields.AllowFullOpen = true;
-            colorDlgForDataFields.AnyColor = true;
-            colorDlgForDataFields.SolidColorOnly = true;
-            colorDlgForDataFields.Color = Color.Red;
+            ColorDialog colorDlgForDataFields = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
 
             if (colorDlgForDataFields.ShowDialog() == DialogResult.OK)
             {
@@ -8017,21 +8027,29 @@ namespace SATSuma
                     control.ForeColor = colorDlgForDataFields.Color;
                 }
                 //bookmarks
-                Control[] listBookmarksDataFieldsToColor = { lblBookmarkTotalCount, lblBookmarkAddressCount, lblBookmarkBlocksCount, lblBookmarkTransactionsCount, lblBookmarkXpubsCount, lblBookmarkDataInFull, lblBookmarkNoteInFull };
+                Control[] listBookmarksDataFieldsToColor = { lblBookmarkTotalCount, lblBookmarkAddressCount, lblBookmarkBlocksCount, lblBookmarkTransactionsCount, lblBookmarkXpubsCount, lblBookmarkDataInFull, lblBookmarkNoteInFull, lblBookmarkProposalData };
                 foreach (Control control in listBookmarksDataFieldsToColor)
+                {
+                    control.ForeColor = colorDlgForDataFields.Color;
+                }
+                //settings
+                Control[] listSettingsDataFieldsToColor = { label154 };
+                foreach (Control control in listSettingsDataFieldsToColor)
                 {
                     control.ForeColor = colorDlgForDataFields.Color;
                 }
             }
         }
 
-        private void btnColorLabels_Click(object sender, EventArgs e)
+        private void BtnColorLabels_Click(object sender, EventArgs e)
         {
-            ColorDialog colorDlgForLabels = new ColorDialog();
-            colorDlgForLabels.AllowFullOpen = true;
-            colorDlgForLabels.AnyColor = true;
-            colorDlgForLabels.SolidColorOnly = true;
-            colorDlgForLabels.Color = Color.Red;
+            ColorDialog colorDlgForLabels = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
 
             if (colorDlgForLabels.ShowDialog() == DialogResult.OK)
             {
@@ -8041,9 +8059,426 @@ namespace SATSuma
                 {
                     control.ForeColor = colorDlgForLabels.Color;
                 }
+                //settings
+                Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178 };
+                foreach (Control control in listSettingsLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //bitcoindashboard
+                Control[] listBitcoinDashboardLabelsToColor = { lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85 };
+                foreach (Control control in listBitcoinDashboardLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //lightningdashboard
+                Control[] listLightningDashboardLabelsToColor = { label38, label50, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
+                foreach (Control control in listLightningDashboardLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //address
+                Control[] listAddressLabelsToColor = { label58, lblAddressTXPositionInList };
+                foreach (Control control in listAddressLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //block
+                Control[] listBlockLabelsToColor = { label60, lblBlockTXPositionInList };
+                foreach (Control control in listBlockLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //transaction
+                Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label132, label130 };
+                foreach (Control control in listTransactionLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //blocklist
+                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92 };
+                foreach (Control control in listBlockListLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //xpub
+                Control[] listXpubLabelsToColor = { label114, label139, label146, label18, label140, label141, label123, label111, label119, label135, label133, label129, label121 };
+                foreach (Control control in listXpubLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
+                //bookmarks
+                Control[] listBookmarksLabelsToColor = { label144, label153, label151, label147, label142, lblSelectedBookmarkType, label138 };
+                foreach (Control control in listBookmarksLabelsToColor)
+                {
+                    control.ForeColor = colorDlgForLabels.Color;
+                }
             }
         }
 
+
+        private void BtnColorHeadings_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForHeadings = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForHeadings.ShowDialog() == DialogResult.OK)
+            {
+                //header
+                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150 };
+                foreach (Control control in listHeaderHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //settings
+                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166 };
+                foreach (Control control in listSettingsHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //bitcoindashboard
+                Control[] listBitcoinDashboardHeadingsToColor = { label79, label84, label80, label81, label83, label86, label82 };
+                foreach (Control control in listBitcoinDashboardHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //lightningdashboard
+                Control[] listLightningDashboardHeadingsToColor = { label76, label78, label75, label53, label54 };
+                foreach (Control control in listLightningDashboardHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //address
+                Control[] listAddressHeadingsToColor = { label61, label59, label67, label63 };
+                foreach (Control control in listAddressHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //block
+                Control[] listBlockHeadingsToColor = { label64, label145, label69, label68, label74, label72, label66, label70, label65, label62, label71 };
+                foreach (Control control in listBlockHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //blocklist
+                Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight };
+                foreach (Control control in listBlockListHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //transaction
+                Control[] listTransactionHeadingsToColor = { label102, label102 };
+                foreach (Control control in listTransactionHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //xpub
+                Control[] listXpubHeadingsToColor = { label124, label117, label127 };
+                foreach (Control control in listXpubHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+                //bookmarks
+                Control[] listBookmarksHeadingsToColor = { label131 };
+                foreach (Control control in listBookmarksHeadingsToColor)
+                {
+                    control.ForeColor = colorDlgForHeadings.Color;
+                }
+            }
+        }
+
+        private void BtnColorProgressBars_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForProgressBars = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForProgressBars.ShowDialog() == DialogResult.OK)
+            {
+                //settings
+                colorProgressBar1.BarColor = colorDlgForProgressBars.Color;
+                //bitcoindashboard
+                progressBarNextDiffAdj.BarColor = colorDlgForProgressBars.Color;
+                progressBarProgressToHalving.BarColor = colorDlgForProgressBars.Color;
+                //blocklist
+                progressBarBlockListNextDiffAdj.BarColor = colorDlgForProgressBars.Color;
+                progressBarBlockListHalvingProgress.BarColor = colorDlgForProgressBars.Color;
+                //xpub
+                progressBarCheckEachAddressType.BarColor = colorDlgForProgressBars.Color;
+                progressBarCheckAllAddressTypes.BarColor = colorDlgForProgressBars.Color;
+            }
+        }
+
+        private void BtnColorButtons_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForButtons = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForButtons.ShowDialog() == DialogResult.OK)
+            {
+                //header
+                Control[] listHeaderButtonsToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks };
+                foreach (Control control in listHeaderButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //settings
+                Control[] listSettingsButtonsToColor = { button1, button2 };
+                foreach (Control control in listSettingsButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //address
+                Control[] listAddressButtonsToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
+                foreach (Control control in listAddressButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //block
+                Control[] listBlockButtonsToColor = { btnPreviousBlock, btnNextBlock, btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
+                foreach (Control control in listBlockButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //blocklist
+                Control[] listBlockListButtonsToColor = { btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
+                foreach (Control control in listBlockListButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //transaction
+                Control[] listTransactionButtonsToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
+                foreach (Control control in listTransactionButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //xpub
+                Control[] listXpubButtonsToColor = { btnViewAddressFromXpub, btnXpubAddressUp, btnXpubAddressesDown };
+                foreach (Control control in listXpubButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+                //bookmarks
+                Control[] listBookmarksButtonsToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark };
+                foreach (Control control in listBookmarksButtonsToColor)
+                {
+                    control.BackColor = colorDlgForButtons.Color;
+                }
+            }
+        }
+
+        private void BtnColorButtonText_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForButtonText = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForButtonText.ShowDialog() == DialogResult.OK)
+            {
+                //header
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks };
+                foreach (Control control in listHeaderButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //settings
+                Control[] listSettingsButtonTextToColor = { button1, button2 };
+                foreach (Control control in listSettingsButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //address
+                Control[] listAddressButtonTextToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
+                foreach (Control control in listAddressButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //block
+                Control[] listBlockButtonTextToColor = { btnPreviousBlock, btnNextBlock, btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
+                foreach (Control control in listBlockButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //blocklist
+                Control[] listBlockListButtonTextToColor = { btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
+                foreach (Control control in listBlockListButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //transaction
+                Control[] listTransactionButtonTextToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
+                foreach (Control control in listTransactionButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //xpub
+                Control[] listXpubButtonTextToColor = { btnViewAddressFromXpub, btnXpubAddressUp, btnXpubAddressesDown };
+                foreach (Control control in listXpubButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+                //bookmarks
+                Control[] listBookmarksButtonTextToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark };
+                foreach (Control control in listBookmarksButtonTextToColor)
+                {
+                    control.ForeColor = colorDlgForButtonText.Color;
+                }
+            }
+        }
+
+        private void BtnColorLines_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForLines = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForLines.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listLinesToColor = { panel14, panel17, panel16, panel18, panel21, panel15, panel19, panel61 };
+                foreach (Control control in listLinesToColor)
+                {
+                    control.BackColor = colorDlgForLines.Color;
+                }
+
+                linesColor = colorDlgForLines.Color;
+            }
+        }
+
+        private void BtnColorTableText_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForTableText = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForTableText.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks };
+                foreach (Control control in listTableTextToColor)
+                {
+                    control.ForeColor = colorDlgForTableText.Color;
+                }
+            }
+
+        }
+        
+        private void BtnColorOtherText_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForOtherText = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForOtherText.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listOtherTextToColor = { label159, label158, label165, label173, label164, lblURLWarning };
+                foreach (Control control in listOtherTextToColor)
+                {
+                    control.ForeColor = colorDlgForOtherText.Color;
+                }
+            }
+        }
+
+        private void BtnColorTextBox_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForTextBoxes = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForTextBoxes.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxMempoolURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh };
+                foreach (Control control in listTextBoxesToColor)
+                {
+                    control.BackColor = colorDlgForTextBoxes.Color;
+                }
+            }
+        }
+
+        private void BtnColorPriceBlock_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForPriceBlock = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForPriceBlock.ShowDialog() == DialogResult.OK)
+            {
+                lblHeaderPrice.ForeColor = colorDlgForPriceBlock.Color;
+                lblBlockNumber.ForeColor = colorDlgForPriceBlock.Color;
+                label175.ForeColor = colorDlgForPriceBlock.Color;
+            }
+        }
+
+        private void btnColorStatusError_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForStatusError = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForStatusError.ShowDialog() == DialogResult.OK)
+            {
+                lblRefreshSuccessOrFailMessage.ForeColor = colorDlgForStatusError.Color;
+                lblElapsedSinceUpdate.ForeColor = colorDlgForStatusError.Color;
+                lblErrorMessage.ForeColor = colorDlgForStatusError.Color;
+                label176.ForeColor = colorDlgForStatusError.Color;
+            }
+        }
+
+        private void lblShowClock_Click(object sender, EventArgs e)
+        {
+            if (lblShowClock.Text == "✔️")
+            {
+                lblShowClock.ForeColor = Color.IndianRed;
+                lblShowClock.Text = "❌";
+                lblTime.Visible = false;
+            }
+            else
+            {
+                lblShowClock.ForeColor = Color.Green;
+                lblShowClock.Text = "✔️";
+                lblTime.Visible = true;
+            }
+        }
         #endregion
 
         #region REUSEABLE STUFF
@@ -8452,7 +8887,7 @@ namespace SATSuma
             {
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 288;
+                    panelMenu.Height = 312;
                 });
                 panelCurrency.Invoke((MethodInvoker)delegate
                 {
@@ -8591,6 +9026,7 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuSettings2.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
                 panelBookmarks.Visible = false;
@@ -8600,6 +9036,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelSettings.Visible = false;
+                panelAppearance.Visible = false;
                 panelXpub.Visible = false;
                 panelBitcoinDashboard.Visible = true;
                 this.ResumeLayout();
@@ -8628,6 +9065,7 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuBlockList.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuLightningDashboard.Enabled = false;
@@ -8641,6 +9079,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
+                panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = true;
                 this.ResumeLayout();
             }
@@ -8668,6 +9107,7 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings2.Enabled = true;
@@ -8679,6 +9119,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
+                panelAppearance.Visible = false;
                 panelAddress.Visible = true;
             }
             catch (Exception ex)
@@ -8705,6 +9146,7 @@ namespace SATSuma
                 btnMenuTransaction.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBlockList.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings2.Enabled = true;
@@ -8713,6 +9155,7 @@ namespace SATSuma
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
+                panelAppearance.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
@@ -8749,6 +9192,7 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuAddress.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
@@ -8758,6 +9202,7 @@ namespace SATSuma
                 panelLightningDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelAddress.Visible = false;
+                panelAppearance.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
@@ -8785,6 +9230,7 @@ namespace SATSuma
                 btnMenuXpub.Enabled = true;
                 btnMenuTransaction.Enabled = true;
                 btnMenuBlock.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
@@ -8797,6 +9243,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
+                panelAppearance.Visible = false;
                 panelSettings.Visible = false;
                 panelBlockList.Visible = true;
                 if (textBoxBlockHeightToStartListFrom.Text == "")
@@ -8836,6 +9283,7 @@ namespace SATSuma
                 btnMenuBlock.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings2.Enabled = true;
@@ -8844,6 +9292,7 @@ namespace SATSuma
                 panelAddress.Visible = false;
                 panelBookmarks.Visible = false;
                 panelBlock.Visible = false;
+                panelAppearance.Visible = false;
                 panelTransaction.Visible = false;
                 panelBlockList.Visible = false;
                 panelXpub.Visible = false;
@@ -8876,6 +9325,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuBookmarks.Enabled = false;
                 panelBlockList.Visible = false;
@@ -8883,6 +9333,7 @@ namespace SATSuma
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
+                panelAppearance.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
@@ -8917,7 +9368,49 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
+                btnMenuAppearance.Enabled = true;
                 btnMenuSettings2.Enabled = false;
+                panelBlockList.Visible = false;
+                panelBitcoinDashboard.Visible = false;
+                panelBookmarks.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelAddress.Visible = false;
+                panelTransaction.Visible = false;
+                panelAppearance.Visible = false;
+                panelXpub.Visible = false;
+                panelBlock.Visible = false;
+                panelBookmarks.Visible = false;
+                panelSettings.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuSettings2_Click");
+            }
+        }
+
+        private void BtnAppearance_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 24;
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
+                btnMenuSettings2.Enabled = true;
+                btnMenuAppearance.Enabled = false;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -8927,15 +9420,14 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
                 panelBookmarks.Visible = false;
-                panelSettings.Visible = true;
-                SetupBookmarksScreen();
+                panelSettings.Visible = false;
+                panelAppearance.Visible = true;
             }
             catch (Exception ex)
             {
-                HandleException(ex, "btnMenuBookmarks_Click");
+                HandleException(ex, "btnAppearance_Click");
             }
-
-        }
+}
 
         private void BtnHelp_Click(object sender, EventArgs e) // help screen
         {
@@ -9015,7 +9507,6 @@ namespace SATSuma
                 lblTime.Invoke((MethodInvoker)delegate
                 {
                     lblTime.Text = DateTime.Now.ToString("HH:mm:ss");
-                    lblTime.Location = new Point(285 - lblTime.Width, lblTime.Location.Y);
                 });
 
             }
@@ -9096,6 +9587,10 @@ namespace SATSuma
                 if (panelSettings.Visible)
                 {
                     lblNowViewing.Text = "Settings";
+                }
+                if (panelAppearance.Visible)
+                {
+                    lblNowViewing.Text = "Appearance";
                 }
                 btnAddToBookmarks.Enabled = false;
             }
@@ -9519,6 +10014,11 @@ namespace SATSuma
                 return dateTimeOffset.UtcDateTime;
             }
         }
+
+
+
+
+
         #endregion
     }
 }

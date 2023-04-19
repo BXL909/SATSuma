@@ -346,6 +346,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\AppBackground2.jpg" />
+    <None Include="Resources\spectrum2.png" />
     <None Include="Resources\titleBGLongerOrangeFlipped.png" />
     <None Include="Resources\titleBGLongerOrange.png" />
     <None Include="Resources\tinylogo1.png" />

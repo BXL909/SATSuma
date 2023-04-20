@@ -346,6 +346,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\SatsumaBTCdir.png" />
+    <None Include="Resources\logoNoText.png" />
+    <None Include="Resources\PnVlfRPD_400x400.png" />
     <None Include="Resources\AppBackground2.jpg" />
     <None Include="Resources\spectrum2.png" />
     <None Include="Resources\titleBGLongerOrangeFlipped.png" />

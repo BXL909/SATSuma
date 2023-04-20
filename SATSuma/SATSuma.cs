@@ -26,7 +26,6 @@ Version history 🍊
  * sorting of bookmarks?
  * find P2SH xpub to test with
  * test and enable testnet
- * customisable background and header backgrounds
  * save user settings and appearance preferences
  */
 
@@ -143,6 +142,7 @@ namespace SATSuma
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
+        Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -8060,7 +8060,7 @@ namespace SATSuma
                     control.ForeColor = colorDlgForLabels.Color;
                 }
                 //settings
-                Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178 };
+                Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = colorDlgForLabels.Color;
@@ -8136,7 +8136,7 @@ namespace SATSuma
                     control.ForeColor = colorDlgForHeadings.Color;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166 };
+                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = colorDlgForHeadings.Color;
@@ -8445,7 +8445,7 @@ namespace SATSuma
             }
         }
 
-        private void btnColorStatusError_Click(object sender, EventArgs e)
+        private void BtnColorStatusError_Click(object sender, EventArgs e)
         {
             ColorDialog colorDlgForStatusError = new ColorDialog
             {
@@ -8464,7 +8464,7 @@ namespace SATSuma
             }
         }
 
-        private void lblShowClock_Click(object sender, EventArgs e)
+        private void LblShowClock_Click(object sender, EventArgs e)
         {
             if (lblShowClock.Text == "✔️")
             {
@@ -8477,6 +8477,297 @@ namespace SATSuma
                 lblShowClock.ForeColor = Color.Green;
                 lblShowClock.Text = "✔️";
                 lblTime.Visible = true;
+            }
+        }
+
+        private void PictureBoxGenesis_Click(object sender, EventArgs e)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                this.BackgroundImage = Properties.Resources.AppBackground2;
+            });
+        }
+
+        private void PictureBoxBTCDir_Click(object sender, EventArgs e)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
+                lblTime.Visible = false;
+            });
+        }
+
+        private void PictureBoxCustomColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForFormBackground = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForFormBackground.ShowDialog() == DialogResult.OK)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    this.BackColor = colorDlgForFormBackground.Color;
+                    this.BackgroundImage = null;
+                });
+                lblTime.Visible = false;
+            }
+
+        }
+
+        private void LblTitleBackgroundNone_Click(object sender, EventArgs e)
+        {
+            if (lblTitleBackgroundNone.Text != "✔️")
+            {
+                lblTitleBackgroundNone.ForeColor = Color.Green;
+                lblTitleBackgroundNone.Text = "✔️";
+                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                lblTitleBackgroundDefault.Text = "❌";
+                lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                lblTitleBackgroundCustom.Text = "❌";
+
+                //header
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57, panelRefreshStatusBar };
+                foreach (Control control in listHeaderHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //settings
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+                foreach (Control control in listSettingsHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //bitcoindashboard
+                Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9 };
+                foreach (Control control in listBitcoinDashboardHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //lightningdashboard
+                Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
+                foreach (Control control in listLightningDashboardHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //address
+                Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
+                foreach (Control control in listAddressHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //block
+                Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+                foreach (Control control in listBlockHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //blocklist
+                Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+                foreach (Control control in listBlockListHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //transaction
+                Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+                foreach (Control control in listTransactionHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+                //xpub
+                Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
+                foreach (Control control in listXpubHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = null;
+                }
+            }
+
+        }
+
+        private void LblTitleBackgroundDefault_Click(object sender, EventArgs e)
+        {
+            if (lblTitleBackgroundDefault.Text != "✔️")
+            {
+                lblTitleBackgroundDefault.ForeColor = Color.Green;
+                lblTitleBackgroundDefault.Text = "✔️";
+                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                lblTitleBackgroundCustom.Text = "❌";
+                //header
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57, panelRefreshStatusBar };
+                foreach (Control control in listHeaderHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //settings
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+                foreach (Control control in listSettingsHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //bitcoindashboard
+                Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9 };
+                foreach (Control control in listBitcoinDashboardHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //lightningdashboard
+                Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
+                foreach (Control control in listLightningDashboardHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //address
+                Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
+                foreach (Control control in listAddressHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //block
+                Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+                foreach (Control control in listBlockHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //blocklist
+                Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+                foreach (Control control in listBlockListHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //transaction
+                Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+                foreach (Control control in listTransactionHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+                //xpub
+                Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
+                foreach (Control control in listXpubHeadingsToColor)
+                {
+                    control.BackColor = Color.Transparent;
+                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                }
+            }
+        }
+
+        private void BtnColorTitleBackgrounds_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForTitleBackgrounds = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Black
+            };
+
+            if (colorDlgForTitleBackgrounds.ShowDialog() == DialogResult.OK)
+            {
+                titleBackgroundColor = colorDlgForTitleBackgrounds.Color;
+                SetCustomTitleBackgroundColor();
+            }
+        }
+
+        private void LblTitleBackgroundCustom_Click(object sender, EventArgs e)
+        {
+            if (lblTitleBackgroundCustom.Text != "✔️")
+            {
+                lblTitleBackgroundCustom.ForeColor = Color.Green;
+                lblTitleBackgroundCustom.Text = "✔️";
+                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                lblTitleBackgroundDefault.Text = "❌";
+                SetCustomTitleBackgroundColor();
+            }
+        }
+
+        private void SetCustomTitleBackgroundColor()
+        {
+            //header
+            Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57, panelRefreshStatusBar };
+            foreach (Control control in listHeaderHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //settings
+            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+            foreach (Control control in listSettingsHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //bitcoindashboard
+            Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9 };
+            foreach (Control control in listBitcoinDashboardHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //lightningdashboard
+            Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
+            foreach (Control control in listLightningDashboardHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //address
+            Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
+            foreach (Control control in listAddressHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //block
+            Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+            foreach (Control control in listBlockHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //blocklist
+            Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+            foreach (Control control in listBlockListHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //transaction
+            Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+            foreach (Control control in listTransactionHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //xpub
+            Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
+            foreach (Control control in listXpubHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
             }
         }
         #endregion
@@ -8932,7 +9223,7 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 24;
                 });
-                splash splash = new splash(); // invoke the about/splash screen
+                Splash splash = new Splash(); // invoke the about/splash screen
                 splash.ShowDialog();
             }
             catch (Exception ex)
@@ -10020,5 +10311,7 @@ namespace SATSuma
 
 
         #endregion
+
+
     }
 }

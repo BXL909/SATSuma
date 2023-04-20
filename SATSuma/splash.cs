@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SATSuma
 {
-    public partial class splash : Form
+    public partial class Splash : Form
     {
-        public splash()
+        public Splash()
         {
             InitializeComponent();
         }

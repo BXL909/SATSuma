@@ -73,6 +73,46 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logoNoText {
+            get {
+                object obj = ResourceManager.GetObject("logoNoText", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PnVlfRPD_400x400 {
+            get {
+                object obj = ResourceManager.GetObject("PnVlfRPD_400x400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SatsumaBTCdir {
+            get {
+                object obj = ResourceManager.GetObject("SatsumaBTCdir", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SatsumaBTCdir1 {
+            get {
+                object obj = ResourceManager.GetObject("SatsumaBTCdir1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap spectrum2 {
             get {
                 object obj = ResourceManager.GetObject("spectrum2", resourceCulture);

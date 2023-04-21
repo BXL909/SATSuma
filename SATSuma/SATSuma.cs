@@ -27,6 +27,7 @@ Version history 🍊
  * find P2SH xpub to test with
  * test and enable testnet
  * save user settings and appearance preferences
+ * ability to re-colour any remaining controls that aren't already customisable
  */
 
 #region Using
@@ -140,9 +141,11 @@ namespace SATSuma
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
+        Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
+        Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
+        Color listViewHeaderTextColor = Color.Silver;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -8060,7 +8063,7 @@ namespace SATSuma
                     control.ForeColor = colorDlgForLabels.Color;
                 }
                 //settings
-                Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180 };
+                Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = colorDlgForLabels.Color;
@@ -8136,7 +8139,7 @@ namespace SATSuma
                     control.ForeColor = colorDlgForHeadings.Color;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183 };
+                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = colorDlgForHeadings.Color;
@@ -8378,7 +8381,7 @@ namespace SATSuma
 
             if (colorDlgForTableText.ShowDialog() == DialogResult.OK)
             {
-                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks };
+                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186 };
                 foreach (Control control in listTableTextToColor)
                 {
                     control.ForeColor = colorDlgForTableText.Color;
@@ -8538,7 +8541,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -8615,7 +8618,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -8714,7 +8717,7 @@ namespace SATSuma
                 control.BackColor = titleBackgroundColor;
             }
             //settings
-            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37 };
+            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
             foreach (Control control in listSettingsHeadingsToColor)
             {
                 control.BackgroundImage = null;
@@ -8853,11 +8856,10 @@ namespace SATSuma
 
         private void AllListViews_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
-            Color headerColor = Color.FromArgb(50, 50, 50);
-            SolidBrush brush = new SolidBrush(headerColor);
+            SolidBrush brush = new SolidBrush(listViewHeaderColor);
             e.Graphics.FillRectangle(brush, e.Bounds);
             // Change text color and alignment
-            SolidBrush textBrush = new SolidBrush(Color.Silver);
+            SolidBrush textBrush = new SolidBrush(listViewHeaderTextColor);
             StringFormat format = new StringFormat
             {
                 Alignment = StringAlignment.Near,
@@ -10310,8 +10312,71 @@ namespace SATSuma
 
 
 
+
         #endregion
 
+        private void btnColorTableBackground_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForTableBackgrounds = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Black
+            };
 
+            if (colorDlgForTableBackgrounds.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listListViewBackgroundsToColor = { listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66 };
+                foreach (Control control in listListViewBackgroundsToColor)
+                {
+                    {
+                        control.BackColor = colorDlgForTableBackgrounds.Color;
+                    }
+                }
+            }
+        }
+
+        private void btnColorTableTitleBar_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForlistViewTitleBarBG = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Black
+            };
+
+            if (colorDlgForlistViewTitleBarBG.ShowDialog() == DialogResult.OK)
+            {
+                Control[] listListViewBackgroundsToColor = { listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel68 };
+                foreach (Control control in listListViewBackgroundsToColor)
+                {
+                    {
+                        listViewHeaderColor = colorDlgForlistViewTitleBarBG.Color;
+                        panel67.BackColor = colorDlgForlistViewTitleBarBG.Color;
+                    }
+                }
+            }
+        }
+
+        private void btnListViewHeadingColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForTableHeadings = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Black
+            };
+
+            if (colorDlgForTableHeadings.ShowDialog() == DialogResult.OK)
+            {
+                listViewHeaderTextColor = colorDlgForTableHeadings.Color;
+                label188.ForeColor = colorDlgForTableHeadings.Color;
+                label190.ForeColor = colorDlgForTableHeadings.Color;
+            }
+            
+        }
     }
 }

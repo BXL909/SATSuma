@@ -603,6 +603,12 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btnColorButtonText = new System.Windows.Forms.Button();
             this.panelAppearance = new System.Windows.Forms.Panel();
+            this.label188 = new System.Windows.Forms.Label();
+            this.btnColorTableTitleBar = new System.Windows.Forms.Button();
+            this.label186 = new System.Windows.Forms.Label();
+            this.btnColorTableBackground = new System.Windows.Forms.Button();
+            this.panel65 = new System.Windows.Forms.Panel();
+            this.label184 = new System.Windows.Forms.Label();
             this.btnColorTitleBackgrounds = new System.Windows.Forms.Button();
             this.lblTitleBackgroundCustom = new System.Windows.Forms.Label();
             this.label189 = new System.Windows.Forms.Label();
@@ -639,6 +645,11 @@
             this.panel61 = new System.Windows.Forms.Panel();
             this.panel60 = new System.Windows.Forms.Panel();
             this.label166 = new System.Windows.Forms.Label();
+            this.panel66 = new System.Windows.Forms.Panel();
+            this.panel67 = new System.Windows.Forms.Panel();
+            this.btnListViewHeadingColor = new System.Windows.Forms.Button();
+            this.panel68 = new System.Windows.Forms.Panel();
+            this.label190 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -721,6 +732,7 @@
             this.panel58.SuspendLayout();
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
+            this.panel65.SuspendLayout();
             this.panel64.SuspendLayout();
             this.panel63.SuspendLayout();
             this.panel62.SuspendLayout();
@@ -728,6 +740,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
+            this.panel66.SuspendLayout();
+            this.panel67.SuspendLayout();
+            this.panel68.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -8514,7 +8529,7 @@
             this.btnColorLabels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorLabels.ForeColor = System.Drawing.Color.White;
             this.btnColorLabels.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorLabels.Location = new System.Drawing.Point(163, 80);
+            this.btnColorLabels.Location = new System.Drawing.Point(163, 65);
             this.btnColorLabels.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorLabels.Name = "btnColorLabels";
             this.btnColorLabels.Size = new System.Drawing.Size(55, 18);
@@ -8529,7 +8544,7 @@
             this.label73.AutoSize = true;
             this.label73.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label73.ForeColor = System.Drawing.Color.Silver;
-            this.label73.Location = new System.Drawing.Point(39, 80);
+            this.label73.Location = new System.Drawing.Point(39, 65);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(55, 20);
             this.label73.TabIndex = 241;
@@ -8600,7 +8615,7 @@
             this.panel59.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel59.BackgroundImage")));
             this.panel59.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel59.Controls.Add(this.label156);
-            this.panel59.Location = new System.Drawing.Point(39, 120);
+            this.panel59.Location = new System.Drawing.Point(39, 90);
             this.panel59.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel59.Name = "panel59";
             this.panel59.Size = new System.Drawing.Size(82, 23);
@@ -8632,7 +8647,7 @@
             this.btnColorHeadings.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorHeadings.ForeColor = System.Drawing.Color.White;
             this.btnColorHeadings.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorHeadings.Location = new System.Drawing.Point(163, 120);
+            this.btnColorHeadings.Location = new System.Drawing.Point(163, 90);
             this.btnColorHeadings.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorHeadings.Name = "btnColorHeadings";
             this.btnColorHeadings.Size = new System.Drawing.Size(55, 18);
@@ -8648,7 +8663,7 @@
             this.colorProgressBar1.BorderColor = System.Drawing.Color.Transparent;
             this.colorProgressBar1.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
             this.colorProgressBar1.ForeColor = System.Drawing.Color.Black;
-            this.colorProgressBar1.Location = new System.Drawing.Point(39, 550);
+            this.colorProgressBar1.Location = new System.Drawing.Point(39, 407);
             this.colorProgressBar1.Maximum = 100;
             this.colorProgressBar1.Minimum = 0;
             this.colorProgressBar1.Name = "colorProgressBar1";
@@ -8662,7 +8677,7 @@
             this.label161.AutoSize = true;
             this.label161.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label161.ForeColor = System.Drawing.Color.Silver;
-            this.label161.Location = new System.Drawing.Point(39, 530);
+            this.label161.Location = new System.Drawing.Point(39, 387);
             this.label161.Name = "label161";
             this.label161.Size = new System.Drawing.Size(105, 20);
             this.label161.TabIndex = 244;
@@ -8680,7 +8695,7 @@
             this.btnColorProgressBars.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorProgressBars.ForeColor = System.Drawing.Color.White;
             this.btnColorProgressBars.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorProgressBars.Location = new System.Drawing.Point(163, 530);
+            this.btnColorProgressBars.Location = new System.Drawing.Point(163, 387);
             this.btnColorProgressBars.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorProgressBars.Name = "btnColorProgressBars";
             this.btnColorProgressBars.Size = new System.Drawing.Size(55, 18);
@@ -8701,10 +8716,10 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(39, 370);
+            this.button1.Location = new System.Drawing.Point(39, 287);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 24);
+            this.button1.Size = new System.Drawing.Size(90, 22);
             this.button1.TabIndex = 160;
             this.button1.TabStop = false;
             this.button1.Text = "Buttons";
@@ -8723,7 +8738,7 @@
             this.btnColorButtons.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtons.ForeColor = System.Drawing.Color.White;
             this.btnColorButtons.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtons.Location = new System.Drawing.Point(163, 370);
+            this.btnColorButtons.Location = new System.Drawing.Point(163, 287);
             this.btnColorButtons.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtons.Name = "btnColorButtons";
             this.btnColorButtons.Size = new System.Drawing.Size(55, 18);
@@ -8744,10 +8759,10 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(39, 410);
+            this.button2.Location = new System.Drawing.Point(39, 312);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(90, 24);
+            this.button2.Size = new System.Drawing.Size(90, 22);
             this.button2.TabIndex = 247;
             this.button2.TabStop = false;
             this.button2.Text = "Button text";
@@ -8766,7 +8781,7 @@
             this.btnColorButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtonText.ForeColor = System.Drawing.Color.White;
             this.btnColorButtonText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtonText.Location = new System.Drawing.Point(163, 410);
+            this.btnColorButtonText.Location = new System.Drawing.Point(163, 312);
             this.btnColorButtonText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtonText.Name = "btnColorButtonText";
             this.btnColorButtonText.Size = new System.Drawing.Size(55, 18);
@@ -8779,6 +8794,13 @@
             // panelAppearance
             // 
             this.panelAppearance.BackColor = System.Drawing.Color.Transparent;
+            this.panelAppearance.Controls.Add(this.panel68);
+            this.panelAppearance.Controls.Add(this.btnListViewHeadingColor);
+            this.panelAppearance.Controls.Add(this.panel67);
+            this.panelAppearance.Controls.Add(this.panel66);
+            this.panelAppearance.Controls.Add(this.btnColorTableTitleBar);
+            this.panelAppearance.Controls.Add(this.btnColorTableBackground);
+            this.panelAppearance.Controls.Add(this.panel65);
             this.panelAppearance.Controls.Add(this.btnColorTitleBackgrounds);
             this.panelAppearance.Controls.Add(this.lblTitleBackgroundCustom);
             this.panelAppearance.Controls.Add(this.label189);
@@ -8830,6 +8852,100 @@
             this.panelAppearance.Size = new System.Drawing.Size(773, 556);
             this.panelAppearance.TabIndex = 249;
             this.panelAppearance.Visible = false;
+            // 
+            // label188
+            // 
+            this.label188.AutoSize = true;
+            this.label188.BackColor = System.Drawing.Color.Transparent;
+            this.label188.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label188.ForeColor = System.Drawing.Color.Silver;
+            this.label188.Location = new System.Drawing.Point(0, 0);
+            this.label188.Name = "label188";
+            this.label188.Size = new System.Drawing.Size(64, 20);
+            this.label188.TabIndex = 279;
+            this.label188.Text = "Title bar";
+            // 
+            // btnColorTableTitleBar
+            // 
+            this.btnColorTableTitleBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnColorTableTitleBar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnColorTableTitleBar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnColorTableTitleBar.FlatAppearance.BorderSize = 0;
+            this.btnColorTableTitleBar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorTableTitleBar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorTableTitleBar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnColorTableTitleBar.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnColorTableTitleBar.ForeColor = System.Drawing.Color.White;
+            this.btnColorTableTitleBar.Image = global::SATSuma.Properties.Resources.spectrum2;
+            this.btnColorTableTitleBar.Location = new System.Drawing.Point(163, 495);
+            this.btnColorTableTitleBar.Margin = new System.Windows.Forms.Padding(0);
+            this.btnColorTableTitleBar.Name = "btnColorTableTitleBar";
+            this.btnColorTableTitleBar.Size = new System.Drawing.Size(55, 18);
+            this.btnColorTableTitleBar.TabIndex = 278;
+            this.btnColorTableTitleBar.TabStop = false;
+            this.btnColorTableTitleBar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnColorTableTitleBar.UseVisualStyleBackColor = false;
+            this.btnColorTableTitleBar.Click += new System.EventHandler(this.btnColorTableTitleBar_Click);
+            // 
+            // label186
+            // 
+            this.label186.AutoSize = true;
+            this.label186.BackColor = System.Drawing.Color.Transparent;
+            this.label186.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label186.ForeColor = System.Drawing.Color.Silver;
+            this.label186.Location = new System.Drawing.Point(0, 0);
+            this.label186.Name = "label186";
+            this.label186.Size = new System.Drawing.Size(99, 20);
+            this.label186.TabIndex = 277;
+            this.label186.Text = "Background";
+            // 
+            // btnColorTableBackground
+            // 
+            this.btnColorTableBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnColorTableBackground.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnColorTableBackground.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnColorTableBackground.FlatAppearance.BorderSize = 0;
+            this.btnColorTableBackground.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorTableBackground.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorTableBackground.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnColorTableBackground.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnColorTableBackground.ForeColor = System.Drawing.Color.White;
+            this.btnColorTableBackground.Image = global::SATSuma.Properties.Resources.spectrum2;
+            this.btnColorTableBackground.Location = new System.Drawing.Point(163, 470);
+            this.btnColorTableBackground.Margin = new System.Windows.Forms.Padding(0);
+            this.btnColorTableBackground.Name = "btnColorTableBackground";
+            this.btnColorTableBackground.Size = new System.Drawing.Size(55, 18);
+            this.btnColorTableBackground.TabIndex = 276;
+            this.btnColorTableBackground.TabStop = false;
+            this.btnColorTableBackground.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnColorTableBackground.UseVisualStyleBackColor = false;
+            this.btnColorTableBackground.Click += new System.EventHandler(this.btnColorTableBackground_Click);
+            // 
+            // panel65
+            // 
+            this.panel65.BackColor = System.Drawing.Color.Transparent;
+            this.panel65.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel65.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel65.Controls.Add(this.label184);
+            this.panel65.Location = new System.Drawing.Point(0, 430);
+            this.panel65.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel65.Name = "panel65";
+            this.panel65.Size = new System.Drawing.Size(224, 23);
+            this.panel65.TabIndex = 214;
+            // 
+            // label184
+            // 
+            this.label184.AutoSize = true;
+            this.label184.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label184.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label184.ForeColor = System.Drawing.Color.Gray;
+            this.label184.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label184.Location = new System.Drawing.Point(0, 2);
+            this.label184.Margin = new System.Windows.Forms.Padding(0);
+            this.label184.Name = "label184";
+            this.label184.Size = new System.Drawing.Size(53, 20);
+            this.label184.TabIndex = 153;
+            this.label184.Text = "Tables";
             // 
             // btnColorTitleBackgrounds
             // 
@@ -8947,9 +9063,9 @@
             this.label183.Location = new System.Drawing.Point(0, 2);
             this.label183.Margin = new System.Windows.Forms.Padding(0);
             this.label183.Name = "label183";
-            this.label183.Size = new System.Drawing.Size(136, 20);
+            this.label183.Size = new System.Drawing.Size(172, 20);
             this.label183.TabIndex = 153;
-            this.label183.Text = "Title backgrounds";
+            this.label183.Text = "Heading backgrounds";
             // 
             // panel63
             // 
@@ -9109,7 +9225,7 @@
             this.btnColorStatusError.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorStatusError.ForeColor = System.Drawing.Color.White;
             this.btnColorStatusError.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorStatusError.Location = new System.Drawing.Point(163, 280);
+            this.btnColorStatusError.Location = new System.Drawing.Point(163, 215);
             this.btnColorStatusError.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorStatusError.Name = "btnColorStatusError";
             this.btnColorStatusError.Size = new System.Drawing.Size(55, 18);
@@ -9124,7 +9240,7 @@
             this.label176.AutoSize = true;
             this.label176.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label176.ForeColor = System.Drawing.Color.Gray;
-            this.label176.Location = new System.Drawing.Point(39, 280);
+            this.label176.Location = new System.Drawing.Point(39, 215);
             this.label176.Name = "label176";
             this.label176.Size = new System.Drawing.Size(98, 20);
             this.label176.TabIndex = 259;
@@ -9142,7 +9258,7 @@
             this.btnColorPriceBlock.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorPriceBlock.ForeColor = System.Drawing.Color.White;
             this.btnColorPriceBlock.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorPriceBlock.Location = new System.Drawing.Point(163, 240);
+            this.btnColorPriceBlock.Location = new System.Drawing.Point(163, 190);
             this.btnColorPriceBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorPriceBlock.Name = "btnColorPriceBlock";
             this.btnColorPriceBlock.Size = new System.Drawing.Size(55, 18);
@@ -9157,7 +9273,7 @@
             this.label175.AutoSize = true;
             this.label175.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label175.ForeColor = System.Drawing.Color.DimGray;
-            this.label175.Location = new System.Drawing.Point(39, 240);
+            this.label175.Location = new System.Drawing.Point(39, 190);
             this.label175.Name = "label175";
             this.label175.Size = new System.Drawing.Size(94, 20);
             this.label175.TabIndex = 257;
@@ -9175,7 +9291,7 @@
             this.btnColorTextBox.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTextBox.ForeColor = System.Drawing.Color.White;
             this.btnColorTextBox.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTextBox.Location = new System.Drawing.Point(163, 490);
+            this.btnColorTextBox.Location = new System.Drawing.Point(163, 362);
             this.btnColorTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTextBox.Name = "btnColorTextBox";
             this.btnColorTextBox.Size = new System.Drawing.Size(55, 18);
@@ -9191,7 +9307,7 @@
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.Gray;
-            this.textBox1.Location = new System.Drawing.Point(39, 490);
+            this.textBox1.Location = new System.Drawing.Point(39, 362);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(90, 25);
@@ -9210,7 +9326,7 @@
             this.btnColorOtherText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorOtherText.ForeColor = System.Drawing.Color.White;
             this.btnColorOtherText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorOtherText.Location = new System.Drawing.Point(163, 200);
+            this.btnColorOtherText.Location = new System.Drawing.Point(163, 165);
             this.btnColorOtherText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorOtherText.Name = "btnColorOtherText";
             this.btnColorOtherText.Size = new System.Drawing.Size(55, 18);
@@ -9225,7 +9341,7 @@
             this.label173.AutoSize = true;
             this.label173.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label173.ForeColor = System.Drawing.Color.Gray;
-            this.label173.Location = new System.Drawing.Point(39, 200);
+            this.label173.Location = new System.Drawing.Point(39, 165);
             this.label173.Name = "label173";
             this.label173.Size = new System.Drawing.Size(82, 20);
             this.label173.TabIndex = 254;
@@ -9243,7 +9359,7 @@
             this.btnColorTableText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableText.ForeColor = System.Drawing.Color.White;
             this.btnColorTableText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableText.Location = new System.Drawing.Point(163, 160);
+            this.btnColorTableText.Location = new System.Drawing.Point(163, 115);
             this.btnColorTableText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableText.Name = "btnColorTableText";
             this.btnColorTableText.Size = new System.Drawing.Size(55, 18);
@@ -9258,7 +9374,7 @@
             this.label170.AutoSize = true;
             this.label170.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label170.ForeColor = System.Drawing.Color.Silver;
-            this.label170.Location = new System.Drawing.Point(39, 160);
+            this.label170.Location = new System.Drawing.Point(39, 115);
             this.label170.Name = "label170";
             this.label170.Size = new System.Drawing.Size(53, 20);
             this.label170.TabIndex = 252;
@@ -9276,7 +9392,7 @@
             this.btnColorLines.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorLines.ForeColor = System.Drawing.Color.White;
             this.btnColorLines.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorLines.Location = new System.Drawing.Point(163, 450);
+            this.btnColorLines.Location = new System.Drawing.Point(163, 337);
             this.btnColorLines.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorLines.Name = "btnColorLines";
             this.btnColorLines.Size = new System.Drawing.Size(55, 18);
@@ -9291,7 +9407,7 @@
             this.label168.AutoSize = true;
             this.label168.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label168.ForeColor = System.Drawing.Color.Silver;
-            this.label168.Location = new System.Drawing.Point(39, 450);
+            this.label168.Location = new System.Drawing.Point(39, 337);
             this.label168.Name = "label168";
             this.label168.Size = new System.Drawing.Size(44, 20);
             this.label168.TabIndex = 250;
@@ -9301,7 +9417,7 @@
             // 
             this.panel61.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel61.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel61.Location = new System.Drawing.Point(39, 470);
+            this.panel61.Location = new System.Drawing.Point(39, 357);
             this.panel61.Name = "panel61";
             this.panel61.Size = new System.Drawing.Size(90, 2);
             this.panel61.TabIndex = 249;
@@ -9312,7 +9428,7 @@
             this.panel60.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel60.Controls.Add(this.label166);
-            this.panel60.Location = new System.Drawing.Point(0, 330);
+            this.panel60.Location = new System.Drawing.Point(0, 247);
             this.panel60.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel60.Name = "panel60";
             this.panel60.Size = new System.Drawing.Size(224, 23);
@@ -9332,6 +9448,67 @@
             this.label166.TabIndex = 153;
             this.label166.Text = "Controls, lines, etc";
             // 
+            // panel66
+            // 
+            this.panel66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel66.Controls.Add(this.label186);
+            this.panel66.Location = new System.Drawing.Point(39, 470);
+            this.panel66.Name = "panel66";
+            this.panel66.Size = new System.Drawing.Size(108, 25);
+            this.panel66.TabIndex = 280;
+            // 
+            // panel67
+            // 
+            this.panel67.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel67.Controls.Add(this.label188);
+            this.panel67.Location = new System.Drawing.Point(39, 495);
+            this.panel67.Name = "panel67";
+            this.panel67.Size = new System.Drawing.Size(108, 25);
+            this.panel67.TabIndex = 281;
+            // 
+            // btnListViewHeadingColor
+            // 
+            this.btnListViewHeadingColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnListViewHeadingColor.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnListViewHeadingColor.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnListViewHeadingColor.FlatAppearance.BorderSize = 0;
+            this.btnListViewHeadingColor.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnListViewHeadingColor.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnListViewHeadingColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnListViewHeadingColor.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnListViewHeadingColor.ForeColor = System.Drawing.Color.White;
+            this.btnListViewHeadingColor.Image = global::SATSuma.Properties.Resources.spectrum2;
+            this.btnListViewHeadingColor.Location = new System.Drawing.Point(163, 140);
+            this.btnListViewHeadingColor.Margin = new System.Windows.Forms.Padding(0);
+            this.btnListViewHeadingColor.Name = "btnListViewHeadingColor";
+            this.btnListViewHeadingColor.Size = new System.Drawing.Size(55, 18);
+            this.btnListViewHeadingColor.TabIndex = 282;
+            this.btnListViewHeadingColor.TabStop = false;
+            this.btnListViewHeadingColor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnListViewHeadingColor.UseVisualStyleBackColor = false;
+            this.btnListViewHeadingColor.Click += new System.EventHandler(this.btnListViewHeadingColor_Click);
+            // 
+            // panel68
+            // 
+            this.panel68.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel68.Controls.Add(this.label190);
+            this.panel68.Location = new System.Drawing.Point(39, 140);
+            this.panel68.Name = "panel68";
+            this.panel68.Size = new System.Drawing.Size(121, 25);
+            this.panel68.TabIndex = 282;
+            // 
+            // label190
+            // 
+            this.label190.AutoSize = true;
+            this.label190.BackColor = System.Drawing.Color.Transparent;
+            this.label190.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label190.ForeColor = System.Drawing.Color.Silver;
+            this.label190.Location = new System.Drawing.Point(0, 0);
+            this.label190.Name = "label190";
+            this.label190.Size = new System.Drawing.Size(118, 20);
+            this.label190.TabIndex = 279;
+            this.label190.Text = "Table headings";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -9342,12 +9519,12 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
@@ -9527,6 +9704,8 @@
             this.panel59.PerformLayout();
             this.panelAppearance.ResumeLayout(false);
             this.panelAppearance.PerformLayout();
+            this.panel65.ResumeLayout(false);
+            this.panel65.PerformLayout();
             this.panel64.ResumeLayout(false);
             this.panel64.PerformLayout();
             this.panel63.ResumeLayout(false);
@@ -9538,6 +9717,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).EndInit();
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
+            this.panel66.ResumeLayout(false);
+            this.panel66.PerformLayout();
+            this.panel67.ResumeLayout(false);
+            this.panel67.PerformLayout();
+            this.panel68.ResumeLayout(false);
+            this.panel68.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -10154,6 +10339,17 @@
         private System.Windows.Forms.Label label185;
         private System.Windows.Forms.Panel panel64;
         private System.Windows.Forms.Label label183;
+        private System.Windows.Forms.Label label188;
+        private System.Windows.Forms.Button btnColorTableTitleBar;
+        private System.Windows.Forms.Label label186;
+        private System.Windows.Forms.Button btnColorTableBackground;
+        private System.Windows.Forms.Panel panel65;
+        private System.Windows.Forms.Label label184;
+        private System.Windows.Forms.Panel panel66;
+        private System.Windows.Forms.Panel panel67;
+        private System.Windows.Forms.Panel panel68;
+        private System.Windows.Forms.Label label190;
+        private System.Windows.Forms.Button btnListViewHeadingColor;
     }
 }
 

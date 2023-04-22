@@ -603,6 +603,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btnColorButtonText = new System.Windows.Forms.Button();
             this.panelAppearance = new System.Windows.Forms.Panel();
+            this.panel73 = new System.Windows.Forms.Panel();
+            this.label197 = new System.Windows.Forms.Label();
+            this.btnColorPanels = new System.Windows.Forms.Button();
             this.panel71 = new System.Windows.Forms.Panel();
             this.comboBoxThemeList = new System.Windows.Forms.ComboBox();
             this.panel72 = new System.Windows.Forms.Panel();
@@ -753,6 +756,7 @@
             this.panel58.SuspendLayout();
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
+            this.panel73.SuspendLayout();
             this.panel71.SuspendLayout();
             this.panel72.SuspendLayout();
             this.panel70.SuspendLayout();
@@ -8689,7 +8693,7 @@
             this.colorProgressBar1.BorderColor = System.Drawing.Color.Transparent;
             this.colorProgressBar1.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
             this.colorProgressBar1.ForeColor = System.Drawing.Color.Black;
-            this.colorProgressBar1.Location = new System.Drawing.Point(39, 407);
+            this.colorProgressBar1.Location = new System.Drawing.Point(39, 433);
             this.colorProgressBar1.Maximum = 100;
             this.colorProgressBar1.Minimum = 0;
             this.colorProgressBar1.Name = "colorProgressBar1";
@@ -8703,7 +8707,7 @@
             this.label161.AutoSize = true;
             this.label161.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label161.ForeColor = System.Drawing.Color.Silver;
-            this.label161.Location = new System.Drawing.Point(39, 387);
+            this.label161.Location = new System.Drawing.Point(39, 413);
             this.label161.Name = "label161";
             this.label161.Size = new System.Drawing.Size(105, 20);
             this.label161.TabIndex = 244;
@@ -8721,7 +8725,7 @@
             this.btnColorProgressBars.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorProgressBars.ForeColor = System.Drawing.Color.White;
             this.btnColorProgressBars.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorProgressBars.Location = new System.Drawing.Point(163, 387);
+            this.btnColorProgressBars.Location = new System.Drawing.Point(163, 413);
             this.btnColorProgressBars.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorProgressBars.Name = "btnColorProgressBars";
             this.btnColorProgressBars.Size = new System.Drawing.Size(55, 18);
@@ -8742,7 +8746,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(39, 287);
+            this.button1.Location = new System.Drawing.Point(39, 312);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(90, 22);
@@ -8764,7 +8768,7 @@
             this.btnColorButtons.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtons.ForeColor = System.Drawing.Color.White;
             this.btnColorButtons.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtons.Location = new System.Drawing.Point(163, 287);
+            this.btnColorButtons.Location = new System.Drawing.Point(163, 312);
             this.btnColorButtons.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtons.Name = "btnColorButtons";
             this.btnColorButtons.Size = new System.Drawing.Size(55, 18);
@@ -8785,7 +8789,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(39, 312);
+            this.button2.Location = new System.Drawing.Point(39, 240);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(90, 22);
@@ -8807,7 +8811,7 @@
             this.btnColorButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtonText.ForeColor = System.Drawing.Color.White;
             this.btnColorButtonText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtonText.Location = new System.Drawing.Point(163, 312);
+            this.btnColorButtonText.Location = new System.Drawing.Point(163, 240);
             this.btnColorButtonText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtonText.Name = "btnColorButtonText";
             this.btnColorButtonText.Size = new System.Drawing.Size(55, 18);
@@ -8820,6 +8824,8 @@
             // panelAppearance
             // 
             this.panelAppearance.BackColor = System.Drawing.Color.Transparent;
+            this.panelAppearance.Controls.Add(this.panel73);
+            this.panelAppearance.Controls.Add(this.btnColorPanels);
             this.panelAppearance.Controls.Add(this.panel71);
             this.panelAppearance.Controls.Add(this.panel70);
             this.panelAppearance.Controls.Add(this.lblBackgroundBTCdirSelected);
@@ -8886,6 +8892,48 @@
             this.panelAppearance.Size = new System.Drawing.Size(773, 556);
             this.panelAppearance.TabIndex = 249;
             this.panelAppearance.Visible = false;
+            // 
+            // panel73
+            // 
+            this.panel73.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel73.Controls.Add(this.label197);
+            this.panel73.Location = new System.Drawing.Point(39, 387);
+            this.panel73.Name = "panel73";
+            this.panel73.Size = new System.Drawing.Size(105, 23);
+            this.panel73.TabIndex = 295;
+            // 
+            // label197
+            // 
+            this.label197.AutoSize = true;
+            this.label197.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label197.ForeColor = System.Drawing.Color.Silver;
+            this.label197.Location = new System.Drawing.Point(1, 1);
+            this.label197.Name = "label197";
+            this.label197.Size = new System.Drawing.Size(56, 20);
+            this.label197.TabIndex = 245;
+            this.label197.Text = "Panels";
+            // 
+            // btnColorPanels
+            // 
+            this.btnColorPanels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnColorPanels.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnColorPanels.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnColorPanels.FlatAppearance.BorderSize = 0;
+            this.btnColorPanels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorPanels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorPanels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnColorPanels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnColorPanels.ForeColor = System.Drawing.Color.White;
+            this.btnColorPanels.Image = global::SATSuma.Properties.Resources.spectrum2;
+            this.btnColorPanels.Location = new System.Drawing.Point(163, 387);
+            this.btnColorPanels.Margin = new System.Windows.Forms.Padding(0);
+            this.btnColorPanels.Name = "btnColorPanels";
+            this.btnColorPanels.Size = new System.Drawing.Size(55, 18);
+            this.btnColorPanels.TabIndex = 294;
+            this.btnColorPanels.TabStop = false;
+            this.btnColorPanels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnColorPanels.UseVisualStyleBackColor = false;
+            this.btnColorPanels.Click += new System.EventHandler(this.btnColorPanels_Click);
             // 
             // panel71
             // 
@@ -9071,9 +9119,9 @@
             this.label194.ForeColor = System.Drawing.Color.Silver;
             this.label194.Location = new System.Drawing.Point(7, 72);
             this.label194.Name = "label194";
-            this.label194.Size = new System.Drawing.Size(137, 20);
+            this.label194.Size = new System.Drawing.Size(136, 20);
             this.label194.TabIndex = 286;
-            this.label194.Text = "path to image file";
+            this.label194.Text = "Path to image file";
             // 
             // textBoxThemeImage
             // 
@@ -9150,9 +9198,9 @@
             this.label191.ForeColor = System.Drawing.Color.Silver;
             this.label191.Location = new System.Drawing.Point(639, 316);
             this.label191.Name = "label191";
-            this.label191.Size = new System.Drawing.Size(104, 20);
+            this.label191.Size = new System.Drawing.Size(114, 20);
             this.label191.TabIndex = 284;
-            this.label191.Text = "Select image";
+            this.label191.Text = "Custom image";
             // 
             // pictureBoxCustomImage
             // 
@@ -9212,7 +9260,7 @@
             // 
             this.panel67.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.panel67.Controls.Add(this.label188);
-            this.panel67.Location = new System.Drawing.Point(39, 470);
+            this.panel67.Location = new System.Drawing.Point(39, 495);
             this.panel67.Name = "panel67";
             this.panel67.Size = new System.Drawing.Size(108, 25);
             this.panel67.TabIndex = 281;
@@ -9233,7 +9281,7 @@
             // 
             this.panel66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel66.Controls.Add(this.label186);
-            this.panel66.Location = new System.Drawing.Point(39, 495);
+            this.panel66.Location = new System.Drawing.Point(39, 520);
             this.panel66.Name = "panel66";
             this.panel66.Size = new System.Drawing.Size(108, 25);
             this.panel66.TabIndex = 280;
@@ -9262,7 +9310,7 @@
             this.btnColorTableTitleBar.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableTitleBar.ForeColor = System.Drawing.Color.White;
             this.btnColorTableTitleBar.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableTitleBar.Location = new System.Drawing.Point(163, 470);
+            this.btnColorTableTitleBar.Location = new System.Drawing.Point(163, 495);
             this.btnColorTableTitleBar.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableTitleBar.Name = "btnColorTableTitleBar";
             this.btnColorTableTitleBar.Size = new System.Drawing.Size(55, 18);
@@ -9284,7 +9332,7 @@
             this.btnColorTableBackground.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableBackground.ForeColor = System.Drawing.Color.White;
             this.btnColorTableBackground.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableBackground.Location = new System.Drawing.Point(163, 495);
+            this.btnColorTableBackground.Location = new System.Drawing.Point(163, 520);
             this.btnColorTableBackground.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableBackground.Name = "btnColorTableBackground";
             this.btnColorTableBackground.Size = new System.Drawing.Size(55, 18);
@@ -9300,7 +9348,7 @@
             this.panel65.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel65.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel65.Controls.Add(this.label184);
-            this.panel65.Location = new System.Drawing.Point(0, 430);
+            this.panel65.Location = new System.Drawing.Point(0, 455);
             this.panel65.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel65.Name = "panel65";
             this.panel65.Size = new System.Drawing.Size(224, 23);
@@ -9499,9 +9547,9 @@
             this.label180.ForeColor = System.Drawing.Color.Silver;
             this.label180.Location = new System.Drawing.Point(511, 316);
             this.label180.Name = "label180";
-            this.label180.Size = new System.Drawing.Size(105, 20);
+            this.label180.Size = new System.Drawing.Size(115, 20);
             this.label180.TabIndex = 268;
-            this.label180.Text = "Select colour";
+            this.label180.Text = "Custom colour";
             // 
             // label179
             // 
@@ -9678,12 +9726,12 @@
             // 
             this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.Gray;
             this.textBox1.Location = new System.Drawing.Point(39, 362);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(90, 25);
+            this.textBox1.Size = new System.Drawing.Size(90, 23);
             this.textBox1.TabIndex = 218;
             this.textBox1.Text = "Textboxes";
             // 
@@ -9790,9 +9838,9 @@
             // 
             this.panel61.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel61.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel61.Location = new System.Drawing.Point(39, 357);
+            this.panel61.Location = new System.Drawing.Point(85, 347);
             this.panel61.Name = "panel61";
-            this.panel61.Size = new System.Drawing.Size(90, 2);
+            this.panel61.Size = new System.Drawing.Size(56, 2);
             this.panel61.TabIndex = 249;
             // 
             // panel60
@@ -9801,7 +9849,7 @@
             this.panel60.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel60.Controls.Add(this.label166);
-            this.panel60.Location = new System.Drawing.Point(0, 247);
+            this.panel60.Location = new System.Drawing.Point(0, 277);
             this.panel60.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel60.Name = "panel60";
             this.panel60.Size = new System.Drawing.Size(224, 23);
@@ -10021,6 +10069,8 @@
             this.panel59.PerformLayout();
             this.panelAppearance.ResumeLayout(false);
             this.panelAppearance.PerformLayout();
+            this.panel73.ResumeLayout(false);
+            this.panel73.PerformLayout();
             this.panel71.ResumeLayout(false);
             this.panel71.PerformLayout();
             this.panel72.ResumeLayout(false);
@@ -10697,6 +10747,9 @@
         private System.Windows.Forms.Label label196;
         private System.Windows.Forms.Button btnLoadTheme;
         private System.Windows.Forms.Panel panel70;
+        private System.Windows.Forms.Panel panel73;
+        private System.Windows.Forms.Label label197;
+        private System.Windows.Forms.Button btnColorPanels;
     }
 }
 

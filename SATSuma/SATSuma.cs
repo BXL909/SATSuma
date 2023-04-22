@@ -26,8 +26,6 @@ Version history 🍊
  * sorting of bookmarks?
  * find P2SH xpub to test with
  * test and enable testnet
- * save users choice of default theme
- * ability to re-colour tickboxes and panel backgrounds
  */
 
 #region Using
@@ -83,6 +81,7 @@ using System.Text.RegularExpressions;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 using Microsoft.Win32;
 using System.Windows.Media.Media3D;
+using static QRCoder.PayloadGenerator;
 
 #endregion
 
@@ -139,6 +138,8 @@ namespace SATSuma
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
         bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
         string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
+        bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
+        string defaultThemeInFile = ""; // stores the default theme from the file to check whether a newly supplied one is different, in which case we'll update the file
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
@@ -194,6 +195,25 @@ namespace SATSuma
                         break;
                     }
                     nodeURLAlreadySavedInFile = false;
+                }
+
+                // check if there is a default theme saved in the bookmarks file
+                foreach (var bookmark in bookmarks)
+                {
+                    if (bookmark.Type == "defaulttheme")
+                    {
+                        var themes = ReadThemesFromJsonFile();
+                        foreach (Theme theme in themes)
+                        {
+                            if (theme.ThemeName == bookmark.Data)
+                            {
+                                RestoreTheme(theme);
+                                defaultThemeInFile = bookmark.Data;
+                                defaultThemeAlreadySavedInFile = true;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
@@ -1620,14 +1640,14 @@ namespace SATSuma
         {
             try
             {
-                BitcoinAddress bitcoinAddress;
+                NBitcoin.BitcoinAddress bitcoinAddress;
                 if (NodeURL == "https://mempool.space/api/")
                 {
-                    bitcoinAddress = BitcoinAddress.Create(address, Network.Main);
+                    bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
                 }
                 else
                 {
-                     bitcoinAddress = BitcoinAddress.Create(address, Network.TestNet);
+                     bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
                 }
                 
                 if (bitcoinAddress is BitcoinPubKeyAddress)
@@ -4945,10 +4965,10 @@ namespace SATSuma
 
                 numberOfAddressesChecked = 0;
                 int checkingAddressCount = 1;
-                List<BitcoinAddress> segwitAddresses = new List<BitcoinAddress>();
-                List<BitcoinAddress> legacyAddresses = new List<BitcoinAddress>();
-                List<BitcoinAddress> segwitP2SHAddresses = new List<BitcoinAddress>();
-                List<BitcoinAddress> P2SHAddresses = new List<BitcoinAddress>();
+                List<NBitcoin.BitcoinAddress> segwitAddresses = new List<NBitcoin.BitcoinAddress>();
+                List<NBitcoin.BitcoinAddress> legacyAddresses = new List<NBitcoin.BitcoinAddress>();
+                List<NBitcoin.BitcoinAddress> segwitP2SHAddresses = new List<NBitcoin.BitcoinAddress>();
+                List<NBitcoin.BitcoinAddress> P2SHAddresses = new List<NBitcoin.BitcoinAddress>();
 
                 int DerivationPath = 0;
                 int NumberOfDerivationPathsToCheck = Convert.ToInt32(numberUpDownDerivationPathsToCheck.Value);
@@ -5053,7 +5073,7 @@ namespace SATSuma
                     label140.Text = "derivation path " + DerivationPath;
 
                     // query the balance for each address
-                    foreach (BitcoinAddress address in segwitAddresses) // (we break when we run out of used addresses)
+                    foreach (NBitcoin.BitcoinAddress address in segwitAddresses) // (we break when we run out of used addresses)
                     {
                         string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
@@ -5289,7 +5309,7 @@ namespace SATSuma
                     label140.Text = "derivation path " + DerivationPath;
 
                     // query the balance for each address
-                    foreach (BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
+                    foreach (NBitcoin.BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
                     {
                         string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
@@ -5525,7 +5545,7 @@ namespace SATSuma
                     label140.Text = "derivation path " + DerivationPath;
 
                     // query the balance for each address
-                    foreach (BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
+                    foreach (NBitcoin.BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
                         string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
@@ -5765,7 +5785,7 @@ namespace SATSuma
                     label140.Text = "derivation path " + DerivationPath;
 
                     // query the balance for each address
-                    foreach (BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
+                    foreach (NBitcoin.BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
                         string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
@@ -8003,6 +8023,22 @@ namespace SATSuma
             }
         }
 
+        private void btnColorPanels_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDlgForPanels = new ColorDialog
+            {
+                AllowFullOpen = true,
+                AnyColor = true,
+                SolidColorOnly = true,
+                Color = Color.Red
+            };
+
+            if (colorDlgForPanels.ShowDialog() == DialogResult.OK)
+            {
+                ColorPanels(colorDlgForPanels.Color);
+            }
+        }
+
         private void BtnColorHeadings_Click(object sender, EventArgs e)
         {
             ColorDialog colorDlgForHeadings = new ColorDialog
@@ -8427,6 +8463,7 @@ namespace SATSuma
                 Color progressbars = colorProgressBar1.BarColor;
                 Color tablebackgrounds = panel66.BackColor;
                 Color tabletitlebars = panel67.BackColor;
+                Color panels = panel73.BackColor;
                 bool showtime = lblTime.Visible;
                 bool headingbgdefault = false;
                 if (lblTitleBackgroundDefault.Text == "✔️")
@@ -8488,7 +8525,7 @@ namespace SATSuma
                         }
                     }
                 }
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage };
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -8498,6 +8535,8 @@ namespace SATSuma
 
                 // Write the updated list of themes back to the JSON file
                 WriteThemeToJsonFile(themes);
+
+                SaveThemeAsDefault(textBoxThemeName.Text);
                 // repopulate the dropdown list with the available themes
                 themes.Clear();
                 themes = ReadThemesFromJsonFile();
@@ -8525,89 +8564,8 @@ namespace SATSuma
                 {
                     if (theme.ThemeName == comboBoxThemeList.Text)
                     {
-                        ColorDataFields(theme.DataFields);
-                        ColorLabels(theme.Labels);
-                        ColorHeadings(theme.Headings);
-                        ColorTables(theme.Tables);
-                        ColorTableHeadings(theme.TableHeadings);
-                        ColorOtherText(theme.OtherText);
-                        ColorPriceBlock(theme.PriceBlock);
-                        ColorStatusError(theme.StatusErrors);
-                        ColorButtons(theme.Buttons);
-                        ColorButtonText(theme.ButtonText);
-                        ColorLines(theme.Lines);
-                        ColorTextBoxes(theme.TextBoxes);
-                        ColorProgressBars(theme.ProgressBars);
-                        ColorTableBackgrounds(theme.TableBackgrounds);
-                        ColorTableTitleBars(theme.TableTitleBars);
-                        if (theme.ShowTime == false)
-                        {
-                            lblShowClock.ForeColor = Color.IndianRed;
-                            lblShowClock.Text = "❌";
-                            lblTime.Visible = false;
-                        }
-                        else
-                        {
-                            lblShowClock.ForeColor = Color.Green;
-                            lblShowClock.Text = "✔️";
-                            lblTime.Visible = true;
-                        }
-                        if (theme.HeadingBGDefault == true)
-                        {
-                            HeadingBackgroundsToDefault();
-                        }
-                        if (theme.HeadingBGNone == true)
-                        {
-                            HeadingBackgroundsToNone();
-                        }
-                        if (theme.HeadingBGCustom == true)
-                        {
-                            lblTitleBackgroundCustom.ForeColor = Color.Green;
-                            lblTitleBackgroundCustom.Text = "✔️";
-                            lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-                            lblTitleBackgroundNone.Text = "❌";
-                            lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                            lblTitleBackgroundDefault.Text = "❌";
-                            titleBackgroundColor = theme.HeadingBackgrounds;
-                            HeadingBackgroundsToCustomColor();
-                        }
-                        if (theme.BackgroundBTCdir == true)
-                        {
-                            lblBackgroundBTCdirSelected.ForeColor = Color.Green;
-                            lblBackgroundBTCdirSelected.Visible = true;
-                            lblBackgroundGenesisSelected.Visible = false;
-                            lblBackgroundCustomColorSelected.Visible = false;
-                            lblBackgroundCustomImageSelected.Visible = false;
-                            this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
-                        }
-                        if (theme.BackgroundGenesis == true)
-                        {
-                            lblBackgroundGenesisSelected.ForeColor = Color.Green;
-                            lblBackgroundBTCdirSelected.Visible = false;
-                            lblBackgroundGenesisSelected.Visible = true;
-                            lblBackgroundCustomColorSelected.Visible = false;
-                            lblBackgroundCustomImageSelected.Visible = false;
-                            this.BackgroundImage = Properties.Resources.AppBackground2;
-                        }
-                        if (theme.BackgroundCustomColor == true)
-                        {
-                            lblBackgroundCustomColorSelected.ForeColor = Color.Green;
-                            lblBackgroundBTCdirSelected.Visible = false;
-                            lblBackgroundGenesisSelected.Visible = false;
-                            lblBackgroundCustomColorSelected.Visible = true;
-                            lblBackgroundCustomImageSelected.Visible = false;
-                            this.BackgroundImage = null;
-                            this.BackColor = theme.WindowBackground;
-                        }
-                        if (theme.BackgroundCustomImage == true)
-                        {
-                            lblBackgroundCustomImageSelected.ForeColor = Color.Green;
-                            lblBackgroundBTCdirSelected.Visible = false;
-                            lblBackgroundGenesisSelected.Visible = false;
-                            lblBackgroundCustomColorSelected.Visible = false;
-                            lblBackgroundCustomImageSelected.Visible = true;
-                            this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
-                        }
+                        RestoreTheme(theme);
+                        SaveThemeAsDefault(theme.ThemeName);
                     }
                 }
             }
@@ -8615,6 +8573,95 @@ namespace SATSuma
             {
                 HandleException(ex, "btnLoadTheme_Click");
             }
+        }
+
+        private void RestoreTheme(Theme theme)
+        {
+            ColorDataFields(theme.DataFields);
+            ColorLabels(theme.Labels);
+            ColorHeadings(theme.Headings);
+            ColorTables(theme.Tables);
+            ColorTableHeadings(theme.TableHeadings);
+            ColorOtherText(theme.OtherText);
+            ColorPriceBlock(theme.PriceBlock);
+            ColorStatusError(theme.StatusErrors);
+            ColorButtons(theme.Buttons);
+            ColorButtonText(theme.ButtonText);
+            ColorLines(theme.Lines);
+            ColorTextBoxes(theme.TextBoxes);
+            ColorProgressBars(theme.ProgressBars);
+            ColorTableBackgrounds(theme.TableBackgrounds);
+            ColorTableTitleBars(theme.TableTitleBars);
+            ColorPanels(theme.Panels);
+            if (theme.ShowTime == false)
+            {
+                lblShowClock.ForeColor = Color.IndianRed;
+                lblShowClock.Text = "❌";
+                lblTime.Visible = false;
+            }
+            else
+            {
+                lblShowClock.ForeColor = Color.Green;
+                lblShowClock.Text = "✔️";
+                lblTime.Visible = true;
+            }
+            if (theme.HeadingBGDefault == true)
+            {
+                HeadingBackgroundsToDefault();
+            }
+            if (theme.HeadingBGNone == true)
+            {
+                HeadingBackgroundsToNone();
+            }
+            if (theme.HeadingBGCustom == true)
+            {
+                lblTitleBackgroundCustom.ForeColor = Color.Green;
+                lblTitleBackgroundCustom.Text = "✔️";
+                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                lblTitleBackgroundDefault.Text = "❌";
+                titleBackgroundColor = theme.HeadingBackgrounds;
+                HeadingBackgroundsToCustomColor();
+            }
+            if (theme.BackgroundBTCdir == true)
+            {
+                lblBackgroundBTCdirSelected.ForeColor = Color.Green;
+                lblBackgroundBTCdirSelected.Visible = true;
+                lblBackgroundGenesisSelected.Visible = false;
+                lblBackgroundCustomColorSelected.Visible = false;
+                lblBackgroundCustomImageSelected.Visible = false;
+                this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
+            }
+            if (theme.BackgroundGenesis == true)
+            {
+                lblBackgroundGenesisSelected.ForeColor = Color.Green;
+                lblBackgroundBTCdirSelected.Visible = false;
+                lblBackgroundGenesisSelected.Visible = true;
+                lblBackgroundCustomColorSelected.Visible = false;
+                lblBackgroundCustomImageSelected.Visible = false;
+                this.BackgroundImage = Properties.Resources.AppBackground2;
+            }
+            if (theme.BackgroundCustomColor == true)
+            {
+                lblBackgroundCustomColorSelected.ForeColor = Color.Green;
+                lblBackgroundBTCdirSelected.Visible = false;
+                lblBackgroundGenesisSelected.Visible = false;
+                lblBackgroundCustomColorSelected.Visible = true;
+                lblBackgroundCustomImageSelected.Visible = false;
+                this.BackgroundImage = null;
+                this.BackColor = theme.WindowBackground;
+            }
+            if (theme.BackgroundCustomImage == true)
+            {
+                lblBackgroundCustomImageSelected.ForeColor = Color.Green;
+                lblBackgroundBTCdirSelected.Visible = false;
+                lblBackgroundGenesisSelected.Visible = false;
+                lblBackgroundCustomColorSelected.Visible = false;
+                lblBackgroundCustomImageSelected.Visible = true;
+                this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
+            }
+
         }
 
         private void ColorDataFields(Color thisColor)
@@ -8690,7 +8737,7 @@ namespace SATSuma
                 control.ForeColor = thiscolor;
             }
             //settings
-            Control[] listSettingsLabelsToColor = { label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
+            Control[] listSettingsLabelsToColor = { label193, label194, label196, label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
             foreach (Control control in listSettingsLabelsToColor)
             {
                 control.ForeColor = thiscolor;
@@ -8754,7 +8801,7 @@ namespace SATSuma
                 control.ForeColor = thiscolor;
             }
             //settings
-            Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184 };
+            Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195 };
             foreach (Control control in listSettingsHeadingsToColor)
             {
                 control.ForeColor = thiscolor;
@@ -8859,7 +8906,7 @@ namespace SATSuma
                 control.BackColor = thiscolor;
             }
             //settings
-            Control[] listSettingsButtonsToColor = { button1, button2 };
+            Control[] listSettingsButtonsToColor = { button1, button2, btnSaveTheme, btnLoadTheme };
             foreach (Control control in listSettingsButtonsToColor)
             {
                 control.BackColor = thiscolor;
@@ -8911,7 +8958,7 @@ namespace SATSuma
                 control.ForeColor = thiscolor;
             }
             //settings
-            Control[] listSettingsButtonTextToColor = { button1, button2 };
+            Control[] listSettingsButtonTextToColor = { button1, button2, btnSaveTheme, btnLoadTheme };
             foreach (Control control in listSettingsButtonTextToColor)
             {
                 control.ForeColor = thiscolor;
@@ -8967,7 +9014,7 @@ namespace SATSuma
 
         private void ColorTextBoxes(Color thiscolor)
         {
-            Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxMempoolURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh };
+            Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxMempoolURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
             foreach (Control control in listTextBoxesToColor)
             {
                 control.BackColor = thiscolor;
@@ -9022,7 +9069,7 @@ namespace SATSuma
                 control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
             }
             //settings
-            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
+            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
             foreach (Control control in listSettingsHeadingsToColor)
             {
                 control.BackColor = Color.Transparent;
@@ -9097,7 +9144,7 @@ namespace SATSuma
                 control.BackgroundImage = null;
             }
             //settings
-            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
+            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
             foreach (Control control in listSettingsHeadingsToColor)
             {
                 control.BackColor = Color.Transparent;
@@ -9164,7 +9211,7 @@ namespace SATSuma
                 control.BackColor = titleBackgroundColor;
             }
             //settings
-            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65 };
+            Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
             foreach (Control control in listSettingsHeadingsToColor)
             {
                 control.BackgroundImage = null;
@@ -9218,6 +9265,57 @@ namespace SATSuma
             {
                 control.BackgroundImage = null;
                 control.BackColor = titleBackgroundColor;
+            }
+        }
+
+        private void ColorPanels(Color thiscolor)
+        {
+            Control[] listPanelsToColor = { panel70, panel71, panel73, panel20, panel32 };
+            foreach (Control control in listPanelsToColor)
+            {
+                {
+                    control.BackColor = thiscolor;
+                }
+            }
+        }
+
+        private void SaveThemeAsDefault(string themename)
+        {
+            // write the theme name to the bookmarks file for auto retrieval next time
+            DateTime today = DateTime.Today;
+            string bookmarkData;
+            string keyCheck = "";
+            bookmarkData = themename;
+            var newBookmark = new Bookmark { DateAdded = today, Type = "defaulttheme", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+            if (!defaultThemeAlreadySavedInFile)
+            {
+
+                // Read the existing bookmarks from the JSON file
+                var bookmarks = ReadBookmarksFromJsonFile();
+
+                // Add the new bookmark to the list
+                bookmarks.Add(newBookmark);
+
+                // Write the updated list of bookmarks back to the JSON file
+                WriteBookmarksToJsonFile(bookmarks);
+                defaultThemeAlreadySavedInFile = true;
+                defaultThemeInFile = bookmarkData;
+            }
+            else
+            {
+                if (defaultThemeInFile != themename)
+                {
+                    //delete the currently saved default theme
+                    DeleteBookmarkFromJsonFile(defaultThemeInFile);
+                    // Read the existing bookmarks from the JSON file
+                    var bookmarks = ReadBookmarksFromJsonFile();
+                    // Add the new bookmark to the list
+                    bookmarks.Add(newBookmark);
+                    // Write the updated list of bookmarks back to the JSON file
+                    WriteBookmarksToJsonFile(bookmarks);
+                    defaultThemeAlreadySavedInFile = true;
+                    defaultThemeInFile = bookmarkData;
+                }
             }
         }
         #endregion
@@ -10383,7 +10481,7 @@ namespace SATSuma
             public bool BackgroundBTCdir { get; set; }
             public bool BackgroundCustomColor { get; set; }
             public bool BackgroundCustomImage { get; set; }
-            
+            public Color Panels { get; set; }
         }
 
         // ------------------------------------- Address Transactions -----------------------------------

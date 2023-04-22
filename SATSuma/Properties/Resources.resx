@@ -118,17 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tinylogo1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tinylogo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="titleBGLongerOrangeFlipped" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrangeFlipped.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SatsumaBTCdir1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spectrum2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\spectrum2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="titleBGLongerOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PnVlfRPD_400x400" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PnVlfRPD_400x400.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="title" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="logoNoText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logoNoText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,13 +145,10 @@
   <data name="SatsumaBTCdir" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="spectrum2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\spectrum2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="title" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tinylogo1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tinylogo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SatsumaBTCdir1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CustomImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

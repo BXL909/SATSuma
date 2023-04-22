@@ -9066,22 +9066,24 @@
             // label194
             // 
             this.label194.AutoSize = true;
+            this.label194.Enabled = false;
             this.label194.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label194.ForeColor = System.Drawing.Color.Silver;
             this.label194.Location = new System.Drawing.Point(7, 72);
             this.label194.Name = "label194";
-            this.label194.Size = new System.Drawing.Size(196, 20);
+            this.label194.Size = new System.Drawing.Size(137, 20);
             this.label194.TabIndex = 286;
-            this.label194.Text = "image filename (optional)";
+            this.label194.Text = "path to image file";
             // 
             // textBoxThemeImage
             // 
             this.textBoxThemeImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBoxThemeImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxThemeImage.Enabled = false;
             this.textBoxThemeImage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxThemeImage.ForeColor = System.Drawing.Color.Silver;
             this.textBoxThemeImage.Location = new System.Drawing.Point(232, 69);
-            this.textBoxThemeImage.MaxLength = 20;
+            this.textBoxThemeImage.MaxLength = 200;
             this.textBoxThemeImage.Name = "textBoxThemeImage";
             this.textBoxThemeImage.Size = new System.Drawing.Size(166, 25);
             this.textBoxThemeImage.TabIndex = 287;
@@ -9210,7 +9212,7 @@
             // 
             this.panel67.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.panel67.Controls.Add(this.label188);
-            this.panel67.Location = new System.Drawing.Point(39, 495);
+            this.panel67.Location = new System.Drawing.Point(39, 470);
             this.panel67.Name = "panel67";
             this.panel67.Size = new System.Drawing.Size(108, 25);
             this.panel67.TabIndex = 281;
@@ -9223,15 +9225,15 @@
             this.label188.ForeColor = System.Drawing.Color.Silver;
             this.label188.Location = new System.Drawing.Point(0, 0);
             this.label188.Name = "label188";
-            this.label188.Size = new System.Drawing.Size(64, 20);
+            this.label188.Size = new System.Drawing.Size(77, 20);
             this.label188.TabIndex = 279;
-            this.label188.Text = "Title bar";
+            this.label188.Text = "Headings";
             // 
             // panel66
             // 
             this.panel66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel66.Controls.Add(this.label186);
-            this.panel66.Location = new System.Drawing.Point(39, 470);
+            this.panel66.Location = new System.Drawing.Point(39, 495);
             this.panel66.Name = "panel66";
             this.panel66.Size = new System.Drawing.Size(108, 25);
             this.panel66.TabIndex = 280;
@@ -9244,9 +9246,9 @@
             this.label186.ForeColor = System.Drawing.Color.Silver;
             this.label186.Location = new System.Drawing.Point(0, 0);
             this.label186.Name = "label186";
-            this.label186.Size = new System.Drawing.Size(99, 20);
+            this.label186.Size = new System.Drawing.Size(45, 20);
             this.label186.TabIndex = 277;
-            this.label186.Text = "Background";
+            this.label186.Text = "Data";
             // 
             // btnColorTableTitleBar
             // 
@@ -9260,7 +9262,7 @@
             this.btnColorTableTitleBar.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableTitleBar.ForeColor = System.Drawing.Color.White;
             this.btnColorTableTitleBar.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableTitleBar.Location = new System.Drawing.Point(163, 495);
+            this.btnColorTableTitleBar.Location = new System.Drawing.Point(163, 470);
             this.btnColorTableTitleBar.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableTitleBar.Name = "btnColorTableTitleBar";
             this.btnColorTableTitleBar.Size = new System.Drawing.Size(55, 18);
@@ -9282,7 +9284,7 @@
             this.btnColorTableBackground.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableBackground.ForeColor = System.Drawing.Color.White;
             this.btnColorTableBackground.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableBackground.Location = new System.Drawing.Point(163, 470);
+            this.btnColorTableBackground.Location = new System.Drawing.Point(163, 495);
             this.btnColorTableBackground.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableBackground.Name = "btnColorTableBackground";
             this.btnColorTableBackground.Size = new System.Drawing.Size(55, 18);
@@ -9314,9 +9316,9 @@
             this.label184.Location = new System.Drawing.Point(0, 2);
             this.label184.Margin = new System.Windows.Forms.Padding(0);
             this.label184.Name = "label184";
-            this.label184.Size = new System.Drawing.Size(53, 20);
+            this.label184.Size = new System.Drawing.Size(148, 20);
             this.label184.TabIndex = 153;
-            this.label184.Text = "Tables";
+            this.label184.Text = "Table backgrounds";
             // 
             // btnColorTitleBackgrounds
             // 
@@ -9747,9 +9749,9 @@
             this.label170.ForeColor = System.Drawing.Color.Silver;
             this.label170.Location = new System.Drawing.Point(39, 115);
             this.label170.Name = "label170";
-            this.label170.Size = new System.Drawing.Size(53, 20);
+            this.label170.Size = new System.Drawing.Size(86, 20);
             this.label170.TabIndex = 252;
-            this.label170.Text = "Tables";
+            this.label170.Text = "Table data";
             // 
             // btnColorLines
             // 

@@ -27,7 +27,7 @@ Version history 🍊
  * find P2SH xpub to test with
  * test and enable testnet
  * save users choice of default theme
- * ability to re-colour any remaining controls that aren't already customisable (tickboxes and panel backgrounds)
+ * ability to re-colour tickboxes and panel backgrounds
  */
 
 #region Using
@@ -8191,6 +8191,9 @@ namespace SATSuma
             lblBackgroundCustomColorSelected.Visible = false;
             lblBackgroundCustomImageSelected.Visible = false;
             lblTime.Visible = true;
+            label194.Enabled = false;
+            textBoxThemeImage.Enabled = false;
+            textBoxThemeImage.Text = "";
         }
 
         private void PictureBoxBTCDir_Click(object sender, EventArgs e)
@@ -8204,6 +8207,9 @@ namespace SATSuma
             lblBackgroundBTCdirSelected.Visible = true;
             lblBackgroundCustomColorSelected.Visible = false;
             lblBackgroundCustomImageSelected.Visible = false;
+            label194.Enabled = false;
+            textBoxThemeImage.Enabled = false;
+            textBoxThemeImage.Text = "";
         }
 
         private void PictureBoxCustomColor_Click(object sender, EventArgs e)
@@ -8228,6 +8234,9 @@ namespace SATSuma
                 lblBackgroundBTCdirSelected.Visible = false;
                 lblBackgroundCustomColorSelected.Visible = true;
                 lblBackgroundCustomImageSelected.Visible = false;
+                label194.Enabled = false;
+                textBoxThemeImage.Enabled = false;
+                textBoxThemeImage.Text = "";
             }
 
         }
@@ -8352,6 +8361,8 @@ namespace SATSuma
                 lblBackgroundCustomColorSelected.Visible = false;
                 lblBackgroundCustomImageSelected.Visible = true;
                 lblTime.Visible = false;
+                label194.Enabled = true;
+                textBoxThemeImage.Enabled = true;
             }
         }
 
@@ -8433,7 +8444,7 @@ namespace SATSuma
                     headingbgcustom = true;
                 }
                 bool backgroundgenesis = false;
-                if (lblBackgroundBTCdirSelected.Visible == true)
+                if (lblBackgroundGenesisSelected.Visible == true)
                 {
                     backgroundgenesis = true;
                 }

@@ -52,7 +52,7 @@
             this.lblTransInNextBlock = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.lblEstimatedHalvingDate = new System.Windows.Forms.Label();
-            this.lblHalveningSecondsRemaining = new System.Windows.Forms.Label();
+            this.lblHalvingSecondsRemaining = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -1058,15 +1058,15 @@
             // 
             // lblHalveningSecondsRemaining
             // 
-            this.lblHalveningSecondsRemaining.AutoSize = true;
-            this.lblHalveningSecondsRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblHalveningSecondsRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHalveningSecondsRemaining.Location = new System.Drawing.Point(371, 533);
-            this.lblHalveningSecondsRemaining.Name = "lblHalveningSecondsRemaining";
-            this.lblHalveningSecondsRemaining.Size = new System.Drawing.Size(80, 22);
-            this.lblHalveningSecondsRemaining.TabIndex = 140;
-            this.lblHalveningSecondsRemaining.Text = "no data";
-            this.toolTip1.SetToolTip(this.lblHalveningSecondsRemaining, "(estimated)");
+            this.lblHalvingSecondsRemaining.AutoSize = true;
+            this.lblHalvingSecondsRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHalvingSecondsRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHalvingSecondsRemaining.Location = new System.Drawing.Point(371, 533);
+            this.lblHalvingSecondsRemaining.Name = "lblHalveningSecondsRemaining";
+            this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(80, 22);
+            this.lblHalvingSecondsRemaining.TabIndex = 140;
+            this.lblHalvingSecondsRemaining.Text = "no data";
+            this.toolTip1.SetToolTip(this.lblHalvingSecondsRemaining, "(estimated)");
             // 
             // label19
             // 
@@ -1438,7 +1438,7 @@
             this.panelBitcoinDashboard.Controls.Add(this.lblNextDiffAdjBlock);
             this.panelBitcoinDashboard.Controls.Add(this.label8);
             this.panelBitcoinDashboard.Controls.Add(this.lblHashesToSolve);
-            this.panelBitcoinDashboard.Controls.Add(this.lblHalveningSecondsRemaining);
+            this.panelBitcoinDashboard.Controls.Add(this.lblHalvingSecondsRemaining);
             this.panelBitcoinDashboard.Controls.Add(this.label7);
             this.panelBitcoinDashboard.Controls.Add(this.lblBTCInCirc);
             this.panelBitcoinDashboard.Controls.Add(this.lblEstimatedHalvingDate);
@@ -8897,7 +8897,7 @@
             // 
             this.panel73.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.panel73.Controls.Add(this.label197);
-            this.panel73.Location = new System.Drawing.Point(39, 387);
+            this.panel73.Location = new System.Drawing.Point(39, 388);
             this.panel73.Name = "panel73";
             this.panel73.Size = new System.Drawing.Size(105, 23);
             this.panel73.TabIndex = 295;
@@ -8933,7 +8933,7 @@
             this.btnColorPanels.TabStop = false;
             this.btnColorPanels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorPanels.UseVisualStyleBackColor = false;
-            this.btnColorPanels.Click += new System.EventHandler(this.btnColorPanels_Click);
+            this.btnColorPanels.Click += new System.EventHandler(this.BtnColorPanels_Click);
             // 
             // panel71
             // 
@@ -9726,12 +9726,12 @@
             // 
             this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.Gray;
-            this.textBox1.Location = new System.Drawing.Point(39, 362);
+            this.textBox1.Location = new System.Drawing.Point(39, 361);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(90, 23);
+            this.textBox1.Size = new System.Drawing.Size(90, 25);
             this.textBox1.TabIndex = 218;
             this.textBox1.Text = "Textboxes";
             // 
@@ -9794,7 +9794,7 @@
             // 
             this.label170.AutoSize = true;
             this.label170.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label170.ForeColor = System.Drawing.Color.Silver;
+            this.label170.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.label170.Location = new System.Drawing.Point(39, 115);
             this.label170.Name = "label170";
             this.label170.Size = new System.Drawing.Size(86, 20);
@@ -10228,7 +10228,7 @@
         private System.Windows.Forms.Label lblHalveningBlock;
         private System.Windows.Forms.Label lblEstimatedHalvingDate;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label lblHalveningSecondsRemaining;
+        private System.Windows.Forms.Label lblHalvingSecondsRemaining;
         private System.Windows.Forms.Panel panelAddress;
         private System.Windows.Forms.Label lblAddressType;
         private System.Windows.Forms.TextBox textboxSubmittedAddress;

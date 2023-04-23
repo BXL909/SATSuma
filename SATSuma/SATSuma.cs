@@ -103,7 +103,7 @@ namespace SATSuma
         private bool RunMempoolSpaceLightningAPI = true;
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
-        private bool ObtainedHalveningSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
+        private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
 #pragma warning disable IDE0044 // Add readonly modifier
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
         private TransactionsForAddressService _transactionsForAddressService;
@@ -266,24 +266,24 @@ namespace SATSuma
                     lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
                 });
             }
-            if (ObtainedHalveningSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
+            if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
             {
-                string secondsString = lblHalveningSecondsRemaining.Text;
+                string secondsString = lblHalvingSecondsRemaining.Text;
                 try
                 {
                     int SecondsToHalving = int.Parse(secondsString);
                     if (SecondsToHalving > 0)
                     {
                         SecondsToHalving--; // one second closer to the halvening!
-                        lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                         {
-                            lblHalveningSecondsRemaining.Text = SecondsToHalving.ToString();
+                            lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
                         });
                     }
                 }
                 catch 
                 {
-                    lblHalveningSecondsRemaining.Text = "disabled";
+                    lblHalvingSecondsRemaining.Text = "disabled";
                 }
             }
 
@@ -351,33 +351,35 @@ namespace SATSuma
                         var blocksJson = await _blockService.GetBlockDataAsync(lblBlockNumber.Text); 
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
-                        // !!!NEED TO HANDLE 'BLOCKS' BEING NULL HERE
-                        lblTransactions.Invoke((MethodInvoker)delegate
+                        if (blocks != null)
                         {
-                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
-                        });
+                            lblTransactions.Invoke((MethodInvoker)delegate
+                            {
+                                lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
+                            });
 
 
-                        long sizeInBytes = blocks[0].Size;
-                        string sizeString; // convert display to bytes/kb/mb accordingly
-                        if (sizeInBytes < 1000)
-                        {
-                            sizeString = $"{sizeInBytes} bytes";
+                            long sizeInBytes = blocks[0].Size;
+                            string sizeString; // convert display to bytes/kb/mb accordingly
+                            if (sizeInBytes < 1000)
+                            {
+                                sizeString = $"{sizeInBytes} bytes";
+                            }
+                            else if (sizeInBytes < 1000 * 1000)
+                            {
+                                double sizeInKB = (double)sizeInBytes / 1000;
+                                sizeString = $"{sizeInKB:N2} KB";
+                            }
+                            else
+                            {
+                                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                                sizeString = $"{sizeInMB:N2} MB";
+                            }
+                            lblBlockSize.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockSize.Text = sizeString;
+                            });
                         }
-                        else if (sizeInBytes < 1000 * 1000)
-                        {
-                            double sizeInKB = (double)sizeInBytes / 1000;
-                            sizeString = $"{sizeInKB:N2} KB";
-                        }
-                        else
-                        {
-                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                            sizeString = $"{sizeInMB:N2} MB";
-                        }
-                        lblBlockSize.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockSize.Text = sizeString;
-                        });
                     }
                     catch (Exception ex)
                     {
@@ -716,7 +718,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task3)");
                     }
                 });
-                Task task6 = Task.Run(() => // mempool.space lightning JSON
+                Task task4 = Task.Run(() => // mempool.space lightning JSON
                 {
                     try
                     {
@@ -932,7 +934,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task6)");
                     }
                 });
-                Task task7 = Task.Run(() =>  // blockchair.com JSON for chain stats
+                Task task5 = Task.Run(() =>  // blockchair.com JSON for chain stats
                 {
                     try
                     {
@@ -996,7 +998,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task7)");
                     }
                 });
-                Task task8 = Task.Run(() =>  // blockchair.com JSON for halving stats
+                Task task6 = Task.Run(() =>  // blockchair.com JSON for halving stats
                 {
                     try
                     {
@@ -1022,11 +1024,11 @@ namespace SATSuma
                             {
                                 lblEstimatedHalvingDate.Text = halveningDate + " / ";
                             });
-                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
-                                lblHalveningSecondsRemaining.Text = seconds_left;
-                                ObtainedHalveningSecondsRemainingYet = true; // signifies that we can now start deducting from this
+                                lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
+                                lblHalvingSecondsRemaining.Text = seconds_left;
+                                ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
                             });
                         }
                         else
@@ -1044,9 +1046,9 @@ namespace SATSuma
                             {
                                 lblEstimatedHalvingDate.Text = "disabled";
                             });
-                            lblHalveningSecondsRemaining.Invoke((MethodInvoker)delegate
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningSecondsRemaining.Text = "disabled";
+                                lblHalvingSecondsRemaining.Text = "disabled";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -1058,7 +1060,7 @@ namespace SATSuma
                     }
                 });
 
-                await Task.WhenAll(task0, task1, task2, task3, task6, task7, task8);
+                await Task.WhenAll(task0, task1, task2, task3, task4, task5, task6);
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
@@ -1081,7 +1083,6 @@ namespace SATSuma
             ToggleLoadingAnimation("disable");
         }
 
-        //=============================================================================================================
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
         
         private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) GetDifficultyAdjustment()
@@ -1420,6 +1421,8 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
 
+        //------------------------------------ CURRENCY --------------------------------------------------------------
+
         private void BtnUSD_Click(object sender, EventArgs e)
         {
             btnUSD.Enabled = false;
@@ -1575,14 +1578,11 @@ namespace SATSuma
             lblPriceUSD.Invoke((MethodInvoker)delegate
             {
                 lblPriceUSD.Text = price;
-                
             });
             lblHeaderPrice.Invoke((MethodInvoker)delegate
             {
                 lblHeaderPrice.Text = price;
             });
-
-
             lblMarketCapUSD.Invoke((MethodInvoker)delegate
             {
                 lblMarketCapUSD.Text = mCap;
@@ -1591,7 +1591,6 @@ namespace SATSuma
             {
                 lblHeaderMarketCap.Text = mCap;
             });
-
             lblMoscowTime.Invoke((MethodInvoker)delegate
             {
                 lblMoscowTime.Text = satsPerUnit;
@@ -1600,14 +1599,11 @@ namespace SATSuma
             {
                 lblHeaderMoscowTime.Text = satsPerUnit;
             });
-
         }
 
-        //=============================================================================================================
         //---------------------- CONNECTING LINES BETWEEN FIELDS ON LIGHTNING DASHBOARD -------------------------------
         private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
         {
-            
             using Pen pen = new Pen(linesColor, 1);
             // Capacity connecting lines
             e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
@@ -1634,7 +1630,7 @@ namespace SATSuma
         #region ADDRESS SCREEN
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
-        //=============================================================================================================
+
         //---------------------- DETERMINE BITCOIN ADDRESS TYPE--------------------------------------------------------
         private string DetermineAddressType(string address)
         {
@@ -1685,11 +1681,9 @@ namespace SATSuma
             }
         }
 
-        //=============================================================================================================
         //--------------- VALIDATE BITCOIN ADDRESS,GENERATE QR, BALANCE, TX, ETC---------------------------------------
         private async void TboxSubmittedAddress_TextChanged(object sender, EventArgs e)
         {
-
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
@@ -1737,7 +1731,6 @@ namespace SATSuma
                 }
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
                 ToggleLoadingAnimation("disable"); // stop the loading animation
-
             }
             else
             {
@@ -1779,10 +1772,8 @@ namespace SATSuma
                 }); 
                 AddressInvalidHideControls();
             }
-
         }
 
-        //=============================================================================================================
         //------------------------------------------ GET ADDRESS BALANCE-----------------------------------------------
         private async Task GetAddressBalance(string addressString)
         {
@@ -2022,7 +2013,6 @@ namespace SATSuma
             await GetAddressBalance(addressString);
         }
 
-        //=============================================================================================================
         //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
         private async Task GetTransactionsForAddress(string addressString, string lastSeenTxId)
         {
@@ -2236,6 +2226,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GET NEXT TRANSACTIONS FOR ADDRESS --------------------------------------------------
         private async void BtnGetNextTransactionsForAddress(object sender, EventArgs e)
         {
             ToggleLoadingAnimation("enable"); // start the loading animation
@@ -2259,6 +2250,7 @@ namespace SATSuma
             BtnViewTransactionFromAddress.Visible = false;
         }
 
+        //------------------------ JUMP BACK TO FIRST TRANSACTION ------------------------------------------------------
         private async void BtnFirstTransactionForAddress_Click(object sender, EventArgs e)
         {
             ToggleLoadingAnimation("enable"); // start the loading animation
@@ -2281,6 +2273,7 @@ namespace SATSuma
             ToggleLoadingAnimation("disable"); // stop the loading animation
         }
 
+        //------------------------ SHOW TRANSACTIONS IN MEMPOOL ------------------------------------------------------
         private void BtnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
@@ -2308,6 +2301,7 @@ namespace SATSuma
             });
         }
 
+        //------------------------ SHOW CONFIRMED TRANSACTIONS ------------------------------------------------------
         private void BtnShowConfirmedTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = false;
@@ -2333,6 +2327,7 @@ namespace SATSuma
             });
         }
 
+        //------------------------ SHOW CONFIRMED & UNCONFIRMED TRANSACTIONS -------------------------------------------
         private void BtnShowAllTXForAddress_Click(object sender, EventArgs e)
         {
             btnShowConfirmedTX.Enabled = true;
@@ -2358,6 +2353,7 @@ namespace SATSuma
             });
         }
 
+        //------------------------ VIEW THE BLOCK CONTAINING THIS TRANSACTION ------------------------------------------
         private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
             //assign block number to text box on block panel
@@ -2382,6 +2378,7 @@ namespace SATSuma
             BtnMenuBlock_Click(sender, e);
         }
 
+        //------------------------ VIEW THIS TRANSACTION ------------------------------------------------------
         private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
         {
             //assign TX ID to text box on transaction panel
@@ -2398,7 +2395,6 @@ namespace SATSuma
             BtnMenuTransaction_Click(sender, e);
         }
 
-        //=============================================================================================================
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
         private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -2431,7 +2427,6 @@ namespace SATSuma
             BtnViewBlockFromAddress.Visible = anySelected;
         }
 
-        //=============================================================================================================
         //-----DRAW AN ELLIPSIS WHEN STRINGS DONT FIT IN LISTVIEW COLUMN (ALSO COLOUR BALANCE DIFFERENCE RED/GREEN)----
         private void ListViewAddressTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -2485,8 +2480,7 @@ namespace SATSuma
             }
         }
 
-        //=============================================================================================================
-        //------------------ LIMIT MINIMUM WIDTH OF LISTVIEW COLUMNS --------------------------------------------------
+        //------------------ LIMIT MINIMUM WIDTH OF ADDRESS LISTVIEW COLUMNS ------------------------------------------
         private void ListViewAddressTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -2538,6 +2532,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ SHOW ALL THE ADDRESS CONTROLS ------------------------------------------------------
         private void AddressValidShowControls() // show all address related controls
         {
             if (mempoolConfUnconfOrAllTx == "mempool")//only one page of unconfirmed tx regardless how many tx there are
@@ -2568,6 +2563,7 @@ namespace SATSuma
             panel44.Visible = true;
         }
 
+        //------------------------ HIDE ALL THE ADDRESS CONTROLS ------------------------------------------------------
         private void AddressInvalidHideControls() // hide all address related controls
         {
             if (lblAddressType.Visible)
@@ -2608,9 +2604,8 @@ namespace SATSuma
         #region BLOCK SCREEN
         //==============================================================================================================================================================================================
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
-        //=============================================================================================================
-        //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
 
+        //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
         private void TextBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -2769,6 +2764,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ LOOK UP THE BLOCK ------------------------------------------------------------------
         private async void LookupBlock()
         {
             try
@@ -2818,6 +2814,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GET FIFTEEN BLOCKS STARTNG FROM THE ONE WE'RE INTERESTED IN ------------------------
         private async Task GetFifteenBlocks(string blockNumber) // overkill at this point, because we're only interested in one block, but this gets us the data
         {
             try
@@ -2894,6 +2891,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GET TRANSACTIONS FOR BLOCK ---------------------------------------------------------
         private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
         {
             try
@@ -3022,6 +3020,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GET NEXT BATCH OF TRANSACTIONS FOR BLOCK -------------------------------------------
         private async void BtnNextBlockTransactions_Click(object sender, EventArgs e)
         {
             try
@@ -3043,6 +3042,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GET PREVIOUS BATCH OF TRANSACTIONS FOR BLOCK -----------------------------------------
         private async void BtnPreviousBlockTransactions_Click(object sender, EventArgs e)
         {
             try
@@ -3050,7 +3050,6 @@ namespace SATSuma
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-
 
                 if (TotalBlockTransactionRowsAdded % 25 == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
                 {
@@ -3076,6 +3075,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ VIEW PREVIOUS BLOCK ------------------------------------------------------------------
         private void BtnPreviousBlock_Click(object sender, EventArgs e) // decrease block number by 1 and populate block data
         {
             try
@@ -3093,6 +3093,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ VIEW NEXT BLOCK --------------------------------------------------------------------
         private void BtnNextBlock_Click(object sender, EventArgs e) // increase block number by 1 and populate block data
         {
             try
@@ -3110,6 +3111,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ USER SELECTED A TRANSACTION ROW -----------------------------------------------------
         private void ListViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -3140,6 +3142,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ USER TRYING TO RESIZE COLUMNS ------------------------------------------------------
         private void ListViewBlockTransactions_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -3194,6 +3197,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ FORMAT DATA WHILE DRAWING LISTVIEW ------------------------------------------------------
         private void ListViewBlockTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
@@ -3246,6 +3250,7 @@ namespace SATSuma
             }
         }
 
+        //------------------------ GO TO THE TRANSACTION SCREEN ----------------------------------------------------------
         private void BtnViewTransactionFromBlock_Click(object sender, EventArgs e)
         {
             try
@@ -3272,6 +3277,9 @@ namespace SATSuma
         #endregion
 
         #region TRANSACTION SCREEN
+        //==============================================================================================================================================================================================
+        //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
+
         private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3291,6 +3299,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- TRANSACTION ID FIELD HAS CHANGED ------------------------------------------------
         private async void TextBoxTransactionID_TextChanged(object sender, EventArgs e)
         {
             string transactionIdToValidate = textBoxTransactionID.Text;
@@ -3343,6 +3352,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- CHECK ITS A VALID TRANSACTION ID FORMAT -----------------------------------------
         private bool ValidateTransactionId(string transactionId) // checks if transaction ID is in a valid format
         {
             try
@@ -3356,6 +3366,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- CHECK IF THE TRANSACTION ID EXISTS ----------------------------------------------
         private async Task<bool> TransactionExists(string transactionId) // checks if the valid transaction ID actually exists
         {
             string url = NodeURL + "tx/" + transactionId;
@@ -3364,6 +3375,7 @@ namespace SATSuma
             return response.IsSuccessStatusCode;
         }
 
+        //-------------------- LOOKUP THE TRANSACTION ----------------------------------------------------------
         private async void LookupTransaction()
         {
             try
@@ -3377,6 +3389,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- GET TRANSACTION DATA AND DISPLAY IT AND DIAGRAM ---------------------------------
         private async Task GetTransaction(string submittedTransactionID)
         {
             try
@@ -3384,12 +3397,11 @@ namespace SATSuma
                 linePoints.Clear();
                 btnViewAddressFromTXInput.Visible = false;
                 btnViewAddressFromTXOutput.Visible = false;
-                //panelTransactionDiagram.Invalidate();
-                //            DisableEnableLoadingAnimation("enable"); // start the loading animation
-                //            DisableEnableButtons("disable"); // disable buttons during operation
+                // DisableEnableLoadingAnimation("enable"); // start the loading animation
+                // DisableEnableButtons("disable"); // disable buttons during operation
                 var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
-                //            DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                //            DisableEnableButtons("enable"); // enable buttons after operation is complete
+                // DisableEnableLoadingAnimation("disable"); // stop the loading animation
+                // DisableEnableButtons("enable"); // enable buttons after operation is complete
                 var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
                 lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                 {
@@ -3448,7 +3460,6 @@ namespace SATSuma
                 {
                     lblTransactionFee.Text = Convert.ToString(transaction.Fee);
                 });
-
 
                 if (transaction.Vin.Count() == 1)
                 {
@@ -3776,7 +3787,6 @@ namespace SATSuma
 
                 // Trigger a repaint of the form
                 this.Invalidate();
-
             }
             catch (Exception ex)
             {
@@ -3784,6 +3794,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- AN INPUT ROW HAS BEEN SELECTED --------------------------------------------------
         private void ListViewTransactionInputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -3823,6 +3834,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- AN OUTPUT ROW HAS BEEN SELECTED --------------------------------------------------
         private void ListViewTransactionOutputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -3861,6 +3873,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- USER TRYING TO CHANGE COLUMN WIDTHS ----------------------------------------------
         private void ListViewTransactionInputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -3886,6 +3899,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- USER TRYING TO CHANGE COLUMN WIDTHS ----------------------------------------------
         private void ListViewTransactionOutputs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -3911,11 +3925,10 @@ namespace SATSuma
             }
         }
 
+        //-------------------- FORMAT DATA WHILE DRAWING LISTVIEW ----------------------------------------------
         private void ListViewTransactionInputs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
-
-
             var font = listViewTransactionInputs.Font;
             var columnWidth = e.Header.Width;
             var textWidth = TextRenderer.MeasureText(text, font).Width;
@@ -3953,11 +3966,10 @@ namespace SATSuma
             }
         }
 
+        //-------------------- FORMAT DATA WHILE DRAWING LISTVIEW ----------------------------------------------
         private void ListViewTransactionOutputs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
-
-
             var font = listViewTransactionOutputs.Font;
             var columnWidth = e.Header.Width;
             var textWidth = TextRenderer.MeasureText(text, font).Width;
@@ -3995,7 +4007,7 @@ namespace SATSuma
             }
         }
 
-        // draw all the lines on the transaction diagram from the previously stored list.
+        //-------DRAW LINES ON TRANSACTION DIAGRAM FROM PREVIOUSLY STORED LIST-----------------------------------
         private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
         {
             Pen pen = new Pen(linesColor);
@@ -4007,6 +4019,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-DOWN INPUTS CLICKED -------------------------------------------------------
         private void BtnTransactionInputsDown_Click(object sender, EventArgs e)
         {
             if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum)
@@ -4015,6 +4028,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-DOWN OUTPUTS CLICKED -----------------------------------------------------
         private void BtnTransactionOutputsDown_Click(object sender, EventArgs e)
         {
             if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum)
@@ -4030,6 +4044,7 @@ namespace SATSuma
         private bool OutputDownButtonPressed = false;
         private bool OutputUpButtonPressed = false;
 
+        //-------------------- SCROLL-DOWN MOUSE-DOWN --------------------------------------------------------
         private void BtnTransactionInputsDown_MouseDown(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = true;
@@ -4045,6 +4060,7 @@ namespace SATSuma
             TXOutScrollTimer.Start();
         }
 
+        //-------------------- SCROLL-DOWN MOUSE-UP-- --------------------------------------------------------
         private void BtnTransactionInputsDown_MouseUp(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = false;
@@ -4062,6 +4078,7 @@ namespace SATSuma
 
         }
 
+        //-------------------- HANDLE THE ACTUAL SCROLLING --------------------------------------------------
         private void TXInTimer_Tick(object sender, EventArgs e)
         {
             if (isInputButtonPressed)
@@ -4120,6 +4137,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-UP INPUTS CLICKED -------------------------------------------------------
         private void BtnTransactionInputsUp_Click(object sender, EventArgs e)
         {
             if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum)
@@ -4128,6 +4146,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-UP OUTPUTS CLICKED -------------------------------------------------------
         private void BtnTransactionOutputsUp_Click(object sender, EventArgs e)
         {
             if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum)
@@ -4136,6 +4155,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-UP MOUSE-DOWN -------------------------------------------------------
         private void BtnTransactionInputsUp_MouseDown(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = true;
@@ -4150,6 +4170,7 @@ namespace SATSuma
             TXOutScrollTimer.Start();
         }
 
+        //-------------------- SCROLL-UP MOUSE-UP -------------------------------------------------------
         private void BtnTransactionInputsUp_MouseUp(object sender, MouseEventArgs e)
         {
             isInputButtonPressed = false;
@@ -4166,6 +4187,7 @@ namespace SATSuma
             TXOutScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
+        //-------------------- VIEW ADDRESS ------------------------------------------------------------
         private void BtnViewAddressFromTXInput_Click(object sender, EventArgs e)
         {
             try
@@ -4210,6 +4232,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- PREVENT LIST-VIEW FROM JUMPING TO TOP WHEN PAINTED ------------------------
         private void PanelTransactionInputs_Paint(object sender, PaintEventArgs e)
         {
             if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
@@ -4228,6 +4251,10 @@ namespace SATSuma
         #endregion
 
         #region BLOCK LIST SCREEN
+        //==============================================================================================================================================================================================
+        //====================== BLOCK LIST SCREEN STUFF ==============================================================================================================================================
+
+        //-------------------- VALIDATE BLOCK LIST HEIGHT TO START LIST FROM ------------------------------------------------
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -4374,7 +4401,6 @@ namespace SATSuma
 
         private void TextBoxBlockHeightToStartListFrom_TextChanged(object sender, EventArgs e)
         {
-
             if (string.IsNullOrEmpty(textBoxBlockHeightToStartListFrom.Text.Trim()))
             {
                 textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -4398,6 +4424,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- GET A LIST OF FIFTEEN BLOCKS AND DISPLAY THEM ------------------------------------------------
         private async Task GetFifteenBlocksForBlockList(string lastSeenBlockNumber)
         {
             try
@@ -4568,6 +4595,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- GET THE PREVIOUS FIFTEEN BLOCKS --------------------------------------------------------------
         private async void BtnOlder15Blocks_Click(object sender, EventArgs e)
         {
             try
@@ -4584,6 +4612,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- GET THE NEXT FIFTEEN BLOCKS ------------------------------------------------------------------
         private async void BtnNewer15Blocks_Click(object sender, EventArgs e)
         {
             try
@@ -4617,6 +4646,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- A ROW HAS BEEN CLICKED ON BLOCKLIST ----------------------------------------------------------
         private async void ListViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -4766,6 +4796,7 @@ namespace SATSuma
 
         }
 
+        //-------------------- VIEW INDIVIDUAL BLOCK ------------------------------------------------------------------------
         private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)  
         {
             try
@@ -4790,6 +4821,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- USER TRYING TO CHANGE COLUMN WIDTH -----------------------------------------------------------
         private void ListViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -4850,15 +4882,14 @@ namespace SATSuma
             }
         }
 
+        ////-------------------- FORMAT THE DATA IN THE LISTVIEW ------------------------------------------------------------
         private void ListViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-
             var text = e.SubItem.Text;
 
             if (text[0] == '+') // if the string is a change to an amount and positive
             {
                 e.SubItem.ForeColor = Color.OliveDrab; // make it green
-
             }
             else
             if (text[0] == '-') // if the string is a change to an amount and negative
@@ -4901,11 +4932,12 @@ namespace SATSuma
 
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
-
         }
         #endregion
 
         #region XPUB SCREEN
+        //==============================================================================================================================================================================================
+        //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
 
         private bool xpubValid = false;
 
@@ -4927,6 +4959,7 @@ namespace SATSuma
             } 
         }
 
+        //-----DERIVE ADDRESSES FOR DIFFERENT ADDRESS TYPES, SCAN FOR TX'S AND OUTPUT TO LIST -------------------------------------
         private async void LookupXpub()
         {
             try
@@ -6028,6 +6061,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- VALIDATE INPUT AND LOOK UP XPUB --------------------------------------------------------------------
         private void TextBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
         {
             if (textBoxSubmittedXpub.Text == "")
@@ -6084,6 +6118,7 @@ namespace SATSuma
             LookupXpub();
         }
 
+        //-------------------- FORMAT DATA IN LISTVIEW ----------------------------------------------------------------------------
         private void ListViewXpubAddresses_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var text = e.SubItem.Text;
@@ -6147,9 +6182,9 @@ namespace SATSuma
             }
         }
 
-
         private bool isTextBoxMempoolURLWatermarkTextDisplayed = true;
 
+        //-------------------- VALIDATE NODE URL ENTRY ---------------------------------------------------------------------------
         private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
         {
             if (isTextBoxMempoolURLWatermarkTextDisplayed)
@@ -6195,6 +6230,19 @@ namespace SATSuma
             }
         }
 
+        private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (previousXpubNodeStringToCompare != textBoxMempoolURL.Text)
+            {
+                textBoxSubmittedXpub.Enabled = false;
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+                textBoxSubmittedXpub.Text = "";
+                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
+                CheckXpubNodeIsOnline();
+            }
+        }
+
         private void LblSegwitUsedAddresses_Paint(object sender, PaintEventArgs e)
         {
             lblSegwitUsedAddresses.Location = new Point(label123.Location.X + label123.Width, label123.Location.Y);
@@ -6212,6 +6260,7 @@ namespace SATSuma
 
         private string xpubNodeURL = "";
 
+        //-------------------- CHECK NODE ONLINE -------------------------------------------------------
         private async void CheckXpubNodeIsOnline()
         {
             using var client = new HttpClient();
@@ -6342,6 +6391,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- USER TRYING TO CHANGE COLUMN WIDTHS -------------------------------------
         private void ListViewXpubAddresses_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -6412,6 +6462,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- HIDE PROGRESS BARS, ETC AFTER A PERIOD ----------------------------------
         private void TimerHideProgressBars_Tick(object sender, EventArgs e)
         {
             progressBarCheckAllAddressTypes.Visible = false;
@@ -6424,6 +6475,7 @@ namespace SATSuma
             timerHideProgressBars.Stop();
         }
 
+        //-------------------- ROW SELECTED ON THE LISTVIEW --------------------------------------------
         private void ListViewXpubAddresses_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -6461,6 +6513,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- SCROLL-DOWN LISTVIEW ----------------------------------------------------
         private void BtnXpubAddressesDown_Click(object sender, EventArgs e)
         {
             if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum)
@@ -6488,6 +6541,7 @@ namespace SATSuma
             XpubScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
+        //-------------------- SCROLL-UP LISTVIEW -------------------------------------------------------
         private void BtnXpubAddressUp_Click(object sender, EventArgs e)
         {
             if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum)
@@ -6511,6 +6565,7 @@ namespace SATSuma
             XpubScrollTimer.Interval = 50; // reset the interval to its original value
         }
 
+        //-------------------- HANDLE THE SCROLLING -------------------------------------------------------
         private void XpubScrollTimer_Tick(object sender, EventArgs e)
         {
             if (isXpubButtonPressed)
@@ -6540,19 +6595,6 @@ namespace SATSuma
             }
         }
 
-        private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (previousXpubNodeStringToCompare != textBoxMempoolURL.Text)
-            {
-                textBoxSubmittedXpub.Enabled = false;
-                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                label18.Text = "invalid / node offline";
-                textBoxSubmittedXpub.Text = "";
-                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
-                CheckXpubNodeIsOnline();
-            }
-        }
-
         private void PanelXpub_Paint(object sender, PaintEventArgs e)
         {
             textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
@@ -6568,6 +6610,7 @@ namespace SATSuma
             }
         }
 
+        //-------------------- VIEW ADDRESS --------------------------------------------------------------
         private void BtnViewAddressFromXpub_Click(object sender, EventArgs e)
         {
             try
@@ -6749,6 +6792,8 @@ namespace SATSuma
                         counterAllBookmarks++;
                     }
                 }
+
+                listViewBookmarks.Items[0].Selected = true;
 
                 lblBookmarkXpubsCount.Invoke((MethodInvoker)delegate
                 {
@@ -8023,7 +8068,7 @@ namespace SATSuma
             }
         }
 
-        private void btnColorPanels_Click(object sender, EventArgs e)
+        private void BtnColorPanels_Click(object sender, EventArgs e)
         {
             ColorDialog colorDlgForPanels = new ColorDialog
             {
@@ -8673,7 +8718,7 @@ namespace SATSuma
                 control.ForeColor = thisColor;
             }
             //bitcoindashboard
-            Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblHalveningBlock, lblEstimatedHalvingDate, lblHalveningSecondsRemaining, lblBlockRewardAfterHalving };
+            Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblHalveningBlock, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving };
             foreach (Control control in listBitcoinDashboardDataFieldsToColor)
             {
                 control.ForeColor = thisColor;

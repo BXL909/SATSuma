@@ -1056,13 +1056,13 @@
             this.lblEstimatedHalvingDate.Text = "no data";
             this.toolTip1.SetToolTip(this.lblEstimatedHalvingDate, "(estimated)");
             // 
-            // lblHalveningSecondsRemaining
+            // lblHalvingSecondsRemaining
             // 
             this.lblHalvingSecondsRemaining.AutoSize = true;
             this.lblHalvingSecondsRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblHalvingSecondsRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHalvingSecondsRemaining.Location = new System.Drawing.Point(371, 533);
-            this.lblHalvingSecondsRemaining.Name = "lblHalveningSecondsRemaining";
+            this.lblHalvingSecondsRemaining.Name = "lblHalvingSecondsRemaining";
             this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(80, 22);
             this.lblHalvingSecondsRemaining.TabIndex = 140;
             this.lblHalvingSecondsRemaining.Text = "no data";
@@ -9884,11 +9884,11 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);

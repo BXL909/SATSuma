@@ -37,51 +37,22 @@ using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.LinkLabel;
 using System.Globalization;
 using NBitcoin;
-using NBitcoin.Crypto;
-using NBitcoin.DataEncoders;
-using NBitcoin.BouncyCastle.Math;
-using QBitNinja.Client;
-using QBitNinja.Client.Models;
-using NBitcoin.RPC;
-using NBitcoin.Payment;
 using QRCoder;
-using System.Windows.Controls;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using System.Reflection;
-using System.Windows.Forms.VisualStyles;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
 using Panel = System.Windows.Forms.Panel;
-using System.Windows.Documents;
-using System.Reflection.Emit;
 using Control = System.Windows.Forms.Control;
-using TextBox = System.Windows.Forms.TextBox;
-using System.Security.AccessControl;
-using System.Collections;
-using System.Data.Common;
-using System.Data.SqlClient;
-using static SATSuma.SATSuma;
 using System.Security.Cryptography;
-using static System.Net.WebRequestMethods;
-using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
-using Microsoft.Win32;
-using System.Windows.Media.Media3D;
-using static QRCoder.PayloadGenerator;
 
 #endregion
 
@@ -8308,6 +8279,10 @@ namespace SATSuma
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackColor = colorDlgForFormBackground.Color;
+                    panel33.BackColor = colorDlgForFormBackground.Color;
+                    panel30.BackColor = colorDlgForFormBackground.Color;
+                    panel24.BackColor = colorDlgForFormBackground.Color;
+                    panel25.BackColor = colorDlgForFormBackground.Color;
                     this.BackgroundImage = null;
                 });
                 lblTime.Visible = false;
@@ -9096,6 +9071,7 @@ namespace SATSuma
         {
             listViewHeaderColor = thiscolor;
             panel67.BackColor = thiscolor;
+            panel68.BackColor = thiscolor;
         }
 
         private void HeadingBackgroundsToDefault()

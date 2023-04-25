@@ -8697,7 +8697,7 @@
             this.colorProgressBar1.Maximum = 100;
             this.colorProgressBar1.Minimum = 0;
             this.colorProgressBar1.Name = "colorProgressBar1";
-            this.colorProgressBar1.Size = new System.Drawing.Size(105, 8);
+            this.colorProgressBar1.Size = new System.Drawing.Size(100, 8);
             this.colorProgressBar1.Step = 10;
             this.colorProgressBar1.TabIndex = 243;
             this.colorProgressBar1.Value = 60;
@@ -8749,7 +8749,7 @@
             this.button1.Location = new System.Drawing.Point(39, 312);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 22);
+            this.button1.Size = new System.Drawing.Size(100, 20);
             this.button1.TabIndex = 160;
             this.button1.TabStop = false;
             this.button1.Text = "Buttons";
@@ -8792,7 +8792,7 @@
             this.button2.Location = new System.Drawing.Point(39, 240);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(90, 22);
+            this.button2.Size = new System.Drawing.Size(100, 20);
             this.button2.TabIndex = 247;
             this.button2.TabStop = false;
             this.button2.Text = "Button text";
@@ -8899,7 +8899,7 @@
             this.panel73.Controls.Add(this.label197);
             this.panel73.Location = new System.Drawing.Point(39, 388);
             this.panel73.Name = "panel73";
-            this.panel73.Size = new System.Drawing.Size(105, 23);
+            this.panel73.Size = new System.Drawing.Size(100, 20);
             this.panel73.TabIndex = 295;
             // 
             // label197
@@ -9219,7 +9219,7 @@
             this.panel68.Controls.Add(this.label190);
             this.panel68.Location = new System.Drawing.Point(39, 140);
             this.panel68.Name = "panel68";
-            this.panel68.Size = new System.Drawing.Size(121, 25);
+            this.panel68.Size = new System.Drawing.Size(100, 20);
             this.panel68.TabIndex = 282;
             // 
             // label190
@@ -9262,7 +9262,7 @@
             this.panel67.Controls.Add(this.label188);
             this.panel67.Location = new System.Drawing.Point(39, 495);
             this.panel67.Name = "panel67";
-            this.panel67.Size = new System.Drawing.Size(108, 25);
+            this.panel67.Size = new System.Drawing.Size(100, 20);
             this.panel67.TabIndex = 281;
             // 
             // label188
@@ -9283,7 +9283,7 @@
             this.panel66.Controls.Add(this.label186);
             this.panel66.Location = new System.Drawing.Point(39, 520);
             this.panel66.Name = "panel66";
-            this.panel66.Size = new System.Drawing.Size(108, 25);
+            this.panel66.Size = new System.Drawing.Size(100, 20);
             this.panel66.TabIndex = 280;
             // 
             // label186
@@ -9731,7 +9731,7 @@
             this.textBox1.Location = new System.Drawing.Point(39, 361);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(90, 25);
+            this.textBox1.Size = new System.Drawing.Size(100, 25);
             this.textBox1.TabIndex = 218;
             this.textBox1.Text = "Textboxes";
             // 

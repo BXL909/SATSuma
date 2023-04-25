@@ -6080,6 +6080,11 @@ namespace SATSuma
                     DerivationPath++;
                     P2SHAddresses.Clear();
                 }
+                if (listViewXpubAddresses.Items.Count > 0)
+                {
+                    listViewXpubAddresses.Items[0].Selected = true;
+                }
+
                 DerivationPath = 0;
 
                 lblXpubStatus.Invoke((MethodInvoker)delegate

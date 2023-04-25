@@ -674,6 +674,7 @@
             this.panel60 = new System.Windows.Forms.Panel();
             this.label166 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnDeleteTheme = new System.Windows.Forms.Button();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -3537,6 +3538,7 @@
             this.BtnViewBlockFromAddress.Size = new System.Drawing.Size(20, 15);
             this.BtnViewBlockFromAddress.TabIndex = 144;
             this.BtnViewBlockFromAddress.Text = "▶️";
+            this.toolTip1.SetToolTip(this.BtnViewBlockFromAddress, "View block");
             this.BtnViewBlockFromAddress.UseVisualStyleBackColor = false;
             this.BtnViewBlockFromAddress.Visible = false;
             this.BtnViewBlockFromAddress.Click += new System.EventHandler(this.BtnViewBlockFromAddress_Click);
@@ -3557,6 +3559,7 @@
             this.BtnViewTransactionFromAddress.Size = new System.Drawing.Size(20, 15);
             this.BtnViewTransactionFromAddress.TabIndex = 143;
             this.BtnViewTransactionFromAddress.Text = "▶️";
+            this.toolTip1.SetToolTip(this.BtnViewTransactionFromAddress, "View transaction");
             this.BtnViewTransactionFromAddress.UseVisualStyleBackColor = false;
             this.BtnViewTransactionFromAddress.Visible = false;
             this.BtnViewTransactionFromAddress.Click += new System.EventHandler(this.BtnViewTransactionFromAddress_Click);
@@ -4173,6 +4176,7 @@
             this.btnViewTransactionFromBlock.Size = new System.Drawing.Size(20, 15);
             this.btnViewTransactionFromBlock.TabIndex = 165;
             this.btnViewTransactionFromBlock.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewTransactionFromBlock, "View transaction");
             this.btnViewTransactionFromBlock.UseVisualStyleBackColor = false;
             this.btnViewTransactionFromBlock.Visible = false;
             this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.BtnViewTransactionFromBlock_Click);
@@ -5080,6 +5084,7 @@
             this.btnViewBlockFromBlockList.Size = new System.Drawing.Size(18, 15);
             this.btnViewBlockFromBlockList.TabIndex = 165;
             this.btnViewBlockFromBlockList.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewBlockFromBlockList, "View block");
             this.btnViewBlockFromBlockList.UseVisualStyleBackColor = false;
             this.btnViewBlockFromBlockList.Visible = false;
             this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.BtnViewBlockFromBlockList_Click);
@@ -5172,6 +5177,7 @@
             this.textBoxBlockHeightToStartListFrom.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBlockHeightToStartListFrom.ForeColor = System.Drawing.Color.White;
             this.textBoxBlockHeightToStartListFrom.Location = new System.Drawing.Point(691, 329);
+            this.textBoxBlockHeightToStartListFrom.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxBlockHeightToStartListFrom.MaxLength = 80;
             this.textBoxBlockHeightToStartListFrom.Name = "textBoxBlockHeightToStartListFrom";
             this.textBoxBlockHeightToStartListFrom.Size = new System.Drawing.Size(60, 25);
@@ -5184,7 +5190,7 @@
             this.label109.AutoSize = true;
             this.label109.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label109.ForeColor = System.Drawing.Color.Silver;
-            this.label109.Location = new System.Drawing.Point(537, 331);
+            this.label109.Location = new System.Drawing.Point(557, 331);
             this.label109.Name = "label109";
             this.label109.Size = new System.Drawing.Size(162, 20);
             this.label109.TabIndex = 6;
@@ -5828,6 +5834,7 @@
             this.btnViewAddressFromTXOutput.Size = new System.Drawing.Size(20, 15);
             this.btnViewAddressFromTXOutput.TabIndex = 217;
             this.btnViewAddressFromTXOutput.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXOutput, "View address");
             this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXOutput.Visible = false;
             this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
@@ -5888,6 +5895,7 @@
             this.btnViewAddressFromTXInput.Size = new System.Drawing.Size(20, 15);
             this.btnViewAddressFromTXInput.TabIndex = 216;
             this.btnViewAddressFromTXInput.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXInput, "View address");
             this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXInput.Visible = false;
             this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
@@ -6592,6 +6600,7 @@
             this.btnViewAddressFromXpub.Size = new System.Drawing.Size(20, 15);
             this.btnViewAddressFromXpub.TabIndex = 165;
             this.btnViewAddressFromXpub.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewAddressFromXpub, "View address");
             this.btnViewAddressFromXpub.UseVisualStyleBackColor = false;
             this.btnViewAddressFromXpub.Visible = false;
             this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
@@ -8938,6 +8947,7 @@
             // panel71
             // 
             this.panel71.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel71.Controls.Add(this.btnDeleteTheme);
             this.panel71.Controls.Add(this.comboBoxThemeList);
             this.panel71.Controls.Add(this.panel72);
             this.panel71.Controls.Add(this.label196);
@@ -8960,10 +8970,11 @@
             "3",
             "4",
             "5"});
-            this.comboBoxThemeList.Location = new System.Drawing.Point(231, 41);
+            this.comboBoxThemeList.Location = new System.Drawing.Point(125, 40);
             this.comboBoxThemeList.Name = "comboBoxThemeList";
             this.comboBoxThemeList.Size = new System.Drawing.Size(167, 23);
             this.comboBoxThemeList.TabIndex = 286;
+            this.comboBoxThemeList.SelectedValueChanged += new System.EventHandler(this.ComboBoxThemeList_SelectedValueChanged);
             // 
             // panel72
             // 
@@ -8996,7 +9007,7 @@
             this.label196.AutoSize = true;
             this.label196.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label196.ForeColor = System.Drawing.Color.Silver;
-            this.label196.Location = new System.Drawing.Point(7, 35);
+            this.label196.Location = new System.Drawing.Point(7, 40);
             this.label196.Name = "label196";
             this.label196.Size = new System.Drawing.Size(102, 20);
             this.label196.TabIndex = 285;
@@ -9013,13 +9024,13 @@
             this.btnLoadTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoadTheme.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLoadTheme.ForeColor = System.Drawing.Color.White;
-            this.btnLoadTheme.Location = new System.Drawing.Point(407, 41);
+            this.btnLoadTheme.Location = new System.Drawing.Point(307, 40);
             this.btnLoadTheme.Margin = new System.Windows.Forms.Padding(0);
             this.btnLoadTheme.Name = "btnLoadTheme";
             this.btnLoadTheme.Size = new System.Drawing.Size(91, 24);
             this.btnLoadTheme.TabIndex = 161;
             this.btnLoadTheme.TabStop = false;
-            this.btnLoadTheme.Text = "load";
+            this.btnLoadTheme.Text = "open";
             this.btnLoadTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLoadTheme.UseVisualStyleBackColor = false;
             this.btnLoadTheme.Click += new System.EventHandler(this.BtnLoadTheme_Click);
@@ -9874,6 +9885,28 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Text files (*.txt)|*.txt";
             // 
+            // btnDeleteTheme
+            // 
+            this.btnDeleteTheme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnDeleteTheme.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnDeleteTheme.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnDeleteTheme.FlatAppearance.BorderSize = 0;
+            this.btnDeleteTheme.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnDeleteTheme.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnDeleteTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteTheme.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteTheme.ForeColor = System.Drawing.Color.White;
+            this.btnDeleteTheme.Location = new System.Drawing.Point(407, 40);
+            this.btnDeleteTheme.Margin = new System.Windows.Forms.Padding(0);
+            this.btnDeleteTheme.Name = "btnDeleteTheme";
+            this.btnDeleteTheme.Size = new System.Drawing.Size(91, 24);
+            this.btnDeleteTheme.TabIndex = 287;
+            this.btnDeleteTheme.TabStop = false;
+            this.btnDeleteTheme.Text = "delete";
+            this.btnDeleteTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDeleteTheme.UseVisualStyleBackColor = false;
+            this.btnDeleteTheme.Click += new System.EventHandler(this.BtnDeleteTheme_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -9884,21 +9917,21 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelAddToBookmarks);
+            this.Controls.Add(this.panelFees);
+            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panelCurrency);
-            this.Controls.Add(this.panelFees);
             this.Controls.Add(this.lblSatsumaTitle);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelHeaderBlockHeight);
@@ -10750,6 +10783,7 @@
         private System.Windows.Forms.Panel panel73;
         private System.Windows.Forms.Label label197;
         private System.Windows.Forms.Button btnColorPanels;
+        private System.Windows.Forms.Button btnDeleteTheme;
     }
 }
 

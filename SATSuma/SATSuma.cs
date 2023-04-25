@@ -7417,6 +7417,7 @@ namespace SATSuma
                 lblBookmarkSavedSuccess.Visible = false;
                 btnCommitToBookmarks.Enabled = true;
                 btnCancelAddToBookmarks.Enabled = true;
+                panelAddToBookmarks.BringToFront();
             }
             else
             {
@@ -8340,8 +8341,8 @@ namespace SATSuma
             this.Invoke((MethodInvoker)delegate
             {
                 this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
-                lblTime.Visible = false;
             });
+            lblTime.Visible = true;
             lblBackgroundGenesisSelected.Visible =false;
             lblBackgroundBTCdirSelected.Visible = true;
             lblBackgroundCustomColorSelected.Visible = false;
@@ -8414,6 +8415,13 @@ namespace SATSuma
             if (colorDlgForTitleBackgrounds.ShowDialog() == DialogResult.OK)
             {
                 titleBackgroundColor = colorDlgForTitleBackgrounds.Color;
+                lblTitleBackgroundCustom.ForeColor = Color.Green;
+                lblTitleBackgroundCustom.Text = "✔️";
+                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                lblTitleBackgroundDefault.Text = "❌";
+
                 SetCustomTitleBackgroundColor();
             }
         }
@@ -8710,7 +8718,13 @@ namespace SATSuma
             {
                 lblShowClock.ForeColor = Color.Green;
                 lblShowClock.Text = "✔️";
-                lblTime.Visible = true;
+                if (theme.BackgroundGenesis == true)
+                {
+                    lblTime.Font = new Font(lblTime.Font.FontFamily, 14, lblTime.Font.Style);
+                    lblTime.Location = new Point(697, 91);
+                    lblTime.Visible = true;
+                    lblTime.BringToFront();
+                }
             }
             if (theme.HeadingBGDefault == true)
             {
@@ -9425,6 +9439,42 @@ namespace SATSuma
                     defaultThemeAlreadySavedInFile = true;
                     defaultThemeInFile = bookmarkData;
                 }
+            }
+        }
+
+        private void ComboBoxThemeList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (Convert.ToString(comboBoxThemeList.SelectedValue) == "Genesis (default)" || Convert.ToString(comboBoxThemeList.SelectedValue) == "BTCdir")
+            {
+                btnDeleteTheme.Enabled = false;
+            }
+            else
+            {
+                btnDeleteTheme.Enabled = true;
+            }
+        }
+
+        private void BtnDeleteTheme_Click(object sender, EventArgs e)
+        {
+            // Read the existing thenes from the JSON file
+            var themes = ReadThemesFromJsonFile();
+
+            // Find the index of the bookmark with the specified data
+            int index = themes.FindIndex(theme =>
+                theme.ThemeName == Convert.ToString(comboBoxThemeList.SelectedItem));
+
+            // If a matching bookmark was found, remove it from the list
+            if (index >= 0)
+            {
+                themes.RemoveAt(index);
+
+                // Write the updated list of bookmarks back to the JSON file
+                WriteThemeToJsonFile(themes);
+                // repopulate the dropdown list with the available themes
+                themes.Clear();
+                themes = ReadThemesFromJsonFile();
+                List<string> themeNames = themes.Select(t => t.ThemeName).ToList();
+                comboBoxThemeList.DataSource = themeNames;
             }
         }
         #endregion
@@ -11010,5 +11060,7 @@ namespace SATSuma
 
 
         #endregion
+
+
     }
 }

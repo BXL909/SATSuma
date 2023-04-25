@@ -120,6 +120,7 @@ namespace SATSuma
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
         Color listViewHeaderTextColor = Color.Silver;
+        Color tableTextColor = Color.FromArgb(255, 153, 0);
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -148,7 +149,7 @@ namespace SATSuma
                     string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                     lblBlockNumber.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockNumber.Text = BlockTip;
+                        //lblBlockNumber.Text = BlockTip;
                     });
                 }
 
@@ -319,16 +320,20 @@ namespace SATSuma
                     // current block size and transaction count
                     try
                     {
-                        var blocksJson = await _blockService.GetBlockDataAsync(lblBlockNumber.Text); 
+                        var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
-                        if (blocks != null)
+                        if (blocks.Count > 0)
                         {
                             lblTransactions.Invoke((MethodInvoker)delegate
                             {
                                 lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
                             });
 
+                            lblBlockNumber.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
+                            });
 
                             long sizeInBytes = blocks[0].Size;
                             string sizeString; // convert display to bytes/kb/mb accordingly
@@ -2167,6 +2172,10 @@ namespace SATSuma
                         break;
                     }
                 }
+                if (listViewAddressTransactions.Items.Count > 0)
+                {
+                    listViewAddressTransactions.Items[0].Selected = true;
+                }
                 if (counter > 0)
                 {
                     lblAddressTXPositionInList.Invoke((MethodInvoker)delegate
@@ -2367,15 +2376,47 @@ namespace SATSuma
         }
 
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
+
         private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            foreach (ListViewItem item in listViewAddressTransactions.Items)
+            {
+                if (item.Selected)
+                {
+                    foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                    {
+                        subItem.ForeColor = Color.White;
+                    }
+                    BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y);
+                    BtnViewTransactionFromAddress.Height = item.Bounds.Height;
+                    BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y);
+                    BtnViewBlockFromAddress.Height = item.Bounds.Height;
+                }
+                else
+                {
+                    foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                    {
+                        subItem.ForeColor = tableTextColor;
+                    }
+                }
+            }
+            BtnViewTransactionFromAddress.Visible = listViewAddressTransactions.SelectedItems.Count > 0;
+            BtnViewBlockFromAddress.Visible = listViewAddressTransactions.SelectedItems.Count > 0;
+        }
+
+        /*private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             bool anySelected = false;
             foreach (ListViewItem item in listViewAddressTransactions.Items)
             {
                 if (item.Selected)
                 {
-                    item.ForeColor = Color.White; // txID
-                    item.SubItems[1].ForeColor = Color.White; //Block 
+                    foreach (ListViewItem.ListViewSubItem subItem in listViewAddressTransactions.SelectedItems[0].SubItems)
+                    {
+                        subItem.ForeColor = Color.White;
+                    }
+                   // item.ForeColor = Color.White; // txID
+                   // item.SubItems[1].ForeColor = Color.White; //Block 
                     anySelected = true;
                     BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                     {
@@ -2390,13 +2431,13 @@ namespace SATSuma
                 }
                 else
                 {
-                    item.ForeColor = Color.FromArgb(255, 153, 0); //txID
-                    item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); //Block
+                    item.ForeColor = tableTextColor;
+                    item.SubItems[1].ForeColor = tableTextColor; //Block
                 }
             }
             BtnViewTransactionFromAddress.Visible = anySelected;
             BtnViewBlockFromAddress.Visible = anySelected;
-        }
+        }*/
 
         //-----DRAW AN ELLIPSIS WHEN STRINGS DONT FIT IN LISTVIEW COLUMN (ALSO COLOUR BALANCE DIFFERENCE RED/GREEN)----
         private void ListViewAddressTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
@@ -2970,6 +3011,7 @@ namespace SATSuma
                         break;
                     }
                 }
+                listViewBlockTransactions.Items[0].Selected = true;
                 if (counter > 0)
                 {
                     lblBlockTXPositionInList.Invoke((MethodInvoker)delegate
@@ -3092,7 +3134,11 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-                        item.ForeColor = Color.White; // txID
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = Color.White;
+                        }
+                        //item.ForeColor = Color.White; // txID
                         btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                         {
                             btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y);
@@ -3102,7 +3148,11 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = tableTextColor;
+                        }
+                        //item.ForeColor = Color.FromArgb(255, 153, 0); //txID
                     }
                 }
                 btnViewTransactionFromBlock.Visible = anySelected;
@@ -3686,6 +3736,10 @@ namespace SATSuma
                 listViewTransactionInputs.Height = listBoxHeight; // Set the height of the ListBox
                 panelTransactionInputs.VerticalScroll.Value = 0;
                 panelTransactionInputs.VerticalScroll.Minimum = 0;
+                if (listViewTransactionInputs.Items.Count > 0)
+                {
+                    listViewTransactionInputs.Items[0].Selected = true;
+                }
 
                 // Outputs listview
                 listViewTransactionOutputs.Invoke((MethodInvoker)delegate
@@ -3756,6 +3810,10 @@ namespace SATSuma
                 panelTransactionOutputs.VerticalScroll.Value = 0;
                 panelTransactionOutputs.VerticalScroll.Minimum = 0;
 
+                if (listViewTransactionOutputs.Items.Count > 0)
+                {
+                    listViewTransactionOutputs.Items[0].Selected = true;
+                }
                 // Trigger a repaint of the form
                 this.Invalidate();
             }
@@ -3775,7 +3833,11 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-                        item.ForeColor = Color.White; // address
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = Color.White;
+                        }
+                        //item.ForeColor = Color.White; // address
                         if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
                         {
                             btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
@@ -3793,7 +3855,10 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = tableTextColor;
+                        }
                     }
                 }
                 btnViewAddressFromTXInput.Visible = anySelected;
@@ -3815,7 +3880,10 @@ namespace SATSuma
                 {
                     if (item.Selected)
                     {
-                        item.ForeColor = Color.White; // address
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = Color.White;
+                        }
                         if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
                         {
                             btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
@@ -3833,7 +3901,10 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = tableTextColor;
+                        }
                     }
                 }
                 btnViewAddressFromTXOutput.Visible = anySelected;
@@ -4628,7 +4699,10 @@ namespace SATSuma
                     if (item.Selected)
                     {
                         btnViewBlockFromBlockList.Enabled = true;
-                        item.SubItems[1].ForeColor = Color.White; // Block number
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = Color.White;
+                        }
                         anySelected = true;
                         btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                         {
@@ -4754,8 +4828,10 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.SubItems[1].ForeColor = Color.FromArgb(255, 153, 0); // Block number
-                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0); // TX count
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = tableTextColor;
+                        }
                     }
                 }
                 btnViewBlockFromBlockList.Visible = anySelected;
@@ -6456,7 +6532,10 @@ namespace SATSuma
                     if (item.Selected)
                     {
                         btnViewAddressFromXpub.Visible = true;
-                        item.ForeColor = Color.White; // address
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = Color.White;
+                        }
                         if (item.SubItems[1].Text == "0")
                         {
                             btnViewAddressFromXpub.Enabled = false;
@@ -6474,7 +6553,10 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.ForeColor = Color.FromArgb(255, 153, 0); //txID
+                        foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                        {
+                            subItem.ForeColor = tableTextColor;
+                        }
                     }
                 }
             }
@@ -6705,7 +6787,7 @@ namespace SATSuma
 
                 foreach (var bookmark in bookmarks)
                 {
-                    if (bookmark.Type != "node")
+                    if (bookmark.Type != "node" && bookmark.Type != "defaulttheme")
                     {
                         ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
                         item.SubItems.Add(bookmark.Type);
@@ -6904,10 +6986,10 @@ namespace SATSuma
                     }
                     else
                     {
-                        item.ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[2].ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[3].ForeColor = Color.FromArgb(255, 153, 0);
-                        item.SubItems[4].ForeColor = Color.FromArgb(255, 153, 0);
+                        item.ForeColor = tableTextColor;
+                        item.SubItems[2].ForeColor = tableTextColor;
+                        item.SubItems[3].ForeColor = tableTextColor;
+                        item.SubItems[4].ForeColor = tableTextColor;
                     }
                 }
             }
@@ -8883,6 +8965,7 @@ namespace SATSuma
             {
                 control.ForeColor = thiscolor;
             }
+            tableTextColor = thiscolor;
         }
 
         private void ColorTableHeadings(Color thiscolor)
@@ -10665,8 +10748,14 @@ namespace SATSuma
                     using var client = new HttpClient();
                     try
                     {
+                        if (blockHeight == "000000")
+                        {
+                            blockHeight = "";
+                        }
                         client.BaseAddress = new Uri(_nodeUrl);
+
                         var response = await client.GetAsync($"v1/blocks/{blockHeight}");
+                        
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();

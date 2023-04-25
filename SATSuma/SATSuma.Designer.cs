@@ -4373,7 +4373,7 @@
             // pictureBoxSatsumaLogo
             // 
             this.pictureBoxSatsumaLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBoxSatsumaLogo.Image = global::SATSuma.Properties.Resources.tinylogo1;
+            this.pictureBoxSatsumaLogo.Image = global::SATSuma.Properties.Resources.logoNoText;
             this.pictureBoxSatsumaLogo.Location = new System.Drawing.Point(8, 8);
             this.pictureBoxSatsumaLogo.Name = "pictureBoxSatsumaLogo";
             this.pictureBoxSatsumaLogo.Size = new System.Drawing.Size(20, 22);

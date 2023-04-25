@@ -122,7 +122,7 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // splash
+            // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -136,7 +136,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "splash";
+            this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "splash";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Splash_Paint);

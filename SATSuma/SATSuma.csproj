@@ -346,6 +346,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\SATSumaLogo.png" />
     <None Include="Resources\CustomImage.png" />
     <None Include="Resources\SatsumaBTCdir.png" />
     <None Include="Resources\logoNoText.png" />

@@ -25,7 +25,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * test and enable testnet
  */
 
 #region Using

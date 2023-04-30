@@ -31,5 +31,10 @@ namespace SATSuma
         {
             System.Diagnostics.Process.Start("https://bxl909.github.io/");
         }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/tips/");
+        }
     }
 }

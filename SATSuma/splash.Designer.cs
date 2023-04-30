@@ -34,6 +34,7 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -45,11 +46,11 @@
             this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Silver;
             this.label2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label2.Location = new System.Drawing.Point(238, 108);
+            this.label2.Location = new System.Drawing.Point(238, 91);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 18);
             this.label2.TabIndex = 9;
-            this.label2.Text = "SATSuma v0.1";
+            this.label2.Text = "SATSuma v0.7";
             // 
             // linkLabel1
             // 
@@ -57,7 +58,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabel1.Location = new System.Drawing.Point(230, 156);
+            this.linkLabel1.Location = new System.Drawing.Point(220, 119);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(136, 18);
             this.linkLabel1.TabIndex = 10;
@@ -72,7 +73,7 @@
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel2.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabel2.Location = new System.Drawing.Point(251, 174);
+            this.linkLabel2.Location = new System.Drawing.Point(241, 138);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(88, 18);
             this.linkLabel2.TabIndex = 11;
@@ -105,7 +106,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::SATSuma.Properties.Resources.logoNoText;
-            this.pictureBox2.Location = new System.Drawing.Point(254, 50);
+            this.pictureBox2.Location = new System.Drawing.Point(254, 33);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(60, 55);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -122,12 +123,28 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // linkLabel3
+            // 
+            this.linkLabel3.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabel3.AutoSize = true;
+            this.linkLabel3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel3.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabel3.Location = new System.Drawing.Point(266, 156);
+            this.linkLabel3.Name = "linkLabel3";
+            this.linkLabel3.Size = new System.Drawing.Size(40, 18);
+            this.linkLabel3.TabIndex = 152;
+            this.linkLabel3.TabStop = true;
+            this.linkLabel3.Text = "tips";
+            this.linkLabel3.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
+            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(378, 209);
+            this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.linkLabel2);
@@ -155,5 +172,6 @@
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.LinkLabel linkLabel3;
     }
 }

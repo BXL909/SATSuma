@@ -16,7 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀
 
 Version history 🍊
-0.8 this work in progress
+0.7 this work in progress
 
  * Stuff to do:
  * further work on own node connection outside of the xpub screen (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
@@ -8342,7 +8342,7 @@ namespace SATSuma
             {
                 this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
             });
-            lblTime.Visible = true;
+            //lblTime.Visible = true;
             lblBackgroundGenesisSelected.Visible =false;
             lblBackgroundBTCdirSelected.Visible = true;
             lblBackgroundCustomColorSelected.Visible = false;
@@ -11060,7 +11060,5 @@ namespace SATSuma
 
 
         #endregion
-
-
     }
 }

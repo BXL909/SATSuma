@@ -491,10 +491,10 @@
             this.label28 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.lblFees1Day = new System.Windows.Forms.Label();
-            this.lblFees60Mins = new System.Windows.Forms.Label();
-            this.lblfeesNextBlock = new System.Windows.Forms.Label();
-            this.lblFees30Mins = new System.Windows.Forms.Label();
+            this.lblFeesNoPriority = new System.Windows.Forms.Label();
+            this.lblFeesLowPriority = new System.Windows.Forms.Label();
+            this.lblfeesHighPriority = new System.Windows.Forms.Label();
+            this.lblFeesMediumPriority = new System.Windows.Forms.Label();
             this.panelBookmarks = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
             this.btnDecryptBookmark = new System.Windows.Forms.Button();
@@ -2007,9 +2007,9 @@
             this.label13.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label13.Location = new System.Drawing.Point(549, 316);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(181, 20);
+            this.label13.Size = new System.Drawing.Size(197, 20);
             this.label13.TabIndex = 207;
-            this.label13.Text = "Est. hashrate (gigahash)";
+            this.label13.Text = "Est. hashrate (hashes/sec)";
             // 
             // lblEstHashrate
             // 
@@ -7127,10 +7127,10 @@
             this.panelFees.Controls.Add(this.label28);
             this.panelFees.Controls.Add(this.label25);
             this.panelFees.Controls.Add(this.label15);
-            this.panelFees.Controls.Add(this.lblFees1Day);
-            this.panelFees.Controls.Add(this.lblFees60Mins);
-            this.panelFees.Controls.Add(this.lblfeesNextBlock);
-            this.panelFees.Controls.Add(this.lblFees30Mins);
+            this.panelFees.Controls.Add(this.lblFeesNoPriority);
+            this.panelFees.Controls.Add(this.lblFeesLowPriority);
+            this.panelFees.Controls.Add(this.lblfeesHighPriority);
+            this.panelFees.Controls.Add(this.lblFeesMediumPriority);
             this.panelFees.Location = new System.Drawing.Point(501, 40);
             this.panelFees.Name = "panelFees";
             this.panelFees.Size = new System.Drawing.Size(280, 114);
@@ -7171,9 +7171,9 @@
             this.label150.Location = new System.Drawing.Point(3, 2);
             this.label150.Margin = new System.Windows.Forms.Padding(0);
             this.label150.Name = "label150";
-            this.label150.Size = new System.Drawing.Size(124, 20);
+            this.label150.Size = new System.Drawing.Size(171, 20);
             this.label150.TabIndex = 153;
-            this.label150.Text = "Hashrate (GH/s)";
+            this.label150.Text = "Hashrate (hashes/sec)";
             // 
             // panel40
             // 
@@ -7249,54 +7249,54 @@
             this.label15.TabIndex = 79;
             this.label15.Text = "10m";
             // 
-            // lblFees1Day
+            // lblFeesNoPriority
             // 
-            this.lblFees1Day.AutoSize = true;
-            this.lblFees1Day.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFees1Day.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFees1Day.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees1Day.Location = new System.Drawing.Point(160, 41);
-            this.lblFees1Day.Name = "lblFees1Day";
-            this.lblFees1Day.Size = new System.Drawing.Size(18, 20);
-            this.lblFees1Day.TabIndex = 78;
-            this.lblFees1Day.Text = "?";
+            this.lblFeesNoPriority.AutoSize = true;
+            this.lblFeesNoPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFeesNoPriority.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFeesNoPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblFeesNoPriority.Location = new System.Drawing.Point(160, 41);
+            this.lblFeesNoPriority.Name = "lblFeesNoPriority";
+            this.lblFeesNoPriority.Size = new System.Drawing.Size(18, 20);
+            this.lblFeesNoPriority.TabIndex = 78;
+            this.lblFeesNoPriority.Text = "?";
             // 
-            // lblFees60Mins
+            // lblFeesLowPriority
             // 
-            this.lblFees60Mins.AutoSize = true;
-            this.lblFees60Mins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFees60Mins.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFees60Mins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees60Mins.Location = new System.Drawing.Point(106, 41);
-            this.lblFees60Mins.Name = "lblFees60Mins";
-            this.lblFees60Mins.Size = new System.Drawing.Size(18, 20);
-            this.lblFees60Mins.TabIndex = 77;
-            this.lblFees60Mins.Text = "?";
+            this.lblFeesLowPriority.AutoSize = true;
+            this.lblFeesLowPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFeesLowPriority.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFeesLowPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblFeesLowPriority.Location = new System.Drawing.Point(106, 41);
+            this.lblFeesLowPriority.Name = "lblFeesLowPriority";
+            this.lblFeesLowPriority.Size = new System.Drawing.Size(18, 20);
+            this.lblFeesLowPriority.TabIndex = 77;
+            this.lblFeesLowPriority.Text = "?";
             // 
-            // lblfeesNextBlock
+            // lblfeesHighPriority
             // 
-            this.lblfeesNextBlock.AutoSize = true;
-            this.lblfeesNextBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblfeesNextBlock.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblfeesNextBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblfeesNextBlock.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblfeesNextBlock.Location = new System.Drawing.Point(6, 41);
-            this.lblfeesNextBlock.Name = "lblfeesNextBlock";
-            this.lblfeesNextBlock.Size = new System.Drawing.Size(18, 20);
-            this.lblfeesNextBlock.TabIndex = 76;
-            this.lblfeesNextBlock.Text = "?";
+            this.lblfeesHighPriority.AutoSize = true;
+            this.lblfeesHighPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblfeesHighPriority.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblfeesHighPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblfeesHighPriority.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblfeesHighPriority.Location = new System.Drawing.Point(6, 41);
+            this.lblfeesHighPriority.Name = "lblfeesHighPriority";
+            this.lblfeesHighPriority.Size = new System.Drawing.Size(18, 20);
+            this.lblfeesHighPriority.TabIndex = 76;
+            this.lblfeesHighPriority.Text = "?";
             // 
-            // lblFees30Mins
+            // lblFeesMediumPriority
             // 
-            this.lblFees30Mins.AutoSize = true;
-            this.lblFees30Mins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblFees30Mins.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFees30Mins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblFees30Mins.Location = new System.Drawing.Point(58, 41);
-            this.lblFees30Mins.Name = "lblFees30Mins";
-            this.lblFees30Mins.Size = new System.Drawing.Size(18, 20);
-            this.lblFees30Mins.TabIndex = 75;
-            this.lblFees30Mins.Text = "?";
+            this.lblFeesMediumPriority.AutoSize = true;
+            this.lblFeesMediumPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFeesMediumPriority.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFeesMediumPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblFeesMediumPriority.Location = new System.Drawing.Point(58, 41);
+            this.lblFeesMediumPriority.Name = "lblFeesMediumPriority";
+            this.lblFeesMediumPriority.Size = new System.Drawing.Size(18, 20);
+            this.lblFeesMediumPriority.TabIndex = 75;
+            this.lblFeesMediumPriority.Text = "?";
             // 
             // panelBookmarks
             // 
@@ -8145,7 +8145,6 @@
             // 
             this.lblSettingsNodeTestnet.AutoSize = true;
             this.lblSettingsNodeTestnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblSettingsNodeTestnet.Enabled = false;
             this.lblSettingsNodeTestnet.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblSettingsNodeTestnet.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsNodeTestnet.Location = new System.Drawing.Point(105, 221);
@@ -9931,19 +9930,19 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelFees);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelAddToBookmarks);
-            this.Controls.Add(this.panelFees);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panelCurrency);
@@ -10543,10 +10542,10 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label lblFees1Day;
-        private System.Windows.Forms.Label lblFees60Mins;
-        private System.Windows.Forms.Label lblfeesNextBlock;
-        private System.Windows.Forms.Label lblFees30Mins;
+        private System.Windows.Forms.Label lblFeesNoPriority;
+        private System.Windows.Forms.Label lblFeesLowPriority;
+        private System.Windows.Forms.Label lblfeesHighPriority;
+        private System.Windows.Forms.Label lblFeesMediumPriority;
         private System.Windows.Forms.TextBox textBoxBookmarkProposedNote;
         private System.Windows.Forms.TextBox textBoxBookmarkEncryptionKey;
         private System.Windows.Forms.Panel panel31;

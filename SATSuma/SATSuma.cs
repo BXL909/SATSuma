@@ -238,24 +238,28 @@ namespace SATSuma
                     lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
                 });
             }
-            if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
+
+            if (!testNet)
             {
-                string secondsString = lblHalvingSecondsRemaining.Text;
-                try
+                if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
                 {
-                    int SecondsToHalving = int.Parse(secondsString);
-                    if (SecondsToHalving > 0)
+                    string secondsString = lblHalvingSecondsRemaining.Text;
+                    try
                     {
-                        SecondsToHalving--; // one second closer to the halvening!
-                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                        int SecondsToHalving = int.Parse(secondsString);
+                        if (SecondsToHalving > 0)
                         {
-                            lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
-                        });
+                            SecondsToHalving--; // one second closer to the halvening!
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
+                            });
+                        }
                     }
-                }
-                catch 
-                {
-                    lblHalvingSecondsRemaining.Text = "disabled";
+                    catch
+                    {
+                        lblHalvingSecondsRemaining.Text = "disabled";
+                    }
                 }
             }
 
@@ -317,7 +321,7 @@ namespace SATSuma
 
                 Task task0 = Task.Run(async () => // mempool.space api's
                 {
-                    // current block size and transaction count
+                    // current block height, size and transaction count
                     try
                     {
                         var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
@@ -361,6 +365,54 @@ namespace SATSuma
                     {
                         errorOccurred = true;
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
+                    }
+
+                    // fees
+                    try
+                    {
+                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
+                        // move returned data to the labels on the form
+                        lblfeesHighPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblfeesHighPriority.Text = fastestFee;
+                        });
+                        lblFeesMediumPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblFeesMediumPriority.Text = halfHourFee;
+                        });
+                        lblFeesLowPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblFeesLowPriority.Text = hourFee;
+                        });
+                        lblFeesNoPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblFeesNoPriority.Text = economyFee;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting fees)");
+                    }
+
+                    // hashrate
+                    try
+                    {
+                        var (currentHashrate, currentDifficulty) = GetHashrate();
+                        // move returned data to the labels on the form
+                        lblHeaderHashrate.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderHashrate.Text = currentHashrate;
+                        });
+                        lblEstHashrate.Invoke((MethodInvoker)delegate
+                        {
+                            lblEstHashrate.Text = currentHashrate;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting hashrate)");
                     }
 
                     // difficulty adjustment
@@ -452,24 +504,43 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunBitcoinExplorerEndpointAPI)
+                        if (!testNet)
                         {
-                            GetMarketData();
+                            if (RunBitcoinExplorerEndpointAPI)
+                            {
+                                GetMarketData();
+                            }
+                            else
+                            {
+                                lblPriceUSD.Invoke((MethodInvoker)delegate
+                                {
+                                    lblPriceUSD.Text = "disabled";
+                                });
+
+                                lblMoscowTime.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMoscowTime.Text = "disabled";
+                                });
+                                lblMarketCapUSD.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMarketCapUSD.Text = "disabled";
+                                });
+                            }
                         }
                         else
                         {
                             lblPriceUSD.Invoke((MethodInvoker)delegate
                             {
-                                lblPriceUSD.Text = "disabled";
+                                lblPriceUSD.Text = "0 (TestNet)";
                             });
 
                             lblMoscowTime.Invoke((MethodInvoker)delegate
                             {
-                                lblMoscowTime.Text = "disabled";
+                                lblMoscowTime.Text = "0 (TestNet)";
                             });
                             lblMarketCapUSD.Invoke((MethodInvoker)delegate
                             {
-                                lblMarketCapUSD.Text = "disabled";
+                                lblMarketCapUSD.Text = "0 (TestNet)";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -484,105 +555,139 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunBlockchainInfoEndpointAPI)
+                        if (!testNet)
                         {
-                            var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
-                            lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                            if (RunBlockchainInfoEndpointAPI)
                             {
-                                lblAvgNoTransactions.Text = avgNoTransactions;
-                            });
-                            lblBlockReward.Invoke((MethodInvoker)delegate
+                                var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
+                                lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAvgNoTransactions.Text = avgNoTransactions;
+                                });
+                                lblBlockReward.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockReward.Text = blockReward;
+                                });
+                                decimal DecBlockReward = Convert.ToDecimal(blockReward);
+                                decimal NextBlockReward = DecBlockReward / 2;
+                                lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
+                                });
+                                lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListBlockReward.Text = blockReward;
+                                });
+                                lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListEstHashRate.Text = estHashrate;
+                                });
+                                lblBTCInCirc.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBTCInCirc.Text = btcInCirc + " / 21000000";
+                                });
+                                lblHashesToSolve.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHashesToSolve.Text = hashesToSolve;
+                                });
+                                lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
+                                });
+                                lbl24HourTransCount.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourTransCount.Text = twentyFourHourTransCount;
+                                });
+                                lbl24HourBTCSent.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourBTCSent.Text = twentyFourHourBTCSent;
+                                });
+                            }
+                            else
                             {
-                                lblBlockReward.Text = blockReward;
-                            });
-                            decimal DecBlockReward = Convert.ToDecimal(blockReward);
-                            decimal NextBlockReward = DecBlockReward / 2;
-                            lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
-                            });
-                            lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                            {
-                                lblBlockListBlockReward.Text = blockReward;
-                            });
-                            lblEstHashrate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstHashrate.Text = estHashrate;
-                            });
-                            lblHeaderHashrate.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderHashrate.Text = estHashrate;
-                            });
-                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
-                            {
-                                lblBlockListEstHashRate.Text = estHashrate;
-                            });
-                            lblBTCInCirc.Invoke((MethodInvoker)delegate
-                            {
-                                lblBTCInCirc.Text = btcInCirc + " / 21000000";
-                            });
-                            lblHashesToSolve.Invoke((MethodInvoker)delegate
-                            {
-                                lblHashesToSolve.Text = hashesToSolve;
-                            });
-                            lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                            {
-                                lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
-                            });
-                            lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HourTransCount.Text = twentyFourHourTransCount;
-                            });
-                            lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                            {
-                                lbl24HourBTCSent.Text = twentyFourHourBTCSent;
-                            });
+                                lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAvgNoTransactions.Text = "disabled";
+                                });
+                                lblBlockReward.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockReward.Text = "disabled";
+                                });
+                                lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListBlockReward.Text = "disabled";
+                                });
+                                lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockRewardAfterHalving.Text = "disabled";
+                                });
+                                lblBTCInCirc.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBTCInCirc.Text = "disabled";
+                                });
+                                lblHashesToSolve.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHashesToSolve.Text = "disabled";
+                                });
+                                lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListAttemptsToSolveBlock.Text = "disabled";
+                                });
+                                lbl24HourTransCount.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourTransCount.Text = "disabled";
+                                });
+                                lbl24HourBTCSent.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourBTCSent.Text = "disabled";
+                                });
+                                lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListEstHashRate.Text = "disabled";
+                                });
+                            }
                         }
                         else
                         {
                             lblAvgNoTransactions.Invoke((MethodInvoker)delegate
                             {
-                                lblAvgNoTransactions.Text = "disabled";
+                                lblAvgNoTransactions.Text = "unavailable on TestNet";
                             });
                             lblBlockReward.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockReward.Text = "disabled";
+                                lblBlockReward.Text = "unavailable on TestNet";
                             });
                             lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
-                                lblBlockListBlockReward.Text = "disabled";
+                                lblBlockListBlockReward.Text = "unavailable on TestNet";
                             });
                             lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockRewardAfterHalving.Text = "disabled";
-                            });
-                            lblEstHashrate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstHashrate.Text = "disabled";
+                                lblBlockRewardAfterHalving.Text = "unavailable on TestNet";
                             });
                             lblBTCInCirc.Invoke((MethodInvoker)delegate
                             {
-                                lblBTCInCirc.Text = "disabled";
+                                lblBTCInCirc.Text = "unavailable on TestNet";
                             });
                             lblHashesToSolve.Invoke((MethodInvoker)delegate
                             {
-                                lblHashesToSolve.Text = "disabled";
+                                lblHashesToSolve.Text = "unavailable on TestNet";
                             });
                             lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
-                                lblBlockListAttemptsToSolveBlock.Text = "disabled";
+                                lblBlockListAttemptsToSolveBlock.Text = "unavailable on TestNet";
                             });
                             lbl24HourTransCount.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HourTransCount.Text = "disabled";
+                                lbl24HourTransCount.Text = "unavailable on TestNet";
                             });
                             lbl24HourBTCSent.Invoke((MethodInvoker)delegate
                             {
-                                lbl24HourBTCSent.Text = "disabled";
+                                lbl24HourBTCSent.Text = "unavailable on TestNet";
                             });
                             lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
                             {
-                                lblBlockListEstHashRate.Text = "disabled";
+                                lblBlockListEstHashRate.Text = "unavailable on TestNet";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -597,94 +702,94 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunBitcoinExplorerOrgJSONAPI)
+                        if (!testNet)
                         {
-                            var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
-                            // move returned data to the labels on the form
-                            lblfeesNextBlock.Invoke((MethodInvoker)delegate
+                            if (RunBitcoinExplorerOrgJSONAPI)
                             {
-                                lblfeesNextBlock.Text = nextBlockFee;
-                            });
-                            lblFees30Mins.Invoke((MethodInvoker)delegate
+                                var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
+                                // move returned data to the labels on the form
+                                lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTransInNextBlock.Text = txInNextBlock;
+                                });
+                                lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTXInNextBlock.Text = txInNextBlock;
+                                });
+                                lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                });
+                                lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                });
+                                lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockTotalFees.Text = nextBlockTotalFees;
+                                });
+                                lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
+                                });
+                            }
+                            else
                             {
-                                lblFees30Mins.Text = thirtyMinFee;
-                            });
-                            lblFees60Mins.Invoke((MethodInvoker)delegate
-                            {
-                                lblFees60Mins.Text = sixtyMinFee;
-                            });
-                            lblFees1Day.Invoke((MethodInvoker)delegate
-                            {
-                                lblFees1Day.Text = oneDayFee;
-                            });
-                            lblTransInNextBlock.Invoke((MethodInvoker)delegate
-                            {
-                                lblTransInNextBlock.Text = txInNextBlock;
-                            });
-                            lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListTXInNextBlock.Text = txInNextBlock;
-                            });
-                            lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                            });
-                            lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                            });
-                            lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextBlockTotalFees.Text = nextBlockTotalFees;
-                            });
-                            lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
-                            });
+                                lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTransInNextBlock.Text = "disabled";
+                                });
+                                lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTXInNextBlock.Text = "disabled";
+                                });
+
+                                lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockMinMaxFee.Text = "disabled";
+                                });
+                                lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
+                                });
+                                lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockTotalFees.Text = "disabled";
+                                });
+                                lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTotalFeesInNextBlock.Text = "disabled";
+                                });
+                            }
                         }
                         else
                         {
-                            lblfeesNextBlock.Invoke((MethodInvoker)delegate
-                            {
-                                lblfeesNextBlock.Text = "n/a";
-                            });
-                            lblFees30Mins.Invoke((MethodInvoker)delegate
-                            {
-                                lblFees30Mins.Text = "n/a";
-                            });
-                            lblFees60Mins.Invoke((MethodInvoker)delegate
-                            {
-                                lblFees60Mins.Text = "n/a";
-                            });
-                            lblFees1Day.Invoke((MethodInvoker)delegate
-                            {
-                                lblFees1Day.Text = "n/a";
-                            });
                             lblTransInNextBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblTransInNextBlock.Text = "disabled";
+                                lblTransInNextBlock.Text = "unavailable on TestNet";
                             });
                             lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListTXInNextBlock.Text = "disabled";
+                                lblBlockListTXInNextBlock.Text = "unavailable on TestNet";
                             });
 
                             lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                             {
-                                lblNextBlockMinMaxFee.Text = "disabled";
+                                lblNextBlockMinMaxFee.Text = "unavailable on TestNet";
                             });
                             lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
+                                lblBlockListMinMaxInFeeNextBlock.Text = "unavailable on TestNet";
                             });
                             lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
                             {
-                                lblNextBlockTotalFees.Text = "disabled";
+                                lblNextBlockTotalFees.Text = "unavailable on TestNet";
                             });
                             lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListTotalFeesInNextBlock.Text = "disabled";
+                                lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
                             });
+
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -698,208 +803,211 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunMempoolSpaceLightningAPI)
+                        if (!testNet)
                         {
-                            var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
-                            // move returned data to the labels on the form
-                            lblChannelCount.Invoke((MethodInvoker)delegate
+                            if (RunMempoolSpaceLightningAPI)
                             {
-                                lblChannelCount.Text = channelCount;
-                            });
-                            lblNodeCount.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodeCount.Text = nodeCount;
-                            });
-                            lblTotalCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblTotalCapacity.Text = totalCapacity;
-                            });
-                            lblTorNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblTorNodes.Text = torNodes;
-                            });
-                            lblClearnetNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetNodes.Text = clearnetNodes;
-                            });
-                            lblAverageCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageCapacity.Text = avgCapacity;
-                            });
-                            lblAverageFeeRate.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageFeeRate.Text = avgFeeRate;
-                            });
-                            lblUnannouncedNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblUnannouncedNodes.Text = unannouncedNodes;
-                            });
-                            lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageBaseFeeMtokens.Text = avgBaseeFeeMtokens;
-                            });
-                            lblMedCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedCapacity.Text = medCapacity;
-                            });
-                            lblMedFeeRate.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedFeeRate.Text = medFeeRate;
-                            });
-                            lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedBaseFeeTokens.Text = medBaseeFeeMtokens;
-                            });
-                            lblClearnetTorNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetTorNodes.Text = clearnetTorNodes;
-                            });
-                        }
-                        else
-                        {
-                            lblChannelCount.Invoke((MethodInvoker)delegate
-                            {
-                                lblChannelCount.Text = "Disabled";
-                            });
-                            lblNodeCount.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodeCount.Text = "Disabled";
-                            });
-                            lblTotalCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblTotalCapacity.Text = "Disabled";
-                            });
-                            lblTorNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblTorNodes.Text = "Disabled";
-                            });
-                            lblClearnetNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetNodes.Text = "Disabled";
-                            });
-                            lblAverageCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageCapacity.Text = "Disabled";
-                            });
-                            lblAverageFeeRate.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageFeeRate.Text = "Disabled";
-                            });
-                            lblUnannouncedNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblUnannouncedNodes.Text = "Disabled";
-                            });
-                            lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
-                            {
-                                lblAverageBaseFeeMtokens.Text = "Disabled";
-                            });
-                            lblMedCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedCapacity.Text = "Disabled";
-                            });
-                            lblMedFeeRate.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedFeeRate.Text = "Disabled";
-                            });
-                            lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
-                            {
-                                lblMedBaseFeeTokens.Text = "Disabled";
-                            });
-                            lblClearnetTorNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetTorNodes.Text = "Disabled";
-                            });
-                        }
-                        if (RunMempoolSpaceLightningAPI)
-                        {
-                            var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
-                            lblClearnetCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetCapacity.Text = clearnetCapacity;
-                            });
-                            lblTorCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblTorCapacity.Text = torCapacity;
-                            });
-                            lblUnknownCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblUnknownCapacity.Text = unknownCapacity;
-                            });
-                        }
-                        else
-                        {
-                            lblClearnetCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblClearnetCapacity.Text = "Disabled";
-                            });
-                            lblTorCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblTorCapacity.Text = "Disabled";
-                            });
-                            lblUnknownCapacity.Invoke((MethodInvoker)delegate
-                            {
-                                lblUnknownCapacity.Text = "Disabled";
-                            });
-                        }
-                        if (RunMempoolSpaceLightningAPI)
-                        {
-                            var (aliases, capacities) = MempoolSpaceLiquidityRankingJSONRefresh();
-                            for (int i = 0; i < 10; i++)
-                            {
-                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
-                                aliasLabel.Invoke((MethodInvoker)delegate
+                                var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
+                                // move returned data to the labels on the form
+                                lblChannelCount.Invoke((MethodInvoker)delegate
                                 {
-                                    aliasLabel.Text = aliases[i];
+                                    lblChannelCount.Text = channelCount;
                                 });
-                                System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
-                                capacityLabel.Invoke((MethodInvoker)delegate
+                                lblNodeCount.Invoke((MethodInvoker)delegate
                                 {
-                                    capacityLabel.Text = capacities[i];
+                                    lblNodeCount.Text = nodeCount;
+                                });
+                                lblTotalCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTotalCapacity.Text = totalCapacity;
+                                });
+                                lblTorNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTorNodes.Text = torNodes;
+                                });
+                                lblClearnetNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblClearnetNodes.Text = clearnetNodes;
+                                });
+                                lblAverageCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageCapacity.Text = avgCapacity;
+                                });
+                                lblAverageFeeRate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageFeeRate.Text = avgFeeRate;
+                                });
+                                lblUnannouncedNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUnannouncedNodes.Text = unannouncedNodes;
+                                });
+                                lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageBaseFeeMtokens.Text = avgBaseeFeeMtokens;
+                                });
+                                lblMedCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedCapacity.Text = medCapacity;
+                                });
+                                lblMedFeeRate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedFeeRate.Text = medFeeRate;
+                                });
+                                lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedBaseFeeTokens.Text = medBaseeFeeMtokens;
+                                });
+                                lblClearnetTorNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblClearnetTorNodes.Text = clearnetTorNodes;
                                 });
                             }
-                            var result7 = MempoolSpaceConnectivityRankingJSONRefresh();
-                            for (int i = 0; i < 10; i++)
+                            else
                             {
-                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
-                                aliasLabel.Invoke((MethodInvoker)delegate
+                                lblChannelCount.Invoke((MethodInvoker)delegate
                                 {
-                                    aliasLabel.Text = result7.aliases[i];
+                                    lblChannelCount.Text = "Disabled";
                                 });
-                                System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
-                                channelLabel.Invoke((MethodInvoker)delegate
+                                lblNodeCount.Invoke((MethodInvoker)delegate
                                 {
-                                    channelLabel.Text = result7.channels[i];
+                                    lblNodeCount.Text = "Disabled";
+                                });
+                                lblTotalCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTotalCapacity.Text = "Disabled";
+                                });
+                                lblTorNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTorNodes.Text = "Disabled";
+                                });
+                                lblClearnetNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblClearnetNodes.Text = "Disabled";
+                                });
+                                lblAverageCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageCapacity.Text = "Disabled";
+                                });
+                                lblAverageFeeRate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageFeeRate.Text = "Disabled";
+                                });
+                                lblUnannouncedNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUnannouncedNodes.Text = "Disabled";
+                                });
+                                lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAverageBaseFeeMtokens.Text = "Disabled";
+                                });
+                                lblMedCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedCapacity.Text = "Disabled";
+                                });
+                                lblMedFeeRate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedFeeRate.Text = "Disabled";
+                                });
+                                lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMedBaseFeeTokens.Text = "Disabled";
+                                });
+                                lblClearnetTorNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblClearnetTorNodes.Text = "Disabled";
                                 });
                             }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 10; i++)
+                            if (RunMempoolSpaceLightningAPI)
                             {
-                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
-                                aliasLabel.Invoke((MethodInvoker)delegate
+                                var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
+                                lblClearnetCapacity.Invoke((MethodInvoker)delegate
                                 {
-                                    aliasLabel.Text = "disabled";
+                                    lblClearnetCapacity.Text = clearnetCapacity;
                                 });
-                                System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
-                                capacityLabel.Invoke((MethodInvoker)delegate
+                                lblTorCapacity.Invoke((MethodInvoker)delegate
                                 {
-                                    capacityLabel.Text = "disabled";
+                                    lblTorCapacity.Text = torCapacity;
+                                });
+                                lblUnknownCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUnknownCapacity.Text = unknownCapacity;
                                 });
                             }
-                            var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
-                            for (int i = 0; i < 10; i++)
+                            else
                             {
-                                System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
-                                aliasLabel.Invoke((MethodInvoker)delegate
+                                lblClearnetCapacity.Invoke((MethodInvoker)delegate
                                 {
-                                    aliasLabel.Text = "disabled";
+                                    lblClearnetCapacity.Text = "Disabled";
                                 });
-                                System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
-                                channelLabel.Invoke((MethodInvoker)delegate
+                                lblTorCapacity.Invoke((MethodInvoker)delegate
                                 {
-                                    channelLabel.Text = "disabled";
+                                    lblTorCapacity.Text = "Disabled";
                                 });
+                                lblUnknownCapacity.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUnknownCapacity.Text = "Disabled";
+                                });
+                            }
+                            if (RunMempoolSpaceLightningAPI)
+                            {
+                                var (aliases, capacities) = MempoolSpaceLiquidityRankingJSONRefresh();
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
+                                    aliasLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        aliasLabel.Text = aliases[i];
+                                    });
+                                    System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
+                                    capacityLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        capacityLabel.Text = capacities[i];
+                                    });
+                                }
+                                var result7 = MempoolSpaceConnectivityRankingJSONRefresh();
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
+                                    aliasLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        aliasLabel.Text = result7.aliases[i];
+                                    });
+                                    System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
+                                    channelLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        channelLabel.Text = result7.channels[i];
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
+                                    aliasLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        aliasLabel.Text = "disabled";
+                                    });
+                                    System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
+                                    capacityLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        capacityLabel.Text = "disabled";
+                                    });
+                                }
+                                var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
+                                    aliasLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        aliasLabel.Text = "disabled";
+                                    });
+                                    System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
+                                    channelLabel.Invoke((MethodInvoker)delegate
+                                    {
+                                        channelLabel.Text = "disabled";
+                                    });
+                                }
                             }
                         }
                         SetLightsMessagesAndResetTimers();
@@ -914,57 +1022,80 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunBlockchairComJSONAPI)
+                        if (!testNet)
                         {
-                            var result7 = BlockchairComChainStatsJSONRefresh();
-                            int hodling_addresses = int.Parse(result7.hodling_addresses);
-                            if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
+                            if (RunBlockchairComJSONAPI)
                             {
-                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                var result7 = BlockchairComChainStatsJSONRefresh();
+                                int hodling_addresses = int.Parse(result7.hodling_addresses);
+                                if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                                 {
-                                    lblHodlingAddresses.Text = result7.hodling_addresses;
+                                    lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHodlingAddresses.Text = result7.hodling_addresses;
+                                    });
+                                }
+                                else
+                                {
+                                    lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHodlingAddresses.Text = "no data";
+                                    });
+                                }
+                                lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlocksIn24Hours.Text = result7.blocks_24h;
+                                });
+                                lblNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNodes.Text = result7.nodes;
+                                });
+                                dynamic blockchainSize = result7.blockchain_size;
+                                double blockchainSizeGB = Math.Round(Convert.ToDouble(blockchainSize) / 1073741824.0, 2);
+                                lblBlockchainSize.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchainSize.Text = blockchainSizeGB.ToString();
                                 });
                             }
                             else
                             {
                                 lblHodlingAddresses.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHodlingAddresses.Text = "no data";
+                                    lblHodlingAddresses.Text = "disabled";
+                                });
+                                lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlocksIn24Hours.Text = "disabled";
+                                });
+                                lblNodes.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNodes.Text = "disabled";
+                                });
+                                lblBlockchainSize.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchainSize.Text = "disabled";
                                 });
                             }
-                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlocksIn24Hours.Text = result7.blocks_24h;
-                            });
-                            lblNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodes.Text = result7.nodes;
-                            });
-                            dynamic blockchainSize = result7.blockchain_size;
-                            double blockchainSizeGB = Math.Round(Convert.ToDouble(blockchainSize) / 1073741824.0, 2);
-                            lblBlockchainSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockchainSize.Text = blockchainSizeGB.ToString();
-                            });
                         }
                         else
                         {
                             lblHodlingAddresses.Invoke((MethodInvoker)delegate
                             {
-                                lblHodlingAddresses.Text = "disabled";
+                                lblHodlingAddresses.Text = "unavailable on TestNet";
                             });
                             lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
                             {
-                                lblBlocksIn24Hours.Text = "disabled";
+                                lblBlocksIn24Hours.Text = "unavailable on TestNet";
                             });
                             lblNodes.Invoke((MethodInvoker)delegate
                             {
-                                lblNodes.Text = "disabled";
+                                lblNodes.Text = "unavailable on TestNet";
                             });
                             lblBlockchainSize.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockchainSize.Text = "disabled";
+                                lblBlockchainSize.Text = "unavailable on TestNet";
                             });
+
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -978,54 +1109,82 @@ namespace SATSuma
                 {
                     try
                     {
-                        if (RunBlockchairComJSONAPI)
+                        if (!testNet)
                         {
-                            var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
-                            lblHalveningBlock.Invoke((MethodInvoker)delegate
+                            if (RunBlockchairComJSONAPI)
                             {
-                                lblHalveningBlock.Text = halveningBlock + " / " + blocksLeft;
-                            });
-                            int progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
-                            progressBarProgressToHalving.Value = progressBarValue;
-                            progressBarBlockListHalvingProgress.Value = progressBarValue;
-                            lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
-                            });
-                            string halvening_time = halveningTime;
-                            DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                            string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
+                                var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
+                                lblHalveningBlock.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHalveningBlock.Text = halveningBlock + " / " + blocksLeft;
+                                });
+                                int progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
+                                progressBarProgressToHalving.Value = progressBarValue;
+                                progressBarBlockListHalvingProgress.Value = progressBarValue;
+                                lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
+                                });
+                                string halvening_time = halveningTime;
+                                DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                string halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
 
-                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                                lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblEstimatedHalvingDate.Text = halveningDate + " / ";
+                                });
+                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
+                                    lblHalvingSecondsRemaining.Text = seconds_left;
+                                    ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
+                                });
+                            }
+                            else
                             {
-                                lblEstimatedHalvingDate.Text = halveningDate + " / ";
-                            });
-                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
-                                lblHalvingSecondsRemaining.Text = seconds_left;
-                                ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
-                            });
+                                progressBarProgressToHalving.Value = 0;
+                                progressBarBlockListHalvingProgress.Value = 0;
+                                lblHalveningBlock.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHalveningBlock.Text = "disabled";
+                                });
+                                lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListHalvingBlockAndRemaining.Text = "disabled";
+                                });
+
+                                lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                                {
+                                    lblEstimatedHalvingDate.Text = "disabled";
+                                });
+                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHalvingSecondsRemaining.Text = "disabled";
+                                });
+                            }
                         }
                         else
                         {
+                            progressBarProgressToHalving.Value = 0;
+                            progressBarBlockListHalvingProgress.Value = 0;
                             lblHalveningBlock.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningBlock.Text = "disabled";
+                                lblHalveningBlock.Text = "unavailable";
                             });
                             lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListHalvingBlockAndRemaining.Text = "disabled";
+                                lblBlockListHalvingBlockAndRemaining.Text = "unavailable";
                             });
 
                             lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
                             {
-                                lblEstimatedHalvingDate.Text = "disabled";
+                                lblEstimatedHalvingDate.Text = "unavailable on TestNet";
                             });
                             lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                             {
-                                lblHalvingSecondsRemaining.Text = "disabled";
+                                lblHalvingSecondsRemaining.Text = "";
                             });
+
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -1037,6 +1196,9 @@ namespace SATSuma
                 });
 
                 await Task.WhenAll(task0, task1, task2, task3, task4, task5, task6);
+
+
+
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
@@ -1060,13 +1222,64 @@ namespace SATSuma
         }
 
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
-        
+
+        private (string currentHashrate, string currentDifficulty) GetHashrate()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/mining/hashrate/3d");
+                if (testNet)
+                {
+                    response = client.DownloadString("https://mempool.space/testnet/api/v1/mining/hashrate/3d");
+                }
+                var data = JObject.Parse(response);
+                string currentHashrate = Convert.ToString(data["currentHashrate"]);
+                string currentDifficulty = Convert.ToString(data["currentDifficulty"]);
+                return (currentHashrate, currentDifficulty);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetHashrate");
+            }
+            return ("error", "error");
+        }
+
+        private (string fastestFee, string halfHourFee, string hourFee, string economyFee, string minimumFee) GetFees()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/fees/recommended");
+                if (testNet)
+                {
+                    response = client.DownloadString("https://mempool.space/testnet/api/v1/fees/recommended");
+                }
+                var data = JObject.Parse(response);
+                string fastestFee = Convert.ToString(data["fastestFee"]);
+                string halfHourFee = Convert.ToString(data["halfHourFee"]);
+                string hourFee = Convert.ToString(data["hourFee"]);
+                string economyFee = Convert.ToString(data["economyFee"]);
+                string minimumFee = Convert.ToString(data["minimumFee"]);
+                return (fastestFee, halfHourFee, hourFee, economyFee, minimumFee);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetFees");
+            }
+            return ("error", "error", "error", "error", "error");
+        }
+
         private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) GetDifficultyAdjustment()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://mempool.space/api/v1/difficulty-adjustment");
+                if (testNet)
+                {
+                    response = client.DownloadString("https://mempool.space/testnet/api/v1/difficulty-adjustment");
+                }
                 var data = JObject.Parse(response);
                 string progressPercent = Convert.ToString(data["progressPercent"]);
                 decimal difficultyChangeFull = (decimal)data["difficultyChange"];
@@ -1153,6 +1366,10 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://mempool.space/api/mempool");
+                if (testNet)
+                {
+                    response = client.DownloadString("https://mempool.space/testnet/api/mempool");
+                }
                 var data = JObject.Parse(response);
                 string txCount = Convert.ToString(data["count"]);
                 string vSize = Convert.ToString(data["vsize"]);
@@ -1456,6 +1673,21 @@ namespace SATSuma
             var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
             var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
             var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+            if (testNet)
+            {
+                priceUSD = "0 (TestNet)";
+                priceGBP = "0 (TestNet)";
+                priceEUR = "0 (TestNet)";
+                priceXAU = "0 (TestNet)";
+                mCapUSD = "0 (TestNet)";
+                mCapGBP = "0 (TestNet)";
+                mCapEUR = "0 (TestNet)";
+                mCapXAU = "0 (TestNet)";
+                satsUSD = "0 (TestNet)";
+                satsGBP = "0 (TestNet)";
+                satsEUR = "0 (TestNet)";
+                satsXAU = "0 (TestNet)";
+            }
             string price = "";
             string mCap = "";
             string satsPerUnit = "";
@@ -1547,6 +1779,7 @@ namespace SATSuma
                     lblMarketCapLabel.Text = "Market cap (XAU)";
                 });
             }
+ 
             lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
             {
                 lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
@@ -7737,16 +7970,25 @@ namespace SATSuma
             {
                 lblSettingsNodeMainnet.ForeColor = Color.Green;
                 lblSettingsNodeMainnet.Text = "✔️";
+                testNet = false;
                 lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
                 lblSettingsNodeTestnet.Text = "❌";
                 lblSettingsNodeCustom.ForeColor = Color.IndianRed;
                 lblSettingsNodeCustom.Text = "❌";
+                btnMenuLightningDashboard.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Enabled = false;
                 NodeURL = "https://mempool.space/api/";
                 CheckBlockchainExplorerApiStatus();
+                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
+                _blockService = new BlockDataService(NodeURL);
+                _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+                _transactionService = new TransactionService(NodeURL);
+                UpdateBitcoinAndLightningDashboards();
             }
 
         }
+
+        bool testNet = false;
 
         private void LblSettingsNodeTestnet_Click(object sender, EventArgs e)
         {
@@ -7754,13 +7996,20 @@ namespace SATSuma
             {
                 lblSettingsNodeTestnet.ForeColor = Color.Green;
                 lblSettingsNodeTestnet.Text = "✔️";
+                testNet = true;
                 lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
                 lblSettingsNodeMainnet.Text = "❌";
                 lblSettingsNodeCustom.ForeColor = Color.IndianRed;
                 lblSettingsNodeCustom.Text = "❌";
                 textBoxSettingsCustomMempoolURL.Enabled = false;
+                btnMenuLightningDashboard.Enabled = false;
                 NodeURL = "https://mempool.space/testnet/api/";
                 CheckBlockchainExplorerApiStatus();
+                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
+                _blockService = new BlockDataService(NodeURL);
+                _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+                _transactionService = new TransactionService(NodeURL);
+                UpdateBitcoinAndLightningDashboards();
             }
         }
 
@@ -7770,6 +8019,7 @@ namespace SATSuma
             {
                 lblSettingsNodeCustom.ForeColor = Color.Green;
                 lblSettingsNodeCustom.Text = "✔️";
+                testNet = false;
                 lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
                 lblSettingsNodeMainnet.Text = "❌";
                 lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
@@ -8788,7 +9038,7 @@ namespace SATSuma
         private void ColorDataFields(Color thisColor)
         {
             //header
-            Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesNextBlock, lblFees30Mins, lblFees60Mins, lblFees1Day, lblHeaderHashrate };
+            Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate };
             foreach (Control control in listHeaderDataFieldsToColor)
             {
                 control.ForeColor = thisColor;
@@ -10807,6 +11057,7 @@ namespace SATSuma
                         {
                             blockHeight = "";
                         }
+                       
                         client.BaseAddress = new Uri(_nodeUrl);
 
                         var response = await client.GetAsync($"v1/blocks/{blockHeight}");

@@ -675,6 +675,8 @@
             this.panel60 = new System.Windows.Forms.Panel();
             this.label166 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.headerNetworkName = new System.Windows.Forms.Label();
+            this.headerNetworkStatusLight = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -8432,7 +8434,7 @@
             this.label165.ForeColor = System.Drawing.Color.Gray;
             this.label165.Location = new System.Drawing.Point(0, 290);
             this.label165.Name = "label165";
-            this.label165.Size = new System.Drawing.Size(770, 63);
+            this.label165.Size = new System.Drawing.Size(760, 63);
             this.label165.TabIndex = 210;
             this.label165.Text = resources.GetString("label165.Text");
             // 
@@ -8545,7 +8547,7 @@
             this.label159.ForeColor = System.Drawing.Color.Gray;
             this.label159.Location = new System.Drawing.Point(0, 26);
             this.label159.Name = "label159";
-            this.label159.Size = new System.Drawing.Size(770, 62);
+            this.label159.Size = new System.Drawing.Size(760, 62);
             this.label159.TabIndex = 150;
             this.label159.Text = resources.GetString("label159.Text");
             // 
@@ -8565,7 +8567,7 @@
             this.label158.ForeColor = System.Drawing.Color.Gray;
             this.label158.Location = new System.Drawing.Point(0, 158);
             this.label158.Name = "label158";
-            this.label158.Size = new System.Drawing.Size(770, 64);
+            this.label158.Size = new System.Drawing.Size(760, 64);
             this.label158.TabIndex = 143;
             this.label158.Text = resources.GetString("label158.Text");
             // 
@@ -8965,7 +8967,7 @@
             this.panel71.Controls.Add(this.panel72);
             this.panel71.Controls.Add(this.label196);
             this.panel71.Controls.Add(this.btnLoadTheme);
-            this.panel71.Location = new System.Drawing.Point(255, 466);
+            this.panel71.Location = new System.Drawing.Point(250, 466);
             this.panel71.Name = "panel71";
             this.panel71.Size = new System.Drawing.Size(505, 80);
             this.panel71.TabIndex = 293;
@@ -9079,7 +9081,7 @@
             this.panel70.Controls.Add(this.btnSaveTheme);
             this.panel70.Controls.Add(this.label194);
             this.panel70.Controls.Add(this.textBoxThemeImage);
-            this.panel70.Location = new System.Drawing.Point(255, 350);
+            this.panel70.Location = new System.Drawing.Point(250, 350);
             this.panel70.Name = "panel70";
             this.panel70.Size = new System.Drawing.Size(505, 104);
             this.panel70.TabIndex = 292;
@@ -9189,7 +9191,7 @@
             this.lblBackgroundBTCdirSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundBTCdirSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundBTCdirSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundBTCdirSelected.Location = new System.Drawing.Point(386, 196);
+            this.lblBackgroundBTCdirSelected.Location = new System.Drawing.Point(381, 196);
             this.lblBackgroundBTCdirSelected.Name = "lblBackgroundBTCdirSelected";
             this.lblBackgroundBTCdirSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundBTCdirSelected.TabIndex = 291;
@@ -9203,7 +9205,7 @@
             this.lblBackgroundCustomColorSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundCustomColorSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundCustomColorSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundCustomColorSelected.Location = new System.Drawing.Point(514, 196);
+            this.lblBackgroundCustomColorSelected.Location = new System.Drawing.Point(509, 196);
             this.lblBackgroundCustomColorSelected.Name = "lblBackgroundCustomColorSelected";
             this.lblBackgroundCustomColorSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundCustomColorSelected.TabIndex = 290;
@@ -9217,7 +9219,7 @@
             this.lblBackgroundCustomImageSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundCustomImageSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundCustomImageSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundCustomImageSelected.Location = new System.Drawing.Point(642, 196);
+            this.lblBackgroundCustomImageSelected.Location = new System.Drawing.Point(637, 196);
             this.lblBackgroundCustomImageSelected.Name = "lblBackgroundCustomImageSelected";
             this.lblBackgroundCustomImageSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundCustomImageSelected.TabIndex = 289;
@@ -9231,7 +9233,7 @@
             this.lblBackgroundGenesisSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundGenesisSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundGenesisSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundGenesisSelected.Location = new System.Drawing.Point(258, 196);
+            this.lblBackgroundGenesisSelected.Location = new System.Drawing.Point(253, 196);
             this.lblBackgroundGenesisSelected.Name = "lblBackgroundGenesisSelected";
             this.lblBackgroundGenesisSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundGenesisSelected.TabIndex = 288;
@@ -9242,7 +9244,7 @@
             this.label191.AutoSize = true;
             this.label191.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label191.ForeColor = System.Drawing.Color.Silver;
-            this.label191.Location = new System.Drawing.Point(639, 316);
+            this.label191.Location = new System.Drawing.Point(634, 316);
             this.label191.Name = "label191";
             this.label191.Size = new System.Drawing.Size(114, 20);
             this.label191.TabIndex = 284;
@@ -9252,7 +9254,7 @@
             // 
             this.pictureBoxCustomImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxCustomImage.Image = global::SATSuma.Properties.Resources.CustomImage;
-            this.pictureBoxCustomImage.Location = new System.Drawing.Point(639, 193);
+            this.pictureBoxCustomImage.Location = new System.Drawing.Point(634, 193);
             this.pictureBoxCustomImage.Name = "pictureBoxCustomImage";
             this.pictureBoxCustomImage.Size = new System.Drawing.Size(120, 120);
             this.pictureBoxCustomImage.TabIndex = 283;
@@ -9426,7 +9428,7 @@
             this.btnColorTitleBackgrounds.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTitleBackgrounds.ForeColor = System.Drawing.Color.White;
             this.btnColorTitleBackgrounds.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTitleBackgrounds.Location = new System.Drawing.Point(658, 113);
+            this.btnColorTitleBackgrounds.Location = new System.Drawing.Point(653, 113);
             this.btnColorTitleBackgrounds.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTitleBackgrounds.Name = "btnColorTitleBackgrounds";
             this.btnColorTitleBackgrounds.Size = new System.Drawing.Size(55, 18);
@@ -9442,7 +9444,7 @@
             this.lblTitleBackgroundCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitleBackgroundCustom.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblTitleBackgroundCustom.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblTitleBackgroundCustom.Location = new System.Drawing.Point(575, 113);
+            this.lblTitleBackgroundCustom.Location = new System.Drawing.Point(570, 113);
             this.lblTitleBackgroundCustom.Name = "lblTitleBackgroundCustom";
             this.lblTitleBackgroundCustom.Size = new System.Drawing.Size(23, 18);
             this.lblTitleBackgroundCustom.TabIndex = 274;
@@ -9454,7 +9456,7 @@
             this.label189.AutoSize = true;
             this.label189.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label189.ForeColor = System.Drawing.Color.Silver;
-            this.label189.Location = new System.Drawing.Point(594, 113);
+            this.label189.Location = new System.Drawing.Point(589, 113);
             this.label189.Name = "label189";
             this.label189.Size = new System.Drawing.Size(64, 20);
             this.label189.TabIndex = 273;
@@ -9466,7 +9468,7 @@
             this.lblTitleBackgroundNone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitleBackgroundNone.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblTitleBackgroundNone.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblTitleBackgroundNone.Location = new System.Drawing.Point(415, 113);
+            this.lblTitleBackgroundNone.Location = new System.Drawing.Point(410, 113);
             this.lblTitleBackgroundNone.Name = "lblTitleBackgroundNone";
             this.lblTitleBackgroundNone.Size = new System.Drawing.Size(23, 18);
             this.lblTitleBackgroundNone.TabIndex = 272;
@@ -9478,7 +9480,7 @@
             this.label187.AutoSize = true;
             this.label187.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label187.ForeColor = System.Drawing.Color.Silver;
-            this.label187.Location = new System.Drawing.Point(434, 113);
+            this.label187.Location = new System.Drawing.Point(429, 113);
             this.label187.Name = "label187";
             this.label187.Size = new System.Drawing.Size(49, 20);
             this.label187.TabIndex = 271;
@@ -9490,7 +9492,7 @@
             this.lblTitleBackgroundDefault.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitleBackgroundDefault.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblTitleBackgroundDefault.ForeColor = System.Drawing.Color.Green;
-            this.lblTitleBackgroundDefault.Location = new System.Drawing.Point(255, 113);
+            this.lblTitleBackgroundDefault.Location = new System.Drawing.Point(250, 113);
             this.lblTitleBackgroundDefault.Name = "lblTitleBackgroundDefault";
             this.lblTitleBackgroundDefault.Size = new System.Drawing.Size(23, 18);
             this.lblTitleBackgroundDefault.TabIndex = 270;
@@ -9502,7 +9504,7 @@
             this.label185.AutoSize = true;
             this.label185.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label185.ForeColor = System.Drawing.Color.Silver;
-            this.label185.Location = new System.Drawing.Point(274, 113);
+            this.label185.Location = new System.Drawing.Point(269, 113);
             this.label185.Name = "label185";
             this.label185.Size = new System.Drawing.Size(62, 20);
             this.label185.TabIndex = 269;
@@ -9514,7 +9516,7 @@
             this.panel64.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel64.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel64.Controls.Add(this.label183);
-            this.panel64.Location = new System.Drawing.Point(255, 73);
+            this.panel64.Location = new System.Drawing.Point(250, 73);
             this.panel64.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel64.Name = "panel64";
             this.panel64.Size = new System.Drawing.Size(224, 23);
@@ -9540,7 +9542,7 @@
             this.panel63.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel63.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel63.Controls.Add(this.label182);
-            this.panel63.Location = new System.Drawing.Point(255, 153);
+            this.panel63.Location = new System.Drawing.Point(250, 153);
             this.panel63.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel63.Name = "panel63";
             this.panel63.Size = new System.Drawing.Size(224, 23);
@@ -9566,7 +9568,7 @@
             this.panel62.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel62.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel62.Controls.Add(this.label181);
-            this.panel62.Location = new System.Drawing.Point(255, 0);
+            this.panel62.Location = new System.Drawing.Point(250, 0);
             this.panel62.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel62.Name = "panel62";
             this.panel62.Size = new System.Drawing.Size(224, 23);
@@ -9591,7 +9593,7 @@
             this.label180.AutoSize = true;
             this.label180.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label180.ForeColor = System.Drawing.Color.Silver;
-            this.label180.Location = new System.Drawing.Point(511, 316);
+            this.label180.Location = new System.Drawing.Point(506, 316);
             this.label180.Name = "label180";
             this.label180.Size = new System.Drawing.Size(115, 20);
             this.label180.TabIndex = 268;
@@ -9602,7 +9604,7 @@
             this.label179.AutoSize = true;
             this.label179.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label179.ForeColor = System.Drawing.Color.Silver;
-            this.label179.Location = new System.Drawing.Point(383, 316);
+            this.label179.Location = new System.Drawing.Point(378, 316);
             this.label179.Name = "label179";
             this.label179.Size = new System.Drawing.Size(88, 20);
             this.label179.TabIndex = 267;
@@ -9613,7 +9615,7 @@
             this.label177.AutoSize = true;
             this.label177.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label177.ForeColor = System.Drawing.Color.Silver;
-            this.label177.Location = new System.Drawing.Point(255, 316);
+            this.label177.Location = new System.Drawing.Point(250, 316);
             this.label177.Name = "label177";
             this.label177.Size = new System.Drawing.Size(72, 20);
             this.label177.TabIndex = 266;
@@ -9625,7 +9627,7 @@
             this.pictureBoxCustomColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.pictureBoxCustomColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxCustomColor.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.pictureBoxCustomColor.Location = new System.Drawing.Point(511, 193);
+            this.pictureBoxCustomColor.Location = new System.Drawing.Point(506, 193);
             this.pictureBoxCustomColor.Name = "pictureBoxCustomColor";
             this.pictureBoxCustomColor.Size = new System.Drawing.Size(120, 120);
             this.pictureBoxCustomColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -9638,7 +9640,7 @@
             this.pictureBoxBTCDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxBTCDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxBTCDir.Image = global::SATSuma.Properties.Resources.SatsumaBTCdir1;
-            this.pictureBoxBTCDir.Location = new System.Drawing.Point(383, 193);
+            this.pictureBoxBTCDir.Location = new System.Drawing.Point(378, 193);
             this.pictureBoxBTCDir.Name = "pictureBoxBTCDir";
             this.pictureBoxBTCDir.Size = new System.Drawing.Size(120, 120);
             this.pictureBoxBTCDir.TabIndex = 264;
@@ -9649,7 +9651,7 @@
             // 
             this.pictureBoxGenesis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxGenesis.Image = global::SATSuma.Properties.Resources.AppBackground2;
-            this.pictureBoxGenesis.Location = new System.Drawing.Point(255, 193);
+            this.pictureBoxGenesis.Location = new System.Drawing.Point(250, 193);
             this.pictureBoxGenesis.Name = "pictureBoxGenesis";
             this.pictureBoxGenesis.Size = new System.Drawing.Size(120, 120);
             this.pictureBoxGenesis.TabIndex = 263;
@@ -9662,7 +9664,7 @@
             this.lblShowClock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblShowClock.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblShowClock.ForeColor = System.Drawing.Color.Green;
-            this.lblShowClock.Location = new System.Drawing.Point(256, 40);
+            this.lblShowClock.Location = new System.Drawing.Point(251, 40);
             this.lblShowClock.Name = "lblShowClock";
             this.lblShowClock.Size = new System.Drawing.Size(23, 18);
             this.lblShowClock.TabIndex = 262;
@@ -9674,7 +9676,7 @@
             this.label178.AutoSize = true;
             this.label178.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label178.ForeColor = System.Drawing.Color.Silver;
-            this.label178.Location = new System.Drawing.Point(278, 40);
+            this.label178.Location = new System.Drawing.Point(273, 40);
             this.label178.Name = "label178";
             this.label178.Size = new System.Drawing.Size(330, 20);
             this.label178.TabIndex = 261;
@@ -9920,6 +9922,30 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Text files (*.txt)|*.txt";
             // 
+            // headerNetworkName
+            // 
+            this.headerNetworkName.AutoSize = true;
+            this.headerNetworkName.BackColor = System.Drawing.Color.Transparent;
+            this.headerNetworkName.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.headerNetworkName.ForeColor = System.Drawing.Color.Silver;
+            this.headerNetworkName.Location = new System.Drawing.Point(723, 162);
+            this.headerNetworkName.Name = "headerNetworkName";
+            this.headerNetworkName.Size = new System.Drawing.Size(60, 17);
+            this.headerNetworkName.TabIndex = 241;
+            this.headerNetworkName.Text = "MAINNET";
+            // 
+            // headerNetworkStatusLight
+            // 
+            this.headerNetworkStatusLight.AutoSize = true;
+            this.headerNetworkStatusLight.BackColor = System.Drawing.Color.Transparent;
+            this.headerNetworkStatusLight.Font = new System.Drawing.Font("Consolas", 6F);
+            this.headerNetworkStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.headerNetworkStatusLight.Location = new System.Drawing.Point(711, 164);
+            this.headerNetworkStatusLight.Name = "headerNetworkStatusLight";
+            this.headerNetworkStatusLight.Size = new System.Drawing.Size(15, 12);
+            this.headerNetworkStatusLight.TabIndex = 240;
+            this.headerNetworkStatusLight.Text = "🟢";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -9929,14 +9955,16 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelFees);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.headerNetworkName);
+            this.Controls.Add(this.headerNetworkStatusLight);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelXpub);
@@ -10797,6 +10825,8 @@
         private System.Windows.Forms.Label label197;
         private System.Windows.Forms.Button btnColorPanels;
         private System.Windows.Forms.Button btnDeleteTheme;
+        private System.Windows.Forms.Label headerNetworkName;
+        private System.Windows.Forms.Label headerNetworkStatusLight;
     }
 }
 

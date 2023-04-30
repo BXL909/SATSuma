@@ -121,6 +121,7 @@ namespace SATSuma
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
         Color listViewHeaderTextColor = Color.Silver;
         Color tableTextColor = Color.FromArgb(255, 153, 0);
+        bool testNet = false;
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -133,25 +134,15 @@ namespace SATSuma
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
-            _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-            _blockService = new BlockDataService(NodeURL);
-            _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-            _transactionService = new TransactionService(NodeURL);
+            CreateDataServices();
         }
 
         private void Form1_Load(object sender, EventArgs e) 
         {
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    string BlockTipURL = NodeURL + "blocks/tip/height";
-                    string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                    lblBlockNumber.Invoke((MethodInvoker)delegate
-                    {
-                        //lblBlockNumber.Text = BlockTip;
-                    });
-                }
+                CheckNetworkStatus();
+                GetBlockTip();
 
                 // check if there is a node address saved in the bookmarks file
                 var bookmarks = ReadBookmarksFromJsonFile();
@@ -195,7 +186,7 @@ namespace SATSuma
                 LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
                 //setup address screen
                 AddressInvalidHideControls(); // initially address textbox is empty so hide the controls
-                CheckBlockchainExplorerApiStatus();
+                CheckNetworkStatus();
                 mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
                 btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
             }
@@ -7978,17 +7969,15 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Enabled = false;
                 NodeURL = "https://mempool.space/api/";
-                CheckBlockchainExplorerApiStatus();
-                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-                _blockService = new BlockDataService(NodeURL);
-                _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-                _transactionService = new TransactionService(NodeURL);
+                CheckNetworkStatus();
+                CreateDataServices();
+                GetBlockTip();
+                LookupBlockList();
                 UpdateBitcoinAndLightningDashboards();
+
             }
 
         }
-
-        bool testNet = false;
 
         private void LblSettingsNodeTestnet_Click(object sender, EventArgs e)
         {
@@ -8004,11 +7993,10 @@ namespace SATSuma
                 textBoxSettingsCustomMempoolURL.Enabled = false;
                 btnMenuLightningDashboard.Enabled = false;
                 NodeURL = "https://mempool.space/testnet/api/";
-                CheckBlockchainExplorerApiStatus();
-                _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-                _blockService = new BlockDataService(NodeURL);
-                _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-                _transactionService = new TransactionService(NodeURL);
+                CheckNetworkStatus();
+                CreateDataServices();
+                GetBlockTip();
+                LookupBlockList();
                 UpdateBitcoinAndLightningDashboards();
             }
         }
@@ -9733,6 +9721,29 @@ namespace SATSuma
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
 
+        private void CreateDataServices()
+        {
+            _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
+            _blockService = new BlockDataService(NodeURL);
+            _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+            _transactionService = new TransactionService(NodeURL);
+        }
+
+        // Get current block tip
+        private void GetBlockTip()
+        {
+            using (WebClient client = new WebClient())
+            {
+                string BlockTipURL = NodeURL + "blocks/tip/height";
+                string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                lblBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockNumber.Text = BlockTip;
+                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
+                });
+            }
+        }
+
         // Method to encrypt a string using SHA-256
         private string Encrypt(string input, string key)
         {
@@ -10024,7 +10035,7 @@ namespace SATSuma
 
         //=============================================================================================================        
         //-------------------------- CHECK API ONLINE STATUS ----------------------------------------------------------
-        private async void CheckBlockchainExplorerApiStatus()
+        private async void CheckNetworkStatus()
         {
             using var client = new HttpClient();
             try
@@ -10050,19 +10061,21 @@ namespace SATSuma
                     lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
+                        headerNetworkStatusLight.ForeColor = Color.OliveDrab;
                     });
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Mainnet";
+                        displayNodeName = "MAINNET";
                     }
                     if (NodeURL == "https://mempool.space/testnet/api/")
                     {
-                        displayNodeName = "Testnet";
+                        displayNodeName = "TESTNET";
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                        headerNetworkName.Text = displayNodeName;
                     });
                 }
                 else
@@ -10070,20 +10083,22 @@ namespace SATSuma
                     // API is not online
                     lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
-                        lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                        headerNetworkStatusLight.ForeColor = Color.IndianRed;
                     });
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "Mainnet";
+                        displayNodeName = "MAINNET";
                     }
                     if (NodeURL == "https://mempool.space/testnet/api/")
                     {
-                        displayNodeName = "Testnet";
+                        displayNodeName = "TESTNET";
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                        headerNetworkName.Text = displayNodeName;
                     });
                 }
             }
@@ -10092,7 +10107,8 @@ namespace SATSuma
                 // API is not online
                 lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
-                    lblSettingsCustomNodeStatusLight.ForeColor = Color.Red;
+                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                    headerNetworkStatusLight.ForeColor = Color.IndianRed;
                 });
                 var displayNodeName = "";
                 if (NodeURL == "https://mempool.space/api/")
@@ -10106,6 +10122,7 @@ namespace SATSuma
                 lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                    headerNetworkName.Text = displayNodeName;
                 });
             }
             catch (Exception ex)

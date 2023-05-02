@@ -4977,9 +4977,9 @@
             this.label118.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label118.Location = new System.Drawing.Point(0, 360);
             this.label118.Name = "label118";
-            this.label118.Size = new System.Drawing.Size(181, 20);
+            this.label118.Size = new System.Drawing.Size(197, 20);
             this.label118.TabIndex = 223;
-            this.label118.Text = "Est. hashrate (gigahash)";
+            this.label118.Text = "Est. hashrate (hashes/sec)";
             // 
             // lblBlockListEstHashRate
             // 
@@ -5214,7 +5214,7 @@
             this.btnNewer15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewer15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewer15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 303);
+            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 299);
             this.btnNewer15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnNewer15Blocks.Name = "btnNewer15Blocks";
             this.btnNewer15Blocks.Size = new System.Drawing.Size(78, 22);
@@ -5234,7 +5234,7 @@
             this.btnOlder15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOlder15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOlder15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 303);
+            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 299);
             this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnOlder15Blocks.Name = "btnOlder15Blocks";
             this.btnOlder15Blocks.Size = new System.Drawing.Size(70, 22);
@@ -5250,7 +5250,7 @@
             this.textBoxBlockHeightToStartListFrom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBlockHeightToStartListFrom.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBlockHeightToStartListFrom.ForeColor = System.Drawing.Color.White;
-            this.textBoxBlockHeightToStartListFrom.Location = new System.Drawing.Point(691, 329);
+            this.textBoxBlockHeightToStartListFrom.Location = new System.Drawing.Point(691, 327);
             this.textBoxBlockHeightToStartListFrom.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxBlockHeightToStartListFrom.MaxLength = 80;
             this.textBoxBlockHeightToStartListFrom.Name = "textBoxBlockHeightToStartListFrom";
@@ -5265,7 +5265,7 @@
             this.label109.AutoSize = true;
             this.label109.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label109.ForeColor = System.Drawing.Color.Silver;
-            this.label109.Location = new System.Drawing.Point(557, 331);
+            this.label109.Location = new System.Drawing.Point(557, 327);
             this.label109.Name = "label109";
             this.label109.Size = new System.Drawing.Size(162, 20);
             this.label109.TabIndex = 6;
@@ -9955,11 +9955,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.headerNetworkName);
             this.Controls.Add(this.headerNetworkStatusLight);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelHeaderBlockHeight);

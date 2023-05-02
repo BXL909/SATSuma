@@ -84,7 +84,7 @@ namespace SATSuma
 #pragma warning restore IDE0044 // Add readonly modifier
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
-        private string mempoolConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
+        private string addressScreenConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         private string storedLastSeenBlockNumber = "0";
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
@@ -186,7 +186,7 @@ namespace SATSuma
                 //setup address screen
                 AddressInvalidHideControls(); // initially address textbox is empty so hide the controls
                 CheckNetworkStatus();
-                mempoolConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
+                addressScreenConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
                 btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
             }
             catch (WebException ex)
@@ -248,7 +248,10 @@ namespace SATSuma
                     }
                     catch
                     {
-                        lblHalvingSecondsRemaining.Text = "disabled";
+                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                        {
+                            lblHalvingSecondsRemaining.Text = "disabled";
+                        });
                     }
                 }
             }
@@ -294,7 +297,6 @@ namespace SATSuma
                 HandleException(ex, "TimerAPIRefreshPeriod_Tick");
             }
         }
-
         #endregion
 
         #region BITCOIN AND LIGHTNING DASHBOARD SCREENS
@@ -397,6 +399,10 @@ namespace SATSuma
                         lblEstHashrate.Invoke((MethodInvoker)delegate
                         {
                             lblEstHashrate.Text = currentHashrate;
+                        });
+                        lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListEstHashRate.Text = currentHashrate;
                         });
                     }
                     catch (Exception ex)
@@ -568,10 +574,6 @@ namespace SATSuma
                                 {
                                     lblBlockListBlockReward.Text = blockReward;
                                 });
-                                lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListEstHashRate.Text = estHashrate;
-                                });
                                 lblBTCInCirc.Invoke((MethodInvoker)delegate
                                 {
                                     lblBTCInCirc.Text = btcInCirc + " / 21000000";
@@ -631,10 +633,6 @@ namespace SATSuma
                                 {
                                     lbl24HourBTCSent.Text = "disabled";
                                 });
-                                lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListEstHashRate.Text = "disabled";
-                                });
                             }
                         }
                         else
@@ -675,10 +673,6 @@ namespace SATSuma
                             {
                                 lbl24HourBTCSent.Text = "unavailable on TestNet";
                             });
-                            lblBlockListEstHashRate.Invoke((MethodInvoker)delegate // (Blocks list)
-                            {
-                                lblBlockListEstHashRate.Text = "unavailable on TestNet";
-                            });
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -697,7 +691,6 @@ namespace SATSuma
                             if (RunBitcoinExplorerOrgJSONAPI)
                             {
                                 var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
-                                // move returned data to the labels on the form
                                 lblTransInNextBlock.Invoke((MethodInvoker)delegate
                                 {
                                     lblTransInNextBlock.Text = txInNextBlock;
@@ -733,7 +726,6 @@ namespace SATSuma
                                 {
                                     lblBlockListTXInNextBlock.Text = "disabled";
                                 });
-
                                 lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                                 {
                                     lblNextBlockMinMaxFee.Text = "disabled";
@@ -762,7 +754,6 @@ namespace SATSuma
                             {
                                 lblBlockListTXInNextBlock.Text = "unavailable on TestNet";
                             });
-
                             lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                             {
                                 lblNextBlockMinMaxFee.Text = "unavailable on TestNet";
@@ -779,7 +770,6 @@ namespace SATSuma
                             {
                                 lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
                             });
-
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -798,7 +788,6 @@ namespace SATSuma
                             if (RunMempoolSpaceLightningAPI)
                             {
                                 var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
-                                // move returned data to the labels on the form
                                 lblChannelCount.Invoke((MethodInvoker)delegate
                                 {
                                     lblChannelCount.Text = channelCount;
@@ -1085,7 +1074,6 @@ namespace SATSuma
                             {
                                 lblBlockchainSize.Text = "unavailable on TestNet";
                             });
-
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -1174,7 +1162,6 @@ namespace SATSuma
                             {
                                 lblHalvingSecondsRemaining.Text = "";
                             });
-
                         }
                         SetLightsMessagesAndResetTimers();
                     }
@@ -1186,9 +1173,6 @@ namespace SATSuma
                 });
 
                 await Task.WhenAll(task0, task1, task2, task3, task4, task5, task6);
-
-
-
 
                 // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
@@ -1425,7 +1409,6 @@ namespace SATSuma
                     capacity = Convert.ToString(dblCapacity);
                     capacities.Add(capacity);
                 }
-
                 return (aliases, capacities);
             }
             catch (Exception ex)
@@ -1999,7 +1982,7 @@ namespace SATSuma
                 var jsonData = await response.Content.ReadAsStringAsync();
                 var addressData = JObject.Parse(jsonData);
 
-                if (mempoolConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+                if (addressScreenConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
                 {
                     label61.Invoke((MethodInvoker)delegate
                     {
@@ -2055,7 +2038,7 @@ namespace SATSuma
                         lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
                     });
                 }
-                if (mempoolConfUnconfOrAllTx == "mempool") //mempool stats only
+                if (addressScreenConfUnconfOrAllTx == "mempool") //mempool stats only
                 {
                     label61.Invoke((MethodInvoker)delegate
                     {
@@ -2111,7 +2094,7 @@ namespace SATSuma
                         lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
                     });
                 }
-                if (mempoolConfUnconfOrAllTx == "all" || (mempoolConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+                if (addressScreenConfUnconfOrAllTx == "all" || (addressScreenConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
                 {
                     label61.Invoke((MethodInvoker)delegate
                     {
@@ -2217,7 +2200,7 @@ namespace SATSuma
         {
             try
             {
-                var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, mempoolConfUnconfOrAllTx, lastSeenTxId);
+                var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId);
                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                 List<string> txIds = transactions.Select(t => t.Txid).ToList();
 
@@ -2246,7 +2229,7 @@ namespace SATSuma
                 if (listViewAddressTransactions.Columns.Count == 0)
                 {
                     // If not, add the column header
-                    if (mempoolConfUnconfOrAllTx == "chain")
+                    if (addressScreenConfUnconfOrAllTx == "chain")
                     {
                         if (PartOfAnAllAddressTransactionsRequest)
                         {
@@ -2263,14 +2246,14 @@ namespace SATSuma
                             });
                         }
                     }
-                    if (mempoolConfUnconfOrAllTx == "mempool")
+                    if (addressScreenConfUnconfOrAllTx == "mempool")
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
                             listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
                         });
                     }
-                    if (mempoolConfUnconfOrAllTx == "all")
+                    if (addressScreenConfUnconfOrAllTx == "all")
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
@@ -2372,7 +2355,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                        if (addressScreenConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
                         {
                             btnFirstAddressTransaction.Visible = true;
                         }
@@ -2384,7 +2367,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (mempoolConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                        if (addressScreenConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
                         {
                             btnNextAddressTransactions.Visible = true;
                         }
@@ -2413,9 +2396,9 @@ namespace SATSuma
                         lblAddressTXPositionInList.Text = "No transactions to display";
                     });
                 }
-                if (mempoolConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
+                if (addressScreenConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
                 {
-                    mempoolConfUnconfOrAllTx = "chain";
+                    addressScreenConfUnconfOrAllTx = "chain";
                 }
                 // set focus
                 if (btnNextAddressTransactions.Visible && btnNextAddressTransactions.Enabled)
@@ -2460,7 +2443,7 @@ namespace SATSuma
             DisableEnableButtons("disable"); // disable buttons during operation
             if (PartOfAnAllAddressTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
             {
-                mempoolConfUnconfOrAllTx = "all";
+                addressScreenConfUnconfOrAllTx = "all";
             }
             btnFirstAddressTransaction.Visible = false;
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
@@ -2482,7 +2465,7 @@ namespace SATSuma
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = true;
             btnShowUnconfirmedTX.Enabled = false;
-            mempoolConfUnconfOrAllTx = "mempool";
+            addressScreenConfUnconfOrAllTx = "mempool";
             btnNextAddressTransactions.Visible = false;
             btnFirstAddressTransaction.Visible = false;
             PartOfAnAllAddressTransactionsRequest = false;
@@ -2510,7 +2493,7 @@ namespace SATSuma
             btnShowConfirmedTX.Enabled = false;
             btnShowAllTX.Enabled = true;
             btnShowUnconfirmedTX.Enabled = true;
-            mempoolConfUnconfOrAllTx = "chain";
+            addressScreenConfUnconfOrAllTx = "chain";
             PartOfAnAllAddressTransactionsRequest = false;
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
@@ -2536,7 +2519,7 @@ namespace SATSuma
             btnShowConfirmedTX.Enabled = true;
             btnShowAllTX.Enabled = false;
             btnShowUnconfirmedTX.Enabled = true;
-            mempoolConfUnconfOrAllTx = "all";
+            addressScreenConfUnconfOrAllTx = "all";
             PartOfAnAllAddressTransactionsRequest = true;
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
@@ -2627,41 +2610,6 @@ namespace SATSuma
             BtnViewBlockFromAddress.Visible = listViewAddressTransactions.SelectedItems.Count > 0;
         }
 
-        /*private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            bool anySelected = false;
-            foreach (ListViewItem item in listViewAddressTransactions.Items)
-            {
-                if (item.Selected)
-                {
-                    foreach (ListViewItem.ListViewSubItem subItem in listViewAddressTransactions.SelectedItems[0].SubItems)
-                    {
-                        subItem.ForeColor = Color.White;
-                    }
-                   // item.ForeColor = Color.White; // txID
-                   // item.SubItems[1].ForeColor = Color.White; //Block 
-                    anySelected = true;
-                    BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
-                    {
-                        BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y);
-                        BtnViewTransactionFromAddress.Height = item.Bounds.Height;
-                    });
-                    BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
-                    {
-                        BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y);
-                        BtnViewBlockFromAddress.Height = item.Bounds.Height;
-                    });
-                }
-                else
-                {
-                    item.ForeColor = tableTextColor;
-                    item.SubItems[1].ForeColor = tableTextColor; //Block
-                }
-            }
-            BtnViewTransactionFromAddress.Visible = anySelected;
-            BtnViewBlockFromAddress.Visible = anySelected;
-        }*/
-
         //-----DRAW AN ELLIPSIS WHEN STRINGS DONT FIT IN LISTVIEW COLUMN (ALSO COLOUR BALANCE DIFFERENCE RED/GREEN)----
         private void ListViewAddressTransactions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -2670,7 +2618,6 @@ namespace SATSuma
             if (text[0] == '+') // if the string is a change to an amount and positive
             {
                 e.SubItem.ForeColor = Color.OliveDrab; // make it green
-
             }
             else
             if (text[0] == '-') // if the string is a change to an amount and negative
@@ -2770,7 +2717,7 @@ namespace SATSuma
         //------------------------ SHOW ALL THE ADDRESS CONTROLS ------------------------------------------------------
         private void AddressValidShowControls() // show all address related controls
         {
-            if (mempoolConfUnconfOrAllTx == "mempool")//only one page of unconfirmed tx regardless how many tx there are
+            if (addressScreenConfUnconfOrAllTx == "mempool")//only one page of unconfirmed tx regardless how many tx there are
             {
                 btnNextAddressTransactions.Visible = false;
                 btnFirstAddressTransaction.Visible = false;
@@ -8579,7 +8526,7 @@ namespace SATSuma
             {
                 this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
             });
-            //lblTime.Visible = true;
+            lblTime.Visible = false;
             lblBackgroundGenesisSelected.Visible =false;
             lblBackgroundBTCdirSelected.Visible = true;
             lblBackgroundCustomColorSelected.Visible = false;

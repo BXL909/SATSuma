@@ -109,6 +109,9 @@ namespace SATSuma
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
         bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
         string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
+        bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
+        string settingsInFile = ""; // stores the settings from the file to check whether any have changed, in which case we'll update the file
+
         bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
         string defaultThemeInFile = ""; // stores the default theme from the file to check whether a newly supplied one is different, in which case we'll update the file
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
@@ -141,11 +144,148 @@ namespace SATSuma
         {
             try
             {
+                // check if settings are already saved in the bookmarks file and either restore them or set defaults and save a settings entry in bookmarks file
+                var bookmarks = ReadBookmarksFromJsonFile();
+                foreach (var bookmark in bookmarks)
+                {
+                    if (bookmark.Type == "settings")
+                    {
+                        if (Convert.ToString(bookmark.Data[0]) == "P")
+                        {
+                            //GBP
+                        }
+                        if (Convert.ToString(bookmark.Data[0]) == "D")
+                        {
+                            //USD
+                        }
+                        if (Convert.ToString(bookmark.Data[0]) == "E")
+                        {
+                            //EUR
+                        }
+                        if (Convert.ToString(bookmark.Data[0]) == "G")
+                        {
+                            //XAU
+                        }
+                        if (Convert.ToString(bookmark.Data[1]) == "M")
+                        {
+                            //mainnet
+                        }
+                        if (Convert.ToString(bookmark.Data[1]) == "T")
+                        {
+                            //testnet
+                        }
+                        if (Convert.ToString(bookmark.Data[1]) == "C")
+                        {
+                            //custom
+                        }
+                        if (Convert.ToString(bookmark.Data[2]) == "1")
+                        {
+                            RunBlockchairComJSONAPI = true;
+                            lblBlockchairComJSON.Text = "✔️";
+                            lblBlockchairComJSON.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            RunBlockchairComJSONAPI = false;
+                            lblBlockchairComJSON.Text = "❌";
+                            lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                        }
+                        if (Convert.ToString(bookmark.Data[3]) == "1")
+                        {
+                            RunBitcoinExplorerEndpointAPI = true;
+                            RunBitcoinExplorerOrgJSONAPI = true;
+                            lblBitcoinExplorerEndpoints.Text = "✔️";
+                            lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            RunBitcoinExplorerEndpointAPI = false;
+                            RunBitcoinExplorerOrgJSONAPI = false;
+                            lblBitcoinExplorerEndpoints.Text = "❌";
+                            lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                        }
+                        if (Convert.ToString(bookmark.Data[4]) == "1")
+                        {
+                            RunBlockchainInfoEndpointAPI = true;
+                            lblBlockchainInfoEndpoints.Text = "✔️";
+                            lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            RunBlockchainInfoEndpointAPI = false;
+                            lblBlockchainInfoEndpoints.Text = "❌";
+                            lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                        }
+                        if (Convert.ToString(bookmark.Data[5]) == "1")
+                        {
+                            lblBitcoinDashboard.Text = "✔️";
+                            lblBitcoinDashboard.ForeColor = Color.Green;
+                            lblBlockchairComJSON.Enabled = true;
+                            lblBitcoinExplorerEndpoints.Enabled = true;
+                            lblBlockchainInfoEndpoints.Enabled = true;
+                        }
+                        else
+                        {
+                            lblBitcoinDashboard.Text = "❌";
+                            lblBitcoinDashboard.ForeColor = Color.IndianRed;
+                            RunBlockchairComJSONAPI = false;
+                            lblBlockchairComJSON.Text = "❌";
+                            lblBlockchairComJSON.Enabled = false;
+                            lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                            RunBitcoinExplorerEndpointAPI = false;
+                            RunBitcoinExplorerOrgJSONAPI = false;
+                            lblBitcoinExplorerEndpoints.Text = "❌";
+                            lblBitcoinExplorerEndpoints.Enabled = false;
+                            lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                            RunBlockchainInfoEndpointAPI = false;
+                            lblBlockchainInfoEndpoints.Text = "❌";
+                            lblBlockchainInfoEndpoints.Enabled = false;
+                            lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                        }
+                        if (Convert.ToString(bookmark.Data[6]) == "1")
+                        {
+                            lblLightningDashboard.Text = "✔️";
+                            lblLightningDashboard.ForeColor = Color.Green;
+                            RunMempoolSpaceLightningAPI = true;
+                            lblMempoolLightningJSON.Text = "✔️";
+                            lblMempoolLightningJSON.Enabled = true;
+                            lblMempoolLightningJSON.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            lblLightningDashboard.Text = "❌";
+                            lblLightningDashboard.ForeColor = Color.IndianRed;
+                            RunMempoolSpaceLightningAPI = false;
+                            lblMempoolLightningJSON.Text = "❌";
+                            lblMempoolLightningJSON.Enabled = false;
+                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                        }
+                        if (Convert.ToString(bookmark.Data[7]) == "1")
+                        {
+                            lblMempoolLightningJSON.Text = "✔️";
+                            lblMempoolLightningJSON.Enabled = true;
+                            lblMempoolLightningJSON.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            lblMempoolLightningJSON.Text = "❌";
+                            lblMempoolLightningJSON.Enabled = false;
+                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                        }
+                        settingsInFile = bookmark.Data;
+                        settingsAlreadySavedInFile = true;
+                        break;
+                    }
+                    settingsAlreadySavedInFile = false;
+                }
+
+
+
                 CheckNetworkStatus();
                 GetBlockTip();
 
                 // check if there is a node address saved in the bookmarks file
-                var bookmarks = ReadBookmarksFromJsonFile();
+                bookmarks = ReadBookmarksFromJsonFile();
                 foreach (var bookmark in bookmarks)
                 {
                     if (bookmark.Type == "node")
@@ -8249,6 +8389,15 @@ namespace SATSuma
             }
         }
 
+        string currencySelected = "D";
+        string selectedNetwork = "M";
+        string blockchairComJSONSelected = "x";
+        string bitcoinExplorerEnpointsSelected = "x";
+        string blockchainInfoEndpointsSelected = "x";
+        string bitcoinDashboardSelected = "x";
+        string lightningDashboardSelected = "x";
+        string mempoolLightningJSONSelected = "x";
+
         private void LblBlockchairComJSON_Click(object sender, EventArgs e)
         {
             if (lblBlockchairComJSON.Text == "✔️")
@@ -8259,6 +8408,7 @@ namespace SATSuma
                     lblBlockchairComJSON.Text = "❌";
                 });
                 RunBlockchairComJSONAPI = false;
+                blockchairComJSONSelected = "0";
             }
             else
             {
@@ -8268,7 +8418,9 @@ namespace SATSuma
                     lblBlockchairComJSON.Text = "✔️";
                 });
                 RunBlockchairComJSONAPI = true;
+                blockchairComJSONSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void LblBitcoinExplorerEndpoints_Click(object sender, EventArgs e)
@@ -8282,6 +8434,7 @@ namespace SATSuma
                 });
                 RunBitcoinExplorerEndpointAPI = false;
                 RunBitcoinExplorerOrgJSONAPI = false;
+                bitcoinExplorerEnpointsSelected = "0";
             }
             else
             {
@@ -8292,7 +8445,9 @@ namespace SATSuma
                 });
                 RunBitcoinExplorerEndpointAPI = true;
                 RunBitcoinExplorerOrgJSONAPI = true;
+                bitcoinExplorerEnpointsSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void LblBlockchainInfoEndpoints_Click(object sender, EventArgs e)
@@ -8305,6 +8460,7 @@ namespace SATSuma
                     lblBlockchainInfoEndpoints.Text = "❌";
                 });
                 RunBlockchainInfoEndpointAPI = false;
+                blockchainInfoEndpointsSelected = "0";
             }
             else
             {
@@ -8314,7 +8470,9 @@ namespace SATSuma
                     lblBlockchainInfoEndpoints.Text = "✔️";
                 });
                 RunBlockchainInfoEndpointAPI = true;
+                blockchainInfoEndpointsSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void LblBitcoinDashboard_Click(object sender, EventArgs e)
@@ -8348,6 +8506,10 @@ namespace SATSuma
                 lblBlockchairComJSON.Enabled = false;
                 lblBitcoinExplorerEndpoints.Enabled = false;
                 lblBlockchainInfoEndpoints.Enabled = false;
+                bitcoinDashboardSelected = "0";
+                blockchairComJSONSelected = "0";
+                bitcoinExplorerEnpointsSelected = "0";
+                blockchainInfoEndpointsSelected = "0";
             }
             else
             {
@@ -8356,29 +8518,12 @@ namespace SATSuma
                     lblBitcoinDashboard.ForeColor = Color.Green;
                     lblBitcoinDashboard.Text = "✔️";
                 });
-                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchairComJSON.ForeColor = Color.Green;
-                    lblBlockchairComJSON.Text = "✔️";
-                });
-                RunBlockchairComJSONAPI = true;
-                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
-                    lblBitcoinExplorerEndpoints.Text = "✔️";
-                });
-                RunBitcoinExplorerEndpointAPI = true;
-                RunBitcoinExplorerOrgJSONAPI = true;
-                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchainInfoEndpoints.ForeColor = Color.Green;
-                    lblBlockchainInfoEndpoints.Text = "✔️";
-                });
-                RunBlockchainInfoEndpointAPI = true;
                 lblBlockchairComJSON.Enabled = true;
                 lblBitcoinExplorerEndpoints.Enabled = true;
                 lblBlockchainInfoEndpoints.Enabled = true;
+                bitcoinDashboardSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void LblLightningDashboard_Click(object sender, EventArgs e)
@@ -8397,6 +8542,8 @@ namespace SATSuma
                 });
                 RunMempoolSpaceLightningAPI = false;
                 lblMempoolLightningJSON.Enabled = false;
+                lightningDashboardSelected = "0";
+                mempoolLightningJSONSelected = "0";
             }
             else
             {
@@ -8412,7 +8559,10 @@ namespace SATSuma
                 });
                 RunMempoolSpaceLightningAPI = true;
                 lblMempoolLightningJSON.Enabled = true;
+                lightningDashboardSelected = "1";
+                mempoolLightningJSONSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void LblMempoolLightningJSON_Click(object sender, EventArgs e)
@@ -8430,6 +8580,7 @@ namespace SATSuma
                     lblLightningDashboard.Text = "❌";
                 });
                 RunMempoolSpaceLightningAPI = false;
+                mempoolLightningJSONSelected = "0";
             }
             else
             {
@@ -8444,7 +8595,9 @@ namespace SATSuma
                     lblLightningDashboard.Text = "✔️";
                 });
                 RunMempoolSpaceLightningAPI = true;
+                mempoolLightningJSONSelected = "1";
             }
+            SaveSettingsToBookmarksFile();
         }
 
         private void NumericUpDownDashboardRefresh_ValueChanged(object sender, EventArgs e)
@@ -8455,6 +8608,76 @@ namespace SATSuma
             timerAPIRefreshPeriod.Stop();
             timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
             timerAPIRefreshPeriod.Start();
+            SaveSettingsToBookmarksFile();
+        }
+
+        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Bitcoin Dashboard, Lightning Dashboard, MempoolLightningJSON, nnn = refresh freq.
+
+        private void SaveSettingsToBookmarksFile()
+        {
+            if (btnUSD.Enabled == false)
+            {
+                currencySelected = "D";
+            }
+            if (btnGBP.Enabled == false) 
+            {
+                currencySelected = "P";
+            }
+            if (btnEUR.Enabled == false)
+            {
+                currencySelected = "E";
+            }
+            if (btnXAU.Enabled == false)
+            {
+                currencySelected = "G";
+            }
+            if (lblSettingsNodeMainnet.Text == "✔️")
+            {
+                selectedNetwork = "M";
+            }
+            if (lblSettingsNodeTestnet.Text == "✔️")
+            {
+                selectedNetwork = "T";
+            }
+            if (lblSettingsNodeCustom.Text == "✔️")
+            {
+                selectedNetwork = "C";
+            }
+            // write the settings to the bookmarks file for auto retrieval next time
+            DateTime today = DateTime.Today;
+            string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + bitcoinDashboardSelected + lightningDashboardSelected + mempoolLightningJSONSelected + Convert.ToString(numericUpDownDashboardRefresh.Value);
+            string keyCheck = "21m";
+            var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+            if (!settingsAlreadySavedInFile)
+            {
+
+                // Read the existing bookmarks from the JSON file
+                var bookmarks = ReadBookmarksFromJsonFile();
+
+                // Add the new bookmark to the list
+                bookmarks.Add(newBookmark);
+
+                // Write the updated list of bookmarks back to the JSON file
+                WriteBookmarksToJsonFile(bookmarks);
+                settingsAlreadySavedInFile = true;
+                settingsInFile = bookmarkData;
+            }
+            else
+            {
+                if (settingsInFile != bookmarkData)
+                {
+                    //delete the currently saved settings
+                    DeleteBookmarkFromJsonFile(settingsInFile);
+                    // Read the existing settings from the JSON file
+                    var bookmarks = ReadBookmarksFromJsonFile();
+                    // Add the new bookmark to the list
+                    bookmarks.Add(newBookmark);
+                    // Write the updated list of bookmarks back to the JSON file
+                    WriteBookmarksToJsonFile(bookmarks);
+                    settingsAlreadySavedInFile = true;
+                    settingsInFile = bookmarkData;
+                }
+            }
         }
 
         #endregion
@@ -11466,7 +11689,6 @@ namespace SATSuma
                 return null;
             }
         }
-
 
         public class Block_Transactions
         {

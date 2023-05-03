@@ -25,6 +25,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
+ * save all tickbox settings and refresh freq in bookmarks file as type:settings
  */
 
 #region Using
@@ -3308,7 +3309,6 @@ namespace SATSuma
                         {
                             subItem.ForeColor = Color.White;
                         }
-                        //item.ForeColor = Color.White; // txID
                         btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                         {
                             btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y);
@@ -3322,7 +3322,6 @@ namespace SATSuma
                         {
                             subItem.ForeColor = tableTextColor;
                         }
-                        //item.ForeColor = Color.FromArgb(255, 153, 0); //txID
                     }
                 }
                 btnViewTransactionFromBlock.Visible = anySelected;
@@ -3356,7 +3355,7 @@ namespace SATSuma
 
             if (e.ColumnIndex == 1)
             {
-                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 70) // don't allow this one to change
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 70) // fixed width
                 {
                     e.Cancel = true;
                     e.NewWidth = 70;
@@ -3364,7 +3363,7 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 2)
             {
-                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // don't allow this one to change
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // fixed width
                 {
                     e.Cancel = true;
                     e.NewWidth = 40;
@@ -3372,7 +3371,7 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 3)
             {
-                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // don't allow this one to change
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // fixed width
                 {
                     e.Cancel = true;
                     e.NewWidth = 40;
@@ -3380,7 +3379,7 @@ namespace SATSuma
             }
             if (e.ColumnIndex == 4)
             {
-                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 100) // don't allow this one to change
+                if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 100) // fixed width
                 {
                     e.Cancel = true;
                     e.NewWidth = 100;
@@ -4032,7 +4031,6 @@ namespace SATSuma
                     }
                 }
                 btnViewAddressFromTXInput.Visible = anySelected;
-                    
             }
             catch (Exception ex)
             {
@@ -4173,7 +4171,6 @@ namespace SATSuma
                 {
                     e.Graphics.FillRectangle(new SolidBrush(listViewTransactionInputs.BackColor), bounds);
                 }
-
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
         }
@@ -4287,7 +4284,6 @@ namespace SATSuma
             OutputDownButtonPressed = false;
             TXOutScrollTimer.Stop();
             TXOutScrollTimer.Interval = 50; // reset the interval to its original value
-
         }
 
         //-------------------- HANDLE THE ACTUAL SCROLLING --------------------------------------------------
@@ -7608,24 +7604,48 @@ namespace SATSuma
             {
                 if (panelAddress.Visible)
                 {
-                    lblBookmarkProposalType.Text = "address";
-                    lblBookmarkProposalData.Text = textboxSubmittedAddress.Text;
+                    lblBookmarkProposalType.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalType.Text = "address";
+                    });
+                    lblBookmarkProposalData.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalData.Text = textboxSubmittedAddress.Text;
+                    });
 
                 }
                 if (panelBlock.Visible)
                 {
-                    lblBookmarkProposalType.Text = "block";
-                    lblBookmarkProposalData.Text = textBoxSubmittedBlockNumber.Text;
+                    lblBookmarkProposalType.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalType.Text = "block";
+                    });
+                    lblBookmarkProposalData.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalData.Text = textBoxSubmittedBlockNumber.Text;
+                    });
                 }
                 if (panelTransaction.Visible)
                 {
-                    lblBookmarkProposalType.Text = "transaction";
-                    lblBookmarkProposalData.Text = textBoxTransactionID.Text;
+                    lblBookmarkProposalType.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalType.Text = "transaction";
+                    });
+                    lblBookmarkProposalData.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalData.Text = textBoxTransactionID.Text;
+                    });
                 }
                 if (panelXpub.Visible)
                 {
-                    lblBookmarkProposalType.Text = "xpub";
-                    lblBookmarkProposalData.Text = textBoxSubmittedXpub.Text;
+                    lblBookmarkProposalType.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalType.Text = "xpub";
+                    });
+                    lblBookmarkProposalData.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkProposalData.Text = textBoxSubmittedXpub.Text;
+                    });
                 }
 
                 lblBookmarkProposalType.Location = new Point(label131.Location.X + label131.Width, label131.Location.Y);
@@ -7707,7 +7727,6 @@ namespace SATSuma
             }
         }
 
-
         private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
             string filePath = "bookmarks.json";
@@ -7749,8 +7768,11 @@ namespace SATSuma
         {
             if (isBookmarkNoteWatermarkTextDisplayed)
             {
-                textBoxBookmarkProposedNote.Text = "";
-                textBoxBookmarkProposedNote.ForeColor = Color.White;
+                textBoxBookmarkProposedNote.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkProposedNote.Text = "";
+                    textBoxBookmarkProposedNote.ForeColor = Color.White;
+                });
                 isBookmarkNoteWatermarkTextDisplayed = false;
             }
         }
@@ -7759,8 +7781,11 @@ namespace SATSuma
         {
             if (string.IsNullOrWhiteSpace(textBoxBookmarkProposedNote.Text))
             {
-                textBoxBookmarkProposedNote.Text = "optional notes";
-                textBoxBookmarkProposedNote.ForeColor = Color.Gray;
+                textBoxBookmarkProposedNote.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkProposedNote.Text = "optional notes";
+                    textBoxBookmarkProposedNote.ForeColor = Color.Gray;
+                });
                 isBookmarkNoteWatermarkTextDisplayed = true;
             }
         }
@@ -7778,8 +7803,11 @@ namespace SATSuma
         {
             if (isBookmarkNoteWatermarkTextDisplayed)
             {
-                textBoxBookmarkProposedNote.Text = "";
-                textBoxBookmarkProposedNote.ForeColor = Color.White;
+                textBoxBookmarkProposedNote.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkProposedNote.Text = "";
+                    textBoxBookmarkProposedNote.ForeColor = Color.White;
+                });
                 isBookmarkNoteWatermarkTextDisplayed = false;
             }
         }
@@ -7790,8 +7818,11 @@ namespace SATSuma
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
             {
-                textBoxBookmarkEncryptionKey.Text = "";
-                textBoxBookmarkEncryptionKey.ForeColor = Color.White;
+                textBoxBookmarkEncryptionKey.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkEncryptionKey.Text = "";
+                    textBoxBookmarkEncryptionKey.ForeColor = Color.White;
+                });
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
@@ -7800,8 +7831,11 @@ namespace SATSuma
         {
             if (string.IsNullOrWhiteSpace(textBoxBookmarkEncryptionKey.Text))
             {
-                textBoxBookmarkEncryptionKey.Text = "optional encryption key";
-                textBoxBookmarkEncryptionKey.ForeColor = Color.Gray;
+                textBoxBookmarkEncryptionKey.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkEncryptionKey.Text = "optional encryption key";
+                    textBoxBookmarkEncryptionKey.ForeColor = Color.Gray;
+                });
                 isEncryptionKeyWatermarkTextDisplayed = true;
             }
         }
@@ -7819,8 +7853,11 @@ namespace SATSuma
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
             {
-                textBoxBookmarkEncryptionKey.Text = "";
-                textBoxBookmarkEncryptionKey.ForeColor = Color.White;
+                textBoxBookmarkEncryptionKey.Invoke((MethodInvoker)delegate
+                {
+                    textBoxBookmarkEncryptionKey.Text = "";
+                    textBoxBookmarkEncryptionKey.ForeColor = Color.White;
+                });
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
@@ -7846,8 +7883,11 @@ namespace SATSuma
         {
             if (isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed)
             {
-                textBoxSettingsXpubMempoolURL.Text = "";
-                textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                textBoxSettingsXpubMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsXpubMempoolURL.Text = "";
+                    textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                });
                 isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = false;
             }
         }
@@ -7856,8 +7896,14 @@ namespace SATSuma
         {
             if (string.IsNullOrWhiteSpace(textBoxSettingsXpubMempoolURL.Text))
             {
-                textBoxSettingsXpubMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                textBoxSettingsXpubMempoolURL.ForeColor = Color.Gray;
+                textBoxSettingsXpubMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsXpubMempoolURL.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSettingsXpubMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                        textBoxSettingsXpubMempoolURL.ForeColor = Color.Gray;
+                    });
+                });
                 isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true;
             }
         }
@@ -7875,8 +7921,14 @@ namespace SATSuma
         {
             if (isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed)
             {
-                textBoxSettingsXpubMempoolURL.Text = "";
-                textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                textBoxSettingsXpubMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsXpubMempoolURL.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSettingsXpubMempoolURL.Text = "";
+                        textBoxSettingsXpubMempoolURL.ForeColor = Color.White;
+                    });
+                });
                 isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = false;
             }
             else
@@ -7892,11 +7944,23 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = false;
                 lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                label18.Text = "invalid / node offline";
-                lblSettingsXpubNodeStatus.Text = "invalid / node offline";
-                textBoxSubmittedXpub.Text = "";
+                label18.Invoke((MethodInvoker)delegate
+                {
+                    label18.Text = "invalid / node offline";
+                });
+                lblSettingsXpubNodeStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+                });
+                textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedXpub.Text = "";
+                });
                 previousXpubNodeStringToCompare = textBoxSettingsXpubMempoolURL.Text;
-                textBoxMempoolURL.Text = textBoxSettingsXpubMempoolURL.Text;
+                textBoxMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxMempoolURL.Text = textBoxSettingsXpubMempoolURL.Text;
+                });
                 CheckXpubNodeIsOnline();
             }
         }
@@ -7905,13 +7969,22 @@ namespace SATSuma
         {
             if (lblSettingsNodeMainnet.Text == "❌")
             {
-                lblSettingsNodeMainnet.ForeColor = Color.Green;
-                lblSettingsNodeMainnet.Text = "✔️";
+                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeMainnet.ForeColor = Color.Green;
+                    lblSettingsNodeMainnet.Text = "✔️";
+                });
                 testNet = false;
-                lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
-                lblSettingsNodeTestnet.Text = "❌";
-                lblSettingsNodeCustom.ForeColor = Color.IndianRed;
-                lblSettingsNodeCustom.Text = "❌";
+                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeTestnet.Text = "❌";
+                });
+                lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                    lblSettingsNodeCustom.Text = "❌";
+                });
                 btnMenuLightningDashboard.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Enabled = false;
                 NodeURL = "https://mempool.space/api/";
@@ -7929,13 +8002,22 @@ namespace SATSuma
         {
             if (lblSettingsNodeTestnet.Text == "❌")
             {
-                lblSettingsNodeTestnet.ForeColor = Color.Green;
-                lblSettingsNodeTestnet.Text = "✔️";
+                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeTestnet.ForeColor = Color.Green;
+                    lblSettingsNodeTestnet.Text = "✔️";
+                });
                 testNet = true;
-                lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
-                lblSettingsNodeMainnet.Text = "❌";
-                lblSettingsNodeCustom.ForeColor = Color.IndianRed;
-                lblSettingsNodeCustom.Text = "❌";
+                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeMainnet.Text = "❌";
+                });
+                lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                    lblSettingsNodeCustom.Text = "❌";
+                });
                 textBoxSettingsCustomMempoolURL.Enabled = false;
                 btnMenuLightningDashboard.Enabled = false;
                 NodeURL = "https://mempool.space/testnet/api/";
@@ -7951,13 +8033,22 @@ namespace SATSuma
         {
             if (lblSettingsNodeCustom.Text == "❌")
             {
-                lblSettingsNodeCustom.ForeColor = Color.Green;
-                lblSettingsNodeCustom.Text = "✔️";
+                lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeCustom.ForeColor = Color.Green;
+                    lblSettingsNodeCustom.Text = "✔️";
+                });
                 testNet = false;
-                lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
-                lblSettingsNodeMainnet.Text = "❌";
-                lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
-                lblSettingsNodeTestnet.Text = "❌";
+                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeMainnet.Text = "❌";
+                });
+                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeTestnet.Text = "❌";
+                });
                 textBoxSettingsCustomMempoolURL.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Focus();
             }
@@ -7970,8 +8061,11 @@ namespace SATSuma
         {
             if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
             {
-                textBoxSettingsCustomMempoolURL.Text = "";
-                textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsCustomMempoolURL.Text = "";
+                    textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                });
                 isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
             }
         }
@@ -7980,8 +8074,11 @@ namespace SATSuma
         {
             if (string.IsNullOrWhiteSpace(textBoxSettingsCustomMempoolURL.Text))
             {
-                textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                textBoxSettingsCustomMempoolURL.ForeColor = Color.Gray;
+                textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                    textBoxSettingsCustomMempoolURL.ForeColor = Color.Gray;
+                });
                 isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
             }
         }
@@ -7990,8 +8087,11 @@ namespace SATSuma
         {
             if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
             {
-                textBoxSettingsCustomMempoolURL.Text = "";
-                textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSettingsCustomMempoolURL.Text = "";
+                    textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                });
                 isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
             }
             else
@@ -8003,7 +8103,10 @@ namespace SATSuma
         private void TextBoxSettingsCustomMempoolURL_KeyUp(object sender, KeyEventArgs e)
         {
             lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-            lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            });
             previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
             CheckCustomNodeIsOnline();
         }
@@ -8024,8 +8127,6 @@ namespace SATSuma
             {
                 Ping pingSender = new Ping();
                 string pingAddress = "";
-
-
                 if (textBoxSettingsCustomMempoolURL.Text != "")
                 {
                     // get the contents of the textbox
@@ -8056,16 +8157,22 @@ namespace SATSuma
                         catch
                         {
                             lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                            lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
-                            lblSettingsCustomNodeStatus.Text = "node offline";
+                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                            {
+                                lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                                lblSettingsCustomNodeStatus.Text = "node offline";
+                            });
                             return;
                         }
                     }
                     else
                     {
                         lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                        lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
-                        lblSettingsCustomNodeStatus.Text = "node offline";
+                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                            lblSettingsCustomNodeStatus.Text = "node offline";
+                        });
                         return;
                     }
                 }
@@ -8075,8 +8182,11 @@ namespace SATSuma
                 if (reply.Status == IPStatus.Success)
                 {
                     lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
-                    lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
-                    lblSettingsCustomNodeStatus.Text = "node online";
+                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
+                        lblSettingsCustomNodeStatus.Text = "node online";
+                    });
                     /*
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
@@ -8122,14 +8232,20 @@ namespace SATSuma
                 {
                     // API is not online
                     lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                    });
                 }
             }
             catch (HttpRequestException)
             {
                 // API is not online
                 lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                });
             }
         }
 
@@ -8137,14 +8253,20 @@ namespace SATSuma
         {
             if (lblBlockchairComJSON.Text == "✔️")
             {
-                lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                lblBlockchairComJSON.Text = "❌";
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                    lblBlockchairComJSON.Text = "❌";
+                });
                 RunBlockchairComJSONAPI = false;
             }
             else
             {
-                lblBlockchairComJSON.ForeColor = Color.Green;
-                lblBlockchairComJSON.Text = "✔️";
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.Green;
+                    lblBlockchairComJSON.Text = "✔️";
+                });
                 RunBlockchairComJSONAPI = true;
             }
         }
@@ -8153,15 +8275,21 @@ namespace SATSuma
         {
             if (lblBitcoinExplorerEndpoints.Text == "✔️")
             {
-                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                lblBitcoinExplorerEndpoints.Text = "❌";
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                    lblBitcoinExplorerEndpoints.Text = "❌";
+                });
                 RunBitcoinExplorerEndpointAPI = false;
                 RunBitcoinExplorerOrgJSONAPI = false;
             }
             else
             {
-                lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
-                lblBitcoinExplorerEndpoints.Text = "✔️";
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                    lblBitcoinExplorerEndpoints.Text = "✔️";
+                });
                 RunBitcoinExplorerEndpointAPI = true;
                 RunBitcoinExplorerOrgJSONAPI = true;
             }
@@ -8171,14 +8299,20 @@ namespace SATSuma
         {
             if (lblBlockchainInfoEndpoints.Text == "✔️")
             {
-                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                lblBlockchainInfoEndpoints.Text = "❌";
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                    lblBlockchainInfoEndpoints.Text = "❌";
+                });
                 RunBlockchainInfoEndpointAPI = false;
             }
             else
             {
-                lblBlockchainInfoEndpoints.ForeColor = Color.Green;
-                lblBlockchainInfoEndpoints.Text = "✔️";
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                    lblBlockchainInfoEndpoints.Text = "✔️";
+                });
                 RunBlockchainInfoEndpointAPI = true;
             }
         }
@@ -8187,17 +8321,29 @@ namespace SATSuma
         {
             if (lblBitcoinDashboard.Text == "✔️")
             {
-                lblBitcoinDashboard.ForeColor = Color.IndianRed;
-                lblBitcoinDashboard.Text = "❌";
-                lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                lblBlockchairComJSON.Text = "❌";
-                RunBlockchairComJSONAPI = false;
-                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                lblBitcoinExplorerEndpoints.Text = "❌";
+                lblBitcoinDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinDashboard.ForeColor = Color.IndianRed;
+                    lblBitcoinDashboard.Text = "❌";
+                });
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                    lblBlockchairComJSON.Text = "❌";
+                    RunBlockchairComJSONAPI = false;
+                });
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                    lblBitcoinExplorerEndpoints.Text = "❌";
+                });
                 RunBitcoinExplorerEndpointAPI = false;
                 RunBitcoinExplorerOrgJSONAPI = false;
-                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                lblBlockchainInfoEndpoints.Text = "❌";
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                    lblBlockchainInfoEndpoints.Text = "❌";
+                });
                 RunBlockchainInfoEndpointAPI = false;
                 lblBlockchairComJSON.Enabled = false;
                 lblBitcoinExplorerEndpoints.Enabled = false;
@@ -8205,17 +8351,29 @@ namespace SATSuma
             }
             else
             {
-                lblBitcoinDashboard.ForeColor = Color.Green;
-                lblBitcoinDashboard.Text = "✔️";
-                lblBlockchairComJSON.ForeColor = Color.Green;
-                lblBlockchairComJSON.Text = "✔️";
+                lblBitcoinDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinDashboard.ForeColor = Color.Green;
+                    lblBitcoinDashboard.Text = "✔️";
+                });
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.Green;
+                    lblBlockchairComJSON.Text = "✔️";
+                });
                 RunBlockchairComJSONAPI = true;
-                lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
-                lblBitcoinExplorerEndpoints.Text = "✔️";
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                    lblBitcoinExplorerEndpoints.Text = "✔️";
+                });
                 RunBitcoinExplorerEndpointAPI = true;
                 RunBitcoinExplorerOrgJSONAPI = true;
-                lblBlockchainInfoEndpoints.ForeColor = Color.Green;
-                lblBlockchainInfoEndpoints.Text = "✔️";
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                    lblBlockchainInfoEndpoints.Text = "✔️";
+                });
                 RunBlockchainInfoEndpointAPI = true;
                 lblBlockchairComJSON.Enabled = true;
                 lblBitcoinExplorerEndpoints.Enabled = true;
@@ -8227,19 +8385,31 @@ namespace SATSuma
         {
             if (lblLightningDashboard.Text == "✔️")
             {
-                lblMempoolLightningJSON.ForeColor = Color.Red;
-                lblMempoolLightningJSON.Text = "❌";
-                lblLightningDashboard.ForeColor = Color.Red;
-                lblLightningDashboard.Text = "❌";
+                lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolLightningJSON.ForeColor = Color.Red;
+                    lblMempoolLightningJSON.Text = "❌";
+                });
+                lblLightningDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblLightningDashboard.ForeColor = Color.Red;
+                    lblLightningDashboard.Text = "❌";
+                });
                 RunMempoolSpaceLightningAPI = false;
                 lblMempoolLightningJSON.Enabled = false;
             }
             else
             {
-                lblMempoolLightningJSON.ForeColor = Color.Green;
-                lblMempoolLightningJSON.Text = "✔️";
-                lblLightningDashboard.ForeColor = Color.Green;
-                lblLightningDashboard.Text = "✔️";
+                lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolLightningJSON.ForeColor = Color.Green;
+                    lblMempoolLightningJSON.Text = "✔️";
+                });
+                lblLightningDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblLightningDashboard.ForeColor = Color.Green;
+                    lblLightningDashboard.Text = "✔️";
+                });
                 RunMempoolSpaceLightningAPI = true;
                 lblMempoolLightningJSON.Enabled = true;
             }
@@ -8249,18 +8419,30 @@ namespace SATSuma
         {
             if (lblMempoolLightningJSON.Text == "✔️")
             {
-                lblMempoolLightningJSON.ForeColor = Color.Red;
-                lblMempoolLightningJSON.Text = "❌";
-                lblLightningDashboard.ForeColor = Color.Red;
-                lblLightningDashboard.Text = "❌";
+                lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolLightningJSON.ForeColor = Color.Red;
+                    lblMempoolLightningJSON.Text = "❌";
+                });
+                lblLightningDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblLightningDashboard.ForeColor = Color.Red;
+                    lblLightningDashboard.Text = "❌";
+                });
                 RunMempoolSpaceLightningAPI = false;
             }
             else
             {
-                lblMempoolLightningJSON.ForeColor = Color.Green;
-                lblMempoolLightningJSON.Text = "✔️";
-                lblLightningDashboard.ForeColor = Color.Green;
-                lblLightningDashboard.Text = "✔️";
+                lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolLightningJSON.ForeColor = Color.Green;
+                    lblMempoolLightningJSON.Text = "✔️";
+                });
+                lblLightningDashboard.Invoke((MethodInvoker)delegate
+                {
+                    lblLightningDashboard.ForeColor = Color.Green;
+                    lblLightningDashboard.Text = "✔️";
+                });
                 RunMempoolSpaceLightningAPI = true;
             }
         }
@@ -8492,14 +8674,20 @@ namespace SATSuma
         {
             if (lblShowClock.Text == "✔️")
             {
-                lblShowClock.ForeColor = Color.IndianRed;
-                lblShowClock.Text = "❌";
+                lblShowClock.Invoke((MethodInvoker)delegate
+                {
+                    lblShowClock.ForeColor = Color.IndianRed;
+                    lblShowClock.Text = "❌";
+                });
                 lblTime.Visible = false;
             }
             else
             {
-                lblShowClock.ForeColor = Color.Green;
-                lblShowClock.Text = "✔️";
+                lblShowClock.Invoke((MethodInvoker)delegate
+                {
+                    lblShowClock.ForeColor = Color.Green;
+                    lblShowClock.Text = "✔️";
+                });
                 lblTime.Visible = true;
             }
         }
@@ -8517,7 +8705,10 @@ namespace SATSuma
             lblTime.Visible = true;
             label194.Enabled = false;
             textBoxThemeImage.Enabled = false;
-            textBoxThemeImage.Text = "";
+            textBoxThemeImage.Invoke((MethodInvoker)delegate
+            {
+                textBoxThemeImage.Text = "";
+            });
         }
 
         private void PictureBoxBTCDir_Click(object sender, EventArgs e)
@@ -8533,7 +8724,10 @@ namespace SATSuma
             lblBackgroundCustomImageSelected.Visible = false;
             label194.Enabled = false;
             textBoxThemeImage.Enabled = false;
-            textBoxThemeImage.Text = "";
+            textBoxThemeImage.Invoke((MethodInvoker)delegate
+            {
+                textBoxThemeImage.Text = "";
+            });
         }
 
         private void PictureBoxCustomColor_Click(object sender, EventArgs e)
@@ -8564,7 +8758,10 @@ namespace SATSuma
                 lblBackgroundCustomImageSelected.Visible = false;
                 label194.Enabled = false;
                 textBoxThemeImage.Enabled = false;
-                textBoxThemeImage.Text = "";
+                textBoxThemeImage.Invoke((MethodInvoker)delegate
+                {
+                    textBoxThemeImage.Text = "";
+                });
             }
 
         }
@@ -8600,11 +8797,20 @@ namespace SATSuma
             {
                 titleBackgroundColor = colorDlgForTitleBackgrounds.Color;
                 lblTitleBackgroundCustom.ForeColor = Color.Green;
-                lblTitleBackgroundCustom.Text = "✔️";
+                lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundCustom.Text = "✔️";
+                });
                 lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundNone.Text = "❌";
+                });
                 lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                lblTitleBackgroundDefault.Text = "❌";
+                lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundDefault.Text = "❌";
+                });
 
                 SetCustomTitleBackgroundColor();
             }
@@ -8615,11 +8821,20 @@ namespace SATSuma
             if (lblTitleBackgroundCustom.Text != "✔️")
             {
                 lblTitleBackgroundCustom.ForeColor = Color.Green;
-                lblTitleBackgroundCustom.Text = "✔️";
+                lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundCustom.Text = "✔️";
+                });
                 lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-                lblTitleBackgroundNone.Text = "❌";
+                lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundNone.Text = "❌";
+                });
                 lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                lblTitleBackgroundDefault.Text = "❌";
+                lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundDefault.Text = "❌";
+                });
                 SetCustomTitleBackgroundColor();
             }
         }
@@ -8841,12 +9056,12 @@ namespace SATSuma
                 themes = ReadThemesFromJsonFile();
                 List<string> themeNames = themes.Select(t => t.ThemeName).ToList();
                 comboBoxThemeList.DataSource = themeNames;
-                //lblBookmarkSavedSuccess.Visible = true;
-                //btnCommitToBookmarks.Enabled = false;
-                //btnCancelAddToBookmarks.Enabled = false;
-                //hideAddToBookmarksTimer.Start();
-
-                textBoxThemeName.Text = "";
+                lblThemeSaved.Visible = true;
+                hideThemeSavedTimer.Start();
+                textBoxThemeName.Invoke((MethodInvoker)delegate
+                {
+                    textBoxThemeName.Text = "";
+                });
             }
             catch (Exception ex)
             {
@@ -8894,14 +9109,21 @@ namespace SATSuma
             ColorPanels(theme.Panels);
             if (theme.ShowTime == false)
             {
-                lblShowClock.ForeColor = Color.IndianRed;
-                lblShowClock.Text = "❌";
+                lblShowClock.Invoke((MethodInvoker)delegate
+                {
+                    lblShowClock.ForeColor = Color.IndianRed;
+                    lblShowClock.Text = "❌";
+                });
                 lblTime.Visible = false;
             }
             else
             {
-                lblShowClock.ForeColor = Color.Green;
-                lblShowClock.Text = "✔️";
+
+                lblShowClock.Invoke((MethodInvoker)delegate
+                {
+                    lblShowClock.ForeColor = Color.Green;
+                    lblShowClock.Text = "✔️";
+                });
                 if (theme.BackgroundGenesis == true)
                 {
                     lblTime.Font = new Font(lblTime.Font.FontFamily, 14, lblTime.Font.Style);
@@ -8920,12 +9142,21 @@ namespace SATSuma
             }
             if (theme.HeadingBGCustom == true)
             {
-                lblTitleBackgroundCustom.ForeColor = Color.Green;
-                lblTitleBackgroundCustom.Text = "✔️";
-                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-                lblTitleBackgroundNone.Text = "❌";
-                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                lblTitleBackgroundDefault.Text = "❌";
+                lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundCustom.ForeColor = Color.Green;
+                    lblTitleBackgroundCustom.Text = "✔️";
+                });
+                lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                    lblTitleBackgroundNone.Text = "❌";
+                });
+                lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                    lblTitleBackgroundDefault.Text = "❌";
+                });
                 titleBackgroundColor = theme.HeadingBackgrounds;
                 HeadingBackgroundsToCustomColor();
             }
@@ -9362,12 +9593,21 @@ namespace SATSuma
 
         private void HeadingBackgroundsToDefault()
         {
-            lblTitleBackgroundDefault.ForeColor = Color.Green;
-            lblTitleBackgroundDefault.Text = "✔️";
-            lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-            lblTitleBackgroundNone.Text = "❌";
-            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
-            lblTitleBackgroundCustom.Text = "❌";
+            lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundDefault.ForeColor = Color.Green;
+                lblTitleBackgroundDefault.Text = "✔️";
+            });
+            lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                lblTitleBackgroundNone.Text = "❌";
+            });
+            lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                lblTitleBackgroundCustom.Text = "❌";
+            });
             //header
             Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57, panelRefreshStatusBar };
             foreach (Control control in listHeaderHeadingsToColor)
@@ -9436,12 +9676,21 @@ namespace SATSuma
 
         private void HeadingBackgroundsToNone()
         {
-            lblTitleBackgroundNone.ForeColor = Color.Green;
-            lblTitleBackgroundNone.Text = "✔️";
-            lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-            lblTitleBackgroundDefault.Text = "❌";
-            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
-            lblTitleBackgroundCustom.Text = "❌";
+            lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundNone.ForeColor = Color.Green;
+                lblTitleBackgroundNone.Text = "✔️";
+            });
+            lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                lblTitleBackgroundDefault.Text = "❌";
+            });
+            lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+            {
+                lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                lblTitleBackgroundCustom.Text = "❌";
+            });
 
             //header
             Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57, panelRefreshStatusBar };
@@ -9659,7 +9908,21 @@ namespace SATSuma
                 themes = ReadThemesFromJsonFile();
                 List<string> themeNames = themes.Select(t => t.ThemeName).ToList();
                 comboBoxThemeList.DataSource = themeNames;
+                lblThemeDeleted.Visible = true;
+                hideThemeDeletedTimer.Start();
             }
+        }
+
+        private void HideThemeSavedTimer_Tick(object sender, EventArgs e)
+        {
+            lblThemeSaved.Visible = false;
+            hideThemeSavedTimer.Stop();
+        }
+
+        private void HideThemeDeletedTimer_Tick(object sender, EventArgs e)
+        {
+            lblThemeDeleted.Visible = false;
+            hideThemeDeletedTimer.Stop();
         }
         #endregion
 
@@ -9678,16 +9941,14 @@ namespace SATSuma
         // Get current block tip
         private void GetBlockTip()
         {
-            using (WebClient client = new WebClient())
+            using WebClient client = new WebClient();
+            string BlockTipURL = NodeURL + "blocks/tip/height";
+            string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+            lblBlockNumber.Invoke((MethodInvoker)delegate
             {
-                string BlockTipURL = NodeURL + "blocks/tip/height";
-                string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                lblBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockNumber.Text = BlockTip;
-                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
-                });
-            }
+                lblBlockNumber.Text = BlockTip;
+                textBoxBlockHeightToStartListFrom.Text = BlockTip;
+            });
         }
 
         // Method to encrypt a string using SHA-256

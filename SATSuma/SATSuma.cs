@@ -25,7 +25,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
- * save all tickbox settings and refresh freq in bookmarks file as type:settings
+ * save all refresh freq and network choice in settings record in bookmarks file
  */
 
 #region Using
@@ -144,8 +144,9 @@ namespace SATSuma
         {
             try
             {
-                // check if settings are already saved in the bookmarks file and either restore them or set defaults and save a settings entry in bookmarks file
+                
                 var bookmarks = ReadBookmarksFromJsonFile();
+                // check if settings are already saved in the bookmarks file and either restore them or set defaults and save a settings entry in bookmarks file
                 foreach (var bookmark in bookmarks)
                 {
                     if (bookmark.Type == "settings")
@@ -153,26 +154,44 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[0]) == "P")
                         {
                             //GBP
+                            btnGBP.Enabled = false;
+                            btnUSD.Enabled = true;
+                            btnEUR.Enabled = true;
+                            btnXAU.Enabled = true;
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
                             //USD
+                            btnGBP.Enabled = true;
+                            btnUSD.Enabled = false;
+                            btnEUR.Enabled = true;
+                            btnXAU.Enabled = true;
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
                             //EUR
+                            btnGBP.Enabled = true;
+                            btnUSD.Enabled = true;
+                            btnEUR.Enabled = false;
+                            btnXAU.Enabled = true;
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
                             //XAU
+                            btnGBP.Enabled = true;
+                            btnUSD.Enabled = true;
+                            btnEUR.Enabled = true;
+                            btnXAU.Enabled = false;
                         }
                         if (Convert.ToString(bookmark.Data[1]) == "M")
                         {
                             //mainnet
+                            NodeURL = "https://mempool.space/api/";
                         }
                         if (Convert.ToString(bookmark.Data[1]) == "T")
                         {
                             //testnet
+                            NodeURL = "https://mempool.space/testnet/api/";
                         }
                         if (Convert.ToString(bookmark.Data[1]) == "C")
                         {
@@ -285,7 +304,6 @@ namespace SATSuma
                 GetBlockTip();
 
                 // check if there is a node address saved in the bookmarks file
-                bookmarks = ReadBookmarksFromJsonFile();
                 foreach (var bookmark in bookmarks)
                 {
                     if (bookmark.Type == "node")
@@ -8133,7 +8151,6 @@ namespace SATSuma
                 GetBlockTip();
                 LookupBlockList();
                 UpdateBitcoinAndLightningDashboards();
-
             }
 
         }
@@ -8391,12 +8408,12 @@ namespace SATSuma
 
         string currencySelected = "D";
         string selectedNetwork = "M";
-        string blockchairComJSONSelected = "x";
-        string bitcoinExplorerEnpointsSelected = "x";
-        string blockchainInfoEndpointsSelected = "x";
-        string bitcoinDashboardSelected = "x";
-        string lightningDashboardSelected = "x";
-        string mempoolLightningJSONSelected = "x";
+        string blockchairComJSONSelected = "1";
+        string bitcoinExplorerEnpointsSelected = "1";
+        string blockchainInfoEndpointsSelected = "1";
+        string bitcoinDashboardSelected = "1";
+        string lightningDashboardSelected = "1";
+        string mempoolLightningJSONSelected = "1";
 
         private void LblBlockchairComJSON_Click(object sender, EventArgs e)
         {

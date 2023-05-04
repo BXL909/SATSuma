@@ -681,6 +681,7 @@
             this.headerNetworkStatusLight = new System.Windows.Forms.Label();
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
+            this.label198 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -8064,6 +8065,7 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
+            this.panelSettings.Controls.Add(this.label198);
             this.panelSettings.Controls.Add(this.textBoxSettingsCustomMempoolURL);
             this.panelSettings.Controls.Add(this.lblSettingsNodeCustom);
             this.panelSettings.Controls.Add(this.label174);
@@ -8321,9 +8323,9 @@
             this.label6.ForeColor = System.Drawing.Color.Silver;
             this.label6.Location = new System.Drawing.Point(544, 378);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(146, 20);
+            this.label6.Size = new System.Drawing.Size(143, 20);
             this.label6.TabIndex = 48;
-            this.label6.Text = "Refresh freq. (mins)";
+            this.label6.Text = "Refresh frequency";
             // 
             // numericUpDownDashboardRefresh
             // 
@@ -8332,6 +8334,11 @@
             this.numericUpDownDashboardRefresh.Font = new System.Drawing.Font("Consolas", 9F);
             this.numericUpDownDashboardRefresh.ForeColor = System.Drawing.Color.Silver;
             this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(691, 379);
+            this.numericUpDownDashboardRefresh.Maximum = new decimal(new int[] {
+            1440,
+            0,
+            0,
+            0});
             this.numericUpDownDashboardRefresh.Minimum = new decimal(new int[] {
             1,
             0,
@@ -9988,6 +9995,17 @@
             this.hideThemeDeletedTimer.Interval = 2000;
             this.hideThemeDeletedTimer.Tick += new System.EventHandler(this.HideThemeDeletedTimer_Tick);
             // 
+            // label198
+            // 
+            this.label198.AutoSize = true;
+            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label198.ForeColor = System.Drawing.Color.Silver;
+            this.label198.Location = new System.Drawing.Point(544, 398);
+            this.label198.Name = "label198";
+            this.label198.Size = new System.Drawing.Size(107, 20);
+            this.label198.TabIndex = 240;
+            this.label198.Text = "(1 - 1440 mins)";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10873,6 +10891,7 @@
         private System.Windows.Forms.Label lblThemeSaved;
         private System.Windows.Forms.Timer hideThemeSavedTimer;
         private System.Windows.Forms.Timer hideThemeDeletedTimer;
+        private System.Windows.Forms.Label label198;
     }
 }
 

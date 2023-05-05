@@ -143,13 +143,14 @@ namespace SATSuma
         {
             try
             {
-                
                 var bookmarks = ReadBookmarksFromJsonFile();
                 // check if settings are already saved in the bookmarks file and either restore them or set defaults and save a settings entry in bookmarks file
                 foreach (var bookmark in bookmarks)
                 {
                     if (bookmark.Type == "settings")
                     {
+                        settingsAlreadySavedInFile = true;
+                        settingsInFile = bookmark.Data;
                         if (Convert.ToString(bookmark.Data[0]) == "P")
                         {
                             //GBP
@@ -316,14 +317,11 @@ namespace SATSuma
                             lblMempoolLightningJSON.Enabled = false;
                             lblMempoolLightningJSON.ForeColor = Color.IndianRed;
                         }
-                        settingsInFile = bookmark.Data;
-                        settingsAlreadySavedInFile = true;
+                        numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
+                        
                         break;
                     }
-                    settingsAlreadySavedInFile = false;
                 }
-
-
 
                 CheckNetworkStatus();
                 GetBlockTip();
@@ -385,6 +383,7 @@ namespace SATSuma
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
         {
+            APIRefreshFrequency = Convert.ToInt32(numericUpDownDashboardRefresh.Value);
             intDisplayCountdownToRefresh = (APIRefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
             APIGroup1DisplayTimerIntervalSecsConstant = (APIRefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
             intAPIGroup1TimerIntervalMillisecsConstant = ((APIRefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
@@ -8661,7 +8660,7 @@ namespace SATSuma
             SaveSettingsToBookmarksFile();
         }
 
-        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Bitcoin Dashboard, Lightning Dashboard, MempoolLightningJSON, nnn = refresh freq.
+        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Bitcoin Dashboard, Lightning Dashboard, MempoolLightningJSON, nnn = refresh freq.
 
         private void SaveSettingsToBookmarksFile()
         {
@@ -8700,13 +8699,10 @@ namespace SATSuma
             var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
             if (!settingsAlreadySavedInFile)
             {
-
                 // Read the existing bookmarks from the JSON file
                 var bookmarks = ReadBookmarksFromJsonFile();
-
                 // Add the new bookmark to the list
                 bookmarks.Add(newBookmark);
-
                 // Write the updated list of bookmarks back to the JSON file
                 WriteBookmarksToJsonFile(bookmarks);
                 settingsAlreadySavedInFile = true;
@@ -8714,8 +8710,8 @@ namespace SATSuma
             }
             else
             {
-                if (settingsInFile != bookmarkData)
-                {
+                //if (settingsInFile != bookmarkData)
+                //{
                     //delete the currently saved settings
                     DeleteBookmarkFromJsonFile(settingsInFile);
                     // Read the existing settings from the JSON file
@@ -8726,7 +8722,7 @@ namespace SATSuma
                     WriteBookmarksToJsonFile(bookmarks);
                     settingsAlreadySavedInFile = true;
                     settingsInFile = bookmarkData;
-                }
+                //}
             }
         }
 

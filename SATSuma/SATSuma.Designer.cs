@@ -440,7 +440,7 @@
             this.label18 = new System.Windows.Forms.Label();
             this.lblXpubNodeStatusLight = new System.Windows.Forms.Label();
             this.lblValidXpubIndicator = new System.Windows.Forms.Label();
-            this.textBoxMempoolURL = new System.Windows.Forms.TextBox();
+            this.textBoxXpubNodeURL = new System.Windows.Forms.TextBox();
             this.panel30 = new System.Windows.Forms.Panel();
             this.btnXpubAddressesDown = new System.Windows.Forms.Button();
             this.btnXpubAddressUp = new System.Windows.Forms.Button();
@@ -547,6 +547,7 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.label198 = new System.Windows.Forms.Label();
             this.textBoxSettingsCustomMempoolURL = new System.Windows.Forms.TextBox();
             this.lblSettingsNodeCustom = new System.Windows.Forms.Label();
             this.label174 = new System.Windows.Forms.Label();
@@ -681,7 +682,6 @@
             this.headerNetworkStatusLight = new System.Windows.Forms.Label();
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
-            this.label198 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -6328,7 +6328,7 @@
             this.panelXpub.Controls.Add(this.label18);
             this.panelXpub.Controls.Add(this.lblXpubNodeStatusLight);
             this.panelXpub.Controls.Add(this.lblValidXpubIndicator);
-            this.panelXpub.Controls.Add(this.textBoxMempoolURL);
+            this.panelXpub.Controls.Add(this.textBoxXpubNodeURL);
             this.panelXpub.Controls.Add(this.panel30);
             this.panelXpub.Controls.Add(this.panelXpubContainer);
             this.panelXpub.Controls.Add(this.lblLegacyUsedAddresses);
@@ -6538,22 +6538,22 @@
             this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 20);
             this.lblValidXpubIndicator.TabIndex = 218;
             // 
-            // textBoxMempoolURL
+            // textBoxXpubNodeURL
             // 
-            this.textBoxMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxMempoolURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxMempoolURL.Location = new System.Drawing.Point(200, 0);
-            this.textBoxMempoolURL.Name = "textBoxMempoolURL";
-            this.textBoxMempoolURL.Size = new System.Drawing.Size(213, 25);
-            this.textBoxMempoolURL.TabIndex = 200;
-            this.textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-            this.textBoxMempoolURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
-            this.textBoxMempoolURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
-            this.textBoxMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxMempoolURL_KeyPress);
-            this.textBoxMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxMempoolURL_KeyUp);
-            this.textBoxMempoolURL.Leave += new System.EventHandler(this.TextBoxMempoolURL_Leave);
+            this.textBoxXpubNodeURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxXpubNodeURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxXpubNodeURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxXpubNodeURL.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxXpubNodeURL.Location = new System.Drawing.Point(200, 0);
+            this.textBoxXpubNodeURL.Name = "textBoxXpubNodeURL";
+            this.textBoxXpubNodeURL.Size = new System.Drawing.Size(213, 25);
+            this.textBoxXpubNodeURL.TabIndex = 200;
+            this.textBoxXpubNodeURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.textBoxXpubNodeURL.TextChanged += new System.EventHandler(this.TextBoxMempoolURL_TextChanged);
+            this.textBoxXpubNodeURL.Enter += new System.EventHandler(this.TextBoxMempoolURL_Enter);
+            this.textBoxXpubNodeURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxMempoolURL_KeyPress);
+            this.textBoxXpubNodeURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxMempoolURL_KeyUp);
+            this.textBoxXpubNodeURL.Leave += new System.EventHandler(this.TextBoxMempoolURL_Leave);
             // 
             // panel30
             // 
@@ -8107,6 +8107,17 @@
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
             // 
+            // label198
+            // 
+            this.label198.AutoSize = true;
+            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label198.ForeColor = System.Drawing.Color.Silver;
+            this.label198.Location = new System.Drawing.Point(544, 398);
+            this.label198.Name = "label198";
+            this.label198.Size = new System.Drawing.Size(107, 20);
+            this.label198.TabIndex = 240;
+            this.label198.Text = "(1 - 1440 mins)";
+            // 
             // textBoxSettingsCustomMempoolURL
             // 
             this.textBoxSettingsCustomMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -8128,7 +8139,6 @@
             // 
             this.lblSettingsNodeCustom.AutoSize = true;
             this.lblSettingsNodeCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblSettingsNodeCustom.Enabled = false;
             this.lblSettingsNodeCustom.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblSettingsNodeCustom.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsNodeCustom.Location = new System.Drawing.Point(190, 246);
@@ -8202,7 +8212,7 @@
             this.lblSettingsCustomNodeStatus.AutoSize = true;
             this.lblSettingsCustomNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(562, 242);
+            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(562, 245);
             this.lblSettingsCustomNodeStatus.Name = "lblSettingsCustomNodeStatus";
             this.lblSettingsCustomNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsCustomNodeStatus.TabIndex = 232;
@@ -8214,7 +8224,7 @@
             this.lblSettingsCustomNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSettingsCustomNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(533, 244);
+            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(533, 248);
             this.lblSettingsCustomNodeStatusLight.Name = "lblSettingsCustomNodeStatusLight";
             this.lblSettingsCustomNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsCustomNodeStatusLight.TabIndex = 231;
@@ -9967,11 +9977,11 @@
             this.headerNetworkName.BackColor = System.Drawing.Color.Transparent;
             this.headerNetworkName.Font = new System.Drawing.Font("Century Gothic", 7F);
             this.headerNetworkName.ForeColor = System.Drawing.Color.Silver;
-            this.headerNetworkName.Location = new System.Drawing.Point(723, 162);
+            this.headerNetworkName.Location = new System.Drawing.Point(633, 162);
             this.headerNetworkName.Name = "headerNetworkName";
-            this.headerNetworkName.Size = new System.Drawing.Size(60, 17);
+            this.headerNetworkName.Size = new System.Drawing.Size(169, 17);
             this.headerNetworkName.TabIndex = 241;
-            this.headerNetworkName.Text = "MAINNET";
+            this.headerNetworkName.Text = "MAINNET (mempool.space)";
             // 
             // headerNetworkStatusLight
             // 
@@ -9979,7 +9989,7 @@
             this.headerNetworkStatusLight.BackColor = System.Drawing.Color.Transparent;
             this.headerNetworkStatusLight.Font = new System.Drawing.Font("Consolas", 6F);
             this.headerNetworkStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.headerNetworkStatusLight.Location = new System.Drawing.Point(711, 164);
+            this.headerNetworkStatusLight.Location = new System.Drawing.Point(620, 166);
             this.headerNetworkStatusLight.Name = "headerNetworkStatusLight";
             this.headerNetworkStatusLight.Size = new System.Drawing.Size(15, 12);
             this.headerNetworkStatusLight.TabIndex = 240;
@@ -9995,17 +10005,6 @@
             this.hideThemeDeletedTimer.Interval = 2000;
             this.hideThemeDeletedTimer.Tick += new System.EventHandler(this.HideThemeDeletedTimer_Tick);
             // 
-            // label198
-            // 
-            this.label198.AutoSize = true;
-            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label198.ForeColor = System.Drawing.Color.Silver;
-            this.label198.Location = new System.Drawing.Point(544, 398);
-            this.label198.Name = "label198";
-            this.label198.Size = new System.Drawing.Size(107, 20);
-            this.label198.TabIndex = 240;
-            this.label198.Text = "(1 - 1440 mins)";
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10016,6 +10015,7 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);
@@ -10027,7 +10027,6 @@
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
@@ -10617,7 +10616,7 @@
         private System.Windows.Forms.Button btnXpubAddressesDown;
         private System.Windows.Forms.Timer XpubScrollTimer;
         private System.Windows.Forms.Panel panel30;
-        private System.Windows.Forms.TextBox textBoxMempoolURL;
+        private System.Windows.Forms.TextBox textBoxXpubNodeURL;
         private System.Windows.Forms.Button btnAddToBookmarks;
         private System.Windows.Forms.Panel panelAddToBookmarks;
         private System.Windows.Forms.Label lblBookmarkProposalType;

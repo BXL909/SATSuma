@@ -74,14 +74,12 @@ namespace SATSuma
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
-#pragma warning disable IDE0044 // Add readonly modifier
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
         private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
-#pragma warning restore IDE0044 // Add readonly modifier
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         private string addressScreenConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
@@ -326,12 +324,12 @@ namespace SATSuma
                 CheckNetworkStatus();
                 GetBlockTip();
 
-                // check if there is a node address saved in the bookmarks file
+                // check if there is an xpub node address saved in the bookmarks file
                 foreach (var bookmark in bookmarks)
                 {
-                    if (bookmark.Type == "node")
+                    if (bookmark.Type == "xpubnode")
                     {
-                        textBoxMempoolURL.Text = bookmark.Data; // move node url string to the form
+                        textBoxXpubNodeURL.Text = bookmark.Data; // move node url string to the form
                         textBoxSettingsXpubMempoolURL.Text = bookmark.Data; // and to the settings screen
                         CheckXpubNodeIsOnline();
                         nodeURLInFile = bookmark.Data;
@@ -5364,7 +5362,7 @@ namespace SATSuma
             try
             {
                 textBoxSubmittedXpub.Enabled = false;
-                textBoxMempoolURL.Enabled = false;
+                textBoxXpubNodeURL.Enabled = false;
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
                 int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
@@ -5513,7 +5511,7 @@ namespace SATSuma
                             lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
                         var request = "address/" + address;
-                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var RequestURL = textBoxXpubNodeURL.Text + request;
                         var client = new HttpClient();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
@@ -5541,7 +5539,7 @@ namespace SATSuma
 
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
-                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubNodeURL.Text);
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                             List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -5749,7 +5747,7 @@ namespace SATSuma
                             lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
                         var request = "address/" + address;
-                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var RequestURL = textBoxXpubNodeURL.Text + request;
                         var client = new HttpClient();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
@@ -5777,7 +5775,7 @@ namespace SATSuma
 
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
-                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubNodeURL.Text);
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                             List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -5985,7 +5983,7 @@ namespace SATSuma
                             lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
                         var request = "address/" + address;
-                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var RequestURL = textBoxXpubNodeURL.Text + request;
                         var client = new HttpClient();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
@@ -6013,7 +6011,7 @@ namespace SATSuma
 
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
-                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubNodeURL.Text);
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                             List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -6225,7 +6223,7 @@ namespace SATSuma
                             lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
                         });
                         var request = "address/" + address;
-                        var RequestURL = textBoxMempoolURL.Text + request;
+                        var RequestURL = textBoxXpubNodeURL.Text + request;
                         var client = new HttpClient();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
@@ -6253,7 +6251,7 @@ namespace SATSuma
 
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
-                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxMempoolURL.Text);
+                            _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubNodeURL.Text);
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                             List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -6456,7 +6454,7 @@ namespace SATSuma
                     lblXpubConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)).ToString("0.00000000");
                 });
                 textBoxSubmittedXpub.Enabled = true;
-                textBoxMempoolURL.Enabled = true;
+                textBoxXpubNodeURL.Enabled = true;
                 timerHideProgressBars.Start();
             }
             catch (Exception ex)
@@ -6593,18 +6591,18 @@ namespace SATSuma
         {
             if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
-                textBoxMempoolURL.Text = "";
-                textBoxMempoolURL.ForeColor = Color.White;
+                textBoxXpubNodeURL.Text = "";
+                textBoxXpubNodeURL.ForeColor = Color.White;
                 isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
         }
 
         private void TextBoxMempoolURL_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBoxMempoolURL.Text))
+            if (string.IsNullOrWhiteSpace(textBoxXpubNodeURL.Text))
             {
-                textBoxMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                textBoxMempoolURL.ForeColor = Color.Gray;
+                textBoxXpubNodeURL.Text = "e.g http://umbrel.local:3006/api/";
+                textBoxXpubNodeURL.ForeColor = Color.Gray;
                 isTextBoxMempoolURLWatermarkTextDisplayed = true;
             }
         }
@@ -6613,7 +6611,7 @@ namespace SATSuma
         {
             if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
-                textBoxMempoolURL.ForeColor = Color.White;
+                textBoxXpubNodeURL.ForeColor = Color.White;
                 isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
         }
@@ -6624,25 +6622,25 @@ namespace SATSuma
         {
             if (isTextBoxMempoolURLWatermarkTextDisplayed)
             {
-                textBoxMempoolURL.Text = "";
-                textBoxMempoolURL.ForeColor = Color.White;
+                textBoxXpubNodeURL.Text = "";
+                textBoxXpubNodeURL.ForeColor = Color.White;
                 isTextBoxMempoolURLWatermarkTextDisplayed = false;
             }
             else
             {
-                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
+                previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
             }
         }
 
         private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
         {
-            if (previousXpubNodeStringToCompare != textBoxMempoolURL.Text)
+            if (previousXpubNodeStringToCompare != textBoxXpubNodeURL.Text)
             {
                 textBoxSubmittedXpub.Enabled = false;
                 lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                 label18.Text = "invalid / node offline";
                 textBoxSubmittedXpub.Text = "";
-                previousXpubNodeStringToCompare = textBoxMempoolURL.Text;
+                previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
                 CheckXpubNodeIsOnline();
             }
         }
@@ -6674,10 +6672,10 @@ namespace SATSuma
                 string pingAddress = "";
 
 
-                if (textBoxMempoolURL.Text != "")
+                if (textBoxXpubNodeURL.Text != "")
                 {
                     // get the contents of the textbox
-                    string url = textBoxMempoolURL.Text;
+                    string url = textBoxXpubNodeURL.Text;
 
                     // create a regex pattern to match URLs
                     string pattern = @"^(http|https):\/\/.*\/api\/$";
@@ -6690,7 +6688,7 @@ namespace SATSuma
                     {
                         try
                         {
-                            xpubNodeURL = textBoxMempoolURL.Text;
+                            xpubNodeURL = textBoxXpubNodeURL.Text;
                             // get the hostname from the URL
                             // parse the URL to extract the hostname
                             Uri uri = new Uri(xpubNodeURL);
@@ -6738,9 +6736,9 @@ namespace SATSuma
                     DateTime today = DateTime.Today;
                     string bookmarkData;
                     string keyCheck = "21m";
-                    bookmarkData = textBoxMempoolURL.Text;
+                    bookmarkData = textBoxXpubNodeURL.Text;
                     textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
-                    var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                    var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                     if (!nodeURLAlreadySavedInFile)
                     {
 
@@ -6757,7 +6755,7 @@ namespace SATSuma
                     }
                     else
                     { 
-                        if (nodeURLInFile != textBoxMempoolURL.Text)
+                        if (nodeURLInFile != textBoxXpubNodeURL.Text)
                         {
                             //delete the currently saved node url
                             DeleteBookmarkFromJsonFile(nodeURLInFile);
@@ -7008,7 +7006,7 @@ namespace SATSuma
         private void PanelXpub_Paint(object sender, PaintEventArgs e)
         {
             textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
-            textBoxMempoolURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxMempoolURL.Location.Y);
+            textBoxXpubNodeURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxXpubNodeURL.Location.Y);
             lblValidXpubIndicator.Location = new Point(textBoxSubmittedXpub.Location.X + textBoxSubmittedXpub.Width, lblValidXpubIndicator.Location.Y);
         }
 
@@ -7144,7 +7142,7 @@ namespace SATSuma
 
                 foreach (var bookmark in bookmarks)
                 {
-                    if (bookmark.Type != "node" && bookmark.Type != "defaulttheme" && bookmark.Type != "settings")
+                    if (bookmark.Type != "xpubnode" && bookmark.Type != "defaulttheme" && bookmark.Type != "settings")
                     {
                         ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
                         item.SubItems.Add(bookmark.Type);
@@ -8143,9 +8141,9 @@ namespace SATSuma
                     textBoxSubmittedXpub.Text = "";
                 });
                 previousXpubNodeStringToCompare = textBoxSettingsXpubMempoolURL.Text;
-                textBoxMempoolURL.Invoke((MethodInvoker)delegate
+                textBoxXpubNodeURL.Invoke((MethodInvoker)delegate
                 {
-                    textBoxMempoolURL.Text = textBoxSettingsXpubMempoolURL.Text;
+                    textBoxXpubNodeURL.Text = textBoxSettingsXpubMempoolURL.Text;
                 });
                 CheckXpubNodeIsOnline();
             }
@@ -8176,6 +8174,7 @@ namespace SATSuma
                 NodeURL = "https://mempool.space/api/";
                 CheckNetworkStatus();
                 CreateDataServices();
+                SaveSettingsToBookmarksFile();
                 GetBlockTip();
                 LookupBlockList();
                 UpdateBitcoinAndLightningDashboards();
@@ -8208,6 +8207,7 @@ namespace SATSuma
                 NodeURL = "https://mempool.space/testnet/api/";
                 CheckNetworkStatus();
                 CreateDataServices();
+                SaveSettingsToBookmarksFile();
                 GetBlockTip();
                 LookupBlockList();
                 UpdateBitcoinAndLightningDashboards();
@@ -8236,6 +8236,12 @@ namespace SATSuma
                 });
                 textBoxSettingsCustomMempoolURL.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Focus();
+          //      CheckNetworkStatus();
+          //      CreateDataServices();
+          //      SaveSettingsToBookmarksFile();
+          //      GetBlockTip();
+          //      LookupBlockList();
+          //      UpdateBitcoinAndLightningDashboards();
             }
         }
 
@@ -8372,6 +8378,15 @@ namespace SATSuma
                         lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
                         lblSettingsCustomNodeStatus.Text = "node online";
                     });
+                    if (lblSettingsNodeCustom.Text == "✔️")
+                    {
+                        CheckNetworkStatus();
+                        CreateDataServices();
+                        SaveSettingsToBookmarksFile();
+                        GetBlockTip();
+                        LookupBlockList();
+                        UpdateBitcoinAndLightningDashboards();
+                    }
                     /*
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
@@ -8620,12 +8635,12 @@ namespace SATSuma
             {
                 lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
                 {
-                    lblMempoolLightningJSON.ForeColor = Color.Red;
+                    lblMempoolLightningJSON.ForeColor = Color.IndianRed;
                     lblMempoolLightningJSON.Text = "❌";
                 });
                 lblLightningDashboard.Invoke((MethodInvoker)delegate
                 {
-                    lblLightningDashboard.ForeColor = Color.Red;
+                    lblLightningDashboard.ForeColor = Color.IndianRed;
                     lblLightningDashboard.Text = "❌";
                 });
                 RunMempoolSpaceLightningAPI = false;
@@ -9820,7 +9835,7 @@ namespace SATSuma
 
         private void ColorTextBoxes(Color thiscolor)
         {
-            Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxMempoolURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
+            Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
             foreach (Control control in listTextBoxesToColor)
             {
                 control.BackColor = thiscolor;
@@ -10542,15 +10557,15 @@ namespace SATSuma
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "MAINNET";
+                        displayNodeName = "MAINNET (mempool.space)";
                     }
                     if (NodeURL == "https://mempool.space/testnet/api/")
                     {
-                        displayNodeName = "TESTNET";
+                        displayNodeName = "TESTNET (mempool.space)";
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                        lblSettingsCustomNodeStatus.Text = displayNodeName;
                         headerNetworkName.Text = displayNodeName;
                     });
                 }
@@ -10573,7 +10588,7 @@ namespace SATSuma
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                        lblSettingsCustomNodeStatus.Text = displayNodeName;
                         headerNetworkName.Text = displayNodeName;
                     });
                 }
@@ -10597,7 +10612,7 @@ namespace SATSuma
                 }
                 lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblSettingsCustomNodeStatus.Text = displayNodeName + " status";
+                    lblSettingsCustomNodeStatus.Text = displayNodeName;
                     headerNetworkName.Text = displayNodeName;
                 });
             }
@@ -10608,9 +10623,13 @@ namespace SATSuma
                     lblErrorMessage.Text = "CheckBlockchainExplorerApiStatus: " + ex.Message;
                 });
             }
+            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsCustomNodeStatus.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width + 8, lblSettingsCustomNodeStatus.Location.Y);
+            });
             lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
             {
-                lblSettingsCustomNodeStatusLight.Location = new Point(lblSettingsCustomNodeStatus.Location.X + lblSettingsCustomNodeStatus.Width, lblSettingsCustomNodeStatus.Location.Y);
+                lblSettingsCustomNodeStatusLight.Location = new Point(lblSettingsCustomNodeStatus.Location.X + lblSettingsCustomNodeStatus.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
             });
         }
 
@@ -11265,8 +11284,8 @@ namespace SATSuma
         private void Form1_Paint(object sender, PaintEventArgs e) // place a 1px border around the form
         {
             ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
-            lblXpubNodeStatusLight.Location = new Point(textBoxMempoolURL.Location.X + textBoxMempoolURL.Width, textBoxMempoolURL.Location.Y + 4);
-            label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxMempoolURL.Location.Y);
+            lblXpubNodeStatusLight.Location = new Point(textBoxXpubNodeURL.Location.X + textBoxXpubNodeURL.Width, textBoxXpubNodeURL.Location.Y + 4);
+            label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxXpubNodeURL.Location.Y);
             if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
             {
                if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")

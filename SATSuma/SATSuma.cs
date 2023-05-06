@@ -493,7 +493,12 @@ namespace SATSuma
                         HandleException(ex, "BlockchainInfoEndpointsRefresh");
                     }
                 }
-                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields
+                CheckNetworkStatus();
+                if (headerNetworkStatusLight.ForeColor == Color.OliveDrab)
+                {
+                    UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields
+                }
+                
             }
             catch (WebException ex)
             {
@@ -2749,6 +2754,7 @@ namespace SATSuma
         //------------------------ VIEW THE BLOCK CONTAINING THIS TRANSACTION ------------------------------------------
         private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
+            CheckNetworkStatus();
             //assign block number to text box on block panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
@@ -2774,6 +2780,7 @@ namespace SATSuma
         //------------------------ VIEW THIS TRANSACTION ------------------------------------------------------
         private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
         {
+            CheckNetworkStatus();
             //assign TX ID to text box on transaction panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
@@ -3651,6 +3658,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 //assign TX ID to text box on transaction panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
@@ -4606,6 +4614,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 //assign address to text box on address panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
@@ -4628,6 +4637,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 //assign address to text box on address panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
@@ -5220,6 +5230,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 //assign block number to text box on block panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
@@ -7045,6 +7056,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 //assign address to text box on address panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewXpubAddresses.SelectedItems[0];
@@ -7523,6 +7535,7 @@ namespace SATSuma
         {
             try
             {
+                CheckNetworkStatus();
                 if (lblSelectedBookmarkType.Text == "block")
                 {
                     textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -10565,120 +10578,170 @@ namespace SATSuma
         //-------------------------- CHECK API ONLINE STATUS ----------------------------------------------------------
         private async void CheckNetworkStatus()
         {
-            using var client = new HttpClient();
-            try
+            string hostnameForDisplay = "";
+
+            if (panelXpub.Visible)
             {
-                Ping pingSender = new Ping();
-                string pingAddress = null;
-                if (NodeURL == "https://mempool.space/api/")
+                CheckXpubNodeIsOnline();
+                Uri uri = new Uri(xpubNodeURL);
+                
+                hostnameForDisplay = uri.Host;
+                if (lblXpubNodeStatusLight.ForeColor == Color.OliveDrab)
                 {
-                    pingAddress = "mempool.space";
+                    headerNetworkStatusLight.ForeColor = Color.OliveDrab;
+                    headerNetworkName.Text = hostnameForDisplay;
                 }
                 else
                 {
-                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    headerNetworkStatusLight.ForeColor = Color.IndianRed;
+                    headerNetworkName.Text = hostnameForDisplay;
+                }
+            }
+            else
+            {
+                using var client = new HttpClient();
+                try
+                {
+                    Ping pingSender = new Ping();
+                    string pingAddress = null;
+                    if (NodeURL == "https://mempool.space/api/")
                     {
                         pingAddress = "mempool.space";
                     }
                     else
                     {
-                        if (NodeURL == null)
+                        if (NodeURL == "https://mempool.space/testnet/api/")
                         {
                             pingAddress = "mempool.space";
-                            NodeURL = "https://mempool.space/api/";
                         }
                         else
                         {
-                            //////////////////////////////////////////////////////////////////////////
-                            if (textBoxSettingsCustomMempoolURL.Text != "")
+                            if (NodeURL == null)
                             {
-                                // get the contents of the textbox
-                                string url = textBoxSettingsCustomMempoolURL.Text;
-
-                                // create a regex pattern to match URLs
-                                string pattern = @"^(http|https):\/\/.*\/api\/$";
-
-                                // create a regex object
-                                Regex regex = new Regex(pattern);
-
-                                // use the regex object to match the contents of the textbox
-                                if (regex.IsMatch(url)) // (at least partially) valid url
+                                pingAddress = "mempool.space";
+                                NodeURL = "https://mempool.space/api/";
+                            }
+                            else
+                            {
+                                //////////////////////////////////////////////////////////////////////////
+                                if (textBoxSettingsCustomMempoolURL.Text != "")
                                 {
-                                    try
-                                    {
-                                        NodeURL = textBoxSettingsCustomMempoolURL.Text;
-                                        // get the hostname from the URL
-                                        // parse the URL to extract the hostname
-                                        Uri uri = new Uri(NodeURL);
-                                        string hostname = uri.Host;
+                                    // get the contents of the textbox
+                                    string url = textBoxSettingsCustomMempoolURL.Text;
 
-                                        // resolve the hostname to an IP address
-                                        IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
-                                        IPAddress ipAddress = hostEntry.AddressList[0];
-                                        pingAddress = ipAddress.ToString();
+                                    // create a regex pattern to match URLs
+                                    string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                                    // create a regex object
+                                    Regex regex = new Regex(pattern);
+
+                                    // use the regex object to match the contents of the textbox
+                                    if (regex.IsMatch(url)) // (at least partially) valid url
+                                    {
+                                        try
+                                        {
+                                            NodeURL = textBoxSettingsCustomMempoolURL.Text;
+                                            // get the hostname from the URL
+                                            // parse the URL to extract the hostname
+                                            Uri uri = new Uri(NodeURL);
+                                            string hostname = uri.Host;
+                                            hostnameForDisplay = hostname;
+                                            // resolve the hostname to an IP address
+                                            IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                                            IPAddress ipAddress = hostEntry.AddressList[0];
+                                            pingAddress = ipAddress.ToString();
+                                        }
+                                        catch
+                                        {
+                                            lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                                            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                                            {
+                                                lblSettingsCustomNodeStatus.Text = "node offline";
+                                            });
+                                            return;
+                                        }
                                     }
-                                    catch
+                                    else
                                     {
                                         lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
                                         lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                                         {
-                                            //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
                                             lblSettingsCustomNodeStatus.Text = "node offline";
                                         });
                                         return;
                                     }
                                 }
-                                else
-                                {
-                                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-                                    {
-                                        //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
-                                        lblSettingsCustomNodeStatus.Text = "node offline";
-                                    });
-                                    return;
-                                }
+                                /////////////////////////////////////////////////
+
                             }
-                            /////////////////////////////////////////////////
-
                         }
+
                     }
 
-                }
-                
-                
-                PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                if (reply.Status == IPStatus.Success)
-                {
-                    lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
+
+                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                    if (reply.Status == IPStatus.Success)
                     {
-                        lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
-                        headerNetworkStatusLight.ForeColor = Color.OliveDrab;
-                    });
-                    var displayNodeName = "";
-                    if (NodeURL == "https://mempool.space/api/")
-                    {
-                        displayNodeName = "MAINNET (mempool.space)";
-                    }
-                    else
-                    {
-                        if (NodeURL == "https://mempool.space/testnet/api/")
+                        lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
-                            displayNodeName = "TESTNET (mempool.space)";
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
+                            headerNetworkStatusLight.ForeColor = Color.OliveDrab;
+                        });
+                        var displayNodeName = "";
+                        if (NodeURL == "https://mempool.space/api/")
+                        {
+                            displayNodeName = "MAINNET (mempool.space)";
                         }
                         else
                         {
-                            displayNodeName = textBoxSettingsCustomMempoolURL.Text;
+                            if (NodeURL == "https://mempool.space/testnet/api/")
+                            {
+                                displayNodeName = "TESTNET (mempool.space)";
+                            }
+                            else
+                            {
+                                displayNodeName = hostnameForDisplay;
+                            }
                         }
+
+                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsCustomNodeStatus.Text = displayNodeName;
+                            headerNetworkName.Text = displayNodeName;
+                        });
                     }
-                    
-                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                    else
                     {
-                        lblSettingsCustomNodeStatus.Text = displayNodeName;
-                        headerNetworkName.Text = displayNodeName;
-                    });
+                        // API is not online
+                        lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                            headerNetworkStatusLight.ForeColor = Color.IndianRed;
+                        });
+                        var displayNodeName = "";
+                        if (NodeURL == "https://mempool.space/api/")
+                        {
+                            displayNodeName = "MAINNET (mempool.space)";
+                        }
+                        else
+                        {
+                            if (NodeURL == "https://mempool.space/testnet/api/")
+                            {
+                                displayNodeName = "TESTNET (mempool.space)";
+                            }
+                            else
+                            {
+                                displayNodeName = hostnameForDisplay;
+                            }
+                        }
+                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsCustomNodeStatus.Text = displayNodeName;
+                            headerNetworkName.Text = displayNodeName;
+                        });
+                    }
                 }
-                else
+                catch (HttpRequestException)
                 {
                     // API is not online
                     lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
@@ -10699,7 +10762,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            displayNodeName = textBoxSettingsCustomMempoolURL.Text;
+                            displayNodeName = hostnameForDisplay;
                         }
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
@@ -10708,55 +10771,33 @@ namespace SATSuma
                         headerNetworkName.Text = displayNodeName;
                     });
                 }
-            }
-            catch (HttpRequestException)
-            {
-                // API is not online
-                lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
+                catch (Exception ex)
                 {
-                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                    headerNetworkStatusLight.ForeColor = Color.IndianRed;
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "CheckNetworkStatus: " + ex.Message;
+                    });
+                }
+
+                headerNetworkName.Invoke((MethodInvoker)delegate
+                {
+                    headerNetworkName.Location = new Point(panelFees.Location.X + panelFees.Width - headerNetworkName.Width, headerNetworkName.Location.Y);
                 });
-                var displayNodeName = "";
-                if (NodeURL == "https://mempool.space/api/")
+                headerNetworkStatusLight.Invoke((MethodInvoker)delegate
                 {
-                    displayNodeName = "MAINNET (mempool.space)";
-                }
-                else
-                {
-                    if (NodeURL == "https://mempool.space/testnet/api/")
-                    {
-                        displayNodeName = "TESTNET (mempool.space)";
-                    }
-                    else
-                    {
-                        displayNodeName = textBoxSettingsCustomMempoolURL.Text;
-                    }
-                }
+                    headerNetworkStatusLight.Location = new Point(headerNetworkName.Location.X - headerNetworkStatusLight.Width, headerNetworkStatusLight.Location.Y);
+                });
+
                 lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblSettingsCustomNodeStatus.Text = displayNodeName;
-                    headerNetworkName.Text = displayNodeName;
+                    lblSettingsCustomNodeStatus.Location = new Point(lblSettingsCustomNodeStatusLight.Location.X + lblSettingsCustomNodeStatusLight.Width, lblSettingsCustomNodeStatus.Location.Y);
                 });
-            }
-            catch (Exception ex)
-            {
-                lblErrorMessage.Invoke((MethodInvoker)delegate
+
+                lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
-                    lblErrorMessage.Text = "CheckNetworkStatus: " + ex.Message;
+                    lblSettingsCustomNodeStatusLight.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
                 });
             }
-
-            lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
-            {
-                lblSettingsCustomNodeStatusLight.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
-            });
-
-            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-            {
-                lblSettingsCustomNodeStatus.Location = new Point(lblSettingsCustomNodeStatusLight.Location.X + lblSettingsCustomNodeStatusLight.Width, lblSettingsCustomNodeStatus.Location.Y);
-            });
-
         }
 
         #endregion
@@ -11006,6 +11047,7 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelAddress.Visible = true;
+                CheckNetworkStatus();
             }
             catch (Exception ex)
             {
@@ -11045,6 +11087,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
                 panelBlock.Visible = true;
+                CheckNetworkStatus();
                 if (textBoxSubmittedBlockNumber.Text == "")
                 {
                     textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -11092,6 +11135,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
                 panelXpub.Visible = true;
+                CheckNetworkStatus();
             }
             catch (Exception ex)
             {
@@ -11131,6 +11175,7 @@ namespace SATSuma
                 panelAppearance.Visible = false;
                 panelSettings.Visible = false;
                 panelBlockList.Visible = true;
+                CheckNetworkStatus();
                 if (textBoxBlockHeightToStartListFrom.Text == "")
                 {
                     textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -11183,6 +11228,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
                 panelTransaction.Visible = true;
+                CheckNetworkStatus();
             }
             catch (Exception ex)
             {
@@ -11224,6 +11270,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
                 panelBookmarks.Visible = true;
+                CheckNetworkStatus();
                 SetupBookmarksScreen();
             }
             catch (Exception ex)
@@ -11266,6 +11313,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelBookmarks.Visible = false;
                 panelSettings.Visible = true;
+                CheckNetworkStatus();
             }
             catch (Exception ex)
             {
@@ -11307,6 +11355,7 @@ namespace SATSuma
                 panelBookmarks.Visible = false;
                 panelSettings.Visible = false;
                 panelAppearance.Visible = true;
+                CheckNetworkStatus();
                 // populate the dropdown list with the available themes
                 var themes = ReadThemesFromJsonFile();
                 List<string> themeNames = themes.Select(t => t.ThemeName).ToList();

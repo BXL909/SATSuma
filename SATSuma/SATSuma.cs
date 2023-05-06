@@ -104,6 +104,8 @@ namespace SATSuma
         bool btnNewer15BlocksWasEnabled = false;
         bool btnOlder15BlocksWasEnabled = true;
         bool textBoxBlockHeightToStartListFromWasEnabled = true;
+        bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
+        string xpubNodeURLInFile = ""; // stores the xpub node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
         string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
@@ -321,8 +323,23 @@ namespace SATSuma
                     }
                 }
 
-                CheckNetworkStatus();
-                GetBlockTip();
+                // check if there is a node address saved in the bookmarks file
+                foreach (var bookmark in bookmarks)
+                {
+                    if (bookmark.Type == "node")
+                    {
+                        textBoxSettingsCustomMempoolURL.Text = bookmark.Data; // move it to the settings screen
+                        
+                        nodeURLInFile = bookmark.Data;
+                        nodeURLAlreadySavedInFile = true;
+                        if (lblSettingsNodeCustom.Text == "✔️")
+                        {
+                            CheckCustomNodeIsOnline();
+                        }
+                        break;
+                    }
+                    nodeURLAlreadySavedInFile = false;
+                }
 
                 // check if there is an xpub node address saved in the bookmarks file
                 foreach (var bookmark in bookmarks)
@@ -332,12 +349,17 @@ namespace SATSuma
                         textBoxXpubNodeURL.Text = bookmark.Data; // move node url string to the form
                         textBoxSettingsXpubMempoolURL.Text = bookmark.Data; // and to the settings screen
                         CheckXpubNodeIsOnline();
-                        nodeURLInFile = bookmark.Data;
-                        nodeURLAlreadySavedInFile = true;
+                        xpubNodeURLInFile = bookmark.Data;
+                        xpubNodeURLAlreadySavedInFile = true;
                         break;
                     }
-                    nodeURLAlreadySavedInFile = false;
+                    xpubNodeURLAlreadySavedInFile = false;
                 }
+
+                CheckNetworkStatus();
+                GetBlockTip();
+
+
 
                 // check if there is a default theme saved in the bookmarks file
                 foreach (var bookmark in bookmarks)
@@ -6704,7 +6726,7 @@ namespace SATSuma
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             label18.ForeColor = Color.IndianRed;
-                            lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
+                            //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
                             label18.Text = "node offline";
                             lblSettingsXpubNodeStatus.Text = "node offline";
                             return;
@@ -6715,7 +6737,7 @@ namespace SATSuma
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         label18.ForeColor = Color.IndianRed;
-                        lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
+                        //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
                         label18.Text = "node offline";
                         lblSettingsXpubNodeStatus.Text = "node offline";
                         return;
@@ -6729,7 +6751,7 @@ namespace SATSuma
                     lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
                     label18.ForeColor = Color.OliveDrab;
-                    lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
+                    //lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
                     label18.Text = "node online";
                     lblSettingsXpubNodeStatus.Text = "node online";
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
@@ -6739,7 +6761,7 @@ namespace SATSuma
                     bookmarkData = textBoxXpubNodeURL.Text;
                     textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
                     var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
-                    if (!nodeURLAlreadySavedInFile)
+                    if (!xpubNodeURLAlreadySavedInFile)
                     {
 
                         // Read the existing bookmarks from the JSON file
@@ -6750,23 +6772,23 @@ namespace SATSuma
 
                         // Write the updated list of bookmarks back to the JSON file
                         WriteBookmarksToJsonFile(bookmarks);
-                        nodeURLAlreadySavedInFile = true;
-                        nodeURLInFile = bookmarkData;
+                        xpubNodeURLAlreadySavedInFile = true;
+                        xpubNodeURLInFile = bookmarkData;
                     }
                     else
                     { 
-                        if (nodeURLInFile != textBoxXpubNodeURL.Text)
+                        if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
                         {
                             //delete the currently saved node url
-                            DeleteBookmarkFromJsonFile(nodeURLInFile);
+                            DeleteBookmarkFromJsonFile(xpubNodeURLInFile);
                             // Read the existing bookmarks from the JSON file
                             var bookmarks = ReadBookmarksFromJsonFile();
                             // Add the new bookmark to the list
                             bookmarks.Add(newBookmark);
                             // Write the updated list of bookmarks back to the JSON file
                             WriteBookmarksToJsonFile(bookmarks);
-                            nodeURLAlreadySavedInFile = true;
-                            nodeURLInFile = bookmarkData;
+                            xpubNodeURLAlreadySavedInFile = true;
+                            xpubNodeURLInFile = bookmarkData;
                         }
                     }
 
@@ -8236,12 +8258,27 @@ namespace SATSuma
                 });
                 textBoxSettingsCustomMempoolURL.Enabled = true;
                 textBoxSettingsCustomMempoolURL.Focus();
-          //      CheckNetworkStatus();
-          //      CreateDataServices();
-          //      SaveSettingsToBookmarksFile();
-          //      GetBlockTip();
-          //      LookupBlockList();
-          //      UpdateBitcoinAndLightningDashboards();
+
+                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                });
+                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+
+                //string tempurl = textBoxSettingsCustomMempoolURL.Text;
+                //textBoxSettingsCustomMempoolURL.Text = "";
+                //textBoxSettingsCustomMempoolURL.Text = tempurl;
+                
+                CheckCustomNodeIsOnline();
+                
+
+                      CheckNetworkStatus();
+                //      CreateDataServices();
+                //      SaveSettingsToBookmarksFile();
+                //      GetBlockTip();
+                //      LookupBlockList();
+                //      UpdateBitcoinAndLightningDashboards();
             }
         }
 
@@ -8300,6 +8337,7 @@ namespace SATSuma
             });
             previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
             CheckCustomNodeIsOnline();
+            CheckNetworkStatus();
         }
 
         private void TextBoxSettingsCustomMempoolURL_TextChanged(object sender, EventArgs e)
@@ -8350,7 +8388,7 @@ namespace SATSuma
                             lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
                             lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                             {
-                                lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                                //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
                                 lblSettingsCustomNodeStatus.Text = "node offline";
                             });
                             return;
@@ -8361,7 +8399,7 @@ namespace SATSuma
                         lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
                         lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                            //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
                             lblSettingsCustomNodeStatus.Text = "node offline";
                         });
                         return;
@@ -8375,25 +8413,24 @@ namespace SATSuma
                     lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
-                        lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
+                        //lblSettingsCustomNodeStatus.ForeColor = Color.OliveDrab;
                         lblSettingsCustomNodeStatus.Text = "node online";
                     });
                     if (lblSettingsNodeCustom.Text == "✔️")
                     {
-                        CheckNetworkStatus();
+                        //CheckNetworkStatus();
                         CreateDataServices();
                         SaveSettingsToBookmarksFile();
                         GetBlockTip();
                         LookupBlockList();
                         UpdateBitcoinAndLightningDashboards();
                     }
-                    /*
+                    
                     // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                     DateTime today = DateTime.Today;
                     string bookmarkData;
                     string keyCheck = "21m";
-                    bookmarkData = textBoxMempoolURL.Text;
-                    textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
+                    bookmarkData = textBoxSettingsCustomMempoolURL.Text;
                     var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                     if (!nodeURLAlreadySavedInFile)
                     {
@@ -8411,7 +8448,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (nodeURLInFile != textBoxMempoolURL.Text)
+                        if (nodeURLInFile != textBoxSettingsCustomMempoolURL.Text)
                         {
                             //delete the currently saved node url
                             DeleteBookmarkFromJsonFile(nodeURLInFile);
@@ -8425,7 +8462,7 @@ namespace SATSuma
                             nodeURLInFile = bookmarkData;
                         }
                     }
-                    */
+                    ////////////
 
                 }
                 else
@@ -10537,15 +10574,79 @@ namespace SATSuma
                 {
                     pingAddress = "mempool.space";
                 }
-                if (NodeURL == "https://mempool.space/testnet/api/")
+                else
                 {
-                    pingAddress = "mempool.space";
+                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    {
+                        pingAddress = "mempool.space";
+                    }
+                    else
+                    {
+                        if (NodeURL == null)
+                        {
+                            pingAddress = "mempool.space";
+                            NodeURL = "https://mempool.space/api/";
+                        }
+                        else
+                        {
+                            //////////////////////////////////////////////////////////////////////////
+                            if (textBoxSettingsCustomMempoolURL.Text != "")
+                            {
+                                // get the contents of the textbox
+                                string url = textBoxSettingsCustomMempoolURL.Text;
+
+                                // create a regex pattern to match URLs
+                                string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                                // create a regex object
+                                Regex regex = new Regex(pattern);
+
+                                // use the regex object to match the contents of the textbox
+                                if (regex.IsMatch(url)) // (at least partially) valid url
+                                {
+                                    try
+                                    {
+                                        NodeURL = textBoxSettingsCustomMempoolURL.Text;
+                                        // get the hostname from the URL
+                                        // parse the URL to extract the hostname
+                                        Uri uri = new Uri(NodeURL);
+                                        string hostname = uri.Host;
+
+                                        // resolve the hostname to an IP address
+                                        IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                                        IPAddress ipAddress = hostEntry.AddressList[0];
+                                        pingAddress = ipAddress.ToString();
+                                    }
+                                    catch
+                                    {
+                                        lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                                        {
+                                            //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                                            lblSettingsCustomNodeStatus.Text = "node offline";
+                                        });
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                                    {
+                                        //lblSettingsCustomNodeStatus.ForeColor = Color.IndianRed;
+                                        lblSettingsCustomNodeStatus.Text = "node offline";
+                                    });
+                                    return;
+                                }
+                            }
+                            /////////////////////////////////////////////////
+
+                        }
+                    }
+
                 }
-                if (NodeURL == null)
-                {
-                    pingAddress = "mempool.space";
-                    NodeURL = "https://mempool.space/api/";
-                }
+                
+                
                 PingReply reply = await pingSender.SendPingAsync(pingAddress);
                 if (reply.Status == IPStatus.Success)
                 {
@@ -10559,10 +10660,18 @@ namespace SATSuma
                     {
                         displayNodeName = "MAINNET (mempool.space)";
                     }
-                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    else
                     {
-                        displayNodeName = "TESTNET (mempool.space)";
+                        if (NodeURL == "https://mempool.space/testnet/api/")
+                        {
+                            displayNodeName = "TESTNET (mempool.space)";
+                        }
+                        else
+                        {
+                            displayNodeName = textBoxSettingsCustomMempoolURL.Text;
+                        }
                     }
+                    
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatus.Text = displayNodeName;
@@ -10580,11 +10689,18 @@ namespace SATSuma
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
                     {
-                        displayNodeName = "MAINNET";
+                        displayNodeName = "MAINNET (mempool.space)";
                     }
-                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    else
                     {
-                        displayNodeName = "TESTNET";
+                        if (NodeURL == "https://mempool.space/testnet/api/")
+                        {
+                            displayNodeName = "TESTNET (mempool.space)";
+                        }
+                        else
+                        {
+                            displayNodeName = textBoxSettingsCustomMempoolURL.Text;
+                        }
                     }
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
@@ -10604,11 +10720,18 @@ namespace SATSuma
                 var displayNodeName = "";
                 if (NodeURL == "https://mempool.space/api/")
                 {
-                    displayNodeName = "Mainnet";
+                    displayNodeName = "MAINNET (mempool.space)";
                 }
-                if (NodeURL == "https://mempool.space/testnet/api/")
+                else
                 {
-                    displayNodeName = "Testnet";
+                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    {
+                        displayNodeName = "TESTNET (mempool.space)";
+                    }
+                    else
+                    {
+                        displayNodeName = textBoxSettingsCustomMempoolURL.Text;
+                    }
                 }
                 lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
@@ -10620,17 +10743,20 @@ namespace SATSuma
             {
                 lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
-                    lblErrorMessage.Text = "CheckBlockchainExplorerApiStatus: " + ex.Message;
+                    lblErrorMessage.Text = "CheckNetworkStatus: " + ex.Message;
                 });
             }
-            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-            {
-                lblSettingsCustomNodeStatus.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width + 8, lblSettingsCustomNodeStatus.Location.Y);
-            });
+
             lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
             {
-                lblSettingsCustomNodeStatusLight.Location = new Point(lblSettingsCustomNodeStatus.Location.X + lblSettingsCustomNodeStatus.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
+                lblSettingsCustomNodeStatusLight.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
             });
+
+            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsCustomNodeStatus.Location = new Point(lblSettingsCustomNodeStatusLight.Location.X + lblSettingsCustomNodeStatusLight.Width, lblSettingsCustomNodeStatus.Location.Y);
+            });
+
         }
 
         #endregion

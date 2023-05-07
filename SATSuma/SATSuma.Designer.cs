@@ -547,45 +547,51 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.panel77 = new System.Windows.Forms.Panel();
+            this.lblBitcoinDashboard = new System.Windows.Forms.Label();
+            this.numericUpDownDashboardRefresh = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblWhatever = new System.Windows.Forms.Label();
             this.label198 = new System.Windows.Forms.Label();
-            this.textBoxSettingsCustomMempoolURL = new System.Windows.Forms.TextBox();
-            this.lblSettingsNodeCustom = new System.Windows.Forms.Label();
-            this.label174 = new System.Windows.Forms.Label();
-            this.lblSettingsNodeTestnet = new System.Windows.Forms.Label();
-            this.label172 = new System.Windows.Forms.Label();
-            this.lblSettingsNodeMainnet = new System.Windows.Forms.Label();
+            this.lblBitcoinExplorerEndpoints = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label152 = new System.Windows.Forms.Label();
+            this.lblLightningDashboard = new System.Windows.Forms.Label();
+            this.lblBlockchainInfoEndpoints = new System.Windows.Forms.Label();
+            this.lblBlockchairComJSON = new System.Windows.Forms.Label();
+            this.label169 = new System.Windows.Forms.Label();
+            this.label167 = new System.Windows.Forms.Label();
+            this.label171 = new System.Windows.Forms.Label();
+            this.lblMempoolLightningJSON = new System.Windows.Forms.Label();
+            this.panel76 = new System.Windows.Forms.Panel();
+            this.label201 = new System.Windows.Forms.Label();
+            this.label204 = new System.Windows.Forms.Label();
+            this.textBoxSettingsXpubMempoolURL = new System.Windows.Forms.TextBox();
+            this.panel74 = new System.Windows.Forms.Panel();
+            this.label199 = new System.Windows.Forms.Label();
             this.label157 = new System.Windows.Forms.Label();
+            this.lblSettingsNodeMainnet = new System.Windows.Forms.Label();
+            this.label172 = new System.Windows.Forms.Label();
+            this.lblSettingsNodeTestnet = new System.Windows.Forms.Label();
+            this.panel75 = new System.Windows.Forms.Panel();
+            this.label200 = new System.Windows.Forms.Label();
+            this.lblSettingsNodeCustom = new System.Windows.Forms.Label();
+            this.textBoxSettingsCustomMempoolURL = new System.Windows.Forms.TextBox();
+            this.label174 = new System.Windows.Forms.Label();
+            this.lblURLWarning = new System.Windows.Forms.Label();
             this.lblSettingsCustomNodeStatus = new System.Windows.Forms.Label();
             this.lblSettingsCustomNodeStatusLight = new System.Windows.Forms.Label();
-            this.lblLightningDashboard = new System.Windows.Forms.Label();
-            this.label169 = new System.Windows.Forms.Label();
-            this.lblMempoolLightningJSON = new System.Windows.Forms.Label();
-            this.label171 = new System.Windows.Forms.Label();
-            this.lblBitcoinDashboard = new System.Windows.Forms.Label();
-            this.label167 = new System.Windows.Forms.Label();
-            this.lblBlockchairComJSON = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericUpDownDashboardRefresh = new System.Windows.Forms.NumericUpDown();
-            this.lblWhatever = new System.Windows.Forms.Label();
-            this.lblBitcoinExplorerEndpoints = new System.Windows.Forms.Label();
-            this.label152 = new System.Windows.Forms.Label();
-            this.lblBlockchainInfoEndpoints = new System.Windows.Forms.Label();
-            this.panel37 = new System.Windows.Forms.Panel();
-            this.label155 = new System.Windows.Forms.Label();
-            this.label164 = new System.Windows.Forms.Label();
-            this.label165 = new System.Windows.Forms.Label();
             this.panel34 = new System.Windows.Forms.Panel();
             this.label163 = new System.Windows.Forms.Label();
+            this.label158 = new System.Windows.Forms.Label();
             this.panel22 = new System.Windows.Forms.Panel();
             this.label162 = new System.Windows.Forms.Label();
-            this.lblSettingsXpubNodeStatus = new System.Windows.Forms.Label();
-            this.lblSettingsXpubNodeStatusLight = new System.Windows.Forms.Label();
-            this.textBoxSettingsXpubMempoolURL = new System.Windows.Forms.TextBox();
-            this.label160 = new System.Windows.Forms.Label();
             this.label159 = new System.Windows.Forms.Label();
-            this.lblURLWarning = new System.Windows.Forms.Label();
-            this.label158 = new System.Windows.Forms.Label();
+            this.lblSettingsXpubNodeStatusLight = new System.Windows.Forms.Label();
+            this.lblSettingsXpubNodeStatus = new System.Windows.Forms.Label();
+            this.label165 = new System.Windows.Forms.Label();
+            this.panel37 = new System.Windows.Forms.Panel();
+            this.label155 = new System.Windows.Forms.Label();
             this.btnColorLabels = new System.Windows.Forms.Button();
             this.label73 = new System.Windows.Forms.Label();
             this.btnColorDataFields = new System.Windows.Forms.Button();
@@ -682,6 +688,8 @@
             this.headerNetworkStatusLight = new System.Windows.Forms.Label();
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
+            this.panel78 = new System.Windows.Forms.Panel();
+            this.label160 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -757,10 +765,14 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
+            this.panel77.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).BeginInit();
-            this.panel37.SuspendLayout();
+            this.panel76.SuspendLayout();
+            this.panel74.SuspendLayout();
+            this.panel75.SuspendLayout();
             this.panel34.SuspendLayout();
             this.panel22.SuspendLayout();
+            this.panel37.SuspendLayout();
             this.panel58.SuspendLayout();
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
@@ -781,6 +793,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
+            this.panel78.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -3884,6 +3897,7 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.panel78);
             this.panelBlock.Controls.Add(this.panel56);
             this.panelBlock.Controls.Add(this.panel55);
             this.panelBlock.Controls.Add(this.panel54);
@@ -8065,218 +8079,48 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
-            this.panelSettings.Controls.Add(this.label198);
-            this.panelSettings.Controls.Add(this.textBoxSettingsCustomMempoolURL);
-            this.panelSettings.Controls.Add(this.lblLightningDashboard);
-            this.panelSettings.Controls.Add(this.label169);
-            this.panelSettings.Controls.Add(this.lblSettingsNodeCustom);
-            this.panelSettings.Controls.Add(this.lblMempoolLightningJSON);
-            this.panelSettings.Controls.Add(this.label171);
-            this.panelSettings.Controls.Add(this.label174);
-            this.panelSettings.Controls.Add(this.lblBitcoinDashboard);
-            this.panelSettings.Controls.Add(this.label167);
-            this.panelSettings.Controls.Add(this.lblSettingsNodeTestnet);
-            this.panelSettings.Controls.Add(this.lblBlockchairComJSON);
-            this.panelSettings.Controls.Add(this.label4);
-            this.panelSettings.Controls.Add(this.label172);
-            this.panelSettings.Controls.Add(this.label6);
-            this.panelSettings.Controls.Add(this.numericUpDownDashboardRefresh);
-            this.panelSettings.Controls.Add(this.lblSettingsNodeMainnet);
-            this.panelSettings.Controls.Add(this.lblWhatever);
-            this.panelSettings.Controls.Add(this.lblBitcoinExplorerEndpoints);
-            this.panelSettings.Controls.Add(this.label157);
-            this.panelSettings.Controls.Add(this.label152);
-            this.panelSettings.Controls.Add(this.lblBlockchainInfoEndpoints);
+            this.panelSettings.Controls.Add(this.panel77);
+            this.panelSettings.Controls.Add(this.panel76);
+            this.panelSettings.Controls.Add(this.panel74);
+            this.panelSettings.Controls.Add(this.panel75);
             this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatus);
-            this.panelSettings.Controls.Add(this.panel37);
-            this.panelSettings.Controls.Add(this.label164);
             this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatusLight);
-            this.panelSettings.Controls.Add(this.label165);
-            this.panelSettings.Controls.Add(this.panel22);
-            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatus);
-            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatusLight);
-            this.panelSettings.Controls.Add(this.textBoxSettingsXpubMempoolURL);
-            this.panelSettings.Controls.Add(this.label160);
-            this.panelSettings.Controls.Add(this.label159);
             this.panelSettings.Controls.Add(this.panel34);
-            this.panelSettings.Controls.Add(this.lblURLWarning);
             this.panelSettings.Controls.Add(this.label158);
+            this.panelSettings.Controls.Add(this.panel22);
+            this.panelSettings.Controls.Add(this.label159);
+            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatusLight);
+            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatus);
+            this.panelSettings.Controls.Add(this.label165);
+            this.panelSettings.Controls.Add(this.panel37);
             this.panelSettings.Location = new System.Drawing.Point(21, 188);
             this.panelSettings.Name = "panelSettings";
             this.panelSettings.Size = new System.Drawing.Size(773, 556);
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
             // 
-            // label198
+            // panel77
             // 
-            this.label198.AutoSize = true;
-            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label198.ForeColor = System.Drawing.Color.Silver;
-            this.label198.Location = new System.Drawing.Point(544, 433);
-            this.label198.Name = "label198";
-            this.label198.Size = new System.Drawing.Size(107, 20);
-            this.label198.TabIndex = 240;
-            this.label198.Text = "(1 - 1440 mins)";
-            // 
-            // textBoxSettingsCustomMempoolURL
-            // 
-            this.textBoxSettingsCustomMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxSettingsCustomMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSettingsCustomMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSettingsCustomMempoolURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxSettingsCustomMempoolURL.Location = new System.Drawing.Point(312, 114);
-            this.textBoxSettingsCustomMempoolURL.Name = "textBoxSettingsCustomMempoolURL";
-            this.textBoxSettingsCustomMempoolURL.Size = new System.Drawing.Size(213, 25);
-            this.textBoxSettingsCustomMempoolURL.TabIndex = 239;
-            this.textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-            this.textBoxSettingsCustomMempoolURL.TextChanged += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_TextChanged);
-            this.textBoxSettingsCustomMempoolURL.Enter += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_Enter);
-            this.textBoxSettingsCustomMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsCustomMempoolURL_KeyPress);
-            this.textBoxSettingsCustomMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsCustomMempoolURL_KeyUp);
-            this.textBoxSettingsCustomMempoolURL.Leave += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_Leave);
-            // 
-            // lblSettingsNodeCustom
-            // 
-            this.lblSettingsNodeCustom.AutoSize = true;
-            this.lblSettingsNodeCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblSettingsNodeCustom.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblSettingsNodeCustom.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsNodeCustom.Location = new System.Drawing.Point(190, 116);
-            this.lblSettingsNodeCustom.Name = "lblSettingsNodeCustom";
-            this.lblSettingsNodeCustom.Size = new System.Drawing.Size(23, 18);
-            this.lblSettingsNodeCustom.TabIndex = 238;
-            this.lblSettingsNodeCustom.Text = "❌";
-            this.lblSettingsNodeCustom.Click += new System.EventHandler(this.LblSettingsNodeCustom_Click);
-            // 
-            // label174
-            // 
-            this.label174.AutoSize = true;
-            this.label174.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label174.ForeColor = System.Drawing.Color.Silver;
-            this.label174.Location = new System.Drawing.Point(212, 117);
-            this.label174.Name = "label174";
-            this.label174.Size = new System.Drawing.Size(64, 20);
-            this.label174.TabIndex = 237;
-            this.label174.Text = "Custom";
-            // 
-            // lblSettingsNodeTestnet
-            // 
-            this.lblSettingsNodeTestnet.AutoSize = true;
-            this.lblSettingsNodeTestnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblSettingsNodeTestnet.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblSettingsNodeTestnet.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsNodeTestnet.Location = new System.Drawing.Point(105, 116);
-            this.lblSettingsNodeTestnet.Name = "lblSettingsNodeTestnet";
-            this.lblSettingsNodeTestnet.Size = new System.Drawing.Size(23, 18);
-            this.lblSettingsNodeTestnet.TabIndex = 236;
-            this.lblSettingsNodeTestnet.Text = "❌";
-            this.lblSettingsNodeTestnet.Click += new System.EventHandler(this.LblSettingsNodeTestnet_Click);
-            // 
-            // label172
-            // 
-            this.label172.AutoSize = true;
-            this.label172.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label172.ForeColor = System.Drawing.Color.Silver;
-            this.label172.Location = new System.Drawing.Point(127, 117);
-            this.label172.Name = "label172";
-            this.label172.Size = new System.Drawing.Size(59, 20);
-            this.label172.TabIndex = 235;
-            this.label172.Text = "Testnet";
-            // 
-            // lblSettingsNodeMainnet
-            // 
-            this.lblSettingsNodeMainnet.AutoSize = true;
-            this.lblSettingsNodeMainnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblSettingsNodeMainnet.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblSettingsNodeMainnet.ForeColor = System.Drawing.Color.Green;
-            this.lblSettingsNodeMainnet.Location = new System.Drawing.Point(8, 116);
-            this.lblSettingsNodeMainnet.Name = "lblSettingsNodeMainnet";
-            this.lblSettingsNodeMainnet.Size = new System.Drawing.Size(23, 18);
-            this.lblSettingsNodeMainnet.TabIndex = 234;
-            this.lblSettingsNodeMainnet.Text = "✔️";
-            this.lblSettingsNodeMainnet.Click += new System.EventHandler(this.LblSettingsNodeMainnet_Click);
-            // 
-            // label157
-            // 
-            this.label157.AutoSize = true;
-            this.label157.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label157.ForeColor = System.Drawing.Color.Silver;
-            this.label157.Location = new System.Drawing.Point(29, 117);
-            this.label157.Name = "label157";
-            this.label157.Size = new System.Drawing.Size(70, 20);
-            this.label157.TabIndex = 233;
-            this.label157.Text = "Mainnet";
-            // 
-            // lblSettingsCustomNodeStatus
-            // 
-            this.lblSettingsCustomNodeStatus.AutoSize = true;
-            this.lblSettingsCustomNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsCustomNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(562, 115);
-            this.lblSettingsCustomNodeStatus.Name = "lblSettingsCustomNodeStatus";
-            this.lblSettingsCustomNodeStatus.Size = new System.Drawing.Size(160, 20);
-            this.lblSettingsCustomNodeStatus.TabIndex = 232;
-            this.lblSettingsCustomNodeStatus.Text = "invalid / node offline";
-            // 
-            // lblSettingsCustomNodeStatusLight
-            // 
-            this.lblSettingsCustomNodeStatusLight.AutoSize = true;
-            this.lblSettingsCustomNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSettingsCustomNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsCustomNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(533, 118);
-            this.lblSettingsCustomNodeStatusLight.Name = "lblSettingsCustomNodeStatusLight";
-            this.lblSettingsCustomNodeStatusLight.Size = new System.Drawing.Size(23, 18);
-            this.lblSettingsCustomNodeStatusLight.TabIndex = 231;
-            this.lblSettingsCustomNodeStatusLight.Text = "🟢";
-            // 
-            // lblLightningDashboard
-            // 
-            this.lblLightningDashboard.AutoSize = true;
-            this.lblLightningDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblLightningDashboard.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblLightningDashboard.ForeColor = System.Drawing.Color.Green;
-            this.lblLightningDashboard.Location = new System.Drawing.Point(287, 412);
-            this.lblLightningDashboard.Name = "lblLightningDashboard";
-            this.lblLightningDashboard.Size = new System.Drawing.Size(23, 18);
-            this.lblLightningDashboard.TabIndex = 229;
-            this.lblLightningDashboard.Text = "✔️";
-            this.lblLightningDashboard.Click += new System.EventHandler(this.LblLightningDashboard_Click);
-            // 
-            // label169
-            // 
-            this.label169.AutoSize = true;
-            this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label169.ForeColor = System.Drawing.Color.Silver;
-            this.label169.Location = new System.Drawing.Point(309, 413);
-            this.label169.Name = "label169";
-            this.label169.Size = new System.Drawing.Size(208, 20);
-            this.label169.TabIndex = 228;
-            this.label169.Text = "Enable lightning dashboard";
-            // 
-            // lblMempoolLightningJSON
-            // 
-            this.lblMempoolLightningJSON.AutoSize = true;
-            this.lblMempoolLightningJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblMempoolLightningJSON.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblMempoolLightningJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblMempoolLightningJSON.Location = new System.Drawing.Point(313, 432);
-            this.lblMempoolLightningJSON.Name = "lblMempoolLightningJSON";
-            this.lblMempoolLightningJSON.Size = new System.Drawing.Size(23, 18);
-            this.lblMempoolLightningJSON.TabIndex = 227;
-            this.lblMempoolLightningJSON.Text = "✔️";
-            this.lblMempoolLightningJSON.Click += new System.EventHandler(this.LblMempoolLightningJSON_Click);
-            // 
-            // label171
-            // 
-            this.label171.AutoSize = true;
-            this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label171.ForeColor = System.Drawing.Color.Silver;
-            this.label171.Location = new System.Drawing.Point(335, 433);
-            this.label171.Name = "label171";
-            this.label171.Size = new System.Drawing.Size(157, 20);
-            this.label171.TabIndex = 226;
-            this.label171.Text = "mempool.space API";
+            this.panel77.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel77.Controls.Add(this.lblBitcoinDashboard);
+            this.panel77.Controls.Add(this.numericUpDownDashboardRefresh);
+            this.panel77.Controls.Add(this.label6);
+            this.panel77.Controls.Add(this.lblWhatever);
+            this.panel77.Controls.Add(this.label198);
+            this.panel77.Controls.Add(this.lblBitcoinExplorerEndpoints);
+            this.panel77.Controls.Add(this.label4);
+            this.panel77.Controls.Add(this.label152);
+            this.panel77.Controls.Add(this.lblLightningDashboard);
+            this.panel77.Controls.Add(this.lblBlockchainInfoEndpoints);
+            this.panel77.Controls.Add(this.lblBlockchairComJSON);
+            this.panel77.Controls.Add(this.label169);
+            this.panel77.Controls.Add(this.label167);
+            this.panel77.Controls.Add(this.label171);
+            this.panel77.Controls.Add(this.lblMempoolLightningJSON);
+            this.panel77.Location = new System.Drawing.Point(0, 443);
+            this.panel77.Name = "panel77";
+            this.panel77.Size = new System.Drawing.Size(755, 91);
+            this.panel77.TabIndex = 244;
             // 
             // lblBitcoinDashboard
             // 
@@ -8284,58 +8128,12 @@
             this.lblBitcoinDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBitcoinDashboard.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBitcoinDashboard.ForeColor = System.Drawing.Color.Green;
-            this.lblBitcoinDashboard.Location = new System.Drawing.Point(8, 412);
+            this.lblBitcoinDashboard.Location = new System.Drawing.Point(6, 7);
             this.lblBitcoinDashboard.Name = "lblBitcoinDashboard";
             this.lblBitcoinDashboard.Size = new System.Drawing.Size(23, 18);
             this.lblBitcoinDashboard.TabIndex = 225;
             this.lblBitcoinDashboard.Text = "✔️";
             this.lblBitcoinDashboard.Click += new System.EventHandler(this.LblBitcoinDashboard_Click);
-            // 
-            // label167
-            // 
-            this.label167.AutoSize = true;
-            this.label167.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label167.ForeColor = System.Drawing.Color.Silver;
-            this.label167.Location = new System.Drawing.Point(30, 413);
-            this.label167.Name = "label167";
-            this.label167.Size = new System.Drawing.Size(197, 20);
-            this.label167.TabIndex = 224;
-            this.label167.Text = "Enable bitcoin dashboard";
-            // 
-            // lblBlockchairComJSON
-            // 
-            this.lblBlockchairComJSON.AutoSize = true;
-            this.lblBlockchairComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblBlockchairComJSON.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockchairComJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchairComJSON.Location = new System.Drawing.Point(34, 432);
-            this.lblBlockchairComJSON.Name = "lblBlockchairComJSON";
-            this.lblBlockchairComJSON.Size = new System.Drawing.Size(23, 18);
-            this.lblBlockchairComJSON.TabIndex = 52;
-            this.lblBlockchairComJSON.Text = "✔️";
-            this.lblBlockchairComJSON.Click += new System.EventHandler(this.LblBlockchairComJSON_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(56, 433);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(153, 20);
-            this.label4.TabIndex = 51;
-            this.label4.Text = "blockchair.com API";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Silver;
-            this.label6.Location = new System.Drawing.Point(544, 413);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(143, 20);
-            this.label6.TabIndex = 48;
-            this.label6.Text = "Refresh frequency";
             // 
             // numericUpDownDashboardRefresh
             // 
@@ -8343,7 +8141,7 @@
             this.numericUpDownDashboardRefresh.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numericUpDownDashboardRefresh.Font = new System.Drawing.Font("Consolas", 9F);
             this.numericUpDownDashboardRefresh.ForeColor = System.Drawing.Color.Silver;
-            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(691, 414);
+            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(689, 9);
             this.numericUpDownDashboardRefresh.Maximum = new decimal(new int[] {
             1440,
             0,
@@ -8365,16 +8163,38 @@
             0});
             this.numericUpDownDashboardRefresh.ValueChanged += new System.EventHandler(this.NumericUpDownDashboardRefresh_ValueChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Silver;
+            this.label6.Location = new System.Drawing.Point(542, 8);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(143, 20);
+            this.label6.TabIndex = 48;
+            this.label6.Text = "Refresh frequency";
+            // 
             // lblWhatever
             // 
             this.lblWhatever.AutoSize = true;
             this.lblWhatever.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWhatever.ForeColor = System.Drawing.Color.Silver;
-            this.lblWhatever.Location = new System.Drawing.Point(56, 453);
+            this.lblWhatever.Location = new System.Drawing.Point(54, 48);
             this.lblWhatever.Name = "lblWhatever";
             this.lblWhatever.Size = new System.Drawing.Size(177, 20);
             this.lblWhatever.TabIndex = 41;
             this.lblWhatever.Text = "bitcoinexplorer.org API";
+            // 
+            // label198
+            // 
+            this.label198.AutoSize = true;
+            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label198.ForeColor = System.Drawing.Color.Silver;
+            this.label198.Location = new System.Drawing.Point(542, 28);
+            this.label198.Name = "label198";
+            this.label198.Size = new System.Drawing.Size(107, 20);
+            this.label198.TabIndex = 240;
+            this.label198.Text = "(1 - 1440 mins)";
             // 
             // lblBitcoinExplorerEndpoints
             // 
@@ -8382,23 +8202,47 @@
             this.lblBitcoinExplorerEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBitcoinExplorerEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBitcoinExplorerEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(34, 452);
+            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(32, 47);
             this.lblBitcoinExplorerEndpoints.Name = "lblBitcoinExplorerEndpoints";
             this.lblBitcoinExplorerEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBitcoinExplorerEndpoints.TabIndex = 42;
             this.lblBitcoinExplorerEndpoints.Text = "✔️";
             this.lblBitcoinExplorerEndpoints.Click += new System.EventHandler(this.LblBitcoinExplorerEndpoints_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Silver;
+            this.label4.Location = new System.Drawing.Point(54, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(153, 20);
+            this.label4.TabIndex = 51;
+            this.label4.Text = "blockchair.com API";
+            // 
             // label152
             // 
             this.label152.AutoSize = true;
             this.label152.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label152.ForeColor = System.Drawing.Color.Silver;
-            this.label152.Location = new System.Drawing.Point(56, 473);
+            this.label152.Location = new System.Drawing.Point(54, 68);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(151, 20);
             this.label152.TabIndex = 43;
             this.label152.Text = "blockchain.info API";
+            // 
+            // lblLightningDashboard
+            // 
+            this.lblLightningDashboard.AutoSize = true;
+            this.lblLightningDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblLightningDashboard.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblLightningDashboard.ForeColor = System.Drawing.Color.Green;
+            this.lblLightningDashboard.Location = new System.Drawing.Point(285, 7);
+            this.lblLightningDashboard.Name = "lblLightningDashboard";
+            this.lblLightningDashboard.Size = new System.Drawing.Size(23, 18);
+            this.lblLightningDashboard.TabIndex = 229;
+            this.lblLightningDashboard.Text = "✔️";
+            this.lblLightningDashboard.Click += new System.EventHandler(this.LblLightningDashboard_Click);
             // 
             // lblBlockchainInfoEndpoints
             // 
@@ -8406,12 +8250,395 @@
             this.lblBlockchainInfoEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBlockchainInfoEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockchainInfoEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(34, 472);
+            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(32, 67);
             this.lblBlockchainInfoEndpoints.Name = "lblBlockchainInfoEndpoints";
             this.lblBlockchainInfoEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBlockchainInfoEndpoints.TabIndex = 44;
             this.lblBlockchainInfoEndpoints.Text = "✔️";
             this.lblBlockchainInfoEndpoints.Click += new System.EventHandler(this.LblBlockchainInfoEndpoints_Click);
+            // 
+            // lblBlockchairComJSON
+            // 
+            this.lblBlockchairComJSON.AutoSize = true;
+            this.lblBlockchairComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblBlockchairComJSON.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBlockchairComJSON.ForeColor = System.Drawing.Color.Green;
+            this.lblBlockchairComJSON.Location = new System.Drawing.Point(32, 27);
+            this.lblBlockchairComJSON.Name = "lblBlockchairComJSON";
+            this.lblBlockchairComJSON.Size = new System.Drawing.Size(23, 18);
+            this.lblBlockchairComJSON.TabIndex = 52;
+            this.lblBlockchairComJSON.Text = "✔️";
+            this.lblBlockchairComJSON.Click += new System.EventHandler(this.LblBlockchairComJSON_Click);
+            // 
+            // label169
+            // 
+            this.label169.AutoSize = true;
+            this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label169.ForeColor = System.Drawing.Color.Silver;
+            this.label169.Location = new System.Drawing.Point(307, 8);
+            this.label169.Name = "label169";
+            this.label169.Size = new System.Drawing.Size(208, 20);
+            this.label169.TabIndex = 228;
+            this.label169.Text = "Enable lightning dashboard";
+            // 
+            // label167
+            // 
+            this.label167.AutoSize = true;
+            this.label167.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label167.ForeColor = System.Drawing.Color.Silver;
+            this.label167.Location = new System.Drawing.Point(28, 8);
+            this.label167.Name = "label167";
+            this.label167.Size = new System.Drawing.Size(197, 20);
+            this.label167.TabIndex = 224;
+            this.label167.Text = "Enable bitcoin dashboard";
+            // 
+            // label171
+            // 
+            this.label171.AutoSize = true;
+            this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label171.ForeColor = System.Drawing.Color.Silver;
+            this.label171.Location = new System.Drawing.Point(333, 28);
+            this.label171.Name = "label171";
+            this.label171.Size = new System.Drawing.Size(157, 20);
+            this.label171.TabIndex = 226;
+            this.label171.Text = "mempool.space API";
+            // 
+            // lblMempoolLightningJSON
+            // 
+            this.lblMempoolLightningJSON.AutoSize = true;
+            this.lblMempoolLightningJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblMempoolLightningJSON.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblMempoolLightningJSON.ForeColor = System.Drawing.Color.Green;
+            this.lblMempoolLightningJSON.Location = new System.Drawing.Point(311, 27);
+            this.lblMempoolLightningJSON.Name = "lblMempoolLightningJSON";
+            this.lblMempoolLightningJSON.Size = new System.Drawing.Size(23, 18);
+            this.lblMempoolLightningJSON.TabIndex = 227;
+            this.lblMempoolLightningJSON.Text = "✔️";
+            this.lblMempoolLightningJSON.Click += new System.EventHandler(this.LblMempoolLightningJSON_Click);
+            // 
+            // panel76
+            // 
+            this.panel76.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel76.Controls.Add(this.label201);
+            this.panel76.Controls.Add(this.label204);
+            this.panel76.Controls.Add(this.textBoxSettingsXpubMempoolURL);
+            this.panel76.Location = new System.Drawing.Point(0, 272);
+            this.panel76.Name = "panel76";
+            this.panel76.Size = new System.Drawing.Size(290, 77);
+            this.panel76.TabIndex = 243;
+            // 
+            // label201
+            // 
+            this.label201.AutoSize = true;
+            this.label201.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label201.ForeColor = System.Drawing.Color.Gray;
+            this.label201.Location = new System.Drawing.Point(5, 3);
+            this.label201.Name = "label201";
+            this.label201.Size = new System.Drawing.Size(255, 20);
+            this.label201.TabIndex = 241;
+            this.label201.Text = "mempool.space on own full node";
+            // 
+            // label204
+            // 
+            this.label204.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label204.ForeColor = System.Drawing.Color.Gray;
+            this.label204.Location = new System.Drawing.Point(7, 56);
+            this.label204.Name = "label204";
+            this.label204.Size = new System.Drawing.Size(280, 21);
+            this.label204.TabIndex = 149;
+            this.label204.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            // 
+            // textBoxSettingsXpubMempoolURL
+            // 
+            this.textBoxSettingsXpubMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxSettingsXpubMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSettingsXpubMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSettingsXpubMempoolURL.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxSettingsXpubMempoolURL.Location = new System.Drawing.Point(10, 28);
+            this.textBoxSettingsXpubMempoolURL.Name = "textBoxSettingsXpubMempoolURL";
+            this.textBoxSettingsXpubMempoolURL.Size = new System.Drawing.Size(213, 25);
+            this.textBoxSettingsXpubMempoolURL.TabIndex = 202;
+            this.textBoxSettingsXpubMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.textBoxSettingsXpubMempoolURL.TextChanged += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_TextChanged);
+            this.textBoxSettingsXpubMempoolURL.Enter += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_Enter);
+            this.textBoxSettingsXpubMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsXpubMempoolURL_KeyPress);
+            this.textBoxSettingsXpubMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsXpubMempoolURL_KeyUp);
+            this.textBoxSettingsXpubMempoolURL.Leave += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_Leave);
+            // 
+            // panel74
+            // 
+            this.panel74.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel74.Controls.Add(this.label199);
+            this.panel74.Controls.Add(this.label157);
+            this.panel74.Controls.Add(this.lblSettingsNodeMainnet);
+            this.panel74.Controls.Add(this.label172);
+            this.panel74.Controls.Add(this.lblSettingsNodeTestnet);
+            this.panel74.Location = new System.Drawing.Point(0, 98);
+            this.panel74.Name = "panel74";
+            this.panel74.Size = new System.Drawing.Size(203, 77);
+            this.panel74.TabIndex = 241;
+            // 
+            // label199
+            // 
+            this.label199.AutoSize = true;
+            this.label199.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label199.ForeColor = System.Drawing.Color.Gray;
+            this.label199.Location = new System.Drawing.Point(5, 3);
+            this.label199.Name = "label199";
+            this.label199.Size = new System.Drawing.Size(128, 20);
+            this.label199.TabIndex = 241;
+            this.label199.Text = "mempool.space";
+            // 
+            // label157
+            // 
+            this.label157.AutoSize = true;
+            this.label157.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label157.ForeColor = System.Drawing.Color.Silver;
+            this.label157.Location = new System.Drawing.Point(36, 30);
+            this.label157.Name = "label157";
+            this.label157.Size = new System.Drawing.Size(70, 20);
+            this.label157.TabIndex = 233;
+            this.label157.Text = "Mainnet";
+            // 
+            // lblSettingsNodeMainnet
+            // 
+            this.lblSettingsNodeMainnet.AutoSize = true;
+            this.lblSettingsNodeMainnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblSettingsNodeMainnet.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblSettingsNodeMainnet.ForeColor = System.Drawing.Color.Green;
+            this.lblSettingsNodeMainnet.Location = new System.Drawing.Point(15, 29);
+            this.lblSettingsNodeMainnet.Name = "lblSettingsNodeMainnet";
+            this.lblSettingsNodeMainnet.Size = new System.Drawing.Size(23, 18);
+            this.lblSettingsNodeMainnet.TabIndex = 234;
+            this.lblSettingsNodeMainnet.Text = "✔️";
+            this.lblSettingsNodeMainnet.Click += new System.EventHandler(this.LblSettingsNodeMainnet_Click);
+            // 
+            // label172
+            // 
+            this.label172.AutoSize = true;
+            this.label172.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label172.ForeColor = System.Drawing.Color.Silver;
+            this.label172.Location = new System.Drawing.Point(134, 30);
+            this.label172.Name = "label172";
+            this.label172.Size = new System.Drawing.Size(59, 20);
+            this.label172.TabIndex = 235;
+            this.label172.Text = "Testnet";
+            // 
+            // lblSettingsNodeTestnet
+            // 
+            this.lblSettingsNodeTestnet.AutoSize = true;
+            this.lblSettingsNodeTestnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblSettingsNodeTestnet.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblSettingsNodeTestnet.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblSettingsNodeTestnet.Location = new System.Drawing.Point(112, 29);
+            this.lblSettingsNodeTestnet.Name = "lblSettingsNodeTestnet";
+            this.lblSettingsNodeTestnet.Size = new System.Drawing.Size(23, 18);
+            this.lblSettingsNodeTestnet.TabIndex = 236;
+            this.lblSettingsNodeTestnet.Text = "❌";
+            this.lblSettingsNodeTestnet.Click += new System.EventHandler(this.LblSettingsNodeTestnet_Click);
+            // 
+            // panel75
+            // 
+            this.panel75.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel75.Controls.Add(this.label200);
+            this.panel75.Controls.Add(this.lblSettingsNodeCustom);
+            this.panel75.Controls.Add(this.textBoxSettingsCustomMempoolURL);
+            this.panel75.Controls.Add(this.label174);
+            this.panel75.Controls.Add(this.lblURLWarning);
+            this.panel75.Location = new System.Drawing.Point(210, 98);
+            this.panel75.Name = "panel75";
+            this.panel75.Size = new System.Drawing.Size(330, 77);
+            this.panel75.TabIndex = 242;
+            // 
+            // label200
+            // 
+            this.label200.AutoSize = true;
+            this.label200.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label200.ForeColor = System.Drawing.Color.Gray;
+            this.label200.Location = new System.Drawing.Point(5, 3);
+            this.label200.Name = "label200";
+            this.label200.Size = new System.Drawing.Size(255, 20);
+            this.label200.TabIndex = 241;
+            this.label200.Text = "mempool.space on own full node";
+            // 
+            // lblSettingsNodeCustom
+            // 
+            this.lblSettingsNodeCustom.AutoSize = true;
+            this.lblSettingsNodeCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblSettingsNodeCustom.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblSettingsNodeCustom.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblSettingsNodeCustom.Location = new System.Drawing.Point(6, 29);
+            this.lblSettingsNodeCustom.Name = "lblSettingsNodeCustom";
+            this.lblSettingsNodeCustom.Size = new System.Drawing.Size(23, 18);
+            this.lblSettingsNodeCustom.TabIndex = 238;
+            this.lblSettingsNodeCustom.Text = "❌";
+            this.lblSettingsNodeCustom.Click += new System.EventHandler(this.LblSettingsNodeCustom_Click);
+            // 
+            // textBoxSettingsCustomMempoolURL
+            // 
+            this.textBoxSettingsCustomMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxSettingsCustomMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSettingsCustomMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSettingsCustomMempoolURL.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxSettingsCustomMempoolURL.Location = new System.Drawing.Point(91, 25);
+            this.textBoxSettingsCustomMempoolURL.Name = "textBoxSettingsCustomMempoolURL";
+            this.textBoxSettingsCustomMempoolURL.Size = new System.Drawing.Size(213, 25);
+            this.textBoxSettingsCustomMempoolURL.TabIndex = 239;
+            this.textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.textBoxSettingsCustomMempoolURL.TextChanged += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_TextChanged);
+            this.textBoxSettingsCustomMempoolURL.Enter += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_Enter);
+            this.textBoxSettingsCustomMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsCustomMempoolURL_KeyPress);
+            this.textBoxSettingsCustomMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsCustomMempoolURL_KeyUp);
+            this.textBoxSettingsCustomMempoolURL.Leave += new System.EventHandler(this.TextBoxSettingsCustomMempoolURL_Leave);
+            // 
+            // label174
+            // 
+            this.label174.AutoSize = true;
+            this.label174.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label174.ForeColor = System.Drawing.Color.Silver;
+            this.label174.Location = new System.Drawing.Point(28, 30);
+            this.label174.Name = "label174";
+            this.label174.Size = new System.Drawing.Size(64, 20);
+            this.label174.TabIndex = 237;
+            this.label174.Text = "Custom";
+            // 
+            // lblURLWarning
+            // 
+            this.lblURLWarning.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
+            this.lblURLWarning.Location = new System.Drawing.Point(50, 56);
+            this.lblURLWarning.Name = "lblURLWarning";
+            this.lblURLWarning.Size = new System.Drawing.Size(280, 21);
+            this.lblURLWarning.TabIndex = 149;
+            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            // 
+            // lblSettingsCustomNodeStatus
+            // 
+            this.lblSettingsCustomNodeStatus.AutoSize = true;
+            this.lblSettingsCustomNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsCustomNodeStatus.ForeColor = System.Drawing.Color.Silver;
+            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(585, 127);
+            this.lblSettingsCustomNodeStatus.Name = "lblSettingsCustomNodeStatus";
+            this.lblSettingsCustomNodeStatus.Size = new System.Drawing.Size(160, 20);
+            this.lblSettingsCustomNodeStatus.TabIndex = 232;
+            this.lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            // 
+            // lblSettingsCustomNodeStatusLight
+            // 
+            this.lblSettingsCustomNodeStatusLight.AutoSize = true;
+            this.lblSettingsCustomNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSettingsCustomNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsCustomNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(556, 130);
+            this.lblSettingsCustomNodeStatusLight.Name = "lblSettingsCustomNodeStatusLight";
+            this.lblSettingsCustomNodeStatusLight.Size = new System.Drawing.Size(23, 18);
+            this.lblSettingsCustomNodeStatusLight.TabIndex = 231;
+            this.lblSettingsCustomNodeStatusLight.Text = "🟢";
+            // 
+            // panel34
+            // 
+            this.panel34.BackColor = System.Drawing.Color.Transparent;
+            this.panel34.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel34.BackgroundImage")));
+            this.panel34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel34.Controls.Add(this.label163);
+            this.panel34.Location = new System.Drawing.Point(0, 15);
+            this.panel34.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel34.Name = "panel34";
+            this.panel34.Size = new System.Drawing.Size(375, 23);
+            this.panel34.TabIndex = 209;
+            // 
+            // label163
+            // 
+            this.label163.AutoSize = true;
+            this.label163.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label163.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label163.ForeColor = System.Drawing.Color.Gray;
+            this.label163.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label163.Location = new System.Drawing.Point(0, 2);
+            this.label163.Margin = new System.Windows.Forms.Padding(0);
+            this.label163.Name = "label163";
+            this.label163.Size = new System.Drawing.Size(294, 20);
+            this.label163.TabIndex = 153;
+            this.label163.Text = "Network - on-chain queries (exc. Xpub)";
+            // 
+            // label158
+            // 
+            this.label158.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label158.ForeColor = System.Drawing.Color.Gray;
+            this.label158.Location = new System.Drawing.Point(0, 41);
+            this.label158.Name = "label158";
+            this.label158.Size = new System.Drawing.Size(760, 64);
+            this.label158.TabIndex = 143;
+            this.label158.Text = resources.GetString("label158.Text");
+            // 
+            // panel22
+            // 
+            this.panel22.BackColor = System.Drawing.Color.Transparent;
+            this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
+            this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel22.Controls.Add(this.label162);
+            this.panel22.Location = new System.Drawing.Point(0, 190);
+            this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel22.Name = "panel22";
+            this.panel22.Size = new System.Drawing.Size(375, 23);
+            this.panel22.TabIndex = 208;
+            // 
+            // label162
+            // 
+            this.label162.AutoSize = true;
+            this.label162.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label162.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label162.ForeColor = System.Drawing.Color.Gray;
+            this.label162.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label162.Location = new System.Drawing.Point(0, 2);
+            this.label162.Margin = new System.Windows.Forms.Padding(0);
+            this.label162.Name = "label162";
+            this.label162.Size = new System.Drawing.Size(214, 20);
+            this.label162.TabIndex = 153;
+            this.label162.Text = "Network - Xpub queries only";
+            // 
+            // label159
+            // 
+            this.label159.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label159.ForeColor = System.Drawing.Color.Gray;
+            this.label159.Location = new System.Drawing.Point(0, 216);
+            this.label159.Name = "label159";
+            this.label159.Size = new System.Drawing.Size(760, 62);
+            this.label159.TabIndex = 150;
+            this.label159.Text = resources.GetString("label159.Text");
+            // 
+            // lblSettingsXpubNodeStatusLight
+            // 
+            this.lblSettingsXpubNodeStatusLight.AutoSize = true;
+            this.lblSettingsXpubNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSettingsXpubNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsXpubNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(305, 304);
+            this.lblSettingsXpubNodeStatusLight.Name = "lblSettingsXpubNodeStatusLight";
+            this.lblSettingsXpubNodeStatusLight.Size = new System.Drawing.Size(23, 18);
+            this.lblSettingsXpubNodeStatusLight.TabIndex = 221;
+            this.lblSettingsXpubNodeStatusLight.Text = "🟢";
+            // 
+            // lblSettingsXpubNodeStatus
+            // 
+            this.lblSettingsXpubNodeStatus.AutoSize = true;
+            this.lblSettingsXpubNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsXpubNodeStatus.ForeColor = System.Drawing.Color.Silver;
+            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(326, 301);
+            this.lblSettingsXpubNodeStatus.Name = "lblSettingsXpubNodeStatus";
+            this.lblSettingsXpubNodeStatus.Size = new System.Drawing.Size(160, 20);
+            this.lblSettingsXpubNodeStatus.TabIndex = 222;
+            this.lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+            // 
+            // label165
+            // 
+            this.label165.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label165.ForeColor = System.Drawing.Color.Gray;
+            this.label165.Location = new System.Drawing.Point(0, 386);
+            this.label165.Name = "label165";
+            this.label165.Size = new System.Drawing.Size(760, 63);
+            this.label165.TabIndex = 210;
+            this.label165.Text = resources.GetString("label165.Text");
             // 
             // panel37
             // 
@@ -8419,10 +8646,10 @@
             this.panel37.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel37.BackgroundImage")));
             this.panel37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel37.Controls.Add(this.label155);
-            this.panel37.Location = new System.Drawing.Point(0, 329);
+            this.panel37.Location = new System.Drawing.Point(0, 360);
             this.panel37.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(224, 23);
+            this.panel37.Size = new System.Drawing.Size(375, 23);
             this.panel37.TabIndex = 211;
             // 
             // label155
@@ -8438,159 +8665,6 @@
             this.label155.Size = new System.Drawing.Size(96, 20);
             this.label155.TabIndex = 153;
             this.label155.Text = "Dashboards";
-            // 
-            // label164
-            // 
-            this.label164.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label164.ForeColor = System.Drawing.Color.Gray;
-            this.label164.Location = new System.Drawing.Point(92, 290);
-            this.label164.Name = "label164";
-            this.label164.Size = new System.Drawing.Size(319, 20);
-            this.label164.TabIndex = 223;
-            this.label164.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
-            // 
-            // label165
-            // 
-            this.label165.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label165.ForeColor = System.Drawing.Color.Gray;
-            this.label165.Location = new System.Drawing.Point(0, 355);
-            this.label165.Name = "label165";
-            this.label165.Size = new System.Drawing.Size(760, 63);
-            this.label165.TabIndex = 210;
-            this.label165.Text = resources.GetString("label165.Text");
-            // 
-            // panel34
-            // 
-            this.panel34.BackColor = System.Drawing.Color.Transparent;
-            this.panel34.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel34.BackgroundImage")));
-            this.panel34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel34.Controls.Add(this.label163);
-            this.panel34.Location = new System.Drawing.Point(0, 15);
-            this.panel34.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(224, 23);
-            this.panel34.TabIndex = 209;
-            // 
-            // label163
-            // 
-            this.label163.AutoSize = true;
-            this.label163.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label163.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label163.ForeColor = System.Drawing.Color.Gray;
-            this.label163.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label163.Location = new System.Drawing.Point(0, 2);
-            this.label163.Margin = new System.Windows.Forms.Padding(0);
-            this.label163.Name = "label163";
-            this.label163.Size = new System.Drawing.Size(206, 20);
-            this.label163.TabIndex = 153;
-            this.label163.Text = "Address, block, transaction";
-            // 
-            // panel22
-            // 
-            this.panel22.BackColor = System.Drawing.Color.Transparent;
-            this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
-            this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel22.Controls.Add(this.label162);
-            this.panel22.Location = new System.Drawing.Point(0, 178);
-            this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(218, 23);
-            this.panel22.TabIndex = 208;
-            // 
-            // label162
-            // 
-            this.label162.AutoSize = true;
-            this.label162.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label162.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label162.ForeColor = System.Drawing.Color.Gray;
-            this.label162.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label162.Location = new System.Drawing.Point(0, 2);
-            this.label162.Margin = new System.Windows.Forms.Padding(0);
-            this.label162.Name = "label162";
-            this.label162.Size = new System.Drawing.Size(47, 20);
-            this.label162.TabIndex = 153;
-            this.label162.Text = "Xpub";
-            // 
-            // lblSettingsXpubNodeStatus
-            // 
-            this.lblSettingsXpubNodeStatus.AutoSize = true;
-            this.lblSettingsXpubNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsXpubNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(331, 266);
-            this.lblSettingsXpubNodeStatus.Name = "lblSettingsXpubNodeStatus";
-            this.lblSettingsXpubNodeStatus.Size = new System.Drawing.Size(160, 20);
-            this.lblSettingsXpubNodeStatus.TabIndex = 222;
-            this.lblSettingsXpubNodeStatus.Text = "invalid / node offline";
-            // 
-            // lblSettingsXpubNodeStatusLight
-            // 
-            this.lblSettingsXpubNodeStatusLight.AutoSize = true;
-            this.lblSettingsXpubNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSettingsXpubNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsXpubNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(310, 269);
-            this.lblSettingsXpubNodeStatusLight.Name = "lblSettingsXpubNodeStatusLight";
-            this.lblSettingsXpubNodeStatusLight.Size = new System.Drawing.Size(23, 18);
-            this.lblSettingsXpubNodeStatusLight.TabIndex = 221;
-            this.lblSettingsXpubNodeStatusLight.Text = "🟢";
-            // 
-            // textBoxSettingsXpubMempoolURL
-            // 
-            this.textBoxSettingsXpubMempoolURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxSettingsXpubMempoolURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSettingsXpubMempoolURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSettingsXpubMempoolURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxSettingsXpubMempoolURL.Location = new System.Drawing.Point(95, 265);
-            this.textBoxSettingsXpubMempoolURL.Name = "textBoxSettingsXpubMempoolURL";
-            this.textBoxSettingsXpubMempoolURL.Size = new System.Drawing.Size(213, 25);
-            this.textBoxSettingsXpubMempoolURL.TabIndex = 202;
-            this.textBoxSettingsXpubMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-            this.textBoxSettingsXpubMempoolURL.TextChanged += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_TextChanged);
-            this.textBoxSettingsXpubMempoolURL.Enter += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_Enter);
-            this.textBoxSettingsXpubMempoolURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsXpubMempoolURL_KeyPress);
-            this.textBoxSettingsXpubMempoolURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsXpubMempoolURL_KeyUp);
-            this.textBoxSettingsXpubMempoolURL.Leave += new System.EventHandler(this.TextBoxSettingsXpubMempoolURL_Leave);
-            // 
-            // label160
-            // 
-            this.label160.AutoSize = true;
-            this.label160.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label160.ForeColor = System.Drawing.Color.Silver;
-            this.label160.Location = new System.Drawing.Point(1, 266);
-            this.label160.Name = "label160";
-            this.label160.Size = new System.Drawing.Size(90, 20);
-            this.label160.TabIndex = 201;
-            this.label160.Text = "Path to API";
-            // 
-            // label159
-            // 
-            this.label159.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label159.ForeColor = System.Drawing.Color.Gray;
-            this.label159.Location = new System.Drawing.Point(0, 204);
-            this.label159.Name = "label159";
-            this.label159.Size = new System.Drawing.Size(760, 62);
-            this.label159.TabIndex = 150;
-            this.label159.Text = resources.GetString("label159.Text");
-            // 
-            // lblURLWarning
-            // 
-            this.lblURLWarning.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
-            this.lblURLWarning.Location = new System.Drawing.Point(309, 145);
-            this.lblURLWarning.Name = "lblURLWarning";
-            this.lblURLWarning.Size = new System.Drawing.Size(319, 20);
-            this.lblURLWarning.TabIndex = 149;
-            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
-            // 
-            // label158
-            // 
-            this.label158.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label158.ForeColor = System.Drawing.Color.Gray;
-            this.label158.Location = new System.Drawing.Point(0, 41);
-            this.label158.Name = "label158";
-            this.label158.Size = new System.Drawing.Size(760, 64);
-            this.label158.TabIndex = 143;
-            this.label158.Text = resources.GetString("label158.Text");
             // 
             // btnColorLabels
             // 
@@ -10005,6 +10079,26 @@
             this.hideThemeDeletedTimer.Interval = 2000;
             this.hideThemeDeletedTimer.Tick += new System.EventHandler(this.HideThemeDeletedTimer_Tick);
             // 
+            // panel78
+            // 
+            this.panel78.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel78.Controls.Add(this.label160);
+            this.panel78.Location = new System.Drawing.Point(250, 465);
+            this.panel78.Name = "panel78";
+            this.panel78.Size = new System.Drawing.Size(499, 41);
+            this.panel78.TabIndex = 212;
+            // 
+            // label160
+            // 
+            this.label160.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label160.ForeColor = System.Drawing.Color.Gray;
+            this.label160.Location = new System.Drawing.Point(9, 3);
+            this.label160.Name = "label160";
+            this.label160.Size = new System.Drawing.Size(482, 51);
+            this.label160.TabIndex = 144;
+            this.label160.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
+    "at a time.";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10014,6 +10108,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAppearance);
@@ -10024,7 +10119,6 @@
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelHeaderBlockHeight);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelTransaction);
@@ -10189,13 +10283,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
             this.panelSettings.PerformLayout();
+            this.panel77.ResumeLayout(false);
+            this.panel77.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).EndInit();
-            this.panel37.ResumeLayout(false);
-            this.panel37.PerformLayout();
+            this.panel76.ResumeLayout(false);
+            this.panel76.PerformLayout();
+            this.panel74.ResumeLayout(false);
+            this.panel74.PerformLayout();
+            this.panel75.ResumeLayout(false);
+            this.panel75.PerformLayout();
             this.panel34.ResumeLayout(false);
             this.panel34.PerformLayout();
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
+            this.panel37.ResumeLayout(false);
+            this.panel37.PerformLayout();
             this.panel58.ResumeLayout(false);
             this.panel58.PerformLayout();
             this.panel59.ResumeLayout(false);
@@ -10232,6 +10334,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).EndInit();
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
+            this.panel78.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -10766,13 +10869,11 @@
         private System.Windows.Forms.Label lblURLWarning;
         private System.Windows.Forms.Label label158;
         private System.Windows.Forms.TextBox textBoxSettingsXpubMempoolURL;
-        private System.Windows.Forms.Label label160;
         private System.Windows.Forms.Label lblSettingsXpubNodeStatus;
         private System.Windows.Forms.Label lblSettingsXpubNodeStatusLight;
         private System.Windows.Forms.Button btnMenuSettings2;
         private System.Windows.Forms.Panel panel22;
         private System.Windows.Forms.Label label162;
-        private System.Windows.Forms.Label label164;
         private System.Windows.Forms.Panel panel34;
         private System.Windows.Forms.Label label163;
         private System.Windows.Forms.Panel panel37;
@@ -10891,6 +10992,16 @@
         private System.Windows.Forms.Timer hideThemeSavedTimer;
         private System.Windows.Forms.Timer hideThemeDeletedTimer;
         private System.Windows.Forms.Label label198;
+        private System.Windows.Forms.Panel panel74;
+        private System.Windows.Forms.Label label199;
+        private System.Windows.Forms.Panel panel75;
+        private System.Windows.Forms.Label label200;
+        private System.Windows.Forms.Panel panel76;
+        private System.Windows.Forms.Label label201;
+        private System.Windows.Forms.Label label204;
+        private System.Windows.Forms.Panel panel77;
+        private System.Windows.Forms.Panel panel78;
+        private System.Windows.Forms.Label label160;
     }
 }
 

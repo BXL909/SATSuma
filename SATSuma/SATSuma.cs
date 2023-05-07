@@ -19,12 +19,12 @@ Version history 🍊
 0.7 this work in progress
 
  * Stuff to do:
- * further work on own node connection outside of the xpub screen (pretty broken right now! connects and works, but the local mempool.space installation returns different numbers of records in api calls)
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
  * find P2SH xpub to test with
+ * fix address screen when using own node
  */
 
 #region Using
@@ -124,6 +124,7 @@ namespace SATSuma
         Color listViewHeaderTextColor = Color.Silver;
         Color tableTextColor = Color.FromArgb(255, 153, 0);
         bool testNet = false;
+        bool dontDisableButtons = true; // ignore button disables during initial setup
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -358,6 +359,7 @@ namespace SATSuma
 
                 CheckNetworkStatus();
                 GetBlockTip();
+                //GetBlockTip();
 
 
 
@@ -384,12 +386,14 @@ namespace SATSuma
                 StartTheClocksTicking(); // start all the timers
                 //setup block list screen
                 textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
+
                 LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
                 //setup address screen
                 AddressInvalidHideControls(); // initially address textbox is empty so hide the controls
                 CheckNetworkStatus();
                 addressScreenConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
                 btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
+                dontDisableButtons = false;
             }
             catch (WebException ex)
             {
@@ -649,9 +653,20 @@ namespace SATSuma
                         {
                             lblBlocksUntilDiffAdj.Text = remainingBlocks.ToString();
                         });
-                        long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
-                        DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
-                        string formattedDate = retargetDate.ToString("yyyy-MM-dd");
+                        string formattedDate;
+                        if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                        {
+                            long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
+                            DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
+                            formattedDate = retargetDate.ToString("yyyy-MM-dd");
+                        }
+                        else
+                        {
+                            double estRetargetDate = Convert.ToDouble(estimatedRetargetDate);
+                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds((long)estRetargetDate);
+                            DateTime dateTime = dateTimeOffset.LocalDateTime;
+                            formattedDate = dateTime.ToString();
+                        }
                         lblEstDiffAdjDate.Invoke((MethodInvoker)delegate
                         {
                             lblEstDiffAdjDate.Text = formattedDate;
@@ -1410,11 +1425,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                var response = client.DownloadString("https://mempool.space/api/v1/mining/hashrate/3d");
-                if (testNet)
-                {
-                    response = client.DownloadString("https://mempool.space/testnet/api/v1/mining/hashrate/3d");
-                }
+                var response = client.DownloadString(NodeURL + "v1/mining/hashrate/3d");
                 var data = JObject.Parse(response);
                 string currentHashrate = Convert.ToString(data["currentHashrate"]);
                 string currentDifficulty = Convert.ToString(data["currentDifficulty"]);
@@ -1432,11 +1443,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                var response = client.DownloadString("https://mempool.space/api/v1/fees/recommended");
-                if (testNet)
-                {
-                    response = client.DownloadString("https://mempool.space/testnet/api/v1/fees/recommended");
-                }
+                var response =  client.DownloadString(NodeURL + "v1/fees/recommended");
                 var data = JObject.Parse(response);
                 string fastestFee = Convert.ToString(data["fastestFee"]);
                 string halfHourFee = Convert.ToString(data["halfHourFee"]);
@@ -1457,11 +1464,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                var response = client.DownloadString("https://mempool.space/api/v1/difficulty-adjustment");
-                if (testNet)
-                {
-                    response = client.DownloadString("https://mempool.space/testnet/api/v1/difficulty-adjustment");
-                }
+                var response = client.DownloadString(NodeURL + "v1/difficulty-adjustment");
                 var data = JObject.Parse(response);
                 string progressPercent = Convert.ToString(data["progressPercent"]);
                 decimal difficultyChangeFull = (decimal)data["difficultyChange"];
@@ -1477,7 +1480,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BitcoinExplorerOrgGetPrice");
+                HandleException(ex, "GetDifficultyAdjustment");
             }
             return ("error", "error", "error", "error", "error", "error", "error", "error", "error");
         }
@@ -2037,8 +2040,16 @@ namespace SATSuma
                 }
                 else
                 {
-                     bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    {
+                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                    }
+                    else
+                    {
+                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                    }
                 }
+                
                 
                 if (bitcoinAddress is BitcoinPubKeyAddress)
                 {
@@ -3288,10 +3299,22 @@ namespace SATSuma
         }
 
         //------------------------ GET TRANSACTIONS FOR BLOCK ---------------------------------------------------------
+        int rowsReturnedByBlockTransactionsAPI;
+
         private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
         {
             try
             {
+                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                {
+                    rowsReturnedByBlockTransactionsAPI = 25;
+                    panel78.Visible = false;
+                }
+                else
+                {
+                    rowsReturnedByBlockTransactionsAPI = 10;
+                    panel78.Visible = true;
+                }
                 var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
                 var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
                 List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -3372,7 +3395,7 @@ namespace SATSuma
                     counter++; // increment rows for this batch
                     TotalBlockTransactionRowsAdded++; // increment all rows
 
-                    if (TotalBlockTransactionRowsAdded <= 25) // we must still be on first results so there are no previous
+                    if (TotalBlockTransactionRowsAdded <= rowsReturnedByBlockTransactionsAPI) // we must still be on first results so there are no previous
                     {
                         btnPreviousBlockTransactions.Visible = false; // so this won't be needed
                     }
@@ -3390,7 +3413,7 @@ namespace SATSuma
                         btnNextBlockTransactions.Visible = true;
                     }
 
-                    if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here...
+                    if (counter == rowsReturnedByBlockTransactionsAPI) // ListView is full. stop adding rows at this point and pick up from here...
                     {
                         break;
                     }
@@ -3444,6 +3467,7 @@ namespace SATSuma
         {
             try
             {
+                /*
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
@@ -3465,6 +3489,29 @@ namespace SATSuma
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
                 ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
+                */
+                ToggleLoadingAnimation("enable"); // start the loading animation
+                DisableEnableButtons("disable"); // disable buttons during operation
+                var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
+
+                if (TotalBlockTransactionRowsAdded % rowsReturnedByBlockTransactionsAPI == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
+                {
+                    TotalBlockTransactionRowsAdded -= (rowsReturnedByBlockTransactionsAPI * 2);
+                }
+                else // otherwise we subtract the odd amount (only happens at end of list) and another 25 to be able to go back to the previous page.
+                {
+                    int closestMultipleOf25 = TotalBlockTransactionRowsAdded - (TotalBlockTransactionRowsAdded % rowsReturnedByBlockTransactionsAPI);
+                    int firstNumberBeforeIt = closestMultipleOf25 - rowsReturnedByBlockTransactionsAPI;
+                    TotalBlockTransactionRowsAdded = firstNumberBeforeIt;
+                }
+
+                var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
+                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
+                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+                ToggleLoadingAnimation("disable"); // stop the loading animation
+                btnViewTransactionFromBlock.Visible = false;
+
             }
             catch (Exception ex)
             {
@@ -4838,6 +4885,7 @@ namespace SATSuma
         {
             try
             {
+                //Task.Run(() => GetBlockTip()).Wait();
                 btnViewBlockFromBlockList.Visible = false;
                 var blockNumber = Convert.ToString(textBoxBlockHeightToStartListFrom.Text);
                 await GetFifteenBlocksForBlockList(blockNumber);
@@ -9601,13 +9649,13 @@ namespace SATSuma
         private void ColorLabels(Color thiscolor)
         {
             //header
-            Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29 };
+            Control[] listHeaderLabelsToColor = { headerNetworkName, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29 };
             foreach (Control control in listHeaderLabelsToColor)
             {
                 control.ForeColor = thiscolor;
             }
             //settings
-            Control[] listSettingsLabelsToColor = { label193, label194, label196, label73, label161, label168, label160, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
+            Control[] listSettingsLabelsToColor = { label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
             foreach (Control control in listSettingsLabelsToColor)
             {
                 control.ForeColor = thiscolor;
@@ -9745,7 +9793,7 @@ namespace SATSuma
 
         private void ColorOtherText(Color thiscolor)
         {
-            Control[] listOtherTextToColor = { label159, label158, label165, label173, label164, lblURLWarning };
+            Control[] listOtherTextToColor = { label160, label199, label200, label201, label204, lblURLWarning, label159, label158, label165, label173, lblURLWarning };
             foreach (Control control in listOtherTextToColor)
             {
                 control.ForeColor = thiscolor;
@@ -10160,7 +10208,7 @@ namespace SATSuma
 
         private void ColorPanels(Color thiscolor)
         {
-            Control[] listPanelsToColor = { panel70, panel71, panel73, panel20, panel32 };
+            Control[] listPanelsToColor = { panel78, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77 };
             foreach (Control control in listPanelsToColor)
             {
                 {
@@ -10275,14 +10323,17 @@ namespace SATSuma
         // Get current block tip
         private void GetBlockTip()
         {
-            using WebClient client = new WebClient();
-            string BlockTipURL = NodeURL + "blocks/tip/height";
-            string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-            lblBlockNumber.Invoke((MethodInvoker)delegate
-            {
-                lblBlockNumber.Text = BlockTip;
-                textBoxBlockHeightToStartListFrom.Text = BlockTip;
-            });
+           // if (headerNetworkStatusLight.ForeColor == Color.OliveDrab)
+           // {
+                using WebClient client = new WebClient();
+                string BlockTipURL = NodeURL + "blocks/tip/height";
+                string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                lblBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockNumber.Text = BlockTip;
+                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
+                });
+           // }
         }
 
         // Method to encrypt a string using SHA-256
@@ -10388,80 +10439,83 @@ namespace SATSuma
         //-------DISABLE/ENABLE BUTTONS AND ANIMATION DURING LOADING AND RETURN THEM TO PREVIOUS STATE-----------------
         private void DisableEnableButtons(string enableOrDisableAllButtons)
         {
-            if (enableOrDisableAllButtons == "disable")
+            if (!dontDisableButtons)
             {
-                // get current state of buttons before disabling them
-                btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
-                btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
-                btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
-                btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
-                btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
-                BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
-                BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
-                btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
-                btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
-                btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
-                textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
-                textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
-                btnNextBlockWasEnabled = btnNextBlock.Enabled;
-                btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
-                btnNewer15BlocksWasEnabled = btnNewer15Blocks.Enabled;
-                btnOlder15BlocksWasEnabled = btnOlder15Blocks.Enabled;
-                textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
+                if (enableOrDisableAllButtons == "disable")
+                {
+                    // get current state of buttons before disabling them
+                    btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
+                    btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
+                    btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
+                    btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
+                    btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
+                    BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
+                    BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
+                    btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
+                    btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
+                    btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
+                    textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
+                    textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
+                    btnNextBlockWasEnabled = btnNextBlock.Enabled;
+                    btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
+                    btnNewer15BlocksWasEnabled = btnNewer15Blocks.Enabled;
+                    btnOlder15BlocksWasEnabled = btnOlder15Blocks.Enabled;
+                    textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
 
-                //disable them all
-                btnShowAllTX.Enabled = false;
-                btnShowConfirmedTX.Enabled = false;
-                btnShowUnconfirmedTX.Enabled = false;
-                btnFirstAddressTransaction.Enabled = false;
-                btnNextAddressTransactions.Enabled = false;
-                BtnViewTransactionFromAddress.Enabled = false;
-                BtnViewBlockFromAddress.Enabled = false;
-                btnViewBlockFromBlockList.Enabled = false;
-                btnPreviousBlockTransactions.Enabled = false;
-                btnNextBlockTransactions.Enabled = false;
-                textboxSubmittedAddress.Enabled = false;
-                textBoxSubmittedBlockNumber.Enabled = false;
-                btnNextBlock.Enabled = false;
-                btnPreviousBlock.Enabled = false;
-                btnMenu.Enabled = false;
-                btnNewer15Blocks.Enabled = false;
-                btnOlder15Blocks.Enabled = false;
-                textBoxBlockHeightToStartListFrom.Enabled = false;
-            }
-            else
-            {
-                // use previously saved states to reinstate buttons
-                btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
-                btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
-                btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
-                btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
-                btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
-                BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
-                BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
-                btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
-                btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
-                btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
-                btnNextBlock.Enabled = btnNextBlockWasEnabled;
-                btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
-                textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
-                textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
-                btnNewer15Blocks.Enabled = btnNewer15BlocksWasEnabled;
-                btnOlder15Blocks.Enabled = btnOlder15BlocksWasEnabled;
-                textBoxBlockHeightToStartListFrom.Enabled = textBoxBlockHeightToStartListFromWasEnabled;
-                if (panelBlock.Visible == true)
-                {
-                    textBoxSubmittedBlockNumber.Focus();
-                    // Set the cursor position to the end of the string
-                    textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+                    //disable them all
+                    btnShowAllTX.Enabled = false;
+                    btnShowConfirmedTX.Enabled = false;
+                    btnShowUnconfirmedTX.Enabled = false;
+                    btnFirstAddressTransaction.Enabled = false;
+                    btnNextAddressTransactions.Enabled = false;
+                    BtnViewTransactionFromAddress.Enabled = false;
+                    BtnViewBlockFromAddress.Enabled = false;
+                    btnViewBlockFromBlockList.Enabled = false;
+                    btnPreviousBlockTransactions.Enabled = false;
+                    btnNextBlockTransactions.Enabled = false;
+                    textboxSubmittedAddress.Enabled = false;
+                    textBoxSubmittedBlockNumber.Enabled = false;
+                    btnNextBlock.Enabled = false;
+                    btnPreviousBlock.Enabled = false;
+                    btnMenu.Enabled = false;
+                    btnNewer15Blocks.Enabled = false;
+                    btnOlder15Blocks.Enabled = false;
+                    textBoxBlockHeightToStartListFrom.Enabled = false;
                 }
-                if (panelAddress.Visible == true)
+                else
                 {
-                    textboxSubmittedAddress.Focus();
-                    // Set the cursor position to the end of the string
-                    textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
+                    // use previously saved states to reinstate buttons
+                    btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
+                    btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
+                    btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
+                    btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
+                    btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
+                    BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
+                    BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
+                    btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
+                    btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
+                    btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
+                    btnNextBlock.Enabled = btnNextBlockWasEnabled;
+                    btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
+                    textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
+                    textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
+                    btnNewer15Blocks.Enabled = btnNewer15BlocksWasEnabled;
+                    btnOlder15Blocks.Enabled = btnOlder15BlocksWasEnabled;
+                    textBoxBlockHeightToStartListFrom.Enabled = textBoxBlockHeightToStartListFromWasEnabled;
+                    if (panelBlock.Visible == true)
+                    {
+                        textBoxSubmittedBlockNumber.Focus();
+                        // Set the cursor position to the end of the string
+                        textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+                    }
+                    if (panelAddress.Visible == true)
+                    {
+                        textboxSubmittedAddress.Focus();
+                        // Set the cursor position to the end of the string
+                        textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
+                    }
+                    btnMenu.Enabled = true;
                 }
-                btnMenu.Enabled = true;
             }
         }
 
@@ -10703,12 +10757,15 @@ namespace SATSuma
                                 displayNodeName = hostnameForDisplay;
                             }
                         }
-
                         lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsCustomNodeStatus.Text = displayNodeName;
                             headerNetworkName.Text = displayNodeName;
                         });
+                        if (lblErrorMessage.Text == "Node disconnected/offline")
+                        {
+                            ClearAlertAndErrorMessage();
+                        }
                     }
                     else
                     {
@@ -10737,7 +10794,15 @@ namespace SATSuma
                         lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsCustomNodeStatus.Text = displayNodeName;
+                        });
+                        headerNetworkName.Invoke((MethodInvoker)delegate
+                        {
                             headerNetworkName.Text = displayNodeName;
+                        });
+                        ShowAlertSymbol();
+                        lblErrorMessage.Invoke((MethodInvoker)delegate
+                        {
+                            lblErrorMessage.Text = "Node disconnected/offline";
                         });
                     }
                 }
@@ -10747,7 +10812,6 @@ namespace SATSuma
                     lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                        headerNetworkStatusLight.ForeColor = Color.IndianRed;
                     });
                     var displayNodeName = "";
                     if (NodeURL == "https://mempool.space/api/")
@@ -10768,7 +10832,15 @@ namespace SATSuma
                     lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsCustomNodeStatus.Text = displayNodeName;
+                    });
+                    headerNetworkName.Invoke((MethodInvoker)delegate
+                    {
                         headerNetworkName.Text = displayNodeName;
+                    });
+                    ShowAlertSymbol();
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node disconnected/offline";
                     });
                 }
                 catch (Exception ex)
@@ -10788,15 +10860,17 @@ namespace SATSuma
                     headerNetworkStatusLight.Location = new Point(headerNetworkName.Location.X - headerNetworkStatusLight.Width, headerNetworkStatusLight.Location.Y);
                 });
 
+                lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsCustomNodeStatusLight.Location = new Point(panel75.Location.X + panel75.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
+                });
+
                 lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsCustomNodeStatus.Location = new Point(lblSettingsCustomNodeStatusLight.Location.X + lblSettingsCustomNodeStatusLight.Width, lblSettingsCustomNodeStatus.Location.Y);
                 });
 
-                lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsCustomNodeStatusLight.Location = new Point(textBoxSettingsCustomMempoolURL.Location.X + textBoxSettingsCustomMempoolURL.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
-                });
+
             }
         }
 

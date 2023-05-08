@@ -23,6 +23,7 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
+ * bug - api tickboxes being reset to true sometimes, noted on the 'disable bitcoin dashboard' so far
  */
 
 #region Using
@@ -123,6 +124,14 @@ namespace SATSuma
         Color tableTextColor = Color.FromArgb(255, 153, 0);
         bool testNet = false;
         bool dontDisableButtons = true; // ignore button disables during initial setup
+        string currencySelected = "D";
+        string selectedNetwork = "M";
+        string blockchairComJSONSelected = "1";
+        string bitcoinExplorerEnpointsSelected = "1";
+        string blockchainInfoEndpointsSelected = "1";
+        string bitcoinDashboardSelected = "1";
+        string lightningDashboardSelected = "1";
+        string mempoolLightningJSONSelected = "1";
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
@@ -742,6 +751,18 @@ namespace SATSuma
                                 {
                                     lblMarketCapUSD.Text = "disabled";
                                 });
+                                lblHeaderPrice.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPrice.Text = "disabled";
+                                });
+                                lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderMoscowTime.Text = "disabled";
+                                });
+                                lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderMarketCap.Text = "disabled";
+                                });
                             }
                         }
                         else
@@ -750,7 +771,6 @@ namespace SATSuma
                             {
                                 lblPriceUSD.Text = "0 (TestNet)";
                             });
-
                             lblMoscowTime.Invoke((MethodInvoker)delegate
                             {
                                 lblMoscowTime.Text = "0 (TestNet)";
@@ -758,6 +778,18 @@ namespace SATSuma
                             lblMarketCapUSD.Invoke((MethodInvoker)delegate
                             {
                                 lblMarketCapUSD.Text = "0 (TestNet)";
+                            });
+                            lblHeaderPrice.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderPrice.Text = "0 (TestNet)";
+                            });
+                            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderMoscowTime.Text = "0 (TestNet)";
+                            });
+                            lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderMarketCap.Text = "0 (TestNet)";
                             });
                         }
                         SetLightsMessagesAndResetTimers();
@@ -7243,7 +7275,7 @@ namespace SATSuma
 
                 foreach (var bookmark in bookmarks)
                 {
-                    if (bookmark.Type != "xpubnode" && bookmark.Type != "defaulttheme" && bookmark.Type != "settings")
+                    if (bookmark.Type != "xpubnode" && bookmark.Type != "node" && bookmark.Type != "defaulttheme" && bookmark.Type != "settings")
                     {
                         ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
                         item.SubItems.Add(bookmark.Type);
@@ -8566,15 +8598,6 @@ namespace SATSuma
             }
         }
 
-        string currencySelected = "D";
-        string selectedNetwork = "M";
-        string blockchairComJSONSelected = "1";
-        string bitcoinExplorerEnpointsSelected = "1";
-        string blockchainInfoEndpointsSelected = "1";
-        string bitcoinDashboardSelected = "1";
-        string lightningDashboardSelected = "1";
-        string mempoolLightningJSONSelected = "1";
-
         private void LblBlockchairComJSON_Click(object sender, EventArgs e)
         {
             if (lblBlockchairComJSON.Text == "✔️")
@@ -8665,8 +8688,8 @@ namespace SATSuma
                 {
                     lblBlockchairComJSON.ForeColor = Color.IndianRed;
                     lblBlockchairComJSON.Text = "❌";
-                    RunBlockchairComJSONAPI = false;
                 });
+                RunBlockchairComJSONAPI = false;
                 lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                 {
                     lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
@@ -8824,6 +8847,9 @@ namespace SATSuma
             {
                 selectedNetwork = "C";
             }
+
+            //!!!!!!!!! set the values on the tickboxes here to fix bug where they get lost on restarting the app
+
             // write the settings to the bookmarks file for auto retrieval next time
             DateTime today = DateTime.Today;
             string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + bitcoinDashboardSelected + lightningDashboardSelected + mempoolLightningJSONSelected + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'); ;

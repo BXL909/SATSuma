@@ -23,8 +23,6 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
- * find P2SH xpub to test with
- * fix address screen when using own node
  */
 
 #region Using
@@ -2034,22 +2032,30 @@ namespace SATSuma
             try
             {
                 NBitcoin.BitcoinAddress bitcoinAddress;
-                if (NodeURL == "https://mempool.space/api/")
+                if (NodeURL == "https://mempool.space/api/") //mempool.space mainnet
                 {
                     bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
                 }
                 else
                 {
-                    if (NodeURL == "https://mempool.space/testnet/api/")
+                    if (NodeURL == "https://mempool.space/testnet/api/") //mempool.space testnet
                     {
                         bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
                     }
                     else
                     {
-                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                        bool containsTestnet = NodeURL.Contains("testnet");
+                        if (containsTestnet) // own node, testnet
+                        {
+                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                        }
+                        else //own node, mainnet
+                        {
+                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                        }
+                        
                     }
                 }
-                
                 
                 if (bitcoinAddress is BitcoinPubKeyAddress)
                 {
@@ -2124,7 +2130,7 @@ namespace SATSuma
                     HandleException(ex, "TboxSubmittedAddress_TextChanged (Error getting address balance)");
                     return;
                 }
-                string lastSeenTxId = ""; // start from the top of the JSON (most recent tx)
+                string lastSeenTxId = "0"; // start from the top of the JSON (most recent tx)
                 try
                 {
                     await GetTransactionsForAddress(addressString, lastSeenTxId); // get first batch of transactions
@@ -2186,7 +2192,6 @@ namespace SATSuma
             {
                 var request = "address/" + addressString;
                 var RequestURL = NodeURL + request;
-                //var RequestURL = "http://umbrel.local:3006/api/" + request;
                 var client = new HttpClient();
                 var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                 if (!response.IsSuccessStatusCode)
@@ -2418,11 +2423,25 @@ namespace SATSuma
             await GetAddressBalance(addressString);
         }
 
+        int rowsReturnedByAddressTransactionsAPI;
+
         //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
         private async Task GetTransactionsForAddress(string addressString, string lastSeenTxId)
         {
             try
             {
+
+                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                {
+                    rowsReturnedByAddressTransactionsAPI = 25;
+                    panelOwnNodeAddressTXInfo.Visible = false;
+                }
+                else
+                {
+                    rowsReturnedByAddressTransactionsAPI = 10;
+                    panelOwnNodeAddressTXInfo.Visible = true;
+                }
+
                 var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId);
                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                 List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -2572,7 +2591,7 @@ namespace SATSuma
                     counter++; // increment rows for this batch
                     TotalAddressTransactionRowsAdded++; // increment all rows
 
-                    if (TotalAddressTransactionRowsAdded <= 25) // less than 25 transactions in all
+                    if (TotalAddressTransactionRowsAdded <= rowsReturnedByAddressTransactionsAPI) // less than 25 transactions in all
                     {
                         btnFirstAddressTransaction.Visible = false; // so this won't be needed
                     }
@@ -2596,7 +2615,7 @@ namespace SATSuma
                         }
                     }
 
-                    if (counter == 25) // ListView is full. stop adding rows at this point and pick up from here next time.
+                    if (counter == rowsReturnedByAddressTransactionsAPI) // ListView is full. stop adding rows at this point and pick up from here next time.
                     {
                         break;
                     }
@@ -2670,7 +2689,7 @@ namespace SATSuma
             }
             btnFirstAddressTransaction.Visible = false;
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
-            var lastSeenTxId = ""; // Reset the last seen transaction ID to go back to start
+            var lastSeenTxId = "0"; // Reset the last seen transaction ID to go back to start
             TotalAddressTransactionRowsAdded = 0;
             btnNextAddressTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
             BtnViewBlockFromAddress.Visible = false;
@@ -3308,12 +3327,12 @@ namespace SATSuma
                 if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
                 {
                     rowsReturnedByBlockTransactionsAPI = 25;
-                    panel78.Visible = false;
+                    panelOwnNodeBlockTXInfo.Visible = false;
                 }
                 else
                 {
                     rowsReturnedByBlockTransactionsAPI = 10;
-                    panel78.Visible = true;
+                    panelOwnNodeBlockTXInfo.Visible = true;
                 }
                 var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
                 var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
@@ -10208,7 +10227,7 @@ namespace SATSuma
 
         private void ColorPanels(Color thiscolor)
         {
-            Control[] listPanelsToColor = { panel78, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77 };
+            Control[] listPanelsToColor = { panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77 };
             foreach (Control control in listPanelsToColor)
             {
                 {

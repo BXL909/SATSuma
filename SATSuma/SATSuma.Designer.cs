@@ -227,6 +227,8 @@
             this.label38 = new System.Windows.Forms.Label();
             this.lblTotalCapacity = new System.Windows.Forms.Label();
             this.panelAddress = new System.Windows.Forms.Panel();
+            this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
+            this.label164 = new System.Windows.Forms.Label();
             this.panel44 = new System.Windows.Forms.Panel();
             this.label63 = new System.Windows.Forms.Label();
             this.panel43 = new System.Windows.Forms.Panel();
@@ -690,8 +692,6 @@
             this.headerNetworkStatusLight = new System.Windows.Forms.Label();
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
-            this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
-            this.label164 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -707,6 +707,7 @@
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelAddress.SuspendLayout();
+            this.panelOwnNodeAddressTXInfo.SuspendLayout();
             this.panel44.SuspendLayout();
             this.panel43.SuspendLayout();
             this.panel42.SuspendLayout();
@@ -796,7 +797,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
-            this.panelOwnNodeAddressTXInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -3492,6 +3492,26 @@
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelAddress.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelAddress_Paint);
+            // 
+            // panelOwnNodeAddressTXInfo
+            // 
+            this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panelOwnNodeAddressTXInfo.Controls.Add(this.label164);
+            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 452);
+            this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
+            this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(499, 41);
+            this.panelOwnNodeAddressTXInfo.TabIndex = 213;
+            // 
+            // label164
+            // 
+            this.label164.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label164.ForeColor = System.Drawing.Color.Gray;
+            this.label164.Location = new System.Drawing.Point(9, 3);
+            this.label164.Name = "label164";
+            this.label164.Size = new System.Drawing.Size(482, 51);
+            this.label164.TabIndex = 144;
+            this.label164.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
+    "at a time.";
             // 
             // panel44
             // 
@@ -10103,26 +10123,6 @@
             this.hideThemeDeletedTimer.Interval = 2000;
             this.hideThemeDeletedTimer.Tick += new System.EventHandler(this.HideThemeDeletedTimer_Tick);
             // 
-            // panelOwnNodeAddressTXInfo
-            // 
-            this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panelOwnNodeAddressTXInfo.Controls.Add(this.label164);
-            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 452);
-            this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
-            this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(499, 41);
-            this.panelOwnNodeAddressTXInfo.TabIndex = 213;
-            // 
-            // label164
-            // 
-            this.label164.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label164.ForeColor = System.Drawing.Color.Gray;
-            this.label164.Location = new System.Drawing.Point(9, 3);
-            this.label164.Name = "label164";
-            this.label164.Size = new System.Drawing.Size(482, 51);
-            this.label164.TabIndex = 144;
-            this.label164.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
-    "at a time.";
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10133,8 +10133,8 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
@@ -10172,7 +10172,7 @@
             this.Name = "SATSuma";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SATSuma";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.SATSuma_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
@@ -10204,6 +10204,7 @@
             this.panel1.PerformLayout();
             this.panelAddress.ResumeLayout(false);
             this.panelAddress.PerformLayout();
+            this.panelOwnNodeAddressTXInfo.ResumeLayout(false);
             this.panel44.ResumeLayout(false);
             this.panel44.PerformLayout();
             this.panel43.ResumeLayout(false);
@@ -10359,7 +10360,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).EndInit();
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
-            this.panelOwnNodeAddressTXInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

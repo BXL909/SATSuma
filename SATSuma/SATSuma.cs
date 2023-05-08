@@ -23,7 +23,6 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * sorting of bookmarks?
- * bug - api tickboxes being reset to true sometimes, noted on the 'disable bitcoin dashboard' so far
  */
 
 #region Using
@@ -58,86 +57,85 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        #region INITIALISE
-        //=============================================================================================================
-        //---------------------------INITIALISE------------------------------------------------------------------------
+        #region VARIABLE DECLARATION
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
         private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api refreshes
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
-        // booleans used to say whether to run individual API's or not. All on/true by default.
-        private bool RunBitcoinExplorerEndpointAPI = true;
-        private bool RunBlockchainInfoEndpointAPI = true;
-        private bool RunBitcoinExplorerOrgJSONAPI = true;
-        private bool RunBlockchairComJSONAPI = true;
-        private bool RunMempoolSpaceLightningAPI = true;
-        private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
-        private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
+        private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
+        private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
+        private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        int rowsReturnedByAddressTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        int rowsReturnedByBlockTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
+        private string addressScreenConfUnconfOrAllTx = "chain"; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
+        private string storedLastSeenBlockNumber = "0"; // restart point to retrieve blocks for block list
+        string xpubNodeURLInFile = ""; // stores the xpub node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
+        string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
+        string settingsInFile = ""; // stores the settings from the file to check whether any have changed, in which case we'll update the file
+        string defaultThemeInFile = ""; // stores the default theme from the file to check whether a newly supplied one is different, in which case we'll update the file
+        string currencySelected = "D"; // for settings record in bookmarks file
+        string selectedNetwork = "M"; // for settings record in bookmarks file
+        string blockchairComJSONSelected = "1"; // for settings record in bookmarks file
+        string bitcoinExplorerEnpointsSelected = "1"; // for settings record in bookmarks file
+        string blockchainInfoEndpointsSelected = "1"; // for settings record in bookmarks file
+        string bitcoinDashboardSelected = "1"; // for settings record in bookmarks file 
+        string lightningDashboardSelected = "1"; // for settings record in bookmarks file
+        string mempoolLightningJSONSelected = "1"; // for settings record in bookmarks file
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
         private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
-        private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
-        private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
-        private string addressScreenConfUnconfOrAllTx = ""; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
-        private string storedLastSeenBlockNumber = "0";
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
-        bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
-        //following bools are used to remember enabled state of buttons to reset them after disabling all during loading
-        bool btnShowAllAddressTXWasEnabled = true;
-        bool btnShowConfirmedAddressTXWasEnabled = false;
-        bool btnShowUnconfirmedAddressTXWasEnabled = true;
-        bool btnFirstAddressTransactionWasEnabled = false;
-        bool btnNextAddressTransactionsWasEnabled = false;
-        bool BtnViewTransactionFromAddressWasEnabled = false;
-        bool BtnViewBlockFromAddressWasEnabled = false;
-        bool btnViewBlockFromBlockListWasEnabled = false;
-        bool btnPreviousBlockTransactionsWasEnabled = false;
-        bool btnNextBlockTransactionsWasEnabled = false;
-        bool textBoxSubmittedBlockNumberWasEnabled = true;
-        bool textBoxSubmittedAddressWasEnabled = true;
-        bool btnNextBlockWasEnabled = false;
-        bool btnPreviousBlockWasEnabled = true;
-        bool btnNewer15BlocksWasEnabled = false;
-        bool btnOlder15BlocksWasEnabled = true;
-        bool textBoxBlockHeightToStartListFromWasEnabled = true;
+        private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
+        private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
+        private bool RunBlockchainInfoEndpointAPI = true; // enable/disable API
+        private bool RunBitcoinExplorerOrgJSONAPI = true; // enable/disable API
+        private bool RunBlockchairComJSONAPI = true; // enable/disable API
+        private bool RunMempoolSpaceLightningAPI = true; // enable/disable API
+        bool testNet = false; // testnet or mainnet
+        bool dontDisableButtons = true; // ignore button disables during initial setup
         bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
-        string xpubNodeURLInFile = ""; // stores the xpub node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
-        string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
-        string settingsInFile = ""; // stores the settings from the file to check whether any have changed, in which case we'll update the file
-
         bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
-        string defaultThemeInFile = ""; // stores the default theme from the file to check whether a newly supplied one is different, in which case we'll update the file
-        private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
+        bool btnShowAllAddressTXWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnShowConfirmedAddressTXWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnShowUnconfirmedAddressTXWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnFirstAddressTransactionWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnNextAddressTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool BtnViewTransactionFromAddressWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool BtnViewBlockFromAddressWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnViewBlockFromBlockListWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnPreviousBlockTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnNextBlockTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool textBoxSubmittedBlockNumberWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool textBoxSubmittedAddressWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnNextBlockWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnPreviousBlockWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnNewer15BlocksWasEnabled = false; // store button state during queries to return to that state afterwards
+        bool btnOlder15BlocksWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool textBoxBlockHeightToStartListFromWasEnabled = true; // store button state during queries to return to that state afterwards
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
         Color listViewHeaderTextColor = Color.Silver;
         Color tableTextColor = Color.FromArgb(255, 153, 0);
-        bool testNet = false;
-        bool dontDisableButtons = true; // ignore button disables during initial setup
-        string currencySelected = "D";
-        string selectedNetwork = "M";
-        string blockchairComJSONSelected = "1";
-        string bitcoinExplorerEnpointsSelected = "1";
-        string blockchainInfoEndpointsSelected = "1";
-        string bitcoinDashboardSelected = "1";
-        string lightningDashboardSelected = "1";
-        string mempoolLightningJSONSelected = "1";
+        #endregion
+
+        #region INITIALISE
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
 
         [DllImport("user32.dll", EntryPoint = "SendMessage")] // needed for the code that moves the form as not using a standard control
-
         private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
 
         public SATSuma()
@@ -147,269 +145,31 @@ namespace SATSuma
             CreateDataServices();
         }
 
-        private void Form1_Load(object sender, EventArgs e) 
+        private void SATSuma_Load(object sender, EventArgs e) 
         {
             try
             {
-                var bookmarks = ReadBookmarksFromJsonFile();
-                // check if settings are already saved in the bookmarks file and either restore them or set defaults and save a settings entry in bookmarks file
-                foreach (var bookmark in bookmarks)
-                {
-                    if (bookmark.Type == "settings")
-                    {
-                        settingsAlreadySavedInFile = true;
-                        settingsInFile = bookmark.Data;
-                        if (Convert.ToString(bookmark.Data[0]) == "P")
-                        {
-                            //GBP
-                            btnGBP.Enabled = false;
-                            btnUSD.Enabled = true;
-                            btnEUR.Enabled = true;
-                            btnXAU.Enabled = true;
-                        }
-                        if (Convert.ToString(bookmark.Data[0]) == "D")
-                        {
-                            //USD
-                            btnGBP.Enabled = true;
-                            btnUSD.Enabled = false;
-                            btnEUR.Enabled = true;
-                            btnXAU.Enabled = true;
-                        }
-                        if (Convert.ToString(bookmark.Data[0]) == "E")
-                        {
-                            //EUR
-                            btnGBP.Enabled = true;
-                            btnUSD.Enabled = true;
-                            btnEUR.Enabled = false;
-                            btnXAU.Enabled = true;
-                        }
-                        if (Convert.ToString(bookmark.Data[0]) == "G")
-                        {
-                            //XAU
-                            btnGBP.Enabled = true;
-                            btnUSD.Enabled = true;
-                            btnEUR.Enabled = true;
-                            btnXAU.Enabled = false;
-                        }
-                        if (Convert.ToString(bookmark.Data[1]) == "M")
-                        {
-                            //mainnet
-                            NodeURL = "https://mempool.space/api/";
-                            CreateDataServices();
-                            lblSettingsNodeMainnet.Text = "✔️";
-                            lblSettingsNodeMainnet.ForeColor = Color.Green;
-                            lblSettingsNodeTestnet.Text = "❌";
-                            lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
-                            lblSettingsNodeCustom.Text = "❌";
-                            lblSettingsNodeCustom.ForeColor = Color.IndianRed;
-                        }
-                        if (Convert.ToString(bookmark.Data[1]) == "T")
-                        {
-                            //testnet
-                            NodeURL = "https://mempool.space/testnet/api/";
-                            CreateDataServices();
-                            lblSettingsNodeMainnet.Text = "❌";
-                            lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
-                            lblSettingsNodeTestnet.Text = "✔️";
-                            lblSettingsNodeTestnet.ForeColor = Color.Green;
-                            lblSettingsNodeCustom.Text = "❌";
-                            lblSettingsNodeCustom.ForeColor = Color.IndianRed;
-                        }
-                        if (Convert.ToString(bookmark.Data[1]) == "C")
-                        {
-                            //custom
-////////////////////////////////////////////////////////////////////////////////////// still need to set and test this
-                            CreateDataServices();
-                            lblSettingsNodeMainnet.Text = "❌";
-                            lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
-                            lblSettingsNodeTestnet.Text = "❌";
-                            lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
-                            lblSettingsNodeCustom.Text = "✔️";
-                            lblSettingsNodeCustom.ForeColor = Color.Green;
-                        }
-                        if (Convert.ToString(bookmark.Data[2]) == "1")
-                        {
-                            RunBlockchairComJSONAPI = true;
-                            lblBlockchairComJSON.Text = "✔️";
-                            lblBlockchairComJSON.ForeColor = Color.Green;
-                        }
-                        else
-                        {
-                            RunBlockchairComJSONAPI = false;
-                            lblBlockchairComJSON.Text = "❌";
-                            lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                        }
-                        if (Convert.ToString(bookmark.Data[3]) == "1")
-                        {
-                            RunBitcoinExplorerEndpointAPI = true;
-                            RunBitcoinExplorerOrgJSONAPI = true;
-                            lblBitcoinExplorerEndpoints.Text = "✔️";
-                            lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
-                        }
-                        else
-                        {
-                            RunBitcoinExplorerEndpointAPI = false;
-                            RunBitcoinExplorerOrgJSONAPI = false;
-                            lblBitcoinExplorerEndpoints.Text = "❌";
-                            lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                        }
-                        if (Convert.ToString(bookmark.Data[4]) == "1")
-                        {
-                            RunBlockchainInfoEndpointAPI = true;
-                            lblBlockchainInfoEndpoints.Text = "✔️";
-                            lblBlockchainInfoEndpoints.ForeColor = Color.Green;
-                        }
-                        else
-                        {
-                            RunBlockchainInfoEndpointAPI = false;
-                            lblBlockchainInfoEndpoints.Text = "❌";
-                            lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                        }
-                        if (Convert.ToString(bookmark.Data[5]) == "1")
-                        {
-                            lblBitcoinDashboard.Text = "✔️";
-                            lblBitcoinDashboard.ForeColor = Color.Green;
-                            lblBlockchairComJSON.Enabled = true;
-                            lblBitcoinExplorerEndpoints.Enabled = true;
-                            lblBlockchainInfoEndpoints.Enabled = true;
-                            btnMenuBitcoinDashboard.Enabled = true;
-                        }
-                        else
-                        {
-                            lblBitcoinDashboard.Text = "❌";
-                            lblBitcoinDashboard.ForeColor = Color.IndianRed;
-                            RunBlockchairComJSONAPI = false;
-                            lblBlockchairComJSON.Text = "❌";
-                            lblBlockchairComJSON.Enabled = false;
-                            lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                            RunBitcoinExplorerEndpointAPI = false;
-                            RunBitcoinExplorerOrgJSONAPI = false;
-                            lblBitcoinExplorerEndpoints.Text = "❌";
-                            lblBitcoinExplorerEndpoints.Enabled = false;
-                            lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                            RunBlockchainInfoEndpointAPI = false;
-                            lblBlockchainInfoEndpoints.Text = "❌";
-                            lblBlockchainInfoEndpoints.Enabled = false;
-                            lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                            btnMenuBitcoinDashboard.Enabled = false;
-                        }
-                        if (Convert.ToString(bookmark.Data[6]) == "1")
-                        {
-                            lblLightningDashboard.Text = "✔️";
-                            lblLightningDashboard.ForeColor = Color.Green;
-                            RunMempoolSpaceLightningAPI = true;
-                            lblMempoolLightningJSON.Text = "✔️";
-                            lblMempoolLightningJSON.Enabled = true;
-                            lblMempoolLightningJSON.ForeColor = Color.Green;
-                            btnMenuLightningDashboard.Enabled = true;
-                        }
-                        else
-                        {
-                            lblLightningDashboard.Text = "❌";
-                            lblLightningDashboard.ForeColor = Color.IndianRed;
-                            RunMempoolSpaceLightningAPI = false;
-                            lblMempoolLightningJSON.Text = "❌";
-                            lblMempoolLightningJSON.Enabled = false;
-                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
-                            btnMenuLightningDashboard.Enabled = false;
-                        }
-                        if (Convert.ToString(bookmark.Data[7]) == "1")
-                        {
-                            lblMempoolLightningJSON.Text = "✔️";
-                            lblMempoolLightningJSON.Enabled = true;
-                            lblMempoolLightningJSON.ForeColor = Color.Green;
-                        }
-                        else
-                        {
-                            lblMempoolLightningJSON.Text = "❌";
-                            lblMempoolLightningJSON.Enabled = false;
-                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
-                        }
-                        numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
-                        
-                        break;
-                    }
-                }
-
-                // check if there is a node address saved in the bookmarks file
-                foreach (var bookmark in bookmarks)
-                {
-                    if (bookmark.Type == "node")
-                    {
-                        textBoxSettingsCustomMempoolURL.Text = bookmark.Data; // move it to the settings screen
-                        
-                        nodeURLInFile = bookmark.Data;
-                        nodeURLAlreadySavedInFile = true;
-                        if (lblSettingsNodeCustom.Text == "✔️")
-                        {
-                            CheckCustomNodeIsOnline();
-                        }
-                        break;
-                    }
-                    nodeURLAlreadySavedInFile = false;
-                }
-
-                // check if there is an xpub node address saved in the bookmarks file
-                foreach (var bookmark in bookmarks)
-                {
-                    if (bookmark.Type == "xpubnode")
-                    {
-                        textBoxXpubNodeURL.Text = bookmark.Data; // move node url string to the form
-                        textBoxSettingsXpubMempoolURL.Text = bookmark.Data; // and to the settings screen
-                        CheckXpubNodeIsOnline();
-                        xpubNodeURLInFile = bookmark.Data;
-                        xpubNodeURLAlreadySavedInFile = true;
-                        break;
-                    }
-                    xpubNodeURLAlreadySavedInFile = false;
-                }
-
+                RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
                 GetBlockTip();
-                //GetBlockTip();
-
-
-
-                // check if there is a default theme saved in the bookmarks file
-                foreach (var bookmark in bookmarks)
-                {
-                    if (bookmark.Type == "defaulttheme")
-                    {
-                        var themes = ReadThemesFromJsonFile();
-                        foreach (Theme theme in themes)
-                        {
-                            if (theme.ThemeName == bookmark.Data)
-                            {
-                                RestoreTheme(theme);
-                                defaultThemeInFile = bookmark.Data;
-                                defaultThemeAlreadySavedInFile = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
                 UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
-                //setup block list screen
-                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
-
-                LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
-                //setup address screen
-                AddressInvalidHideControls(); // initially address textbox is empty so hide the controls
-                CheckNetworkStatus();
-                addressScreenConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
-                btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
-                dontDisableButtons = false;
+                textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; //setup block list screen
+                LookupBlockList(); // fetch the first 15 blocks automatically for the block list initial view.
+                AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
+//                CheckNetworkStatus();
+//                addressScreenConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
+//                btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
+                dontDisableButtons = false; // from here on, buttons are disabled during queries
             }
             catch (WebException ex)
             {
-                HandleException(ex, "Form1_Load");
+                HandleException(ex, "SATSuma_Load");
             }
         }
         #endregion
 
-        #region CLOCK TICK EVENTS
+        #region CLOCK TICK EVENTS (1 sec and API refresh clock only)
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
@@ -427,59 +187,11 @@ namespace SATSuma
         {
             UpdateOnScreenClock();
             UpdateOnScreenCountdownAndFlashLights();
-            intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
-            if (intDisplaySecondsElapsedSinceUpdate == 1)
-            {
-                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                {
-                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
-                });
-            }
-            else
-            {
-                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                {
-                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
-                });
-            }
-
-            if (!testNet)
-            {
-                if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
-                {
-                    string secondsString = lblHalvingSecondsRemaining.Text;
-                    try
-                    {
-                        int SecondsToHalving = int.Parse(secondsString);
-                        if (SecondsToHalving > 0)
-                        {
-                            SecondsToHalving--; // one second closer to the halvening!
-                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
-                            });
-                        }
-                    }
-                    catch
-                    {
-                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                        {
-                            lblHalvingSecondsRemaining.Text = "disabled";
-                        });
-                    }
-                }
-            }
-
+            UpdateOnScreenElapsedTimeSinceUpdate();
+            UpdateSecondsToHalving();
             if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh, clear error alert symblol & error message
             {
-                lblAlert.Invoke((MethodInvoker)delegate
-                {
-                    lblAlert.Text = "";
-                });
-                lblErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblErrorMessage.Text = "";
-                });
+                ClearAlertAndErrorMessage();
             }
         }
 
@@ -488,28 +200,27 @@ namespace SATSuma
             try
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-                using (WebClient client = new WebClient())
-                {
-                    try
-                    {
-                        string BlockTipURL = NodeURL + "blocks/tip/height";
-                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                        lblBlockNumber.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockNumber.Text = BlockTip;
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        HandleException(ex, "BlockchainInfoEndpointsRefresh");
-                    }
-                }
                 CheckNetworkStatus();
-                if (headerNetworkStatusLight.ForeColor == Color.OliveDrab)
+                if (headerNetworkStatusLight.ForeColor == Color.OliveDrab) // get latest block tip and update bitcoin & lightning dashboards
                 {
+                    using (WebClient client = new WebClient())
+                    {
+                        try
+                        {
+                            string BlockTipURL = NodeURL + "blocks/tip/height";
+                            string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                            lblBlockNumber.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockNumber.Text = BlockTip;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            HandleException(ex, "TimerAPIRefreshPeriod_Tick");
+                        }
+                    }
                     UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields
                 }
-                
             }
             catch (WebException ex)
             {
@@ -1448,6 +1159,196 @@ namespace SATSuma
             ToggleLoadingAnimation("disable");
         }
 
+        //------------------------------------ CURRENCY --------------------------------------------------------------
+
+        private void BtnUSD_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = false;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+        }
+
+        private void BtnEUR_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = false;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+        }
+
+        private void BtnGBP_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = false;
+            btnXAU.Enabled = true;
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+        }
+
+        private void BtnXAU_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = false;
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+        }
+
+        private void CloseCurrencyMenuGetMarketDataSaveCurrency()
+        {
+            panelCurrency.Invoke((MethodInvoker)delegate
+            {
+                panelCurrency.Height = 24;
+            });
+            GetMarketData();
+            SaveSettingsToBookmarksFile();
+        }
+
+        private void GetMarketData()
+        {
+            var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+            var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
+            var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+            if (testNet)
+            {
+                priceUSD = "0 (TestNet)";
+                priceGBP = "0 (TestNet)";
+                priceEUR = "0 (TestNet)";
+                priceXAU = "0 (TestNet)";
+                mCapUSD = "0 (TestNet)";
+                mCapGBP = "0 (TestNet)";
+                mCapEUR = "0 (TestNet)";
+                mCapXAU = "0 (TestNet)";
+                satsUSD = "0 (TestNet)";
+                satsGBP = "0 (TestNet)";
+                satsEUR = "0 (TestNet)";
+                satsXAU = "0 (TestNet)";
+            }
+            string price = "";
+            string mCap = "";
+            string satsPerUnit = "";
+            if (!btnUSD.Enabled)
+            {
+                price = "$" + priceUSD;
+                mCap = "$" + mCapUSD;
+                satsPerUnit = satsUSD;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 USD / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / USD";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (USD)";
+                });
+            }
+            if (!btnEUR.Enabled)
+            {
+                price = "€" + priceEUR;
+                mCap = "€" + mCapEUR;
+                satsPerUnit = satsEUR;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 EUR / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / EUR";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (EUR)";
+                });
+            }
+            if (!btnGBP.Enabled)
+            {
+                price = "£" + priceGBP;
+                mCap = "£" + mCapGBP;
+                satsPerUnit = satsGBP;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 GBP / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / GBP";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (GBP)";
+                });
+            }
+            if (!btnXAU.Enabled)
+            {
+                price = "🪙" + priceXAU;
+                mCap = "🪙" + mCapXAU;
+                satsPerUnit = satsXAU;
+                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
+                });
+                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMoscowTimeLabel.Text = "1 XAU / sats";
+                });
+                lblPriceLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblPriceLabel.Text = "1 BTC / XAU";
+                });
+                lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                {
+                    lblMarketCapLabel.Text = "Market cap (XAU)";
+                });
+            }
+ 
+            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
+            });
+            lblPriceUSD.Invoke((MethodInvoker)delegate
+            {
+                lblPriceUSD.Text = price;
+            });
+            lblHeaderPrice.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderPrice.Text = price;
+            });
+            lblMarketCapUSD.Invoke((MethodInvoker)delegate
+            {
+                lblMarketCapUSD.Text = mCap;
+            });
+            lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMarketCap.Text = mCap;
+            });
+            lblMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblMoscowTime.Text = satsPerUnit;
+            });
+            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+            {
+                lblHeaderMoscowTime.Text = satsPerUnit;
+            });
+        }
+
         //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
 
         private (string currentHashrate, string currentDifficulty) GetHashrate()
@@ -1473,7 +1374,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                var response =  client.DownloadString(NodeURL + "v1/fees/recommended");
+                var response = client.DownloadString(NodeURL + "v1/fees/recommended");
                 var data = JObject.Parse(response);
                 string fastestFee = Convert.ToString(data["fastestFee"]);
                 string halfHourFee = Convert.ToString(data["halfHourFee"]);
@@ -1828,206 +1729,6 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
 
-        //------------------------------------ CURRENCY --------------------------------------------------------------
-
-        private void BtnUSD_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = false;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = true;
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            GetMarketData();
-            SaveSettingsToBookmarksFile();
-        }
-
-        private void BtnEUR_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = false;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = true;
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            GetMarketData();
-            SaveSettingsToBookmarksFile();
-        }
-
-        private void BtnGBP_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = false;
-            btnXAU.Enabled = true;
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            GetMarketData();
-            SaveSettingsToBookmarksFile();
-        }
-
-        private void BtnXAU_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = false;
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            GetMarketData();
-            SaveSettingsToBookmarksFile();
-        }
-
-        private void GetMarketData()
-        {
-            var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-            var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
-            var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
-            if (testNet)
-            {
-                priceUSD = "0 (TestNet)";
-                priceGBP = "0 (TestNet)";
-                priceEUR = "0 (TestNet)";
-                priceXAU = "0 (TestNet)";
-                mCapUSD = "0 (TestNet)";
-                mCapGBP = "0 (TestNet)";
-                mCapEUR = "0 (TestNet)";
-                mCapXAU = "0 (TestNet)";
-                satsUSD = "0 (TestNet)";
-                satsGBP = "0 (TestNet)";
-                satsEUR = "0 (TestNet)";
-                satsXAU = "0 (TestNet)";
-            }
-            string price = "";
-            string mCap = "";
-            string satsPerUnit = "";
-            if (!btnUSD.Enabled)
-            {
-                price = "$" + priceUSD;
-                mCap = "$" + mCapUSD;
-                satsPerUnit = satsUSD;
-                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
-                });
-                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMoscowTimeLabel.Text = "1 USD / sats";
-                });
-                lblPriceLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblPriceLabel.Text = "1 BTC / USD";
-                });
-                lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMarketCapLabel.Text = "Market cap (USD)";
-                });
-            }
-            if (!btnEUR.Enabled)
-            {
-                price = "€" + priceEUR;
-                mCap = "€" + mCapEUR;
-                satsPerUnit = satsEUR;
-                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
-                });
-                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMoscowTimeLabel.Text = "1 EUR / sats";
-                });
-                lblPriceLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblPriceLabel.Text = "1 BTC / EUR";
-                });
-                lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMarketCapLabel.Text = "Market cap (EUR)";
-                });
-            }
-            if (!btnGBP.Enabled)
-            {
-                price = "£" + priceGBP;
-                mCap = "£" + mCapGBP;
-                satsPerUnit = satsGBP;
-                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
-                });
-                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMoscowTimeLabel.Text = "1 GBP / sats";
-                });
-                lblPriceLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblPriceLabel.Text = "1 BTC / GBP";
-                });
-                lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMarketCapLabel.Text = "Market cap (GBP)";
-                });
-            }
-            if (!btnXAU.Enabled)
-            {
-                price = "🪙" + priceXAU;
-                mCap = "🪙" + mCapXAU;
-                satsPerUnit = satsXAU;
-                lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
-                });
-                lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMoscowTimeLabel.Text = "1 XAU / sats";
-                });
-                lblPriceLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblPriceLabel.Text = "1 BTC / XAU";
-                });
-                lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                {
-                    lblMarketCapLabel.Text = "Market cap (XAU)";
-                });
-            }
- 
-            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-            {
-                lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
-            });
-            lblPriceUSD.Invoke((MethodInvoker)delegate
-            {
-                lblPriceUSD.Text = price;
-            });
-            lblHeaderPrice.Invoke((MethodInvoker)delegate
-            {
-                lblHeaderPrice.Text = price;
-            });
-            lblMarketCapUSD.Invoke((MethodInvoker)delegate
-            {
-                lblMarketCapUSD.Text = mCap;
-            });
-            lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-            {
-                lblHeaderMarketCap.Text = mCap;
-            });
-            lblMoscowTime.Invoke((MethodInvoker)delegate
-            {
-                lblMoscowTime.Text = satsPerUnit;
-            });
-            lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-            {
-                lblHeaderMoscowTime.Text = satsPerUnit;
-            });
-        }
-
         //---------------------- CONNECTING LINES BETWEEN FIELDS ON LIGHTNING DASHBOARD -------------------------------
         private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
         {
@@ -2058,72 +1759,6 @@ namespace SATSuma
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
 
-        //---------------------- DETERMINE BITCOIN ADDRESS TYPE--------------------------------------------------------
-        private string DetermineAddressType(string address)
-        {
-            try
-            {
-                NBitcoin.BitcoinAddress bitcoinAddress;
-                if (NodeURL == "https://mempool.space/api/") //mempool.space mainnet
-                {
-                    bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
-                }
-                else
-                {
-                    if (NodeURL == "https://mempool.space/testnet/api/") //mempool.space testnet
-                    {
-                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
-                    }
-                    else
-                    {
-                        bool containsTestnet = NodeURL.Contains("testnet");
-                        if (containsTestnet) // own node, testnet
-                        {
-                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
-                        }
-                        else //own node, mainnet
-                        {
-                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
-                        }
-                        
-                    }
-                }
-                
-                if (bitcoinAddress is BitcoinPubKeyAddress)
-                {
-                    return "P2PKH (legacy)"; // Legacy P2PKH
-                }
-                else if (bitcoinAddress is BitcoinScriptAddress)
-                {
-                    return "P2SH"; // (pay-to-script-hash) Multisig P2SH
-                }
-                else if (bitcoinAddress is BitcoinWitPubKeyAddress)
-                {
-                    return "P2WPKH (segwit)"; // P2WPKH
-                }
-                else if (bitcoinAddress is BitcoinWitScriptAddress)
-                {
-                    return "P2WSH"; // (pay-to- witness-script-hash) P2WSH 
-                }
-                else if (address.StartsWith("bc1p") && (address.Length > 41 || address.Length < 73))
-                {
-                    for (int i = 4; i < address.Length - 4; i++)
-                    {
-                        char c = address[i];
-                        if (((c >= '0' && c <= '9') || (c >= 'q' && c <= 'z')))
-                        {
-                            return "P2TT (taproot)";
-                        }
-                    }
-                }
-                return "unknown";
-            }
-            catch (FormatException)
-            {
-                return "Invalid address format";
-            }
-        }
-
         //--------------- VALIDATE BITCOIN ADDRESS,GENERATE QR, BALANCE, TX, ETC---------------------------------------
         private async void TboxSubmittedAddress_TextChanged(object sender, EventArgs e)
         {
@@ -2132,14 +1767,14 @@ namespace SATSuma
             listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
             TotalAddressTransactionRowsAdded = 0;
 
-            string addressString = textboxSubmittedAddress.Text; //user entered address
+            string addressString = textboxSubmittedAddress.Text; // supplied address
             string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 AddressValidShowControls();
-                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                lblAddressType.Invoke((MethodInvoker)delegate
                 {
                     lblAddressType.Text = addressType + " address";
                 });
@@ -2214,6 +1849,72 @@ namespace SATSuma
                     lblAddressConfirmedUnspentOutputs.Text = string.Empty;
                 }); 
                 AddressInvalidHideControls();
+            }
+        }
+
+        //---------------------- DETERMINE BITCOIN ADDRESS TYPE--------------------------------------------------------
+        private string DetermineAddressType(string address)
+        {
+            try
+            {
+                NBitcoin.BitcoinAddress bitcoinAddress;
+                if (NodeURL == "https://mempool.space/api/") //mempool.space mainnet
+                {
+                    bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                }
+                else
+                {
+                    if (NodeURL == "https://mempool.space/testnet/api/") //mempool.space testnet
+                    {
+                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                    }
+                    else
+                    {
+                        bool containsTestnet = NodeURL.Contains("testnet");
+                        if (containsTestnet) // own node, testnet
+                        {
+                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                        }
+                        else //own node, mainnet
+                        {
+                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                        }
+
+                    }
+                }
+
+                if (bitcoinAddress is BitcoinPubKeyAddress)
+                {
+                    return "P2PKH (legacy)"; // Legacy P2PKH
+                }
+                else if (bitcoinAddress is BitcoinScriptAddress)
+                {
+                    return "P2SH"; // (pay-to-script-hash) Multisig P2SH
+                }
+                else if (bitcoinAddress is BitcoinWitPubKeyAddress)
+                {
+                    return "P2WPKH (segwit)"; // P2WPKH
+                }
+                else if (bitcoinAddress is BitcoinWitScriptAddress)
+                {
+                    return "P2WSH"; // (pay-to- witness-script-hash) P2WSH 
+                }
+                else if (address.StartsWith("bc1p") && (address.Length > 41 || address.Length < 73))
+                {
+                    for (int i = 4; i < address.Length - 4; i++)
+                    {
+                        char c = address[i];
+                        if (((c >= '0' && c <= '9') || (c >= 'q' && c <= 'z')))
+                        {
+                            return "P2TT (taproot)";
+                        }
+                    }
+                }
+                return "unknown";
+            }
+            catch (FormatException)
+            {
+                return "Invalid address format";
             }
         }
 
@@ -2455,14 +2156,11 @@ namespace SATSuma
             await GetAddressBalance(addressString);
         }
 
-        int rowsReturnedByAddressTransactionsAPI;
-
         //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
         private async Task GetTransactionsForAddress(string addressString, string lastSeenTxId)
         {
             try
             {
-
                 if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
@@ -2817,12 +2515,11 @@ namespace SATSuma
         private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
             CheckNetworkStatus();
-            //assign block number to text box on block panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
             // Get the second subitem in the selected item 
             string submittedBlockNumber = selectedItem.SubItems[1].Text;
-            // Set the text of the textBoxSubmittedBlockNumber control
+            // copy block number to the block screen
             textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
             {
                 textBoxSubmittedBlockNumber.Text = submittedBlockNumber;
@@ -2843,12 +2540,11 @@ namespace SATSuma
         private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
         {
             CheckNetworkStatus();
-            //assign TX ID to text box on transaction panel
             // Get the selected item
             ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
             // Get the first subitem in the selected item 
             string TransactionIDFromRow = selectedItem.SubItems[0].Text;
-            // Set the text of the textBoxTransactionID control
+            // copy transaction ID to transaction screen
             textBoxTransactionID.Invoke((MethodInvoker)delegate
             {
                 textBoxTransactionID.Text = TransactionIDFromRow;
@@ -2858,7 +2554,6 @@ namespace SATSuma
         }
 
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
-
         private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             foreach (ListViewItem item in listViewAddressTransactions.Items)
@@ -3350,8 +3045,6 @@ namespace SATSuma
         }
 
         //------------------------ GET TRANSACTIONS FOR BLOCK ---------------------------------------------------------
-        int rowsReturnedByBlockTransactionsAPI;
-
         private async Task GetTransactionsForBlock(string blockHash, string lastSeenBlockTransaction)
         {
             try
@@ -3499,10 +3192,8 @@ namespace SATSuma
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-                                                   // Get the last seen transaction ID from the list view
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
-                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction); // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
                 ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
@@ -3518,33 +3209,9 @@ namespace SATSuma
         {
             try
             {
-                /*
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-
-                if (TotalBlockTransactionRowsAdded % 25 == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
-                {
-                    TotalBlockTransactionRowsAdded -= 50;
-                }
-                else // otherwise we subtract the odd amount (only happens at end of list) and another 25 to be able to go back to the previous page.
-                {
-                    int closestMultipleOf25 = TotalBlockTransactionRowsAdded - (TotalBlockTransactionRowsAdded % 25);
-                    int firstNumberBeforeIt = closestMultipleOf25 - 25;
-                    TotalBlockTransactionRowsAdded = firstNumberBeforeIt;
-                }
-
-                var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
-                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
-                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                ToggleLoadingAnimation("disable"); // stop the loading animation
-                btnViewTransactionFromBlock.Visible = false;
-                */
-                ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
-                var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
-
                 if (TotalBlockTransactionRowsAdded % rowsReturnedByBlockTransactionsAPI == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
                 {
                     TotalBlockTransactionRowsAdded -= (rowsReturnedByBlockTransactionsAPI * 2);
@@ -3555,14 +3222,11 @@ namespace SATSuma
                     int firstNumberBeforeIt = closestMultipleOf25 - rowsReturnedByBlockTransactionsAPI;
                     TotalBlockTransactionRowsAdded = firstNumberBeforeIt;
                 }
-
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
-                                                                                                 // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction);
+                await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction); // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
                 DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
                 ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
-
             }
             catch (Exception ex)
             {
@@ -3757,12 +3421,11 @@ namespace SATSuma
             try
             {
                 CheckNetworkStatus();
-                //assign TX ID to text box on transaction panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
                 // Get the first subitem in the selected item 
                 string TransactionIDFromRow = selectedItem.SubItems[0].Text;
-                // Set the text of the textBoxTransactionID control
+                // copy transaction ID to transaction screen
                 textBoxTransactionID.Invoke((MethodInvoker)delegate
                 {
                     textBoxTransactionID.Text = TransactionIDFromRow;
@@ -3775,7 +3438,6 @@ namespace SATSuma
                 HandleException(ex, "BtnViewTransactionFromBlock_Click");
             }
         }
-
         #endregion
 
         #region TRANSACTION SCREEN
@@ -4282,8 +3944,7 @@ namespace SATSuma
                         listViewTransactionOutputs.Items.Add(item); // add row
                     });
                 }
-                // Get the height of each item to set height of whole listview
-                int rowHeightout = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                int rowHeightout = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height; // Get the height of each item to set height of whole listview
                 int itemCountout = listViewTransactionOutputs.Items.Count; // Get the number of items in the ListBox
                 int listBoxHeightout = (itemCountout + 2) * rowHeightout; // Calculate the height of the ListBox (the extra 2 gives room for the header)
 
@@ -4318,7 +3979,6 @@ namespace SATSuma
                         {
                             subItem.ForeColor = Color.White;
                         }
-                        //item.ForeColor = Color.White; // address
                         if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
                         {
                             btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
@@ -4713,14 +4373,13 @@ namespace SATSuma
             try
             {
                 CheckNetworkStatus();
-                //assign address to text box on address panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
-                string SelectedAddress = selectedItem.SubItems[0].Text;
+                string SelectedAddress = selectedItem.SubItems[0].Text; 
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
-                    textboxSubmittedAddress.Text = SelectedAddress;
+                    textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
                 });
                 //show the address screen
                 BtnMenuAddress_Click(sender, e);
@@ -4736,14 +4395,13 @@ namespace SATSuma
             try
             {
                 CheckNetworkStatus();
-                //assign address to text box on address panel
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
-                string SelectedAddress = selectedItem.SubItems[0].Text;
+                string SelectedAddress = selectedItem.SubItems[0].Text; 
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
-                    textboxSubmittedAddress.Text = SelectedAddress;
+                    textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
                 });
                 //show the address screen
                 BtnMenuAddress_Click(sender, e);
@@ -8847,8 +8505,30 @@ namespace SATSuma
             {
                 selectedNetwork = "C";
             }
-
-            //!!!!!!!!! set the values on the tickboxes here to fix bug where they get lost on restarting the app
+            if (lblBitcoinDashboard.Text == "✔️")
+            {
+                bitcoinDashboardSelected = "1";
+            }
+            if (lblBlockchairComJSON.Text == "✔️")
+            {
+                blockchairComJSONSelected = "1";
+            }
+            if (lblBitcoinExplorerEndpoints.Text == "✔️")
+            {
+                bitcoinExplorerEnpointsSelected = "1";
+            }
+            if (lblBlockchainInfoEndpoints.Text == "✔️")
+            {
+                blockchainInfoEndpointsSelected = "1";
+            }
+            if (lblLightningDashboard.Text == "✔️")
+            {
+                lightningDashboardSelected = "1";
+            }
+            if (lblMempoolLightningJSON.Text == "✔️")
+            {
+                mempoolLightningJSONSelected = "1";
+            }
 
             // write the settings to the bookmarks file for auto retrieval next time
             DateTime today = DateTime.Today;
@@ -8882,6 +8562,241 @@ namespace SATSuma
                     settingsInFile = bookmarkData;
                 //}
             }
+        }
+
+        private void RestoreSavedSettings()
+        {
+            var bookmarks = ReadBookmarksFromJsonFile();
+
+            // check if settings are already saved in the bookmarks file and either restore them or use defaults and save a settings entry in bookmarks file
+            foreach (var bookmark in bookmarks)
+            {
+                if (bookmark.Type == "settings")
+                {
+                    settingsAlreadySavedInFile = true;
+                    settingsInFile = bookmark.Data;
+                    if (Convert.ToString(bookmark.Data[0]) == "P")
+                    {
+                        //GBP
+                        btnGBP.Enabled = false;
+                        btnUSD.Enabled = true;
+                        btnEUR.Enabled = true;
+                        btnXAU.Enabled = true;
+                    }
+                    if (Convert.ToString(bookmark.Data[0]) == "D")
+                    {
+                        //USD
+                        btnGBP.Enabled = true;
+                        btnUSD.Enabled = false;
+                        btnEUR.Enabled = true;
+                        btnXAU.Enabled = true;
+                    }
+                    if (Convert.ToString(bookmark.Data[0]) == "E")
+                    {
+                        //EUR
+                        btnGBP.Enabled = true;
+                        btnUSD.Enabled = true;
+                        btnEUR.Enabled = false;
+                        btnXAU.Enabled = true;
+                    }
+                    if (Convert.ToString(bookmark.Data[0]) == "G")
+                    {
+                        //XAU
+                        btnGBP.Enabled = true;
+                        btnUSD.Enabled = true;
+                        btnEUR.Enabled = true;
+                        btnXAU.Enabled = false;
+                    }
+                    if (Convert.ToString(bookmark.Data[1]) == "M")
+                    {
+                        //mainnet
+                        NodeURL = "https://mempool.space/api/";
+                        CreateDataServices();
+                        lblSettingsNodeMainnet.Text = "✔️";
+                        lblSettingsNodeMainnet.ForeColor = Color.Green;
+                        lblSettingsNodeTestnet.Text = "❌";
+                        lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                        lblSettingsNodeCustom.Text = "❌";
+                        lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                    }
+                    if (Convert.ToString(bookmark.Data[1]) == "T")
+                    {
+                        //testnet
+                        NodeURL = "https://mempool.space/testnet/api/";
+                        CreateDataServices();
+                        lblSettingsNodeMainnet.Text = "❌";
+                        lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                        lblSettingsNodeTestnet.Text = "✔️";
+                        lblSettingsNodeTestnet.ForeColor = Color.Green;
+                        lblSettingsNodeCustom.Text = "❌";
+                        lblSettingsNodeCustom.ForeColor = Color.IndianRed;
+                    }
+                    if (Convert.ToString(bookmark.Data[1]) == "C")
+                    {
+                        //custom
+                        CreateDataServices();
+                        lblSettingsNodeMainnet.Text = "❌";
+                        lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                        lblSettingsNodeTestnet.Text = "❌";
+                        lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                        lblSettingsNodeCustom.Text = "✔️";
+                        lblSettingsNodeCustom.ForeColor = Color.Green;
+                    }
+                    if (Convert.ToString(bookmark.Data[2]) == "1")
+                    {
+                        RunBlockchairComJSONAPI = true;
+                        lblBlockchairComJSON.Text = "✔️";
+                        lblBlockchairComJSON.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        RunBlockchairComJSONAPI = false;
+                        lblBlockchairComJSON.Text = "❌";
+                        lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                    }
+                    if (Convert.ToString(bookmark.Data[3]) == "1")
+                    {
+                        RunBitcoinExplorerEndpointAPI = true;
+                        RunBitcoinExplorerOrgJSONAPI = true;
+                        lblBitcoinExplorerEndpoints.Text = "✔️";
+                        lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        RunBitcoinExplorerEndpointAPI = false;
+                        RunBitcoinExplorerOrgJSONAPI = false;
+                        lblBitcoinExplorerEndpoints.Text = "❌";
+                        lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                    }
+                    if (Convert.ToString(bookmark.Data[4]) == "1")
+                    {
+                        RunBlockchainInfoEndpointAPI = true;
+                        lblBlockchainInfoEndpoints.Text = "✔️";
+                        lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        RunBlockchainInfoEndpointAPI = false;
+                        lblBlockchainInfoEndpoints.Text = "❌";
+                        lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                    }
+                    if (Convert.ToString(bookmark.Data[5]) == "1")
+                    {
+                        lblBitcoinDashboard.Text = "✔️";
+                        lblBitcoinDashboard.ForeColor = Color.Green;
+                        lblBlockchairComJSON.Enabled = true;
+                        lblBitcoinExplorerEndpoints.Enabled = true;
+                        lblBlockchainInfoEndpoints.Enabled = true;
+                        btnMenuBitcoinDashboard.Enabled = true;
+                    }
+                    else
+                    {
+                        lblBitcoinDashboard.Text = "❌";
+                        lblBitcoinDashboard.ForeColor = Color.IndianRed;
+                        RunBlockchairComJSONAPI = false;
+                        lblBlockchairComJSON.Text = "❌";
+                        lblBlockchairComJSON.Enabled = false;
+                        lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                        RunBitcoinExplorerEndpointAPI = false;
+                        RunBitcoinExplorerOrgJSONAPI = false;
+                        lblBitcoinExplorerEndpoints.Text = "❌";
+                        lblBitcoinExplorerEndpoints.Enabled = false;
+                        lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                        RunBlockchainInfoEndpointAPI = false;
+                        lblBlockchainInfoEndpoints.Text = "❌";
+                        lblBlockchainInfoEndpoints.Enabled = false;
+                        lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                        btnMenuBitcoinDashboard.Enabled = false;
+                    }
+                    if (Convert.ToString(bookmark.Data[6]) == "1")
+                    {
+                        lblLightningDashboard.Text = "✔️";
+                        lblLightningDashboard.ForeColor = Color.Green;
+                        RunMempoolSpaceLightningAPI = true;
+                        lblMempoolLightningJSON.Text = "✔️";
+                        lblMempoolLightningJSON.Enabled = true;
+                        lblMempoolLightningJSON.ForeColor = Color.Green;
+                        btnMenuLightningDashboard.Enabled = true;
+                    }
+                    else
+                    {
+                        lblLightningDashboard.Text = "❌";
+                        lblLightningDashboard.ForeColor = Color.IndianRed;
+                        RunMempoolSpaceLightningAPI = false;
+                        lblMempoolLightningJSON.Text = "❌";
+                        lblMempoolLightningJSON.Enabled = false;
+                        lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                        btnMenuLightningDashboard.Enabled = false;
+                    }
+                    if (Convert.ToString(bookmark.Data[7]) == "1")
+                    {
+                        lblMempoolLightningJSON.Text = "✔️";
+                        lblMempoolLightningJSON.Enabled = true;
+                        lblMempoolLightningJSON.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        lblMempoolLightningJSON.Text = "❌";
+                        lblMempoolLightningJSON.Enabled = false;
+                        lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                    }
+                    numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
+                    break;
+                }
+            }
+
+            // check if there is a node address saved in the bookmarks file
+            foreach (var bookmark in bookmarks)
+            {
+                if (bookmark.Type == "node")
+                {
+                    textBoxSettingsCustomMempoolURL.Text = bookmark.Data; // move it to the settings screen
+
+                    nodeURLInFile = bookmark.Data;
+                    nodeURLAlreadySavedInFile = true;
+                    if (lblSettingsNodeCustom.Text == "✔️")
+                    {
+                        CheckCustomNodeIsOnline();
+                    }
+                    break;
+                }
+                nodeURLAlreadySavedInFile = false;
+            }
+
+            // check if there is an xpub node address saved in the bookmarks file
+            foreach (var bookmark in bookmarks)
+            {
+                if (bookmark.Type == "xpubnode")
+                {
+                    textBoxXpubNodeURL.Text = bookmark.Data; // move node url string to the form
+                    textBoxSettingsXpubMempoolURL.Text = bookmark.Data; // and to the settings screen
+                    CheckXpubNodeIsOnline();
+                    xpubNodeURLInFile = bookmark.Data;
+                    xpubNodeURLAlreadySavedInFile = true;
+                    break;
+                }
+                xpubNodeURLAlreadySavedInFile = false;
+            }
+
+            // check if there is a default theme saved in the bookmarks file
+            foreach (var bookmark in bookmarks)
+            {
+                if (bookmark.Type == "defaulttheme")
+                {
+                    var themes = ReadThemesFromJsonFile();
+                    foreach (Theme theme in themes)
+                    {
+                        if (theme.ThemeName == bookmark.Data)
+                        {
+                            RestoreTheme(theme);
+                            defaultThemeInFile = bookmark.Data;
+                            defaultThemeAlreadySavedInFile = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
 
         #endregion
@@ -10357,6 +10272,56 @@ namespace SATSuma
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
 
+        private void UpdateSecondsToHalving()
+        {
+            if (!testNet)
+            {
+                if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
+                {
+                    string secondsString = lblHalvingSecondsRemaining.Text;
+                    try
+                    {
+                        int SecondsToHalving = int.Parse(secondsString);
+                        if (SecondsToHalving > 0)
+                        {
+                            SecondsToHalving--; // one second closer to the halvening!
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                        {
+                            lblHalvingSecondsRemaining.Text = "disabled";
+                        });
+                    }
+                }
+            }
+
+        }
+
+        private void UpdateOnScreenElapsedTimeSinceUpdate()
+        {
+            intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
+            if (intDisplaySecondsElapsedSinceUpdate == 1)
+            {
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
+            }
+            else
+            {
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
+            }
+        }
+
         private void CreateDataServices()
         {
             _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
@@ -10368,17 +10333,14 @@ namespace SATSuma
         // Get current block tip
         private void GetBlockTip()
         {
-           // if (headerNetworkStatusLight.ForeColor == Color.OliveDrab)
-           // {
-                using WebClient client = new WebClient();
-                string BlockTipURL = NodeURL + "blocks/tip/height";
-                string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                lblBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockNumber.Text = BlockTip;
-                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
-                });
-           // }
+            using WebClient client = new WebClient();
+            string BlockTipURL = NodeURL + "blocks/tip/height";
+            string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+            lblBlockNumber.Invoke((MethodInvoker)delegate
+            {
+                lblBlockNumber.Text = BlockTip;
+                textBoxBlockHeightToStartListFrom.Text = BlockTip;
+            });
         }
 
         // Method to encrypt a string using SHA-256

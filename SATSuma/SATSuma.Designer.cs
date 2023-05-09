@@ -3501,6 +3501,7 @@
             this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
             this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(499, 41);
             this.panelOwnNodeAddressTXInfo.TabIndex = 213;
+            this.panelOwnNodeAddressTXInfo.Visible = false;
             // 
             // label164
             // 
@@ -6028,11 +6029,14 @@
             // lblInvalidTransaction
             // 
             this.lblInvalidTransaction.AutoSize = true;
+            this.lblInvalidTransaction.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInvalidTransaction.ForeColor = System.Drawing.Color.IndianRed;
             this.lblInvalidTransaction.Location = new System.Drawing.Point(606, 6);
             this.lblInvalidTransaction.Name = "lblInvalidTransaction";
-            this.lblInvalidTransaction.Size = new System.Drawing.Size(182, 15);
+            this.lblInvalidTransaction.Size = new System.Drawing.Size(190, 20);
             this.lblInvalidTransaction.TabIndex = 198;
-            this.lblInvalidTransaction.Text = "Invalid or does not exist";
+            this.lblInvalidTransaction.Text = "❌ Invalid transaction ID";
+            this.lblInvalidTransaction.Visible = false;
             // 
             // panelTransactionHeadline
             // 
@@ -10132,10 +10136,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);
@@ -10146,7 +10151,6 @@
             this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.pictureBox1);

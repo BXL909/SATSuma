@@ -4570,9 +4570,9 @@
             this.panelMenu.Controls.Add(this.btnMenuAddress);
             this.panelMenu.Controls.Add(this.btnMenuBitcoinDashboard);
             this.panelMenu.Controls.Add(this.btnMenuLightningDashboard);
-            this.panelMenu.Location = new System.Drawing.Point(557, 11);
+            this.panelMenu.Location = new System.Drawing.Point(587, 11);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(144, 24);
+            this.panelMenu.Size = new System.Drawing.Size(114, 24);
             this.panelMenu.TabIndex = 152;
             // 
             // btnMenuAppearance
@@ -4587,7 +4587,7 @@
             this.btnMenuAppearance.ForeColor = System.Drawing.Color.White;
             this.btnMenuAppearance.Location = new System.Drawing.Point(0, 240);
             this.btnMenuAppearance.Name = "btnMenuAppearance";
-            this.btnMenuAppearance.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuAppearance.Size = new System.Drawing.Size(114, 24);
             this.btnMenuAppearance.TabIndex = 160;
             this.btnMenuAppearance.TabStop = false;
             this.btnMenuAppearance.Text = "appearance";
@@ -4607,7 +4607,7 @@
             this.btnMenuSettings2.ForeColor = System.Drawing.Color.White;
             this.btnMenuSettings2.Location = new System.Drawing.Point(0, 216);
             this.btnMenuSettings2.Name = "btnMenuSettings2";
-            this.btnMenuSettings2.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuSettings2.Size = new System.Drawing.Size(114, 24);
             this.btnMenuSettings2.TabIndex = 159;
             this.btnMenuSettings2.TabStop = false;
             this.btnMenuSettings2.Text = "settings";
@@ -4627,7 +4627,7 @@
             this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
             this.btnMenuHelp.Location = new System.Drawing.Point(0, 288);
             this.btnMenuHelp.Name = "btnMenuHelp";
-            this.btnMenuHelp.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuHelp.Size = new System.Drawing.Size(114, 24);
             this.btnMenuHelp.TabIndex = 158;
             this.btnMenuHelp.TabStop = false;
             this.btnMenuHelp.Text = "help";
@@ -4647,7 +4647,7 @@
             this.btnMenuBookmarks.ForeColor = System.Drawing.Color.White;
             this.btnMenuBookmarks.Location = new System.Drawing.Point(0, 192);
             this.btnMenuBookmarks.Name = "btnMenuBookmarks";
-            this.btnMenuBookmarks.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuBookmarks.Size = new System.Drawing.Size(114, 24);
             this.btnMenuBookmarks.TabIndex = 157;
             this.btnMenuBookmarks.TabStop = false;
             this.btnMenuBookmarks.Text = "bookmarks";
@@ -4669,7 +4669,7 @@
             this.btnMenuXpub.Location = new System.Drawing.Point(0, 120);
             this.btnMenuXpub.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuXpub.Name = "btnMenuXpub";
-            this.btnMenuXpub.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuXpub.Size = new System.Drawing.Size(114, 24);
             this.btnMenuXpub.TabIndex = 156;
             this.btnMenuXpub.TabStop = false;
             this.btnMenuXpub.Text = "xpub";
@@ -4691,7 +4691,7 @@
             this.btnMenuTransaction.Location = new System.Drawing.Point(0, 96);
             this.btnMenuTransaction.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuTransaction.Name = "btnMenuTransaction";
-            this.btnMenuTransaction.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuTransaction.Size = new System.Drawing.Size(114, 24);
             this.btnMenuTransaction.TabIndex = 155;
             this.btnMenuTransaction.TabStop = false;
             this.btnMenuTransaction.Text = "transaction";
@@ -4714,10 +4714,10 @@
             this.btnMenuBlockList.Location = new System.Drawing.Point(0, 24);
             this.btnMenuBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBlockList.Name = "btnMenuBlockList";
-            this.btnMenuBlockList.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuBlockList.Size = new System.Drawing.Size(114, 24);
             this.btnMenuBlockList.TabIndex = 154;
             this.btnMenuBlockList.TabStop = false;
-            this.btnMenuBlockList.Text = "recent blocks";
+            this.btnMenuBlockList.Text = "blocks";
             this.btnMenuBlockList.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuBlockList.UseVisualStyleBackColor = false;
             this.btnMenuBlockList.Click += new System.EventHandler(this.BtnMenuBlockList_Click);
@@ -4736,7 +4736,7 @@
             this.btnMenu.Location = new System.Drawing.Point(0, 0);
             this.btnMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(144, 24);
+            this.btnMenu.Size = new System.Drawing.Size(114, 24);
             this.btnMenu.TabIndex = 3;
             this.btnMenu.TabStop = false;
             this.btnMenu.Text = "MENU";
@@ -4756,7 +4756,7 @@
             this.btnMenuSplash.ForeColor = System.Drawing.Color.White;
             this.btnMenuSplash.Location = new System.Drawing.Point(0, 264);
             this.btnMenuSplash.Name = "btnMenuSplash";
-            this.btnMenuSplash.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuSplash.Size = new System.Drawing.Size(114, 24);
             this.btnMenuSplash.TabIndex = 151;
             this.btnMenuSplash.TabStop = false;
             this.btnMenuSplash.Text = "about";
@@ -4778,7 +4778,7 @@
             this.btnMenuBlock.Location = new System.Drawing.Point(0, 48);
             this.btnMenuBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBlock.Name = "btnMenuBlock";
-            this.btnMenuBlock.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuBlock.Size = new System.Drawing.Size(114, 24);
             this.btnMenuBlock.TabIndex = 150;
             this.btnMenuBlock.TabStop = false;
             this.btnMenuBlock.Text = "block";
@@ -4800,7 +4800,7 @@
             this.btnMenuAddress.Location = new System.Drawing.Point(0, 72);
             this.btnMenuAddress.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuAddress.Name = "btnMenuAddress";
-            this.btnMenuAddress.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuAddress.Size = new System.Drawing.Size(114, 24);
             this.btnMenuAddress.TabIndex = 92;
             this.btnMenuAddress.TabStop = false;
             this.btnMenuAddress.Text = "address";
@@ -4822,10 +4822,10 @@
             this.btnMenuBitcoinDashboard.Location = new System.Drawing.Point(0, 144);
             this.btnMenuBitcoinDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBitcoinDashboard.Name = "btnMenuBitcoinDashboard";
-            this.btnMenuBitcoinDashboard.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuBitcoinDashboard.Size = new System.Drawing.Size(114, 24);
             this.btnMenuBitcoinDashboard.TabIndex = 88;
             this.btnMenuBitcoinDashboard.TabStop = false;
-            this.btnMenuBitcoinDashboard.Text = "bitcoin dashbaord";
+            this.btnMenuBitcoinDashboard.Text = "₿ dashbaord";
             this.btnMenuBitcoinDashboard.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuBitcoinDashboard.UseVisualStyleBackColor = false;
             this.btnMenuBitcoinDashboard.Click += new System.EventHandler(this.BtnMenuBitcoinDashboard_Click);
@@ -4844,10 +4844,10 @@
             this.btnMenuLightningDashboard.Location = new System.Drawing.Point(0, 168);
             this.btnMenuLightningDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuLightningDashboard.Name = "btnMenuLightningDashboard";
-            this.btnMenuLightningDashboard.Size = new System.Drawing.Size(144, 24);
+            this.btnMenuLightningDashboard.Size = new System.Drawing.Size(114, 24);
             this.btnMenuLightningDashboard.TabIndex = 87;
             this.btnMenuLightningDashboard.TabStop = false;
-            this.btnMenuLightningDashboard.Text = "lightning dashboard";
+            this.btnMenuLightningDashboard.Text = "⚡dashboard";
             this.btnMenuLightningDashboard.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuLightningDashboard.UseVisualStyleBackColor = false;
             this.btnMenuLightningDashboard.Click += new System.EventHandler(this.BtnMenuLightningDashboard_Click);
@@ -7017,7 +7017,7 @@
             this.btnAddToBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddToBookmarks.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddToBookmarks.ForeColor = System.Drawing.Color.White;
-            this.btnAddToBookmarks.Location = new System.Drawing.Point(527, 11);
+            this.btnAddToBookmarks.Location = new System.Drawing.Point(557, 11);
             this.btnAddToBookmarks.Name = "btnAddToBookmarks";
             this.btnAddToBookmarks.Size = new System.Drawing.Size(24, 24);
             this.btnAddToBookmarks.TabIndex = 2;
@@ -7997,9 +7997,9 @@
             this.panelCurrency.Controls.Add(this.btnCurrency);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(453, 11);
+            this.panelCurrency.Location = new System.Drawing.Point(456, 11);
             this.panelCurrency.Name = "panelCurrency";
-            this.panelCurrency.Size = new System.Drawing.Size(69, 24);
+            this.panelCurrency.Size = new System.Drawing.Size(96, 24);
             this.panelCurrency.TabIndex = 159;
             // 
             // btnXAU
@@ -8016,7 +8016,7 @@
             this.btnXAU.Location = new System.Drawing.Point(0, 96);
             this.btnXAU.Margin = new System.Windows.Forms.Padding(0);
             this.btnXAU.Name = "btnXAU";
-            this.btnXAU.Size = new System.Drawing.Size(69, 24);
+            this.btnXAU.Size = new System.Drawing.Size(96, 24);
             this.btnXAU.TabIndex = 155;
             this.btnXAU.TabStop = false;
             this.btnXAU.Text = "XAU🪙";
@@ -8039,7 +8039,7 @@
             this.btnUSD.Location = new System.Drawing.Point(0, 24);
             this.btnUSD.Margin = new System.Windows.Forms.Padding(0);
             this.btnUSD.Name = "btnUSD";
-            this.btnUSD.Size = new System.Drawing.Size(69, 24);
+            this.btnUSD.Size = new System.Drawing.Size(96, 24);
             this.btnUSD.TabIndex = 154;
             this.btnUSD.TabStop = false;
             this.btnUSD.Text = "USD $";
@@ -8061,10 +8061,10 @@
             this.btnCurrency.Location = new System.Drawing.Point(0, 0);
             this.btnCurrency.Margin = new System.Windows.Forms.Padding(0);
             this.btnCurrency.Name = "btnCurrency";
-            this.btnCurrency.Size = new System.Drawing.Size(69, 24);
+            this.btnCurrency.Size = new System.Drawing.Size(96, 24);
             this.btnCurrency.TabIndex = 1;
             this.btnCurrency.TabStop = false;
-            this.btnCurrency.Text = "$€£🪙";
+            this.btnCurrency.Text = "CURRENCY";
             this.btnCurrency.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCurrency.UseVisualStyleBackColor = false;
             this.btnCurrency.Click += new System.EventHandler(this.BtnCurrency_Click);
@@ -8083,7 +8083,7 @@
             this.btnEUR.Location = new System.Drawing.Point(0, 48);
             this.btnEUR.Margin = new System.Windows.Forms.Padding(0);
             this.btnEUR.Name = "btnEUR";
-            this.btnEUR.Size = new System.Drawing.Size(69, 24);
+            this.btnEUR.Size = new System.Drawing.Size(96, 24);
             this.btnEUR.TabIndex = 150;
             this.btnEUR.TabStop = false;
             this.btnEUR.Text = "EUR €";
@@ -8105,7 +8105,7 @@
             this.btnGBP.Location = new System.Drawing.Point(0, 72);
             this.btnGBP.Margin = new System.Windows.Forms.Padding(0);
             this.btnGBP.Name = "btnGBP";
-            this.btnGBP.Size = new System.Drawing.Size(69, 24);
+            this.btnGBP.Size = new System.Drawing.Size(96, 24);
             this.btnGBP.TabIndex = 92;
             this.btnGBP.TabStop = false;
             this.btnGBP.Text = "GBP £";
@@ -10136,6 +10136,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelCurrency);
+            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
@@ -10152,9 +10154,7 @@
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.lblSatsumaTitle);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelHeaderPrice);

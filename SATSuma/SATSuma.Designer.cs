@@ -4825,7 +4825,7 @@
             this.btnMenuBitcoinDashboard.Size = new System.Drawing.Size(114, 24);
             this.btnMenuBitcoinDashboard.TabIndex = 88;
             this.btnMenuBitcoinDashboard.TabStop = false;
-            this.btnMenuBitcoinDashboard.Text = "₿ dashbaord";
+            this.btnMenuBitcoinDashboard.Text = "₿ dashboard";
             this.btnMenuBitcoinDashboard.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuBitcoinDashboard.UseVisualStyleBackColor = false;
             this.btnMenuBitcoinDashboard.Click += new System.EventHandler(this.BtnMenuBitcoinDashboard_Click);

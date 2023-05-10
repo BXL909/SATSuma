@@ -10964,7 +10964,7 @@ namespace SATSuma
             {
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 312;
+                    panelMenu.Height = 292;
                 });
                 panelCurrency.Invoke((MethodInvoker)delegate
                 {

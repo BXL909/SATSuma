@@ -16,7 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀
 
 Version history 🍊
-0.7 this work in progress
+0.8 this work in progress
 
  * Stuff to do:
  * handle tabbing and focus better

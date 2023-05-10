@@ -24,7 +24,7 @@ namespace SATSuma
 
         private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://btcdir.org");
+            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/download/");
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -35,6 +35,11 @@ namespace SATSuma
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://satsuma.btcdir.org/tips/");
+        }
+
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/BXL909/SATSuma");
         }
     }
 }

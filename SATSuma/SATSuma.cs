@@ -12,8 +12,8 @@
 ⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   user's own node. Keys to unlock encrypted bookmarks
 ⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   are not stored anywhere and are uncrecoverable. The
 ⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   bookmarks file is bookmarks.json, in the installation
-⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   directory.
-⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   directory. Themes are stored in themes.json, in the
+⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   installation directory
 
 Version history 🍊
 0.8 this work in progress
@@ -22,7 +22,7 @@ Version history 🍊
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * sorting of bookmarks?
+ * test that none of the buttons get stuck in a disabled state
  */
 
 #region Using

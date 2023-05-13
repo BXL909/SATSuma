@@ -96,6 +96,7 @@ namespace SATSuma
         private TransactionService _transactionService;
         private TransactionsForBlockService _transactionsForBlockService;
         private HashrateAndDifficultyService _hashrateAndDifficultyService;
+        private HistoricPriceDataService _historicPriceDataService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -6907,8 +6908,9 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
             // refresh the graph
             formsPlot1.Refresh();
-            btnGraphHashrate.Enabled = false;
-            btnGraphDifficulty.Enabled = true;
+            btnChartHashrate.Enabled = false;
+            btnChartDifficulty.Enabled = true;
+            btnChartPrice.Enabled = true;
         }
 
         private async void BtnGraphDifficulty_Click(object sender, EventArgs e)
@@ -6947,8 +6949,50 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
             // refresh the graph
             formsPlot1.Refresh();
-            btnGraphDifficulty.Enabled = false;
-            btnGraphHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = false;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = true;
+        }
+
+        private async void btnChartPrice_Click(object sender, EventArgs e)
+        {
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges");
+
+            // get a series of historic price data
+            var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync();
+            JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
+
+            //split the data into two lists
+            List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+            //List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+
+            //DIFFICULTY
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = PriceList.Count;
+
+            // create arrays of doubles of the difficulties and the dates
+            double[] yValues = PriceList.Select(h => (double)(h.y)).ToArray(); // divide by 1E12 to convert to trillions
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.x)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Price (USD)");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            // refresh the graph
+            formsPlot1.Refresh();
+            btnChartDifficulty.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = false;
         }
 
         #endregion
@@ -10500,6 +10544,7 @@ namespace SATSuma
             _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
             _transactionService = new TransactionService(NodeURL);
             _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
+            _historicPriceDataService = new HistoricPriceDataService(NodeURL);
         }
 
         // Get current block tip
@@ -11325,7 +11370,7 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = false;
-                btnGraphHashrate.Enabled = false;
+                btnChartHashrate.Enabled = false;
                 panelCharts.Visible = true;
                 this.ResumeLayout();
             }
@@ -11918,6 +11963,13 @@ namespace SATSuma
                         lblNowViewing.Text = "Appearance";
                     });
                 }
+                if (panelCharts.Visible)
+                {
+                    lblNowViewing.Invoke((MethodInvoker)delegate
+                    {
+                        lblNowViewing.Text = "Charts";
+                    });
+                }
                 btnAddToBookmarks.Enabled = false;
             }
         }
@@ -12379,6 +12431,61 @@ namespace SATSuma
         }
 
         //---------------------------charts-----------------------------------------------
+        public class HistoricPriceData
+        {
+            public string status { get; set; }
+            public string name { get; set; }
+            public string unit { get; set; }
+            public string period { get; set; }
+            public string description { get; set; }
+            public PriceCoordinates[] values { get; set; }
+        }
+        public class PriceCoordinates
+        {
+            public string x { get; set; } // date
+            public decimal y { get; set; } // price
+        }
+
+        public class PriceCoordinatesList
+        {
+            public string x { get; set; }
+            public decimal y { get; set; }
+        }
+
+        public class HistoricPriceDataService
+        {
+            private readonly string _nodeUrl;
+            public HistoricPriceDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetHistoricPriceDataAsync()
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri("https://api.blockchain.info/");
+                        var response = await client.GetAsync($"charts/market-price?timespan=all&format=json");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
         public class HashrateAndDifficultySnapshot
         {
             public HashrateSnapshot[] Hashrates { get; set; }
@@ -12435,5 +12542,7 @@ namespace SATSuma
             }
         }
         #endregion
+
+
     }
 }

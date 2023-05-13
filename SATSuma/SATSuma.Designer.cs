@@ -80,6 +80,10 @@
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.btnViewAddressFromXpub = new System.Windows.Forms.Button();
             this.pictureBoxHashrateChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDifficultyChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderHashrateChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListDifficultyChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListHashrateChart = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -696,13 +700,14 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
-            this.btnGraphDifficulty = new System.Windows.Forms.Button();
-            this.btnGraphHashrate = new System.Windows.Forms.Button();
-            this.pictureBoxDifficultyChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderHashrateChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListDifficultyChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListHashrateChart = new System.Windows.Forms.PictureBox();
+            this.btnChartDifficulty = new System.Windows.Forms.Button();
+            this.btnChartHashrate = new System.Windows.Forms.Button();
+            this.btnChartPrice = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -809,10 +814,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
             this.panelCharts.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1518,6 +1519,54 @@
             this.pictureBoxHashrateChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxHashrateChart, "view chart");
             this.pictureBoxHashrateChart.Click += new System.EventHandler(this.PictureBoxHashrateChart_Click);
+            // 
+            // pictureBoxDifficultyChart
+            // 
+            this.pictureBoxDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(436, 352);
+            this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
+            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxDifficultyChart.TabIndex = 232;
+            this.pictureBoxDifficultyChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxDifficultyChart, "view chart");
+            this.pictureBoxDifficultyChart.Click += new System.EventHandler(this.PictureBoxDifficultyChart_Click);
+            // 
+            // pictureBoxHeaderHashrateChart
+            // 
+            this.pictureBoxHeaderHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(143, 3);
+            this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
+            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxHeaderHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderHashrateChart.TabIndex = 233;
+            this.pictureBoxHeaderHashrateChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderHashrateChart, "view chart");
+            this.pictureBoxHeaderHashrateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
+            // 
+            // pictureBoxBlockListDifficultyChart
+            // 
+            this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(165, 288);
+            this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
+            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListDifficultyChart.TabIndex = 234;
+            this.pictureBoxBlockListDifficultyChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListDifficultyChart, "view chart");
+            this.pictureBoxBlockListDifficultyChart.Click += new System.EventHandler(this.PictureBoxBlockListDifficultyChart_Click);
+            // 
+            // pictureBoxBlockListHashrateChart
+            // 
+            this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(161, 359);
+            this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
+            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListHashrateChart.TabIndex = 237;
+            this.pictureBoxBlockListHashrateChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListHashrateChart, "view chart");
+            this.pictureBoxBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
             // 
             // label134
             // 
@@ -10192,8 +10241,9 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
-            this.panelCharts.Controls.Add(this.btnGraphDifficulty);
-            this.panelCharts.Controls.Add(this.btnGraphHashrate);
+            this.panelCharts.Controls.Add(this.btnChartPrice);
+            this.panelCharts.Controls.Add(this.btnChartDifficulty);
+            this.panelCharts.Controls.Add(this.btnChartHashrate);
             this.panelCharts.Controls.Add(this.formsPlot1);
             this.panelCharts.Location = new System.Drawing.Point(21, 188);
             this.panelCharts.Name = "panelCharts";
@@ -10201,97 +10251,71 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
-            // btnGraphDifficulty
+            // btnChartDifficulty
             // 
-            this.btnGraphDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnGraphDifficulty.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnGraphDifficulty.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnGraphDifficulty.FlatAppearance.BorderSize = 0;
-            this.btnGraphDifficulty.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphDifficulty.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGraphDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGraphDifficulty.ForeColor = System.Drawing.Color.White;
-            this.btnGraphDifficulty.Location = new System.Drawing.Point(0, 59);
-            this.btnGraphDifficulty.Margin = new System.Windows.Forms.Padding(0);
-            this.btnGraphDifficulty.Name = "btnGraphDifficulty";
-            this.btnGraphDifficulty.Size = new System.Drawing.Size(114, 24);
-            this.btnGraphDifficulty.TabIndex = 163;
-            this.btnGraphDifficulty.TabStop = false;
-            this.btnGraphDifficulty.Text = "difficulty";
-            this.btnGraphDifficulty.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnGraphDifficulty.UseVisualStyleBackColor = false;
-            this.btnGraphDifficulty.Click += new System.EventHandler(this.BtnGraphDifficulty_Click);
+            this.btnChartDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartDifficulty.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartDifficulty.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartDifficulty.FlatAppearance.BorderSize = 0;
+            this.btnChartDifficulty.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartDifficulty.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
+            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 59);
+            this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartDifficulty.Name = "btnChartDifficulty";
+            this.btnChartDifficulty.Size = new System.Drawing.Size(114, 24);
+            this.btnChartDifficulty.TabIndex = 163;
+            this.btnChartDifficulty.TabStop = false;
+            this.btnChartDifficulty.Text = "difficulty";
+            this.btnChartDifficulty.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartDifficulty.UseVisualStyleBackColor = false;
+            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnGraphDifficulty_Click);
             // 
-            // btnGraphHashrate
+            // btnChartHashrate
             // 
-            this.btnGraphHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnGraphHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnGraphHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnGraphHashrate.FlatAppearance.BorderSize = 0;
-            this.btnGraphHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGraphHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGraphHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnGraphHashrate.Location = new System.Drawing.Point(0, 28);
-            this.btnGraphHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.btnGraphHashrate.Name = "btnGraphHashrate";
-            this.btnGraphHashrate.Size = new System.Drawing.Size(114, 24);
-            this.btnGraphHashrate.TabIndex = 162;
-            this.btnGraphHashrate.TabStop = false;
-            this.btnGraphHashrate.Text = "hashrate";
-            this.btnGraphHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnGraphHashrate.UseVisualStyleBackColor = false;
-            this.btnGraphHashrate.Click += new System.EventHandler(this.BtnGraphHashrate_Click);
+            this.btnChartHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartHashrate.FlatAppearance.BorderSize = 0;
+            this.btnChartHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
+            this.btnChartHashrate.Location = new System.Drawing.Point(0, 28);
+            this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartHashrate.Name = "btnChartHashrate";
+            this.btnChartHashrate.Size = new System.Drawing.Size(114, 24);
+            this.btnChartHashrate.TabIndex = 162;
+            this.btnChartHashrate.TabStop = false;
+            this.btnChartHashrate.Text = "hashrate";
+            this.btnChartHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartHashrate.UseVisualStyleBackColor = false;
+            this.btnChartHashrate.Click += new System.EventHandler(this.BtnGraphHashrate_Click);
             // 
-            // pictureBoxDifficultyChart
+            // btnChartPrice
             // 
-            this.pictureBoxDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(436, 352);
-            this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
-            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxDifficultyChart.TabIndex = 232;
-            this.pictureBoxDifficultyChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxDifficultyChart, "view chart");
-            this.pictureBoxDifficultyChart.Click += new System.EventHandler(this.PictureBoxDifficultyChart_Click);
-            // 
-            // pictureBoxHeaderHashrateChart
-            // 
-            this.pictureBoxHeaderHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(143, 3);
-            this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
-            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxHeaderHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderHashrateChart.TabIndex = 233;
-            this.pictureBoxHeaderHashrateChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderHashrateChart, "view chart");
-            this.pictureBoxHeaderHashrateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
-            // 
-            // pictureBoxBlockListDifficultyChart
-            // 
-            this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(165, 288);
-            this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
-            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListDifficultyChart.TabIndex = 234;
-            this.pictureBoxBlockListDifficultyChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListDifficultyChart, "view chart");
-            this.pictureBoxBlockListDifficultyChart.Click += new System.EventHandler(this.PictureBoxBlockListDifficultyChart_Click);
-            // 
-            // pictureBoxBlockListHashrateChart
-            // 
-            this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(161, 359);
-            this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
-            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListHashrateChart.TabIndex = 237;
-            this.pictureBoxBlockListHashrateChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListHashrateChart, "view chart");
-            this.pictureBoxBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
+            this.btnChartPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPrice.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPrice.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPrice.FlatAppearance.BorderSize = 0;
+            this.btnChartPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPrice.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPrice.ForeColor = System.Drawing.Color.White;
+            this.btnChartPrice.Location = new System.Drawing.Point(0, 90);
+            this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPrice.Name = "btnChartPrice";
+            this.btnChartPrice.Size = new System.Drawing.Size(114, 24);
+            this.btnChartPrice.TabIndex = 164;
+            this.btnChartPrice.TabStop = false;
+            this.btnChartPrice.Text = "price (USD)";
+            this.btnChartPrice.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPrice.UseVisualStyleBackColor = false;
+            this.btnChartPrice.Click += new System.EventHandler(this.btnChartPrice_Click);
             // 
             // SATSuma
             // 
@@ -10302,10 +10326,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
@@ -10346,6 +10370,10 @@
             this.Load += new System.EventHandler(this.SATSuma_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -10533,10 +10561,6 @@
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -11209,13 +11233,14 @@
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.Panel panelCharts;
         private System.Windows.Forms.Button btnMenuCharts;
-        private System.Windows.Forms.Button btnGraphHashrate;
-        private System.Windows.Forms.Button btnGraphDifficulty;
+        private System.Windows.Forms.Button btnChartHashrate;
+        private System.Windows.Forms.Button btnChartDifficulty;
         private System.Windows.Forms.PictureBox pictureBoxHashrateChart;
         private System.Windows.Forms.PictureBox pictureBoxDifficultyChart;
         private System.Windows.Forms.PictureBox pictureBoxHeaderHashrateChart;
         private System.Windows.Forms.PictureBox pictureBoxBlockListHashrateChart;
         private System.Windows.Forms.PictureBox pictureBoxBlockListDifficultyChart;
+        private System.Windows.Forms.Button btnChartPrice;
     }
 }
 

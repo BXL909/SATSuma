@@ -79,6 +79,7 @@
             this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.btnViewAddressFromXpub = new System.Windows.Forms.Button();
+            this.pictureBoxHashrateChart = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -306,7 +307,7 @@
             this.pictureBoxSatsumaLogo = new System.Windows.Forms.PictureBox();
             this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
-            this.btnMenuGraphs = new System.Windows.Forms.Button();
+            this.btnMenuCharts = new System.Windows.Forms.Button();
             this.btnMenuAppearance = new System.Windows.Forms.Button();
             this.btnMenuSettings2 = new System.Windows.Forms.Button();
             this.btnMenuHelp = new System.Windows.Forms.Button();
@@ -695,8 +696,13 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
-            this.btnGraphHashrate = new System.Windows.Forms.Button();
             this.btnGraphDifficulty = new System.Windows.Forms.Button();
+            this.btnGraphHashrate = new System.Windows.Forms.Button();
+            this.pictureBoxDifficultyChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderHashrateChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListDifficultyChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListHashrateChart = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -803,6 +809,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
             this.panelCharts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1497,6 +1507,18 @@
             this.btnViewAddressFromXpub.Visible = false;
             this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
             // 
+            // pictureBoxHashrateChart
+            // 
+            this.pictureBoxHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxHashrateChart.Location = new System.Drawing.Point(708, 315);
+            this.pictureBoxHashrateChart.Name = "pictureBoxHashrateChart";
+            this.pictureBoxHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHashrateChart.TabIndex = 231;
+            this.pictureBoxHashrateChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHashrateChart, "view chart");
+            this.pictureBoxHashrateChart.Click += new System.EventHandler(this.PictureBoxHashrateChart_Click);
+            // 
             // label134
             // 
             this.label134.AutoSize = true;
@@ -1586,6 +1608,8 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxDifficultyChart);
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxHashrateChart);
             this.panelBitcoinDashboard.Controls.Add(this.progressBarProgressToHalving);
             this.panelBitcoinDashboard.Controls.Add(this.progressBarNextDiffAdj);
             this.panelBitcoinDashboard.Controls.Add(this.label23);
@@ -4571,7 +4595,7 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.panelMenu.Controls.Add(this.btnMenuGraphs);
+            this.panelMenu.Controls.Add(this.btnMenuCharts);
             this.panelMenu.Controls.Add(this.btnMenuAppearance);
             this.panelMenu.Controls.Add(this.btnMenuSettings2);
             this.panelMenu.Controls.Add(this.btnMenuHelp);
@@ -4590,25 +4614,25 @@
             this.panelMenu.Size = new System.Drawing.Size(114, 24);
             this.panelMenu.TabIndex = 152;
             // 
-            // btnMenuGraphs
+            // btnMenuCharts
             // 
-            this.btnMenuGraphs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuGraphs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuGraphs.FlatAppearance.BorderSize = 0;
-            this.btnMenuGraphs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenuGraphs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnMenuGraphs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuGraphs.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuGraphs.ForeColor = System.Drawing.Color.White;
-            this.btnMenuGraphs.Location = new System.Drawing.Point(0, 312);
-            this.btnMenuGraphs.Name = "btnMenuGraphs";
-            this.btnMenuGraphs.Size = new System.Drawing.Size(114, 24);
-            this.btnMenuGraphs.TabIndex = 161;
-            this.btnMenuGraphs.TabStop = false;
-            this.btnMenuGraphs.Text = "charts";
-            this.btnMenuGraphs.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnMenuGraphs.UseVisualStyleBackColor = false;
-            this.btnMenuGraphs.Click += new System.EventHandler(this.btnMenuGraphs_Click);
+            this.btnMenuCharts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuCharts.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuCharts.FlatAppearance.BorderSize = 0;
+            this.btnMenuCharts.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuCharts.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuCharts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuCharts.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuCharts.ForeColor = System.Drawing.Color.White;
+            this.btnMenuCharts.Location = new System.Drawing.Point(0, 312);
+            this.btnMenuCharts.Name = "btnMenuCharts";
+            this.btnMenuCharts.Size = new System.Drawing.Size(114, 24);
+            this.btnMenuCharts.TabIndex = 161;
+            this.btnMenuCharts.TabStop = false;
+            this.btnMenuCharts.Text = "charts";
+            this.btnMenuCharts.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuCharts.UseVisualStyleBackColor = false;
+            this.btnMenuCharts.Click += new System.EventHandler(this.BtnMenuCharts_Click);
             // 
             // btnMenuAppearance
             // 
@@ -4890,6 +4914,8 @@
             // panelBlockList
             // 
             this.panelBlockList.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlockList.Controls.Add(this.pictureBoxBlockListHashrateChart);
+            this.panelBlockList.Controls.Add(this.pictureBoxBlockListDifficultyChart);
             this.panelBlockList.Controls.Add(this.panel45);
             this.panelBlockList.Controls.Add(this.progressBarBlockListHalvingProgress);
             this.panelBlockList.Controls.Add(this.progressBarBlockListNextDiffAdj);
@@ -7258,6 +7284,7 @@
             this.panel57.BackColor = System.Drawing.Color.Transparent;
             this.panel57.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel57.Controls.Add(this.pictureBoxHeaderHashrateChart);
             this.panel57.Controls.Add(this.label150);
             this.panel57.Location = new System.Drawing.Point(0, 60);
             this.panel57.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
@@ -10174,28 +10201,6 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
-            // btnGraphHashrate
-            // 
-            this.btnGraphHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnGraphHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnGraphHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnGraphHashrate.FlatAppearance.BorderSize = 0;
-            this.btnGraphHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnGraphHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGraphHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGraphHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnGraphHashrate.Location = new System.Drawing.Point(0, 28);
-            this.btnGraphHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.btnGraphHashrate.Name = "btnGraphHashrate";
-            this.btnGraphHashrate.Size = new System.Drawing.Size(114, 24);
-            this.btnGraphHashrate.TabIndex = 162;
-            this.btnGraphHashrate.TabStop = false;
-            this.btnGraphHashrate.Text = "hashrate";
-            this.btnGraphHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnGraphHashrate.UseVisualStyleBackColor = false;
-            this.btnGraphHashrate.Click += new System.EventHandler(this.BtnGraphHashrate_Click);
-            // 
             // btnGraphDifficulty
             // 
             this.btnGraphDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -10218,6 +10223,76 @@
             this.btnGraphDifficulty.UseVisualStyleBackColor = false;
             this.btnGraphDifficulty.Click += new System.EventHandler(this.BtnGraphDifficulty_Click);
             // 
+            // btnGraphHashrate
+            // 
+            this.btnGraphHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnGraphHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnGraphHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnGraphHashrate.FlatAppearance.BorderSize = 0;
+            this.btnGraphHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnGraphHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnGraphHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGraphHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGraphHashrate.ForeColor = System.Drawing.Color.White;
+            this.btnGraphHashrate.Location = new System.Drawing.Point(0, 28);
+            this.btnGraphHashrate.Margin = new System.Windows.Forms.Padding(0);
+            this.btnGraphHashrate.Name = "btnGraphHashrate";
+            this.btnGraphHashrate.Size = new System.Drawing.Size(114, 24);
+            this.btnGraphHashrate.TabIndex = 162;
+            this.btnGraphHashrate.TabStop = false;
+            this.btnGraphHashrate.Text = "hashrate";
+            this.btnGraphHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnGraphHashrate.UseVisualStyleBackColor = false;
+            this.btnGraphHashrate.Click += new System.EventHandler(this.BtnGraphHashrate_Click);
+            // 
+            // pictureBoxDifficultyChart
+            // 
+            this.pictureBoxDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(436, 352);
+            this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
+            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxDifficultyChart.TabIndex = 232;
+            this.pictureBoxDifficultyChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxDifficultyChart, "view chart");
+            this.pictureBoxDifficultyChart.Click += new System.EventHandler(this.PictureBoxDifficultyChart_Click);
+            // 
+            // pictureBoxHeaderHashrateChart
+            // 
+            this.pictureBoxHeaderHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(143, 3);
+            this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
+            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxHeaderHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderHashrateChart.TabIndex = 233;
+            this.pictureBoxHeaderHashrateChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderHashrateChart, "view chart");
+            this.pictureBoxHeaderHashrateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
+            // 
+            // pictureBoxBlockListDifficultyChart
+            // 
+            this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(165, 288);
+            this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
+            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListDifficultyChart.TabIndex = 234;
+            this.pictureBoxBlockListDifficultyChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListDifficultyChart, "view chart");
+            this.pictureBoxBlockListDifficultyChart.Click += new System.EventHandler(this.PictureBoxBlockListDifficultyChart_Click);
+            // 
+            // pictureBoxBlockListHashrateChart
+            // 
+            this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(161, 359);
+            this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
+            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListHashrateChart.TabIndex = 237;
+            this.pictureBoxBlockListHashrateChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListHashrateChart, "view chart");
+            this.pictureBoxBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10227,9 +10302,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
@@ -10238,7 +10314,6 @@
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.headerNetworkName);
             this.Controls.Add(this.headerNetworkStatusLight);
             this.Controls.Add(this.panelFees);
@@ -10270,6 +10345,7 @@
             this.Text = "SATSuma";
             this.Load += new System.EventHandler(this.SATSuma_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -10457,6 +10533,10 @@
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -11128,9 +11208,14 @@
         private System.Windows.Forms.Label label164;
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.Panel panelCharts;
-        private System.Windows.Forms.Button btnMenuGraphs;
+        private System.Windows.Forms.Button btnMenuCharts;
         private System.Windows.Forms.Button btnGraphHashrate;
         private System.Windows.Forms.Button btnGraphDifficulty;
+        private System.Windows.Forms.PictureBox pictureBoxHashrateChart;
+        private System.Windows.Forms.PictureBox pictureBoxDifficultyChart;
+        private System.Windows.Forms.PictureBox pictureBoxHeaderHashrateChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListHashrateChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListDifficultyChart;
     }
 }
 

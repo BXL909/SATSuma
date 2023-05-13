@@ -24,39 +24,35 @@ Version history 🍊
  * Taproot support on xpub screen
  * test that none of the buttons get stuck in a disabled state
  * price chart
- * incorporate charts (menu) button behavious with all other menu buttons etc.
- * set hashrate chart to auto-show
+ * table text not being set properly when changing theme on some screens
  */
 
 #region Using
+using NBitcoin;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using QRCoder;
+using ScottPlot;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Globalization;
-using NBitcoin;
-using QRCoder;
-using ListViewItem = System.Windows.Forms.ListViewItem;
-using System.Reflection;
-using Panel = System.Windows.Forms.Panel;
 using Control = System.Windows.Forms.Control;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using ScottPlot;
-using static SATSuma.SATSuma;
-using System.ComponentModel.DataAnnotations;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using ListViewItem = System.Windows.Forms.ListViewItem;
+using Panel = System.Windows.Forms.Panel;
 
 #endregion
 
@@ -166,19 +162,17 @@ namespace SATSuma
                 textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; //setup block list screen
                 LookupBlockList(); // fetch the first 15 blocks automatically for the block list initial view.
                 AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
-//                CheckNetworkStatus();
-//                addressScreenConfUnconfOrAllTx = "chain"; // valid values are chain, mempool or all
-//                btnShowConfirmedTX.Enabled = false; // already looking at confirmed transactions to start with
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
 
+                //initialise chart and pre-populate it with hashrate data
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
                 formsPlot1.Plot.Title("Hashrate (exahash per second)");
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
+                BtnGraphHashrate_Click(sender, e);
                 formsPlot1.Refresh();
-
             }
             catch (WebException ex)
             {
@@ -1175,6 +1169,18 @@ namespace SATSuma
                 }
             }
             ToggleLoadingAnimation("disable");
+        }
+
+        private void PictureBoxHashrateChart_Click(object sender, EventArgs e)
+        {
+            BtnGraphHashrate_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxDifficultyChart_Click(object sender, EventArgs e)
+        {
+            BtnGraphDifficulty_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
         }
 
         //------------------------------------ CURRENCY --------------------------------------------------------------
@@ -5136,6 +5142,19 @@ namespace SATSuma
                 TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
             }
         }
+
+        //---------------------- VIEW CHARTS --------------------------------------------------------------------------------
+        private void PictureBoxBlockListDifficultyChart_Click(object sender, EventArgs e)
+        {
+            BtnGraphDifficulty_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxBlockListHashrateChart_Click(object sender, EventArgs e)
+        {
+            BtnGraphHashrate_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
         #endregion
 
         #region XPUB SCREEN
@@ -6847,6 +6866,89 @@ namespace SATSuma
             {
                 numberUpDownDerivationPathsToCheck.Value = 100;
             }
+        }
+
+        #endregion
+
+        #region CHARTS SCREEN
+        private async void BtnGraphHashrate_Click(object sender, EventArgs e)
+        {
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Hashrate (exahash per second)");
+
+            // get a series of historic dates/hashrates/difficulties
+            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
+            JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
+
+            //split the data into two lists
+            List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+            List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+
+            //HASHRATES
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = hashratesList.Count;
+
+            // create arrays of doubles of the hashrates and the dates
+            double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = hashratesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("EH/s");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            // refresh the graph
+            formsPlot1.Refresh();
+            btnGraphHashrate.Enabled = false;
+            btnGraphDifficulty.Enabled = true;
+        }
+
+        private async void BtnGraphDifficulty_Click(object sender, EventArgs e)
+        {
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Difficulty");
+
+            // get a series of historic dates/hashrates/difficulties
+            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
+            JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
+
+            //split the data into two lists
+            List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+            List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+
+            //DIFFICULTY
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = difficultyList.Count;
+
+            // create arrays of doubles of the difficulties and the dates
+            double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = difficultyList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Time)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("trillion");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            // refresh the graph
+            formsPlot1.Refresh();
+            btnGraphDifficulty.Enabled = false;
+            btnGraphHashrate.Enabled = true;
         }
 
         #endregion
@@ -11120,6 +11222,7 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBlock.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuAppearance.Enabled = true;
                 this.DoubleBuffered = true;
@@ -11127,6 +11230,7 @@ namespace SATSuma
                 panelBookmarks.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
@@ -11163,11 +11267,13 @@ namespace SATSuma
                 btnMenuAppearance.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuSettings2.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuLightningDashboard.Enabled = false;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
+                panelCharts.Visible = false;
                 panelBlockList.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
@@ -11184,7 +11290,7 @@ namespace SATSuma
             }
         }
 
-        private void btnMenuGraphs_Click(object sender, EventArgs e)
+        private void BtnMenuCharts_Click(object sender, EventArgs e)
         {
             try
             {
@@ -11206,7 +11312,7 @@ namespace SATSuma
                 btnMenuBlock.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
-                btnMenuGraphs.Enabled = false;
+                btnMenuCharts.Enabled = false;
                 this.DoubleBuffered = true;
                 this.SuspendLayout();
                 panelBitcoinDashboard.Visible = false;
@@ -11219,6 +11325,7 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = false;
+                btnGraphHashrate.Enabled = false;
                 panelCharts.Visible = true;
                 this.ResumeLayout();
             }
@@ -11249,12 +11356,14 @@ namespace SATSuma
                 btnMenuAppearance.Enabled = true;
                 btnMenuBlock.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelBlock.Visible = false;
+                panelCharts.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
@@ -11289,6 +11398,7 @@ namespace SATSuma
                 btnMenuAppearance.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
@@ -11296,6 +11406,7 @@ namespace SATSuma
                 panelLightningDashboard.Visible = false;
                 panelAddress.Visible = false;
                 panelAppearance.Visible = false;
+                panelCharts.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
@@ -11334,6 +11445,7 @@ namespace SATSuma
                 btnMenuTransaction.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuAppearance.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
@@ -11341,6 +11453,7 @@ namespace SATSuma
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelBookmarks.Visible = false;
                 panelAddress.Visible = false;
                 panelAppearance.Visible = false;
@@ -11375,12 +11488,14 @@ namespace SATSuma
                 btnMenuAppearance.Enabled = true;
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelBlock.Visible = false;
                 panelTransaction.Visible = false;
@@ -11427,11 +11542,13 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuAppearance.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelBookmarks.Visible = false;
                 panelBlock.Visible = false;
@@ -11469,6 +11586,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuAppearance.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuBookmarks.Enabled = false;
@@ -11476,6 +11594,7 @@ namespace SATSuma
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelAppearance.Visible = false;
                 panelTransaction.Visible = false;
@@ -11512,6 +11631,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuAppearance.Enabled = true;
                 btnMenuSettings2.Enabled = false;
@@ -11519,6 +11639,7 @@ namespace SATSuma
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelAppearance.Visible = false;
@@ -11554,6 +11675,7 @@ namespace SATSuma
                 btnMenuAddress.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
                 btnMenuSettings2.Enabled = true;
                 btnMenuAppearance.Enabled = false;
@@ -11561,6 +11683,7 @@ namespace SATSuma
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
                 panelAddress.Visible = false;
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
@@ -11579,6 +11702,11 @@ namespace SATSuma
                 HandleException(ex, "btnAppearance_Click");
             }
 }
+        private void PictureBoxHeaderHashrateChart_Click(object sender, EventArgs e)
+        {
+            BtnGraphHashrate_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
 
         private void BtnHelp_Click(object sender, EventArgs e) // help screen
         {
@@ -11630,6 +11758,11 @@ namespace SATSuma
         public Panel GetPanelXpub() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelXpub;
+        }
+
+        public Panel GetPanelCharts() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelCharts;
         }
 
         public Panel GetPanelBookmarks() // enables help screen to get state (visible) of panel to determine which help text to show
@@ -12245,41 +12378,27 @@ namespace SATSuma
             }
         }
 
-
-
-
-
-
-
-        #endregion
-
-        public class HashrateAndDifficulty
+        //---------------------------charts-----------------------------------------------
+        public class HashrateAndDifficultySnapshot
         {
-            public Hashrate[] hashrates { get; set; }
-            public Difficulty[] difficulty { get; set; }
+            public HashrateSnapshot[] Hashrates { get; set; }
+            public DifficultySnapshot[] Difficulty { get; set; }
             public decimal CurrentHashrate { get; set; }
             public decimal CurrentDifficulty { get; set; }
         }
 
-        public class Hashrate
+        public class HashrateSnapshot
         {
-            public string timestamp { get; set; }
+            public string Timestamp { get; set; }
             public decimal AvgHashrate { get; set; }
         }
 
-        public class HashrateFormattedDates
+        public class DifficultySnapshot
         {
-            public DateTime timestamp { get; set; }
-            //public decimal avgHashrate { get; set; }
-        }
-
-        public class Difficulty
-        {
-            public string time { get; set; }
-            public long height { get; set; }
-            public decimal difficulty { get; set; }
-            public decimal adjustment { get; set; }
-
+            public string Time { get; set; }
+            public long Height { get; set; }
+            public decimal Difficulty { get; set; }
+            public decimal Adjustment { get; set; }
         }
 
         public class HashrateAndDifficultyService
@@ -12315,82 +12434,6 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        
-        private async void BtnGraphHashrate_Click(object sender, EventArgs e)
-        {
-            // clear any previous graph
-            formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Hashrate (exahash per second)");
-
-            // get a series of historic dates/hashrates/difficulties
-            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
-            JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
-
-            //split the data into two lists
-            List<Hashrate> hashratesList = JsonConvert.DeserializeObject<List<Hashrate>>(jsonObj["hashrates"].ToString());
-            List<Difficulty> difficultyList = JsonConvert.DeserializeObject<List<Difficulty>>(jsonObj["difficulty"].ToString());
-
-            //HASHRATES
-            // set the number of points on the graph to the number of hashrates to display
-            int pointCount = hashratesList.Count;
-
-            // create arrays of doubles of the hashrates and the dates
-            double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
-            // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = hashratesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
-            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
-
-            formsPlot1.Plot.XAxis.DateTimeFormat(true);
-            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
-            formsPlot1.Plot.XAxis.Ticks(true);
-            formsPlot1.Plot.YAxis.Label("EH/s");
-            formsPlot1.Plot.XAxis.Label("Date");
-            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
-            // prevent navigating beyond the data
-            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
-            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(),xValues.Max());
-            // refresh the graph
-            formsPlot1.Refresh();
-        }
-
-        private async void BtnGraphDifficulty_Click(object sender, EventArgs e)
-        {
-            // clear any previous graph
-            formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Difficulty");
-
-            // get a series of historic dates/hashrates/difficulties
-            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
-            JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
-
-            //split the data into two lists
-            List<Hashrate> hashratesList = JsonConvert.DeserializeObject<List<Hashrate>>(jsonObj["hashrates"].ToString());
-            List<Difficulty> difficultyList = JsonConvert.DeserializeObject<List<Difficulty>>(jsonObj["difficulty"].ToString());
-
-            //DIFFICULTY
-            // set the number of points on the graph to the number of hashrates to display
-            int pointCount = difficultyList.Count;
-
-            // create arrays of doubles of the difficulties and the dates
-            double[] yValues = difficultyList.Select(h => (double)(h.difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
-            // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = difficultyList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.time)).LocalDateTime).ToList();
-            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
-
-            formsPlot1.Plot.XAxis.DateTimeFormat(true);
-            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
-            formsPlot1.Plot.XAxis.Ticks(true);
-            formsPlot1.Plot.YAxis.Label("trillion");
-            formsPlot1.Plot.XAxis.Label("Date");
-            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
-            // prevent navigating beyond the data
-            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
-            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-            // refresh the graph
-            formsPlot1.Refresh();
-        }
+        #endregion
     }
 }

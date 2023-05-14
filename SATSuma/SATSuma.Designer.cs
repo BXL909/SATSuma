@@ -84,6 +84,8 @@
             this.pictureBoxHeaderHashrateChart = new System.Windows.Forms.PictureBox();
             this.pictureBoxBlockListDifficultyChart = new System.Windows.Forms.PictureBox();
             this.pictureBoxBlockListHashrateChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderPriceChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxPriceChart = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -700,14 +702,28 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartBlockFees = new System.Windows.Forms.Button();
+            this.btnChartReward = new System.Windows.Forms.Button();
+            this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.btnChartPrice = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderPriceChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPriceChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -1511,9 +1527,9 @@
             // pictureBoxHashrateChart
             // 
             this.pictureBoxHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxHashrateChart.Location = new System.Drawing.Point(708, 315);
+            this.pictureBoxHashrateChart.Location = new System.Drawing.Point(640, 334);
             this.pictureBoxHashrateChart.Name = "pictureBoxHashrateChart";
-            this.pictureBoxHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxHashrateChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxHashrateChart.TabIndex = 231;
             this.pictureBoxHashrateChart.TabStop = false;
@@ -1523,9 +1539,9 @@
             // pictureBoxDifficultyChart
             // 
             this.pictureBoxDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(436, 352);
+            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(366, 372);
             this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
-            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxDifficultyChart.TabIndex = 232;
             this.pictureBoxDifficultyChart.TabStop = false;
@@ -1535,9 +1551,9 @@
             // pictureBoxHeaderHashrateChart
             // 
             this.pictureBoxHeaderHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(143, 3);
+            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(69, 87);
             this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
-            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxHeaderHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxHeaderHashrateChart.TabIndex = 233;
             this.pictureBoxHeaderHashrateChart.TabStop = false;
@@ -1547,9 +1563,9 @@
             // pictureBoxBlockListDifficultyChart
             // 
             this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(165, 288);
+            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 305);
             this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
-            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxBlockListDifficultyChart.TabIndex = 234;
             this.pictureBoxBlockListDifficultyChart.TabStop = false;
@@ -1559,14 +1575,38 @@
             // pictureBoxBlockListHashrateChart
             // 
             this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(161, 359);
+            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 377);
             this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
-            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxBlockListHashrateChart.TabIndex = 237;
             this.pictureBoxBlockListHashrateChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListHashrateChart, "view chart");
             this.pictureBoxBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
+            // 
+            // pictureBoxHeaderPriceChart
+            // 
+            this.pictureBoxHeaderPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxHeaderPriceChart.Location = new System.Drawing.Point(110, 32);
+            this.pictureBoxHeaderPriceChart.Name = "pictureBoxHeaderPriceChart";
+            this.pictureBoxHeaderPriceChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderPriceChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderPriceChart.TabIndex = 234;
+            this.pictureBoxHeaderPriceChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderPriceChart, "view chart");
+            this.pictureBoxHeaderPriceChart.Click += new System.EventHandler(this.pictureBoxHeaderPriceChart_Click);
+            // 
+            // pictureBoxPriceChart
+            // 
+            this.pictureBoxPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxPriceChart.Location = new System.Drawing.Point(88, 43);
+            this.pictureBoxPriceChart.Name = "pictureBoxPriceChart";
+            this.pictureBoxPriceChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxPriceChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPriceChart.TabIndex = 235;
+            this.pictureBoxPriceChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxPriceChart, "view chart");
+            this.pictureBoxPriceChart.Click += new System.EventHandler(this.pictureBoxPriceChart_Click);
             // 
             // label134
             // 
@@ -1657,6 +1697,7 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxPriceChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxDifficultyChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxHashrateChart);
             this.panelBitcoinDashboard.Controls.Add(this.progressBarProgressToHalving);
@@ -2345,7 +2386,7 @@
             this.formsPlot1.Location = new System.Drawing.Point(100, 0);
             this.formsPlot1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(682, 556);
+            this.formsPlot1.Size = new System.Drawing.Size(682, 521);
             this.formsPlot1.TabIndex = 0;
             // 
             // panelLightningDashboard
@@ -7299,6 +7340,7 @@
             // panelFees
             // 
             this.panelFees.BackColor = System.Drawing.Color.Transparent;
+            this.panelFees.Controls.Add(this.pictureBoxHeaderHashrateChart);
             this.panelFees.Controls.Add(this.lblHeaderHashrate);
             this.panelFees.Controls.Add(this.panel57);
             this.panelFees.Controls.Add(this.panel40);
@@ -7333,7 +7375,6 @@
             this.panel57.BackColor = System.Drawing.Color.Transparent;
             this.panel57.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel57.Controls.Add(this.pictureBoxHeaderHashrateChart);
             this.panel57.Controls.Add(this.label150);
             this.panel57.Location = new System.Drawing.Point(0, 60);
             this.panel57.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
@@ -7922,6 +7963,7 @@
             // 
             this.panelHeaderPrice.BackColor = System.Drawing.Color.Transparent;
             this.panelHeaderPrice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelHeaderPrice.Controls.Add(this.pictureBoxHeaderPriceChart);
             this.panelHeaderPrice.Controls.Add(this.lblHeaderMoscowTimeLabel);
             this.panelHeaderPrice.Controls.Add(this.lblHeaderMarketCap);
             this.panelHeaderPrice.Controls.Add(this.label77);
@@ -10241,6 +10283,18 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.button12);
+            this.panelCharts.Controls.Add(this.button11);
+            this.panelCharts.Controls.Add(this.button10);
+            this.panelCharts.Controls.Add(this.button9);
+            this.panelCharts.Controls.Add(this.button8);
+            this.panelCharts.Controls.Add(this.button7);
+            this.panelCharts.Controls.Add(this.button6);
+            this.panelCharts.Controls.Add(this.button5);
+            this.panelCharts.Controls.Add(this.button4);
+            this.panelCharts.Controls.Add(this.button3);
+            this.panelCharts.Controls.Add(this.btnChartBlockFees);
+            this.panelCharts.Controls.Add(this.btnChartReward);
             this.panelCharts.Controls.Add(this.btnChartPrice);
             this.panelCharts.Controls.Add(this.btnChartDifficulty);
             this.panelCharts.Controls.Add(this.btnChartHashrate);
@@ -10251,49 +10305,49 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
-            // btnChartDifficulty
+            // btnChartBlockFees
             // 
-            this.btnChartDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartDifficulty.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartDifficulty.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartDifficulty.FlatAppearance.BorderSize = 0;
-            this.btnChartDifficulty.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartDifficulty.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
-            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 59);
-            this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartDifficulty.Name = "btnChartDifficulty";
-            this.btnChartDifficulty.Size = new System.Drawing.Size(114, 24);
-            this.btnChartDifficulty.TabIndex = 163;
-            this.btnChartDifficulty.TabStop = false;
-            this.btnChartDifficulty.Text = "difficulty";
-            this.btnChartDifficulty.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartDifficulty.UseVisualStyleBackColor = false;
-            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnGraphDifficulty_Click);
+            this.btnChartBlockFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartBlockFees.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartBlockFees.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartBlockFees.FlatAppearance.BorderSize = 0;
+            this.btnChartBlockFees.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartBlockFees.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartBlockFees.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartBlockFees.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartBlockFees.ForeColor = System.Drawing.Color.White;
+            this.btnChartBlockFees.Location = new System.Drawing.Point(0, 152);
+            this.btnChartBlockFees.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartBlockFees.Name = "btnChartBlockFees";
+            this.btnChartBlockFees.Size = new System.Drawing.Size(114, 24);
+            this.btnChartBlockFees.TabIndex = 166;
+            this.btnChartBlockFees.TabStop = false;
+            this.btnChartBlockFees.Text = "block fees";
+            this.btnChartBlockFees.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartBlockFees.UseVisualStyleBackColor = false;
+            this.btnChartBlockFees.Click += new System.EventHandler(this.btnChartBlockFees_Click);
             // 
-            // btnChartHashrate
+            // btnChartReward
             // 
-            this.btnChartHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartHashrate.FlatAppearance.BorderSize = 0;
-            this.btnChartHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnChartHashrate.Location = new System.Drawing.Point(0, 28);
-            this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartHashrate.Name = "btnChartHashrate";
-            this.btnChartHashrate.Size = new System.Drawing.Size(114, 24);
-            this.btnChartHashrate.TabIndex = 162;
-            this.btnChartHashrate.TabStop = false;
-            this.btnChartHashrate.Text = "hashrate";
-            this.btnChartHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartHashrate.UseVisualStyleBackColor = false;
-            this.btnChartHashrate.Click += new System.EventHandler(this.BtnGraphHashrate_Click);
+            this.btnChartReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartReward.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartReward.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartReward.FlatAppearance.BorderSize = 0;
+            this.btnChartReward.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartReward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartReward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartReward.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartReward.ForeColor = System.Drawing.Color.White;
+            this.btnChartReward.Location = new System.Drawing.Point(0, 121);
+            this.btnChartReward.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartReward.Name = "btnChartReward";
+            this.btnChartReward.Size = new System.Drawing.Size(114, 24);
+            this.btnChartReward.TabIndex = 165;
+            this.btnChartReward.TabStop = false;
+            this.btnChartReward.Text = "block reward";
+            this.btnChartReward.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartReward.UseVisualStyleBackColor = false;
+            this.btnChartReward.Click += new System.EventHandler(this.btnChartReward_Click);
             // 
             // btnChartPrice
             // 
@@ -10316,6 +10370,260 @@
             this.btnChartPrice.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPrice.UseVisualStyleBackColor = false;
             this.btnChartPrice.Click += new System.EventHandler(this.btnChartPrice_Click);
+            // 
+            // btnChartDifficulty
+            // 
+            this.btnChartDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartDifficulty.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartDifficulty.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartDifficulty.FlatAppearance.BorderSize = 0;
+            this.btnChartDifficulty.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartDifficulty.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
+            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 59);
+            this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartDifficulty.Name = "btnChartDifficulty";
+            this.btnChartDifficulty.Size = new System.Drawing.Size(114, 24);
+            this.btnChartDifficulty.TabIndex = 163;
+            this.btnChartDifficulty.TabStop = false;
+            this.btnChartDifficulty.Text = "difficulty";
+            this.btnChartDifficulty.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartDifficulty.UseVisualStyleBackColor = false;
+            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
+            // 
+            // btnChartHashrate
+            // 
+            this.btnChartHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartHashrate.FlatAppearance.BorderSize = 0;
+            this.btnChartHashrate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartHashrate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
+            this.btnChartHashrate.Location = new System.Drawing.Point(0, 28);
+            this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartHashrate.Name = "btnChartHashrate";
+            this.btnChartHashrate.Size = new System.Drawing.Size(114, 24);
+            this.btnChartHashrate.TabIndex = 162;
+            this.btnChartHashrate.TabStop = false;
+            this.btnChartHashrate.Text = "hashrate";
+            this.btnChartHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartHashrate.UseVisualStyleBackColor = false;
+            this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(154, 530);
+            this.button3.Margin = new System.Windows.Forms.Padding(0);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(46, 24);
+            this.button3.TabIndex = 167;
+            this.button3.TabStop = false;
+            this.button3.Text = "24h";
+            this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.Color.White;
+            this.button4.Location = new System.Drawing.Point(204, 530);
+            this.button4.Margin = new System.Windows.Forms.Padding(0);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(46, 24);
+            this.button4.TabIndex = 168;
+            this.button4.TabStop = false;
+            this.button4.Text = "3d";
+            this.button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button4.UseVisualStyleBackColor = false;
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button5.FlatAppearance.BorderSize = 0;
+            this.button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.ForeColor = System.Drawing.Color.White;
+            this.button5.Location = new System.Drawing.Point(254, 530);
+            this.button5.Margin = new System.Windows.Forms.Padding(0);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(46, 24);
+            this.button5.TabIndex = 169;
+            this.button5.TabStop = false;
+            this.button5.Text = "1w";
+            this.button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button5.UseVisualStyleBackColor = false;
+            // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button6.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button6.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button6.FlatAppearance.BorderSize = 0;
+            this.button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button6.ForeColor = System.Drawing.Color.White;
+            this.button6.Location = new System.Drawing.Point(304, 530);
+            this.button6.Margin = new System.Windows.Forms.Padding(0);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(46, 24);
+            this.button6.TabIndex = 170;
+            this.button6.TabStop = false;
+            this.button6.Text = "1m";
+            this.button6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button6.UseVisualStyleBackColor = false;
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button7.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button7.FlatAppearance.BorderSize = 0;
+            this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.ForeColor = System.Drawing.Color.White;
+            this.button7.Location = new System.Drawing.Point(354, 530);
+            this.button7.Margin = new System.Windows.Forms.Padding(0);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(46, 24);
+            this.button7.TabIndex = 171;
+            this.button7.TabStop = false;
+            this.button7.Text = "3m";
+            this.button7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button7.UseVisualStyleBackColor = false;
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button8.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button8.FlatAppearance.BorderSize = 0;
+            this.button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.ForeColor = System.Drawing.Color.White;
+            this.button8.Location = new System.Drawing.Point(404, 530);
+            this.button8.Margin = new System.Windows.Forms.Padding(0);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(46, 24);
+            this.button8.TabIndex = 172;
+            this.button8.TabStop = false;
+            this.button8.Text = "6m";
+            this.button8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button8.UseVisualStyleBackColor = false;
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button9.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button9.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button9.FlatAppearance.BorderSize = 0;
+            this.button9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button9.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.ForeColor = System.Drawing.Color.White;
+            this.button9.Location = new System.Drawing.Point(454, 530);
+            this.button9.Margin = new System.Windows.Forms.Padding(0);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(46, 24);
+            this.button9.TabIndex = 173;
+            this.button9.TabStop = false;
+            this.button9.Text = "1y";
+            this.button9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button9.UseVisualStyleBackColor = false;
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button10.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button10.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button10.FlatAppearance.BorderSize = 0;
+            this.button10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button10.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.ForeColor = System.Drawing.Color.White;
+            this.button10.Location = new System.Drawing.Point(504, 530);
+            this.button10.Margin = new System.Windows.Forms.Padding(0);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(46, 24);
+            this.button10.TabIndex = 174;
+            this.button10.TabStop = false;
+            this.button10.Text = "2y";
+            this.button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button10.UseVisualStyleBackColor = false;
+            // 
+            // button11
+            // 
+            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button11.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button11.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button11.FlatAppearance.BorderSize = 0;
+            this.button11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button11.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button11.ForeColor = System.Drawing.Color.White;
+            this.button11.Location = new System.Drawing.Point(554, 530);
+            this.button11.Margin = new System.Windows.Forms.Padding(0);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(46, 24);
+            this.button11.TabIndex = 175;
+            this.button11.TabStop = false;
+            this.button11.Text = "3y";
+            this.button11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button11.UseVisualStyleBackColor = false;
+            // 
+            // button12
+            // 
+            this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button12.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button12.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button12.FlatAppearance.BorderSize = 0;
+            this.button12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button12.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button12.ForeColor = System.Drawing.Color.White;
+            this.button12.Location = new System.Drawing.Point(604, 530);
+            this.button12.Margin = new System.Windows.Forms.Padding(0);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(46, 24);
+            this.button12.TabIndex = 176;
+            this.button12.TabStop = false;
+            this.button12.Text = "all";
+            this.button12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button12.UseVisualStyleBackColor = false;
             // 
             // SATSuma
             // 
@@ -10374,6 +10682,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderPriceChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPriceChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -11241,6 +11551,20 @@
         private System.Windows.Forms.PictureBox pictureBoxBlockListHashrateChart;
         private System.Windows.Forms.PictureBox pictureBoxBlockListDifficultyChart;
         private System.Windows.Forms.Button btnChartPrice;
+        private System.Windows.Forms.PictureBox pictureBoxHeaderPriceChart;
+        private System.Windows.Forms.PictureBox pictureBoxPriceChart;
+        private System.Windows.Forms.Button btnChartReward;
+        private System.Windows.Forms.Button btnChartBlockFees;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button5;
     }
 }
 

@@ -33,6 +33,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using QRCoder;
 using ScottPlot;
+using ScottPlot.Control.EventProcess.Events;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -167,12 +168,14 @@ namespace SATSuma
 
                 //initialise chart and pre-populate it with hashrate data
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
+                formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
+                formsPlot1.Configuration.DoubleClickBenchmark = false;
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
                 formsPlot1.Plot.Title("Hashrate (exahash per second)");
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
-                BtnGraphHashrate_Click(sender, e);
+                BtnChartHashrate_Click(sender, e);
                 formsPlot1.Refresh();
             }
             catch (WebException ex)
@@ -182,10 +185,12 @@ namespace SATSuma
         }
         #endregion
 
-        #region CLOCK TICK EVENTS (1 sec and API refresh clock only)
-        //=============================================================================================================
-        // -------------------------CLOCK TICKS------------------------------------------------------------------------
-        private void StartTheClocksTicking()
+
+
+    #region CLOCK TICK EVENTS (1 sec and API refresh clock only)
+    //=============================================================================================================
+    // -------------------------CLOCK TICKS------------------------------------------------------------------------
+    private void StartTheClocksTicking()
         {
             APIRefreshFrequency = Convert.ToInt32(numericUpDownDashboardRefresh.Value);
             intDisplayCountdownToRefresh = (APIRefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
@@ -256,97 +261,109 @@ namespace SATSuma
 
                 Task task0 = Task.Run(async () => // mempool.space api's
                 {
-                    // current block height, size and transaction count
-                    try
+                // current block height, size and transaction count
+                try
+                {
+                    var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
+                    var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+
+                    if (blocks.Count > 0)
                     {
-                        var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
-                        var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-
-                        if (blocks.Count > 0)
+                        lblTransactions.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactions.Invoke((MethodInvoker)delegate
-                            {
-                                lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
-                            });
+                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
+                        });
 
-                            lblBlockNumber.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
-                            });
+                        lblBlockNumber.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
+                        });
 
-                            long sizeInBytes = blocks[0].Size;
-                            string sizeString; // convert display to bytes/kb/mb accordingly
-                            if (sizeInBytes < 1000)
-                            {
-                                sizeString = $"{sizeInBytes} bytes";
-                            }
-                            else if (sizeInBytes < 1000 * 1000)
-                            {
-                                double sizeInKB = (double)sizeInBytes / 1000;
-                                sizeString = $"{sizeInKB:N2} KB";
-                            }
-                            else
-                            {
-                                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                                sizeString = $"{sizeInMB:N2} MB";
-                            }
-                            lblBlockSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockSize.Text = sizeString;
-                            });
+                        long sizeInBytes = blocks[0].Size;
+                        string sizeString; // convert display to bytes/kb/mb accordingly
+                        if (sizeInBytes < 1000)
+                        {
+                            sizeString = $"{sizeInBytes} bytes";
                         }
+                        else if (sizeInBytes < 1000 * 1000)
+                        {
+                            double sizeInKB = (double)sizeInBytes / 1000;
+                            sizeString = $"{sizeInKB:N2} KB";
+                        }
+                        else
+                        {
+                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                            sizeString = $"{sizeInMB:N2} MB";
+                        }
+                        lblBlockSize.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockSize.Text = sizeString;
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
+                }
 
-                    // fees
-                    try
+                // fees
+                try
+                {
+                    var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
+                    // move returned data to the labels on the form
+                    lblfeesHighPriority.Invoke((MethodInvoker)delegate
                     {
-                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
-                        // move returned data to the labels on the form
-                        lblfeesHighPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblfeesHighPriority.Text = fastestFee;
-                        });
-                        lblFeesMediumPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblFeesMediumPriority.Text = halfHourFee;
-                        });
-                        lblFeesLowPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblFeesLowPriority.Text = hourFee;
-                        });
-                        lblFeesNoPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblFeesNoPriority.Text = economyFee;
-                        });
-                    }
-                    catch (Exception ex)
+                        lblfeesHighPriority.Text = fastestFee;
+                    });
+                    lblFeesMediumPriority.Invoke((MethodInvoker)delegate
                     {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting fees)");
-                    }
+                        lblFeesMediumPriority.Text = halfHourFee;
+                    });
+                    lblFeesLowPriority.Invoke((MethodInvoker)delegate
+                    {
+                        lblFeesLowPriority.Text = hourFee;
+                    });
+                    lblFeesNoPriority.Invoke((MethodInvoker)delegate
+                    {
+                        lblFeesNoPriority.Text = economyFee;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting fees)");
+                }
 
-                    // hashrate
-                    try
+                // hashrate
+                try
+                {
+                    var (currentHashrate, currentDifficulty) = GetHashrate();
+                    // move returned data to the labels on the form
+                    lblHeaderHashrate.Invoke((MethodInvoker)delegate
                     {
-                        var (currentHashrate, currentDifficulty) = GetHashrate();
-                        // move returned data to the labels on the form
-                        lblHeaderHashrate.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderHashrate.Text = currentHashrate;
-                        });
-                        lblEstHashrate.Invoke((MethodInvoker)delegate
-                        {
-                            lblEstHashrate.Text = currentHashrate;
-                        });
-                        lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockListEstHashRate.Text = currentHashrate;
-                        });
+                        lblHeaderHashrate.Text = currentHashrate;
+                    });
+                    pictureBoxHeaderHashrateChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + 10, pictureBoxHeaderHashrateChart.Location.Y);
+                    });
+                    lblEstHashrate.Invoke((MethodInvoker)delegate
+                    {
+                        lblEstHashrate.Text = currentHashrate;
+                    });
+                    pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 10, pictureBoxHashrateChart.Location.Y);
+                    });
+                    lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockListEstHashRate.Text = currentHashrate;
+                    });
+                    pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 10, pictureBoxBlockListHashrateChart.Location.Y);
+                    });
                     }
                     catch (Exception ex)
                     {
@@ -376,9 +393,17 @@ namespace SATSuma
                         {
                             lblDifficultyAdjEst.Text = difficultyChange + "%";
                         });
+                        pictureBoxDifficultyChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + 10, pictureBoxDifficultyChart.Location.Y);
+                        });
                         lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
                             lblBlockListNextDifficultyAdjustment.Text = difficultyChange + "%";
+                        });
+                        pictureBoxBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
+                        {
+                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + 10, pictureBoxBlockListDifficultyChart.Location.Y);
                         });
                         lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
                         {
@@ -466,7 +491,10 @@ namespace SATSuma
                                 {
                                     lblPriceUSD.Text = "disabled";
                                 });
-
+                                pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+                                {
+                                    pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 10, pictureBoxPriceChart.Location.Y);
+                                });
                                 lblMoscowTime.Invoke((MethodInvoker)delegate
                                 {
                                     lblMoscowTime.Text = "disabled";
@@ -478,6 +506,10 @@ namespace SATSuma
                                 lblHeaderPrice.Invoke((MethodInvoker)delegate
                                 {
                                     lblHeaderPrice.Text = "disabled";
+                                });
+                                pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                                {
+                                    pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
                                 });
                                 lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
                                 {
@@ -506,6 +538,10 @@ namespace SATSuma
                             lblHeaderPrice.Invoke((MethodInvoker)delegate
                             {
                                 lblHeaderPrice.Text = "0 (TestNet)";
+                            });
+                            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
                             });
                             lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
                             {
@@ -1174,13 +1210,19 @@ namespace SATSuma
 
         private void PictureBoxHashrateChart_Click(object sender, EventArgs e)
         {
-            BtnGraphHashrate_Click(sender, e);
+            BtnChartHashrate_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
         private void PictureBoxDifficultyChart_Click(object sender, EventArgs e)
         {
-            BtnGraphDifficulty_Click(sender, e);
+            BtnChartDifficulty_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxPriceChart_Click(object sender, EventArgs e)
+        {
+            btnChartPrice_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -1355,6 +1397,10 @@ namespace SATSuma
             lblHeaderPrice.Invoke((MethodInvoker)delegate
             {
                 lblHeaderPrice.Text = price;
+            });
+            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
             });
             lblMarketCapUSD.Invoke((MethodInvoker)delegate
             {
@@ -5147,13 +5193,13 @@ namespace SATSuma
         //---------------------- VIEW CHARTS --------------------------------------------------------------------------------
         private void PictureBoxBlockListDifficultyChart_Click(object sender, EventArgs e)
         {
-            BtnGraphDifficulty_Click(sender, e);
+            BtnChartDifficulty_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
         private void PictureBoxBlockListHashrateChart_Click(object sender, EventArgs e)
         {
-            BtnGraphHashrate_Click(sender, e);
+            BtnChartHashrate_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
         #endregion
@@ -6872,7 +6918,7 @@ namespace SATSuma
         #endregion
 
         #region CHARTS SCREEN
-        private async void BtnGraphHashrate_Click(object sender, EventArgs e)
+        private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
             // clear any previous graph
             formsPlot1.Plot.Clear();
@@ -6911,9 +6957,101 @@ namespace SATSuma
             btnChartHashrate.Enabled = false;
             btnChartDifficulty.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
         }
 
-        private async void BtnGraphDifficulty_Click(object sender, EventArgs e)
+        private async void btnChartReward_Click(object sender, EventArgs e)
+        {
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Block rewards (block subsidy plus fees)");
+
+            // Create an instance of HttpClient
+            HttpClient client = new HttpClient();
+
+            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
+            string url = NodeURL + "v1/mining/blocks/rewards/all";
+            string json = await client.GetStringAsync(url);
+
+            // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
+            List<HistoricRewardsAndPrice> rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
+            
+            //REWARDS
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = rewardsAndPriceList.Count;
+
+            // create arrays of doubles of the rewards and the dates
+            double[] yValues = rewardsAndPriceList.Select(h => (double)(h.avgRewards / 100000000)).ToArray(); 
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = rewardsAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("BTC");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            // refresh the graph
+            formsPlot1.Refresh();
+            btnChartDifficulty.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = false;
+        }
+
+        private async void btnChartBlockFees_Click(object sender, EventArgs e)
+        {
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Average total fees per block");
+
+            // Create an instance of HttpClient
+            HttpClient client = new HttpClient();
+
+            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
+            string url = NodeURL + "v1/mining/blocks/fees/all";
+            string json = await client.GetStringAsync(url);
+
+            // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
+            List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
+
+            //REWARDS
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = feesAndPriceList.Count;
+
+            // create arrays of doubles of the rewards and the dates
+            double[] yValues = feesAndPriceList.Select(h => (double)(h.avgFees / 100000000)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = feesAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("BTC");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            // refresh the graph
+            formsPlot1.Refresh();
+            btnChartDifficulty.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = false;
+        }
+
+        private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
             // clear any previous graph
             formsPlot1.Plot.Clear();
@@ -6951,7 +7089,9 @@ namespace SATSuma
             formsPlot1.Refresh();
             btnChartDifficulty.Enabled = false;
             btnChartHashrate.Enabled = true;
+            btnChartBlockFees.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
         }
 
         private async void btnChartPrice_Click(object sender, EventArgs e)
@@ -6966,9 +7106,8 @@ namespace SATSuma
 
             //split the data into two lists
             List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
-            //List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
 
-            //DIFFICULTY
+            //PRICE
             // set the number of points on the graph to the number of hashrates to display
             int pointCount = PriceList.Count;
 
@@ -6991,6 +7130,8 @@ namespace SATSuma
             // refresh the graph
             formsPlot1.Refresh();
             btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = false;
         }
@@ -11749,7 +11890,13 @@ namespace SATSuma
 }
         private void PictureBoxHeaderHashrateChart_Click(object sender, EventArgs e)
         {
-            BtnGraphHashrate_Click(sender, e);
+            BtnChartHashrate_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxHeaderPriceChart_Click(object sender, EventArgs e)
+        {
+            btnChartPrice_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -12431,6 +12578,7 @@ namespace SATSuma
         }
 
         //---------------------------charts-----------------------------------------------
+        //-------------------historic price chart
         public class HistoricPriceData
         {
             public string status { get; set; }
@@ -12485,6 +12633,28 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
+        //-------------------historic rewards (& price) chart
+
+        public class HistoricRewardsAndPrice
+        {
+            public string avgHeight { get; set; }
+            public string timestamp { get; set; }
+            public decimal avgRewards { get; set; }
+            public decimal USD { get; set; }
+        }
+
+        //-------------------historic fees (& price) chart
+
+        public class HistoricFeesAndPrice
+        {
+            public string avgHeight { get; set; }
+            public string timestamp { get; set; }
+            public decimal avgFees { get; set; }
+            public decimal USD { get; set; }
+        }
+
+        //-------------------historic hashrate and difficulty chart
 
         public class HashrateAndDifficultySnapshot
         {
@@ -12541,8 +12711,7 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
         #endregion
-
-
     }
 }

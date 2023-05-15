@@ -23,8 +23,8 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * test that none of the buttons get stuck in a disabled state
- * price chart
  * table text not being set properly when changing theme on some screens
+ * disable buttons on a screen basis rather than universally 
  */
 
 #region Using
@@ -116,23 +116,23 @@ namespace SATSuma
         bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
         bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
-        bool btnShowAllAddressTXWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool btnShowConfirmedAddressTXWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnShowUnconfirmedAddressTXWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool btnFirstAddressTransactionWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnNextAddressTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool BtnViewTransactionFromAddressWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool BtnViewBlockFromAddressWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnViewBlockFromBlockListWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnPreviousBlockTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnNextBlockTransactionsWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool textBoxSubmittedBlockNumberWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool textBoxSubmittedAddressWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool btnNextBlockWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnPreviousBlockWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool btnNewer15BlocksWasEnabled = false; // store button state during queries to return to that state afterwards
-        bool btnOlder15BlocksWasEnabled = true; // store button state during queries to return to that state afterwards
-        bool textBoxBlockHeightToStartListFromWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnShowAllAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+        bool btnShowConfirmedAddressTXWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
+        bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+        bool btnFirstAddressTransactionWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
+        bool btnNextAddressTransactionsWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
+        bool BtnViewTransactionFromAddressWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
+        bool BtnViewBlockFromAddressWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
+        bool textBoxSubmittedAddressWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+        bool btnPreviousBlockTransactionsWasEnabled = false; // Block screen - store button state during queries to return to that state afterwards
+        bool btnNextBlockTransactionsWasEnabled = false; // Block screen - store button state during queries to return to that state afterwards
+        bool textBoxSubmittedBlockNumberWasEnabled = true; // Block screen - store button state during queries to return to that state afterwards
+        bool btnNextBlockWasEnabled = false; // Block screen - store button state during queries to return to that state afterwards
+        bool btnPreviousBlockWasEnabled = true; // Block screen - store button state during queries to return to that state afterwards
+        bool btnViewBlockFromBlockListWasEnabled = false; // Block List screen - store button state during queries to return to that state afterwards
+        bool btnNewer15BlocksWasEnabled = false; // Block List screen - store button state during queries to return to that state afterwards
+        bool btnOlder15BlocksWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
+        bool textBoxBlockHeightToStartListFromWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
         bool btnChartBlockFeesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartDifficultyWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartHashrateWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
@@ -148,6 +148,12 @@ namespace SATSuma
         bool btnChartPeriod3yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool btnTransactionOutputsDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool btnViewAddressFromTXInputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool btnViewAddressFromTXOutputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
@@ -1864,7 +1870,7 @@ namespace SATSuma
             if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
             {
                 ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+                DisableEnableAddressButtons("disable"); // disable buttons during operation
                 AddressValidShowControls();
                 lblAddressType.Invoke((MethodInvoker)delegate
                 {
@@ -1899,7 +1905,7 @@ namespace SATSuma
                     HandleException(ex, "TboxSubmittedAddress_TextChanged (Error getting first batch of transactions for address)");
                     return;
                 }
-                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+                DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
                 ToggleLoadingAnimation("disable"); // stop the loading animation
             }
             else
@@ -2480,7 +2486,7 @@ namespace SATSuma
         private async void BtnGetNextTransactionsForAddress(object sender, EventArgs e)
         {
             ToggleLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
+            DisableEnableAddressButtons("disable"); // disable buttons during operation
             var address = textboxSubmittedAddress.Text; // Get the address from the address text box
             // Get the last seen transaction ID from the list view
             string lastSeenTxId;
@@ -2494,7 +2500,7 @@ namespace SATSuma
             }
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
             ToggleLoadingAnimation("disable"); // stop the loading animation
             BtnViewBlockFromAddress.Visible = false;
             BtnViewTransactionFromAddress.Visible = false;
@@ -2504,7 +2510,7 @@ namespace SATSuma
         private async void BtnFirstTransactionForAddress_Click(object sender, EventArgs e)
         {
             ToggleLoadingAnimation("enable"); // start the loading animation
-            DisableEnableButtons("disable"); // disable buttons during operation
+            DisableEnableAddressButtons("disable"); // disable buttons during operation
             if (PartOfAnAllAddressTransactionsRequest) // if this was originally a list of 'all' TXs which switched to 'chain', switch back to 'all' to get the unconfirmed again first
             {
                 addressScreenConfUnconfOrAllTx = "all";
@@ -2519,7 +2525,7 @@ namespace SATSuma
 
             // Call the GetConfirmedTransactionsForAddress method with the updated lastSeenTxId
             await GetTransactionsForAddress(address, lastSeenTxId);
-            DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
+            DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
             ToggleLoadingAnimation("disable"); // stop the loading animation
         }
 
@@ -2839,6 +2845,50 @@ namespace SATSuma
             }
         }
 
+        private void DisableEnableAddressButtons(string enableOrDisableAddressButtons)
+        {
+                if (enableOrDisableAddressButtons == "disable")
+                {
+                    // get current state of buttons before disabling them
+                    btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
+                    btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
+                    btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
+                    btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
+                    btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
+                    BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
+                    BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
+                    textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
+
+                    //disable them all
+                    btnShowAllTX.Enabled = false;
+                    btnShowConfirmedTX.Enabled = false;
+                    btnShowUnconfirmedTX.Enabled = false;
+                    btnFirstAddressTransaction.Enabled = false;
+                    btnNextAddressTransactions.Enabled = false;
+                    BtnViewTransactionFromAddress.Enabled = false;
+                    BtnViewBlockFromAddress.Enabled = false;
+                    textboxSubmittedAddress.Enabled = false;
+                    btnMenu.Enabled = false;
+                }
+                else
+                {
+                    // use previously saved states to reinstate buttons
+                    btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
+                    btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
+                    btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
+                    btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
+                    btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
+                    BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
+                    BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
+                    textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
+                    textboxSubmittedAddress.Focus();
+                    // Set the cursor position to the end of the string
+                    textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
+                    btnMenu.Enabled = true;
+                }
+        }
+
+
         private void PanelAddress_Paint(object sender, PaintEventArgs e)
         {
             textboxSubmittedAddress.Location = new Point(label58.Location.X + label58.Width, textboxSubmittedAddress.Location.Y);
@@ -3045,13 +3095,13 @@ namespace SATSuma
                 }
 
                 var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-                ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+//                ToggleLoadingAnimation("enable"); // start the loading animation
+//                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 await GetFifteenBlocks(blockNumber);
                 string BlockHashToGetTransactionsFor = lblBlockHash.Text;
                 await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
-                ToggleLoadingAnimation("disable"); // stop the loading animation
-                DisableEnableButtons("enable"); // enable buttons after operation is complete
+//                ToggleLoadingAnimation("disable"); // stop the loading animation
+//                DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
             }
             catch (Exception ex)
             {
@@ -3064,8 +3114,12 @@ namespace SATSuma
         {
             try
             {
+                ToggleLoadingAnimation("enable"); // start the loading animation
+                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                ToggleLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
                 lblNumberOfTXInBlock.Invoke((MethodInvoker)delegate
                 {
                     lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].Tx_count);
@@ -3151,8 +3205,12 @@ namespace SATSuma
                     rowsReturnedByBlockTransactionsAPI = 10;
                     panelOwnNodeBlockTXInfo.Visible = true;
                 }
+                ToggleLoadingAnimation("enable"); // start the loading animation
+                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
                 var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
+                ToggleLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
                 List<string> txIds = transactions.Select(t => t.Txid).ToList();
 
                 // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
@@ -3233,20 +3291,20 @@ namespace SATSuma
 
                     if (TotalBlockTransactionRowsAdded <= rowsReturnedByBlockTransactionsAPI) // we must still be on first results so there are no previous
                     {
-                        btnPreviousBlockTransactions.Visible = false; // so this won't be needed
+                        btnPreviousBlockTransactions.Enabled = false; 
                     }
                     else
                     {
-                        btnPreviousBlockTransactions.Visible = true;
+                        btnPreviousBlockTransactions.Enabled = true;
                     }
 
                     if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
                     {
-                        btnNextBlockTransactions.Visible = false; // so we won't need this
+                        btnNextBlockTransactions.Enabled = false; // so we won't need this
                     }
                     else
                     {
-                        btnNextBlockTransactions.Visible = true;
+                        btnNextBlockTransactions.Enabled = true;
                     }
 
                     if (counter == rowsReturnedByBlockTransactionsAPI) // ListView is full. stop adding rows at this point and pick up from here...
@@ -3281,13 +3339,13 @@ namespace SATSuma
         {
             try
             {
-                ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+                //ToggleLoadingAnimation("enable"); // start the loading animation
+                //DisableEnableBlockButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction); // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                ToggleLoadingAnimation("disable"); // stop the loading animation
+                //DisableEnableBlockButtons("enable"); // enable the buttons that were previously enabled again
+                //ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
             catch (Exception ex)
@@ -3301,8 +3359,8 @@ namespace SATSuma
         {
             try
             {
-                ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+//                ToggleLoadingAnimation("enable"); // start the loading animation
+//                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
                 if (TotalBlockTransactionRowsAdded % rowsReturnedByBlockTransactionsAPI == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
                 {
@@ -3316,8 +3374,8 @@ namespace SATSuma
                 }
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction); // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-                DisableEnableButtons("enable"); // enable the buttons that were previously enabled again
-                ToggleLoadingAnimation("disable"); // stop the loading animation
+//                DisableEnableBlockButtons("enable"); // enable the buttons that were previously enabled again
+//                ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
             catch (Exception ex)
@@ -3530,6 +3588,41 @@ namespace SATSuma
                 HandleException(ex, "BtnViewTransactionFromBlock_Click");
             }
         }
+
+        private void DisableEnableBlockButtons(string enableOrDisableBlockButtons)
+        {
+            if (enableOrDisableBlockButtons == "disable")
+            {
+                // get current state of buttons before disabling them
+                btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
+                btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
+                textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
+                btnNextBlockWasEnabled = btnNextBlock.Enabled;
+                btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
+
+                //disable them all
+                btnPreviousBlockTransactions.Enabled = false;
+                btnNextBlockTransactions.Enabled = false;
+                textBoxSubmittedBlockNumber.Enabled = false;
+                btnNextBlock.Enabled = false;
+                btnPreviousBlock.Enabled = false;
+                btnMenu.Enabled = false;
+            }
+            else
+            {
+                // use previously saved states to reinstate buttons
+                btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
+                btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
+                btnNextBlock.Enabled = btnNextBlockWasEnabled;
+                btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
+                textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
+                textBoxSubmittedBlockNumber.Focus();
+                // Set the cursor position to the end of the string
+                textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
+                btnMenu.Enabled = true;
+            }
+        }
+
         #endregion
 
         #region TRANSACTION SCREEN
@@ -3575,6 +3668,8 @@ namespace SATSuma
                     btnTransactionOutputsDown.Visible = true;
                     listViewTransactionInputs.Visible = true;
                     listViewTransactionOutputs.Visible = true;
+                    btnViewAddressFromTXInput.Visible = true;
+                    btnViewAddressFromTXOutput.Visible = true;
                     LookupTransaction();
                 }
                 else
@@ -3589,6 +3684,8 @@ namespace SATSuma
                     btnTransactionOutputsDown.Visible = false;
                     listViewTransactionInputs.Visible = false;
                     listViewTransactionOutputs.Visible = false;
+                    btnViewAddressFromTXInput.Visible = false;
+                    btnViewAddressFromTXOutput.Visible = false;
                     lblInvalidTransaction.Visible = true;
                 }
             }
@@ -3604,6 +3701,8 @@ namespace SATSuma
                 btnTransactionOutputsDown.Visible = false;
                 listViewTransactionInputs.Visible = false;
                 listViewTransactionOutputs.Visible = false;
+                btnViewAddressFromTXInput.Visible = false;
+                btnViewAddressFromTXOutput.Visible = false;
                 lblInvalidTransaction.Visible = true;
             }
         }
@@ -3625,10 +3724,15 @@ namespace SATSuma
         //-------------------- CHECK IF THE TRANSACTION ID EXISTS ----------------------------------------------
         private async Task<bool> TransactionExists(string transactionId) // checks if the valid transaction ID actually exists
         {
+            ToggleLoadingAnimation("enable"); // start the loading animation
+            DisableEnableTransactionButtons("disable"); // disable buttons during operation
             string url = NodeURL + "tx/" + transactionId;
             using HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(url);
+            ToggleLoadingAnimation("disable"); // start the loading animation
+            DisableEnableTransactionButtons("enable"); // disable buttons during operation
             return response.IsSuccessStatusCode;
+
         }
 
         //-------------------- LOOKUP THE TRANSACTION ----------------------------------------------------------
@@ -3653,12 +3757,13 @@ namespace SATSuma
                 linePoints.Clear();
                 btnViewAddressFromTXInput.Visible = false;
                 btnViewAddressFromTXOutput.Visible = false;
-                // DisableEnableLoadingAnimation("enable"); // start the loading animation
-                // DisableEnableButtons("disable"); // disable buttons during operation
+                ToggleLoadingAnimation("enable"); // start the loading animation
+                DisableEnableTransactionButtons("disable"); // disable buttons during operation
                 var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
-                // DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                // DisableEnableButtons("enable"); // enable buttons after operation is complete
                 var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
+                ToggleLoadingAnimation("disable"); // stop the loading animation
+                DisableEnableTransactionButtons("enable"); // enable buttons after operation is complete
+
                 lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                 {
                     lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
@@ -4520,6 +4625,41 @@ namespace SATSuma
                 panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
             }
         }
+
+        private void DisableEnableTransactionButtons(string enableOrDisableTransactionButtons)
+        {
+            if (enableOrDisableTransactionButtons == "disable")
+            {
+                // get current state of buttons before disabling them
+                btnTransactionInputsUpWasEnabled = btnTransactionInputsUp.Enabled;
+                btnTransactionInputDownWasEnabled = btnTransactionInputDown.Enabled;
+                btnTransactionOutputsUpWasEnabled = btnTransactionOutputsUp.Enabled;
+                btnTransactionOutputsDownWasEnabled = btnTransactionOutputsDown.Enabled;
+                btnViewAddressFromTXInputWasEnabled = btnViewAddressFromTXInput.Enabled;
+                btnViewAddressFromTXOutputWasEnabled = btnViewAddressFromTXOutput.Enabled;
+
+                //disable them all
+                btnTransactionInputsUp.Enabled = false;
+                btnTransactionInputDown.Enabled = false;
+                btnTransactionOutputsUp.Enabled = false;
+                btnTransactionOutputsDown.Enabled = false;
+                btnViewAddressFromTXInput.Enabled = false;
+                btnViewAddressFromTXOutput.Enabled = false;
+                btnMenu.Enabled = false;
+            }
+            else
+            {
+                // use previously saved states to reinstate buttons
+                btnTransactionInputsUp.Enabled = btnTransactionInputsUpWasEnabled;
+                btnTransactionInputDown.Enabled = btnTransactionInputDownWasEnabled;
+                btnTransactionOutputsUp.Enabled = btnTransactionOutputsUpWasEnabled;
+                btnTransactionOutputsDown.Enabled = btnTransactionOutputsDownWasEnabled;
+                btnViewAddressFromTXInput.Enabled = btnViewAddressFromTXInputWasEnabled;
+                btnViewAddressFromTXOutput.Enabled = btnViewAddressFromTXOutputWasEnabled;
+                // Set the cursor position to the end of the string
+                btnMenu.Enabled = true;
+            }
+        }
         #endregion
 
         #region BLOCK LIST SCREEN
@@ -4603,11 +4743,7 @@ namespace SATSuma
                 if (e.KeyChar == '\r')
                 {
                     // Submit button was pressed
-                    //DisableEnableLoadingAnimation("enable"); // start the loading animation
-                    //DisableEnableButtons("disable"); // disable buttons during operation
                     LookupBlockList();
-                    //DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                    //DisableEnableButtons("enable"); // enable buttons after operation is complete
                     e.Handled = true;
                     return;
                 }
@@ -4702,12 +4838,12 @@ namespace SATSuma
             try
             {
                 ToggleLoadingAnimation("enable"); // start the loading animation
-                DisableEnableButtons("disable"); // disable buttons during operation
+                DisableEnableBlockListButtons("disable"); // disable buttons during operation
 
                 var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
 
                 ToggleLoadingAnimation("disable"); // stop the loading animation
-                DisableEnableButtons("enable"); // enable buttons after operation is complete
+                DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
 
                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                 List<string> blocklist = blocks.Select(t => t.Height).ToList();
@@ -4816,20 +4952,21 @@ namespace SATSuma
 
                     if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
                     {
-                        btnNewer15Blocks.Visible = false; // so this won't be needed
+                        btnNewer15Blocks.Enabled = false;
                     }
                     else
                     {
-                        btnNewer15Blocks.Visible = true;
+                        btnNewer15Blocks.Enabled = true; 
+
                     }
 
                     if (counter > 1 && blocklist.Last() == "0") // we've reached the Genesis Block (bottom of the list)
                     {
-                        btnOlder15Blocks.Visible = false; // so we won't need this
+                        btnOlder15Blocks.Enabled = false; // so we won't need this
                     }
                     else
                     {
-                        btnOlder15Blocks.Visible = true;
+                        btnOlder15Blocks.Enabled = true;
                     }
 
                     if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
@@ -4951,11 +5088,11 @@ namespace SATSuma
                             });
                         }
                         string blockNumber = item.SubItems[1].Text;
-                        //DisableEnableLoadingAnimation("enable"); // start the loading animation
-                        //DisableEnableButtons("disable"); // disable buttons during operation
+                        ToggleLoadingAnimation("enable"); // start the loading animation
+                        DisableEnableBlockListButtons("disable"); // disable buttons during operation
                         var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
-                        //DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                        //DisableEnableButtons("enable"); // enable buttons after operation is complete
+                        ToggleLoadingAnimation("disable"); // stop the loading animation
+                        DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                         List<string> blocklist = blocks.Select(t => t.Height).ToList();
                         lblBlockListBlockTime.Invoke((MethodInvoker)delegate
@@ -5223,6 +5360,38 @@ namespace SATSuma
             BtnChartHashrate_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
+
+        private void DisableEnableBlockListButtons(string enableOrDisableBlockListButtons)
+        {
+            if (!dontDisableButtons)
+            {
+                if (enableOrDisableBlockListButtons == "disable")
+                {
+                    // get current state of buttons before disabling them
+                    btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
+                    btnNewer15BlocksWasEnabled = btnNewer15Blocks.Enabled;
+                    btnOlder15BlocksWasEnabled = btnOlder15Blocks.Enabled;
+                    textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
+
+                    //disable them all
+                    btnViewBlockFromBlockList.Enabled = false;
+                    btnNewer15Blocks.Enabled = false;
+                    btnOlder15Blocks.Enabled = false;
+                    textBoxBlockHeightToStartListFrom.Enabled = false;
+                    btnMenu.Enabled = false;
+                }
+                else
+                {
+                    // use previously saved states to reinstate buttons
+                    btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
+                    btnNewer15Blocks.Enabled = btnNewer15BlocksWasEnabled;
+                    btnOlder15Blocks.Enabled = btnOlder15BlocksWasEnabled;
+                    textBoxBlockHeightToStartListFrom.Enabled = textBoxBlockHeightToStartListFromWasEnabled;
+                    btnMenu.Enabled = true;
+                }
+            }
+        }
+
         #endregion
 
         #region XPUB SCREEN
@@ -11206,90 +11375,6 @@ namespace SATSuma
         }
 
         //=============================================================================================================
-        //-------DISABLE/ENABLE BUTTONS AND ANIMATION DURING LOADING AND RETURN THEM TO PREVIOUS STATE-----------------
-        private void DisableEnableButtons(string enableOrDisableAllButtons)
-        {
-            if (!dontDisableButtons)
-            {
-                if (enableOrDisableAllButtons == "disable")
-                {
-                    // get current state of buttons before disabling them
-                    btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
-                    btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
-                    btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
-                    btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
-                    btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
-                    BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
-                    BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
-                    btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
-                    btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
-                    btnNextBlockTransactionsWasEnabled = btnNextBlockTransactions.Enabled;
-                    textBoxSubmittedBlockNumberWasEnabled = textBoxSubmittedBlockNumber.Enabled;
-                    textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
-                    btnNextBlockWasEnabled = btnNextBlock.Enabled;
-                    btnPreviousBlockWasEnabled = btnPreviousBlock.Enabled;
-                    btnNewer15BlocksWasEnabled = btnNewer15Blocks.Enabled;
-                    btnOlder15BlocksWasEnabled = btnOlder15Blocks.Enabled;
-                    textBoxBlockHeightToStartListFromWasEnabled = textBoxBlockHeightToStartListFrom.Enabled;
-
-                    //disable them all
-                    btnShowAllTX.Enabled = false;
-                    btnShowConfirmedTX.Enabled = false;
-                    btnShowUnconfirmedTX.Enabled = false;
-                    btnFirstAddressTransaction.Enabled = false;
-                    btnNextAddressTransactions.Enabled = false;
-                    BtnViewTransactionFromAddress.Enabled = false;
-                    BtnViewBlockFromAddress.Enabled = false;
-                    btnViewBlockFromBlockList.Enabled = false;
-                    btnPreviousBlockTransactions.Enabled = false;
-                    btnNextBlockTransactions.Enabled = false;
-                    textboxSubmittedAddress.Enabled = false;
-                    textBoxSubmittedBlockNumber.Enabled = false;
-                    btnNextBlock.Enabled = false;
-                    btnPreviousBlock.Enabled = false;
-                    btnMenu.Enabled = false;
-                    btnNewer15Blocks.Enabled = false;
-                    btnOlder15Blocks.Enabled = false;
-                    textBoxBlockHeightToStartListFrom.Enabled = false;
-                }
-                else
-                {
-                    // use previously saved states to reinstate buttons
-                    btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
-                    btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
-                    btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
-                    btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
-                    btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
-                    BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
-                    BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
-                    btnViewBlockFromBlockList.Enabled = btnViewBlockFromBlockListWasEnabled;
-                    btnPreviousBlockTransactions.Enabled = btnPreviousBlockTransactionsWasEnabled;
-                    btnNextBlockTransactions.Enabled = btnNextBlockTransactionsWasEnabled;
-                    btnNextBlock.Enabled = btnNextBlockWasEnabled;
-                    btnPreviousBlock.Enabled = btnPreviousBlockWasEnabled;
-                    textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
-                    textBoxSubmittedBlockNumber.Enabled = textBoxSubmittedBlockNumberWasEnabled;
-                    btnNewer15Blocks.Enabled = btnNewer15BlocksWasEnabled;
-                    btnOlder15Blocks.Enabled = btnOlder15BlocksWasEnabled;
-                    textBoxBlockHeightToStartListFrom.Enabled = textBoxBlockHeightToStartListFromWasEnabled;
-                    if (panelBlock.Visible == true)
-                    {
-                        textBoxSubmittedBlockNumber.Focus();
-                        // Set the cursor position to the end of the string
-                        textBoxSubmittedBlockNumber.Select(textBoxSubmittedBlockNumber.Text.Length, 0);
-                    }
-                    if (panelAddress.Visible == true)
-                    {
-                        textboxSubmittedAddress.Focus();
-                        // Set the cursor position to the end of the string
-                        textboxSubmittedAddress.Select(textboxSubmittedAddress.Text.Length, 0);
-                    }
-                    btnMenu.Enabled = true;
-                }
-            }
-        }
-
-        //=============================================================================================================
         //------------------------DISABLE/ENABLE THE LOADING ANIMATION-------------------------------------------------
 
         private void ToggleLoadingAnimation(string enableOrDisableAnimation)
@@ -12102,11 +12187,7 @@ namespace SATSuma
                     {
                         textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
                     });
-                    // DisableEnableLoadingAnimation("enable"); // start the loading animation
-                    // DisableEnableButtons("disable"); // disable buttons during operation
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
-                    // DisableEnableLoadingAnimation("disable"); // stop the loading animation
-                    // DisableEnableButtons("enable"); // enable buttons after operation is complete
                 }
             }
             catch (Exception ex)

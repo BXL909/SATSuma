@@ -702,6 +702,7 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.lblChartMousePositionData = new System.Windows.Forms.Label();
             this.btnChartPeriodAll = new System.Windows.Forms.Button();
             this.btnChartPeriod3y = new System.Windows.Forms.Button();
             this.btnChartPeriod2y = new System.Windows.Forms.Button();
@@ -717,7 +718,6 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.lblChartMousePositionData = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -4510,6 +4510,7 @@
             // btnPreviousBlockTransactions
             // 
             this.btnPreviousBlockTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPreviousBlockTransactions.Enabled = false;
             this.btnPreviousBlockTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnPreviousBlockTransactions.FlatAppearance.BorderSize = 0;
             this.btnPreviousBlockTransactions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
@@ -10308,6 +10309,16 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
+            // lblChartMousePositionData
+            // 
+            this.lblChartMousePositionData.AutoSize = true;
+            this.lblChartMousePositionData.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChartMousePositionData.Location = new System.Drawing.Point(150, 495);
+            this.lblChartMousePositionData.Name = "lblChartMousePositionData";
+            this.lblChartMousePositionData.Size = new System.Drawing.Size(81, 20);
+            this.lblChartMousePositionData.TabIndex = 177;
+            this.lblChartMousePositionData.Text = "label202";
+            // 
             // btnChartPeriodAll
             // 
             this.btnChartPeriodAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -10638,16 +10649,6 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // lblChartMousePositionData
-            // 
-            this.lblChartMousePositionData.AutoSize = true;
-            this.lblChartMousePositionData.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChartMousePositionData.Location = new System.Drawing.Point(150, 495);
-            this.lblChartMousePositionData.Name = "lblChartMousePositionData";
-            this.lblChartMousePositionData.Size = new System.Drawing.Size(81, 20);
-            this.lblChartMousePositionData.TabIndex = 177;
-            this.lblChartMousePositionData.Text = "label202";
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10657,16 +10658,16 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCurrency);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.headerNetworkName);

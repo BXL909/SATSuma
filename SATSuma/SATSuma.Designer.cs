@@ -702,21 +702,22 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartPeriodAll = new System.Windows.Forms.Button();
+            this.btnChartPeriod3y = new System.Windows.Forms.Button();
+            this.btnChartPeriod2y = new System.Windows.Forms.Button();
+            this.btnChartPeriod1y = new System.Windows.Forms.Button();
+            this.btnChartPeriod6m = new System.Windows.Forms.Button();
+            this.btnChartPeriod3m = new System.Windows.Forms.Button();
+            this.btnChartPeriod1m = new System.Windows.Forms.Button();
+            this.btnChartPeriod1w = new System.Windows.Forms.Button();
+            this.btnChartPeriod3d = new System.Windows.Forms.Button();
+            this.btnChartPeriod24h = new System.Windows.Forms.Button();
             this.btnChartBlockFees = new System.Windows.Forms.Button();
             this.btnChartReward = new System.Windows.Forms.Button();
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
+            this.lblChartMousePositionData = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -1594,7 +1595,7 @@
             this.pictureBoxHeaderPriceChart.TabIndex = 234;
             this.pictureBoxHeaderPriceChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxHeaderPriceChart, "view chart");
-            this.pictureBoxHeaderPriceChart.Click += new System.EventHandler(this.pictureBoxHeaderPriceChart_Click);
+            this.pictureBoxHeaderPriceChart.Click += new System.EventHandler(this.PictureBoxHeaderPriceChart_Click);
             // 
             // pictureBoxPriceChart
             // 
@@ -1606,7 +1607,7 @@
             this.pictureBoxPriceChart.TabIndex = 235;
             this.pictureBoxPriceChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxPriceChart, "view chart");
-            this.pictureBoxPriceChart.Click += new System.EventHandler(this.pictureBoxPriceChart_Click);
+            this.pictureBoxPriceChart.Click += new System.EventHandler(this.PictureBoxPriceChart_Click);
             // 
             // label134
             // 
@@ -2388,6 +2389,7 @@
             this.formsPlot1.Name = "formsPlot1";
             this.formsPlot1.Size = new System.Drawing.Size(682, 521);
             this.formsPlot1.TabIndex = 0;
+            this.formsPlot1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormsPlot1_MouseMove);
             // 
             // panelLightningDashboard
             // 
@@ -10283,16 +10285,17 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
-            this.panelCharts.Controls.Add(this.button12);
-            this.panelCharts.Controls.Add(this.button11);
-            this.panelCharts.Controls.Add(this.button10);
-            this.panelCharts.Controls.Add(this.button9);
-            this.panelCharts.Controls.Add(this.button8);
-            this.panelCharts.Controls.Add(this.button7);
-            this.panelCharts.Controls.Add(this.button6);
-            this.panelCharts.Controls.Add(this.button5);
-            this.panelCharts.Controls.Add(this.button4);
-            this.panelCharts.Controls.Add(this.button3);
+            this.panelCharts.Controls.Add(this.lblChartMousePositionData);
+            this.panelCharts.Controls.Add(this.btnChartPeriodAll);
+            this.panelCharts.Controls.Add(this.btnChartPeriod3y);
+            this.panelCharts.Controls.Add(this.btnChartPeriod2y);
+            this.panelCharts.Controls.Add(this.btnChartPeriod1y);
+            this.panelCharts.Controls.Add(this.btnChartPeriod6m);
+            this.panelCharts.Controls.Add(this.btnChartPeriod3m);
+            this.panelCharts.Controls.Add(this.btnChartPeriod1m);
+            this.panelCharts.Controls.Add(this.btnChartPeriod1w);
+            this.panelCharts.Controls.Add(this.btnChartPeriod3d);
+            this.panelCharts.Controls.Add(this.btnChartPeriod24h);
             this.panelCharts.Controls.Add(this.btnChartBlockFees);
             this.panelCharts.Controls.Add(this.btnChartReward);
             this.panelCharts.Controls.Add(this.btnChartPrice);
@@ -10304,6 +10307,226 @@
             this.panelCharts.Size = new System.Drawing.Size(773, 556);
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
+            // 
+            // btnChartPeriodAll
+            // 
+            this.btnChartPeriodAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriodAll.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriodAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriodAll.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriodAll.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriodAll.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriodAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriodAll.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriodAll.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriodAll.Location = new System.Drawing.Point(604, 530);
+            this.btnChartPeriodAll.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriodAll.Name = "btnChartPeriodAll";
+            this.btnChartPeriodAll.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriodAll.TabIndex = 176;
+            this.btnChartPeriodAll.TabStop = false;
+            this.btnChartPeriodAll.Text = "all";
+            this.btnChartPeriodAll.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriodAll.UseVisualStyleBackColor = false;
+            this.btnChartPeriodAll.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod3y
+            // 
+            this.btnChartPeriod3y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod3y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod3y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod3y.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod3y.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3y.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod3y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod3y.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod3y.Location = new System.Drawing.Point(554, 530);
+            this.btnChartPeriod3y.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod3y.Name = "btnChartPeriod3y";
+            this.btnChartPeriod3y.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod3y.TabIndex = 175;
+            this.btnChartPeriod3y.TabStop = false;
+            this.btnChartPeriod3y.Text = "3y";
+            this.btnChartPeriod3y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod3y.UseVisualStyleBackColor = false;
+            this.btnChartPeriod3y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod2y
+            // 
+            this.btnChartPeriod2y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod2y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod2y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod2y.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod2y.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod2y.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod2y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod2y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod2y.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod2y.Location = new System.Drawing.Point(504, 530);
+            this.btnChartPeriod2y.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod2y.Name = "btnChartPeriod2y";
+            this.btnChartPeriod2y.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod2y.TabIndex = 174;
+            this.btnChartPeriod2y.TabStop = false;
+            this.btnChartPeriod2y.Text = "2y";
+            this.btnChartPeriod2y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod2y.UseVisualStyleBackColor = false;
+            this.btnChartPeriod2y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod1y
+            // 
+            this.btnChartPeriod1y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod1y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod1y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod1y.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod1y.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1y.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod1y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod1y.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod1y.Location = new System.Drawing.Point(454, 530);
+            this.btnChartPeriod1y.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod1y.Name = "btnChartPeriod1y";
+            this.btnChartPeriod1y.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod1y.TabIndex = 173;
+            this.btnChartPeriod1y.TabStop = false;
+            this.btnChartPeriod1y.Text = "1y";
+            this.btnChartPeriod1y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod1y.UseVisualStyleBackColor = false;
+            this.btnChartPeriod1y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod6m
+            // 
+            this.btnChartPeriod6m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod6m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod6m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod6m.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod6m.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod6m.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod6m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod6m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod6m.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod6m.Location = new System.Drawing.Point(404, 530);
+            this.btnChartPeriod6m.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod6m.Name = "btnChartPeriod6m";
+            this.btnChartPeriod6m.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod6m.TabIndex = 172;
+            this.btnChartPeriod6m.TabStop = false;
+            this.btnChartPeriod6m.Text = "6m";
+            this.btnChartPeriod6m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod6m.UseVisualStyleBackColor = false;
+            this.btnChartPeriod6m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod3m
+            // 
+            this.btnChartPeriod3m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod3m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod3m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod3m.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod3m.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3m.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod3m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod3m.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod3m.Location = new System.Drawing.Point(354, 530);
+            this.btnChartPeriod3m.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod3m.Name = "btnChartPeriod3m";
+            this.btnChartPeriod3m.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod3m.TabIndex = 171;
+            this.btnChartPeriod3m.TabStop = false;
+            this.btnChartPeriod3m.Text = "3m";
+            this.btnChartPeriod3m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod3m.UseVisualStyleBackColor = false;
+            this.btnChartPeriod3m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod1m
+            // 
+            this.btnChartPeriod1m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod1m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod1m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod1m.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod1m.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1m.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod1m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod1m.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod1m.Location = new System.Drawing.Point(304, 530);
+            this.btnChartPeriod1m.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod1m.Name = "btnChartPeriod1m";
+            this.btnChartPeriod1m.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod1m.TabIndex = 170;
+            this.btnChartPeriod1m.TabStop = false;
+            this.btnChartPeriod1m.Text = "1m";
+            this.btnChartPeriod1m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod1m.UseVisualStyleBackColor = false;
+            this.btnChartPeriod1m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod1w
+            // 
+            this.btnChartPeriod1w.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod1w.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod1w.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod1w.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod1w.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1w.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod1w.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod1w.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod1w.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod1w.Location = new System.Drawing.Point(254, 530);
+            this.btnChartPeriod1w.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod1w.Name = "btnChartPeriod1w";
+            this.btnChartPeriod1w.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod1w.TabIndex = 169;
+            this.btnChartPeriod1w.TabStop = false;
+            this.btnChartPeriod1w.Text = "1w";
+            this.btnChartPeriod1w.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod1w.UseVisualStyleBackColor = false;
+            this.btnChartPeriod1w.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod3d
+            // 
+            this.btnChartPeriod3d.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod3d.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod3d.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod3d.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod3d.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3d.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod3d.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod3d.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod3d.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod3d.Location = new System.Drawing.Point(204, 530);
+            this.btnChartPeriod3d.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod3d.Name = "btnChartPeriod3d";
+            this.btnChartPeriod3d.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod3d.TabIndex = 168;
+            this.btnChartPeriod3d.TabStop = false;
+            this.btnChartPeriod3d.Text = "3d";
+            this.btnChartPeriod3d.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod3d.UseVisualStyleBackColor = false;
+            this.btnChartPeriod3d.Click += new System.EventHandler(this.BtnChartPeriod_Click);
+            // 
+            // btnChartPeriod24h
+            // 
+            this.btnChartPeriod24h.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPeriod24h.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPeriod24h.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPeriod24h.FlatAppearance.BorderSize = 0;
+            this.btnChartPeriod24h.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod24h.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPeriod24h.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPeriod24h.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPeriod24h.ForeColor = System.Drawing.Color.White;
+            this.btnChartPeriod24h.Location = new System.Drawing.Point(154, 530);
+            this.btnChartPeriod24h.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPeriod24h.Name = "btnChartPeriod24h";
+            this.btnChartPeriod24h.Size = new System.Drawing.Size(46, 24);
+            this.btnChartPeriod24h.TabIndex = 167;
+            this.btnChartPeriod24h.TabStop = false;
+            this.btnChartPeriod24h.Text = "24h";
+            this.btnChartPeriod24h.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPeriod24h.UseVisualStyleBackColor = false;
+            this.btnChartPeriod24h.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
             // btnChartBlockFees
             // 
@@ -10325,7 +10548,7 @@
             this.btnChartBlockFees.Text = "block fees";
             this.btnChartBlockFees.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartBlockFees.UseVisualStyleBackColor = false;
-            this.btnChartBlockFees.Click += new System.EventHandler(this.btnChartBlockFees_Click);
+            this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_Click);
             // 
             // btnChartReward
             // 
@@ -10347,7 +10570,7 @@
             this.btnChartReward.Text = "block reward";
             this.btnChartReward.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartReward.UseVisualStyleBackColor = false;
-            this.btnChartReward.Click += new System.EventHandler(this.btnChartReward_Click);
+            this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_Click);
             // 
             // btnChartPrice
             // 
@@ -10369,7 +10592,7 @@
             this.btnChartPrice.Text = "price (USD)";
             this.btnChartPrice.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPrice.UseVisualStyleBackColor = false;
-            this.btnChartPrice.Click += new System.EventHandler(this.btnChartPrice_Click);
+            this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_Click);
             // 
             // btnChartDifficulty
             // 
@@ -10415,215 +10638,15 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // button3
+            // lblChartMousePositionData
             // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(154, 530);
-            this.button3.Margin = new System.Windows.Forms.Padding(0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(46, 24);
-            this.button3.TabIndex = 167;
-            this.button3.TabStop = false;
-            this.button3.Text = "24h";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button3.UseVisualStyleBackColor = false;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(204, 530);
-            this.button4.Margin = new System.Windows.Forms.Padding(0);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(46, 24);
-            this.button4.TabIndex = 168;
-            this.button4.TabStop = false;
-            this.button4.Text = "3d";
-            this.button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button4.UseVisualStyleBackColor = false;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button5.FlatAppearance.BorderSize = 0;
-            this.button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(254, 530);
-            this.button5.Margin = new System.Windows.Forms.Padding(0);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(46, 24);
-            this.button5.TabIndex = 169;
-            this.button5.TabStop = false;
-            this.button5.Text = "1w";
-            this.button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button5.UseVisualStyleBackColor = false;
-            // 
-            // button6
-            // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button6.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button6.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.ForeColor = System.Drawing.Color.White;
-            this.button6.Location = new System.Drawing.Point(304, 530);
-            this.button6.Margin = new System.Windows.Forms.Padding(0);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(46, 24);
-            this.button6.TabIndex = 170;
-            this.button6.TabStop = false;
-            this.button6.Text = "1m";
-            this.button6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button6.UseVisualStyleBackColor = false;
-            // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button7.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(354, 530);
-            this.button7.Margin = new System.Windows.Forms.Padding(0);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(46, 24);
-            this.button7.TabIndex = 171;
-            this.button7.TabStop = false;
-            this.button7.Text = "3m";
-            this.button7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button7.UseVisualStyleBackColor = false;
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button8.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(404, 530);
-            this.button8.Margin = new System.Windows.Forms.Padding(0);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(46, 24);
-            this.button8.TabIndex = 172;
-            this.button8.TabStop = false;
-            this.button8.Text = "6m";
-            this.button8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button8.UseVisualStyleBackColor = false;
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button9.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button9.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button9.FlatAppearance.BorderSize = 0;
-            this.button9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(454, 530);
-            this.button9.Margin = new System.Windows.Forms.Padding(0);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(46, 24);
-            this.button9.TabIndex = 173;
-            this.button9.TabStop = false;
-            this.button9.Text = "1y";
-            this.button9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button9.UseVisualStyleBackColor = false;
-            // 
-            // button10
-            // 
-            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button10.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button10.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button10.FlatAppearance.BorderSize = 0;
-            this.button10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button10.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.ForeColor = System.Drawing.Color.White;
-            this.button10.Location = new System.Drawing.Point(504, 530);
-            this.button10.Margin = new System.Windows.Forms.Padding(0);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(46, 24);
-            this.button10.TabIndex = 174;
-            this.button10.TabStop = false;
-            this.button10.Text = "2y";
-            this.button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button10.UseVisualStyleBackColor = false;
-            // 
-            // button11
-            // 
-            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button11.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button11.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button11.FlatAppearance.BorderSize = 0;
-            this.button11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button11.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.ForeColor = System.Drawing.Color.White;
-            this.button11.Location = new System.Drawing.Point(554, 530);
-            this.button11.Margin = new System.Windows.Forms.Padding(0);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(46, 24);
-            this.button11.TabIndex = 175;
-            this.button11.TabStop = false;
-            this.button11.Text = "3y";
-            this.button11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button11.UseVisualStyleBackColor = false;
-            // 
-            // button12
-            // 
-            this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.button12.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button12.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button12.FlatAppearance.BorderSize = 0;
-            this.button12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button12.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.ForeColor = System.Drawing.Color.White;
-            this.button12.Location = new System.Drawing.Point(604, 530);
-            this.button12.Margin = new System.Windows.Forms.Padding(0);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(46, 24);
-            this.button12.TabIndex = 176;
-            this.button12.TabStop = false;
-            this.button12.Text = "all";
-            this.button12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button12.UseVisualStyleBackColor = false;
+            this.lblChartMousePositionData.AutoSize = true;
+            this.lblChartMousePositionData.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChartMousePositionData.Location = new System.Drawing.Point(150, 495);
+            this.lblChartMousePositionData.Name = "lblChartMousePositionData";
+            this.lblChartMousePositionData.Size = new System.Drawing.Size(81, 20);
+            this.lblChartMousePositionData.TabIndex = 177;
+            this.lblChartMousePositionData.Text = "label202";
             // 
             // SATSuma
             // 
@@ -10871,6 +10894,7 @@
             this.panel60.ResumeLayout(false);
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
+            this.panelCharts.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -11555,16 +11579,17 @@
         private System.Windows.Forms.PictureBox pictureBoxPriceChart;
         private System.Windows.Forms.Button btnChartReward;
         private System.Windows.Forms.Button btnChartBlockFees;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnChartPeriod24h;
+        private System.Windows.Forms.Button btnChartPeriod3d;
+        private System.Windows.Forms.Button btnChartPeriodAll;
+        private System.Windows.Forms.Button btnChartPeriod3y;
+        private System.Windows.Forms.Button btnChartPeriod2y;
+        private System.Windows.Forms.Button btnChartPeriod1y;
+        private System.Windows.Forms.Button btnChartPeriod6m;
+        private System.Windows.Forms.Button btnChartPeriod3m;
+        private System.Windows.Forms.Button btnChartPeriod1m;
+        private System.Windows.Forms.Button btnChartPeriod1w;
+        private System.Windows.Forms.Label lblChartMousePositionData;
     }
 }
 

@@ -34,6 +34,7 @@ using Newtonsoft.Json.Linq;
 using QRCoder;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
+using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,6 +74,7 @@ namespace SATSuma
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private int LastHighlightedIndex = -1; // used by charts for mousemove events to highlight plots closest to pointer
         int rowsReturnedByAddressTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
         int rowsReturnedByBlockTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
@@ -91,6 +93,8 @@ namespace SATSuma
         string bitcoinDashboardSelected = "1"; // for settings record in bookmarks file 
         string lightningDashboardSelected = "1"; // for settings record in bookmarks file
         string mempoolLightningJSONSelected = "1"; // for settings record in bookmarks file
+        string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
+        string chartType = ""; // keeps track of what type of chart is being displayed
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
@@ -129,12 +133,29 @@ namespace SATSuma
         bool btnNewer15BlocksWasEnabled = false; // store button state during queries to return to that state afterwards
         bool btnOlder15BlocksWasEnabled = true; // store button state during queries to return to that state afterwards
         bool textBoxBlockHeightToStartListFromWasEnabled = true; // store button state during queries to return to that state afterwards
+        bool btnChartBlockFeesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartDifficultyWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartHashrateWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPriceWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartRewardWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod1mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod1wWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod1yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod24hWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod2yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod3dWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod3mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod3yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
         Color listViewHeaderTextColor = Color.Silver;
         Color tableTextColor = Color.FromArgb(255, 153, 0);
+        private ScottPlot.Plottable.ScatterPlot scatter; // chart data gets plotted onto this
+        private ScottPlot.Plottable.MarkerPlot HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
         #endregion
 
         #region INITIALISE
@@ -152,7 +173,7 @@ namespace SATSuma
             CreateDataServices();
         }
 
-        private void SATSuma_Load(object sender, EventArgs e) 
+        private void SATSuma_Load(object sender, EventArgs e)
         {
             try
             {
@@ -175,8 +196,10 @@ namespace SATSuma
                     dataBackground: subItemBackColor);
                 formsPlot1.Plot.Title("Hashrate (exahash per second)");
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
+                btnChartPeriodAll.Enabled = false;
                 BtnChartHashrate_Click(sender, e);
                 formsPlot1.Refresh();
+                
             }
             catch (WebException ex)
             {
@@ -185,12 +208,10 @@ namespace SATSuma
         }
         #endregion
 
-
-
-    #region CLOCK TICK EVENTS (1 sec and API refresh clock only)
-    //=============================================================================================================
-    // -------------------------CLOCK TICKS------------------------------------------------------------------------
-    private void StartTheClocksTicking()
+        #region CLOCK TICK EVENTS (1 sec and API refresh clock only)
+        //=============================================================================================================
+        // -------------------------CLOCK TICKS------------------------------------------------------------------------
+        private void StartTheClocksTicking()
         {
             APIRefreshFrequency = Convert.ToInt32(numericUpDownDashboardRefresh.Value);
             intDisplayCountdownToRefresh = (APIRefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
@@ -261,109 +282,109 @@ namespace SATSuma
 
                 Task task0 = Task.Run(async () => // mempool.space api's
                 {
-                // current block height, size and transaction count
-                try
-                {
-                    var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
-                    var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-
-                    if (blocks.Count > 0)
+                    // current block height, size and transaction count
+                    try
                     {
-                        lblTransactions.Invoke((MethodInvoker)delegate
-                        {
-                            lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
-                        });
+                        var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
+                        var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
-                        lblBlockNumber.Invoke((MethodInvoker)delegate
+                        if (blocks.Count > 0)
                         {
-                            lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
-                        });
+                            lblTransactions.Invoke((MethodInvoker)delegate
+                            {
+                                lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
+                            });
 
-                        long sizeInBytes = blocks[0].Size;
-                        string sizeString; // convert display to bytes/kb/mb accordingly
-                        if (sizeInBytes < 1000)
-                        {
-                            sizeString = $"{sizeInBytes} bytes";
+                            lblBlockNumber.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
+                            });
+
+                            long sizeInBytes = blocks[0].Size;
+                            string sizeString; // convert display to bytes/kb/mb accordingly
+                            if (sizeInBytes < 1000)
+                            {
+                                sizeString = $"{sizeInBytes} bytes";
+                            }
+                            else if (sizeInBytes < 1000 * 1000)
+                            {
+                                double sizeInKB = (double)sizeInBytes / 1000;
+                                sizeString = $"{sizeInKB:N2} KB";
+                            }
+                            else
+                            {
+                                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                                sizeString = $"{sizeInMB:N2} MB";
+                            }
+                            lblBlockSize.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockSize.Text = sizeString;
+                            });
                         }
-                        else if (sizeInBytes < 1000 * 1000)
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
+                    }
+
+                    // fees
+                    try
+                    {
+                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
+                        // move returned data to the labels on the form
+                        lblfeesHighPriority.Invoke((MethodInvoker)delegate
                         {
-                            double sizeInKB = (double)sizeInBytes / 1000;
-                            sizeString = $"{sizeInKB:N2} KB";
-                        }
-                        else
+                            lblfeesHighPriority.Text = fastestFee;
+                        });
+                        lblFeesMediumPriority.Invoke((MethodInvoker)delegate
                         {
-                            double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                            sizeString = $"{sizeInMB:N2} MB";
-                        }
-                        lblBlockSize.Invoke((MethodInvoker)delegate
+                            lblFeesMediumPriority.Text = halfHourFee;
+                        });
+                        lblFeesLowPriority.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockSize.Text = sizeString;
+                            lblFeesLowPriority.Text = hourFee;
+                        });
+                        lblFeesNoPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblFeesNoPriority.Text = economyFee;
                         });
                     }
-                }
-                catch (Exception ex)
-                {
-                    errorOccurred = true;
-                    HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting block size & tx count)");
-                }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting fees)");
+                    }
 
-                // fees
-                try
-                {
-                    var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
-                    // move returned data to the labels on the form
-                    lblfeesHighPriority.Invoke((MethodInvoker)delegate
+                    // hashrate
+                    try
                     {
-                        lblfeesHighPriority.Text = fastestFee;
-                    });
-                    lblFeesMediumPriority.Invoke((MethodInvoker)delegate
-                    {
-                        lblFeesMediumPriority.Text = halfHourFee;
-                    });
-                    lblFeesLowPriority.Invoke((MethodInvoker)delegate
-                    {
-                        lblFeesLowPriority.Text = hourFee;
-                    });
-                    lblFeesNoPriority.Invoke((MethodInvoker)delegate
-                    {
-                        lblFeesNoPriority.Text = economyFee;
-                    });
-                }
-                catch (Exception ex)
-                {
-                    errorOccurred = true;
-                    HandleException(ex, "UpdateBitcoinAndLightningDashboards(getting fees)");
-                }
-
-                // hashrate
-                try
-                {
-                    var (currentHashrate, currentDifficulty) = GetHashrate();
-                    // move returned data to the labels on the form
-                    lblHeaderHashrate.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderHashrate.Text = currentHashrate;
-                    });
-                    pictureBoxHeaderHashrateChart.Invoke((MethodInvoker)delegate
-                    {
-                        pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + 10, pictureBoxHeaderHashrateChart.Location.Y);
-                    });
-                    lblEstHashrate.Invoke((MethodInvoker)delegate
-                    {
-                        lblEstHashrate.Text = currentHashrate;
-                    });
-                    pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
-                    {
-                        pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 10, pictureBoxHashrateChart.Location.Y);
-                    });
-                    lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
-                    {
-                        lblBlockListEstHashRate.Text = currentHashrate;
-                    });
-                    pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
-                    {
-                        pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 10, pictureBoxBlockListHashrateChart.Location.Y);
-                    });
+                        var (currentHashrate, currentDifficulty) = GetHashrate();
+                        // move returned data to the labels on the form
+                        lblHeaderHashrate.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderHashrate.Text = currentHashrate;
+                        });
+                        pictureBoxHeaderHashrateChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + 10, pictureBoxHeaderHashrateChart.Location.Y);
+                        });
+                        lblEstHashrate.Invoke((MethodInvoker)delegate
+                        {
+                            lblEstHashrate.Text = currentHashrate;
+                        });
+                        pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 10, pictureBoxHashrateChart.Location.Y);
+                        });
+                        lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListEstHashRate.Text = currentHashrate;
+                        });
+                        pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 10, pictureBoxBlockListHashrateChart.Location.Y);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -373,11 +394,11 @@ namespace SATSuma
 
                     // difficulty adjustment
                     try
-                    { 
-                    var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment();
+                    {
+                        var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment();
                         decimal progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
                         string truncatedPercent = string.Format("{0:F2}%", progressValue2 * 100); // truncate to two decimal places
-                        
+
                         lblProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate
                         {
                             lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
@@ -457,7 +478,7 @@ namespace SATSuma
                     // transactions in mempool
                     try
                     {
-                        var (txCount, vSize, totalFees) = GetMempool(); 
+                        var (txCount, vSize, totalFees) = GetMempool();
                         string txInMempool = txCount;
                         lblTXInMempool.Invoke((MethodInvoker)delegate
                         {
@@ -1220,9 +1241,9 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxPriceChart_Click(object sender, EventArgs e)
+        private void PictureBoxPriceChart_Click(object sender, EventArgs e)
         {
-            btnChartPrice_Click(sender, e);
+            BtnChartPrice_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -1385,7 +1406,7 @@ namespace SATSuma
                     lblMarketCapLabel.Text = "Market cap (XAU)";
                 });
             }
- 
+
             lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
             {
                 lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
@@ -1918,7 +1939,7 @@ namespace SATSuma
                 lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
                 {
                     lblAddressConfirmedUnspentOutputs.Text = string.Empty;
-                }); 
+                });
                 AddressInvalidHideControls();
             }
         }
@@ -4005,7 +4026,7 @@ namespace SATSuma
                         string ascii = Encoding.ASCII.GetString(bytes);
                         OutputAddress = "OP_RETURN: " + ascii;
                     }
-                    
+
                     ListViewItem item = new ListViewItem(OutputAddress); // create new row
                     string OutputValue = Convert.ToString(vout.Value);
                     decimal DecOutputValue = ConvertSatsToBitcoin(OutputValue);
@@ -4447,7 +4468,7 @@ namespace SATSuma
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
-                string SelectedAddress = selectedItem.SubItems[0].Text; 
+                string SelectedAddress = selectedItem.SubItems[0].Text;
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
                     textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
@@ -4469,7 +4490,7 @@ namespace SATSuma
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
-                string SelectedAddress = selectedItem.SubItems[0].Text; 
+                string SelectedAddress = selectedItem.SubItems[0].Text;
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
                     textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
@@ -5053,7 +5074,7 @@ namespace SATSuma
         }
 
         //-------------------- VIEW INDIVIDUAL BLOCK ------------------------------------------------------------------------
-        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)  
+        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)
         {
             try
             {
@@ -5215,7 +5236,7 @@ namespace SATSuma
             if (e.KeyChar == '\r')
             {
                 // Submit button was pressed
-                if (xpubValid) 
+                if (xpubValid)
                 {
                     LookupXpub();
                     e.Handled = true;
@@ -5225,7 +5246,7 @@ namespace SATSuma
                 {
                     return;
                 }
-            } 
+            }
         }
 
         //-----DERIVE ADDRESSES FOR DIFFERENT ADDRESS TYPES, SCAN FOR TX'S AND OUTPUT TO LIST -------------------------------------
@@ -5359,7 +5380,7 @@ namespace SATSuma
 
                 // -------------------------------------------------------- P2WPKH (Bech32 SegWit)
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
-                { 
+                {
                     for (uint i = 0; i < 500; i++)
                     {
                         lblXpubStatus.Invoke((MethodInvoker)delegate
@@ -5589,7 +5610,7 @@ namespace SATSuma
                     checkingAddressCount = 1;
                     DerivationPath++;
                     segwitAddresses.Clear();
-                    
+
                 }
                 DerivationPath = 0;
 
@@ -6378,12 +6399,12 @@ namespace SATSuma
                 BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
                 PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
             }
-            catch 
+            catch
             {
                 xpubValid = false;
                 lblValidXpubIndicator.ForeColor = Color.IndianRed;
                 lblValidXpubIndicator.Text = "✖️ Invalid Xpub";
-                
+
                 return;
             }
             xpubValid = true;
@@ -6624,7 +6645,7 @@ namespace SATSuma
                         xpubNodeURLInFile = bookmarkData;
                     }
                     else
-                    { 
+                    {
                         if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
                         {
                             //delete the currently saved node url
@@ -6918,21 +6939,40 @@ namespace SATSuma
         #endregion
 
         #region CHARTS SCREEN
+
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
+            chartType = "hashrate";
+            // if chart period too short for this chart, set it to max instead
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+            
+            // enable the other chart types
+            btnChartHashrate.Enabled = false;
+            btnChartDifficulty.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            DisableIrrelevantTimePeriods();
+
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Hashrate (exahash per second)");
+            formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod);
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
 
             // get a series of historic dates/hashrates/difficulties
-            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
+            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
             JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
             //split the data into two lists
             List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
             List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
 
-            //HASHRATES
             // set the number of points on the graph to the number of hashrates to display
             int pointCount = hashratesList.Count;
 
@@ -6941,7 +6981,7 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = hashratesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -6952,86 +6992,60 @@ namespace SATSuma
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
+
             // refresh the graph
             formsPlot1.Refresh();
-            btnChartHashrate.Enabled = false;
-            btnChartDifficulty.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+            
+
         }
 
-        private async void btnChartReward_Click(object sender, EventArgs e)
+        private async void BtnChartReward_Click(object sender, EventArgs e)
         {
-            // clear any previous graph
-            formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Block rewards (block subsidy plus fees)");
+            chartType = "reward";
 
-            // Create an instance of HttpClient
-            HttpClient client = new HttpClient();
-
-            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
-            string url = NodeURL + "v1/mining/blocks/rewards/all";
-            string json = await client.GetStringAsync(url);
-
-            // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
-            List<HistoricRewardsAndPrice> rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
-            
-            //REWARDS
-            // set the number of points on the graph to the number of hashrates to display
-            int pointCount = rewardsAndPriceList.Count;
-
-            // create arrays of doubles of the rewards and the dates
-            double[] yValues = rewardsAndPriceList.Select(h => (double)(h.avgRewards / 100000000)).ToArray(); 
-            // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = rewardsAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
-            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
-
-            formsPlot1.Plot.XAxis.DateTimeFormat(true);
-            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
-            formsPlot1.Plot.XAxis.Ticks(true);
-            formsPlot1.Plot.YAxis.Label("BTC");
-            formsPlot1.Plot.XAxis.Label("Date");
-            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
-            // prevent navigating beyond the data
-            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
-            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-            // refresh the graph
-            formsPlot1.Refresh();
             btnChartDifficulty.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartReward.Enabled = false;
-        }
+            DisableIrrelevantTimePeriods();
 
-        private async void btnChartBlockFees_Click(object sender, EventArgs e)
-        {
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average total fees per block");
+            formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod);
 
             // Create an instance of HttpClient
             HttpClient client = new HttpClient();
 
             // Make an HTTP GET request to the API endpoint and get the JSON response as a string
-            string url = NodeURL + "v1/mining/blocks/fees/all";
+            string url = NodeURL + "v1/mining/blocks/rewards/" + chartPeriod;
             string json = await client.GetStringAsync(url);
 
             // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
-            List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
+            List<HistoricRewardsAndPrice> rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
 
-            //REWARDS
             // set the number of points on the graph to the number of hashrates to display
-            int pointCount = feesAndPriceList.Count;
+            int pointCount = rewardsAndPriceList.Count;
 
             // create arrays of doubles of the rewards and the dates
-            double[] yValues = feesAndPriceList.Select(h => (double)(h.avgFees / 100000000)).ToArray();
+            double[] yValues = rewardsAndPriceList.Select(h => (double)(h.AvgRewards / 100000000)).ToArray();
             // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = feesAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
+            List<DateTime> dateTimes = rewardsAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -7042,30 +7056,116 @@ namespace SATSuma
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
             // refresh the graph
             formsPlot1.Refresh();
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void BtnChartBlockFees_Click(object sender, EventArgs e)
+        {
+            chartType = "blockfees";
+
             btnChartDifficulty.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod);
+
+            // Create an instance of HttpClient
+            HttpClient client = new HttpClient();
+
+            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
+            string url = NodeURL + "v1/mining/blocks/fees/" + chartPeriod;
+            string json = await client.GetStringAsync(url);
+
+            // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
+            List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
+
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = feesAndPriceList.Count;
+
+            // create arrays of doubles of the rewards and the dates
+            double[] yValues = feesAndPriceList.Select(h => (double)(h.AvgFees / 100000000)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = feesAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("BTC");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
+            // refresh the graph
+            formsPlot1.Refresh();
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
         }
 
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
+            chartType = "difficulty";
+
+            // if chart period too short for this chart, set it to max instead
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = false;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Difficulty");
+            formsPlot1.Plot.Title("Difficulty - " + chartPeriod);
 
             // get a series of historic dates/hashrates/difficulties
-            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync();
+            var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
             JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
             //split the data into two lists
             List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
             List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
 
-            //DIFFICULTY
             // set the number of points on the graph to the number of hashrates to display
             int pointCount = difficultyList.Count;
 
@@ -7074,7 +7174,7 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = difficultyList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Time)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -7085,38 +7185,61 @@ namespace SATSuma
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
             // refresh the graph
             formsPlot1.Refresh();
-            btnChartDifficulty.Enabled = false;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartPrice_Click(object sender, EventArgs e)
+        private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
+            chartType = "price";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges");
+            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod);
 
             // get a series of historic price data
-            var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync();
+            var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
             JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
             //split the data into two lists
             List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
 
-            //PRICE
             // set the number of points on the graph to the number of hashrates to display
             int pointCount = PriceList.Count;
 
             // create arrays of doubles of the difficulties and the dates
-            double[] yValues = PriceList.Select(h => (double)(h.y)).ToArray(); // divide by 1E12 to convert to trillions
+            double[] yValues = PriceList.Select(h => (double)(h.Y)).ToArray();
             // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.x)).LocalDateTime).ToList();
+            List<DateTime> dateTimes = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
-            var scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -7127,13 +7250,296 @@ namespace SATSuma
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
             // refresh the graph
             formsPlot1.Refresh();
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartPrice.Enabled = false;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private void BtnChartPeriod_Click(object sender, EventArgs e)
+        {
+            Control[] chartPeriodButtons = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll };
+
+            Button clickedButton = (Button)sender;
+            clickedButton.Enabled = false;
+
+            foreach (Control control in chartPeriodButtons)
+            {
+                if (control is Button && control == clickedButton)
+                {
+                    chartPeriod = clickedButton.Text;
+                }
+                if (control is Button && control != clickedButton)
+                {
+                    control.Enabled = true;
+                }
+            }
+
+            if (chartType == "hashrate")
+            {
+                BtnChartHashrate_Click(sender, e);
+            }
+            if (chartType == "blockfees")
+            { 
+                BtnChartBlockFees_Click(sender, e);
+            }
+            if (chartType == "difficulty")
+            {
+                BtnChartDifficulty_Click(sender, e);
+            }
+            if (chartType == "price")
+            {
+                BtnChartPrice_Click(sender, e);
+            }
+            if (chartType == "reward")
+            {
+                BtnChartReward_Click(sender, e);
+            }
+        }
+
+        private void DisableIrrelevantTimePeriods()
+        {
+            if (chartType == "hashrate")
+            {
+                btnChartPeriod24h.Enabled = false;
+                btnChartPeriod3d.Enabled = false;
+                btnChartPeriod1w.Enabled = false;
+                btnChartPeriod1m.Enabled = false;
+                if (chartPeriod != "3m")
+                {
+                    btnChartPeriod3m.Enabled = true;
+                }
+                if (chartPeriod != "6m")
+                {
+                    btnChartPeriod6m.Enabled = true;
+                }
+                if (chartPeriod != "1y")
+                {
+                    btnChartPeriod1y.Enabled = true;
+                }
+                if (chartPeriod != "2y")
+                {
+                    btnChartPeriod2y.Enabled = true;
+                }
+                if (chartPeriod != "3y")
+                {
+                    btnChartPeriod3y.Enabled = true;
+                }
+                if (chartPeriod != "all")
+                {
+                    btnChartPeriodAll.Enabled = true;
+                }
+            }
+            else
+            {
+                if (chartType == "difficulty")
+                {
+                    btnChartPeriod24h.Enabled = false;
+                    btnChartPeriod3d.Enabled = false;
+                    btnChartPeriod1w.Enabled = false;
+                    btnChartPeriod1m.Enabled = false;
+                    if (chartPeriod != "3m")
+                    {
+                        btnChartPeriod3m.Enabled = true;
+                    }
+                    if (chartPeriod != "6m")
+                    {
+                        btnChartPeriod6m.Enabled = true;
+                    }
+                    if (chartPeriod != "1y")
+                    {
+                        btnChartPeriod1y.Enabled = true;
+                    }
+                    if (chartPeriod != "2y")
+                    {
+                        btnChartPeriod2y.Enabled = true;
+                    }
+                    if (chartPeriod != "3y")
+                    {
+                        btnChartPeriod3y.Enabled = true;
+                    }
+                    if (chartPeriod != "all")
+                    {
+                        btnChartPeriodAll.Enabled = true;
+                    }
+                }
+                else
+                {
+                    if (chartType == "price")
+                    {
+                        btnChartPeriod24h.Enabled = false;
+                        btnChartPeriod3d.Enabled = false;
+                        btnChartPeriod1w.Enabled = false;
+                        btnChartPeriod2y.Enabled = false;
+                        if (chartPeriod != "1m")
+                        {
+                            btnChartPeriod1m.Enabled = true;
+                        }
+                        if (chartPeriod != "3m")
+                        {
+                            btnChartPeriod3m.Enabled = true;
+                        }
+                        if (chartPeriod != "6m")
+                        {
+                            btnChartPeriod6m.Enabled = true;
+                        }
+                        if (chartPeriod != "1y")
+                        {
+                            btnChartPeriod1y.Enabled = true;
+                        }
+                        if (chartPeriod != "3y")
+                        {
+                            btnChartPeriod3y.Enabled = true;
+                        }
+                        if (chartPeriod != "all")
+                        {
+                            btnChartPeriodAll.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        if (chartPeriod != "24h")
+                        {
+                            btnChartPeriod24h.Enabled = true;
+                        }
+                        if (chartPeriod != "3d")
+                        {
+                            btnChartPeriod3d.Enabled = true;
+                        }
+                        if (chartPeriod != "1w")
+                        {
+                            btnChartPeriod1w.Enabled = true;
+                        }
+                        if (chartPeriod != "1m")
+                        {
+                            btnChartPeriod1m.Enabled = true;
+                        }
+                        if (chartPeriod != "3m")
+                        {
+                            btnChartPeriod3m.Enabled = true;
+                        }
+                        if (chartPeriod != "6m")
+                        {
+                            btnChartPeriod6m.Enabled = true;
+                        }
+                        if (chartPeriod != "1y")
+                        {
+                            btnChartPeriod1y.Enabled = true;
+                        }
+                        if (chartPeriod != "2y")
+                        {
+                            btnChartPeriod2y.Enabled = true;
+                        }
+                        if (chartPeriod != "3y")
+                        {
+                            btnChartPeriod3y.Enabled = true;
+                        }
+                        if (chartPeriod != "all")
+                        {
+                            btnChartPeriodAll.Enabled = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FormsPlot1_MouseMove(object sender, MouseEventArgs e)
+        {
+            // determine point nearest the cursor
+            (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
+            double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
+            (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+
+            // place the highlight over the point of interest
+            HighlightedPoint.X = pointX;
+            HighlightedPoint.Y = pointY;
+            HighlightedPoint.IsVisible = true;
+
+            // render if the highlighted point chnaged
+            if (LastHighlightedIndex != pointIndex)
+            {
+                LastHighlightedIndex = pointIndex;
+                formsPlot1.Render();
+            }
+            // Convert pointX to a DateTime object
+            DateTime pointXDate = DateTime.FromOADate(pointX);
+
+            // Format the DateTime object using the desired format string
+            string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
+
+            // update coordinate data label below chart
+            lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
+        }
+
+        private void DisableEnableChartButtons(string enableOrDisableAllButtons)
+        {
+            
+                if (enableOrDisableAllButtons == "disable")
+                {
+                    // get current state of buttons before disabling them
+                    btnChartBlockFeesWasEnabled = btnChartBlockFees.Enabled;
+                    btnChartDifficultyWasEnabled = btnChartDifficulty.Enabled;
+                    btnChartHashrateWasEnabled = btnChartHashrate.Enabled;
+                    btnChartPriceWasEnabled = btnChartPrice.Enabled;
+                    btnChartRewardWasEnabled = btnChartReward.Enabled;
+                    btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
+                    btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
+                    btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
+                    btnChartPeriod24hWasEnabled = btnChartPeriod24h.Enabled;
+                    btnChartPeriod2yWasEnabled = btnChartPeriod2y.Enabled;
+                    btnChartPeriod3dWasEnabled = btnChartPeriod3d.Enabled;
+                    btnChartPeriod3mWasEnabled = btnChartPeriod3m.Enabled;
+                    btnChartPeriod3yWasEnabled = btnChartPeriod3y.Enabled;
+                    btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
+                    btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
+
+                    //disable them all
+                    btnChartBlockFees.Enabled = false;
+                    btnChartDifficulty.Enabled = false;
+                    btnChartHashrate.Enabled = false;
+                    btnChartPrice.Enabled = false;
+                    btnChartReward.Enabled = false;
+                    btnChartPeriod1m.Enabled = false;
+                    btnChartPeriod1w.Enabled = false;
+                    btnChartPeriod1y.Enabled = false;
+                    btnChartPeriod24h.Enabled = false;
+                    btnChartPeriod2y.Enabled = false;
+                    btnChartPeriod3d.Enabled = false;
+                    btnChartPeriod3m.Enabled = false;
+                    btnChartPeriod3y.Enabled = false;
+                    btnChartPeriod6m.Enabled = false;
+                    btnChartPeriodAll.Enabled = false;
+                }
+                else
+                {
+                    // use previously saved states to reinstate buttons
+
+                    btnChartBlockFees.Enabled = btnChartBlockFeesWasEnabled;
+                    btnChartDifficulty.Enabled = btnChartDifficultyWasEnabled;
+                    btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
+                    btnChartPrice.Enabled = btnChartPriceWasEnabled;
+                    btnChartReward.Enabled = btnChartRewardWasEnabled;
+                    btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
+                    btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
+                    btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
+                    btnChartPeriod24h.Enabled = btnChartPeriod24hWasEnabled;
+                    btnChartPeriod2y.Enabled = btnChartPeriod2yWasEnabled;
+                    btnChartPeriod3d.Enabled = btnChartPeriod3dWasEnabled;
+                    btnChartPeriod3m.Enabled = btnChartPeriod3mWasEnabled;
+                    btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
+                    btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
+                    btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
+                }
+            
         }
 
         #endregion
@@ -11894,9 +12300,9 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxHeaderPriceChart_Click(object sender, EventArgs e)
+        private void PictureBoxHeaderPriceChart_Click(object sender, EventArgs e)
         {
-            btnChartPrice_Click(sender, e);
+            BtnChartPrice_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -12581,23 +12987,23 @@ namespace SATSuma
         //-------------------historic price chart
         public class HistoricPriceData
         {
-            public string status { get; set; }
-            public string name { get; set; }
-            public string unit { get; set; }
-            public string period { get; set; }
-            public string description { get; set; }
-            public PriceCoordinates[] values { get; set; }
+            public string Status { get; set; }
+            public string Name { get; set; }
+            public string Unit { get; set; }
+            public string Period { get; set; }
+            public string Description { get; set; }
+            public PriceCoordinates[] Values { get; set; }
         }
         public class PriceCoordinates
         {
-            public string x { get; set; } // date
-            public decimal y { get; set; } // price
+            public string X { get; set; } // date
+            public decimal Y { get; set; } // price
         }
 
         public class PriceCoordinatesList
         {
-            public string x { get; set; }
-            public decimal y { get; set; }
+            public string X { get; set; }
+            public decimal Y { get; set; }
         }
 
         public class HistoricPriceDataService
@@ -12607,7 +13013,7 @@ namespace SATSuma
             {
                 _nodeUrl = nodeUrl;
             }
-            public async Task<string> GetHistoricPriceDataAsync()
+            public async Task<string> GetHistoricPriceDataAsync(string chartPeriod)
             {
                 int retryCount = 3;
                 while (retryCount > 0)
@@ -12616,7 +13022,32 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
-                        var response = await client.GetAsync($"charts/market-price?timespan=all&format=json");
+                        string blockChainInfoPeriod = "";
+                        if (chartPeriod == "1m")
+                        {
+                            blockChainInfoPeriod = "1months";
+                        }
+                        if (chartPeriod == "3m")
+                        {
+                            blockChainInfoPeriod = "3months";
+                        }
+                        if (chartPeriod == "6m")
+                        {
+                            blockChainInfoPeriod = "6months";
+                        }
+                        if (chartPeriod == "1y")
+                        {
+                            blockChainInfoPeriod = "1years";
+                        }
+                        if (chartPeriod == "3y")
+                        {
+                            blockChainInfoPeriod = "3years";
+                        }
+                        if (chartPeriod == "all")
+                        {
+                            blockChainInfoPeriod = "all";
+                        }
+                        var response = await client.GetAsync($"charts/market-price?timespan=" + blockChainInfoPeriod + "&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -12638,9 +13069,9 @@ namespace SATSuma
 
         public class HistoricRewardsAndPrice
         {
-            public string avgHeight { get; set; }
-            public string timestamp { get; set; }
-            public decimal avgRewards { get; set; }
+            public string AvgHeight { get; set; }
+            public string Timestamp { get; set; }
+            public decimal AvgRewards { get; set; }
             public decimal USD { get; set; }
         }
 
@@ -12648,9 +13079,9 @@ namespace SATSuma
 
         public class HistoricFeesAndPrice
         {
-            public string avgHeight { get; set; }
-            public string timestamp { get; set; }
-            public decimal avgFees { get; set; }
+            public string AvgHeight { get; set; }
+            public string Timestamp { get; set; }
+            public decimal AvgFees { get; set; }
             public decimal USD { get; set; }
         }
 
@@ -12685,7 +13116,7 @@ namespace SATSuma
             {
                 _nodeUrl = nodeUrl;
             }
-            public async Task<string> GetHashrateAndDifficultyAsync()
+            public async Task<string> GetHashrateAndDifficultyAsync(string chartPeriod)
             {
                 int retryCount = 3;
                 while (retryCount > 0)
@@ -12694,7 +13125,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/hashrate/all");
+                        var response = await client.GetAsync($"v1/mining/hashrate/" + chartPeriod);
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();

@@ -718,6 +718,7 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
+            this.btnChartFeeRates = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -10286,6 +10287,7 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.btnChartFeeRates);
             this.panelCharts.Controls.Add(this.lblChartMousePositionData);
             this.panelCharts.Controls.Add(this.btnChartPeriodAll);
             this.panelCharts.Controls.Add(this.btnChartPeriod3y);
@@ -10649,6 +10651,28 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
+            // btnChartFeeRates
+            // 
+            this.btnChartFeeRates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartFeeRates.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartFeeRates.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartFeeRates.FlatAppearance.BorderSize = 0;
+            this.btnChartFeeRates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartFeeRates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartFeeRates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartFeeRates.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartFeeRates.ForeColor = System.Drawing.Color.White;
+            this.btnChartFeeRates.Location = new System.Drawing.Point(0, 183);
+            this.btnChartFeeRates.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartFeeRates.Name = "btnChartFeeRates";
+            this.btnChartFeeRates.Size = new System.Drawing.Size(114, 24);
+            this.btnChartFeeRates.TabIndex = 178;
+            this.btnChartFeeRates.TabStop = false;
+            this.btnChartFeeRates.Text = "fee rates";
+            this.btnChartFeeRates.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartFeeRates.UseVisualStyleBackColor = false;
+            this.btnChartFeeRates.Click += new System.EventHandler(this.btnChartFeeRates_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -10658,10 +10682,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCurrency);
@@ -11591,6 +11615,7 @@
         private System.Windows.Forms.Button btnChartPeriod1m;
         private System.Windows.Forms.Button btnChartPeriod1w;
         private System.Windows.Forms.Label lblChartMousePositionData;
+        private System.Windows.Forms.Button btnChartFeeRates;
     }
 }
 

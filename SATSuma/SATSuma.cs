@@ -22,9 +22,9 @@ Version history 🍊
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * test that none of the buttons get stuck in a disabled state
  * table text not being set properly when changing theme on some screens
- * disable buttons on a screen basis rather than universally 
+ * change colours on fee rates chart. Include fee rates chart button in enable/disable sequences. Hide co-ords on fee rates chart
+ * more charts!
  */
 
 #region Using
@@ -52,6 +52,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
@@ -102,6 +103,7 @@ namespace SATSuma
         private TransactionsForBlockService _transactionsForBlockService;
         private HashrateAndDifficultyService _hashrateAndDifficultyService;
         private HistoricPriceDataService _historicPriceDataService;
+        private BlockFeeRatesDataService _blockFeeRatesDataService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -201,7 +203,7 @@ namespace SATSuma
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
                 formsPlot1.Plot.Title("Hashrate (exahash per second)");
-                formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
+                formsPlot1.Plot.Palette = Palette.Amber;
                 btnChartPeriodAll.Enabled = false;
                 BtnChartHashrate_Click(sender, e);
                 formsPlot1.Refresh();
@@ -7108,6 +7110,107 @@ namespace SATSuma
         #endregion
 
         #region CHARTS SCREEN
+        private async void btnChartFeeRates_Click(object sender, EventArgs e)
+        {
+            chartType = "feerates";
+            // enable the other chart types
+            btnChartFeeRates.Enabled = false;
+            btnChartHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            DisableIrrelevantTimePeriods();
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Block fee rates - " + chartPeriod);
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // Create an instance of HttpClient
+            HttpClient client = new HttpClient();
+
+            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
+            string url = NodeURL + "v1/mining/blocks/fee-rates/" + chartPeriod;
+            string json = await client.GetStringAsync(url);
+
+            List<BlockFeeRates> feeRatesList = JsonConvert.DeserializeObject<List<BlockFeeRates>>(json.ToString());
+
+            // set the number of points on the graph to the number of hashrates to display
+            int pointCount = feeRatesList.Count;
+
+            // create arrays of doubles of the hashrates and the dates
+            //double[] yValues1 = feeRatesList.Select(h => (double)(h.avgFee_100)).ToArray();
+            double[] yValues2 = feeRatesList.Select(h => (double)(h.avgFee_90)).ToArray();
+            double[] yValues3 = feeRatesList.Select(h => (double)(h.avgFee_75)).ToArray();
+            double[] yValues4 = feeRatesList.Select(h => (double)(h.avgFee_50)).ToArray();
+            double[] yValues5 = feeRatesList.Select(h => (double)(h.avgFee_25)).ToArray();
+            double[] yValues6 = feeRatesList.Select(h => (double)(h.avgFee_10)).ToArray();
+            double[] yValues7 = feeRatesList.Select(h => (double)(h.avgFee_0)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = feeRatesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+            // prevent navigating beyond the data
+            double yBoundary = yValues2.Max();
+            yBoundary = yBoundary / 7;
+            formsPlot1.Plot.YAxis.SetBoundary(0, yBoundary);
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            //scatter = formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.Cyan);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.Orange);
+            formsPlot1.Plot.AddFill(xValues, yValues2, 0, color: Color.Orange);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.Yellow);
+            formsPlot1.Plot.AddFill(xValues, yValues3, 0, color: Color.Yellow);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Red);
+            formsPlot1.Plot.AddFill(xValues, yValues4, 0, color: Color.Red);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues5, lineWidth: 1, markerSize: 1, color: Color.Green);
+            formsPlot1.Plot.AddFill(xValues, yValues5, 0, color: Color.Green);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues6, lineWidth: 1, markerSize: 1, color: Color.White);
+            formsPlot1.Plot.AddFill(xValues, yValues6, 0, color: Color.White);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues7, lineWidth: 1, markerSize: 1, color: Color.Purple);
+            formsPlot1.Plot.AddFill(xValues, yValues7, 0, color: Color.Purple);
+
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("sats per v/byte");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
+
+            // refresh the graph
+            formsPlot1.Refresh();
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        // Helper method to get a color based on index
+        private Color GetColorByIndex(int index)
+        {
+            switch (index)
+            {
+                case 0: return Color.Cyan;
+                case 1: return Color.Purple;
+                case 2: return Color.White;
+                case 3: return Color.Green;
+                case 4: return Color.Red;
+                case 5: return Color.Yellow;
+                case 6: return Color.Blue;
+                default: return Color.Black;
+            }
+        }
+
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
@@ -11261,6 +11364,7 @@ namespace SATSuma
             _transactionService = new TransactionService(NodeURL);
             _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
             _historicPriceDataService = new HistoricPriceDataService(NodeURL);
+            _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
         }
 
         // Get current block tip
@@ -13224,6 +13328,54 @@ namespace SATSuma
             }
         }
 
+        public class BlockFeeRates
+        {
+            public string avgHeight { get; set; }
+            public string timestamp { get; set; }
+            public double avgFee_0 { get; set; }
+            public double avgFee_10 { get; set; }
+            public double avgFee_25 { get; set; }
+            public double avgFee_50 { get; set; }
+            public double avgFee_75 { get; set; }
+            public double avgFee_90 { get; set; }
+            public double avgFee_100 { get; set; }
+        }
+
+        public class BlockFeeRatesDataService
+        {
+            private readonly string _nodeUrl;
+            public BlockFeeRatesDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetBlockFeeRatesAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/mining/blocks/fee-rates/" + chartPeriod);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
         #endregion
+
+
     }
 }

@@ -702,6 +702,7 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartFeeRates = new System.Windows.Forms.Button();
             this.lblChartMousePositionData = new System.Windows.Forms.Label();
             this.btnChartPeriodAll = new System.Windows.Forms.Button();
             this.btnChartPeriod3y = new System.Windows.Forms.Button();
@@ -718,7 +719,7 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.btnChartFeeRates = new System.Windows.Forms.Button();
+            this.btnChartCirculation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -10287,6 +10288,7 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.btnChartCirculation);
             this.panelCharts.Controls.Add(this.btnChartFeeRates);
             this.panelCharts.Controls.Add(this.lblChartMousePositionData);
             this.panelCharts.Controls.Add(this.btnChartPeriodAll);
@@ -10310,6 +10312,28 @@
             this.panelCharts.Size = new System.Drawing.Size(773, 556);
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
+            // 
+            // btnChartFeeRates
+            // 
+            this.btnChartFeeRates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartFeeRates.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartFeeRates.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartFeeRates.FlatAppearance.BorderSize = 0;
+            this.btnChartFeeRates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartFeeRates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartFeeRates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartFeeRates.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartFeeRates.ForeColor = System.Drawing.Color.White;
+            this.btnChartFeeRates.Location = new System.Drawing.Point(0, 183);
+            this.btnChartFeeRates.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartFeeRates.Name = "btnChartFeeRates";
+            this.btnChartFeeRates.Size = new System.Drawing.Size(100, 24);
+            this.btnChartFeeRates.TabIndex = 178;
+            this.btnChartFeeRates.TabStop = false;
+            this.btnChartFeeRates.Text = "fee rates";
+            this.btnChartFeeRates.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartFeeRates.UseVisualStyleBackColor = false;
+            this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_Click);
             // 
             // lblChartMousePositionData
             // 
@@ -10555,7 +10579,7 @@
             this.btnChartBlockFees.Location = new System.Drawing.Point(0, 152);
             this.btnChartBlockFees.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartBlockFees.Name = "btnChartBlockFees";
-            this.btnChartBlockFees.Size = new System.Drawing.Size(114, 24);
+            this.btnChartBlockFees.Size = new System.Drawing.Size(100, 24);
             this.btnChartBlockFees.TabIndex = 166;
             this.btnChartBlockFees.TabStop = false;
             this.btnChartBlockFees.Text = "block fees";
@@ -10577,7 +10601,7 @@
             this.btnChartReward.Location = new System.Drawing.Point(0, 121);
             this.btnChartReward.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartReward.Name = "btnChartReward";
-            this.btnChartReward.Size = new System.Drawing.Size(114, 24);
+            this.btnChartReward.Size = new System.Drawing.Size(100, 24);
             this.btnChartReward.TabIndex = 165;
             this.btnChartReward.TabStop = false;
             this.btnChartReward.Text = "block reward";
@@ -10599,7 +10623,7 @@
             this.btnChartPrice.Location = new System.Drawing.Point(0, 90);
             this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPrice.Name = "btnChartPrice";
-            this.btnChartPrice.Size = new System.Drawing.Size(114, 24);
+            this.btnChartPrice.Size = new System.Drawing.Size(100, 24);
             this.btnChartPrice.TabIndex = 164;
             this.btnChartPrice.TabStop = false;
             this.btnChartPrice.Text = "price (USD)";
@@ -10621,7 +10645,7 @@
             this.btnChartDifficulty.Location = new System.Drawing.Point(0, 59);
             this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartDifficulty.Name = "btnChartDifficulty";
-            this.btnChartDifficulty.Size = new System.Drawing.Size(114, 24);
+            this.btnChartDifficulty.Size = new System.Drawing.Size(100, 24);
             this.btnChartDifficulty.TabIndex = 163;
             this.btnChartDifficulty.TabStop = false;
             this.btnChartDifficulty.Text = "difficulty";
@@ -10643,7 +10667,7 @@
             this.btnChartHashrate.Location = new System.Drawing.Point(0, 28);
             this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartHashrate.Name = "btnChartHashrate";
-            this.btnChartHashrate.Size = new System.Drawing.Size(114, 24);
+            this.btnChartHashrate.Size = new System.Drawing.Size(100, 24);
             this.btnChartHashrate.TabIndex = 162;
             this.btnChartHashrate.TabStop = false;
             this.btnChartHashrate.Text = "hashrate";
@@ -10651,27 +10675,27 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // btnChartFeeRates
+            // btnChartCirculation
             // 
-            this.btnChartFeeRates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartFeeRates.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartFeeRates.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartFeeRates.FlatAppearance.BorderSize = 0;
-            this.btnChartFeeRates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartFeeRates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartFeeRates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartFeeRates.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartFeeRates.ForeColor = System.Drawing.Color.White;
-            this.btnChartFeeRates.Location = new System.Drawing.Point(0, 183);
-            this.btnChartFeeRates.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartFeeRates.Name = "btnChartFeeRates";
-            this.btnChartFeeRates.Size = new System.Drawing.Size(114, 24);
-            this.btnChartFeeRates.TabIndex = 178;
-            this.btnChartFeeRates.TabStop = false;
-            this.btnChartFeeRates.Text = "fee rates";
-            this.btnChartFeeRates.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartFeeRates.UseVisualStyleBackColor = false;
-            this.btnChartFeeRates.Click += new System.EventHandler(this.btnChartFeeRates_Click);
+            this.btnChartCirculation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartCirculation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartCirculation.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartCirculation.FlatAppearance.BorderSize = 0;
+            this.btnChartCirculation.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartCirculation.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartCirculation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartCirculation.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartCirculation.ForeColor = System.Drawing.Color.White;
+            this.btnChartCirculation.Location = new System.Drawing.Point(0, 214);
+            this.btnChartCirculation.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartCirculation.Name = "btnChartCirculation";
+            this.btnChartCirculation.Size = new System.Drawing.Size(100, 24);
+            this.btnChartCirculation.TabIndex = 179;
+            this.btnChartCirculation.TabStop = false;
+            this.btnChartCirculation.Text = "circulation";
+            this.btnChartCirculation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartCirculation.UseVisualStyleBackColor = false;
+            this.btnChartCirculation.Click += new System.EventHandler(this.btnChartCirculation_Click);
             // 
             // SATSuma
             // 
@@ -11616,6 +11640,7 @@
         private System.Windows.Forms.Button btnChartPeriod1w;
         private System.Windows.Forms.Label lblChartMousePositionData;
         private System.Windows.Forms.Button btnChartFeeRates;
+        private System.Windows.Forms.Button btnChartCirculation;
     }
 }
 

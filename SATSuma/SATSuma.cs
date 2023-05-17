@@ -22,9 +22,8 @@ Version history 🍊
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * table text not being set properly when changing theme on some screens
- * change colours on fee rates chart. Include fee rates chart button in enable/disable sequences. Hide co-ords on fee rates chart
- * more charts!
+ * table text not being set properly when changing theme on some screens? - can't reproduce again. Either fixed or didn't happen!
+ * more charts! logarithmic views
  */
 
 #region Using
@@ -35,6 +34,7 @@ using QRCoder;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
 using ScottPlot.Plottable;
+using ScottPlot.Ticks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -52,6 +52,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SATSuma.SATSuma;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
@@ -104,6 +105,7 @@ namespace SATSuma
         private HashrateAndDifficultyService _hashrateAndDifficultyService;
         private HistoricPriceDataService _historicPriceDataService;
         private BlockFeeRatesDataService _blockFeeRatesDataService;
+        private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -140,6 +142,8 @@ namespace SATSuma
         bool btnChartHashrateWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPriceWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartRewardWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartFeeRatesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartCirculationWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1wWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
@@ -196,6 +200,7 @@ namespace SATSuma
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
 
                 //initialise chart and pre-populate it with hashrate data
+                formsPlot1.Plot.Margins(x: .1, y: .1);
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
                 formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
                 formsPlot1.Configuration.DoubleClickBenchmark = false;
@@ -7110,9 +7115,10 @@ namespace SATSuma
         #endregion
 
         #region CHARTS SCREEN
-        private async void btnChartFeeRates_Click(object sender, EventArgs e)
+        private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
             chartType = "feerates";
+            lblChartMousePositionData.Text = "";
             // enable the other chart types
             btnChartFeeRates.Enabled = false;
             btnChartHashrate.Enabled = true;
@@ -7120,12 +7126,13 @@ namespace SATSuma
             btnChartPrice.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block fee rates - " + chartPeriod);
-
+            
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
 
@@ -7142,38 +7149,34 @@ namespace SATSuma
             int pointCount = feeRatesList.Count;
 
             // create arrays of doubles of the hashrates and the dates
-            //double[] yValues1 = feeRatesList.Select(h => (double)(h.avgFee_100)).ToArray();
-            double[] yValues2 = feeRatesList.Select(h => (double)(h.avgFee_90)).ToArray();
-            double[] yValues3 = feeRatesList.Select(h => (double)(h.avgFee_75)).ToArray();
-            double[] yValues4 = feeRatesList.Select(h => (double)(h.avgFee_50)).ToArray();
-            double[] yValues5 = feeRatesList.Select(h => (double)(h.avgFee_25)).ToArray();
-            double[] yValues6 = feeRatesList.Select(h => (double)(h.avgFee_10)).ToArray();
-            double[] yValues7 = feeRatesList.Select(h => (double)(h.avgFee_0)).ToArray();
+            double[] yValues1 = feeRatesList.Select(h => (double)(h.AvgFee_100)).ToArray();
+            double[] yValues2 = feeRatesList.Select(h => (double)(h.AvgFee_90)).ToArray();
+            double[] yValues3 = feeRatesList.Select(h => (double)(h.AvgFee_75)).ToArray();
+            double[] yValues4 = feeRatesList.Select(h => (double)(h.AvgFee_50)).ToArray();
+            double[] yValues5 = feeRatesList.Select(h => (double)(h.AvgFee_25)).ToArray();
+            double[] yValues6 = feeRatesList.Select(h => (double)(h.AvgFee_10)).ToArray();
+            double[] yValues7 = feeRatesList.Select(h => (double)(h.AvgFee_0)).ToArray();
             // create a new list of the dates, this time in DateTime format
-            List<DateTime> dateTimes = feeRatesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.timestamp)).LocalDateTime).ToList();
+            List<DateTime> dateTimes = feeRatesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
 
             // prevent navigating beyond the data
             double yBoundary = yValues2.Max();
-            yBoundary = yBoundary / 7;
+            if (yBoundary > 5000)
+            {
+                yBoundary = 5000;
+            }
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yBoundary);
             formsPlot1.Plot.YAxis.SetBoundary(0, yBoundary);
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-
-            //scatter = formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.Cyan);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.Orange);
-            formsPlot1.Plot.AddFill(xValues, yValues2, 0, color: Color.Orange);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.Yellow);
-            formsPlot1.Plot.AddFill(xValues, yValues3, 0, color: Color.Yellow);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Red);
-            formsPlot1.Plot.AddFill(xValues, yValues4, 0, color: Color.Red);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues5, lineWidth: 1, markerSize: 1, color: Color.Green);
-            formsPlot1.Plot.AddFill(xValues, yValues5, 0, color: Color.Green);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues6, lineWidth: 1, markerSize: 1, color: Color.White);
-            formsPlot1.Plot.AddFill(xValues, yValues6, 0, color: Color.White);
-            scatter = formsPlot1.Plot.AddScatter(xValues, yValues7, lineWidth: 1, markerSize: 1, color: Color.Purple);
-            formsPlot1.Plot.AddFill(xValues, yValues7, 0, color: Color.Purple);
-
-
+            formsPlot1.Plot.AddFill(xValues, yValues1, 0, color: Color.FromArgb(30, Color.DarkGray));
+            formsPlot1.Plot.AddFill(xValues, yValues2, 0, color: Color.Red);
+            formsPlot1.Plot.AddFill(xValues, yValues3, 0, color: Color.Orange);
+            formsPlot1.Plot.AddFill(xValues, yValues4, 0, color: Color.Yellow);
+            formsPlot1.Plot.AddFill(xValues, yValues5, 0, color: Color.LimeGreen);
+            formsPlot1.Plot.AddFill(xValues, yValues6, 0, color: Color.Blue);
+            formsPlot1.Plot.AddFill(xValues, yValues7, 0, color: Color.Indigo);
+            
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
@@ -7181,36 +7184,11 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.Label("Date");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
-            // Add a red circle we can move around later as a highlighted point indicator
-            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
-            HighlightedPoint.Color = Color.Red;
-            HighlightedPoint.MarkerSize = 10;
-            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
-            HighlightedPoint.IsVisible = false;
-
-
             // refresh the graph
             formsPlot1.Refresh();
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
         }
-
-        // Helper method to get a color based on index
-        private Color GetColorByIndex(int index)
-        {
-            switch (index)
-            {
-                case 0: return Color.Cyan;
-                case 1: return Color.Purple;
-                case 2: return Color.White;
-                case 3: return Color.Green;
-                case 4: return Color.Red;
-                case 5: return Color.Yellow;
-                case 6: return Color.Blue;
-                default: return Color.Black;
-            }
-        }
-
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
@@ -7225,15 +7203,17 @@ namespace SATSuma
             // enable the other chart types
             btnChartHashrate.Enabled = false;
             btnChartDifficulty.Enabled = true;
+            btnChartFeeRates.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
             DisableIrrelevantTimePeriods();
-
+            
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod);
-
+            
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
 
@@ -7253,6 +7233,9 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = hashratesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
+
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
@@ -7262,6 +7245,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.Label("Date");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
+            
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
@@ -7272,7 +7256,7 @@ namespace SATSuma
             HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
             HighlightedPoint.IsVisible = false;
 
-
+            
             // refresh the graph
             formsPlot1.Refresh();
             ToggleLoadingAnimation("disable");
@@ -7288,7 +7272,9 @@ namespace SATSuma
             btnChartDifficulty.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartFeeRates.Enabled = true;
             btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
             btnChartReward.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7298,7 +7284,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod);
-
+            
             // Create an instance of HttpClient
             HttpClient client = new HttpClient();
 
@@ -7317,6 +7303,8 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = rewardsAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
@@ -7350,7 +7338,9 @@ namespace SATSuma
             btnChartDifficulty.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartFeeRates.Enabled = true;
             btnChartReward.Enabled = true;
+            btnChartCirculation.Enabled = true;
             btnChartBlockFees.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7360,7 +7350,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod);
-
+            
             // Create an instance of HttpClient
             HttpClient client = new HttpClient();
 
@@ -7379,6 +7369,7 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = feesAndPriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
@@ -7420,6 +7411,8 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartCirculation.Enabled = true;
             btnChartReward.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7429,7 +7422,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Difficulty - " + chartPeriod);
-
+           
             // get a series of historic dates/hashrates/difficulties
             var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
             JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
@@ -7446,6 +7439,7 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = difficultyList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Time)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
@@ -7485,7 +7479,9 @@ namespace SATSuma
             btnChartDifficulty.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
+            btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7495,15 +7491,15 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod);
+            formsPlot1.Plot.Palette = Palette.Amber;
 
             // get a series of historic price data
             var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
             JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
-            //split the data into two lists
             List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
 
-            // set the number of points on the graph to the number of hashrates to display
+            // set the number of points on the graph
             int pointCount = PriceList.Count;
 
             // create arrays of doubles of the difficulties and the dates
@@ -7511,6 +7507,7 @@ namespace SATSuma
             // create a new list of the dates, this time in DateTime format
             List<DateTime> dateTimes = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
@@ -7529,7 +7526,81 @@ namespace SATSuma
             HighlightedPoint.MarkerSize = 10;
             HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
             HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
 
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void btnChartCirculation_Click(object sender, EventArgs e)
+        {
+            chartType = "circulation";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartCirculation.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod);
+            
+            // get a series of historic dates and amounts of btc in circulation
+            var CirculationJson = await _bitcoinsInCirculationDataService.GetBitcoinsInCirculationAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(CirculationJson);
+
+            List<BTCInCircChartCoordinates> CirculationList = JsonConvert.DeserializeObject<List<BTCInCircChartCoordinates>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = CirculationList.Count;
+
+            // create arrays of doubles of the difficulties and the dates
+            double[] yValues = CirculationList.Select(h => (double)(h.Y)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = CirculationList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, 22500000);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1, color: Color.Orange);
+
+            double[] yConstant = new double[xValues.Count()];
+            for (int i = 0; i < xValues.Count(); i++)
+            {
+                yConstant[i] = 21000000;
+            }
+
+            formsPlot1.Plot.AddFill(xValues, yConstant, 0, color: Color.FromArgb(30, Color.Orange));
+            formsPlot1.Plot.AddFill(xValues, yValues, 0, color: Color.Orange);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)");
+            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, 22500000);
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            formsPlot1.Plot.AddText("21 million", xValues.Min(), 21000000, size: 12, color: Color.Orange);
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
             // refresh the graph
             formsPlot1.Refresh();
 
@@ -7561,7 +7632,7 @@ namespace SATSuma
                 BtnChartHashrate_Click(sender, e);
             }
             if (chartType == "blockfees")
-            { 
+            {
                 BtnChartBlockFees_Click(sender, e);
             }
             if (chartType == "difficulty")
@@ -7575,6 +7646,10 @@ namespace SATSuma
             if (chartType == "reward")
             {
                 BtnChartReward_Click(sender, e);
+            }
+            if (chartType == "feerates")
+            { 
+                BtnChartFeeRates_Click(sender, e);
             }
         }
 
@@ -7646,7 +7721,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (chartType == "price")
+                    if (chartType == "price" || chartType == "circulation")
                     {
                         btnChartPeriod24h.Enabled = false;
                         btnChartPeriod3d.Enabled = false;
@@ -7726,30 +7801,33 @@ namespace SATSuma
 
         private void FormsPlot1_MouseMove(object sender, MouseEventArgs e)
         {
-            // determine point nearest the cursor
-            (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
-            double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
-            (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
-
-            // place the highlight over the point of interest
-            HighlightedPoint.X = pointX;
-            HighlightedPoint.Y = pointY;
-            HighlightedPoint.IsVisible = true;
-
-            // render if the highlighted point chnaged
-            if (LastHighlightedIndex != pointIndex)
+            if (chartType != "feerates")
             {
-                LastHighlightedIndex = pointIndex;
-                formsPlot1.Render();
+                // determine point nearest the cursor
+                (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
+                double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
+                (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+
+                // place the highlight over the point of interest
+                HighlightedPoint.X = pointX;
+                HighlightedPoint.Y = pointY;
+                HighlightedPoint.IsVisible = true;
+
+                // render if the highlighted point chnaged
+                if (LastHighlightedIndex != pointIndex)
+                {
+                    LastHighlightedIndex = pointIndex;
+                    formsPlot1.Render();
+                }
+                // Convert pointX to a DateTime object
+                DateTime pointXDate = DateTime.FromOADate(pointX);
+
+                // Format the DateTime object using the desired format string
+                string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
+
+                // update coordinate data label below chart
+                lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
             }
-            // Convert pointX to a DateTime object
-            DateTime pointXDate = DateTime.FromOADate(pointX);
-
-            // Format the DateTime object using the desired format string
-            string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
-
-            // update coordinate data label below chart
-            lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
         }
 
         private void DisableEnableChartButtons(string enableOrDisableAllButtons)
@@ -7763,6 +7841,8 @@ namespace SATSuma
                     btnChartHashrateWasEnabled = btnChartHashrate.Enabled;
                     btnChartPriceWasEnabled = btnChartPrice.Enabled;
                     btnChartRewardWasEnabled = btnChartReward.Enabled;
+                    btnChartFeeRatesWasEnabled = btnChartFeeRates.Enabled;
+                    btnChartCirculationWasEnabled = btnChartCirculation.Enabled;
                     btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
                     btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
                     btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
@@ -7780,6 +7860,8 @@ namespace SATSuma
                     btnChartHashrate.Enabled = false;
                     btnChartPrice.Enabled = false;
                     btnChartReward.Enabled = false;
+                    btnChartFeeRates.Enabled = false;
+                    btnChartCirculation.Enabled = false;
                     btnChartPeriod1m.Enabled = false;
                     btnChartPeriod1w.Enabled = false;
                     btnChartPeriod1y.Enabled = false;
@@ -7800,6 +7882,8 @@ namespace SATSuma
                     btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
                     btnChartPrice.Enabled = btnChartPriceWasEnabled;
                     btnChartReward.Enabled = btnChartRewardWasEnabled;
+                    btnChartFeeRates.Enabled = btnChartFeeRatesWasEnabled;
+                    btnChartCirculation.Enabled = btnChartCirculationWasEnabled;
                     btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
                     btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
                     btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
@@ -11365,6 +11449,7 @@ namespace SATSuma
             _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
             _historicPriceDataService = new HistoricPriceDataService(NodeURL);
             _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
+            _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService(NodeURL);
         }
 
         // Get current block tip
@@ -13330,15 +13415,15 @@ namespace SATSuma
 
         public class BlockFeeRates
         {
-            public string avgHeight { get; set; }
-            public string timestamp { get; set; }
-            public double avgFee_0 { get; set; }
-            public double avgFee_10 { get; set; }
-            public double avgFee_25 { get; set; }
-            public double avgFee_50 { get; set; }
-            public double avgFee_75 { get; set; }
-            public double avgFee_90 { get; set; }
-            public double avgFee_100 { get; set; }
+            public string AvgHeight { get; set; }
+            public string Timestamp { get; set; }
+            public double AvgFee_0 { get; set; }
+            public double AvgFee_10 { get; set; }
+            public double AvgFee_25 { get; set; }
+            public double AvgFee_50 { get; set; }
+            public double AvgFee_75 { get; set; }
+            public double AvgFee_90 { get; set; }
+            public double AvgFee_100 { get; set; }
         }
 
         public class BlockFeeRatesDataService
@@ -13374,8 +13459,86 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-        #endregion
 
+        //------------------- BTC in circulation
+        public class BitcoinsInCirculation
+        {
+            public string Status { get; set; }
+            public string Name { get; set; }
+            public string Unit { get; set; }
+            public string Period { get; set; }
+            public string Description { get; set; }
+            public BTCInCircChartCoordinates[] Values { get; set; }
+        }
+        public class BTCInCircChartCoordinates
+        {
+            public string X { get; set; } // date
+            public decimal Y { get; set; } // BTC in circ
+        }
+
+        public class BitcoinsInCirculationDataService
+        {
+            private readonly string _nodeUrl;
+            public BitcoinsInCirculationDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetBitcoinsInCirculationAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri("https://api.blockchain.info/");
+                        string blockChainInfoPeriod = "";
+                        if (chartPeriod == "1m")
+                        {
+                            blockChainInfoPeriod = "1months";
+                        }
+                        if (chartPeriod == "3m")
+                        {
+                            blockChainInfoPeriod = "3months";
+                        }
+                        if (chartPeriod == "6m")
+                        {
+                            blockChainInfoPeriod = "6months";
+                        }
+                        if (chartPeriod == "1y")
+                        {
+                            blockChainInfoPeriod = "1years";
+                        }
+                        if (chartPeriod == "3y")
+                        {
+                            blockChainInfoPeriod = "3years";
+                        }
+                        if (chartPeriod == "all")
+                        {
+                            blockChainInfoPeriod = "all";
+                        }
+                        var response = await client.GetAsync($"charts/total-bitcoins?timespan=" + blockChainInfoPeriod + "&format=json");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+
+
+
+        #endregion
 
     }
 }

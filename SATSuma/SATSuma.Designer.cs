@@ -702,6 +702,7 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartPriceLog = new System.Windows.Forms.Button();
             this.btnChartCirculation = new System.Windows.Forms.Button();
             this.btnChartFeeRates = new System.Windows.Forms.Button();
             this.lblChartMousePositionData = new System.Windows.Forms.Label();
@@ -720,7 +721,26 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.btnChartPriceLog = new System.Windows.Forms.Button();
+            this.panelFeeRatesKey = new System.Windows.Forms.Panel();
+            this.label202 = new System.Windows.Forms.Label();
+            this.label203 = new System.Windows.Forms.Label();
+            this.label205 = new System.Windows.Forms.Label();
+            this.label206 = new System.Windows.Forms.Label();
+            this.label207 = new System.Windows.Forms.Label();
+            this.label208 = new System.Windows.Forms.Label();
+            this.label209 = new System.Windows.Forms.Label();
+            this.label210 = new System.Windows.Forms.Label();
+            this.label211 = new System.Windows.Forms.Label();
+            this.label212 = new System.Windows.Forms.Label();
+            this.label213 = new System.Windows.Forms.Label();
+            this.label214 = new System.Windows.Forms.Label();
+            this.label215 = new System.Windows.Forms.Label();
+            this.label216 = new System.Windows.Forms.Label();
+            this.panelCirculationKey = new System.Windows.Forms.Panel();
+            this.label222 = new System.Windows.Forms.Label();
+            this.label223 = new System.Windows.Forms.Label();
+            this.label229 = new System.Windows.Forms.Label();
+            this.label230 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -834,6 +854,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
             this.panelCharts.SuspendLayout();
+            this.panelFeeRatesKey.SuspendLayout();
+            this.panelCirculationKey.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10289,6 +10311,8 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.panelCirculationKey);
+            this.panelCharts.Controls.Add(this.panelFeeRatesKey);
             this.panelCharts.Controls.Add(this.btnChartPriceLog);
             this.panelCharts.Controls.Add(this.btnChartCirculation);
             this.panelCharts.Controls.Add(this.btnChartFeeRates);
@@ -10314,6 +10338,28 @@
             this.panelCharts.Size = new System.Drawing.Size(773, 556);
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
+            // 
+            // btnChartPriceLog
+            // 
+            this.btnChartPriceLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartPriceLog.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartPriceLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartPriceLog.FlatAppearance.BorderSize = 0;
+            this.btnChartPriceLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPriceLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartPriceLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartPriceLog.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartPriceLog.ForeColor = System.Drawing.Color.White;
+            this.btnChartPriceLog.Location = new System.Drawing.Point(0, 245);
+            this.btnChartPriceLog.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartPriceLog.Name = "btnChartPriceLog";
+            this.btnChartPriceLog.Size = new System.Drawing.Size(100, 24);
+            this.btnChartPriceLog.TabIndex = 180;
+            this.btnChartPriceLog.TabStop = false;
+            this.btnChartPriceLog.Text = "price (log)";
+            this.btnChartPriceLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartPriceLog.UseVisualStyleBackColor = false;
+            this.btnChartPriceLog.Click += new System.EventHandler(this.BtnChartPriceLog_Click);
             // 
             // btnChartCirculation
             // 
@@ -10699,27 +10745,264 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // btnChartPriceLog
+            // panelFeeRatesKey
             // 
-            this.btnChartPriceLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPriceLog.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPriceLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPriceLog.FlatAppearance.BorderSize = 0;
-            this.btnChartPriceLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartPriceLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartPriceLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPriceLog.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPriceLog.ForeColor = System.Drawing.Color.White;
-            this.btnChartPriceLog.Location = new System.Drawing.Point(0, 245);
-            this.btnChartPriceLog.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPriceLog.Name = "btnChartPriceLog";
-            this.btnChartPriceLog.Size = new System.Drawing.Size(100, 24);
-            this.btnChartPriceLog.TabIndex = 180;
-            this.btnChartPriceLog.TabStop = false;
-            this.btnChartPriceLog.Text = "price (log)";
-            this.btnChartPriceLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartPriceLog.UseVisualStyleBackColor = false;
-            this.btnChartPriceLog.Click += new System.EventHandler(this.BtnChartPriceLog_Click);
+            this.panelFeeRatesKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
+            this.panelFeeRatesKey.Controls.Add(this.label216);
+            this.panelFeeRatesKey.Controls.Add(this.label215);
+            this.panelFeeRatesKey.Controls.Add(this.label214);
+            this.panelFeeRatesKey.Controls.Add(this.label213);
+            this.panelFeeRatesKey.Controls.Add(this.label212);
+            this.panelFeeRatesKey.Controls.Add(this.label211);
+            this.panelFeeRatesKey.Controls.Add(this.label210);
+            this.panelFeeRatesKey.Controls.Add(this.label209);
+            this.panelFeeRatesKey.Controls.Add(this.label208);
+            this.panelFeeRatesKey.Controls.Add(this.label207);
+            this.panelFeeRatesKey.Controls.Add(this.label206);
+            this.panelFeeRatesKey.Controls.Add(this.label205);
+            this.panelFeeRatesKey.Controls.Add(this.label203);
+            this.panelFeeRatesKey.Controls.Add(this.label202);
+            this.panelFeeRatesKey.Location = new System.Drawing.Point(180, 27);
+            this.panelFeeRatesKey.Name = "panelFeeRatesKey";
+            this.panelFeeRatesKey.Size = new System.Drawing.Size(539, 25);
+            this.panelFeeRatesKey.TabIndex = 181;
+            // 
+            // label202
+            // 
+            this.label202.AutoSize = true;
+            this.label202.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label202.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label202.ForeColor = System.Drawing.Color.Silver;
+            this.label202.Location = new System.Drawing.Point(22, 0);
+            this.label202.Margin = new System.Windows.Forms.Padding(0);
+            this.label202.Name = "label202";
+            this.label202.Size = new System.Drawing.Size(72, 20);
+            this.label202.TabIndex = 211;
+            this.label202.Text = "minimum";
+            // 
+            // label203
+            // 
+            this.label203.AutoSize = true;
+            this.label203.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label203.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label203.ForeColor = System.Drawing.Color.Silver;
+            this.label203.Location = new System.Drawing.Point(109, 0);
+            this.label203.Margin = new System.Windows.Forms.Padding(0);
+            this.label203.Name = "label203";
+            this.label203.Size = new System.Drawing.Size(39, 20);
+            this.label203.TabIndex = 212;
+            this.label203.Text = "10th";
+            // 
+            // label205
+            // 
+            this.label205.AutoSize = true;
+            this.label205.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label205.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label205.ForeColor = System.Drawing.Color.Silver;
+            this.label205.Location = new System.Drawing.Point(167, 0);
+            this.label205.Margin = new System.Windows.Forms.Padding(0);
+            this.label205.Name = "label205";
+            this.label205.Size = new System.Drawing.Size(39, 20);
+            this.label205.TabIndex = 213;
+            this.label205.Text = "25th";
+            // 
+            // label206
+            // 
+            this.label206.AutoSize = true;
+            this.label206.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label206.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label206.ForeColor = System.Drawing.Color.Silver;
+            this.label206.Location = new System.Drawing.Point(227, 0);
+            this.label206.Margin = new System.Windows.Forms.Padding(0);
+            this.label206.Name = "label206";
+            this.label206.Size = new System.Drawing.Size(64, 20);
+            this.label206.TabIndex = 214;
+            this.label206.Text = "median";
+            // 
+            // label207
+            // 
+            this.label207.AutoSize = true;
+            this.label207.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label207.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label207.ForeColor = System.Drawing.Color.Silver;
+            this.label207.Location = new System.Drawing.Point(305, 0);
+            this.label207.Margin = new System.Windows.Forms.Padding(0);
+            this.label207.Name = "label207";
+            this.label207.Size = new System.Drawing.Size(39, 20);
+            this.label207.TabIndex = 215;
+            this.label207.Text = "75th";
+            // 
+            // label208
+            // 
+            this.label208.AutoSize = true;
+            this.label208.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label208.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label208.ForeColor = System.Drawing.Color.Silver;
+            this.label208.Location = new System.Drawing.Point(419, 0);
+            this.label208.Margin = new System.Windows.Forms.Padding(0);
+            this.label208.Name = "label208";
+            this.label208.Size = new System.Drawing.Size(77, 20);
+            this.label208.TabIndex = 216;
+            this.label208.Text = "maximum";
+            // 
+            // label209
+            // 
+            this.label209.AutoSize = true;
+            this.label209.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label209.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label209.ForeColor = System.Drawing.Color.Silver;
+            this.label209.Location = new System.Drawing.Point(363, 0);
+            this.label209.Margin = new System.Windows.Forms.Padding(0);
+            this.label209.Name = "label209";
+            this.label209.Size = new System.Drawing.Size(39, 20);
+            this.label209.TabIndex = 217;
+            this.label209.Text = "90th";
+            // 
+            // label210
+            // 
+            this.label210.AutoSize = true;
+            this.label210.BackColor = System.Drawing.Color.Transparent;
+            this.label210.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label210.ForeColor = System.Drawing.Color.Indigo;
+            this.label210.Location = new System.Drawing.Point(0, 3);
+            this.label210.Name = "label210";
+            this.label210.Size = new System.Drawing.Size(23, 18);
+            this.label210.TabIndex = 250;
+            this.label210.Text = "🟢";
+            // 
+            // label211
+            // 
+            this.label211.AutoSize = true;
+            this.label211.BackColor = System.Drawing.Color.Transparent;
+            this.label211.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label211.ForeColor = System.Drawing.Color.Blue;
+            this.label211.Location = new System.Drawing.Point(89, 3);
+            this.label211.Name = "label211";
+            this.label211.Size = new System.Drawing.Size(23, 18);
+            this.label211.TabIndex = 251;
+            this.label211.Text = "🟢";
+            // 
+            // label212
+            // 
+            this.label212.AutoSize = true;
+            this.label212.BackColor = System.Drawing.Color.Transparent;
+            this.label212.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label212.ForeColor = System.Drawing.Color.LimeGreen;
+            this.label212.Location = new System.Drawing.Point(147, 3);
+            this.label212.Name = "label212";
+            this.label212.Size = new System.Drawing.Size(23, 18);
+            this.label212.TabIndex = 252;
+            this.label212.Text = "🟢";
+            // 
+            // label213
+            // 
+            this.label213.AutoSize = true;
+            this.label213.BackColor = System.Drawing.Color.Transparent;
+            this.label213.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label213.ForeColor = System.Drawing.Color.Yellow;
+            this.label213.Location = new System.Drawing.Point(207, 3);
+            this.label213.Name = "label213";
+            this.label213.Size = new System.Drawing.Size(23, 18);
+            this.label213.TabIndex = 253;
+            this.label213.Text = "🟢";
+            // 
+            // label214
+            // 
+            this.label214.AutoSize = true;
+            this.label214.BackColor = System.Drawing.Color.Transparent;
+            this.label214.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label214.ForeColor = System.Drawing.Color.Orange;
+            this.label214.Location = new System.Drawing.Point(285, 3);
+            this.label214.Name = "label214";
+            this.label214.Size = new System.Drawing.Size(23, 18);
+            this.label214.TabIndex = 254;
+            this.label214.Text = "🟢";
+            // 
+            // label215
+            // 
+            this.label215.AutoSize = true;
+            this.label215.BackColor = System.Drawing.Color.Transparent;
+            this.label215.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label215.ForeColor = System.Drawing.Color.Red;
+            this.label215.Location = new System.Drawing.Point(343, 3);
+            this.label215.Name = "label215";
+            this.label215.Size = new System.Drawing.Size(23, 18);
+            this.label215.TabIndex = 255;
+            this.label215.Text = "🟢";
+            // 
+            // label216
+            // 
+            this.label216.AutoSize = true;
+            this.label216.BackColor = System.Drawing.Color.Transparent;
+            this.label216.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label216.ForeColor = System.Drawing.Color.DarkGray;
+            this.label216.Location = new System.Drawing.Point(399, 3);
+            this.label216.Name = "label216";
+            this.label216.Size = new System.Drawing.Size(23, 18);
+            this.label216.TabIndex = 256;
+            this.label216.Text = "🟢";
+            // 
+            // panelCirculationKey
+            // 
+            this.panelCirculationKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
+            this.panelCirculationKey.Controls.Add(this.label222);
+            this.panelCirculationKey.Controls.Add(this.label223);
+            this.panelCirculationKey.Controls.Add(this.label229);
+            this.panelCirculationKey.Controls.Add(this.label230);
+            this.panelCirculationKey.Location = new System.Drawing.Point(494, 27);
+            this.panelCirculationKey.Name = "panelCirculationKey";
+            this.panelCirculationKey.Size = new System.Drawing.Size(252, 25);
+            this.panelCirculationKey.TabIndex = 257;
+            // 
+            // label222
+            // 
+            this.label222.AutoSize = true;
+            this.label222.BackColor = System.Drawing.Color.Transparent;
+            this.label222.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label222.ForeColor = System.Drawing.Color.Orange;
+            this.label222.Location = new System.Drawing.Point(130, 3);
+            this.label222.Name = "label222";
+            this.label222.Size = new System.Drawing.Size(23, 18);
+            this.label222.TabIndex = 251;
+            this.label222.Text = "🟢";
+            // 
+            // label223
+            // 
+            this.label223.AutoSize = true;
+            this.label223.BackColor = System.Drawing.Color.Transparent;
+            this.label223.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label223.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(38)))), ((int)(((byte)(19)))));
+            this.label223.Location = new System.Drawing.Point(2, 3);
+            this.label223.Name = "label223";
+            this.label223.Size = new System.Drawing.Size(23, 18);
+            this.label223.TabIndex = 250;
+            this.label223.Text = "🟢";
+            // 
+            // label229
+            // 
+            this.label229.AutoSize = true;
+            this.label229.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label229.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label229.ForeColor = System.Drawing.Color.Silver;
+            this.label229.Location = new System.Drawing.Point(150, 0);
+            this.label229.Margin = new System.Windows.Forms.Padding(0);
+            this.label229.Name = "label229";
+            this.label229.Size = new System.Drawing.Size(115, 20);
+            this.label229.TabIndex = 212;
+            this.label229.Text = "Already mined";
+            // 
+            // label230
+            // 
+            this.label230.AutoSize = true;
+            this.label230.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label230.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label230.ForeColor = System.Drawing.Color.Silver;
+            this.label230.Location = new System.Drawing.Point(22, 0);
+            this.label230.Margin = new System.Windows.Forms.Padding(0);
+            this.label230.Name = "label230";
+            this.label230.Size = new System.Drawing.Size(97, 20);
+            this.label230.TabIndex = 211;
+            this.label230.Text = "To be mined";
             // 
             // SATSuma
             // 
@@ -10968,6 +11251,10 @@
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
             this.panelCharts.PerformLayout();
+            this.panelFeeRatesKey.ResumeLayout(false);
+            this.panelFeeRatesKey.PerformLayout();
+            this.panelCirculationKey.ResumeLayout(false);
+            this.panelCirculationKey.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -11666,6 +11953,26 @@
         private System.Windows.Forms.Button btnChartFeeRates;
         private System.Windows.Forms.Button btnChartCirculation;
         private System.Windows.Forms.Button btnChartPriceLog;
+        private System.Windows.Forms.Panel panelFeeRatesKey;
+        private System.Windows.Forms.Label label209;
+        private System.Windows.Forms.Label label208;
+        private System.Windows.Forms.Label label207;
+        private System.Windows.Forms.Label label206;
+        private System.Windows.Forms.Label label205;
+        private System.Windows.Forms.Label label203;
+        private System.Windows.Forms.Label label202;
+        private System.Windows.Forms.Label label210;
+        private System.Windows.Forms.Label label212;
+        private System.Windows.Forms.Label label211;
+        private System.Windows.Forms.Label label215;
+        private System.Windows.Forms.Label label214;
+        private System.Windows.Forms.Label label213;
+        private System.Windows.Forms.Label label216;
+        private System.Windows.Forms.Panel panelCirculationKey;
+        private System.Windows.Forms.Label label222;
+        private System.Windows.Forms.Label label223;
+        private System.Windows.Forms.Label label229;
+        private System.Windows.Forms.Label label230;
     }
 }
 

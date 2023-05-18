@@ -7118,6 +7118,7 @@ namespace SATSuma
         #region CHARTS SCREEN
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
+            panelCirculationKey.Visible = false;
             chartType = "feerates";
             lblChartMousePositionData.Text = "";
             // enable the other chart types
@@ -7133,7 +7134,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Block fee rates - " + chartPeriod);
+            formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, color: Color.Silver, bold: true) ;
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7195,13 +7196,16 @@ namespace SATSuma
 
             // refresh the graph
             formsPlot1.Refresh();
+            panelFeeRatesKey.Visible = true;
+            
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
         }
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
-            //formsPlot1.Plot.YAxis.MinorLogScale(false);
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
             chartType = "hashrate";
             // if chart period too short for this chart, set it to max instead
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
@@ -7223,7 +7227,7 @@ namespace SATSuma
             
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod);
+            formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7285,6 +7289,8 @@ namespace SATSuma
 
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
             chartType = "reward";
 
             btnChartDifficulty.Enabled = true;
@@ -7302,7 +7308,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod);
+            formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7359,6 +7365,8 @@ namespace SATSuma
 
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
             chartType = "blockfees";
 
             btnChartDifficulty.Enabled = true;
@@ -7376,7 +7384,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod);
+            formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7432,6 +7440,8 @@ namespace SATSuma
 
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
             chartType = "difficulty";
 
             // if chart period too short for this chart, set it to max instead
@@ -7456,7 +7466,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Difficulty - " + chartPeriod);
+            formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7510,6 +7520,8 @@ namespace SATSuma
 
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
             chartType = "price";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -7533,7 +7545,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod);
+            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7585,7 +7597,9 @@ namespace SATSuma
 
         private async void BtnChartPriceLog_Click(object sender, EventArgs e)
         {
-                chartType = "pricelog";
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "pricelog";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
             {
@@ -7608,7 +7622,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges (log scale) - " + chartPeriod);
+            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges (log scale) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             // get a series of historic price data
             var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
@@ -7652,9 +7666,12 @@ namespace SATSuma
             
             // Use log-spaced minor tick marks and grid lines to make it more convincing
             formsPlot1.Plot.YAxis.MinorLogScale(true);
-            formsPlot1.Plot.YAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
-            formsPlot1.Plot.YAxis.MinorGrid(true, Color.FromArgb(20, Color.Black));
-            formsPlot1.Plot.XAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
+            //formsPlot1.Plot.YAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
+            //formsPlot1.Plot.YAxis.MinorGrid(true, Color.FromArgb(20, Color.Black));
+            //formsPlot1.Plot.XAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MinorGrid(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -7682,6 +7699,7 @@ namespace SATSuma
 
         private async void btnChartCirculation_Click(object sender, EventArgs e)
         {
+            panelFeeRatesKey.Visible = false;
             chartType = "circulation";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -7705,7 +7723,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod);
+            formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
@@ -7749,13 +7767,14 @@ namespace SATSuma
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, 22500000);
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-            formsPlot1.Plot.AddText("21 million", xValues.Min(), 21000000, size: 12, color: Color.Orange);
+            
             // Add a red circle we can move around later as a highlighted point indicator
             HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
             HighlightedPoint.Color = Color.Red;
             HighlightedPoint.MarkerSize = 10;
             HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
             HighlightedPoint.IsVisible = false;
+            panelCirculationKey.Visible = true;
             // refresh the graph
             formsPlot1.Refresh();
 

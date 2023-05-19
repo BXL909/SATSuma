@@ -23,7 +23,7 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens? - can't reproduce again. Either fixed or didn't happen!
- * more charts! logarithmic views
+ * unique addresses chart, UTXO's chart
  */
 
 #region Using

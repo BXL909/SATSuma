@@ -55,6 +55,7 @@ using System.Windows.Forms;
 using static SATSuma.SATSuma;
 using static ScottPlot.Plottable.PopulationPlot;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
@@ -107,6 +108,7 @@ namespace SATSuma
         private HistoricPriceDataService _historicPriceDataService;
         private BlockFeeRatesDataService _blockFeeRatesDataService;
         private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService;
+        private BlockSizeAndWeightService _blockSizeAndWeightService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -121,6 +123,7 @@ namespace SATSuma
         bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
         bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
         bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
+        bool ignoreMouseMoveOnChart = false; // ignore mouse move event while chart is still drawing
         bool btnShowAllAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowConfirmedAddressTXWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
@@ -155,6 +158,8 @@ namespace SATSuma
         bool btnChartPeriod3yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartBlockSizeWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPriceLogWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -208,10 +213,10 @@ namespace SATSuma
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
-                formsPlot1.Plot.Title("Hashrate (exahash per second)");
+                //formsPlot1.Plot.Title("Hashrate (exahash per second)");
                 formsPlot1.Plot.Palette = Palette.Amber;
                 btnChartPeriodAll.Enabled = false;
-                BtnChartHashrate_Click(sender, e);
+                BtnChartFeeRates_Click(sender, e);
                 formsPlot1.Refresh();
                 
             }
@@ -7124,6 +7129,7 @@ namespace SATSuma
             // enable the other chart types
             btnChartFeeRates.Enabled = false;
             btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartDifficulty.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartPriceLog.Enabled = true;
@@ -7136,9 +7142,11 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, color: Color.Silver, bold: true) ;
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
@@ -7149,7 +7157,6 @@ namespace SATSuma
             // Create an instance of HttpClient
             HttpClient client = new HttpClient();
 
-            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
             string url = NodeURL + "v1/mining/blocks/fee-rates/" + chartPeriod;
             string json = await client.GetStringAsync(url);
 
@@ -7191,7 +7198,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("sats per v/byte");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
             // refresh the graph
@@ -7223,15 +7230,18 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPriceLog.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             DisableIrrelevantTimePeriods();
             
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
@@ -7264,10 +7274,9 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("EH/s");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
-            
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
             formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
@@ -7283,8 +7292,6 @@ namespace SATSuma
             formsPlot1.Refresh();
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
-            
-
         }
 
         private async void BtnChartReward_Click(object sender, EventArgs e)
@@ -7300,6 +7307,7 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPriceLog.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartReward.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7310,17 +7318,16 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
 
-            // Create an instance of HttpClient
             HttpClient client = new HttpClient();
-
-            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
             string url = NodeURL + "v1/mining/blocks/rewards/" + chartPeriod;
             string json = await client.GetStringAsync(url);
 
@@ -7343,7 +7350,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("BTC");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -7376,6 +7383,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPriceLog.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartBlockFees.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7386,21 +7394,20 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
 
-            // Create an instance of HttpClient
             HttpClient client = new HttpClient();
-
-            // Make an HTTP GET request to the API endpoint and get the JSON response as a string
             string url = NodeURL + "v1/mining/blocks/fees/" + chartPeriod;
             string json = await client.GetStringAsync(url);
 
-            // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
+            // Deserialize JSON array into a list of HistoricFeesAndPrice objects
             List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
 
             // set the number of points on the graph to the number of hashrates to display
@@ -7418,7 +7425,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("BTC");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -7458,6 +7465,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartPriceLog.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartReward.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7468,9 +7476,11 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
@@ -7498,7 +7508,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("trillion");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -7536,6 +7546,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPriceLog.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = false;
             DisableIrrelevantTimePeriods();
@@ -7547,9 +7558,11 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
@@ -7575,7 +7588,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("Price (USD)");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -7612,6 +7625,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartPriceLog.Enabled = false;
@@ -7622,7 +7636,7 @@ namespace SATSuma
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges (log scale) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+            formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
 
             // get a series of historic price data
             var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
@@ -7663,12 +7677,9 @@ namespace SATSuma
             // Use a custom formatter to control the label for each tick mark
             static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
-            
-            // Use log-spaced minor tick marks and grid lines to make it more convincing
+
+            // Use log-spaced minor tick marks and grid lines
             formsPlot1.Plot.YAxis.MinorLogScale(true);
-            //formsPlot1.Plot.YAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
-            //formsPlot1.Plot.YAxis.MinorGrid(true, Color.FromArgb(20, Color.Black));
-            //formsPlot1.Plot.XAxis.MajorGrid(true, Color.FromArgb(80, Color.Black));
             formsPlot1.Plot.YAxis.MajorGrid(true);
             formsPlot1.Plot.YAxis.MinorGrid(true);
             formsPlot1.Plot.XAxis.MajorGrid(true);
@@ -7677,7 +7688,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("Price (USD)");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
@@ -7693,6 +7704,86 @@ namespace SATSuma
             // refresh the graph
             formsPlot1.Refresh();
 
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void btnChartBlockSize_Click(object sender, EventArgs e)
+        {
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "blocksize";
+
+            // enable the other chart types
+            btnChartHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartPriceLog.Enabled = true;
+            btnChartBlockSize.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+
+            // switch to linear scaling in case it was log before
+            formsPlot1.Plot.YAxis.MinorLogScale(false);
+            formsPlot1.Plot.YAxis.MajorGrid(false);
+            formsPlot1.Plot.YAxis.MinorGrid(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N2");
+            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // get a series of historic dates/hashrates/difficulties
+            var BlockSizeAndWeightJson = await _blockSizeAndWeightService.GetBlockSizeAndWeightServiceAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(BlockSizeAndWeightJson);
+
+            //split the data into two lists
+            List<Sizes> blockSizeList = JsonConvert.DeserializeObject<List<Sizes>>(jsonObj["sizes"].ToString());
+            List<Weights> blockWeightList = JsonConvert.DeserializeObject<List<Weights>>(jsonObj["weights"].ToString());
+
+            // set the number of points on the graph to the number of records to display
+            int pointCount = blockSizeList.Count;
+
+            // create arrays of doubles of the hashrates and the dates
+            
+            double[] yValues = blockSizeList.Select(h => (double)h.AvgSize / (1000 * 1000)).ToArray();
+            //double[] yValues = blockSizeList.Select(h => (double)(h.AvgSize / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = blockSizeList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
+
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Block size (MB)");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+
+            // refresh the graph
+            formsPlot1.Refresh();
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
         }
@@ -7715,6 +7806,7 @@ namespace SATSuma
             btnChartPriceLog.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7724,10 +7816,12 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
+            
+            // switch to linear scaling in case it was log before
             formsPlot1.Plot.YAxis.MinorLogScale(false);
             formsPlot1.Plot.YAxis.MajorGrid(false);
             formsPlot1.Plot.YAxis.MinorGrid(false);
+
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
@@ -7762,7 +7856,7 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
             formsPlot1.Plot.XAxis.Ticks(true);
             formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)");
-            formsPlot1.Plot.XAxis.Label("Date");
+            formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
             // prevent navigating beyond the data
             formsPlot1.Plot.YAxis.SetBoundary(0, 22500000);
@@ -7829,11 +7923,15 @@ namespace SATSuma
             { 
                 BtnChartFeeRates_Click(sender, e);
             }
+            if (chartType == "blocksize")
+            {
+                btnChartBlockSize_Click(sender, e);
+            }
         }
 
         private void DisableIrrelevantTimePeriods()
         {
-            if (chartType == "hashrate")
+            if (chartType == "hashrate" || chartType == "hashratelog")
             {
                 btnChartPeriod24h.Enabled = false;
                 btnChartPeriod3d.Enabled = false;
@@ -7979,39 +8077,42 @@ namespace SATSuma
 
         private void FormsPlot1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (chartType != "feerates")
+            if (!ignoreMouseMoveOnChart)
             {
-                // determine point nearest the cursor
-                (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
-                double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
-                (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
-
-                // place the highlight over the point of interest
-                HighlightedPoint.X = pointX;
-                HighlightedPoint.Y = pointY;
-                HighlightedPoint.IsVisible = true;
-
-                // render if the highlighted point chnaged
-                if (LastHighlightedIndex != pointIndex)
+                if (chartType != "feerates")
                 {
-                    LastHighlightedIndex = pointIndex;
-                    formsPlot1.Render();
-                }
-                // Convert pointX to a DateTime object
-                DateTime pointXDate = DateTime.FromOADate(pointX);
+                    // determine point nearest the cursor
+                    (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
+                    double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
+                    (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
 
-                // Format the DateTime object using the desired format string
-                string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
+                    // place the highlight over the point of interest
+                    HighlightedPoint.X = pointX;
+                    HighlightedPoint.Y = pointY;
+                    HighlightedPoint.IsVisible = true;
 
-                if (chartType == "pricelog")
-                {
-                    double originalY = Math.Pow(10, pointY); // Convert back to the original scale
-                    lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
-                }
-                else
-                {
-                    // update coordinate data label below chart
-                    lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
+                    // render if the highlighted point chnaged
+                    if (LastHighlightedIndex != pointIndex)
+                    {
+                        LastHighlightedIndex = pointIndex;
+                        formsPlot1.Render();
+                    }
+                    // Convert pointX to a DateTime object
+                    DateTime pointXDate = DateTime.FromOADate(pointX);
+
+                    // Format the DateTime object using the desired format string
+                    string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
+
+                    if (chartType == "pricelog")
+                    {
+                        double originalY = Math.Pow(10, pointY); // Convert back to the original scale
+                        lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
+                    }
+                    else
+                    {
+                        // update coordinate data label below chart
+                        lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
+                    }
                 }
             }
         }
@@ -8021,6 +8122,7 @@ namespace SATSuma
             
                 if (enableOrDisableAllButtons == "disable")
                 {
+                    ignoreMouseMoveOnChart = true;
                     // get current state of buttons before disabling them
                     btnChartBlockFeesWasEnabled = btnChartBlockFees.Enabled;
                     btnChartDifficultyWasEnabled = btnChartDifficulty.Enabled;
@@ -8029,6 +8131,8 @@ namespace SATSuma
                     btnChartRewardWasEnabled = btnChartReward.Enabled;
                     btnChartFeeRatesWasEnabled = btnChartFeeRates.Enabled;
                     btnChartCirculationWasEnabled = btnChartCirculation.Enabled;
+                    btnChartBlockSizeWasEnabled = btnChartBlockSize.Enabled;
+                    btnChartPriceLogWasEnabled = btnChartPriceLog.Enabled;
                     btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
                     btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
                     btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
@@ -8058,6 +8162,8 @@ namespace SATSuma
                     btnChartPeriod3y.Enabled = false;
                     btnChartPeriod6m.Enabled = false;
                     btnChartPeriodAll.Enabled = false;
+                    btnChartPriceLog.Enabled = false;
+                    btnChartBlockSize.Enabled = false;
                 }
                 else
                 {
@@ -8070,6 +8176,8 @@ namespace SATSuma
                     btnChartReward.Enabled = btnChartRewardWasEnabled;
                     btnChartFeeRates.Enabled = btnChartFeeRatesWasEnabled;
                     btnChartCirculation.Enabled = btnChartCirculationWasEnabled;
+                    btnChartBlockSize.Enabled = btnChartBlockSizeWasEnabled;
+                    btnChartPriceLog.Enabled = btnChartPriceLogWasEnabled;
                     btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
                     btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
                     btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
@@ -8080,6 +8188,7 @@ namespace SATSuma
                     btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
                     btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
                     btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
+                    ignoreMouseMoveOnChart = false;
                 }
             
         }
@@ -11636,6 +11745,7 @@ namespace SATSuma
             _historicPriceDataService = new HistoricPriceDataService(NodeURL);
             _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
             _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService(NodeURL);
+            _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
         }
 
         // Get current block tip
@@ -12377,7 +12487,6 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = false;
-                btnChartHashrate.Enabled = false;
                 panelCharts.Visible = true;
                 this.ResumeLayout();
             }
@@ -12759,6 +12868,36 @@ namespace SATSuma
         private void PictureBoxHeaderPriceChart_Click(object sender, EventArgs e)
         {
             BtnChartPrice_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxHeaderFeeRatesChart_Click(object sender, EventArgs e)
+        {
+            BtnChartFeeRates_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxBlockScreenChartBlockSize_Click(object sender, EventArgs e)
+        {
+            btnChartBlockSize_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxBlockScreenChartReward_Click(object sender, EventArgs e)
+        {
+            BtnChartReward_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxBlockScreenChartFeeRange_Click(object sender, EventArgs e)
+        {
+            BtnChartFeeRates_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxChartCirculation_Click(object sender, EventArgs e)
+        {
+            btnChartCirculation_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -13599,6 +13738,8 @@ namespace SATSuma
             }
         }
 
+        // ---------- block fee rates chart
+
         public class BlockFeeRates
         {
             public string AvgHeight { get; set; }
@@ -13721,10 +13862,66 @@ namespace SATSuma
             }
         }
 
+        //------------------- block size and weight chart
+
+        public class BlockSizeAndWeight
+        {
+            public Sizes[] sizes { get; set; }
+            public Weights[] weights { get; set; }
+        }
+
+        public class Sizes
+        {
+            public string AvgHeight { get; set; }
+            public string Timestamp { get; set; }
+            public decimal AvgSize { get; set; }
+        }
+
+        public class Weights
+        {
+            public string AvgHeight { get; set; }
+            public string Timestamp { get; set; }
+            public decimal AvgWeight { get; set; }
+        }
+
+        public class BlockSizeAndWeightService
+        {
+            private readonly string _nodeUrl;
+            public BlockSizeAndWeightService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetBlockSizeAndWeightServiceAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/mining/blocks/sizes-weights/" + chartPeriod);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
 
 
 
         #endregion
+
 
     }
 }

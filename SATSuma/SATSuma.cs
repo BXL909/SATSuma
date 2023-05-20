@@ -109,6 +109,8 @@ namespace SATSuma
         private BlockFeeRatesDataService _blockFeeRatesDataService;
         private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService;
         private BlockSizeAndWeightService _blockSizeAndWeightService;
+        private UniqueAddressesDataService _uniqueAddressesDataService;
+        private UTXODataService _utxoDataService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -160,6 +162,12 @@ namespace SATSuma
         bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartBlockSizeWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPriceLogWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartUniqueAddressesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartUniqueAddressesLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartAddressScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartAddressScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnPriceChartScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnPriceChartScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -7121,8 +7129,17 @@ namespace SATSuma
         #endregion
 
         #region CHARTS SCREEN
+
+        private async void btnChartPoolsRanking_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             chartType = "feerates";
             lblChartMousePositionData.Text = "";
@@ -7132,10 +7149,12 @@ namespace SATSuma
             btnChartBlockSize.Enabled = true;
             btnChartDifficulty.Enabled = true;
             btnChartPrice.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
+
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
@@ -7211,6 +7230,9 @@ namespace SATSuma
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "hashrate";
@@ -7229,8 +7251,9 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
             
             // clear any previous graph
@@ -7296,6 +7319,9 @@ namespace SATSuma
 
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "reward";
@@ -7306,9 +7332,10 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
             btnChartReward.Enabled = false;
+            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -7372,6 +7399,9 @@ namespace SATSuma
 
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "blockfees";
@@ -7382,8 +7412,9 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartCirculation.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
             btnChartBlockFees.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7447,6 +7478,9 @@ namespace SATSuma
 
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "difficulty";
@@ -7463,9 +7497,10 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartFeeRates.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
             btnChartReward.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7503,6 +7538,7 @@ namespace SATSuma
             double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
             formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
             scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+            scatter.StepDisplay = true;
 
             formsPlot1.Plot.XAxis.DateTimeFormat(true);
             formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
@@ -7528,8 +7564,204 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
+        private async void btnChartUniqueAddresses_Click(object sender, EventArgs e)
+        {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            btnChartAddressScaleLinear.Enabled = false;
+            btnChartAddressScaleLog.Enabled = true;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "addresses";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartUniqueAddresses.Enabled = false;
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+
+            // switch to linear scaling in case it was log before
+            formsPlot1.Plot.YAxis.MinorLogScale(false);
+            formsPlot1.Plot.YAxis.MajorGrid(false);
+            formsPlot1.Plot.YAxis.MinorGrid(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            // get a series of historic price data
+            var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
+
+            List<UniqueAddressesList> AddressesList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = AddressesList.Count;
+
+            // create arrays of doubles of the amounts and the dates
+            double[] yValues = AddressesList.Select(h => (double)(h.Y)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = AddressesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Unique addresses");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            panelUniqueAddressesScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void btnChartUniqueAddressesLog_Click(object sender, EventArgs e)
+        {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            btnChartAddressScaleLinear.Enabled = true;
+            btnChartAddressScaleLog.Enabled = false;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "addresseslog";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            btnChartUniqueAddresses.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+
+            // get a series of historic price data
+            var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
+
+            List<UniqueAddressesList> AddressList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = AddressList.Count;
+
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = AddressList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+
+            List<double> filteredYValues = new List<double>();
+            List<double> filteredXValues = new List<double>();
+
+            for (int i = 0; i < AddressList.Count; i++)
+            {
+                double yValue = (double)AddressList[i].Y;
+                if (yValue > 0)
+                {
+                    filteredYValues.Add(Math.Log10(yValue));
+                    filteredXValues.Add(xValues[i]);
+                }
+            }
+
+            double[] yValues = filteredYValues.ToArray();
+            double[] xValuesFiltered = filteredXValues.ToArray();
+
+
+            double minY = yValues.Min();
+            double maxY = yValues.Max() * 1.05;
+            formsPlot1.Plot.SetAxisLimits(xValuesFiltered.Min(), xValuesFiltered.Max(), minY, maxY);
+            scatter = formsPlot1.Plot.AddScatter(xValuesFiltered, yValues, lineWidth: 1, markerSize: 1);
+
+            // Use a custom formatter to control the label for each tick mark
+            static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
+
+            // Use log-spaced minor tick marks and grid lines
+            formsPlot1.Plot.YAxis.MinorLogScale(true);
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MinorGrid(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Unique addresses");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
+            //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            panelUniqueAddressesScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+
+        }
+
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            btnPriceChartScaleLinear.Enabled = false;
+            btnPriceChartScaleLog.Enabled = true;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "price";
@@ -7545,9 +7777,10 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
             btnChartPrice.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7602,6 +7835,7 @@ namespace SATSuma
             HighlightedPoint.IsVisible = false;
             // refresh the graph
             formsPlot1.Refresh();
+            panelPriceScaleButtons.Visible = true;
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
@@ -7610,6 +7844,10 @@ namespace SATSuma
 
         private async void BtnChartPriceLog_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            btnPriceChartScaleLinear.Enabled = true;
+            btnPriceChartScaleLog.Enabled = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "pricelog";
@@ -7627,8 +7865,9 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartPriceLog.Enabled = false;
+            btnChartUTXO.Enabled = true;
+            btnChartPrice.Enabled = false;
+            btnChartUniqueAddresses.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -7703,6 +7942,198 @@ namespace SATSuma
             HighlightedPoint.IsVisible = false;
             // refresh the graph
             formsPlot1.Refresh();
+            panelPriceScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void btnChartUTXO_Click(object sender, EventArgs e)
+        {
+            btnChartUTXOScaleLinear.Enabled = false;
+            btnChartUTXOScaleLog.Enabled = true;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "utxo";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartUTXO.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+
+            // switch to linear scaling in case it was log before
+            formsPlot1.Plot.YAxis.MinorLogScale(false);
+            formsPlot1.Plot.YAxis.MajorGrid(false);
+            formsPlot1.Plot.YAxis.MinorGrid(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            // get a series of historic price data
+            var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(UTXODataJson);
+
+            List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = UTXOList.Count;
+
+            // create arrays of doubles
+            double[] yValues = UTXOList.Select(h => (double)(h.Y)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = UTXOList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("valid UTXO count");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            panelChartUTXOScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
+        private async void btnChartUTXOScaleLog_Click(object sender, EventArgs e)
+        {
+            btnChartUTXOScaleLinear.Enabled = true;
+            btnChartUTXOScaleLog.Enabled = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "pricelog";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            btnChartDifficulty.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+
+            // get a series of historic price data
+            var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(UTXODataJson);
+
+            List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = UTXOList.Count;
+
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = UTXOList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+
+            List<double> filteredYValues = new List<double>();
+            List<double> filteredXValues = new List<double>();
+
+            for (int i = 0; i < UTXOList.Count; i++)
+            {
+                double yValue = (double)UTXOList[i].Y;
+                if (yValue > 0)
+                {
+                    filteredYValues.Add(Math.Log10(yValue));
+                    filteredXValues.Add(xValues[i]);
+                }
+            }
+
+            double[] yValues = filteredYValues.ToArray();
+            double[] xValuesFiltered = filteredXValues.ToArray();
+
+
+            double minY = yValues.Min();
+            double maxY = yValues.Max() * 1.05;
+            formsPlot1.Plot.SetAxisLimits(xValuesFiltered.Min(), xValuesFiltered.Max(), minY, maxY);
+            scatter = formsPlot1.Plot.AddScatter(xValuesFiltered, yValues, lineWidth: 1, markerSize: 1);
+
+            // Use a custom formatter to control the label for each tick mark
+            static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
+
+            // Use log-spaced minor tick marks and grid lines
+            formsPlot1.Plot.YAxis.MinorLogScale(true);
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MinorGrid(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("valid UTXO count");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
+            //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            panelChartUTXOScaleButtons.Visible = true;
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
@@ -7710,6 +8141,9 @@ namespace SATSuma
 
         private async void btnChartBlockSize_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "blocksize";
@@ -7722,7 +8156,8 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
-            btnChartPriceLog.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
             btnChartBlockSize.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7790,6 +8225,9 @@ namespace SATSuma
 
         private async void btnChartCirculation_Click(object sender, EventArgs e)
         {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "circulation";
 
@@ -7803,10 +8241,11 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartFeeRates.Enabled = true;
-            btnChartPriceLog.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartUTXO.Enabled = true;
             btnChartCirculation.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7927,6 +8366,14 @@ namespace SATSuma
             {
                 btnChartBlockSize_Click(sender, e);
             }
+            if (chartType == "addresses")
+            {
+                btnChartUniqueAddresses_Click(sender, e);
+            }
+            if (chartType == "addresseslog")
+            {
+                btnChartUniqueAddressesLog_Click(sender, e);
+            }
         }
 
         private void DisableIrrelevantTimePeriods()
@@ -7997,7 +8444,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (chartType == "price" || chartType == "pricelog" || chartType == "circulation")
+                    if (chartType == "price" || chartType == "pricelog" || chartType == "circulation" || chartType == "addresses" || chartType == "addresseslog" || chartType == "utxo" || chartType == "utxolog")
                     {
                         btnChartPeriod24h.Enabled = false;
                         btnChartPeriod3d.Enabled = false;
@@ -8103,7 +8550,7 @@ namespace SATSuma
                     // Format the DateTime object using the desired format string
                     string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
 
-                    if (chartType == "pricelog")
+                    if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog")
                     {
                         double originalY = Math.Pow(10, pointY); // Convert back to the original scale
                         lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
@@ -8113,6 +8560,7 @@ namespace SATSuma
                         // update coordinate data label below chart
                         lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
                     }
+                    lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width, lblChartMousePositionData.Location.Y);
                 }
             }
         }
@@ -8120,78 +8568,91 @@ namespace SATSuma
         private void DisableEnableChartButtons(string enableOrDisableAllButtons)
         {
             
-                if (enableOrDisableAllButtons == "disable")
-                {
-                    ignoreMouseMoveOnChart = true;
-                    // get current state of buttons before disabling them
-                    btnChartBlockFeesWasEnabled = btnChartBlockFees.Enabled;
-                    btnChartDifficultyWasEnabled = btnChartDifficulty.Enabled;
-                    btnChartHashrateWasEnabled = btnChartHashrate.Enabled;
-                    btnChartPriceWasEnabled = btnChartPrice.Enabled;
-                    btnChartRewardWasEnabled = btnChartReward.Enabled;
-                    btnChartFeeRatesWasEnabled = btnChartFeeRates.Enabled;
-                    btnChartCirculationWasEnabled = btnChartCirculation.Enabled;
-                    btnChartBlockSizeWasEnabled = btnChartBlockSize.Enabled;
-                    btnChartPriceLogWasEnabled = btnChartPriceLog.Enabled;
-                    btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
-                    btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
-                    btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
-                    btnChartPeriod24hWasEnabled = btnChartPeriod24h.Enabled;
-                    btnChartPeriod2yWasEnabled = btnChartPeriod2y.Enabled;
-                    btnChartPeriod3dWasEnabled = btnChartPeriod3d.Enabled;
-                    btnChartPeriod3mWasEnabled = btnChartPeriod3m.Enabled;
-                    btnChartPeriod3yWasEnabled = btnChartPeriod3y.Enabled;
-                    btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
-                    btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
+            if (enableOrDisableAllButtons == "disable")
+            {
+                ignoreMouseMoveOnChart = true;
+                // get current state of buttons before disabling them
+                btnChartBlockFeesWasEnabled = btnChartBlockFees.Enabled;
+                btnChartDifficultyWasEnabled = btnChartDifficulty.Enabled;
+                btnChartHashrateWasEnabled = btnChartHashrate.Enabled;
+                btnChartPriceWasEnabled = btnChartPrice.Enabled;
+                btnChartRewardWasEnabled = btnChartReward.Enabled;
+                btnChartFeeRatesWasEnabled = btnChartFeeRates.Enabled;
+                btnChartCirculationWasEnabled = btnChartCirculation.Enabled;
+                btnChartBlockSizeWasEnabled = btnChartBlockSize.Enabled;
+                btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
+                btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
+                btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
+                btnChartPeriod24hWasEnabled = btnChartPeriod24h.Enabled;
+                btnChartPeriod2yWasEnabled = btnChartPeriod2y.Enabled;
+                btnChartPeriod3dWasEnabled = btnChartPeriod3d.Enabled;
+                btnChartPeriod3mWasEnabled = btnChartPeriod3m.Enabled;
+                btnChartPeriod3yWasEnabled = btnChartPeriod3y.Enabled;
+                btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
+                btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
+                btnChartUniqueAddressesWasEnabled = btnChartUniqueAddresses.Enabled;
+                btnChartAddressScaleLinearWasEnabled = btnChartAddressScaleLinear.Enabled;
+                btnChartAddressScaleLogWasEnabled = btnChartAddressScaleLog.Enabled;
+                btnPriceChartScaleLogWasEnabled = btnPriceChartScaleLog.Enabled;
+                btnPriceChartScaleLinearWasEnabled = btnPriceChartScaleLinear.Enabled;
 
-                    //disable them all
-                    btnChartBlockFees.Enabled = false;
-                    btnChartDifficulty.Enabled = false;
-                    btnChartHashrate.Enabled = false;
-                    btnChartPrice.Enabled = false;
-                    btnChartReward.Enabled = false;
-                    btnChartFeeRates.Enabled = false;
-                    btnChartCirculation.Enabled = false;
-                    btnChartPeriod1m.Enabled = false;
-                    btnChartPeriod1w.Enabled = false;
-                    btnChartPeriod1y.Enabled = false;
-                    btnChartPeriod24h.Enabled = false;
-                    btnChartPeriod2y.Enabled = false;
-                    btnChartPeriod3d.Enabled = false;
-                    btnChartPeriod3m.Enabled = false;
-                    btnChartPeriod3y.Enabled = false;
-                    btnChartPeriod6m.Enabled = false;
-                    btnChartPeriodAll.Enabled = false;
-                    btnChartPriceLog.Enabled = false;
-                    btnChartBlockSize.Enabled = false;
-                }
-                else
-                {
-                    // use previously saved states to reinstate buttons
+                //disable them all
+                btnChartBlockFees.Enabled = false;
+                btnChartDifficulty.Enabled = false;
+                btnChartHashrate.Enabled = false;
+                btnChartPrice.Enabled = false;
+                btnChartReward.Enabled = false;
+                btnChartFeeRates.Enabled = false;
+                btnChartCirculation.Enabled = false;
+                btnChartPeriod1m.Enabled = false;
+                btnChartPeriod1w.Enabled = false;
+                btnChartPeriod1y.Enabled = false;
+                btnChartPeriod24h.Enabled = false;
+                btnChartPeriod2y.Enabled = false;
+                btnChartPeriod3d.Enabled = false;
+                btnChartPeriod3m.Enabled = false;
+                btnChartPeriod3y.Enabled = false;
+                btnChartPeriod6m.Enabled = false;
+                btnChartPeriodAll.Enabled = false;
+                btnChartBlockSize.Enabled = false;
+                btnChartUniqueAddresses.Enabled = false;
+                btnChartAddressScaleLinear.Enabled = false;
+                btnChartAddressScaleLog.Enabled = false;
+                btnPriceChartScaleLog.Enabled = false;
+                btnPriceChartScaleLinear.Enabled = false;
+            }
+            else
+            {
+                // use previously saved states to reinstate buttons
 
-                    btnChartBlockFees.Enabled = btnChartBlockFeesWasEnabled;
-                    btnChartDifficulty.Enabled = btnChartDifficultyWasEnabled;
-                    btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
-                    btnChartPrice.Enabled = btnChartPriceWasEnabled;
-                    btnChartReward.Enabled = btnChartRewardWasEnabled;
-                    btnChartFeeRates.Enabled = btnChartFeeRatesWasEnabled;
-                    btnChartCirculation.Enabled = btnChartCirculationWasEnabled;
-                    btnChartBlockSize.Enabled = btnChartBlockSizeWasEnabled;
-                    btnChartPriceLog.Enabled = btnChartPriceLogWasEnabled;
-                    btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
-                    btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
-                    btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
-                    btnChartPeriod24h.Enabled = btnChartPeriod24hWasEnabled;
-                    btnChartPeriod2y.Enabled = btnChartPeriod2yWasEnabled;
-                    btnChartPeriod3d.Enabled = btnChartPeriod3dWasEnabled;
-                    btnChartPeriod3m.Enabled = btnChartPeriod3mWasEnabled;
-                    btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
-                    btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
-                    btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
-                    ignoreMouseMoveOnChart = false;
-                }
+                btnChartBlockFees.Enabled = btnChartBlockFeesWasEnabled;
+                btnChartDifficulty.Enabled = btnChartDifficultyWasEnabled;
+                btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
+                btnChartPrice.Enabled = btnChartPriceWasEnabled;
+                btnChartReward.Enabled = btnChartRewardWasEnabled;
+                btnChartFeeRates.Enabled = btnChartFeeRatesWasEnabled;
+                btnChartCirculation.Enabled = btnChartCirculationWasEnabled;
+                btnChartBlockSize.Enabled = btnChartBlockSizeWasEnabled;
+                btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
+                btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
+                btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
+                btnChartPeriod24h.Enabled = btnChartPeriod24hWasEnabled;
+                btnChartPeriod2y.Enabled = btnChartPeriod2yWasEnabled;
+                btnChartPeriod3d.Enabled = btnChartPeriod3dWasEnabled;
+                btnChartPeriod3m.Enabled = btnChartPeriod3mWasEnabled;
+                btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
+                btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
+                btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
+                btnChartUniqueAddresses.Enabled = btnChartUniqueAddressesWasEnabled;
+                btnChartAddressScaleLinear.Enabled = btnChartAddressScaleLinearWasEnabled;
+                btnChartAddressScaleLog.Enabled = btnChartAddressScaleLogWasEnabled;
+                btnPriceChartScaleLog.Enabled = btnPriceChartScaleLogWasEnabled;
+                btnPriceChartScaleLinear.Enabled = btnPriceChartScaleLinearWasEnabled;
+                ignoreMouseMoveOnChart = false;
+            }
             
         }
+
 
         #endregion
 
@@ -11746,6 +12207,8 @@ namespace SATSuma
             _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
             _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService(NodeURL);
             _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
+            _uniqueAddressesDataService = new UniqueAddressesDataService(NodeURL);
+            _utxoDataService = new UTXODataService(NodeURL);
         }
 
         // Get current block tip
@@ -13918,10 +14381,232 @@ namespace SATSuma
             }
         }
 
+        //------------------- unique addresses chart
+        public class UniqueAddressesData
+        {
+            public string Status { get; set; }
+            public string Name { get; set; }
+            public string Unit { get; set; }
+            public string Period { get; set; }
+            public string Description { get; set; }
+            public PriceCoordinates[] Values { get; set; }
+        }
+        public class UniqueAddresses
+        {
+            public string X { get; set; } // date
+            public decimal Y { get; set; } // price
+        }
 
+        public class UniqueAddressesList
+        {
+            public string X { get; set; }
+            public decimal Y { get; set; }
+        }
 
+        public class UniqueAddressesDataService
+        {
+            private readonly string _nodeUrl;
+            public UniqueAddressesDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetUniqueAddressesDataAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri("https://api.blockchain.info/");
+                        string blockChainInfoPeriod = "";
+                        if (chartPeriod == "1m")
+                        {
+                            blockChainInfoPeriod = "1months";
+                        }
+                        if (chartPeriod == "3m")
+                        {
+                            blockChainInfoPeriod = "3months";
+                        }
+                        if (chartPeriod == "6m")
+                        {
+                            blockChainInfoPeriod = "6months";
+                        }
+                        if (chartPeriod == "1y")
+                        {
+                            blockChainInfoPeriod = "1years";
+                        }
+                        if (chartPeriod == "3y")
+                        {
+                            blockChainInfoPeriod = "3years";
+                        }
+                        if (chartPeriod == "all")
+                        {
+                            blockChainInfoPeriod = "all";
+                        }
+                        var response = await client.GetAsync($"charts/n-unique-addresses?timespan=" + blockChainInfoPeriod + "&format=json");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        //------------------- UTXO count chart
+        public class UTXOData
+        {
+            public string Status { get; set; }
+            public string Name { get; set; }
+            public string Unit { get; set; }
+            public string Period { get; set; }
+            public string Description { get; set; }
+            public UTXOCoordinates[] Values { get; set; }
+        }
+        public class UTXOCoordinates
+        {
+            public string X { get; set; } // date
+            public decimal Y { get; set; } // price
+        }
+
+        public class UTXOList
+        {
+            public string X { get; set; }
+            public decimal Y { get; set; }
+        }
+
+        public class UTXODataService
+        {
+            private readonly string _nodeUrl;
+            public UTXODataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetUTXODataAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri("https://api.blockchain.info/");
+                        string blockChainInfoPeriod = "";
+                        if (chartPeriod == "1m")
+                        {
+                            blockChainInfoPeriod = "1months";
+                        }
+                        if (chartPeriod == "3m")
+                        {
+                            blockChainInfoPeriod = "3months";
+                        }
+                        if (chartPeriod == "6m")
+                        {
+                            blockChainInfoPeriod = "6months";
+                        }
+                        if (chartPeriod == "1y")
+                        {
+                            blockChainInfoPeriod = "1years";
+                        }
+                        if (chartPeriod == "3y")
+                        {
+                            blockChainInfoPeriod = "3years";
+                        }
+                        if (chartPeriod == "all")
+                        {
+                            blockChainInfoPeriod = "all";
+                        }
+                        var response = await client.GetAsync($"charts/utxo-count?timespan=" + blockChainInfoPeriod + "&format=json");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        //------------------- Pools ranking chart
+        public class PoolsRankingData
+        {
+            public PoolsRanking[] Values { get; set; }
+            public string BlockCount { get; set; }
+            public string LastEstimatedHashrate { get; set; }
+        }
+        public class PoolsRanking
+        {
+            public string PoolId { get; set; } 
+            public string Name { get; set; }
+            public string Link { get; set; }
+            public string BlockCount { get; set; }
+            public string Rank { get; set; }
+            public string EmptyBlocks { get; set; }
+            public string Slug { get; set; }
+            public string AvgMatchRate { get; set; }
+        }
+
+        public class PoolsRankingList
+        {
+            public string PoolId { get; set; }
+            public string Name { get; set; }
+            public string Link { get; set; }
+            public string BlockCount { get; set; }
+            public string Rank { get; set; }
+            public string EmptyBlocks { get; set; }
+            public string Slug { get; set; }
+            public string AvgMatchRate { get; set; }
+        }
+
+        public class PoolsRankingDataService
+        {
+            private readonly string _nodeUrl;
+            public PoolsRankingDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetPoolsRankingDataAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/mining/pools/" + chartPeriod);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
         #endregion
-
-
     }
 }

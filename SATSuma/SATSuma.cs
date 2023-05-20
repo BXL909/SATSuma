@@ -23,7 +23,6 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens? - can't reproduce again. Either fixed or didn't happen!
- * unique addresses chart, UTXO's chart
  */
 
 #region Using
@@ -33,7 +32,9 @@ using Newtonsoft.Json.Linq;
 using QRCoder;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
+using ScottPlot.Drawing.Colormaps;
 using ScottPlot.Plottable;
+using ScottPlot.Renderable;
 using ScottPlot.Ticks;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -111,6 +113,7 @@ namespace SATSuma
         private BlockSizeAndWeightService _blockSizeAndWeightService;
         private UniqueAddressesDataService _uniqueAddressesDataService;
         private UTXODataService _utxoDataService;
+        private PoolsRankingDataService _poolsRankingDataService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -161,13 +164,13 @@ namespace SATSuma
         bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartBlockSizeWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPriceLogWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartUniqueAddressesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartUniqueAddressesLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartAddressScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartAddressScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnPriceChartScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnPriceChartScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartUTXOWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartPoolsRankingWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -221,12 +224,14 @@ namespace SATSuma
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
-                //formsPlot1.Plot.Title("Hashrate (exahash per second)");
-                formsPlot1.Plot.Palette = Palette.Amber;
+                formsPlot2.Plot.Style(
+                    figureBackground: Color.Transparent,
+                    dataBackground: subItemBackColor);
+                formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
+                formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
                 btnChartPeriodAll.Enabled = false;
                 BtnChartFeeRates_Click(sender, e);
                 formsPlot1.Refresh();
-                
             }
             catch (WebException ex)
             {
@@ -7130,13 +7135,159 @@ namespace SATSuma
 
         #region CHARTS SCREEN
 
-        private async void btnChartPoolsRanking_Click(object sender, EventArgs e)
+        private async void BtnChartPoolsRanking_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = false;
+            formsPlot2.Visible = true;
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "poolranking";
 
+            // enable the other chart types
+            btnChartHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            DisableIrrelevantTimePeriods();
+
+            // clear any previous graph
+            formsPlot2.Plot.Clear();
+            int desiredSpacing = 98; // spacing added to title to force left-align in
+            string spacing = new string('\u00A0', desiredSpacing);
+            string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
+            formsPlot2.Plot.Title(title, size: 13, color: Color.Silver, bold: true);
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            var PoolRankingDataJson = await _poolsRankingDataService.GetPoolsRankingDataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(PoolRankingDataJson);
+
+            List<PoolsRanking> poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"].ToString());
+
+            // Calculate the total BlockCount
+            int totalBlockCount = poolsRankingList.Sum(p => int.Parse(p.BlockCount));
+
+            // Create lists for values and labels
+            List<double> values = new List<double>();
+            List<string> labels = new List<string>();
+
+            // Populate values and labels for the first 15 segments
+            int blocksMinedByTop15 = 0;
+            for (int i = 0; i < Math.Min(15, poolsRankingList.Count); i++)
+            {
+                var pool = poolsRankingList[i];
+                values.Add(double.Parse(pool.BlockCount));
+                blocksMinedByTop15 += Convert.ToInt32(pool.BlockCount);
+                labels.Add(pool.Name);
+            }
+
+            int numberOfBlocksMinedByOthers = totalBlockCount - blocksMinedByTop15;
+            values.Add(numberOfBlocksMinedByOthers);
+            labels.Add("Others");
+
+            // Copy values list to an array
+            double[] valuesArray = values.ToArray();
+            // Copy labels list to an array
+            string[] labelsArray = labels.ToArray();
+
+            string[] labelsAndValuesArray = new string[labelsArray.Length]; // this array is used to label the segments
+            for (int i = 0; i < labelsArray.Count(); i++)
+            {
+                string labelAndValue = labelsArray[i] + " (" + valuesArray[i] + ")";
+                labelsAndValuesArray[i] = labelAndValue;
+            }
+            
+            // Define the color spectrum
+            Color[] colorSpectrum = GenerateRainbowColorSpectrum(values.Count);
+
+            // Method to generate a rainbow-like color spectrum
+            Color[] GenerateRainbowColorSpectrum(int segmentCount)
+            {
+                var colors = new Color[segmentCount];
+                double hueIncrement = 360.0 / segmentCount;
+
+                for (int i = 0; i < segmentCount; i++)
+                {
+                    double hue = i * hueIncrement;
+                    Color color = ColorFromHSV(hue, 0.6, 0.7);
+                    colors[i] = color;
+                }
+
+                return colors;
+            }
+
+            // Method to convert HSV (Hue, Saturation, Value) to RGB
+            Color ColorFromHSV(double hue, double saturation, double value)
+            {
+                int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+                double f = hue / 60 - Math.Floor(hue / 60);
+
+                value *= 255;
+                int v = Convert.ToInt32(value);
+                int p = Convert.ToInt32(value * (1 - saturation));
+                int q = Convert.ToInt32(value * (1 - f * saturation));
+                int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+                if (hi == 0)
+                    return Color.FromArgb(255, v, t, p);
+                else if (hi == 1)
+                    return Color.FromArgb(255, q, v, p);
+                else if (hi == 2)
+                    return Color.FromArgb(255, p, v, t);
+                else if (hi == 3)
+                    return Color.FromArgb(255, p, q, v);
+                else if (hi == 4)
+                    return Color.FromArgb(255, t, p, v);
+                else
+                    return Color.FromArgb(255, v, p, q);
+            }
+
+            // Create the pie chart 
+            var pie = formsPlot2.Plot.AddPie(valuesArray);
+            pie.DonutSize = .3;
+            pie.DonutLabel = Convert.ToString(totalBlockCount - 1 + "\r\nblocks mined\r\n"+"period: " + chartPeriod);
+            pie.CenterFont.Color = Color.Orange;
+            pie.CenterFont.Size = 13;
+            pie.CenterFont.Bold = false;
+            pie.SliceFillColors = colorSpectrum;
+            pie.ShowPercentages = true;
+            pie.ShowValues = false;
+            pie.ShowLabels = true;
+            pie.Size = .7;
+            pie.SliceFont.Size = 11;
+            pie.SliceFont.Bold = false;
+            pie.SliceLabels = labelsAndValuesArray;
+            pie.SliceLabelPosition = 0.60;
+            
+            var padding = new ScottPlot.PixelPadding(
+                left: 45,
+                right: 25,
+                bottom: 15,
+                top: 27);
+            formsPlot2.Plot.ManualDataArea(padding);
+            
+            formsPlot2.Plot.YAxis.Label("");
+            formsPlot2.Plot.XAxis.Label("");
+            // refresh the graph
+            formsPlot2.Refresh();
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
         }
-
+            
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7169,6 +7320,10 @@ namespace SATSuma
             // Define a new tick label formatter for the linear scale
             static string linearTickLabels(double y) => y.ToString("N0");
             formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            // Revert back to automatic data area
+            formsPlot1.Plot.ResetLayout();
+            formsPlot1.Plot.AxisAuto();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7220,6 +7375,12 @@ namespace SATSuma
             formsPlot1.Plot.XAxis.Label("");
             formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
+            // Set the tick and gridline settings
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Ticks(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+
             // refresh the graph
             formsPlot1.Refresh();
             panelFeeRatesKey.Visible = true;
@@ -7230,6 +7391,8 @@ namespace SATSuma
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7309,7 +7472,6 @@ namespace SATSuma
             HighlightedPoint.MarkerSize = 10;
             HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
             HighlightedPoint.IsVisible = false;
-
             
             // refresh the graph
             formsPlot1.Refresh();
@@ -7319,6 +7481,8 @@ namespace SATSuma
 
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7399,6 +7563,8 @@ namespace SATSuma
 
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7478,6 +7644,8 @@ namespace SATSuma
 
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7564,8 +7732,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartUniqueAddresses_Click(object sender, EventArgs e)
+        private async void BtnChartUniqueAddresses_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = false;
@@ -7649,8 +7819,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartUniqueAddressesLog_Click(object sender, EventArgs e)
+        private async void BtnChartUniqueAddressesLog_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = true;
@@ -7758,6 +7930,8 @@ namespace SATSuma
 
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = false;
@@ -7844,6 +8018,8 @@ namespace SATSuma
 
         private async void BtnChartPriceLog_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = true;
@@ -7948,8 +8124,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartUTXO_Click(object sender, EventArgs e)
+        private async void BtnChartUTXO_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             btnChartUTXOScaleLinear.Enabled = false;
             btnChartUTXOScaleLog.Enabled = true;
             panelUniqueAddressesScaleButtons.Visible = false;
@@ -8033,8 +8211,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartUTXOScaleLog_Click(object sender, EventArgs e)
+        private async void BtnChartUTXOScaleLog_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             btnChartUTXOScaleLinear.Enabled = true;
             btnChartUTXOScaleLog.Enabled = false;
             panelUniqueAddressesScaleButtons.Visible = false;
@@ -8139,8 +8319,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartBlockSize_Click(object sender, EventArgs e)
+        private async void BtnChartBlockSize_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -8223,8 +8405,10 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
-        private async void btnChartCirculation_Click(object sender, EventArgs e)
+        private async void BtnChartCirculation_Click(object sender, EventArgs e)
         {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -8364,15 +8548,19 @@ namespace SATSuma
             }
             if (chartType == "blocksize")
             {
-                btnChartBlockSize_Click(sender, e);
+                BtnChartBlockSize_Click(sender, e);
             }
             if (chartType == "addresses")
             {
-                btnChartUniqueAddresses_Click(sender, e);
+                BtnChartUniqueAddresses_Click(sender, e);
             }
             if (chartType == "addresseslog")
             {
-                btnChartUniqueAddressesLog_Click(sender, e);
+                BtnChartUniqueAddressesLog_Click(sender, e);
+            }
+            if (chartType == "poolranking")
+            {
+                BtnChartPoolsRanking_Click(sender, e);
             }
         }
 
@@ -8526,7 +8714,7 @@ namespace SATSuma
         {
             if (!ignoreMouseMoveOnChart)
             {
-                if (chartType != "feerates")
+                if (chartType != "feerates" && chartType != "poolranking")
                 {
                     // determine point nearest the cursor
                     (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
@@ -8595,6 +8783,8 @@ namespace SATSuma
                 btnChartAddressScaleLogWasEnabled = btnChartAddressScaleLog.Enabled;
                 btnPriceChartScaleLogWasEnabled = btnPriceChartScaleLog.Enabled;
                 btnPriceChartScaleLinearWasEnabled = btnPriceChartScaleLinear.Enabled;
+                btnChartUTXOWasEnabled = btnChartUTXO.Enabled;
+                btnChartPoolsRankingWasEnabled = btnChartPoolsRanking.Enabled;
 
                 //disable them all
                 btnChartBlockFees.Enabled = false;
@@ -8620,6 +8810,8 @@ namespace SATSuma
                 btnChartAddressScaleLog.Enabled = false;
                 btnPriceChartScaleLog.Enabled = false;
                 btnPriceChartScaleLinear.Enabled = false;
+                btnChartUTXO.Enabled = false;
+                btnChartPoolsRanking.Enabled = false;
             }
             else
             {
@@ -8648,12 +8840,12 @@ namespace SATSuma
                 btnChartAddressScaleLog.Enabled = btnChartAddressScaleLogWasEnabled;
                 btnPriceChartScaleLog.Enabled = btnPriceChartScaleLogWasEnabled;
                 btnPriceChartScaleLinear.Enabled = btnPriceChartScaleLinearWasEnabled;
+                btnChartUTXO.Enabled = btnChartUTXOWasEnabled;
+                btnChartPoolsRanking.Enabled = btnChartPoolsRankingWasEnabled;
                 ignoreMouseMoveOnChart = false;
             }
             
         }
-
-
         #endregion
 
         #region BOOKMARKS SCREEN
@@ -12209,6 +12401,7 @@ namespace SATSuma
             _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
             _uniqueAddressesDataService = new UniqueAddressesDataService(NodeURL);
             _utxoDataService = new UTXODataService(NodeURL);
+            _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
         }
 
         // Get current block tip
@@ -13334,33 +13527,33 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxHeaderFeeRatesChart_Click(object sender, EventArgs e)
+        private void PictureBoxHeaderFeeRatesChart_Click(object sender, EventArgs e)
         {
             BtnChartFeeRates_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockScreenChartBlockSize_Click(object sender, EventArgs e)
+        private void PictureBoxBlockScreenChartBlockSize_Click(object sender, EventArgs e)
         {
-            btnChartBlockSize_Click(sender, e);
+            BtnChartBlockSize_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockScreenChartReward_Click(object sender, EventArgs e)
+        private void PictureBoxBlockScreenChartReward_Click(object sender, EventArgs e)
         {
             BtnChartReward_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockScreenChartFeeRange_Click(object sender, EventArgs e)
+        private void PictureBoxBlockScreenChartFeeRange_Click(object sender, EventArgs e)
         {
             BtnChartFeeRates_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxChartCirculation_Click(object sender, EventArgs e)
+        private void PictureBoxChartCirculation_Click(object sender, EventArgs e)
         {
-            btnChartCirculation_Click(sender, e);
+            BtnChartCirculation_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -14329,8 +14522,8 @@ namespace SATSuma
 
         public class BlockSizeAndWeight
         {
-            public Sizes[] sizes { get; set; }
-            public Weights[] weights { get; set; }
+            public Sizes[] Sizes { get; set; }
+            public Weights[] Weights { get; set; }
         }
 
         public class Sizes

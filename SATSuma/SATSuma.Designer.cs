@@ -761,6 +761,18 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
+            this.btnChartNodesByNetwork = new System.Windows.Forms.Button();
+            this.panel79 = new System.Windows.Forms.Panel();
+            this.label218 = new System.Windows.Forms.Label();
+            this.panelLightningNodeNetwork = new System.Windows.Forms.Panel();
+            this.label227 = new System.Windows.Forms.Label();
+            this.label236 = new System.Windows.Forms.Label();
+            this.label219 = new System.Windows.Forms.Label();
+            this.label220 = new System.Windows.Forms.Label();
+            this.label221 = new System.Windows.Forms.Label();
+            this.label224 = new System.Windows.Forms.Label();
+            this.label225 = new System.Windows.Forms.Label();
+            this.label226 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -885,6 +897,8 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
+            this.panel79.SuspendLayout();
+            this.panelLightningNodeNetwork.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10417,6 +10431,9 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.panelLightningNodeNetwork);
+            this.panelCharts.Controls.Add(this.panel79);
+            this.panelCharts.Controls.Add(this.btnChartNodesByNetwork);
             this.panelCharts.Controls.Add(this.formsPlot2);
             this.panelCharts.Controls.Add(this.btnChartPoolsRanking);
             this.panelCharts.Controls.Add(this.panelChartUTXOScaleButtons);
@@ -11381,6 +11398,171 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
+            // btnChartNodesByNetwork
+            // 
+            this.btnChartNodesByNetwork.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartNodesByNetwork.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartNodesByNetwork.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartNodesByNetwork.FlatAppearance.BorderSize = 0;
+            this.btnChartNodesByNetwork.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartNodesByNetwork.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartNodesByNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartNodesByNetwork.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartNodesByNetwork.ForeColor = System.Drawing.Color.White;
+            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 410);
+            this.btnChartNodesByNetwork.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartNodesByNetwork.Name = "btnChartNodesByNetwork";
+            this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 24);
+            this.btnChartNodesByNetwork.TabIndex = 267;
+            this.btnChartNodesByNetwork.TabStop = false;
+            this.btnChartNodesByNetwork.Text = "nodes/network";
+            this.btnChartNodesByNetwork.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
+            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.btnChartNodesByNetwork_Click);
+            // 
+            // panel79
+            // 
+            this.panel79.BackColor = System.Drawing.Color.Transparent;
+            this.panel79.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel79.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel79.Controls.Add(this.label218);
+            this.panel79.Location = new System.Drawing.Point(0, 378);
+            this.panel79.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel79.Name = "panel79";
+            this.panel79.Size = new System.Drawing.Size(102, 23);
+            this.panel79.TabIndex = 208;
+            // 
+            // label218
+            // 
+            this.label218.AutoSize = true;
+            this.label218.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label218.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label218.ForeColor = System.Drawing.Color.Gray;
+            this.label218.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label218.Location = new System.Drawing.Point(3, 2);
+            this.label218.Margin = new System.Windows.Forms.Padding(0);
+            this.label218.Name = "label218";
+            this.label218.Size = new System.Drawing.Size(74, 20);
+            this.label218.TabIndex = 153;
+            this.label218.Text = "Lightning";
+            // 
+            // panelLightningNodeNetwork
+            // 
+            this.panelLightningNodeNetwork.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
+            this.panelLightningNodeNetwork.Controls.Add(this.label226);
+            this.panelLightningNodeNetwork.Controls.Add(this.label225);
+            this.panelLightningNodeNetwork.Controls.Add(this.label224);
+            this.panelLightningNodeNetwork.Controls.Add(this.label221);
+            this.panelLightningNodeNetwork.Controls.Add(this.label219);
+            this.panelLightningNodeNetwork.Controls.Add(this.label220);
+            this.panelLightningNodeNetwork.Controls.Add(this.label227);
+            this.panelLightningNodeNetwork.Controls.Add(this.label236);
+            this.panelLightningNodeNetwork.Location = new System.Drawing.Point(185, 32);
+            this.panelLightningNodeNetwork.Name = "panelLightningNodeNetwork";
+            this.panelLightningNodeNetwork.Size = new System.Drawing.Size(190, 89);
+            this.panelLightningNodeNetwork.TabIndex = 268;
+            this.panelLightningNodeNetwork.Visible = false;
+            // 
+            // label227
+            // 
+            this.label227.AutoSize = true;
+            this.label227.BackColor = System.Drawing.Color.Transparent;
+            this.label227.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label227.ForeColor = System.Drawing.Color.IndianRed;
+            this.label227.Location = new System.Drawing.Point(0, 3);
+            this.label227.Name = "label227";
+            this.label227.Size = new System.Drawing.Size(23, 18);
+            this.label227.TabIndex = 250;
+            this.label227.Text = "🟢";
+            // 
+            // label236
+            // 
+            this.label236.AutoSize = true;
+            this.label236.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label236.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label236.ForeColor = System.Drawing.Color.Silver;
+            this.label236.Location = new System.Drawing.Point(22, 0);
+            this.label236.Margin = new System.Windows.Forms.Padding(0);
+            this.label236.Name = "label236";
+            this.label236.Size = new System.Drawing.Size(211, 20);
+            this.label236.TabIndex = 211;
+            this.label236.Text = "Darknet only (Tor, I2P, cjdns)";
+            // 
+            // label219
+            // 
+            this.label219.AutoSize = true;
+            this.label219.BackColor = System.Drawing.Color.Transparent;
+            this.label219.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label219.ForeColor = System.Drawing.Color.OliveDrab;
+            this.label219.Location = new System.Drawing.Point(0, 25);
+            this.label219.Name = "label219";
+            this.label219.Size = new System.Drawing.Size(23, 18);
+            this.label219.TabIndex = 252;
+            this.label219.Text = "🟢";
+            // 
+            // label220
+            // 
+            this.label220.AutoSize = true;
+            this.label220.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label220.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label220.ForeColor = System.Drawing.Color.Silver;
+            this.label220.Location = new System.Drawing.Point(22, 22);
+            this.label220.Margin = new System.Windows.Forms.Padding(0);
+            this.label220.Name = "label220";
+            this.label220.Size = new System.Drawing.Size(193, 20);
+            this.label220.TabIndex = 251;
+            this.label220.Text = "Clearnet only (IPv4, IPv6)";
+            // 
+            // label221
+            // 
+            this.label221.AutoSize = true;
+            this.label221.BackColor = System.Drawing.Color.Transparent;
+            this.label221.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label221.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label221.Location = new System.Drawing.Point(0, 47);
+            this.label221.Name = "label221";
+            this.label221.Size = new System.Drawing.Size(23, 18);
+            this.label221.TabIndex = 253;
+            this.label221.Text = "🟢";
+            // 
+            // label224
+            // 
+            this.label224.AutoSize = true;
+            this.label224.BackColor = System.Drawing.Color.Transparent;
+            this.label224.Font = new System.Drawing.Font("Consolas", 9F);
+            this.label224.ForeColor = System.Drawing.Color.Gold;
+            this.label224.Location = new System.Drawing.Point(0, 69);
+            this.label224.Name = "label224";
+            this.label224.Size = new System.Drawing.Size(23, 18);
+            this.label224.TabIndex = 254;
+            this.label224.Text = "🟢";
+            // 
+            // label225
+            // 
+            this.label225.AutoSize = true;
+            this.label225.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label225.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label225.ForeColor = System.Drawing.Color.Silver;
+            this.label225.Location = new System.Drawing.Point(22, 44);
+            this.label225.Margin = new System.Windows.Forms.Padding(0);
+            this.label225.Name = "label225";
+            this.label225.Size = new System.Drawing.Size(168, 20);
+            this.label225.TabIndex = 255;
+            this.label225.Text = "Clearnet and Darknet";
+            // 
+            // label226
+            // 
+            this.label226.AutoSize = true;
+            this.label226.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label226.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label226.ForeColor = System.Drawing.Color.Silver;
+            this.label226.Location = new System.Drawing.Point(22, 66);
+            this.label226.Margin = new System.Windows.Forms.Padding(0);
+            this.label226.Name = "label226";
+            this.label226.Size = new System.Drawing.Size(79, 20);
+            this.label226.TabIndex = 256;
+            this.label226.Text = "Unknown";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -11642,6 +11824,10 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
+            this.panel79.ResumeLayout(false);
+            this.panel79.PerformLayout();
+            this.panelLightningNodeNetwork.ResumeLayout(false);
+            this.panelLightningNodeNetwork.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -12380,6 +12566,18 @@
         private System.Windows.Forms.Button btnChartUTXOScaleLinear;
         private System.Windows.Forms.Button btnChartPoolsRanking;
         private ScottPlot.FormsPlot formsPlot2;
+        private System.Windows.Forms.Panel panel79;
+        private System.Windows.Forms.Label label218;
+        private System.Windows.Forms.Button btnChartNodesByNetwork;
+        private System.Windows.Forms.Panel panelLightningNodeNetwork;
+        private System.Windows.Forms.Label label219;
+        private System.Windows.Forms.Label label220;
+        private System.Windows.Forms.Label label227;
+        private System.Windows.Forms.Label label236;
+        private System.Windows.Forms.Label label226;
+        private System.Windows.Forms.Label label225;
+        private System.Windows.Forms.Label label224;
+        private System.Windows.Forms.Label label221;
     }
 }
 

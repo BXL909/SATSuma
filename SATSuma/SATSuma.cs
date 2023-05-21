@@ -171,6 +171,7 @@ namespace SATSuma
         bool btnPriceChartScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartUTXOWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPoolsRankingWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartNodesByNetworkWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -7142,6 +7143,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "poolranking";
@@ -7156,6 +7158,7 @@ namespace SATSuma
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7291,6 +7294,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             chartType = "feerates";
             lblChartMousePositionData.Text = "";
@@ -7303,6 +7307,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
 
@@ -7389,6 +7394,109 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
+        private async void btnChartNodesByNetwork_Click(object sender, EventArgs e)
+        {
+            formsPlot1.Visible = true;
+            formsPlot2.Visible = false;
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            panelLightningNodeNetwork.Visible = true;
+            panelCirculationKey.Visible = false;
+            chartType = "lightningnodesbynetwork";
+            lblChartMousePositionData.Text = "";
+            // enable the other chart types
+            btnChartFeeRates.Enabled = true;
+            btnChartHashrate.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            btnChartNodesByNetwork.Enabled = false;
+
+            DisableIrrelevantTimePeriods();
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+
+            // switch to linear scaling in case it was log before
+            formsPlot1.Plot.YAxis.MinorLogScale(false);
+            formsPlot1.Plot.YAxis.MajorGrid(false);
+            formsPlot1.Plot.YAxis.MinorGrid(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            // Revert back to automatic data area
+            formsPlot1.Plot.ResetLayout();
+            formsPlot1.Plot.AxisAuto();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // Create an instance of HttpClient
+            HttpClient client = new HttpClient();
+
+            string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+            string json = await client.GetStringAsync(url);
+
+            List<LightningNodesPerNetwork> lightningNodesPerNetworkList = JsonConvert.DeserializeObject<List<LightningNodesPerNetwork>>(json.ToString());
+
+            // set the number of points on the graph
+            int pointCount = lightningNodesPerNetworkList.Count;
+
+            // create arrays of doubles
+            double[] yValues1 = lightningNodesPerNetworkList.Select(h => (double)(h.Tor_nodes)).ToArray();
+            double[] yValues2 = lightningNodesPerNetworkList.Select(h => (double)(h.Clearnet_nodes)).ToArray();
+            double[] yValues3 = lightningNodesPerNetworkList.Select(h => (double)(h.Unannounced_nodes)).ToArray();
+            double[] yValues4 = lightningNodesPerNetworkList.Select(h => (double)(h.Clearnet_tor_nodes)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = lightningNodesPerNetworkList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Added)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+            // prevent navigating beyond the data
+            double yBoundary = yValues1.Max();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yBoundary);
+            formsPlot1.Plot.YAxis.SetBoundary(0, yBoundary);
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+            //formsPlot1.Plot.AddFill(xValues, yValues1, 0, Color.IndianRed);
+            formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.IndianRed);
+            formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.OliveDrab);
+            formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.SteelBlue);
+            formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Gold);
+            //formsPlot1.Plot.AddFill(xValues, yValues2, 0, Color.DarkOrange);
+            //formsPlot1.Plot.AddFill(xValues, yValues3, 0, Color.DarkSalmon);
+            //formsPlot1.Plot.AddFill(xValues, yValues4, 0, Color.DarkGoldenrod);
+            
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("lightning nodes per network");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
+            // Set the tick and gridline settings
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Ticks(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+            
+            formsPlot1.Plot.Legend();
+            // refresh the graph
+            formsPlot1.Refresh();
+            //panelFeeRatesKey.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
             formsPlot1.Visible = true;
@@ -7397,6 +7505,7 @@ namespace SATSuma
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "hashrate";
             // if chart period too short for this chart, set it to max instead
@@ -7413,6 +7522,7 @@ namespace SATSuma
             btnChartPrice.Enabled = true;
             btnChartReward.Enabled = true;
             btnChartBlockFees.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
@@ -7487,6 +7597,7 @@ namespace SATSuma
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             panelCirculationKey.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "reward";
 
@@ -7496,6 +7607,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartReward.Enabled = false;
@@ -7568,6 +7680,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "blockfees";
@@ -7579,6 +7692,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartBlockFees.Enabled = false;
@@ -7649,6 +7763,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "difficulty";
@@ -7667,6 +7782,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartReward.Enabled = true;
@@ -7739,6 +7855,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = false;
+            panelLightningNodeNetwork.Visible = false;
             btnChartAddressScaleLog.Enabled = true;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
@@ -7757,6 +7874,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartUTXO.Enabled = true;
@@ -7826,6 +7944,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = true;
+            panelLightningNodeNetwork.Visible = false;
             btnChartAddressScaleLog.Enabled = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
@@ -7842,6 +7961,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = true;
@@ -7935,6 +8055,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = false;
+            panelLightningNodeNetwork.Visible = false;
             btnPriceChartScaleLog.Enabled = true;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
@@ -7953,6 +8074,7 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartPrice.Enabled = false;
@@ -8025,6 +8147,7 @@ namespace SATSuma
             btnPriceChartScaleLinear.Enabled = true;
             btnPriceChartScaleLog.Enabled = false;
             panelCirculationKey.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "pricelog";
 
@@ -8042,6 +8165,7 @@ namespace SATSuma
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartPrice.Enabled = false;
             btnChartUniqueAddresses.Enabled = true;
             DisableIrrelevantTimePeriods();
@@ -8132,6 +8256,7 @@ namespace SATSuma
             btnChartUTXOScaleLog.Enabled = true;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "utxo";
@@ -8149,6 +8274,7 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartUTXO.Enabled = false;
@@ -8219,6 +8345,7 @@ namespace SATSuma
             btnChartUTXOScaleLog.Enabled = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "pricelog";
@@ -8236,6 +8363,7 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = false;
@@ -8326,6 +8454,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "blocksize";
@@ -8339,6 +8468,7 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartBlockSize.Enabled = false;
             DisableIrrelevantTimePeriods();
@@ -8412,6 +8542,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
             panelFeeRatesKey.Visible = false;
             chartType = "circulation";
 
@@ -8427,6 +8558,7 @@ namespace SATSuma
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUTXO.Enabled = true;
@@ -8561,6 +8693,10 @@ namespace SATSuma
             if (chartType == "poolranking")
             {
                 BtnChartPoolsRanking_Click(sender, e);
+            }
+            if (chartType == "lightningnodesbynetwork")
+            {
+                btnChartNodesByNetwork_Click(sender, e);
             }
         }
 
@@ -8714,7 +8850,7 @@ namespace SATSuma
         {
             if (!ignoreMouseMoveOnChart)
             {
-                if (chartType != "feerates" && chartType != "poolranking")
+                if (chartType != "feerates" && chartType != "poolranking" && chartType != "lightningnodesbynetwork")
                 {
                     // determine point nearest the cursor
                     (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
@@ -8785,6 +8921,7 @@ namespace SATSuma
                 btnPriceChartScaleLinearWasEnabled = btnPriceChartScaleLinear.Enabled;
                 btnChartUTXOWasEnabled = btnChartUTXO.Enabled;
                 btnChartPoolsRankingWasEnabled = btnChartPoolsRanking.Enabled;
+                btnChartNodesByNetworkWasEnabled = btnChartNodesByNetwork.Enabled;
 
                 //disable them all
                 btnChartBlockFees.Enabled = false;
@@ -8812,6 +8949,7 @@ namespace SATSuma
                 btnPriceChartScaleLinear.Enabled = false;
                 btnChartUTXO.Enabled = false;
                 btnChartPoolsRanking.Enabled = false;
+                btnChartNodesByNetwork.Enabled = false;
             }
             else
             {
@@ -8842,6 +8980,7 @@ namespace SATSuma
                 btnPriceChartScaleLinear.Enabled = btnPriceChartScaleLinearWasEnabled;
                 btnChartUTXO.Enabled = btnChartUTXOWasEnabled;
                 btnChartPoolsRanking.Enabled = btnChartPoolsRankingWasEnabled;
+                btnChartNodesByNetwork.Enabled = btnChartNodesByNetworkWasEnabled;
                 ignoreMouseMoveOnChart = false;
             }
             
@@ -14134,7 +14273,6 @@ namespace SATSuma
             public long Value { get; set; }
         }
 
-
         // ------------------------------------- Block Transactions -------------------------------------
         public class TransactionsForBlockService
         {
@@ -14197,7 +14335,6 @@ namespace SATSuma
             public string Is_coinbase { get; set; }
             //   public string sequence { get; set; }
         }
-
 
         public class Prevout_BlockTransactions
         {
@@ -14784,6 +14921,53 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
                         var response = await client.GetAsync($"v1/mining/pools/" + chartPeriod);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        // ---------- block fee rates chart
+
+        public class LightningNodesPerNetwork
+        {
+            public string Added { get; set; }
+            public double Channel_count { get; set; }
+            public double Total_capacity { get; set; }
+            public double Tor_nodes { get; set; }
+            public double Clearnet_nodes { get; set; }
+            public double Unannounced_nodes { get; set; }
+            public double Clearnet_tor_nodes { get; set; }
+        }
+
+        public class LightningNodesPerNetworkDataService
+        {
+            private readonly string _nodeUrl;
+            public LightningNodesPerNetworkDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetLightningNodesPerNetworkAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/lightning/statistics/" + chartPeriod);
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();

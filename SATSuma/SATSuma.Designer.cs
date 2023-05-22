@@ -707,6 +707,11 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.panel81 = new System.Windows.Forms.Panel();
+            this.label231 = new System.Windows.Forms.Label();
+            this.panel80 = new System.Windows.Forms.Panel();
+            this.label228 = new System.Windows.Forms.Label();
+            this.formsPlot3 = new ScottPlot.FormsPlot();
             this.btnChartNodesByCountry = new System.Windows.Forms.Button();
             this.panelLightningNodeNetwork = new System.Windows.Forms.Panel();
             this.label226 = new System.Windows.Forms.Label();
@@ -774,11 +779,8 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.formsPlot3 = new ScottPlot.FormsPlot();
-            this.panel80 = new System.Windows.Forms.Panel();
-            this.label228 = new System.Windows.Forms.Label();
-            this.panel81 = new System.Windows.Forms.Panel();
-            this.label231 = new System.Windows.Forms.Label();
+            this.btnChartLightningCapacity = new System.Windows.Forms.Button();
+            this.btnChartLightningChannels = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -897,6 +899,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
             this.panelCharts.SuspendLayout();
+            this.panel81.SuspendLayout();
+            this.panel80.SuspendLayout();
             this.panelLightningNodeNetwork.SuspendLayout();
             this.panel79.SuspendLayout();
             this.panelChartUTXOScaleButtons.SuspendLayout();
@@ -905,8 +909,6 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
-            this.panel80.SuspendLayout();
-            this.panel81.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10439,6 +10441,8 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.btnChartLightningChannels);
+            this.panelCharts.Controls.Add(this.btnChartLightningCapacity);
             this.panelCharts.Controls.Add(this.panel81);
             this.panelCharts.Controls.Add(this.panel80);
             this.panelCharts.Controls.Add(this.formsPlot3);
@@ -10482,6 +10486,67 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
+            // panel81
+            // 
+            this.panel81.BackColor = System.Drawing.Color.Transparent;
+            this.panel81.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel81.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel81.Controls.Add(this.label231);
+            this.panel81.Location = new System.Drawing.Point(0, 472);
+            this.panel81.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel81.Name = "panel81";
+            this.panel81.Size = new System.Drawing.Size(116, 23);
+            this.panel81.TabIndex = 209;
+            // 
+            // label231
+            // 
+            this.label231.AutoSize = true;
+            this.label231.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label231.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label231.ForeColor = System.Drawing.Color.Gray;
+            this.label231.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label231.Location = new System.Drawing.Point(3, 2);
+            this.label231.Margin = new System.Windows.Forms.Padding(0);
+            this.label231.Name = "label231";
+            this.label231.Size = new System.Drawing.Size(60, 20);
+            this.label231.TabIndex = 153;
+            this.label231.Text = "market";
+            // 
+            // panel80
+            // 
+            this.panel80.BackColor = System.Drawing.Color.Transparent;
+            this.panel80.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel80.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel80.Controls.Add(this.label228);
+            this.panel80.Location = new System.Drawing.Point(0, 0);
+            this.panel80.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel80.Name = "panel80";
+            this.panel80.Size = new System.Drawing.Size(116, 23);
+            this.panel80.TabIndex = 209;
+            // 
+            // label228
+            // 
+            this.label228.AutoSize = true;
+            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label228.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label228.ForeColor = System.Drawing.Color.Gray;
+            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label228.Location = new System.Drawing.Point(3, 2);
+            this.label228.Margin = new System.Windows.Forms.Padding(0);
+            this.label228.Name = "label228";
+            this.label228.Size = new System.Drawing.Size(74, 20);
+            this.label228.TabIndex = 153;
+            this.label228.Text = "on-chain";
+            // 
+            // formsPlot3
+            // 
+            this.formsPlot3.Location = new System.Drawing.Point(100, 0);
+            this.formsPlot3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.formsPlot3.Name = "formsPlot3";
+            this.formsPlot3.Size = new System.Drawing.Size(682, 521);
+            this.formsPlot3.TabIndex = 270;
+            this.formsPlot3.Visible = false;
+            // 
             // btnChartNodesByCountry
             // 
             this.btnChartNodesByCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -10493,7 +10558,7 @@
             this.btnChartNodesByCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByCountry.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByCountry.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 402);
+            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 376);
             this.btnChartNodesByCountry.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByCountry.Name = "btnChartNodesByCountry";
             this.btnChartNodesByCountry.Size = new System.Drawing.Size(100, 24);
@@ -10627,7 +10692,7 @@
             this.panel79.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel79.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel79.Controls.Add(this.label218);
-            this.panel79.Location = new System.Drawing.Point(0, 339);
+            this.panel79.Location = new System.Drawing.Point(0, 320);
             this.panel79.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel79.Name = "panel79";
             this.panel79.Size = new System.Drawing.Size(116, 23);
@@ -10658,7 +10723,7 @@
             this.btnChartNodesByNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByNetwork.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByNetwork.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 371);
+            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 348);
             this.btnChartNodesByNetwork.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByNetwork.Name = "btnChartNodesByNetwork";
             this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 24);
@@ -10689,7 +10754,7 @@
             this.btnChartPoolsRanking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartPoolsRanking.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartPoolsRanking.ForeColor = System.Drawing.Color.White;
-            this.btnChartPoolsRanking.Location = new System.Drawing.Point(0, 307);
+            this.btnChartPoolsRanking.Location = new System.Drawing.Point(0, 280);
             this.btnChartPoolsRanking.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPoolsRanking.Name = "btnChartPoolsRanking";
             this.btnChartPoolsRanking.Size = new System.Drawing.Size(100, 24);
@@ -10765,7 +10830,7 @@
             this.btnChartUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartUTXO.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnChartUTXO.Location = new System.Drawing.Point(0, 276);
+            this.btnChartUTXO.Location = new System.Drawing.Point(0, 252);
             this.btnChartUTXO.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartUTXO.Name = "btnChartUTXO";
             this.btnChartUTXO.Size = new System.Drawing.Size(100, 24);
@@ -10895,7 +10960,7 @@
             this.btnChartUniqueAddresses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartUniqueAddresses.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartUniqueAddresses.ForeColor = System.Drawing.Color.White;
-            this.btnChartUniqueAddresses.Location = new System.Drawing.Point(0, 245);
+            this.btnChartUniqueAddresses.Location = new System.Drawing.Point(0, 224);
             this.btnChartUniqueAddresses.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartUniqueAddresses.Name = "btnChartUniqueAddresses";
             this.btnChartUniqueAddresses.Size = new System.Drawing.Size(100, 24);
@@ -10953,7 +11018,7 @@
             this.btnChartBlockSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartBlockSize.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartBlockSize.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockSize.Location = new System.Drawing.Point(0, 121);
+            this.btnChartBlockSize.Location = new System.Drawing.Point(0, 112);
             this.btnChartBlockSize.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartBlockSize.Name = "btnChartBlockSize";
             this.btnChartBlockSize.Size = new System.Drawing.Size(100, 24);
@@ -11234,7 +11299,7 @@
             this.btnChartCirculation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartCirculation.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartCirculation.ForeColor = System.Drawing.Color.White;
-            this.btnChartCirculation.Location = new System.Drawing.Point(0, 214);
+            this.btnChartCirculation.Location = new System.Drawing.Point(0, 196);
             this.btnChartCirculation.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartCirculation.Name = "btnChartCirculation";
             this.btnChartCirculation.Size = new System.Drawing.Size(100, 24);
@@ -11498,7 +11563,7 @@
             this.btnChartBlockFees.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartBlockFees.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartBlockFees.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockFees.Location = new System.Drawing.Point(0, 59);
+            this.btnChartBlockFees.Location = new System.Drawing.Point(0, 56);
             this.btnChartBlockFees.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartBlockFees.Name = "btnChartBlockFees";
             this.btnChartBlockFees.Size = new System.Drawing.Size(100, 24);
@@ -11520,7 +11585,7 @@
             this.btnChartReward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartReward.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartReward.ForeColor = System.Drawing.Color.White;
-            this.btnChartReward.Location = new System.Drawing.Point(0, 90);
+            this.btnChartReward.Location = new System.Drawing.Point(0, 84);
             this.btnChartReward.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartReward.Name = "btnChartReward";
             this.btnChartReward.Size = new System.Drawing.Size(100, 24);
@@ -11542,7 +11607,7 @@
             this.btnChartPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartPrice.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartPrice.ForeColor = System.Drawing.Color.White;
-            this.btnChartPrice.Location = new System.Drawing.Point(0, 466);
+            this.btnChartPrice.Location = new System.Drawing.Point(0, 500);
             this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPrice.Name = "btnChartPrice";
             this.btnChartPrice.Size = new System.Drawing.Size(100, 24);
@@ -11564,7 +11629,7 @@
             this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
-            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 183);
+            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 168);
             this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartDifficulty.Name = "btnChartDifficulty";
             this.btnChartDifficulty.Size = new System.Drawing.Size(100, 24);
@@ -11586,7 +11651,7 @@
             this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnChartHashrate.Location = new System.Drawing.Point(0, 152);
+            this.btnChartHashrate.Location = new System.Drawing.Point(0, 140);
             this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartHashrate.Name = "btnChartHashrate";
             this.btnChartHashrate.Size = new System.Drawing.Size(100, 24);
@@ -11597,66 +11662,49 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // formsPlot3
+            // btnChartLightningCapacity
             // 
-            this.formsPlot3.Location = new System.Drawing.Point(100, 0);
-            this.formsPlot3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.formsPlot3.Name = "formsPlot3";
-            this.formsPlot3.Size = new System.Drawing.Size(682, 521);
-            this.formsPlot3.TabIndex = 270;
-            this.formsPlot3.Visible = false;
+            this.btnChartLightningCapacity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartLightningCapacity.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartLightningCapacity.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartLightningCapacity.FlatAppearance.BorderSize = 0;
+            this.btnChartLightningCapacity.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningCapacity.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
+            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 404);
+            this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
+            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 24);
+            this.btnChartLightningCapacity.TabIndex = 271;
+            this.btnChartLightningCapacity.TabStop = false;
+            this.btnChartLightningCapacity.Text = "capacity";
+            this.btnChartLightningCapacity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
+            this.btnChartLightningCapacity.Click += new System.EventHandler(this.btnChartLightningCapacity_Click);
             // 
-            // panel80
+            // btnChartLightningChannels
             // 
-            this.panel80.BackColor = System.Drawing.Color.Transparent;
-            this.panel80.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
-            this.panel80.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel80.Controls.Add(this.label228);
-            this.panel80.Location = new System.Drawing.Point(0, 0);
-            this.panel80.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel80.Name = "panel80";
-            this.panel80.Size = new System.Drawing.Size(116, 23);
-            this.panel80.TabIndex = 209;
-            // 
-            // label228
-            // 
-            this.label228.AutoSize = true;
-            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label228.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label228.ForeColor = System.Drawing.Color.Gray;
-            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label228.Location = new System.Drawing.Point(3, 2);
-            this.label228.Margin = new System.Windows.Forms.Padding(0);
-            this.label228.Name = "label228";
-            this.label228.Size = new System.Drawing.Size(74, 20);
-            this.label228.TabIndex = 153;
-            this.label228.Text = "on-chain";
-            // 
-            // panel81
-            // 
-            this.panel81.BackColor = System.Drawing.Color.Transparent;
-            this.panel81.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
-            this.panel81.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel81.Controls.Add(this.label231);
-            this.panel81.Location = new System.Drawing.Point(0, 434);
-            this.panel81.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel81.Name = "panel81";
-            this.panel81.Size = new System.Drawing.Size(116, 23);
-            this.panel81.TabIndex = 209;
-            // 
-            // label231
-            // 
-            this.label231.AutoSize = true;
-            this.label231.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label231.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label231.ForeColor = System.Drawing.Color.Gray;
-            this.label231.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label231.Location = new System.Drawing.Point(3, 2);
-            this.label231.Margin = new System.Windows.Forms.Padding(0);
-            this.label231.Name = "label231";
-            this.label231.Size = new System.Drawing.Size(60, 20);
-            this.label231.TabIndex = 153;
-            this.label231.Text = "market";
+            this.btnChartLightningChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartLightningChannels.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartLightningChannels.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartLightningChannels.FlatAppearance.BorderSize = 0;
+            this.btnChartLightningChannels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningChannels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
+            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 432);
+            this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartLightningChannels.Name = "btnChartLightningChannels";
+            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 24);
+            this.btnChartLightningChannels.TabIndex = 272;
+            this.btnChartLightningChannels.TabStop = false;
+            this.btnChartLightningChannels.Text = "channels";
+            this.btnChartLightningChannels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartLightningChannels.UseVisualStyleBackColor = false;
+            this.btnChartLightningChannels.Click += new System.EventHandler(this.btnChartLightningChannels_Click);
             // 
             // SATSuma
             // 
@@ -11910,6 +11958,10 @@
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
             this.panelCharts.PerformLayout();
+            this.panel81.ResumeLayout(false);
+            this.panel81.PerformLayout();
+            this.panel80.ResumeLayout(false);
+            this.panel80.PerformLayout();
             this.panelLightningNodeNetwork.ResumeLayout(false);
             this.panelLightningNodeNetwork.PerformLayout();
             this.panel79.ResumeLayout(false);
@@ -11923,10 +11975,6 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
-            this.panel80.ResumeLayout(false);
-            this.panel80.PerformLayout();
-            this.panel81.ResumeLayout(false);
-            this.panel81.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -12683,6 +12731,8 @@
         private System.Windows.Forms.Label label228;
         private System.Windows.Forms.Panel panel81;
         private System.Windows.Forms.Label label231;
+        private System.Windows.Forms.Button btnChartLightningCapacity;
+        private System.Windows.Forms.Button btnChartLightningChannels;
     }
 }
 

@@ -114,6 +114,7 @@ namespace SATSuma
         private UniqueAddressesDataService _uniqueAddressesDataService;
         private UTXODataService _utxoDataService;
         private PoolsRankingDataService _poolsRankingDataService;
+        private LightningNodesByCountryService _lightningNodesByCountryService;
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
@@ -172,6 +173,7 @@ namespace SATSuma
         bool btnChartUTXOWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPoolsRankingWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartNodesByNetworkWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartNodesByCountryWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -222,14 +224,26 @@ namespace SATSuma
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
                 formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
                 formsPlot1.Configuration.DoubleClickBenchmark = false;
+                formsPlot3.Plot.Margins(x: .1, y: .1);
+                formsPlot3.Plot.Style(ScottPlot.Style.Black);
+                formsPlot3.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
+                formsPlot3.Configuration.DoubleClickBenchmark = false;
+
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
                 formsPlot2.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: subItemBackColor);
+                formsPlot3.Plot.Style(
+                    figureBackground: Color.Transparent,
+                    dataBackground: subItemBackColor);
+
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
                 formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
+                formsPlot3.Plot.Palette = ScottPlot.Palette.Amber;
+                formsPlot3.Plot.YAxis.AxisLabel.IsVisible = false;
+
                 btnChartPeriodAll.Enabled = false;
                 BtnChartFeeRates_Click(sender, e);
                 formsPlot1.Refresh();
@@ -7140,6 +7154,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = false;
             formsPlot2.Visible = true;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7160,6 +7175,7 @@ namespace SATSuma
             btnChartUniqueAddresses.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
@@ -7291,6 +7307,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7309,6 +7326,7 @@ namespace SATSuma
             btnChartCirculation.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUTXO.Enabled = true;
 
             DisableIrrelevantTimePeriods();
@@ -7398,6 +7416,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7417,6 +7436,7 @@ namespace SATSuma
             btnChartCirculation.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartNodesByNetwork.Enabled = false;
 
             DisableIrrelevantTimePeriods();
@@ -7501,6 +7521,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7526,6 +7547,7 @@ namespace SATSuma
             btnChartCirculation.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
             
@@ -7589,10 +7611,91 @@ namespace SATSuma
             DisableEnableChartButtons("enable");
         }
 
+        private async void btnChartNodesByCountry_Click(object sender, EventArgs e)
+        {
+            formsPlot1.Visible = false;
+            formsPlot2.Visible = false;
+            formsPlot3.Visible = true;
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelCirculationKey.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            chartType = "nodesbycountry";
+
+            // enable the other chart types
+            btnChartHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            // clear any previous graph
+            formsPlot3.Plot.Clear();
+            formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: 13, color: Color.Silver, bold: true);
+
+            // switch to linear scaling in case it was log before
+            formsPlot3.Plot.YAxis.MinorLogScale(false);
+            formsPlot3.Plot.YAxis.MajorGrid(false);
+            formsPlot3.Plot.YAxis.MinorGrid(false);
+
+            formsPlot3.Plot.XAxis.DateTimeFormat(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N0");
+            formsPlot3.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // Fetch data from the API
+            string url = "https://mempool.space/api/v1/lightning/nodes/countries";
+            HttpClient client = new HttpClient();
+            string json = await client.GetStringAsync(url);
+
+            // Deserialize the JSON response
+            var response = JsonConvert.DeserializeObject<LightningNodeCountry[]>(json);
+
+            // Extract the country names (En) and counts, handling nullable decimal values
+            string[] countryNames = response.Select(node => node.name.en).Take(40).ToArray();
+            double[] counts = response.Select(node => Convert.ToDouble(node.count)).Take(40).ToArray();
+            
+            // Create the ScottPlot bar chart
+            var bar = formsPlot3.Plot.AddBar(counts);
+            bar.Orientation = ScottPlot.Orientation.Horizontal;
+
+            // Generate a sequence of numbers for the Y-axis tick positions
+            double[] yPositions = Enumerable.Range(0, counts.Length).Select(y => (double)y).ToArray();
+
+            // Set the Y-axis tick positions and labels
+            formsPlot3.Plot.YTicks(yPositions, countryNames);
+            formsPlot3.Plot.YLabel("");
+            formsPlot3.Plot.XLabel("");
+            formsPlot3.Plot.SetAxisLimits(0, counts.Max());
+            formsPlot3.Plot.XAxis.SetBoundary(0, counts.Max());
+            formsPlot3.Plot.YAxis.SetBoundary(-3, 45);
+            formsPlot3.Plot.Layout(left: 100);
+
+            // refresh the graph
+            formsPlot3.Refresh();
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+        }
+
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7610,6 +7713,7 @@ namespace SATSuma
             btnChartNodesByNetwork.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartReward.Enabled = false;
             btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
@@ -7677,6 +7781,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7695,6 +7800,7 @@ namespace SATSuma
             btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartBlockFees.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -7760,6 +7866,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -7785,6 +7892,7 @@ namespace SATSuma
             btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartReward.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7852,6 +7960,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = false;
@@ -7877,6 +7986,7 @@ namespace SATSuma
             btnChartNodesByNetwork.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
@@ -7941,6 +8051,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = true;
@@ -7965,6 +8076,7 @@ namespace SATSuma
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartPrice.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartUniqueAddresses.Enabled = false;
             DisableIrrelevantTimePeriods();
@@ -8052,6 +8164,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = false;
@@ -8072,6 +8185,7 @@ namespace SATSuma
             btnChartReward.Enabled = true;
             btnChartFeeRates.Enabled = true;
             btnChartHashrate.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
@@ -8142,6 +8256,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = true;
@@ -8165,6 +8280,7 @@ namespace SATSuma
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
             btnChartPrice.Enabled = false;
             btnChartUniqueAddresses.Enabled = true;
@@ -8252,6 +8368,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = false;
             btnChartUTXOScaleLog.Enabled = true;
             panelUniqueAddressesScaleButtons.Visible = false;
@@ -8275,6 +8392,7 @@ namespace SATSuma
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartUTXO.Enabled = false;
@@ -8341,6 +8459,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = true;
             btnChartUTXOScaleLog.Enabled = false;
             panelUniqueAddressesScaleButtons.Visible = false;
@@ -8363,6 +8482,7 @@ namespace SATSuma
             btnChartHashrate.Enabled = true;
             btnChartBlockSize.Enabled = true;
             btnChartCirculation.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
             btnChartPrice.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
@@ -8451,6 +8571,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -8468,6 +8589,7 @@ namespace SATSuma
             btnChartBlockFees.Enabled = true;
             btnChartCirculation.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartNodesByNetwork.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartBlockSize.Enabled = false;
@@ -8539,6 +8661,7 @@ namespace SATSuma
         {
             formsPlot1.Visible = true;
             formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -8561,6 +8684,7 @@ namespace SATSuma
             btnChartNodesByNetwork.Enabled = true;
             btnChartUniqueAddresses.Enabled = true;
             btnChartBlockSize.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
             btnChartUTXO.Enabled = true;
             btnChartCirculation.Enabled = false;
             DisableIrrelevantTimePeriods();
@@ -8801,45 +8925,91 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (chartPeriod != "24h")
+                        if (chartType == "nodesbycountry")
                         {
-                            btnChartPeriod24h.Enabled = true;
+                            if (chartPeriod != "24h")
+                            {
+                                btnChartPeriod24h.Enabled = false;
+                            }
+                            if (chartPeriod != "3d")
+                            {
+                                btnChartPeriod3d.Enabled = false;
+                            }
+                            if (chartPeriod != "1w")
+                            {
+                                btnChartPeriod1w.Enabled = false;
+                            }
+                            if (chartPeriod != "1m")
+                            {
+                                btnChartPeriod1m.Enabled = false;
+                            }
+                            if (chartPeriod != "3m")
+                            {
+                                btnChartPeriod3m.Enabled = false;
+                            }
+                            if (chartPeriod != "6m")
+                            {
+                                btnChartPeriod6m.Enabled = false;
+                            }
+                            if (chartPeriod != "1y")
+                            {
+                                btnChartPeriod1y.Enabled = false;
+                            }
+                            if (chartPeriod != "2y")
+                            {
+                                btnChartPeriod2y.Enabled = false;
+                            }
+                            if (chartPeriod != "3y")
+                            {
+                                btnChartPeriod3y.Enabled = false;
+                            }
+                            if (chartPeriod != "all")
+                            {
+                                btnChartPeriodAll.Enabled = false;
+                            }
                         }
-                        if (chartPeriod != "3d")
+                        else
                         {
-                            btnChartPeriod3d.Enabled = true;
-                        }
-                        if (chartPeriod != "1w")
-                        {
-                            btnChartPeriod1w.Enabled = true;
-                        }
-                        if (chartPeriod != "1m")
-                        {
-                            btnChartPeriod1m.Enabled = true;
-                        }
-                        if (chartPeriod != "3m")
-                        {
-                            btnChartPeriod3m.Enabled = true;
-                        }
-                        if (chartPeriod != "6m")
-                        {
-                            btnChartPeriod6m.Enabled = true;
-                        }
-                        if (chartPeriod != "1y")
-                        {
-                            btnChartPeriod1y.Enabled = true;
-                        }
-                        if (chartPeriod != "2y")
-                        {
-                            btnChartPeriod2y.Enabled = true;
-                        }
-                        if (chartPeriod != "3y")
-                        {
-                            btnChartPeriod3y.Enabled = true;
-                        }
-                        if (chartPeriod != "all")
-                        {
-                            btnChartPeriodAll.Enabled = true;
+                            if (chartPeriod != "24h")
+                            {
+                                btnChartPeriod24h.Enabled = true;
+                            }
+                            if (chartPeriod != "3d")
+                            {
+                                btnChartPeriod3d.Enabled = true;
+                            }
+                            if (chartPeriod != "1w")
+                            {
+                                btnChartPeriod1w.Enabled = true;
+                            }
+                            if (chartPeriod != "1m")
+                            {
+                                btnChartPeriod1m.Enabled = true;
+                            }
+                            if (chartPeriod != "3m")
+                            {
+                                btnChartPeriod3m.Enabled = true;
+                            }
+                            if (chartPeriod != "6m")
+                            {
+                                btnChartPeriod6m.Enabled = true;
+                            }
+                            if (chartPeriod != "1y")
+                            {
+                                btnChartPeriod1y.Enabled = true;
+                            }
+                            if (chartPeriod != "2y")
+                            {
+                                btnChartPeriod2y.Enabled = true;
+                            }
+                            if (chartPeriod != "3y")
+                            {
+                                btnChartPeriod3y.Enabled = true;
+                            }
+                            if (chartPeriod != "all")
+                            {
+                                btnChartPeriodAll.Enabled = true;
+                            }
                         }
                     }
                 }
@@ -8850,7 +9020,7 @@ namespace SATSuma
         {
             if (!ignoreMouseMoveOnChart)
             {
-                if (chartType != "feerates" && chartType != "poolranking" && chartType != "lightningnodesbynetwork")
+                if (chartType != "feerates" && chartType != "poolranking" && chartType != "lightningnodesbynetwork" && chartType != "nodesbycountry")
                 {
                     // determine point nearest the cursor
                     (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
@@ -8922,6 +9092,7 @@ namespace SATSuma
                 btnChartUTXOWasEnabled = btnChartUTXO.Enabled;
                 btnChartPoolsRankingWasEnabled = btnChartPoolsRanking.Enabled;
                 btnChartNodesByNetworkWasEnabled = btnChartNodesByNetwork.Enabled;
+                btnChartNodesByCountryWasEnabled = btnChartNodesByCountry.Enabled;
 
                 //disable them all
                 btnChartBlockFees.Enabled = false;
@@ -8950,6 +9121,7 @@ namespace SATSuma
                 btnChartUTXO.Enabled = false;
                 btnChartPoolsRanking.Enabled = false;
                 btnChartNodesByNetwork.Enabled = false;
+                btnChartNodesByCountry.Enabled = false;
             }
             else
             {
@@ -8981,6 +9153,7 @@ namespace SATSuma
                 btnChartUTXO.Enabled = btnChartUTXOWasEnabled;
                 btnChartPoolsRanking.Enabled = btnChartPoolsRankingWasEnabled;
                 btnChartNodesByNetwork.Enabled = btnChartNodesByNetworkWasEnabled;
+                btnChartNodesByCountry.Enabled = btnChartNodesByCountryWasEnabled;
                 ignoreMouseMoveOnChart = false;
             }
             
@@ -12541,6 +12714,7 @@ namespace SATSuma
             _uniqueAddressesDataService = new UniqueAddressesDataService(NodeURL);
             _utxoDataService = new UTXODataService(NodeURL);
             _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
+            _lightningNodesByCountryService = new LightningNodesByCountryService(NodeURL);
         }
 
         // Get current block tip
@@ -14984,6 +15158,58 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
+        //------------------- lightning nodes by country
+
+        public class CountryName
+        {
+            public string en { get; set; }
+        }
+
+        public class LightningNodeCountry
+        {
+            public CountryName name { get; set; }
+            public string iso { get; set; }
+            public decimal count { get; set; }
+            public decimal share { get; set; }
+            public decimal? capacity { get; set; } // Nullable decimal
+        }
+
+        public class LightningNodesByCountryService
+        {
+            private readonly string _nodeUrl;
+            public LightningNodesByCountryService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetLightningNodesByCountryAsync()
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"v1/lightning/nodes/countries");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
         #endregion
+
     }
 }

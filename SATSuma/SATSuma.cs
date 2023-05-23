@@ -23,6 +23,8 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens? - can't reproduce again. Either fixed or didn't happen!
+ * get rid of white flashes when switching charts (make visible after populating chart)
+ * change remaining hardcoded mempool.space urls to NodeURL urls
  */
 
 #region Using
@@ -7876,7 +7878,7 @@ namespace SATSuma
             DisableEnableChartButtons("disable");
 
             // Fetch data from the API
-            string url = "https://mempool.space/api/v1/lightning/nodes/countries";
+            string url = NodeURL + "v1/lightning/nodes/countries";
             HttpClient client = new HttpClient();
             string json = await client.GetStringAsync(url);
 

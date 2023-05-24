@@ -716,6 +716,11 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartMarketCap = new System.Windows.Forms.Button();
+            this.panelChartLoading = new System.Windows.Forms.Panel();
+            this.label233 = new System.Windows.Forms.Label();
+            this.label232 = new System.Windows.Forms.Label();
+            this.pictureBoxChartLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.btnChartLightningChannels = new System.Windows.Forms.Button();
             this.btnChartLightningCapacity = new System.Windows.Forms.Button();
             this.panel81 = new System.Windows.Forms.Panel();
@@ -790,10 +795,9 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.panelChartLoading = new System.Windows.Forms.Panel();
-            this.pictureBoxChartLoadingAnimation = new System.Windows.Forms.PictureBox();
-            this.label232 = new System.Windows.Forms.Label();
-            this.label233 = new System.Windows.Forms.Label();
+            this.panelChartMarketCapScaleButtons = new System.Windows.Forms.Panel();
+            this.btnChartMarketCapScaleLog = new System.Windows.Forms.Button();
+            this.btnChartMarketCapScaleLinear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -921,6 +925,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             this.panel60.SuspendLayout();
             this.panelCharts.SuspendLayout();
+            this.panelChartLoading.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).BeginInit();
             this.panel81.SuspendLayout();
             this.panel80.SuspendLayout();
             this.panelLightningNodeNetwork.SuspendLayout();
@@ -931,8 +937,7 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
-            this.panelChartLoading.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).BeginInit();
+            this.panelChartMarketCapScaleButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10591,21 +10596,21 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.panelChartMarketCapScaleButtons);
+            this.panelCharts.Controls.Add(this.btnChartMarketCap);
             this.panelCharts.Controls.Add(this.panelChartLoading);
             this.panelCharts.Controls.Add(this.btnChartLightningChannels);
             this.panelCharts.Controls.Add(this.btnChartLightningCapacity);
             this.panelCharts.Controls.Add(this.panel81);
             this.panelCharts.Controls.Add(this.panel80);
-            this.panelCharts.Controls.Add(this.formsPlot3);
             this.panelCharts.Controls.Add(this.btnChartNodesByCountry);
+            this.panelCharts.Controls.Add(this.panelPriceScaleButtons);
             this.panelCharts.Controls.Add(this.panelLightningNodeNetwork);
             this.panelCharts.Controls.Add(this.panel79);
             this.panelCharts.Controls.Add(this.btnChartNodesByNetwork);
-            this.panelCharts.Controls.Add(this.formsPlot2);
             this.panelCharts.Controls.Add(this.btnChartPoolsRanking);
             this.panelCharts.Controls.Add(this.panelChartUTXOScaleButtons);
             this.panelCharts.Controls.Add(this.btnChartUTXO);
-            this.panelCharts.Controls.Add(this.panelPriceScaleButtons);
             this.panelCharts.Controls.Add(this.panelUniqueAddressesScaleButtons);
             this.panelCharts.Controls.Add(this.btnChartUniqueAddresses);
             this.panelCharts.Controls.Add(this.lblChartMousePositionData);
@@ -10630,12 +10635,84 @@
             this.panelCharts.Controls.Add(this.btnChartPrice);
             this.panelCharts.Controls.Add(this.btnChartDifficulty);
             this.panelCharts.Controls.Add(this.btnChartHashrate);
+            this.panelCharts.Controls.Add(this.formsPlot3);
+            this.panelCharts.Controls.Add(this.formsPlot2);
             this.panelCharts.Controls.Add(this.formsPlot1);
             this.panelCharts.Location = new System.Drawing.Point(21, 188);
             this.panelCharts.Name = "panelCharts";
             this.panelCharts.Size = new System.Drawing.Size(773, 556);
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
+            // 
+            // btnChartMarketCap
+            // 
+            this.btnChartMarketCap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartMarketCap.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartMarketCap.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartMarketCap.FlatAppearance.BorderSize = 0;
+            this.btnChartMarketCap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartMarketCap.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartMarketCap.ForeColor = System.Drawing.Color.White;
+            this.btnChartMarketCap.Location = new System.Drawing.Point(0, 531);
+            this.btnChartMarketCap.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartMarketCap.Name = "btnChartMarketCap";
+            this.btnChartMarketCap.Size = new System.Drawing.Size(100, 24);
+            this.btnChartMarketCap.TabIndex = 274;
+            this.btnChartMarketCap.TabStop = false;
+            this.btnChartMarketCap.Text = "market cap.";
+            this.btnChartMarketCap.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartMarketCap.UseVisualStyleBackColor = false;
+            this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
+            // 
+            // panelChartLoading
+            // 
+            this.panelChartLoading.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelChartLoading.Controls.Add(this.label233);
+            this.panelChartLoading.Controls.Add(this.label232);
+            this.panelChartLoading.Controls.Add(this.pictureBoxChartLoadingAnimation);
+            this.panelChartLoading.Location = new System.Drawing.Point(380, 225);
+            this.panelChartLoading.Name = "panelChartLoading";
+            this.panelChartLoading.Size = new System.Drawing.Size(154, 35);
+            this.panelChartLoading.TabIndex = 273;
+            this.panelChartLoading.Visible = false;
+            // 
+            // label233
+            // 
+            this.label233.AutoSize = true;
+            this.label233.BackColor = System.Drawing.Color.Transparent;
+            this.label233.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label233.ForeColor = System.Drawing.Color.Gray;
+            this.label233.Location = new System.Drawing.Point(49, 14);
+            this.label233.Name = "label233";
+            this.label233.Size = new System.Drawing.Size(117, 17);
+            this.label233.TabIndex = 251;
+            this.label233.Text = "generating chart";
+            // 
+            // label232
+            // 
+            this.label232.AutoSize = true;
+            this.label232.BackColor = System.Drawing.Color.Transparent;
+            this.label232.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label232.ForeColor = System.Drawing.Color.Gray;
+            this.label232.Location = new System.Drawing.Point(49, 1);
+            this.label232.Name = "label232";
+            this.label232.Size = new System.Drawing.Size(111, 17);
+            this.label232.TabIndex = 85;
+            this.label232.Text = "fetching data &&";
+            // 
+            // pictureBoxChartLoadingAnimation
+            // 
+            this.pictureBoxChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxChartLoadingAnimation.Enabled = false;
+            this.pictureBoxChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxChartLoadingAnimation.Image")));
+            this.pictureBoxChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
+            this.pictureBoxChartLoadingAnimation.Name = "pictureBoxChartLoadingAnimation";
+            this.pictureBoxChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
+            this.pictureBoxChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxChartLoadingAnimation.TabIndex = 250;
+            this.pictureBoxChartLoadingAnimation.TabStop = false;
             // 
             // btnChartLightningChannels
             // 
@@ -10648,7 +10725,7 @@
             this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 432);
+            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 434);
             this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartLightningChannels.Name = "btnChartLightningChannels";
             this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 24);
@@ -10670,7 +10747,7 @@
             this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 404);
+            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 406);
             this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
             this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 24);
@@ -10687,10 +10764,10 @@
             this.panel81.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel81.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel81.Controls.Add(this.label231);
-            this.panel81.Location = new System.Drawing.Point(0, 472);
+            this.panel81.Location = new System.Drawing.Point(0, 475);
             this.panel81.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel81.Name = "panel81";
-            this.panel81.Size = new System.Drawing.Size(116, 23);
+            this.panel81.Size = new System.Drawing.Size(100, 23);
             this.panel81.TabIndex = 209;
             // 
             // label231
@@ -10716,7 +10793,7 @@
             this.panel80.Location = new System.Drawing.Point(0, 0);
             this.panel80.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel80.Name = "panel80";
-            this.panel80.Size = new System.Drawing.Size(116, 23);
+            this.panel80.Size = new System.Drawing.Size(100, 23);
             this.panel80.TabIndex = 209;
             // 
             // label228
@@ -10753,7 +10830,7 @@
             this.btnChartNodesByCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByCountry.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByCountry.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 376);
+            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 378);
             this.btnChartNodesByCountry.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByCountry.Name = "btnChartNodesByCountry";
             this.btnChartNodesByCountry.Size = new System.Drawing.Size(100, 24);
@@ -10887,10 +10964,10 @@
             this.panel79.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel79.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel79.Controls.Add(this.label218);
-            this.panel79.Location = new System.Drawing.Point(0, 320);
+            this.panel79.Location = new System.Drawing.Point(0, 322);
             this.panel79.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel79.Name = "panel79";
-            this.panel79.Size = new System.Drawing.Size(116, 23);
+            this.panel79.Size = new System.Drawing.Size(100, 23);
             this.panel79.TabIndex = 208;
             // 
             // label218
@@ -10918,7 +10995,7 @@
             this.btnChartNodesByNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByNetwork.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByNetwork.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 348);
+            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 350);
             this.btnChartNodesByNetwork.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByNetwork.Name = "btnChartNodesByNetwork";
             this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 24);
@@ -11041,7 +11118,7 @@
             this.panelPriceScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLog);
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLinear);
-            this.panelPriceScaleButtons.Location = new System.Drawing.Point(191, 32);
+            this.panelPriceScaleButtons.Location = new System.Drawing.Point(198, 34);
             this.panelPriceScaleButtons.Name = "panelPriceScaleButtons";
             this.panelPriceScaleButtons.Size = new System.Drawing.Size(175, 24);
             this.panelPriceScaleButtons.TabIndex = 263;
@@ -11802,7 +11879,7 @@
             this.btnChartPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartPrice.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartPrice.ForeColor = System.Drawing.Color.White;
-            this.btnChartPrice.Location = new System.Drawing.Point(0, 500);
+            this.btnChartPrice.Location = new System.Drawing.Point(0, 503);
             this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPrice.Name = "btnChartPrice";
             this.btnChartPrice.Size = new System.Drawing.Size(100, 24);
@@ -11857,53 +11934,60 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // panelChartLoading
+            // panelChartMarketCapScaleButtons
             // 
-            this.panelChartLoading.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelChartLoading.Controls.Add(this.label233);
-            this.panelChartLoading.Controls.Add(this.label232);
-            this.panelChartLoading.Controls.Add(this.pictureBoxChartLoadingAnimation);
-            this.panelChartLoading.Location = new System.Drawing.Point(380, 225);
-            this.panelChartLoading.Name = "panelChartLoading";
-            this.panelChartLoading.Size = new System.Drawing.Size(154, 35);
-            this.panelChartLoading.TabIndex = 273;
-            this.panelChartLoading.Visible = false;
+            this.panelChartMarketCapScaleButtons.BackColor = System.Drawing.Color.Transparent;
+            this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLog);
+            this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLinear);
+            this.panelChartMarketCapScaleButtons.Location = new System.Drawing.Point(254, 34);
+            this.panelChartMarketCapScaleButtons.Name = "panelChartMarketCapScaleButtons";
+            this.panelChartMarketCapScaleButtons.Size = new System.Drawing.Size(175, 24);
+            this.panelChartMarketCapScaleButtons.TabIndex = 264;
+            this.panelChartMarketCapScaleButtons.Visible = false;
             // 
-            // pictureBoxChartLoadingAnimation
+            // btnChartMarketCapScaleLog
             // 
-            this.pictureBoxChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBoxChartLoadingAnimation.Enabled = false;
-            this.pictureBoxChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxChartLoadingAnimation.Image")));
-            this.pictureBoxChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
-            this.pictureBoxChartLoadingAnimation.Name = "pictureBoxChartLoadingAnimation";
-            this.pictureBoxChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
-            this.pictureBoxChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxChartLoadingAnimation.TabIndex = 250;
-            this.pictureBoxChartLoadingAnimation.TabStop = false;
+            this.btnChartMarketCapScaleLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartMarketCapScaleLog.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartMarketCapScaleLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartMarketCapScaleLog.FlatAppearance.BorderSize = 0;
+            this.btnChartMarketCapScaleLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCapScaleLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCapScaleLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartMarketCapScaleLog.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartMarketCapScaleLog.ForeColor = System.Drawing.Color.White;
+            this.btnChartMarketCapScaleLog.Location = new System.Drawing.Point(90, 0);
+            this.btnChartMarketCapScaleLog.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartMarketCapScaleLog.Name = "btnChartMarketCapScaleLog";
+            this.btnChartMarketCapScaleLog.Size = new System.Drawing.Size(85, 24);
+            this.btnChartMarketCapScaleLog.TabIndex = 262;
+            this.btnChartMarketCapScaleLog.TabStop = false;
+            this.btnChartMarketCapScaleLog.Text = "logarithmic";
+            this.btnChartMarketCapScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
+            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.btnChartMarketCapScaleLog_Click);
             // 
-            // label232
+            // btnChartMarketCapScaleLinear
             // 
-            this.label232.AutoSize = true;
-            this.label232.BackColor = System.Drawing.Color.Transparent;
-            this.label232.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label232.ForeColor = System.Drawing.Color.Gray;
-            this.label232.Location = new System.Drawing.Point(49, 1);
-            this.label232.Name = "label232";
-            this.label232.Size = new System.Drawing.Size(111, 17);
-            this.label232.TabIndex = 85;
-            this.label232.Text = "fetching data &&";
-            // 
-            // label233
-            // 
-            this.label233.AutoSize = true;
-            this.label233.BackColor = System.Drawing.Color.Transparent;
-            this.label233.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label233.ForeColor = System.Drawing.Color.Gray;
-            this.label233.Location = new System.Drawing.Point(49, 14);
-            this.label233.Name = "label233";
-            this.label233.Size = new System.Drawing.Size(117, 17);
-            this.label233.TabIndex = 251;
-            this.label233.Text = "generating chart";
+            this.btnChartMarketCapScaleLinear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartMarketCapScaleLinear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartMarketCapScaleLinear.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartMarketCapScaleLinear.FlatAppearance.BorderSize = 0;
+            this.btnChartMarketCapScaleLinear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCapScaleLinear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartMarketCapScaleLinear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartMarketCapScaleLinear.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartMarketCapScaleLinear.ForeColor = System.Drawing.Color.White;
+            this.btnChartMarketCapScaleLinear.Location = new System.Drawing.Point(0, 0);
+            this.btnChartMarketCapScaleLinear.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartMarketCapScaleLinear.Name = "btnChartMarketCapScaleLinear";
+            this.btnChartMarketCapScaleLinear.Size = new System.Drawing.Size(85, 24);
+            this.btnChartMarketCapScaleLinear.TabIndex = 261;
+            this.btnChartMarketCapScaleLinear.TabStop = false;
+            this.btnChartMarketCapScaleLinear.Text = "linear";
+            this.btnChartMarketCapScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
+            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
             // 
             // SATSuma
             // 
@@ -12166,6 +12250,9 @@
             this.panel60.PerformLayout();
             this.panelCharts.ResumeLayout(false);
             this.panelCharts.PerformLayout();
+            this.panelChartLoading.ResumeLayout(false);
+            this.panelChartLoading.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).EndInit();
             this.panel81.ResumeLayout(false);
             this.panel81.PerformLayout();
             this.panel80.ResumeLayout(false);
@@ -12183,9 +12270,7 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
-            this.panelChartLoading.ResumeLayout(false);
-            this.panelChartLoading.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).EndInit();
+            this.panelChartMarketCapScaleButtons.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -12957,6 +13042,10 @@
         private System.Windows.Forms.PictureBox pictureBoxChartLoadingAnimation;
         private System.Windows.Forms.Label label232;
         private System.Windows.Forms.Label label233;
+        private System.Windows.Forms.Button btnChartMarketCap;
+        private System.Windows.Forms.Panel panelChartMarketCapScaleButtons;
+        private System.Windows.Forms.Button btnChartMarketCapScaleLog;
+        private System.Windows.Forms.Button btnChartMarketCapScaleLinear;
     }
 }
 

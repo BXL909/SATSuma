@@ -111,6 +111,7 @@ namespace SATSuma
         private TransactionsForBlockService _transactionsForBlockService;
         private HashrateAndDifficultyService _hashrateAndDifficultyService;
         private HistoricPriceDataService _historicPriceDataService;
+        private MarketCapDataService _marketCapDataService;
         private BlockFeeRatesDataService _blockFeeRatesDataService;
         private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService;
         private BlockSizeAndWeightService _blockSizeAndWeightService;
@@ -179,6 +180,8 @@ namespace SATSuma
         bool btnChartNodesByCountryWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartLightningCapacityWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartLightningChannelsWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartMarketCapWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartMarketCapLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -7257,31 +7260,14 @@ namespace SATSuma
         private async void BtnChartPoolsRanking_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot1.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "poolranking";
 
-            // enable the other chart types
-            btnChartHashrate.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartUTXO.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
+            EnableAllCharts();
+            btnChartPoolsRanking.Enabled = false;
+
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
@@ -7414,49 +7400,18 @@ namespace SATSuma
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
             chartType = "feerates";
             lblChartMousePositionData.Text = "";
-            // enable the other chart types
+            EnableAllCharts();
             btnChartFeeRates.Enabled = false;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
-
             DisableIrrelevantTimePeriods();
-
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, color: Color.Silver, bold: true) ;
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
-
-            // Revert back to automatic data area
-            formsPlot1.Plot.ResetLayout();
-            formsPlot1.Plot.AxisAuto();
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7527,13 +7482,9 @@ namespace SATSuma
         private async void btnChartNodesByNetwork_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelFeeRatesKey.Visible = false;
-            panelCirculationKey.Visible = false;
             chartType = "lightningnodesbynetwork";
             lblChartMousePositionData.Text = "";
 
@@ -7543,21 +7494,7 @@ namespace SATSuma
                 chartPeriod = "all";
                 btnChartPeriodAll.Enabled = false;
             }
-
-            // enable the other chart types
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartUTXO.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
+            EnableAllCharts();
             btnChartNodesByNetwork.Enabled = false;
 
             DisableIrrelevantTimePeriods();
@@ -7566,18 +7503,7 @@ namespace SATSuma
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
-
-            // Revert back to automatic data area
-            formsPlot1.Plot.ResetLayout();
-            formsPlot1.Plot.AxisAuto();
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7644,14 +7570,9 @@ namespace SATSuma
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "hashrate";
             // if chart period too short for this chart, set it to max instead
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
@@ -7659,36 +7580,15 @@ namespace SATSuma
                 chartPeriod = "all";
                 btnChartPeriodAll.Enabled = false;
             }
-            
-            // enable the other chart types
+            EnableAllCharts();
             btnChartHashrate.Enabled = false;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
             
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
 
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7742,14 +7642,9 @@ namespace SATSuma
         private async void btnChartLightningCapacity_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "lightningcapacity";
             // if chart period too short for this chart, set it to max instead
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
@@ -7758,35 +7653,14 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            // enable the other chart types
+            EnableAllCharts();
             btnChartLightningCapacity.Enabled = false;
-            btnChartLightningChannels.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7841,14 +7715,9 @@ namespace SATSuma
         private async void btnChartLightningChannels_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "lightningchannels";
             // if chart period too short for this chart, set it to max instead
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
@@ -7857,35 +7726,14 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            // enable the other chart types
+            EnableAllCharts();
             btnChartLightningChannels.Enabled = false;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -7940,30 +7788,12 @@ namespace SATSuma
         private async void btnChartNodesByCountry_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot1.Visible = false;
             formsPlot2.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "nodesbycountry";
 
-            // enable the other chart types
-            btnChartHashrate.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartUTXO.Enabled = true;
+            EnableAllCharts();
             btnChartNodesByCountry.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8030,30 +7860,13 @@ namespace SATSuma
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "reward";
 
-            btnChartDifficulty.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
+            EnableAllCharts();
             btnChartReward.Enabled = false;
-            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -8062,15 +7875,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             HttpClient client = new HttpClient();
             string url = NodeURL + "v1/mining/blocks/rewards/" + chartPeriod;
@@ -8120,29 +7925,12 @@ namespace SATSuma
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "blockfees";
 
-            btnChartDifficulty.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartUTXO.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
+            EnableAllCharts();
             btnChartBlockFees.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8152,15 +7940,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             HttpClient client = new HttpClient();
             string url = NodeURL + "v1/mining/blocks/fees/" + chartPeriod;
@@ -8209,14 +7989,9 @@ namespace SATSuma
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "difficulty";
 
             // if chart period too short for this chart, set it to max instead
@@ -8226,20 +8001,8 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
+            EnableAllCharts();
             btnChartDifficulty.Enabled = false;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartUTXO.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartReward.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -8248,15 +8011,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             // get a series of historic dates/hashrates/difficulties
             var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
@@ -8307,15 +8062,11 @@ namespace SATSuma
         private async void BtnChartUniqueAddresses_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = false;
-            panelLightningNodeNetwork.Visible = false;
             btnChartAddressScaleLog.Enabled = true;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "addresses";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8323,21 +8074,8 @@ namespace SATSuma
                 chartPeriod = "all";
                 btnChartPeriodAll.Enabled = false;
             }
-
+            EnableAllCharts();
             btnChartUniqueAddresses.Enabled = false;
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -8346,15 +8084,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             // get a series of historic price data
             var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -8402,15 +8132,11 @@ namespace SATSuma
         private async void BtnChartUniqueAddressesLog_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
             btnChartAddressScaleLinear.Enabled = true;
-            panelLightningNodeNetwork.Visible = false;
             btnChartAddressScaleLog.Enabled = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "addresseslog";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8419,19 +8145,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
+            EnableAllCharts();
             btnChartUniqueAddresses.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8518,15 +8232,11 @@ namespace SATSuma
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = false;
-            panelLightningNodeNetwork.Visible = false;
             btnPriceChartScaleLog.Enabled = true;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "price";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8535,19 +8245,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartUTXO.Enabled = true;
+            EnableAllCharts();
             btnChartPrice.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8557,15 +8255,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             // get a series of historic price data
             var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
@@ -8613,15 +8303,11 @@ namespace SATSuma
         private async void BtnChartPriceLog_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
             btnPriceChartScaleLinear.Enabled = true;
             btnPriceChartScaleLog.Enabled = false;
-            panelCirculationKey.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "pricelog";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8630,20 +8316,8 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartUTXO.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
+            EnableAllCharts();
             btnChartPrice.Enabled = false;
-            btnChartUniqueAddresses.Enabled = true;
             DisableIrrelevantTimePeriods();
 
             ToggleLoadingAnimation("enable");
@@ -8726,18 +8400,186 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
+        private async void BtnChartMarketCap_Click(object sender, EventArgs e)
+        {
+            ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
+            formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
+            btnPriceChartScaleLinear.Enabled = false;
+            btnChartMarketCapScaleLog.Enabled = true;
+            chartType = "marketcap";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            EnableAllCharts();
+            btnChartMarketCap.Enabled = false;
+            btnChartMarketCapScaleLinear.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+            PrepareLinearScaleChart();
+
+            // get a series of historic price data
+            var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(MarketCapDataJson);
+
+            List<MarketCapCoordinatesList> MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = MarketCapList.Count;
+
+            // create arrays of doubles of the difficulties and the dates
+            double[] yValues = MarketCapList.Select(h => (double)(h.Y)).ToArray();
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = MarketCapList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+            formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yValues.Max() * 1.05);
+            scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            formsPlot1.Visible = true;
+            panelChartMarketCapScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
+        }
+
+        private async void btnChartMarketCapScaleLog_Click(object sender, EventArgs e)
+        {
+            ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
+            formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
+            btnChartMarketCapScaleLinear.Enabled = true;
+            btnChartMarketCapScaleLog.Enabled = false;
+            chartType = "marketcaplog";
+
+            if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+            {
+                chartPeriod = "all";
+                btnChartPeriodAll.Enabled = false;
+            }
+
+            EnableAllCharts();
+            btnChartMarketCapScaleLog.Enabled = false;
+            DisableIrrelevantTimePeriods();
+
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+
+            // clear any previous graph
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+
+            // get a series of market cap data
+            var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
+            JObject jsonObj = JObject.Parse(MarketCapDataJson);
+
+            List<MarketCapCoordinatesList> MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"].ToString());
+
+            // set the number of points on the graph
+            int pointCount = MarketCapList.Count;
+
+            // create a new list of the dates, this time in DateTime format
+            List<DateTime> dateTimes = MarketCapList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
+            double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+
+            List<double> filteredYValues = new List<double>();
+            List<double> filteredXValues = new List<double>();
+
+            for (int i = 0; i < MarketCapList.Count; i++)
+            {
+                double yValue = (double)MarketCapList[i].Y;
+                if (yValue > 0)
+                {
+                    filteredYValues.Add(Math.Log10(yValue));
+                    filteredXValues.Add(xValues[i]);
+                }
+            }
+
+            double[] yValues = filteredYValues.ToArray();
+            double[] xValuesFiltered = filteredXValues.ToArray();
+
+
+            double minY = yValues.Min();
+            double maxY = yValues.Max() * 1.05;
+            formsPlot1.Plot.SetAxisLimits(xValuesFiltered.Min(), xValuesFiltered.Max(), minY, maxY);
+            scatter = formsPlot1.Plot.AddScatter(xValuesFiltered, yValues, lineWidth: 1, markerSize: 1);
+
+            // Use a custom formatter to control the label for each tick mark
+            static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
+
+            // Use log-spaced minor tick marks and grid lines
+            formsPlot1.Plot.YAxis.MinorLogScale(true);
+            formsPlot1.Plot.YAxis.MajorGrid(true);
+            formsPlot1.Plot.YAxis.MinorGrid(true);
+            formsPlot1.Plot.XAxis.MajorGrid(true);
+
+            formsPlot1.Plot.XAxis.DateTimeFormat(true);
+            formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+            formsPlot1.Plot.XAxis.Ticks(true);
+            formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)");
+            formsPlot1.Plot.XAxis.Label("");
+            formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+            // prevent navigating beyond the data
+            formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
+            //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+            formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+            // Add a red circle we can move around later as a highlighted point indicator
+            HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+            HighlightedPoint.Color = Color.Red;
+            HighlightedPoint.MarkerSize = 10;
+            HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+            HighlightedPoint.IsVisible = false;
+            // refresh the graph
+            formsPlot1.Refresh();
+            formsPlot1.Visible = true;
+            panelChartMarketCapScaleButtons.Visible = true;
+
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
+        }
+
         private async void BtnChartUTXO_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = false;
             btnChartUTXOScaleLog.Enabled = true;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "utxo";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8746,20 +8588,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartPoolsRanking.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartPrice.Enabled = true;
+            EnableAllCharts();
             btnChartUTXO.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8769,15 +8598,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             // get a series of historic price data
             var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
@@ -8825,15 +8646,11 @@ namespace SATSuma
         private async void BtnChartUTXOScaleLog_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = true;
             btnChartUTXOScaleLog.Enabled = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "pricelog";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -8842,20 +8659,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartPoolsRanking.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
+            EnableAllCharts();
             btnChartUTXO.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -8942,45 +8746,19 @@ namespace SATSuma
         private async void BtnChartBlockSize_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelCirculationKey.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "blocksize";
 
-            // enable the other chart types
-            btnChartHashrate.Enabled = true;
-            btnChartDifficulty.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartCirculation.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartUTXO.Enabled = true;
+            EnableAllCharts();
             btnChartBlockSize.Enabled = false;
             DisableIrrelevantTimePeriods();
 
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N2");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             ToggleLoadingAnimation("enable");
             DisableEnableChartButtons("disable");
@@ -9036,13 +8814,9 @@ namespace SATSuma
         private async void BtnChartCirculation_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
+            HideAllChartKeysAndPanels();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
-            panelChartUTXOScaleButtons.Visible = false;
-            panelUniqueAddressesScaleButtons.Visible = false;
-            panelPriceScaleButtons.Visible = false;
-            panelLightningNodeNetwork.Visible = false;
-            panelFeeRatesKey.Visible = false;
             chartType = "circulation";
 
             if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
@@ -9051,19 +8825,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
             }
 
-            btnChartDifficulty.Enabled = true;
-            btnChartBlockFees.Enabled = true;
-            btnChartReward.Enabled = true;
-            btnChartFeeRates.Enabled = true;
-            btnChartHashrate.Enabled = true;
-            btnChartPrice.Enabled = true;
-            btnChartLightningCapacity.Enabled = true;
-            btnChartLightningChannels.Enabled = true;
-            btnChartNodesByNetwork.Enabled = true;
-            btnChartUniqueAddresses.Enabled = true;
-            btnChartBlockSize.Enabled = true;
-            btnChartNodesByCountry.Enabled = true;
-            btnChartUTXO.Enabled = true;
+            EnableAllCharts();
             btnChartCirculation.Enabled = false;
             DisableIrrelevantTimePeriods();
 
@@ -9073,15 +8835,7 @@ namespace SATSuma
             // clear any previous graph
             formsPlot1.Plot.Clear();
             formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
-            
-            // switch to linear scaling in case it was log before
-            formsPlot1.Plot.YAxis.MinorLogScale(false);
-            formsPlot1.Plot.YAxis.MajorGrid(false);
-            formsPlot1.Plot.YAxis.MinorGrid(false);
-
-            // Define a new tick label formatter for the linear scale
-            static string linearTickLabels(double y) => y.ToString("N0");
-            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+            PrepareLinearScaleChart();
 
             // get a series of historic dates and amounts of btc in circulation
             var CirculationJson = await _bitcoinsInCirculationDataService.GetBitcoinsInCirculationAsync(chartPeriod);
@@ -9133,6 +8887,52 @@ namespace SATSuma
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
             HideChartLoadingPanel();
+        }
+
+        private void PrepareLinearScaleChart()
+        {
+            // switch to linear scaling in case it was log before
+            formsPlot1.Plot.YAxis.MinorLogScale(false);
+            formsPlot1.Plot.YAxis.MajorGrid(false);
+            formsPlot1.Plot.YAxis.MinorGrid(false);
+
+            // Define a new tick label formatter for the linear scale
+            static string linearTickLabels(double y) => y.ToString("N0");
+            formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+            // Revert back to automatic data area
+            formsPlot1.Plot.ResetLayout();
+            formsPlot1.Plot.AxisAuto();
+        }
+
+        private void EnableAllCharts()
+        {
+            btnChartHashrate.Enabled = true;
+            btnChartDifficulty.Enabled = true;
+            btnChartFeeRates.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartReward.Enabled = true;
+            btnChartBlockFees.Enabled = true;
+            btnChartCirculation.Enabled = true;
+            btnChartBlockSize.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartNodesByNetwork.Enabled = true;
+            btnChartLightningCapacity.Enabled = true;
+            btnChartLightningChannels.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            btnChartNodesByCountry.Enabled = true;
+            btnChartPoolsRanking.Enabled = true;
+        }
+
+        private void HideAllChartKeysAndPanels()
+        {
+            panelChartUTXOScaleButtons.Visible = false;
+            panelUniqueAddressesScaleButtons.Visible = false;
+            panelPriceScaleButtons.Visible = false;
+            panelLightningNodeNetwork.Visible = false;
+            panelCirculationKey.Visible = false;
+            panelFeeRatesKey.Visible = false;
+            panelChartMarketCapScaleButtons.Visible = false;
         }
 
         private void BtnChartPeriod_Click(object sender, EventArgs e)
@@ -9210,6 +9010,10 @@ namespace SATSuma
             {
                 btnChartLightningChannels_Click(sender, e);
             }
+            if (chartType == "marketcap")
+            {
+                BtnChartMarketCap_Click(sender, e);
+            }
         }
 
         private void DisableIrrelevantTimePeriods()
@@ -9280,7 +9084,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (chartType == "price" || chartType == "pricelog" || chartType == "circulation" || chartType == "addresses" || chartType == "addresseslog" || chartType == "utxo" || chartType == "utxolog")
+                    if (chartType == "price" || chartType == "pricelog" || chartType == "circulation" || chartType == "addresses" || chartType == "addresseslog" || chartType == "utxo" || chartType == "utxolog" || chartType == "marketcap" || chartType == "marketcaplog")
                     {
                         btnChartPeriod24h.Enabled = false;
                         btnChartPeriod3d.Enabled = false;
@@ -9470,7 +9274,7 @@ namespace SATSuma
                     // Format the DateTime object using the desired format string
                     string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
 
-                    if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog")
+                    if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog" || chartType == "marketcaplog")
                     {
                         double originalY = Math.Pow(10, pointY); // Convert back to the original scale
                         lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
@@ -9521,6 +9325,8 @@ namespace SATSuma
                 btnChartNodesByCountryWasEnabled = btnChartNodesByCountry.Enabled;
                 btnChartLightningCapacityWasEnabled = btnChartLightningCapacity.Enabled;
                 btnChartLightningChannelsWasEnabled = btnChartLightningChannels.Enabled;
+                btnChartMarketCapWasEnabled = btnChartMarketCap.Enabled;
+                btnChartMarketCapLogWasEnabled = btnChartMarketCapScaleLog.Enabled;
 
                 //disable them all
                 btnChartBlockFees.Enabled = false;
@@ -9552,6 +9358,8 @@ namespace SATSuma
                 btnChartNodesByCountry.Enabled = false;
                 btnChartLightningCapacity.Enabled = false;
                 btnChartLightningChannels.Enabled = false;
+                btnChartMarketCap.Enabled = false;
+                btnChartMarketCapScaleLog.Enabled = false;
             }
             else
             {
@@ -9586,6 +9394,8 @@ namespace SATSuma
                 btnChartNodesByCountry.Enabled = btnChartNodesByCountryWasEnabled;
                 btnChartLightningCapacity.Enabled = btnChartLightningCapacityWasEnabled;
                 btnChartLightningChannels.Enabled = btnChartLightningChannelsWasEnabled;
+                btnChartMarketCap.Enabled = btnChartMarketCapWasEnabled;
+                btnChartMarketCapScaleLog.Enabled = btnChartMarketCapLogWasEnabled;
                 ignoreMouseMoveOnChart = false;
             }
             
@@ -13147,6 +12957,7 @@ namespace SATSuma
             _utxoDataService = new UTXODataService(NodeURL);
             _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
             _lightningNodesByCountryService = new LightningNodesByCountryService(NodeURL);
+            _marketCapDataService = new MarketCapDataService(NodeURL);
         }
 
         // Get current block tip
@@ -15054,6 +14865,87 @@ namespace SATSuma
             }
         }
 
+        //-------------------historic market cap chart
+        public class MarketCapData
+        {
+            public string Status { get; set; }
+            public string Name { get; set; }
+            public string Unit { get; set; }
+            public string Period { get; set; }
+            public string Description { get; set; }
+            public MarketCapCoordinates[] Values { get; set; }
+        }
+        public class MarketCapCoordinates
+        {
+            public string X { get; set; } // date
+            public decimal Y { get; set; } // price
+        }
+
+        public class MarketCapCoordinatesList
+        {
+            public string X { get; set; }
+            public decimal Y { get; set; }
+        }
+
+        public class MarketCapDataService
+        {
+            private readonly string _nodeUrl;
+            public MarketCapDataService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+            public async Task<string> GetMarketCapDataAsync(string chartPeriod)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri("https://api.blockchain.info/");
+                        string blockChainInfoPeriod = "";
+                        if (chartPeriod == "1m")
+                        {
+                            blockChainInfoPeriod = "1months";
+                        }
+                        if (chartPeriod == "3m")
+                        {
+                            blockChainInfoPeriod = "3months";
+                        }
+                        if (chartPeriod == "6m")
+                        {
+                            blockChainInfoPeriod = "6months";
+                        }
+                        if (chartPeriod == "1y")
+                        {
+                            blockChainInfoPeriod = "1years";
+                        }
+                        if (chartPeriod == "3y")
+                        {
+                            blockChainInfoPeriod = "3years";
+                        }
+                        if (chartPeriod == "all")
+                        {
+                            blockChainInfoPeriod = "all";
+                        }
+                        var response = await client.GetAsync($"charts/market-cap?timespan=" + blockChainInfoPeriod + "&format=json");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
         //-------------------historic rewards (& price) chart
 
         public class HistoricRewardsAndPrice
@@ -15635,6 +15527,7 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
 
 
 

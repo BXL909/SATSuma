@@ -790,6 +790,10 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
+            this.panelChartLoading = new System.Windows.Forms.Panel();
+            this.pictureBoxChartLoadingAnimation = new System.Windows.Forms.PictureBox();
+            this.label232 = new System.Windows.Forms.Label();
+            this.label233 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -927,6 +931,8 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
+            this.panelChartLoading.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10585,6 +10591,7 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.panelChartLoading);
             this.panelCharts.Controls.Add(this.btnChartLightningChannels);
             this.panelCharts.Controls.Add(this.btnChartLightningCapacity);
             this.panelCharts.Controls.Add(this.panel81);
@@ -11850,6 +11857,54 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
+            // panelChartLoading
+            // 
+            this.panelChartLoading.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelChartLoading.Controls.Add(this.label233);
+            this.panelChartLoading.Controls.Add(this.label232);
+            this.panelChartLoading.Controls.Add(this.pictureBoxChartLoadingAnimation);
+            this.panelChartLoading.Location = new System.Drawing.Point(380, 225);
+            this.panelChartLoading.Name = "panelChartLoading";
+            this.panelChartLoading.Size = new System.Drawing.Size(154, 35);
+            this.panelChartLoading.TabIndex = 273;
+            this.panelChartLoading.Visible = false;
+            // 
+            // pictureBoxChartLoadingAnimation
+            // 
+            this.pictureBoxChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxChartLoadingAnimation.Enabled = false;
+            this.pictureBoxChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxChartLoadingAnimation.Image")));
+            this.pictureBoxChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
+            this.pictureBoxChartLoadingAnimation.Name = "pictureBoxChartLoadingAnimation";
+            this.pictureBoxChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
+            this.pictureBoxChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxChartLoadingAnimation.TabIndex = 250;
+            this.pictureBoxChartLoadingAnimation.TabStop = false;
+            // 
+            // label232
+            // 
+            this.label232.AutoSize = true;
+            this.label232.BackColor = System.Drawing.Color.Transparent;
+            this.label232.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label232.ForeColor = System.Drawing.Color.Gray;
+            this.label232.Location = new System.Drawing.Point(49, 1);
+            this.label232.Name = "label232";
+            this.label232.Size = new System.Drawing.Size(111, 17);
+            this.label232.TabIndex = 85;
+            this.label232.Text = "fetching data &&";
+            // 
+            // label233
+            // 
+            this.label233.AutoSize = true;
+            this.label233.BackColor = System.Drawing.Color.Transparent;
+            this.label233.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label233.ForeColor = System.Drawing.Color.Gray;
+            this.label233.Location = new System.Drawing.Point(49, 14);
+            this.label233.Name = "label233";
+            this.label233.Size = new System.Drawing.Size(117, 17);
+            this.label233.TabIndex = 251;
+            this.label233.Text = "generating chart";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12128,6 +12183,9 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
+            this.panelChartLoading.ResumeLayout(false);
+            this.panelChartLoading.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartLoadingAnimation)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -12895,6 +12953,10 @@
         private System.Windows.Forms.PictureBox pictureBoxBlockScreenPoolRankingChart;
         private System.Windows.Forms.PictureBox pictureBoxBlockListFeeChart2;
         private System.Windows.Forms.PictureBox pictureBoxBlockListFeeRangeChart2;
+        private System.Windows.Forms.Panel panelChartLoading;
+        private System.Windows.Forms.PictureBox pictureBoxChartLoadingAnimation;
+        private System.Windows.Forms.Label label232;
+        private System.Windows.Forms.Label label233;
     }
 }
 

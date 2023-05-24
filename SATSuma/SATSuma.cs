@@ -26,7 +26,6 @@ Version history 🍊
  * change remaining hardcoded mempool.space urls to NodeURL urls
  * make charts controls get included in the appearance settings
  * add more chart shortcuts (block and blocklist screens done)
- * overlay loading animation over charts
  */
 
 #region Using
@@ -7257,6 +7256,7 @@ namespace SATSuma
 
         private async void BtnChartPoolsRanking_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot1.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7408,10 +7408,12 @@ namespace SATSuma
             formsPlot2.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
             
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7519,10 +7521,12 @@ namespace SATSuma
             
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void btnChartNodesByNetwork_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7634,10 +7638,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7730,10 +7736,12 @@ namespace SATSuma
             formsPlot1.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void btnChartLightningCapacity_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7827,10 +7835,12 @@ namespace SATSuma
             formsPlot1.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void btnChartLightningChannels_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -7924,10 +7934,12 @@ namespace SATSuma
             formsPlot1.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void btnChartNodesByCountry_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot1.Visible = false;
             formsPlot2.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8012,10 +8024,12 @@ namespace SATSuma
             formsPlot3.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8100,10 +8114,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8187,10 +8203,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8283,10 +8301,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartUniqueAddresses_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8376,10 +8396,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartUniqueAddressesLog_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8490,11 +8512,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
-
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8584,11 +8607,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
-              
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartPriceLog_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -8699,10 +8723,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartUTXO_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = false;
@@ -8793,10 +8819,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartUTXOScaleLog_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             btnChartUTXOScaleLinear.Enabled = true;
@@ -8908,10 +8936,12 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartBlockSize_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -9000,10 +9030,12 @@ namespace SATSuma
             formsPlot1.Visible = true;
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private async void BtnChartCirculation_Click(object sender, EventArgs e)
         {
+            ShowChartLoadingPanel();
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
@@ -9100,6 +9132,7 @@ namespace SATSuma
 
             ToggleLoadingAnimation("disable");
             DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
         }
 
         private void BtnChartPeriod_Click(object sender, EventArgs e)
@@ -13228,7 +13261,7 @@ namespace SATSuma
         }
 
         //=============================================================================================================
-        //------------------------DISABLE/ENABLE THE LOADING ANIMATION-------------------------------------------------
+        //------------------------DISABLE/ENABLE THE LOADING ANIMATIONS-------------------------------------------------
 
         private void ToggleLoadingAnimation(string enableOrDisableAnimation)
         {
@@ -13249,6 +13282,18 @@ namespace SATSuma
             {
                 HandleException(ex, "DisableEnableLoadingAnimation");
             }
+        }
+
+        private void ShowChartLoadingPanel()
+        {
+            pictureBoxChartLoadingAnimation.Enabled = true;
+            panelChartLoading.Visible = true;
+        }
+
+        private void HideChartLoadingPanel()
+        {
+            pictureBoxChartLoadingAnimation.Enabled = false;
+            panelChartLoading.Visible = false;
         }
 
         //=============================================================================================================

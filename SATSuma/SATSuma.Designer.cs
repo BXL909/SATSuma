@@ -91,6 +91,15 @@
             this.pictureBoxBlockScreenChartReward = new System.Windows.Forms.PictureBox();
             this.pictureBoxBlockScreenChartBlockSize = new System.Windows.Forms.PictureBox();
             this.pictureBoxChartCirculation = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListBlockSizeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListPoolRanking = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListFeeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListRewardChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListFeeRangeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockFeeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockScreenPoolRankingChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListFeeChart2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockListFeeRangeChart2 = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -707,6 +716,8 @@
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.btnChartLightningChannels = new System.Windows.Forms.Button();
+            this.btnChartLightningCapacity = new System.Windows.Forms.Button();
             this.panel81 = new System.Windows.Forms.Panel();
             this.label231 = new System.Windows.Forms.Label();
             this.panel80 = new System.Windows.Forms.Panel();
@@ -779,8 +790,6 @@
             this.btnChartPrice = new System.Windows.Forms.Button();
             this.btnChartDifficulty = new System.Windows.Forms.Button();
             this.btnChartHashrate = new System.Windows.Forms.Button();
-            this.btnChartLightningCapacity = new System.Windows.Forms.Button();
-            this.btnChartLightningChannels = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -793,6 +802,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartReward)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartBlockSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartCirculation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListBlockSizeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListPoolRanking)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListRewardChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenPoolRankingChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -1758,6 +1776,123 @@
             this.pictureBoxChartCirculation.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxChartCirculation, "view chart");
             this.pictureBoxChartCirculation.Click += new System.EventHandler(this.PictureBoxChartCirculation_Click);
+            // 
+            // pictureBoxBlockListBlockSizeChart
+            // 
+            this.pictureBoxBlockListBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListBlockSizeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListBlockSizeChart.Location = new System.Drawing.Point(135, 63);
+            this.pictureBoxBlockListBlockSizeChart.Name = "pictureBoxBlockListBlockSizeChart";
+            this.pictureBoxBlockListBlockSizeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListBlockSizeChart.TabIndex = 238;
+            this.pictureBoxBlockListBlockSizeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListBlockSizeChart, "view chart");
+            this.pictureBoxBlockListBlockSizeChart.Click += new System.EventHandler(this.pictureBoxBlockListBlockSizeChart_Click);
+            // 
+            // pictureBoxBlockListPoolRanking
+            // 
+            this.pictureBoxBlockListPoolRanking.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListPoolRanking.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListPoolRanking.Location = new System.Drawing.Point(167, 118);
+            this.pictureBoxBlockListPoolRanking.Name = "pictureBoxBlockListPoolRanking";
+            this.pictureBoxBlockListPoolRanking.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListPoolRanking.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListPoolRanking.TabIndex = 238;
+            this.pictureBoxBlockListPoolRanking.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListPoolRanking, "view chart");
+            this.pictureBoxBlockListPoolRanking.Click += new System.EventHandler(this.pictureBoxBlockListPoolRanking_Click);
+            // 
+            // pictureBoxBlockListFeeChart
+            // 
+            this.pictureBoxBlockListFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListFeeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListFeeChart.Location = new System.Drawing.Point(390, 45);
+            this.pictureBoxBlockListFeeChart.Name = "pictureBoxBlockListFeeChart";
+            this.pictureBoxBlockListFeeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListFeeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListFeeChart.TabIndex = 239;
+            this.pictureBoxBlockListFeeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart, "view chart");
+            this.pictureBoxBlockListFeeChart.Click += new System.EventHandler(this.pictureBoxBlockListFeeChart_Click);
+            // 
+            // pictureBoxBlockListRewardChart
+            // 
+            this.pictureBoxBlockListRewardChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListRewardChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListRewardChart.Location = new System.Drawing.Point(462, 63);
+            this.pictureBoxBlockListRewardChart.Name = "pictureBoxBlockListRewardChart";
+            this.pictureBoxBlockListRewardChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListRewardChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListRewardChart.TabIndex = 240;
+            this.pictureBoxBlockListRewardChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListRewardChart, "view chart");
+            this.pictureBoxBlockListRewardChart.Click += new System.EventHandler(this.pictureBoxBlockListRewardChart_Click);
+            // 
+            // pictureBoxBlockListFeeRangeChart
+            // 
+            this.pictureBoxBlockListFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListFeeRangeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListFeeRangeChart.Location = new System.Drawing.Point(455, 82);
+            this.pictureBoxBlockListFeeRangeChart.Name = "pictureBoxBlockListFeeRangeChart";
+            this.pictureBoxBlockListFeeRangeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListFeeRangeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListFeeRangeChart.TabIndex = 241;
+            this.pictureBoxBlockListFeeRangeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart, "view chart");
+            this.pictureBoxBlockListFeeRangeChart.Click += new System.EventHandler(this.pictureBoxBlockListFeeRangeChart_Click);
+            // 
+            // pictureBoxBlockFeeChart
+            // 
+            this.pictureBoxBlockFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockFeeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockFeeChart.Location = new System.Drawing.Point(137, 258);
+            this.pictureBoxBlockFeeChart.Name = "pictureBoxBlockFeeChart";
+            this.pictureBoxBlockFeeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockFeeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockFeeChart.TabIndex = 239;
+            this.pictureBoxBlockFeeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockFeeChart, "view chart");
+            this.pictureBoxBlockFeeChart.Click += new System.EventHandler(this.pictureBoxBlockFeeChart_Click);
+            // 
+            // pictureBoxBlockScreenPoolRankingChart
+            // 
+            this.pictureBoxBlockScreenPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockScreenPoolRankingChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 497);
+            this.pictureBoxBlockScreenPoolRankingChart.Name = "pictureBoxBlockScreenPoolRankingChart";
+            this.pictureBoxBlockScreenPoolRankingChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockScreenPoolRankingChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockScreenPoolRankingChart.TabIndex = 240;
+            this.pictureBoxBlockScreenPoolRankingChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockScreenPoolRankingChart, "view chart");
+            this.pictureBoxBlockScreenPoolRankingChart.Click += new System.EventHandler(this.pictureBoxBlockScreenPoolRankingChart_Click);
+            // 
+            // pictureBoxBlockListFeeChart2
+            // 
+            this.pictureBoxBlockListFeeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListFeeChart2.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListFeeChart2.Location = new System.Drawing.Point(60, 163);
+            this.pictureBoxBlockListFeeChart2.Name = "pictureBoxBlockListFeeChart2";
+            this.pictureBoxBlockListFeeChart2.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListFeeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListFeeChart2.TabIndex = 238;
+            this.pictureBoxBlockListFeeChart2.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart2, "view chart");
+            this.pictureBoxBlockListFeeChart2.Click += new System.EventHandler(this.pictureBoxBlockListFeeChart2_Click);
+            // 
+            // pictureBoxBlockListFeeRangeChart2
+            // 
+            this.pictureBoxBlockListFeeRangeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockListFeeRangeChart2.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 125);
+            this.pictureBoxBlockListFeeRangeChart2.Name = "pictureBoxBlockListFeeRangeChart2";
+            this.pictureBoxBlockListFeeRangeChart2.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockListFeeRangeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockListFeeRangeChart2.TabIndex = 242;
+            this.pictureBoxBlockListFeeRangeChart2.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart2, "view chart");
+            this.pictureBoxBlockListFeeRangeChart2.Click += new System.EventHandler(this.pictureBoxBlockListFeeRangeChart2_Click);
             // 
             // label134
             // 
@@ -4203,6 +4338,8 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenPoolRankingChart);
+            this.panelBlock.Controls.Add(this.pictureBoxBlockFeeChart);
             this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartFeeRange);
             this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartReward);
             this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartBlockSize);
@@ -5161,6 +5298,8 @@
             // panelBlockList
             // 
             this.panelBlockList.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeRangeChart2);
+            this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeChart2);
             this.panelBlockList.Controls.Add(this.pictureBoxBlockListHashrateChart);
             this.panelBlockList.Controls.Add(this.pictureBoxBlockListDifficultyChart);
             this.panelBlockList.Controls.Add(this.panel45);
@@ -5646,6 +5785,11 @@
             // panel20
             // 
             this.panel20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel20.Controls.Add(this.pictureBoxBlockListFeeRangeChart);
+            this.panel20.Controls.Add(this.pictureBoxBlockListRewardChart);
+            this.panel20.Controls.Add(this.pictureBoxBlockListFeeChart);
+            this.panel20.Controls.Add(this.pictureBoxBlockListPoolRanking);
+            this.panel20.Controls.Add(this.pictureBoxBlockListBlockSizeChart);
             this.panel20.Controls.Add(this.label90);
             this.panel20.Controls.Add(this.lblBlockListBlockSize);
             this.panel20.Controls.Add(this.label105);
@@ -5745,7 +5889,7 @@
             this.lblBlockListReward.AutoSize = true;
             this.lblBlockListReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListReward.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListReward.Location = new System.Drawing.Point(403, 66);
+            this.lblBlockListReward.Location = new System.Drawing.Point(390, 66);
             this.lblBlockListReward.Name = "lblBlockListReward";
             this.lblBlockListReward.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListReward.TabIndex = 140;
@@ -5758,7 +5902,7 @@
             this.label101.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label101.ForeColor = System.Drawing.Color.Silver;
             this.label101.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label101.Location = new System.Drawing.Point(262, 64);
+            this.label101.Location = new System.Drawing.Point(249, 64);
             this.label101.Name = "label101";
             this.label101.Size = new System.Drawing.Size(181, 20);
             this.label101.TabIndex = 141;
@@ -5816,7 +5960,7 @@
             this.label92.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label92.ForeColor = System.Drawing.Color.Silver;
             this.label92.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label92.Location = new System.Drawing.Point(262, 154);
+            this.label92.Location = new System.Drawing.Point(249, 154);
             this.label92.Name = "label92";
             this.label92.Size = new System.Drawing.Size(175, 20);
             this.label92.TabIndex = 180;
@@ -5827,7 +5971,7 @@
             this.lblBlockListAverageFee.AutoSize = true;
             this.lblBlockListAverageFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListAverageFee.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListAverageFee.Location = new System.Drawing.Point(387, 102);
+            this.lblBlockListAverageFee.Location = new System.Drawing.Point(374, 102);
             this.lblBlockListAverageFee.Name = "lblBlockListAverageFee";
             this.lblBlockListAverageFee.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListAverageFee.TabIndex = 144;
@@ -5838,7 +5982,7 @@
             this.lblBlockListAverageTransactionSize.AutoSize = true;
             this.lblBlockListAverageTransactionSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListAverageTransactionSize.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListAverageTransactionSize.Location = new System.Drawing.Point(431, 156);
+            this.lblBlockListAverageTransactionSize.Location = new System.Drawing.Point(418, 156);
             this.lblBlockListAverageTransactionSize.Name = "lblBlockListAverageTransactionSize";
             this.lblBlockListAverageTransactionSize.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListAverageTransactionSize.TabIndex = 179;
@@ -5851,7 +5995,7 @@
             this.label97.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label97.ForeColor = System.Drawing.Color.Silver;
             this.label97.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label97.Location = new System.Drawing.Point(262, 100);
+            this.label97.Location = new System.Drawing.Point(249, 100);
             this.label97.Name = "label97";
             this.label97.Size = new System.Drawing.Size(145, 20);
             this.label97.TabIndex = 145;
@@ -5864,7 +6008,7 @@
             this.label94.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label94.ForeColor = System.Drawing.Color.Silver;
             this.label94.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label94.Location = new System.Drawing.Point(262, 136);
+            this.label94.Location = new System.Drawing.Point(249, 136);
             this.label94.Name = "label94";
             this.label94.Size = new System.Drawing.Size(100, 20);
             this.label94.TabIndex = 178;
@@ -5886,7 +6030,7 @@
             this.lblBlockListTotalOutputs.AutoSize = true;
             this.lblBlockListTotalOutputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListTotalOutputs.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListTotalOutputs.Location = new System.Drawing.Point(359, 138);
+            this.lblBlockListTotalOutputs.Location = new System.Drawing.Point(346, 138);
             this.lblBlockListTotalOutputs.Name = "lblBlockListTotalOutputs";
             this.lblBlockListTotalOutputs.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalOutputs.TabIndex = 177;
@@ -5912,7 +6056,7 @@
             this.label89.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label89.ForeColor = System.Drawing.Color.Silver;
             this.label89.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label89.Location = new System.Drawing.Point(262, 118);
+            this.label89.Location = new System.Drawing.Point(249, 118);
             this.label89.Name = "label89";
             this.label89.Size = new System.Drawing.Size(88, 20);
             this.label89.TabIndex = 176;
@@ -5923,7 +6067,7 @@
             this.lblBlockListBlockFeeRangeAndMedianFee.AutoSize = true;
             this.lblBlockListBlockFeeRangeAndMedianFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(392, 84);
+            this.lblBlockListBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(379, 84);
             this.lblBlockListBlockFeeRangeAndMedianFee.Name = "lblBlockListBlockFeeRangeAndMedianFee";
             this.lblBlockListBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockFeeRangeAndMedianFee.TabIndex = 150;
@@ -5934,7 +6078,7 @@
             this.lblBlockListTotalInputs.AutoSize = true;
             this.lblBlockListTotalInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListTotalInputs.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListTotalInputs.Location = new System.Drawing.Point(336, 120);
+            this.lblBlockListTotalInputs.Location = new System.Drawing.Point(323, 120);
             this.lblBlockListTotalInputs.Name = "lblBlockListTotalInputs";
             this.lblBlockListTotalInputs.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalInputs.TabIndex = 175;
@@ -5947,7 +6091,7 @@
             this.label93.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label93.ForeColor = System.Drawing.Color.Silver;
             this.label93.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label93.Location = new System.Drawing.Point(262, 82);
+            this.label93.Location = new System.Drawing.Point(249, 82);
             this.label93.Name = "label93";
             this.label93.Size = new System.Drawing.Size(163, 20);
             this.label93.TabIndex = 151;
@@ -5992,7 +6136,7 @@
             this.lblBlockListTotalFees.AutoSize = true;
             this.lblBlockListTotalFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListTotalFees.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBlockListTotalFees.Location = new System.Drawing.Point(329, 48);
+            this.lblBlockListTotalFees.Location = new System.Drawing.Point(316, 48);
             this.lblBlockListTotalFees.Name = "lblBlockListTotalFees";
             this.lblBlockListTotalFees.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalFees.TabIndex = 166;
@@ -6018,7 +6162,7 @@
             this.label88.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label88.ForeColor = System.Drawing.Color.Silver;
             this.label88.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label88.Location = new System.Drawing.Point(262, 46);
+            this.label88.Location = new System.Drawing.Point(249, 46);
             this.label88.Name = "label88";
             this.label88.Size = new System.Drawing.Size(77, 20);
             this.label88.TabIndex = 167;
@@ -10486,6 +10630,50 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
+            // btnChartLightningChannels
+            // 
+            this.btnChartLightningChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartLightningChannels.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartLightningChannels.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartLightningChannels.FlatAppearance.BorderSize = 0;
+            this.btnChartLightningChannels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningChannels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
+            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 432);
+            this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartLightningChannels.Name = "btnChartLightningChannels";
+            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 24);
+            this.btnChartLightningChannels.TabIndex = 272;
+            this.btnChartLightningChannels.TabStop = false;
+            this.btnChartLightningChannels.Text = "channels";
+            this.btnChartLightningChannels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartLightningChannels.UseVisualStyleBackColor = false;
+            this.btnChartLightningChannels.Click += new System.EventHandler(this.btnChartLightningChannels_Click);
+            // 
+            // btnChartLightningCapacity
+            // 
+            this.btnChartLightningCapacity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnChartLightningCapacity.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnChartLightningCapacity.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnChartLightningCapacity.FlatAppearance.BorderSize = 0;
+            this.btnChartLightningCapacity.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningCapacity.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
+            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 404);
+            this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
+            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 24);
+            this.btnChartLightningCapacity.TabIndex = 271;
+            this.btnChartLightningCapacity.TabStop = false;
+            this.btnChartLightningCapacity.Text = "capacity";
+            this.btnChartLightningCapacity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
+            this.btnChartLightningCapacity.Click += new System.EventHandler(this.btnChartLightningCapacity_Click);
+            // 
             // panel81
             // 
             this.panel81.BackColor = System.Drawing.Color.Transparent;
@@ -10846,7 +11034,7 @@
             this.panelPriceScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLog);
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLinear);
-            this.panelPriceScaleButtons.Location = new System.Drawing.Point(185, 32);
+            this.panelPriceScaleButtons.Location = new System.Drawing.Point(191, 32);
             this.panelPriceScaleButtons.Name = "panelPriceScaleButtons";
             this.panelPriceScaleButtons.Size = new System.Drawing.Size(175, 24);
             this.panelPriceScaleButtons.TabIndex = 263;
@@ -11662,50 +11850,6 @@
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
-            // btnChartLightningCapacity
-            // 
-            this.btnChartLightningCapacity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningCapacity.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartLightningCapacity.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartLightningCapacity.FlatAppearance.BorderSize = 0;
-            this.btnChartLightningCapacity.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartLightningCapacity.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 404);
-            this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
-            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 24);
-            this.btnChartLightningCapacity.TabIndex = 271;
-            this.btnChartLightningCapacity.TabStop = false;
-            this.btnChartLightningCapacity.Text = "capacity";
-            this.btnChartLightningCapacity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
-            this.btnChartLightningCapacity.Click += new System.EventHandler(this.btnChartLightningCapacity_Click);
-            // 
-            // btnChartLightningChannels
-            // 
-            this.btnChartLightningChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningChannels.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartLightningChannels.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartLightningChannels.FlatAppearance.BorderSize = 0;
-            this.btnChartLightningChannels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartLightningChannels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 432);
-            this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartLightningChannels.Name = "btnChartLightningChannels";
-            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 24);
-            this.btnChartLightningChannels.TabIndex = 272;
-            this.btnChartLightningChannels.TabStop = false;
-            this.btnChartLightningChannels.Text = "channels";
-            this.btnChartLightningChannels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnChartLightningChannels.UseVisualStyleBackColor = false;
-            this.btnChartLightningChannels.Click += new System.EventHandler(this.btnChartLightningChannels_Click);
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -11716,9 +11860,9 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCurrency);
@@ -11770,6 +11914,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartReward)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartBlockSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartCirculation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListBlockSizeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListPoolRanking)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListRewardChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenPoolRankingChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -12733,6 +12886,15 @@
         private System.Windows.Forms.Label label231;
         private System.Windows.Forms.Button btnChartLightningCapacity;
         private System.Windows.Forms.Button btnChartLightningChannels;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListBlockSizeChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListPoolRanking;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListRewardChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeRangeChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockFeeChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockScreenPoolRankingChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeChart2;
+        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeRangeChart2;
     }
 }
 

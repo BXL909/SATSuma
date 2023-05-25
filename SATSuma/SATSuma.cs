@@ -22,10 +22,10 @@ Version history 🍊
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * table text not being set properly when changing theme on some screens? - can't reproduce again. Either fixed or didn't happen!
+ * table text not being set properly when changing theme on some screens (sometimes!)
  * change remaining hardcoded mempool.space urls to NodeURL urls
  * make charts controls get included in the appearance settings
- * add more chart shortcuts (block and blocklist screens done)
+ * add more chart shortcuts (block and blocklist screens done) and automate placement on all
  */
 
 #region Using
@@ -1307,6 +1307,12 @@ namespace SATSuma
         private void PictureBoxPriceChart_Click(object sender, EventArgs e)
         {
             BtnChartPrice_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void pictureBoxPoolRankingChart_Click(object sender, EventArgs e)
+        {
+            BtnChartPoolsRanking_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
@@ -15539,5 +15545,7 @@ namespace SATSuma
 
 
         #endregion
+
+
     }
 }

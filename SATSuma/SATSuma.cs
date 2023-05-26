@@ -24,7 +24,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * change remaining hardcoded mempool.space urls to NodeURL urls
- * make charts controls get included in the appearance settings
  */
 
 #region Using
@@ -12331,6 +12330,12 @@ namespace SATSuma
             {
                 control.ForeColor = thisColor;
             }
+            //charts
+            Control[] listChartsDataFieldsToColor = { lblChartMousePositionData };
+            foreach (Control control in listChartsDataFieldsToColor)
+            {
+                control.ForeColor = thisColor;
+            }
         }
 
         private void ColorLabels(Color thiscolor)
@@ -12459,6 +12464,12 @@ namespace SATSuma
             {
                 control.ForeColor = thiscolor;
             }
+            //charts
+            Control[] listChartsHeadingsToColor = { label228, label218, label231, label217 };
+            foreach (Control control in listChartsHeadingsToColor)
+            {
+                control.ForeColor = thiscolor;
+            }
         }
 
         private void ColorTables(Color thiscolor)
@@ -12552,6 +12563,12 @@ namespace SATSuma
             {
                 control.BackColor = thiscolor;
             }
+            //charts
+            Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog };
+            foreach (Control control in listChartsButtonsToColor)
+            {
+                control.BackColor = thiscolor;
+            }
         }
 
         private void ColorButtonText(Color thiscolor)
@@ -12601,6 +12618,12 @@ namespace SATSuma
             //bookmarks
             Control[] listBookmarksButtonTextToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark };
             foreach (Control control in listBookmarksButtonTextToColor)
+            {
+                control.ForeColor = thiscolor;
+            }
+            //charts
+            Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog };
+            foreach (Control control in listChartsButtonsTextToColor)
             {
                 control.ForeColor = thiscolor;
             }
@@ -12738,6 +12761,13 @@ namespace SATSuma
                 control.BackColor = Color.Transparent;
                 control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
             }
+            //charts
+            Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+            foreach (Control control in listChartsHeadingsToColor)
+            {
+                control.BackColor= Color.Transparent;
+                control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+            }
 
         }
 
@@ -12822,6 +12852,13 @@ namespace SATSuma
                 control.BackColor = Color.Transparent;
                 control.BackgroundImage = null;
             }
+            //charts
+            Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+            foreach (Control control in listChartsHeadingsToColor)
+            {
+                control.BackColor = Color.Transparent;
+                control.BackgroundImage = null;
+            }
         }
 
         private void HeadingBackgroundsToCustomColor()
@@ -12885,6 +12922,13 @@ namespace SATSuma
             //xpub
             Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
             foreach (Control control in listXpubHeadingsToColor)
+            {
+                control.BackgroundImage = null;
+                control.BackColor = titleBackgroundColor;
+            }
+            //charts
+            Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+            foreach (Control control in listChartsHeadingsToColor)
             {
                 control.BackgroundImage = null;
                 control.BackColor = titleBackgroundColor;

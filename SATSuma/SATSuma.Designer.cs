@@ -101,6 +101,13 @@
             this.pictureBoxBlockListFeeChart2 = new System.Windows.Forms.PictureBox();
             this.pictureBoxBlockListFeeRangeChart2 = new System.Windows.Forms.PictureBox();
             this.pictureBoxPoolRankingChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxMarketCapChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxUniqueAddressesChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxFeeRangeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBlockFeesChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLightningCapacityChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLightningNodesChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLightningChannelsChart = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -240,7 +247,6 @@
             this.capacityLabel2 = new System.Windows.Forms.Label();
             this.aliasLabel2 = new System.Windows.Forms.Label();
             this.aliasLabel1 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.lblUnknownCapacity = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
@@ -821,6 +827,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPoolRankingChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMarketCapChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUniqueAddressesChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFeeRangeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeesChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -1677,7 +1690,7 @@
             // 
             this.pictureBoxBlockListDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 305);
+            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 307);
             this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
             this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1690,7 +1703,7 @@
             // 
             this.pictureBoxBlockListHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 377);
+            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 379);
             this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
             this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1768,7 +1781,7 @@
             // 
             this.pictureBoxBlockScreenChartBlockSize.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxBlockScreenChartBlockSize.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(137, 163);
+            this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(137, 162);
             this.pictureBoxBlockScreenChartBlockSize.Name = "pictureBoxBlockScreenChartBlockSize";
             this.pictureBoxBlockScreenChartBlockSize.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenChartBlockSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1801,7 +1814,7 @@
             this.pictureBoxBlockListBlockSizeChart.TabIndex = 238;
             this.pictureBoxBlockListBlockSizeChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListBlockSizeChart, "view chart");
-            this.pictureBoxBlockListBlockSizeChart.Click += new System.EventHandler(this.pictureBoxBlockListBlockSizeChart_Click);
+            this.pictureBoxBlockListBlockSizeChart.Click += new System.EventHandler(this.PictureBoxBlockListBlockSizeChart_Click);
             // 
             // pictureBoxBlockListPoolRanking
             // 
@@ -1814,7 +1827,7 @@
             this.pictureBoxBlockListPoolRanking.TabIndex = 238;
             this.pictureBoxBlockListPoolRanking.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListPoolRanking, "view chart");
-            this.pictureBoxBlockListPoolRanking.Click += new System.EventHandler(this.pictureBoxBlockListPoolRanking_Click);
+            this.pictureBoxBlockListPoolRanking.Click += new System.EventHandler(this.PictureBoxBlockListPoolRanking_Click);
             // 
             // pictureBoxBlockListFeeChart
             // 
@@ -1827,7 +1840,7 @@
             this.pictureBoxBlockListFeeChart.TabIndex = 239;
             this.pictureBoxBlockListFeeChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart, "view chart");
-            this.pictureBoxBlockListFeeChart.Click += new System.EventHandler(this.pictureBoxBlockListFeeChart_Click);
+            this.pictureBoxBlockListFeeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart_Click);
             // 
             // pictureBoxBlockListRewardChart
             // 
@@ -1840,7 +1853,7 @@
             this.pictureBoxBlockListRewardChart.TabIndex = 240;
             this.pictureBoxBlockListRewardChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListRewardChart, "view chart");
-            this.pictureBoxBlockListRewardChart.Click += new System.EventHandler(this.pictureBoxBlockListRewardChart_Click);
+            this.pictureBoxBlockListRewardChart.Click += new System.EventHandler(this.PictureBoxBlockListRewardChart_Click);
             // 
             // pictureBoxBlockListFeeRangeChart
             // 
@@ -1853,7 +1866,7 @@
             this.pictureBoxBlockListFeeRangeChart.TabIndex = 241;
             this.pictureBoxBlockListFeeRangeChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart, "view chart");
-            this.pictureBoxBlockListFeeRangeChart.Click += new System.EventHandler(this.pictureBoxBlockListFeeRangeChart_Click);
+            this.pictureBoxBlockListFeeRangeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart_Click);
             // 
             // pictureBoxBlockFeeChart
             // 
@@ -1866,20 +1879,20 @@
             this.pictureBoxBlockFeeChart.TabIndex = 239;
             this.pictureBoxBlockFeeChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockFeeChart, "view chart");
-            this.pictureBoxBlockFeeChart.Click += new System.EventHandler(this.pictureBoxBlockFeeChart_Click);
+            this.pictureBoxBlockFeeChart.Click += new System.EventHandler(this.PictureBoxBlockFeeChart_Click);
             // 
             // pictureBoxBlockScreenPoolRankingChart
             // 
             this.pictureBoxBlockScreenPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxBlockScreenPoolRankingChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 497);
+            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 498);
             this.pictureBoxBlockScreenPoolRankingChart.Name = "pictureBoxBlockScreenPoolRankingChart";
             this.pictureBoxBlockScreenPoolRankingChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenPoolRankingChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxBlockScreenPoolRankingChart.TabIndex = 240;
             this.pictureBoxBlockScreenPoolRankingChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockScreenPoolRankingChart, "view chart");
-            this.pictureBoxBlockScreenPoolRankingChart.Click += new System.EventHandler(this.pictureBoxBlockScreenPoolRankingChart_Click);
+            this.pictureBoxBlockScreenPoolRankingChart.Click += new System.EventHandler(this.PictureBoxBlockScreenPoolRankingChart_Click);
             // 
             // pictureBoxBlockListFeeChart2
             // 
@@ -1892,20 +1905,20 @@
             this.pictureBoxBlockListFeeChart2.TabIndex = 238;
             this.pictureBoxBlockListFeeChart2.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart2, "view chart");
-            this.pictureBoxBlockListFeeChart2.Click += new System.EventHandler(this.pictureBoxBlockListFeeChart2_Click);
+            this.pictureBoxBlockListFeeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart2_Click);
             // 
             // pictureBoxBlockListFeeRangeChart2
             // 
             this.pictureBoxBlockListFeeRangeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxBlockListFeeRangeChart2.Image = global::SATSuma.Properties.Resources.graphIcon1;
-            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 125);
+            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 127);
             this.pictureBoxBlockListFeeRangeChart2.Name = "pictureBoxBlockListFeeRangeChart2";
             this.pictureBoxBlockListFeeRangeChart2.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListFeeRangeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxBlockListFeeRangeChart2.TabIndex = 242;
             this.pictureBoxBlockListFeeRangeChart2.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart2, "view chart");
-            this.pictureBoxBlockListFeeRangeChart2.Click += new System.EventHandler(this.pictureBoxBlockListFeeRangeChart2_Click);
+            this.pictureBoxBlockListFeeRangeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart2_Click);
             // 
             // pictureBoxPoolRankingChart
             // 
@@ -1918,7 +1931,98 @@
             this.pictureBoxPoolRankingChart.TabIndex = 239;
             this.pictureBoxPoolRankingChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxPoolRankingChart, "view chart");
-            this.pictureBoxPoolRankingChart.Click += new System.EventHandler(this.pictureBoxPoolRankingChart_Click);
+            this.pictureBoxPoolRankingChart.Click += new System.EventHandler(this.PictureBoxPoolRankingChart_Click);
+            // 
+            // pictureBoxMarketCapChart
+            // 
+            this.pictureBoxMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxMarketCapChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxMarketCapChart.Location = new System.Drawing.Point(698, 43);
+            this.pictureBoxMarketCapChart.Name = "pictureBoxMarketCapChart";
+            this.pictureBoxMarketCapChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxMarketCapChart.TabIndex = 240;
+            this.pictureBoxMarketCapChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxMarketCapChart, "view chart");
+            this.pictureBoxMarketCapChart.Click += new System.EventHandler(this.PictureBoxMarketCapChart_Click);
+            // 
+            // pictureBoxUniqueAddressesChart
+            // 
+            this.pictureBoxUniqueAddressesChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxUniqueAddressesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxUniqueAddressesChart.Location = new System.Drawing.Point(430, 107);
+            this.pictureBoxUniqueAddressesChart.Name = "pictureBoxUniqueAddressesChart";
+            this.pictureBoxUniqueAddressesChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxUniqueAddressesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxUniqueAddressesChart.TabIndex = 241;
+            this.pictureBoxUniqueAddressesChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxUniqueAddressesChart, "view chart");
+            this.pictureBoxUniqueAddressesChart.Click += new System.EventHandler(this.PictureBoxUniqueAddressesChart_Click);
+            // 
+            // pictureBoxFeeRangeChart
+            // 
+            this.pictureBoxFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxFeeRangeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxFeeRangeChart.Location = new System.Drawing.Point(397, 234);
+            this.pictureBoxFeeRangeChart.Name = "pictureBoxFeeRangeChart";
+            this.pictureBoxFeeRangeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxFeeRangeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxFeeRangeChart.TabIndex = 242;
+            this.pictureBoxFeeRangeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxFeeRangeChart, "view chart");
+            this.pictureBoxFeeRangeChart.Click += new System.EventHandler(this.PictureBoxFeeRangeChart_Click);
+            // 
+            // pictureBoxBlockFeesChart
+            // 
+            this.pictureBoxBlockFeesChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxBlockFeesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxBlockFeesChart.Location = new System.Drawing.Point(666, 234);
+            this.pictureBoxBlockFeesChart.Name = "pictureBoxBlockFeesChart";
+            this.pictureBoxBlockFeesChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxBlockFeesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBlockFeesChart.TabIndex = 243;
+            this.pictureBoxBlockFeesChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxBlockFeesChart, "view chart");
+            this.pictureBoxBlockFeesChart.Click += new System.EventHandler(this.PictureBoxBlockFeesChart_Click);
+            // 
+            // pictureBoxLightningCapacityChart
+            // 
+            this.pictureBoxLightningCapacityChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxLightningCapacityChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxLightningCapacityChart.Location = new System.Drawing.Point(157, 26);
+            this.pictureBoxLightningCapacityChart.Name = "pictureBoxLightningCapacityChart";
+            this.pictureBoxLightningCapacityChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxLightningCapacityChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLightningCapacityChart.TabIndex = 235;
+            this.pictureBoxLightningCapacityChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxLightningCapacityChart, "view chart");
+            this.pictureBoxLightningCapacityChart.Click += new System.EventHandler(this.PictureBoxLightningCapacityChart_Click);
+            // 
+            // pictureBoxLightningNodesChart
+            // 
+            this.pictureBoxLightningNodesChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxLightningNodesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxLightningNodesChart.Location = new System.Drawing.Point(104, 165);
+            this.pictureBoxLightningNodesChart.Name = "pictureBoxLightningNodesChart";
+            this.pictureBoxLightningNodesChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxLightningNodesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLightningNodesChart.TabIndex = 236;
+            this.pictureBoxLightningNodesChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxLightningNodesChart, "view chart");
+            this.pictureBoxLightningNodesChart.Click += new System.EventHandler(this.PictureBoxLightningNodesChart_Click);
+            // 
+            // pictureBoxLightningChannelsChart
+            // 
+            this.pictureBoxLightningChannelsChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxLightningChannelsChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxLightningChannelsChart.Location = new System.Drawing.Point(512, 26);
+            this.pictureBoxLightningChannelsChart.Name = "pictureBoxLightningChannelsChart";
+            this.pictureBoxLightningChannelsChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxLightningChannelsChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLightningChannelsChart.TabIndex = 237;
+            this.pictureBoxLightningChannelsChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxLightningChannelsChart, "view chart");
+            this.pictureBoxLightningChannelsChart.Click += new System.EventHandler(this.PictureBoxLightningChannelsChart_Click);
             // 
             // label134
             // 
@@ -2009,6 +2113,10 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxBlockFeesChart);
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxFeeRangeChart);
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxUniqueAddressesChart);
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxMarketCapChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxPoolRankingChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxChartCirculation);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxPriceChart);
@@ -2707,6 +2815,9 @@
             // panelLightningDashboard
             // 
             this.panelLightningDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningChannelsChart);
+            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningNodesChart);
+            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningCapacityChart);
             this.panelLightningDashboard.Controls.Add(this.panel5);
             this.panelLightningDashboard.Controls.Add(this.panel4);
             this.panelLightningDashboard.Controls.Add(this.panel3);
@@ -2780,7 +2891,6 @@
             this.panelLightningDashboard.Controls.Add(this.capacityLabel2);
             this.panelLightningDashboard.Controls.Add(this.aliasLabel2);
             this.panelLightningDashboard.Controls.Add(this.aliasLabel1);
-            this.panelLightningDashboard.Controls.Add(this.label50);
             this.panelLightningDashboard.Controls.Add(this.label49);
             this.panelLightningDashboard.Controls.Add(this.lblUnknownCapacity);
             this.panelLightningDashboard.Controls.Add(this.label48);
@@ -3792,19 +3902,6 @@
             this.aliasLabel1.TabIndex = 120;
             this.aliasLabel1.Text = "no data";
             // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label50.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label50.ForeColor = System.Drawing.Color.Silver;
-            this.label50.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label50.Location = new System.Drawing.Point(3, 64);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(40, 17);
-            this.label50.TabIndex = 119;
-            this.label50.Text = "(BTC)";
-            // 
             // label49
             // 
             this.label49.AutoSize = true;
@@ -3886,9 +3983,9 @@
             this.label38.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label38.Location = new System.Drawing.Point(3, 24);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(112, 20);
+            this.label38.Size = new System.Drawing.Size(152, 20);
             this.label38.TabIndex = 92;
-            this.label38.Text = "Total capacity";
+            this.label38.Text = "Total capacity (BTC)";
             // 
             // lblTotalCapacity
             // 
@@ -10691,7 +10788,7 @@
             this.btnChartMarketCapScaleLog.Text = "logarithmic";
             this.btnChartMarketCapScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.btnChartMarketCapScaleLog_Click);
+            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_Click);
             // 
             // btnChartMarketCapScaleLinear
             // 
@@ -10805,7 +10902,7 @@
             this.btnChartLightningChannels.Text = "channels";
             this.btnChartLightningChannels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartLightningChannels.UseVisualStyleBackColor = false;
-            this.btnChartLightningChannels.Click += new System.EventHandler(this.btnChartLightningChannels_Click);
+            this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_Click);
             // 
             // btnChartLightningCapacity
             // 
@@ -10827,7 +10924,7 @@
             this.btnChartLightningCapacity.Text = "capacity";
             this.btnChartLightningCapacity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
-            this.btnChartLightningCapacity.Click += new System.EventHandler(this.btnChartLightningCapacity_Click);
+            this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_Click);
             // 
             // panel81
             // 
@@ -10901,7 +10998,7 @@
             this.btnChartNodesByCountry.Text = "countries";
             this.btnChartNodesByCountry.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartNodesByCountry.UseVisualStyleBackColor = false;
-            this.btnChartNodesByCountry.Click += new System.EventHandler(this.btnChartNodesByCountry_Click);
+            this.btnChartNodesByCountry.Click += new System.EventHandler(this.BtnChartNodesByCountry_Click);
             // 
             // panelPriceScaleButtons
             // 
@@ -11120,7 +11217,7 @@
             this.btnChartNodesByNetwork.Text = "networks";
             this.btnChartNodesByNetwork.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
-            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.btnChartNodesByNetwork_Click);
+            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_Click);
             // 
             // btnChartPoolsRanking
             // 
@@ -12014,10 +12111,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCurrency);
@@ -12032,7 +12130,6 @@
             this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblSatsumaTitle);
             this.Controls.Add(this.lblNowViewing);
@@ -12079,6 +12176,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPoolRankingChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMarketCapChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUniqueAddressesChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFeeRangeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeesChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -12344,7 +12448,6 @@
         private System.Windows.Forms.Label lblTorCapacity;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label lblClearnetCapacity;
-        private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Label capacityLabel1;
         private System.Windows.Forms.Label capacityLabel2;
         private System.Windows.Forms.Label aliasLabel2;
@@ -13064,6 +13167,13 @@
         private System.Windows.Forms.Button btnChartMarketCapScaleLog;
         private System.Windows.Forms.Button btnChartMarketCapScaleLinear;
         private System.Windows.Forms.PictureBox pictureBoxPoolRankingChart;
+        private System.Windows.Forms.PictureBox pictureBoxMarketCapChart;
+        private System.Windows.Forms.PictureBox pictureBoxUniqueAddressesChart;
+        private System.Windows.Forms.PictureBox pictureBoxFeeRangeChart;
+        private System.Windows.Forms.PictureBox pictureBoxBlockFeesChart;
+        private System.Windows.Forms.PictureBox pictureBoxLightningCapacityChart;
+        private System.Windows.Forms.PictureBox pictureBoxLightningNodesChart;
+        private System.Windows.Forms.PictureBox pictureBoxLightningChannelsChart;
     }
 }
 

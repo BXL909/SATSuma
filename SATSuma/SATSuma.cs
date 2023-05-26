@@ -25,7 +25,6 @@ Version history 🍊
  * table text not being set properly when changing theme on some screens (sometimes!)
  * change remaining hardcoded mempool.space urls to NodeURL urls
  * make charts controls get included in the appearance settings
- * add more chart shortcuts (block and blocklist screens done) and automate placement on all
  */
 
 #region Using
@@ -434,7 +433,7 @@ namespace SATSuma
                         });
                         pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 10, pictureBoxHashrateChart.Location.Y);
+                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 5, pictureBoxHashrateChart.Location.Y);
                         });
                         lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
                         {
@@ -442,7 +441,7 @@ namespace SATSuma
                         });
                         pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 10, pictureBoxBlockListHashrateChart.Location.Y);
+                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 5, pictureBoxBlockListHashrateChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -475,7 +474,7 @@ namespace SATSuma
                         });
                         pictureBoxDifficultyChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + 10, pictureBoxDifficultyChart.Location.Y);
+                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + 5, pictureBoxDifficultyChart.Location.Y);
                         });
                         lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
@@ -483,7 +482,7 @@ namespace SATSuma
                         });
                         pictureBoxBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
-                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + 10, pictureBoxBlockListDifficultyChart.Location.Y);
+                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + 5, pictureBoxBlockListDifficultyChart.Location.Y);
                         });
                         lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
                         {
@@ -571,10 +570,7 @@ namespace SATSuma
                                 {
                                     lblPriceUSD.Text = "disabled";
                                 });
-                                pictureBoxPriceChart.Invoke((MethodInvoker)delegate
-                                {
-                                    pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 10, pictureBoxPriceChart.Location.Y);
-                                });
+                                
                                 lblMoscowTime.Invoke((MethodInvoker)delegate
                                 {
                                     lblMoscowTime.Text = "disabled";
@@ -587,10 +583,7 @@ namespace SATSuma
                                 {
                                     lblHeaderPrice.Text = "disabled";
                                 });
-                                pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                                {
-                                    pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
-                                });
+                                
                                 lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
                                 {
                                     lblHeaderMoscowTime.Text = "disabled";
@@ -619,10 +612,6 @@ namespace SATSuma
                             {
                                 lblHeaderPrice.Text = "0 (TestNet)";
                             });
-                            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
-                            });
                             lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
                             {
                                 lblHeaderMoscowTime.Text = "0 (TestNet)";
@@ -632,6 +621,18 @@ namespace SATSuma
                                 lblHeaderMarketCap.Text = "0 (TestNet)";
                             });
                         }
+                        pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + 5, pictureBoxMarketCapChart.Location.Y);
+                        });
+                        pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 5, pictureBoxPriceChart.Location.Y);
+                        });
+                        pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                        });
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
@@ -767,6 +768,10 @@ namespace SATSuma
                                 lbl24HourBTCSent.Text = "unavailable on TestNet";
                             });
                         }
+                        pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + 5, pictureBoxChartCirculation.Location.Y);
+                        });
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
@@ -864,9 +869,21 @@ namespace SATSuma
                                 lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
                             });
                         }
-                        pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate // Blocks list
+                        pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate 
                         {
-                            pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + 10, pictureBoxBlockListFeeRangeChart2.Location.Y);
+                            pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width + 5, pictureBoxBlockFeesChart.Location.Y);
+                        });
+                        pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate 
+                        {
+                            pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + 5, pictureBoxFeeRangeChart.Location.Y);
+                        });
+                        pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate 
+                        {
+                            pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + 5, pictureBoxBlockListFeeRangeChart2.Location.Y);
+                        });
+                        pictureBoxBlockListFeeChart2.Invoke((MethodInvoker)delegate 
+                        {
+                            pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width + 5, pictureBoxBlockListFeeChart2.Location.Y);
                         });
                         SetLightsMessagesAndResetTimers();
                     }
@@ -993,6 +1010,18 @@ namespace SATSuma
                                     lblClearnetTorNodes.Text = "Disabled";
                                 });
                             }
+                            pictureBoxLightningNodesChart.Invoke((MethodInvoker)delegate 
+                            {
+                                pictureBoxLightningNodesChart.Location = new Point(label40.Location.X + label40.Width + 5, pictureBoxLightningNodesChart.Location.Y);
+                            });
+                            pictureBoxLightningChannelsChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width + 5, pictureBoxLightningChannelsChart.Location.Y);
+                            });
+                            pictureBoxLightningCapacityChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width + 5, pictureBoxLightningCapacityChart.Location.Y);
+                            });
                             if (RunMempoolSpaceLightningAPI)
                             {
                                 var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
@@ -1172,6 +1201,14 @@ namespace SATSuma
                                 lblBlockchainSize.Text = "unavailable on TestNet";
                             });
                         }
+                        pictureBoxPoolRankingChart.Invoke((MethodInvoker)delegate 
+                        {
+                            pictureBoxPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width + 5, pictureBoxPoolRankingChart.Location.Y);
+                        });
+                        pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width + 5, pictureBoxUniqueAddressesChart.Location.Y);
+                        });
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
@@ -1310,12 +1347,53 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxPoolRankingChart_Click(object sender, EventArgs e)
+        private void PictureBoxPoolRankingChart_Click(object sender, EventArgs e)
         {
             BtnChartPoolsRanking_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
+        private void PictureBoxMarketCapChart_Click(object sender, EventArgs e)
+        {
+            BtnChartMarketCap_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxUniqueAddressesChart_Click(object sender, EventArgs e)
+        {
+            BtnChartUniqueAddresses_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxFeeRangeChart_Click(object sender, EventArgs e)
+        {
+            BtnChartFeeRates_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxBlockFeesChart_Click(object sender, EventArgs e)
+        {
+            BtnChartBlockFees_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxLightningCapacityChart_Click(object sender, EventArgs e)
+        {
+            BtnChartLightningCapacity_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxLightningNodesChart_Click(object sender, EventArgs e)
+        {
+            BtnChartNodesByNetwork_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxLightningChannelsChart_Click(object sender, EventArgs e)
+        {
+            BtnChartLightningChannels_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
         //------------------------------------ CURRENCY --------------------------------------------------------------
 
         private void BtnUSD_Click(object sender, EventArgs e)
@@ -3207,6 +3285,10 @@ namespace SATSuma
                 {
                     lblSizeOfBlock.Text = sizeString;
                 });
+                pictureBoxBlockScreenChartBlockSize.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxBlockScreenChartBlockSize.Location = new Point(lblSizeOfBlock.Location.X + lblSizeOfBlock.Width + 5, pictureBoxBlockScreenChartBlockSize.Location.Y);
+                });
                 string strWeight = Convert.ToString(blocks[0].Weight);
                 decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
                 string strFormattedWeight = decWeight.ToString("N2"); // Display to 2 decimal places
@@ -3220,6 +3302,10 @@ namespace SATSuma
                 {
                     lblTotalFees.Text = TotalBlockFees;
                 });
+                pictureBoxBlockFeeChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width + 5, pictureBoxBlockFeeChart.Location.Y);
+                });
                 long nonceLong = Convert.ToInt64(blocks[0].Nonce);
                 lblNonce.Invoke((MethodInvoker)delegate
                 {
@@ -3230,9 +3316,17 @@ namespace SATSuma
                 {
                     lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
                 });
+                pictureBoxBlockScreenChartReward.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width + 5, pictureBoxBlockScreenChartReward.Location.Y);
+                });
                 lblBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                 {
                     lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
+                });
+                pictureBoxBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxBlockScreenChartFeeRange.Location = new Point(lblBlockFeeRangeAndMedianFee.Location.X + lblBlockFeeRangeAndMedianFee.Width + 5, pictureBoxBlockScreenChartFeeRange.Location.Y);
                 });
                 lblBlockAverageFee.Invoke((MethodInvoker)delegate
                 {
@@ -3241,6 +3335,10 @@ namespace SATSuma
                 lblMiner.Invoke((MethodInvoker)delegate
                 {
                     lblMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                });
+                pictureBoxBlockScreenPoolRankingChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width + 5, pictureBoxBlockScreenPoolRankingChart.Location.Y);
                 });
                 lblBlockTime.Invoke((MethodInvoker)delegate
                 {
@@ -3704,13 +3802,13 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockFeeChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockFeeChart_Click(object sender, EventArgs e)
         {
             BtnChartBlockFees_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockScreenPoolRankingChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockScreenPoolRankingChart_Click(object sender, EventArgs e)
         {
             BtnChartPoolsRanking_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
@@ -5473,43 +5571,43 @@ namespace SATSuma
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListBlockSizeChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListBlockSizeChart_Click(object sender, EventArgs e)
         {
             BtnChartBlockSize_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListPoolRanking_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListPoolRanking_Click(object sender, EventArgs e)
         {
             BtnChartPoolsRanking_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListFeeChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListFeeChart_Click(object sender, EventArgs e)
         {
             BtnChartBlockFees_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListRewardChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListRewardChart_Click(object sender, EventArgs e)
         {
             BtnChartReward_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListFeeRangeChart_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListFeeRangeChart_Click(object sender, EventArgs e)
         {
             BtnChartFeeRates_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListFeeChart2_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListFeeChart2_Click(object sender, EventArgs e)
         {
             BtnChartBlockFees_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
 
-        private void pictureBoxBlockListFeeRangeChart2_Click(object sender, EventArgs e)
+        private void PictureBoxBlockListFeeRangeChart2_Click(object sender, EventArgs e)
         {
             BtnChartFeeRates_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
@@ -7485,7 +7583,7 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
-        private async void btnChartNodesByNetwork_Click(object sender, EventArgs e)
+        private async void BtnChartNodesByNetwork_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
             HideAllChartKeysAndPanels();
@@ -7645,7 +7743,7 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
-        private async void btnChartLightningCapacity_Click(object sender, EventArgs e)
+        private async void BtnChartLightningCapacity_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
             HideAllChartKeysAndPanels();
@@ -7718,7 +7816,7 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
-        private async void btnChartLightningChannels_Click(object sender, EventArgs e)
+        private async void BtnChartLightningChannels_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
             HideAllChartKeysAndPanels();
@@ -7791,7 +7889,7 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
-        private async void btnChartNodesByCountry_Click(object sender, EventArgs e)
+        private async void BtnChartNodesByCountry_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
             HideAllChartKeysAndPanels();
@@ -7830,9 +7928,9 @@ namespace SATSuma
             var response = JsonConvert.DeserializeObject<LightningNodeCountry[]>(json);
 
             // Extract the top 40 country names (En) and counts, handling nullable decimal values
-            string[] countryNames = response.Select(node => node.name.en).Take(40).ToArray();
-            double[] counts = response.Select(node => Convert.ToDouble(node.count)).Take(40).ToArray();
-            double[] allcounts = response.Select(node => Convert.ToDouble(node.count)).ToArray();
+            string[] countryNames = response.Select(node => node.Name.En).Take(40).ToArray();
+            double[] counts = response.Select(node => Convert.ToDouble(node.Count)).Take(40).ToArray();
+            double[] allcounts = response.Select(node => Convert.ToDouble(node.Count)).ToArray();
             double totalNodes = allcounts.Sum();
             double nodesInTop40 = counts.Sum();
             double nodesOfOtherCountries = totalNodes - nodesInTop40;
@@ -8478,7 +8576,7 @@ namespace SATSuma
             HideChartLoadingPanel();
         }
 
-        private async void btnChartMarketCapScaleLog_Click(object sender, EventArgs e)
+        private async void BtnChartMarketCapScaleLog_Click(object sender, EventArgs e)
         {
             ShowChartLoadingPanel();
             HideAllChartKeysAndPanels();
@@ -9006,15 +9104,15 @@ namespace SATSuma
             }
             if (chartType == "lightningnodesbynetwork")
             {
-                btnChartNodesByNetwork_Click(sender, e);
+                BtnChartNodesByNetwork_Click(sender, e);
             }
             if (chartType == "lightningcapacity")
             {
-                btnChartLightningCapacity_Click(sender, e);
+                BtnChartLightningCapacity_Click(sender, e);
             }
             if (chartType == "lightningchannels")
             {
-                btnChartLightningChannels_Click(sender, e);
+                BtnChartLightningChannels_Click(sender, e);
             }
             if (chartType == "marketcap")
             {
@@ -12256,7 +12354,7 @@ namespace SATSuma
                 control.ForeColor = thiscolor;
             }
             //lightningdashboard
-            Control[] listLightningDashboardLabelsToColor = { label38, label50, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
+            Control[] listLightningDashboardLabelsToColor = { label38, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
             foreach (Control control in listLightningDashboardLabelsToColor)
             {
                 control.ForeColor = thiscolor;
@@ -15488,16 +15586,16 @@ namespace SATSuma
 
         public class CountryName
         {
-            public string en { get; set; }
+            public string En { get; set; }
         }
 
         public class LightningNodeCountry
         {
-            public CountryName name { get; set; }
-            public string iso { get; set; }
-            public decimal count { get; set; }
-            public decimal share { get; set; }
-            public decimal? capacity { get; set; } // Nullable decimal
+            public CountryName Name { get; set; }
+            public string Iso { get; set; }
+            public decimal Count { get; set; }
+            public decimal Share { get; set; }
+            public decimal? Capacity { get; set; } // Nullable decimal
         }
 
         public class LightningNodesByCountryService
@@ -15544,8 +15642,12 @@ namespace SATSuma
 
 
 
+
+
+
+
+
+
         #endregion
-
-
     }
 }

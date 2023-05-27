@@ -25,6 +25,7 @@ Version history 🍊
  * table text not being set properly when changing theme on some screens (sometimes!)
  * change remaining hardcoded mempool.space urls to NodeURL urls
  * test 'full privacy' mode (graph icons/menu enable/disable in particular)
+ * disable charts when testnet
  */
 
 #region Using
@@ -98,11 +99,12 @@ namespace SATSuma
         string blockchairComJSONSelected = "1"; // for settings record in bookmarks file
         string bitcoinExplorerEnpointsSelected = "1"; // for settings record in bookmarks file
         string blockchainInfoEndpointsSelected = "1"; // for settings record in bookmarks file
-        string PrivacyModeSelected = "1"; // for settings record in bookmarks file 
+        string PrivacyModeSelected = "0"; // for settings record in bookmarks file 
         string unused1 = "1"; // for settings record in bookmarks file
         string unused2 = "1"; // for settings record in bookmarks file
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
         string chartType = ""; // keeps track of what type of chart is being displayed
+        string previousCustomNodeStringToCompare = ""; // settings screen - to check whether settings have changed before saving them
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
@@ -188,6 +190,10 @@ namespace SATSuma
         bool btnViewAddressFromTXInputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnViewAddressFromTXOutputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool privacyMode = false; // disables all comms apart from to full node
+        bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
+        bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
+        
+
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
@@ -10601,7 +10607,6 @@ namespace SATSuma
         #endregion
 
         #region SETTINGS SCREEN
-        private bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true;
 
         private void TextBoxSettingsXpubMempoolURL_Enter(object sender, EventArgs e)
         {
@@ -10788,8 +10793,6 @@ namespace SATSuma
             }
         }
 
-        private bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
-        private string previousCustomNodeStringToCompare = "";
 
         private void TextBoxSettingsCustomMempoolURL_Enter(object sender, EventArgs e)
         {

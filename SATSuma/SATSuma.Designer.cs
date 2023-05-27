@@ -581,22 +581,24 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
-            this.panel77 = new System.Windows.Forms.Panel();
-            this.lblBitcoinDashboard = new System.Windows.Forms.Label();
+            this.panel84 = new System.Windows.Forms.Panel();
+            this.label167 = new System.Windows.Forms.Label();
+            this.panel83 = new System.Windows.Forms.Panel();
+            this.label237 = new System.Windows.Forms.Label();
+            this.label235 = new System.Windows.Forms.Label();
+            this.panel82 = new System.Windows.Forms.Panel();
+            this.label234 = new System.Windows.Forms.Label();
             this.numericUpDownDashboardRefresh = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.lblWhatever = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.lblPrivacyMode = new System.Windows.Forms.Label();
             this.label198 = new System.Windows.Forms.Label();
+            this.panel77 = new System.Windows.Forms.Panel();
+            this.lblWhatever = new System.Windows.Forms.Label();
             this.lblBitcoinExplorerEndpoints = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label152 = new System.Windows.Forms.Label();
-            this.lblLightningDashboard = new System.Windows.Forms.Label();
             this.lblBlockchainInfoEndpoints = new System.Windows.Forms.Label();
             this.lblBlockchairComJSON = new System.Windows.Forms.Label();
-            this.label169 = new System.Windows.Forms.Label();
-            this.label167 = new System.Windows.Forms.Label();
-            this.label171 = new System.Windows.Forms.Label();
-            this.lblMempoolLightningJSON = new System.Windows.Forms.Label();
             this.panel76 = new System.Windows.Forms.Panel();
             this.label201 = new System.Windows.Forms.Label();
             this.label204 = new System.Windows.Forms.Label();
@@ -615,17 +617,21 @@
             this.lblURLWarning = new System.Windows.Forms.Label();
             this.lblSettingsCustomNodeStatus = new System.Windows.Forms.Label();
             this.lblSettingsCustomNodeStatusLight = new System.Windows.Forms.Label();
+            this.lblUnused1 = new System.Windows.Forms.Label();
             this.panel34 = new System.Windows.Forms.Panel();
             this.label163 = new System.Windows.Forms.Label();
+            this.label171 = new System.Windows.Forms.Label();
             this.label158 = new System.Windows.Forms.Label();
+            this.lblUnused2 = new System.Windows.Forms.Label();
+            this.label169 = new System.Windows.Forms.Label();
             this.panel22 = new System.Windows.Forms.Panel();
             this.label162 = new System.Windows.Forms.Label();
             this.label159 = new System.Windows.Forms.Label();
             this.lblSettingsXpubNodeStatusLight = new System.Windows.Forms.Label();
             this.lblSettingsXpubNodeStatus = new System.Windows.Forms.Label();
-            this.label165 = new System.Windows.Forms.Label();
             this.panel37 = new System.Windows.Forms.Panel();
             this.label155 = new System.Windows.Forms.Label();
+            this.label165 = new System.Windows.Forms.Label();
             this.btnColorLabels = new System.Windows.Forms.Button();
             this.label73 = new System.Windows.Forms.Label();
             this.btnColorDataFields = new System.Windows.Forms.Button();
@@ -805,6 +811,7 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
+            this.panel85 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -911,8 +918,11 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
-            this.panel77.SuspendLayout();
+            this.panel84.SuspendLayout();
+            this.panel83.SuspendLayout();
+            this.panel82.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).BeginInit();
+            this.panel77.SuspendLayout();
             this.panel76.SuspendLayout();
             this.panel74.SuspendLayout();
             this.panel75.SuspendLayout();
@@ -953,6 +963,7 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
+            this.panel85.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1715,7 +1726,7 @@
             // pictureBoxHeaderPriceChart
             // 
             this.pictureBoxHeaderPriceChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
+            this.pictureBoxHeaderPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon;
             this.pictureBoxHeaderPriceChart.Location = new System.Drawing.Point(110, 32);
             this.pictureBoxHeaderPriceChart.Name = "pictureBoxHeaderPriceChart";
             this.pictureBoxHeaderPriceChart.Size = new System.Drawing.Size(16, 12);
@@ -8706,61 +8717,118 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
+            this.panelSettings.Controls.Add(this.panel85);
+            this.panelSettings.Controls.Add(this.panel84);
+            this.panelSettings.Controls.Add(this.panel83);
+            this.panelSettings.Controls.Add(this.label235);
+            this.panelSettings.Controls.Add(this.panel82);
+            this.panelSettings.Controls.Add(this.label50);
             this.panelSettings.Controls.Add(this.panel77);
             this.panelSettings.Controls.Add(this.panel76);
             this.panelSettings.Controls.Add(this.panel74);
             this.panelSettings.Controls.Add(this.panel75);
             this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatus);
             this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatusLight);
+            this.panelSettings.Controls.Add(this.lblUnused1);
             this.panelSettings.Controls.Add(this.panel34);
+            this.panelSettings.Controls.Add(this.label171);
             this.panelSettings.Controls.Add(this.label158);
+            this.panelSettings.Controls.Add(this.lblUnused2);
+            this.panelSettings.Controls.Add(this.label169);
             this.panelSettings.Controls.Add(this.panel22);
             this.panelSettings.Controls.Add(this.label159);
             this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatusLight);
             this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatus);
-            this.panelSettings.Controls.Add(this.label165);
             this.panelSettings.Controls.Add(this.panel37);
+            this.panelSettings.Controls.Add(this.label165);
             this.panelSettings.Location = new System.Drawing.Point(21, 188);
             this.panelSettings.Name = "panelSettings";
             this.panelSettings.Size = new System.Drawing.Size(773, 556);
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
             // 
-            // panel77
+            // panel84
             // 
-            this.panel77.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panel77.Controls.Add(this.lblBitcoinDashboard);
-            this.panel77.Controls.Add(this.numericUpDownDashboardRefresh);
-            this.panel77.Controls.Add(this.label6);
-            this.panel77.Controls.Add(this.lblWhatever);
-            this.panel77.Controls.Add(this.label198);
-            this.panel77.Controls.Add(this.lblBitcoinExplorerEndpoints);
-            this.panel77.Controls.Add(this.label4);
-            this.panel77.Controls.Add(this.label152);
-            this.panel77.Controls.Add(this.lblLightningDashboard);
-            this.panel77.Controls.Add(this.lblBlockchainInfoEndpoints);
-            this.panel77.Controls.Add(this.lblBlockchairComJSON);
-            this.panel77.Controls.Add(this.label169);
-            this.panel77.Controls.Add(this.label167);
-            this.panel77.Controls.Add(this.label171);
-            this.panel77.Controls.Add(this.lblMempoolLightningJSON);
-            this.panel77.Location = new System.Drawing.Point(0, 443);
-            this.panel77.Name = "panel77";
-            this.panel77.Size = new System.Drawing.Size(755, 91);
-            this.panel77.TabIndex = 244;
+            this.panel84.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel84.Controls.Add(this.lblPrivacyMode);
+            this.panel84.Controls.Add(this.label167);
+            this.panel84.Location = new System.Drawing.Point(0, 506);
+            this.panel84.Name = "panel84";
+            this.panel84.Size = new System.Drawing.Size(755, 49);
+            this.panel84.TabIndex = 248;
             // 
-            // lblBitcoinDashboard
+            // label167
             // 
-            this.lblBitcoinDashboard.AutoSize = true;
-            this.lblBitcoinDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblBitcoinDashboard.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBitcoinDashboard.ForeColor = System.Drawing.Color.Green;
-            this.lblBitcoinDashboard.Location = new System.Drawing.Point(6, 7);
-            this.lblBitcoinDashboard.Name = "lblBitcoinDashboard";
-            this.lblBitcoinDashboard.Size = new System.Drawing.Size(23, 18);
-            this.lblBitcoinDashboard.TabIndex = 225;
-            this.lblBitcoinDashboard.Text = "✔️";
-            this.lblBitcoinDashboard.Click += new System.EventHandler(this.LblBitcoinDashboard_Click);
+            this.label167.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label167.ForeColor = System.Drawing.Color.Gray;
+            this.label167.Location = new System.Drawing.Point(34, 7);
+            this.label167.Name = "label167";
+            this.label167.Size = new System.Drawing.Size(719, 46);
+            this.label167.TabIndex = 247;
+            this.label167.Text = "When enabled, SATSuma will communicate ONLY with your full node. All functionalit" +
+    "y that can\'t be fulfilled by your own full node will be disabled.";
+            // 
+            // panel83
+            // 
+            this.panel83.BackColor = System.Drawing.Color.Transparent;
+            this.panel83.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel83.BackgroundImage")));
+            this.panel83.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel83.Controls.Add(this.label237);
+            this.panel83.Location = new System.Drawing.Point(0, 476);
+            this.panel83.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel83.Name = "panel83";
+            this.panel83.Size = new System.Drawing.Size(375, 23);
+            this.panel83.TabIndex = 213;
+            // 
+            // label237
+            // 
+            this.label237.AutoSize = true;
+            this.label237.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label237.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label237.ForeColor = System.Drawing.Color.Gray;
+            this.label237.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label237.Location = new System.Drawing.Point(0, 2);
+            this.label237.Margin = new System.Windows.Forms.Padding(0);
+            this.label237.Name = "label237";
+            this.label237.Size = new System.Drawing.Size(186, 20);
+            this.label237.TabIndex = 153;
+            this.label237.Text = "Maximum privacy mode";
+            // 
+            // label235
+            // 
+            this.label235.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label235.ForeColor = System.Drawing.Color.Gray;
+            this.label235.Location = new System.Drawing.Point(0, 448);
+            this.label235.Name = "label235";
+            this.label235.Size = new System.Drawing.Size(452, 22);
+            this.label235.TabIndex = 246;
+            this.label235.Text = "Choose how often automatically updated data is refreshed";
+            // 
+            // panel82
+            // 
+            this.panel82.BackColor = System.Drawing.Color.Transparent;
+            this.panel82.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel82.BackgroundImage")));
+            this.panel82.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel82.Controls.Add(this.label234);
+            this.panel82.Location = new System.Drawing.Point(0, 418);
+            this.panel82.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel82.Name = "panel82";
+            this.panel82.Size = new System.Drawing.Size(375, 23);
+            this.panel82.TabIndex = 212;
+            // 
+            // label234
+            // 
+            this.label234.AutoSize = true;
+            this.label234.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label234.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label234.ForeColor = System.Drawing.Color.Gray;
+            this.label234.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label234.Location = new System.Drawing.Point(0, 2);
+            this.label234.Margin = new System.Windows.Forms.Padding(0);
+            this.label234.Name = "label234";
+            this.label234.Size = new System.Drawing.Size(151, 20);
+            this.label234.TabIndex = 153;
+            this.label234.Text = "Data refresh period";
             // 
             // numericUpDownDashboardRefresh
             // 
@@ -8768,7 +8836,7 @@
             this.numericUpDownDashboardRefresh.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numericUpDownDashboardRefresh.Font = new System.Drawing.Font("Consolas", 9F);
             this.numericUpDownDashboardRefresh.ForeColor = System.Drawing.Color.Silver;
-            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(689, 9);
+            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(15, 7);
             this.numericUpDownDashboardRefresh.Maximum = new decimal(new int[] {
             1440,
             0,
@@ -8790,38 +8858,64 @@
             0});
             this.numericUpDownDashboardRefresh.ValueChanged += new System.EventHandler(this.NumericUpDownDashboardRefresh_ValueChanged);
             // 
-            // label6
+            // label50
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Silver;
-            this.label6.Location = new System.Drawing.Point(542, 8);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(143, 20);
-            this.label6.TabIndex = 48;
-            this.label6.Text = "Refresh frequency";
+            this.label50.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label50.ForeColor = System.Drawing.Color.Gray;
+            this.label50.Location = new System.Drawing.Point(204, 93);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(27, 24);
+            this.label50.TabIndex = 245;
+            this.label50.Text = "OR";
             // 
-            // lblWhatever
+            // lblPrivacyMode
             // 
-            this.lblWhatever.AutoSize = true;
-            this.lblWhatever.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWhatever.ForeColor = System.Drawing.Color.Silver;
-            this.lblWhatever.Location = new System.Drawing.Point(54, 48);
-            this.lblWhatever.Name = "lblWhatever";
-            this.lblWhatever.Size = new System.Drawing.Size(177, 20);
-            this.lblWhatever.TabIndex = 41;
-            this.lblWhatever.Text = "bitcoinexplorer.org API";
+            this.lblPrivacyMode.AutoSize = true;
+            this.lblPrivacyMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblPrivacyMode.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblPrivacyMode.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblPrivacyMode.Location = new System.Drawing.Point(7, 7);
+            this.lblPrivacyMode.Name = "lblPrivacyMode";
+            this.lblPrivacyMode.Size = new System.Drawing.Size(23, 18);
+            this.lblPrivacyMode.TabIndex = 225;
+            this.lblPrivacyMode.Text = "❌";
+            this.lblPrivacyMode.Click += new System.EventHandler(this.LblPrivacyMode_Click);
             // 
             // label198
             // 
             this.label198.AutoSize = true;
             this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label198.ForeColor = System.Drawing.Color.Silver;
-            this.label198.Location = new System.Drawing.Point(542, 28);
+            this.label198.Location = new System.Drawing.Point(80, 6);
             this.label198.Name = "label198";
             this.label198.Size = new System.Drawing.Size(107, 20);
             this.label198.TabIndex = 240;
             this.label198.Text = "(1 - 1440 mins)";
+            // 
+            // panel77
+            // 
+            this.panel77.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel77.Controls.Add(this.lblWhatever);
+            this.panel77.Controls.Add(this.lblBitcoinExplorerEndpoints);
+            this.panel77.Controls.Add(this.label4);
+            this.panel77.Controls.Add(this.label152);
+            this.panel77.Controls.Add(this.lblBlockchainInfoEndpoints);
+            this.panel77.Controls.Add(this.lblBlockchairComJSON);
+            this.panel77.Location = new System.Drawing.Point(0, 370);
+            this.panel77.Name = "panel77";
+            this.panel77.Size = new System.Drawing.Size(755, 35);
+            this.panel77.TabIndex = 244;
+            // 
+            // lblWhatever
+            // 
+            this.lblWhatever.AutoSize = true;
+            this.lblWhatever.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWhatever.ForeColor = System.Drawing.Color.Silver;
+            this.lblWhatever.Location = new System.Drawing.Point(281, 10);
+            this.lblWhatever.Name = "lblWhatever";
+            this.lblWhatever.Size = new System.Drawing.Size(177, 20);
+            this.lblWhatever.TabIndex = 41;
+            this.lblWhatever.Text = "bitcoinexplorer.org API";
             // 
             // lblBitcoinExplorerEndpoints
             // 
@@ -8829,7 +8923,7 @@
             this.lblBitcoinExplorerEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBitcoinExplorerEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBitcoinExplorerEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(32, 47);
+            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(259, 9);
             this.lblBitcoinExplorerEndpoints.Name = "lblBitcoinExplorerEndpoints";
             this.lblBitcoinExplorerEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBitcoinExplorerEndpoints.TabIndex = 42;
@@ -8841,7 +8935,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(54, 28);
+            this.label4.Location = new System.Drawing.Point(37, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(153, 20);
             this.label4.TabIndex = 51;
@@ -8852,24 +8946,11 @@
             this.label152.AutoSize = true;
             this.label152.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label152.ForeColor = System.Drawing.Color.Silver;
-            this.label152.Location = new System.Drawing.Point(54, 68);
+            this.label152.Location = new System.Drawing.Point(554, 10);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(151, 20);
             this.label152.TabIndex = 43;
             this.label152.Text = "blockchain.info API";
-            // 
-            // lblLightningDashboard
-            // 
-            this.lblLightningDashboard.AutoSize = true;
-            this.lblLightningDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblLightningDashboard.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblLightningDashboard.ForeColor = System.Drawing.Color.Green;
-            this.lblLightningDashboard.Location = new System.Drawing.Point(285, 7);
-            this.lblLightningDashboard.Name = "lblLightningDashboard";
-            this.lblLightningDashboard.Size = new System.Drawing.Size(23, 18);
-            this.lblLightningDashboard.TabIndex = 229;
-            this.lblLightningDashboard.Text = "✔️";
-            this.lblLightningDashboard.Click += new System.EventHandler(this.LblLightningDashboard_Click);
             // 
             // lblBlockchainInfoEndpoints
             // 
@@ -8877,7 +8958,7 @@
             this.lblBlockchainInfoEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBlockchainInfoEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockchainInfoEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(32, 67);
+            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(532, 9);
             this.lblBlockchainInfoEndpoints.Name = "lblBlockchainInfoEndpoints";
             this.lblBlockchainInfoEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBlockchainInfoEndpoints.TabIndex = 44;
@@ -8890,58 +8971,12 @@
             this.lblBlockchairComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBlockchairComJSON.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockchairComJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchairComJSON.Location = new System.Drawing.Point(32, 27);
+            this.lblBlockchairComJSON.Location = new System.Drawing.Point(15, 9);
             this.lblBlockchairComJSON.Name = "lblBlockchairComJSON";
             this.lblBlockchairComJSON.Size = new System.Drawing.Size(23, 18);
             this.lblBlockchairComJSON.TabIndex = 52;
             this.lblBlockchairComJSON.Text = "✔️";
             this.lblBlockchairComJSON.Click += new System.EventHandler(this.LblBlockchairComJSON_Click);
-            // 
-            // label169
-            // 
-            this.label169.AutoSize = true;
-            this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label169.ForeColor = System.Drawing.Color.Silver;
-            this.label169.Location = new System.Drawing.Point(307, 8);
-            this.label169.Name = "label169";
-            this.label169.Size = new System.Drawing.Size(208, 20);
-            this.label169.TabIndex = 228;
-            this.label169.Text = "Enable lightning dashboard";
-            // 
-            // label167
-            // 
-            this.label167.AutoSize = true;
-            this.label167.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label167.ForeColor = System.Drawing.Color.Silver;
-            this.label167.Location = new System.Drawing.Point(28, 8);
-            this.label167.Name = "label167";
-            this.label167.Size = new System.Drawing.Size(197, 20);
-            this.label167.TabIndex = 224;
-            this.label167.Text = "Enable bitcoin dashboard";
-            // 
-            // label171
-            // 
-            this.label171.AutoSize = true;
-            this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label171.ForeColor = System.Drawing.Color.Silver;
-            this.label171.Location = new System.Drawing.Point(333, 28);
-            this.label171.Name = "label171";
-            this.label171.Size = new System.Drawing.Size(157, 20);
-            this.label171.TabIndex = 226;
-            this.label171.Text = "mempool.space API";
-            // 
-            // lblMempoolLightningJSON
-            // 
-            this.lblMempoolLightningJSON.AutoSize = true;
-            this.lblMempoolLightningJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblMempoolLightningJSON.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblMempoolLightningJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblMempoolLightningJSON.Location = new System.Drawing.Point(311, 27);
-            this.lblMempoolLightningJSON.Name = "lblMempoolLightningJSON";
-            this.lblMempoolLightningJSON.Size = new System.Drawing.Size(23, 18);
-            this.lblMempoolLightningJSON.TabIndex = 227;
-            this.lblMempoolLightningJSON.Text = "✔️";
-            this.lblMempoolLightningJSON.Click += new System.EventHandler(this.LblMempoolLightningJSON_Click);
             // 
             // panel76
             // 
@@ -8949,9 +8984,9 @@
             this.panel76.Controls.Add(this.label201);
             this.panel76.Controls.Add(this.label204);
             this.panel76.Controls.Add(this.textBoxSettingsXpubMempoolURL);
-            this.panel76.Location = new System.Drawing.Point(0, 272);
+            this.panel76.Location = new System.Drawing.Point(0, 216);
             this.panel76.Name = "panel76";
-            this.panel76.Size = new System.Drawing.Size(290, 77);
+            this.panel76.Size = new System.Drawing.Size(290, 73);
             this.panel76.TabIndex = 243;
             // 
             // label201
@@ -8969,11 +9004,11 @@
             // 
             this.label204.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label204.ForeColor = System.Drawing.Color.Gray;
-            this.label204.Location = new System.Drawing.Point(7, 56);
+            this.label204.Location = new System.Drawing.Point(7, 53);
             this.label204.Name = "label204";
             this.label204.Size = new System.Drawing.Size(280, 21);
             this.label204.TabIndex = 149;
-            this.label204.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            this.label204.Text = "(format http(s)://xxxxxx.xxx/api/)";
             // 
             // textBoxSettingsXpubMempoolURL
             // 
@@ -9000,9 +9035,9 @@
             this.panel74.Controls.Add(this.lblSettingsNodeMainnet);
             this.panel74.Controls.Add(this.label172);
             this.panel74.Controls.Add(this.lblSettingsNodeTestnet);
-            this.panel74.Location = new System.Drawing.Point(0, 98);
+            this.panel74.Location = new System.Drawing.Point(0, 65);
             this.panel74.Name = "panel74";
-            this.panel74.Size = new System.Drawing.Size(203, 77);
+            this.panel74.Size = new System.Drawing.Size(203, 73);
             this.panel74.TabIndex = 241;
             // 
             // label199
@@ -9012,9 +9047,9 @@
             this.label199.ForeColor = System.Drawing.Color.Gray;
             this.label199.Location = new System.Drawing.Point(5, 3);
             this.label199.Name = "label199";
-            this.label199.Size = new System.Drawing.Size(128, 20);
+            this.label199.Size = new System.Drawing.Size(206, 20);
             this.label199.TabIndex = 241;
-            this.label199.Text = "mempool.space";
+            this.label199.Text = "public mempool.space API";
             // 
             // label157
             // 
@@ -9072,9 +9107,9 @@
             this.panel75.Controls.Add(this.textBoxSettingsCustomMempoolURL);
             this.panel75.Controls.Add(this.label174);
             this.panel75.Controls.Add(this.lblURLWarning);
-            this.panel75.Location = new System.Drawing.Point(210, 98);
+            this.panel75.Location = new System.Drawing.Point(232, 65);
             this.panel75.Name = "panel75";
-            this.panel75.Size = new System.Drawing.Size(330, 77);
+            this.panel75.Size = new System.Drawing.Size(330, 73);
             this.panel75.TabIndex = 242;
             // 
             // label200
@@ -9131,20 +9166,22 @@
             // 
             // lblURLWarning
             // 
+            this.lblURLWarning.BackColor = System.Drawing.Color.Transparent;
             this.lblURLWarning.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblURLWarning.ForeColor = System.Drawing.Color.Gray;
-            this.lblURLWarning.Location = new System.Drawing.Point(50, 56);
+            this.lblURLWarning.Location = new System.Drawing.Point(88, 50);
+            this.lblURLWarning.Margin = new System.Windows.Forms.Padding(0);
             this.lblURLWarning.Name = "lblURLWarning";
             this.lblURLWarning.Size = new System.Drawing.Size(280, 21);
             this.lblURLWarning.TabIndex = 149;
-            this.lblURLWarning.Text = "Must be in format \"http(s)://xxxxxx.xxx/api/";
+            this.lblURLWarning.Text = "(format http(s)://xxxxxx.xxx/api/)";
             // 
             // lblSettingsCustomNodeStatus
             // 
             this.lblSettingsCustomNodeStatus.AutoSize = true;
             this.lblSettingsCustomNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(585, 127);
+            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(614, 93);
             this.lblSettingsCustomNodeStatus.Name = "lblSettingsCustomNodeStatus";
             this.lblSettingsCustomNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsCustomNodeStatus.TabIndex = 232;
@@ -9156,11 +9193,25 @@
             this.lblSettingsCustomNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSettingsCustomNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(556, 130);
+            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(585, 96);
             this.lblSettingsCustomNodeStatusLight.Name = "lblSettingsCustomNodeStatusLight";
             this.lblSettingsCustomNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsCustomNodeStatusLight.TabIndex = 231;
             this.lblSettingsCustomNodeStatusLight.Text = "🟢";
+            // 
+            // lblUnused1
+            // 
+            this.lblUnused1.AutoSize = true;
+            this.lblUnused1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblUnused1.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblUnused1.ForeColor = System.Drawing.Color.Green;
+            this.lblUnused1.Location = new System.Drawing.Point(521, 267);
+            this.lblUnused1.Name = "lblUnused1";
+            this.lblUnused1.Size = new System.Drawing.Size(23, 18);
+            this.lblUnused1.TabIndex = 229;
+            this.lblUnused1.Text = "✔️";
+            this.lblUnused1.Visible = false;
+            this.lblUnused1.Click += new System.EventHandler(this.LblUnused1_Click);
             // 
             // panel34
             // 
@@ -9168,7 +9219,7 @@
             this.panel34.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel34.BackgroundImage")));
             this.panel34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel34.Controls.Add(this.label163);
-            this.panel34.Location = new System.Drawing.Point(0, 15);
+            this.panel34.Location = new System.Drawing.Point(0, 0);
             this.panel34.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel34.Name = "panel34";
             this.panel34.Size = new System.Drawing.Size(375, 23);
@@ -9188,15 +9239,55 @@
             this.label163.TabIndex = 153;
             this.label163.Text = "Network - on-chain queries (exc. Xpub)";
             // 
+            // label171
+            // 
+            this.label171.AutoSize = true;
+            this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label171.ForeColor = System.Drawing.Color.Silver;
+            this.label171.Location = new System.Drawing.Point(540, 291);
+            this.label171.Name = "label171";
+            this.label171.Size = new System.Drawing.Size(220, 20);
+            this.label171.TabIndex = 226;
+            this.label171.Text = "unused(WasMempool⚡API)";
+            this.label171.Visible = false;
+            // 
             // label158
             // 
             this.label158.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label158.ForeColor = System.Drawing.Color.Gray;
-            this.label158.Location = new System.Drawing.Point(0, 41);
+            this.label158.Location = new System.Drawing.Point(0, 26);
             this.label158.Name = "label158";
-            this.label158.Size = new System.Drawing.Size(760, 64);
+            this.label158.Size = new System.Drawing.Size(760, 46);
             this.label158.TabIndex = 143;
-            this.label158.Text = resources.GetString("label158.Text");
+            this.label158.Text = "Select network to use for on-chain queries. Selecting \'own/custom\' requires the U" +
+    "RL to your own installation of mempool.space (e.g http://umbrel.local:3006/api/)" +
+    ".";
+            // 
+            // lblUnused2
+            // 
+            this.lblUnused2.AutoSize = true;
+            this.lblUnused2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblUnused2.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblUnused2.ForeColor = System.Drawing.Color.Green;
+            this.lblUnused2.Location = new System.Drawing.Point(518, 290);
+            this.lblUnused2.Name = "lblUnused2";
+            this.lblUnused2.Size = new System.Drawing.Size(23, 18);
+            this.lblUnused2.TabIndex = 227;
+            this.lblUnused2.Text = "✔️";
+            this.lblUnused2.Visible = false;
+            this.lblUnused2.Click += new System.EventHandler(this.LblUnused2_Click);
+            // 
+            // label169
+            // 
+            this.label169.AutoSize = true;
+            this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label169.ForeColor = System.Drawing.Color.Silver;
+            this.label169.Location = new System.Drawing.Point(543, 268);
+            this.label169.Name = "label169";
+            this.label169.Size = new System.Drawing.Size(160, 20);
+            this.label169.TabIndex = 228;
+            this.label169.Text = "unused(Was⚡Dash)";
+            this.label169.Visible = false;
             // 
             // panel22
             // 
@@ -9204,7 +9295,7 @@
             this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
             this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel22.Controls.Add(this.label162);
-            this.panel22.Location = new System.Drawing.Point(0, 190);
+            this.panel22.Location = new System.Drawing.Point(0, 149);
             this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel22.Name = "panel22";
             this.panel22.Size = new System.Drawing.Size(375, 23);
@@ -9228,9 +9319,9 @@
             // 
             this.label159.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label159.ForeColor = System.Drawing.Color.Gray;
-            this.label159.Location = new System.Drawing.Point(0, 216);
+            this.label159.Location = new System.Drawing.Point(0, 175);
             this.label159.Name = "label159";
-            this.label159.Size = new System.Drawing.Size(760, 62);
+            this.label159.Size = new System.Drawing.Size(760, 43);
             this.label159.TabIndex = 150;
             this.label159.Text = resources.GetString("label159.Text");
             // 
@@ -9240,7 +9331,7 @@
             this.lblSettingsXpubNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSettingsXpubNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsXpubNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(305, 304);
+            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(305, 248);
             this.lblSettingsXpubNodeStatusLight.Name = "lblSettingsXpubNodeStatusLight";
             this.lblSettingsXpubNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsXpubNodeStatusLight.TabIndex = 221;
@@ -9251,21 +9342,11 @@
             this.lblSettingsXpubNodeStatus.AutoSize = true;
             this.lblSettingsXpubNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsXpubNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(326, 301);
+            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(326, 245);
             this.lblSettingsXpubNodeStatus.Name = "lblSettingsXpubNodeStatus";
             this.lblSettingsXpubNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsXpubNodeStatus.TabIndex = 222;
             this.lblSettingsXpubNodeStatus.Text = "invalid / node offline";
-            // 
-            // label165
-            // 
-            this.label165.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label165.ForeColor = System.Drawing.Color.Gray;
-            this.label165.Location = new System.Drawing.Point(0, 386);
-            this.label165.Name = "label165";
-            this.label165.Size = new System.Drawing.Size(760, 63);
-            this.label165.TabIndex = 210;
-            this.label165.Text = resources.GetString("label165.Text");
             // 
             // panel37
             // 
@@ -9273,7 +9354,7 @@
             this.panel37.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel37.BackgroundImage")));
             this.panel37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel37.Controls.Add(this.label155);
-            this.panel37.Location = new System.Drawing.Point(0, 360);
+            this.panel37.Location = new System.Drawing.Point(0, 302);
             this.panel37.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel37.Name = "panel37";
             this.panel37.Size = new System.Drawing.Size(375, 23);
@@ -9289,9 +9370,19 @@
             this.label155.Location = new System.Drawing.Point(0, 2);
             this.label155.Margin = new System.Windows.Forms.Padding(0);
             this.label155.Name = "label155";
-            this.label155.Size = new System.Drawing.Size(96, 20);
+            this.label155.Size = new System.Drawing.Size(89, 20);
             this.label155.TabIndex = 153;
-            this.label155.Text = "Dashboards";
+            this.label155.Text = "Other API\'s";
+            // 
+            // label165
+            // 
+            this.label165.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label165.ForeColor = System.Drawing.Color.Gray;
+            this.label165.Location = new System.Drawing.Point(0, 328);
+            this.label165.Name = "label165";
+            this.label165.Size = new System.Drawing.Size(760, 40);
+            this.label165.TabIndex = 210;
+            this.label165.Text = resources.GetString("label165.Text");
             // 
             // btnColorLabels
             // 
@@ -12102,6 +12193,16 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
+            // panel85
+            // 
+            this.panel85.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel85.Controls.Add(this.numericUpDownDashboardRefresh);
+            this.panel85.Controls.Add(this.label198);
+            this.panel85.Location = new System.Drawing.Point(362, 440);
+            this.panel85.Name = "panel85";
+            this.panel85.Size = new System.Drawing.Size(200, 34);
+            this.panel85.TabIndex = 249;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12111,6 +12212,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
@@ -12121,7 +12223,6 @@
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.headerNetworkName);
@@ -12318,9 +12419,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
             this.panelSettings.PerformLayout();
+            this.panel84.ResumeLayout(false);
+            this.panel84.PerformLayout();
+            this.panel83.ResumeLayout(false);
+            this.panel83.PerformLayout();
+            this.panel82.ResumeLayout(false);
+            this.panel82.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).EndInit();
             this.panel77.ResumeLayout(false);
             this.panel77.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).EndInit();
             this.panel76.ResumeLayout(false);
             this.panel76.PerformLayout();
             this.panel74.ResumeLayout(false);
@@ -12392,6 +12499,8 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
+            this.panel85.ResumeLayout(false);
+            this.panel85.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -12915,7 +13024,6 @@
         private System.Windows.Forms.Panel panelSettings;
         private System.Windows.Forms.Label lblBlockchairComJSON;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericUpDownDashboardRefresh;
         private System.Windows.Forms.Label lblWhatever;
         private System.Windows.Forms.Label lblBitcoinExplorerEndpoints;
@@ -12935,11 +13043,10 @@
         private System.Windows.Forms.Panel panel37;
         private System.Windows.Forms.Label label155;
         private System.Windows.Forms.Label label165;
-        private System.Windows.Forms.Label lblBitcoinDashboard;
-        private System.Windows.Forms.Label label167;
-        private System.Windows.Forms.Label lblLightningDashboard;
+        private System.Windows.Forms.Label lblPrivacyMode;
+        private System.Windows.Forms.Label lblUnused1;
         private System.Windows.Forms.Label label169;
-        private System.Windows.Forms.Label lblMempoolLightningJSON;
+        private System.Windows.Forms.Label lblUnused2;
         private System.Windows.Forms.Label label171;
         private System.Windows.Forms.Panel panel58;
         private System.Windows.Forms.Label label5;
@@ -13174,6 +13281,15 @@
         private System.Windows.Forms.PictureBox pictureBoxLightningCapacityChart;
         private System.Windows.Forms.PictureBox pictureBoxLightningNodesChart;
         private System.Windows.Forms.PictureBox pictureBoxLightningChannelsChart;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label235;
+        private System.Windows.Forms.Panel panel82;
+        private System.Windows.Forms.Label label234;
+        private System.Windows.Forms.Panel panel83;
+        private System.Windows.Forms.Label label237;
+        private System.Windows.Forms.Label label167;
+        private System.Windows.Forms.Panel panel84;
+        private System.Windows.Forms.Panel panel85;
     }
 }
 

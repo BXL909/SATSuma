@@ -355,6 +355,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\graphIcondisabled.png" />
     <None Include="Resources\graphIcon.png" />
     <None Include="Resources\chartIcon.png" />
     <None Include="Resources\fyj01dbo0i.gif" />

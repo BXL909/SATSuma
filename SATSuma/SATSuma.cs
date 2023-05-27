@@ -24,6 +24,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * change remaining hardcoded mempool.space urls to NodeURL urls
+ * test 'full privacy' mode (graph icons/menu enable/disable in particular)
  */
 
 #region Using
@@ -97,9 +98,9 @@ namespace SATSuma
         string blockchairComJSONSelected = "1"; // for settings record in bookmarks file
         string bitcoinExplorerEnpointsSelected = "1"; // for settings record in bookmarks file
         string blockchainInfoEndpointsSelected = "1"; // for settings record in bookmarks file
-        string bitcoinDashboardSelected = "1"; // for settings record in bookmarks file 
-        string lightningDashboardSelected = "1"; // for settings record in bookmarks file
-        string mempoolLightningJSONSelected = "1"; // for settings record in bookmarks file
+        string PrivacyModeSelected = "1"; // for settings record in bookmarks file 
+        string unused1 = "1"; // for settings record in bookmarks file
+        string unused2 = "1"; // for settings record in bookmarks file
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
         string chartType = ""; // keeps track of what type of chart is being displayed
         private TransactionsForAddressService _transactionsForAddressService;
@@ -186,6 +187,7 @@ namespace SATSuma
         bool btnTransactionOutputsDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnViewAddressFromTXInputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnViewAddressFromTXOutputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
+        bool privacyMode = false; // disables all comms apart from to full node
         readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
@@ -9501,7 +9503,81 @@ namespace SATSuma
                 btnChartMarketCapScaleLog.Enabled = btnChartMarketCapLogWasEnabled;
                 ignoreMouseMoveOnChart = false;
             }
-            
+            // disable charts where corresponding API is disabled
+            if (RunBlockchainInfoEndpointAPI == false)
+            {
+                DisableChartsThatDontUseMempoolSpace();
+            }
+        }
+
+        private void DisableChartsThatDontUseMempoolSpace()
+        {
+            btnChartCirculation.Enabled = false;
+            btnChartMarketCap.Enabled = false;
+            btnChartPrice.Enabled = false;
+            btnChartUniqueAddresses.Enabled = false;
+            btnChartUTXO.Enabled = false;
+            pictureBoxChartCirculation.Enabled = false;
+            pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxChartCirculation.Image = Properties.Resources.graphIcondisabled;
+            });
+            pictureBoxHeaderPriceChart.Enabled = false;
+            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxHeaderPriceChart.Image = Properties.Resources.graphIcondisabled;
+            });
+            pictureBoxPriceChart.Enabled = false;
+            pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxPriceChart.Image = Properties.Resources.graphIcondisabled;
+            });
+            pictureBoxMarketCapChart.Enabled = false;
+            pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxMarketCapChart.Image = Properties.Resources.graphIcondisabled;
+            });
+            pictureBoxUniqueAddressesChart.Enabled = false;
+            pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxUniqueAddressesChart.Image = Properties.Resources.graphIcondisabled;
+            });
+
+
+        }
+
+        private void EnableChartsThatDontUseMempoolSpace()
+        {
+            btnChartCirculation.Enabled = true;
+            btnChartMarketCap.Enabled = true;
+            btnChartPrice.Enabled = true;
+            btnChartUniqueAddresses.Enabled = true;
+            btnChartUTXO.Enabled = true;
+            pictureBoxChartCirculation.Enabled = true;
+            pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxChartCirculation.Image = Properties.Resources.graphIcon;
+            });
+            pictureBoxHeaderPriceChart.Enabled = true;
+            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxHeaderPriceChart.Image = Properties.Resources.graphIcon;
+            });
+            pictureBoxPriceChart.Enabled = true;
+            pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxPriceChart.Image = Properties.Resources.graphIcon;
+            });
+            pictureBoxMarketCapChart.Enabled = true;
+            pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxMarketCapChart.Image = Properties.Resources.graphIcon;
+            });
+            pictureBoxUniqueAddressesChart.Enabled = true;
+            pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
+            {
+                pictureBoxUniqueAddressesChart.Image = Properties.Resources.graphIcon;
+            });
         }
         #endregion
 
@@ -10970,6 +11046,7 @@ namespace SATSuma
                 });
                 RunBlockchainInfoEndpointAPI = false;
                 blockchainInfoEndpointsSelected = "0";
+                DisableChartsThatDontUseMempoolSpace();
             }
             else
             {
@@ -10980,65 +11057,27 @@ namespace SATSuma
                 });
                 RunBlockchainInfoEndpointAPI = true;
                 blockchainInfoEndpointsSelected = "1";
+                EnableChartsThatDontUseMempoolSpace();
             }
             SaveSettingsToBookmarksFile();
         }
 
-        private void LblBitcoinDashboard_Click(object sender, EventArgs e)
+        private void LblPrivacyMode_Click(object sender, EventArgs e)
         {
-            if (lblBitcoinDashboard.Text == "✔️")
+            if (lblPrivacyMode.Text == "❌")
             {
-                lblBitcoinDashboard.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinDashboard.ForeColor = Color.IndianRed;
-                    lblBitcoinDashboard.Text = "❌";
-                });
-                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                    lblBlockchairComJSON.Text = "❌";
-                });
-                RunBlockchairComJSONAPI = false;
-                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                    lblBitcoinExplorerEndpoints.Text = "❌";
-                });
-                RunBitcoinExplorerEndpointAPI = false;
-                RunBitcoinExplorerOrgJSONAPI = false;
-                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                    lblBlockchainInfoEndpoints.Text = "❌";
-                });
-                RunBlockchainInfoEndpointAPI = false;
-                lblBlockchairComJSON.Enabled = false;
-                lblBitcoinExplorerEndpoints.Enabled = false;
-                lblBlockchainInfoEndpoints.Enabled = false;
-                bitcoinDashboardSelected = "0";
-                blockchairComJSONSelected = "0";
-                bitcoinExplorerEnpointsSelected = "0";
-                blockchainInfoEndpointsSelected = "0";
-                btnMenuBitcoinDashboard.Enabled = false;
+                EnablePrivacyMode();
             }
             else
             {
-                lblBitcoinDashboard.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinDashboard.ForeColor = Color.Green;
-                    lblBitcoinDashboard.Text = "✔️";
-                });
-                lblBlockchairComJSON.Enabled = true;
-                lblBitcoinExplorerEndpoints.Enabled = true;
-                lblBlockchainInfoEndpoints.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                bitcoinDashboardSelected = "1";
+                DisablePrivacyMode();
             }
             SaveSettingsToBookmarksFile();
         }
 
-        private void LblLightningDashboard_Click(object sender, EventArgs e)
+        private void LblUnused1_Click(object sender, EventArgs e)
         {
+            /*
             if (lblLightningDashboard.Text == "✔️")
             {
                 lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
@@ -11076,10 +11115,12 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
             }
             SaveSettingsToBookmarksFile();
+            */
         }
 
-        private void LblMempoolLightningJSON_Click(object sender, EventArgs e)
+        private void LblUnused2_Click(object sender, EventArgs e)
         {
+            /*
             if (lblMempoolLightningJSON.Text == "✔️")
             {
                 lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
@@ -11111,6 +11152,7 @@ namespace SATSuma
                 mempoolLightningJSONSelected = "1";
             }
             SaveSettingsToBookmarksFile();
+            */
         }
 
         private void NumericUpDownDashboardRefresh_ValueChanged(object sender, EventArgs e)
@@ -11124,7 +11166,7 @@ namespace SATSuma
             SaveSettingsToBookmarksFile();
         }
 
-        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Bitcoin Dashboard, Lightning Dashboard, MempoolLightningJSON, nnn = refresh freq.
+        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnn = refresh freq.
 
         private void SaveSettingsToBookmarksFile()
         {
@@ -11156,9 +11198,9 @@ namespace SATSuma
             {
                 selectedNetwork = "C";
             }
-            if (lblBitcoinDashboard.Text == "✔️")
+            if (lblPrivacyMode.Text == "✔️")
             {
-                bitcoinDashboardSelected = "1";
+                PrivacyModeSelected = "1";
             }
             if (lblBlockchairComJSON.Text == "✔️")
             {
@@ -11172,18 +11214,18 @@ namespace SATSuma
             {
                 blockchainInfoEndpointsSelected = "1";
             }
-            if (lblLightningDashboard.Text == "✔️")
+            if (lblUnused1.Text == "✔️")
             {
-                lightningDashboardSelected = "1";
+                unused1 = "1";
             }
-            if (lblMempoolLightningJSON.Text == "✔️")
+            if (lblUnused2.Text == "✔️")
             {
-                mempoolLightningJSONSelected = "1";
+                unused2 = "1";
             }
 
             // write the settings to the bookmarks file for auto retrieval next time
             DateTime today = DateTime.Today;
-            string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + bitcoinDashboardSelected + lightningDashboardSelected + mempoolLightningJSONSelected + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'); ;
+            string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + PrivacyModeSelected + unused1 + unused2 + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'); ;
             string keyCheck = "21m";
             var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
             if (!settingsAlreadySavedInFile)
@@ -11375,96 +11417,75 @@ namespace SATSuma
                     }
                     if (Convert.ToString(bookmark.Data[5]) == "1")
                     {
-                        lblBitcoinDashboard.Invoke((MethodInvoker)delegate
+                        lblPrivacyMode.Invoke((MethodInvoker)delegate
                         {
-                            lblBitcoinDashboard.Text = "✔️";
-                            lblBitcoinDashboard.ForeColor = Color.Green;
+                            lblPrivacyMode.Enabled = true;
+                            lblPrivacyMode.Text = "✔️";
+                            lblPrivacyMode.ForeColor = Color.Green;
                         });
+                        EnablePrivacyMode();
+                    }
+                    else
+                    {
+                        privacyMode = false;
+                        lblPrivacyMode.Invoke((MethodInvoker)delegate
+                        {
+                            lblPrivacyMode.Text = "❌";
+                            lblPrivacyMode.ForeColor = Color.IndianRed;
+                        });
+                        
                         lblBlockchairComJSON.Enabled = true;
                         lblBitcoinExplorerEndpoints.Enabled = true;
                         lblBlockchainInfoEndpoints.Enabled = true;
-                        btnMenuBitcoinDashboard.Enabled = true;
-                    }
-                    else
-                    {
-                        lblBitcoinDashboard.Invoke((MethodInvoker)delegate
-                        {
-                            lblBitcoinDashboard.Text = "❌";
-                            lblBitcoinDashboard.ForeColor = Color.IndianRed;
-                        });
-                        RunBlockchairComJSONAPI = false;
-                        lblBlockchairComJSON.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockchairComJSON.Text = "❌";
-                            lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                        });
-                        lblBlockchairComJSON.Enabled = false;
-                        RunBitcoinExplorerEndpointAPI = false;
-                        RunBitcoinExplorerOrgJSONAPI = false;
-                        lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
-                        {
-                            lblBitcoinExplorerEndpoints.Text = "❌";
-                            lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                        });
-                        lblBitcoinExplorerEndpoints.Enabled = false;
-                        RunBlockchainInfoEndpointAPI = false;
-                        lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockchainInfoEndpoints.Text = "❌";
-                            lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                        });
-                        lblBlockchainInfoEndpoints.Enabled = false;
-                        btnMenuBitcoinDashboard.Enabled = false;
+                        lblSettingsNodeMainnet.Enabled = true;
+                        lblSettingsNodeTestnet.Enabled = true;
                     }
                     if (Convert.ToString(bookmark.Data[6]) == "1")
                     {
-                        lblLightningDashboard.Invoke((MethodInvoker)delegate
+                        lblUnused1.Invoke((MethodInvoker)delegate
                         {
-                            lblLightningDashboard.Text = "✔️";
-                            lblLightningDashboard.ForeColor = Color.Green;
+                            lblUnused1.Text = "✔️";
+                            lblUnused1.ForeColor = Color.Green;
                         });
-                        RunMempoolSpaceLightningAPI = true;
-                        lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                        lblUnused2.Invoke((MethodInvoker)delegate
                         {
-                            lblMempoolLightningJSON.Text = "✔️";
-                            lblMempoolLightningJSON.ForeColor = Color.Green;
+                            lblUnused2.Text = "✔️";
+                            lblUnused2.ForeColor = Color.Green;
                         });
-                        lblMempoolLightningJSON.Enabled = true;
-                        btnMenuLightningDashboard.Enabled = true;
+                        lblUnused2.Enabled = true;
+                        
                     }
                     else
                     {
-                        lblLightningDashboard.Invoke((MethodInvoker)delegate
+                        lblUnused1.Invoke((MethodInvoker)delegate
                         {
-                            lblLightningDashboard.Text = "❌";
-                            lblLightningDashboard.ForeColor = Color.IndianRed;
+                            lblUnused1.Text = "❌";
+                            lblUnused1.ForeColor = Color.IndianRed;
                         });
-                        RunMempoolSpaceLightningAPI = false;
-                        lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                        lblUnused2.Invoke((MethodInvoker)delegate
                         {
-                            lblMempoolLightningJSON.Text = "❌";
-                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                            lblUnused2.Text = "❌";
+                            lblUnused2.ForeColor = Color.IndianRed;
                         });
-                        lblMempoolLightningJSON.Enabled = false;
-                        btnMenuLightningDashboard.Enabled = false;
+                        lblUnused2.Enabled = false;
                     }
                     if (Convert.ToString(bookmark.Data[7]) == "1")
                     {
-                        lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                        lblUnused2.Invoke((MethodInvoker)delegate
                         {
-                            lblMempoolLightningJSON.Text = "✔️";
-                            lblMempoolLightningJSON.ForeColor = Color.Green;
+                            lblUnused2.Text = "✔️";
+                            lblUnused2.ForeColor = Color.Green;
                         });
-                        lblMempoolLightningJSON.Enabled = true;
+                        lblUnused2.Enabled = true;
                     }
                     else
                     {
-                        lblMempoolLightningJSON.Invoke((MethodInvoker)delegate
+                        lblUnused2.Invoke((MethodInvoker)delegate
                         {
-                            lblMempoolLightningJSON.Text = "❌";
-                            lblMempoolLightningJSON.ForeColor = Color.IndianRed;
+                            lblUnused2.Text = "❌";
+                            lblUnused2.ForeColor = Color.IndianRed;
                         });
-                        lblMempoolLightningJSON.Enabled = false;
+                        lblUnused2.Enabled = false;
                     }
                     numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
                     break;
@@ -12347,7 +12368,7 @@ namespace SATSuma
                 control.ForeColor = thiscolor;
             }
             //settings
-            Control[] listSettingsLabelsToColor = { label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label6, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
+            Control[] listSettingsLabelsToColor = { label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
             foreach (Control control in listSettingsLabelsToColor)
             {
                 control.ForeColor = thiscolor;
@@ -13039,6 +13060,124 @@ namespace SATSuma
         #region REUSEABLE STUFF
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
+
+        private void DisablePrivacyMode()
+        {
+            privacyMode = false;
+            lblPrivacyMode.Invoke((MethodInvoker)delegate
+            {
+                lblPrivacyMode.ForeColor = Color.IndianRed;
+                lblPrivacyMode.Text = "❌";
+            });
+            lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+            {
+                lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                lblBlockchairComJSON.Text = "❌";
+                lblBlockchairComJSON.Enabled = true;
+            });
+            RunBlockchairComJSONAPI = false;
+            lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+            {
+                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                lblBitcoinExplorerEndpoints.Text = "❌";
+                lblBitcoinExplorerEndpoints.Enabled = true;
+            });
+            RunBitcoinExplorerEndpointAPI = false;
+            RunBitcoinExplorerOrgJSONAPI = false;
+            lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+            {
+                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                lblBlockchainInfoEndpoints.Text = "❌";
+                lblBlockchainInfoEndpoints.Enabled = true;
+            });
+            RunBlockchainInfoEndpointAPI = false;
+
+            PrivacyModeSelected = "0";
+            blockchairComJSONSelected = "0";
+            bitcoinExplorerEnpointsSelected = "0";
+            blockchainInfoEndpointsSelected = "0";
+
+            lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeTestnet.Enabled = true;
+            });
+            lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                lblSettingsNodeMainnet.Enabled = true;
+            });
+            EnableChartsThatDontUseMempoolSpace();
+
+        }
+
+        private void EnablePrivacyMode()
+        {
+            privacyMode = true;
+            lblPrivacyMode.Invoke((MethodInvoker)delegate
+            {
+                lblPrivacyMode.ForeColor = Color.Green;
+                lblPrivacyMode.Text = "✔️";
+            });
+            lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+            {
+                lblBlockchairComJSON.ForeColor = Color.Gray;
+                lblBlockchairComJSON.Text = "❌";
+                lblBlockchairComJSON.Enabled = false;
+            });
+            RunBlockchairComJSONAPI = false;
+            lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+            {
+                lblBitcoinExplorerEndpoints.ForeColor = Color.Gray;
+                lblBitcoinExplorerEndpoints.Text = "❌";
+                lblBitcoinExplorerEndpoints.Enabled = false;
+            });
+            RunBitcoinExplorerEndpointAPI = false;
+            RunBitcoinExplorerOrgJSONAPI = false;
+            lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+            {
+                lblBlockchainInfoEndpoints.ForeColor = Color.Gray;
+                lblBlockchainInfoEndpoints.Text = "❌";
+                lblBlockchainInfoEndpoints.Enabled = false;
+            });
+            RunBlockchainInfoEndpointAPI = false;
+
+            PrivacyModeSelected = "1";
+            blockchairComJSONSelected = "0";
+            bitcoinExplorerEnpointsSelected = "0";
+            blockchainInfoEndpointsSelected = "0";
+
+            lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsNodeCustom.ForeColor = Color.Green;
+                lblSettingsNodeCustom.Text = "✔️";
+            });
+            testNet = false;
+            textBoxSettingsCustomMempoolURL.Enabled = true;
+            textBoxSettingsCustomMempoolURL.Focus();
+
+            lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+            lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+            });
+            previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+
+            CheckCustomNodeIsOnline();
+            CheckNetworkStatus();
+
+            lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsNodeTestnet.ForeColor = Color.Gray;
+                lblSettingsNodeTestnet.Enabled = false;
+            });
+            lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+            {
+                lblSettingsNodeMainnet.ForeColor = Color.Gray;
+                lblSettingsNodeMainnet.Enabled = false;
+            });
+            DisableChartsThatDontUseMempoolSpace();
+        }
 
         private void UpdateSecondsToHalving()
         {

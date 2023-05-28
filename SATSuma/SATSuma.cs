@@ -23,8 +23,8 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
- * test 'full privacy' mode (graph icons/menu enable/disable in particular)
- * disable lightning and charts on testnet?
+ * further testing of privacy mode, testnet and own node
+ * error handling on charts, etc
  */
 
 #region Using
@@ -9541,27 +9541,27 @@ namespace SATSuma
             pictureBoxChartCirculation.Enabled = false;
             pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
             {
-                pictureBoxChartCirculation.Image = Properties.Resources.graphIcondisabled;
+                pictureBoxChartCirculation.BackgroundImage = Properties.Resources.graphIcondisabled;
             });
             pictureBoxHeaderPriceChart.Enabled = false;
             pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxHeaderPriceChart.Image = Properties.Resources.graphIcondisabled;
+                pictureBoxHeaderPriceChart.BackgroundImage = Properties.Resources.graphIcondisabled;
             });
             pictureBoxPriceChart.Enabled = false;
             pictureBoxPriceChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxPriceChart.Image = Properties.Resources.graphIcondisabled;
+                pictureBoxPriceChart.BackgroundImage = Properties.Resources.graphIcondisabled;
             });
             pictureBoxMarketCapChart.Enabled = false;
             pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxMarketCapChart.Image = Properties.Resources.graphIcondisabled;
+                pictureBoxMarketCapChart.BackgroundImage = Properties.Resources.graphIcondisabled;
             });
             pictureBoxUniqueAddressesChart.Enabled = false;
             pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxUniqueAddressesChart.Image = Properties.Resources.graphIcondisabled;
+                pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcondisabled;
             });
 
 
@@ -9577,29 +9577,31 @@ namespace SATSuma
             pictureBoxChartCirculation.Enabled = true;
             pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
             {
-                pictureBoxChartCirculation.Image = Properties.Resources.graphIcon;
+                pictureBoxChartCirculation.BackgroundImage = Properties.Resources.graphIcon;
             });
             pictureBoxHeaderPriceChart.Enabled = true;
             pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxHeaderPriceChart.Image = Properties.Resources.graphIcon;
+                pictureBoxHeaderPriceChart.BackgroundImage = Properties.Resources.graphIcon;
             });
             pictureBoxPriceChart.Enabled = true;
             pictureBoxPriceChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxPriceChart.Image = Properties.Resources.graphIcon;
+                pictureBoxPriceChart.BackgroundImage = Properties.Resources.graphIcon;
             });
             pictureBoxMarketCapChart.Enabled = true;
             pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxMarketCapChart.Image = Properties.Resources.graphIcon;
+                pictureBoxMarketCapChart.BackgroundImage = Properties.Resources.graphIcon;
             });
             pictureBoxUniqueAddressesChart.Enabled = true;
             pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
             {
-                pictureBoxUniqueAddressesChart.Image = Properties.Resources.graphIcon;
+                pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcon;
             });
         }
+
+
         #endregion
 
         #region BOOKMARKS SCREEN
@@ -10740,7 +10742,7 @@ namespace SATSuma
                 }
                 GetBlockTip();
                 LookupBlockList();
-                RunMempoolSpaceLightningAPI = true;
+                EnableFunctionalityForMainNet();
                 UpdateBitcoinAndLightningDashboards();
             }
         }
@@ -10770,10 +10772,9 @@ namespace SATSuma
                 CheckNetworkStatus();
                 CreateDataServices();
                 SaveSettingsToBookmarksFile();
-                DisableChartsThatDontUseMempoolSpace();
+                DisableFunctionalityForTestNet();
                 GetBlockTip();
                 LookupBlockList();
-                RunMempoolSpaceLightningAPI = false;
                 UpdateBitcoinAndLightningDashboards();
             }
         }
@@ -11348,6 +11349,7 @@ namespace SATSuma
                         testNet = true;
                         NodeURL = "https://mempool.space/testnet/api/";
                         CreateDataServices();
+                        DisableFunctionalityForTestNet();
                         lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsNodeMainnet.Text = "❌";
@@ -11573,6 +11575,32 @@ namespace SATSuma
                         }
                     }
                 }
+            }
+        }
+
+        private void DisableFunctionalityForTestNet()
+        {
+            Control[] DisableThisStuffForTestnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxChartCirculation, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxHeaderPriceChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxMarketCapChart, pictureBoxPoolRankingChart, pictureBoxPriceChart, pictureBoxUniqueAddressesChart };
+            foreach (Control control in DisableThisStuffForTestnet)
+            {
+                control.Enabled = false;
+                control.BackgroundImage = Properties.Resources.graphIcondisabled;
+            }
+            btnMenuCharts.Enabled = false;
+        }    
+
+        private void EnableFunctionalityForMainNet()
+        {
+            btnMenuCharts.Enabled = true;
+            if (RunBlockchainInfoEndpointAPI == true && privacyMode == false)
+            {
+                EnableChartsThatDontUseMempoolSpace();
+            }
+            Control[] EnableThisStuffForMainnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxPoolRankingChart };
+            foreach (Control control in EnableThisStuffForMainnet)
+            {
+                control.Enabled = true;
+                control.BackgroundImage = Properties.Resources.graphIcon;
             }
         }
 

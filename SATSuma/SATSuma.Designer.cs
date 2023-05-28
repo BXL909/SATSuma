@@ -581,17 +581,18 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.panel85 = new System.Windows.Forms.Panel();
+            this.numericUpDownDashboardRefresh = new System.Windows.Forms.NumericUpDown();
+            this.label198 = new System.Windows.Forms.Label();
             this.panel84 = new System.Windows.Forms.Panel();
+            this.lblPrivacyMode = new System.Windows.Forms.Label();
             this.label167 = new System.Windows.Forms.Label();
             this.panel83 = new System.Windows.Forms.Panel();
             this.label237 = new System.Windows.Forms.Label();
             this.label235 = new System.Windows.Forms.Label();
             this.panel82 = new System.Windows.Forms.Panel();
             this.label234 = new System.Windows.Forms.Label();
-            this.numericUpDownDashboardRefresh = new System.Windows.Forms.NumericUpDown();
             this.label50 = new System.Windows.Forms.Label();
-            this.lblPrivacyMode = new System.Windows.Forms.Label();
-            this.label198 = new System.Windows.Forms.Label();
             this.panel77 = new System.Windows.Forms.Panel();
             this.lblWhatever = new System.Windows.Forms.Label();
             this.lblBitcoinExplorerEndpoints = new System.Windows.Forms.Label();
@@ -811,7 +812,6 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.panel85 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -918,10 +918,11 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
+            this.panel85.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).BeginInit();
             this.panel84.SuspendLayout();
             this.panel83.SuspendLayout();
             this.panel82.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).BeginInit();
             this.panel77.SuspendLayout();
             this.panel76.SuspendLayout();
             this.panel74.SuspendLayout();
@@ -963,7 +964,6 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
-            this.panel85.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1660,8 +1660,9 @@
             // 
             // pictureBoxHashrateChart
             // 
+            this.pictureBoxHashrateChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxHashrateChart.BackgroundImage")));
+            this.pictureBoxHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxHashrateChart.Location = new System.Drawing.Point(640, 334);
             this.pictureBoxHashrateChart.Name = "pictureBoxHashrateChart";
             this.pictureBoxHashrateChart.Size = new System.Drawing.Size(16, 12);
@@ -1673,8 +1674,9 @@
             // 
             // pictureBoxDifficultyChart
             // 
+            this.pictureBoxDifficultyChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxDifficultyChart.BackgroundImage")));
+            this.pictureBoxDifficultyChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(366, 372);
             this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
             this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 12);
@@ -1686,8 +1688,9 @@
             // 
             // pictureBoxHeaderHashrateChart
             // 
+            this.pictureBoxHeaderHashrateChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxHeaderHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(69, 87);
             this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
             this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 12);
@@ -1699,8 +1702,9 @@
             // 
             // pictureBoxBlockListDifficultyChart
             // 
+            this.pictureBoxBlockListDifficultyChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListDifficultyChart.BackgroundImage")));
+            this.pictureBoxBlockListDifficultyChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListDifficultyChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 307);
             this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
             this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 12);
@@ -1712,8 +1716,9 @@
             // 
             // pictureBoxBlockListHashrateChart
             // 
+            this.pictureBoxBlockListHashrateChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListHashrateChart.BackgroundImage")));
+            this.pictureBoxBlockListHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListHashrateChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 379);
             this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
             this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 12);
@@ -1725,8 +1730,9 @@
             // 
             // pictureBoxHeaderPriceChart
             // 
+            this.pictureBoxHeaderPriceChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderPriceChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxHeaderPriceChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon;
             this.pictureBoxHeaderPriceChart.Location = new System.Drawing.Point(110, 32);
             this.pictureBoxHeaderPriceChart.Name = "pictureBoxHeaderPriceChart";
             this.pictureBoxHeaderPriceChart.Size = new System.Drawing.Size(16, 12);
@@ -1738,8 +1744,9 @@
             // 
             // pictureBoxPriceChart
             // 
+            this.pictureBoxPriceChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxPriceChart.BackgroundImage")));
+            this.pictureBoxPriceChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxPriceChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxPriceChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxPriceChart.Location = new System.Drawing.Point(88, 43);
             this.pictureBoxPriceChart.Name = "pictureBoxPriceChart";
             this.pictureBoxPriceChart.Size = new System.Drawing.Size(16, 12);
@@ -1751,8 +1758,9 @@
             // 
             // pictureBoxHeaderFeeRatesChart
             // 
+            this.pictureBoxHeaderFeeRatesChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderFeeRatesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxHeaderFeeRatesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderFeeRatesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxHeaderFeeRatesChart.Location = new System.Drawing.Point(210, 26);
             this.pictureBoxHeaderFeeRatesChart.Name = "pictureBoxHeaderFeeRatesChart";
             this.pictureBoxHeaderFeeRatesChart.Size = new System.Drawing.Size(16, 12);
@@ -1764,8 +1772,9 @@
             // 
             // pictureBoxBlockScreenChartFeeRange
             // 
+            this.pictureBoxBlockScreenChartFeeRange.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartFeeRange.BackgroundImage")));
+            this.pictureBoxBlockScreenChartFeeRange.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartFeeRange.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartFeeRange.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockScreenChartFeeRange.Location = new System.Drawing.Point(137, 354);
             this.pictureBoxBlockScreenChartFeeRange.Name = "pictureBoxBlockScreenChartFeeRange";
             this.pictureBoxBlockScreenChartFeeRange.Size = new System.Drawing.Size(16, 12);
@@ -1777,8 +1786,9 @@
             // 
             // pictureBoxBlockScreenChartReward
             // 
+            this.pictureBoxBlockScreenChartReward.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartReward.BackgroundImage")));
+            this.pictureBoxBlockScreenChartReward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartReward.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartReward.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockScreenChartReward.Location = new System.Drawing.Point(137, 306);
             this.pictureBoxBlockScreenChartReward.Name = "pictureBoxBlockScreenChartReward";
             this.pictureBoxBlockScreenChartReward.Size = new System.Drawing.Size(16, 12);
@@ -1790,8 +1800,9 @@
             // 
             // pictureBoxBlockScreenChartBlockSize
             // 
+            this.pictureBoxBlockScreenChartBlockSize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartBlockSize.BackgroundImage")));
+            this.pictureBoxBlockScreenChartBlockSize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartBlockSize.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartBlockSize.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(137, 162);
             this.pictureBoxBlockScreenChartBlockSize.Name = "pictureBoxBlockScreenChartBlockSize";
             this.pictureBoxBlockScreenChartBlockSize.Size = new System.Drawing.Size(16, 12);
@@ -1803,8 +1814,9 @@
             // 
             // pictureBoxChartCirculation
             // 
+            this.pictureBoxChartCirculation.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxChartCirculation.BackgroundImage")));
+            this.pictureBoxChartCirculation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxChartCirculation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxChartCirculation.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxChartCirculation.Location = new System.Drawing.Point(176, 107);
             this.pictureBoxChartCirculation.Name = "pictureBoxChartCirculation";
             this.pictureBoxChartCirculation.Size = new System.Drawing.Size(16, 12);
@@ -1816,8 +1828,9 @@
             // 
             // pictureBoxBlockListBlockSizeChart
             // 
+            this.pictureBoxBlockListBlockSizeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListBlockSizeChart.BackgroundImage")));
+            this.pictureBoxBlockListBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListBlockSizeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListBlockSizeChart.Location = new System.Drawing.Point(135, 63);
             this.pictureBoxBlockListBlockSizeChart.Name = "pictureBoxBlockListBlockSizeChart";
             this.pictureBoxBlockListBlockSizeChart.Size = new System.Drawing.Size(16, 12);
@@ -1829,8 +1842,9 @@
             // 
             // pictureBoxBlockListPoolRanking
             // 
+            this.pictureBoxBlockListPoolRanking.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListPoolRanking.BackgroundImage")));
+            this.pictureBoxBlockListPoolRanking.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListPoolRanking.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListPoolRanking.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListPoolRanking.Location = new System.Drawing.Point(167, 118);
             this.pictureBoxBlockListPoolRanking.Name = "pictureBoxBlockListPoolRanking";
             this.pictureBoxBlockListPoolRanking.Size = new System.Drawing.Size(16, 12);
@@ -1842,8 +1856,9 @@
             // 
             // pictureBoxBlockListFeeChart
             // 
+            this.pictureBoxBlockListFeeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeChart.BackgroundImage")));
+            this.pictureBoxBlockListFeeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListFeeChart.Location = new System.Drawing.Point(390, 45);
             this.pictureBoxBlockListFeeChart.Name = "pictureBoxBlockListFeeChart";
             this.pictureBoxBlockListFeeChart.Size = new System.Drawing.Size(16, 12);
@@ -1855,8 +1870,9 @@
             // 
             // pictureBoxBlockListRewardChart
             // 
+            this.pictureBoxBlockListRewardChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListRewardChart.BackgroundImage")));
+            this.pictureBoxBlockListRewardChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListRewardChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListRewardChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListRewardChart.Location = new System.Drawing.Point(462, 63);
             this.pictureBoxBlockListRewardChart.Name = "pictureBoxBlockListRewardChart";
             this.pictureBoxBlockListRewardChart.Size = new System.Drawing.Size(16, 12);
@@ -1868,8 +1884,9 @@
             // 
             // pictureBoxBlockListFeeRangeChart
             // 
+            this.pictureBoxBlockListFeeRangeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeRangeChart.BackgroundImage")));
+            this.pictureBoxBlockListFeeRangeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeRangeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListFeeRangeChart.Location = new System.Drawing.Point(455, 82);
             this.pictureBoxBlockListFeeRangeChart.Name = "pictureBoxBlockListFeeRangeChart";
             this.pictureBoxBlockListFeeRangeChart.Size = new System.Drawing.Size(16, 12);
@@ -1881,8 +1898,9 @@
             // 
             // pictureBoxBlockFeeChart
             // 
+            this.pictureBoxBlockFeeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockFeeChart.BackgroundImage")));
+            this.pictureBoxBlockFeeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockFeeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockFeeChart.Location = new System.Drawing.Point(137, 258);
             this.pictureBoxBlockFeeChart.Name = "pictureBoxBlockFeeChart";
             this.pictureBoxBlockFeeChart.Size = new System.Drawing.Size(16, 12);
@@ -1894,8 +1912,9 @@
             // 
             // pictureBoxBlockScreenPoolRankingChart
             // 
+            this.pictureBoxBlockScreenPoolRankingChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenPoolRankingChart.BackgroundImage")));
+            this.pictureBoxBlockScreenPoolRankingChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenPoolRankingChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 498);
             this.pictureBoxBlockScreenPoolRankingChart.Name = "pictureBoxBlockScreenPoolRankingChart";
             this.pictureBoxBlockScreenPoolRankingChart.Size = new System.Drawing.Size(16, 12);
@@ -1907,8 +1926,9 @@
             // 
             // pictureBoxBlockListFeeChart2
             // 
+            this.pictureBoxBlockListFeeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeChart2.BackgroundImage")));
+            this.pictureBoxBlockListFeeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeChart2.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListFeeChart2.Location = new System.Drawing.Point(60, 163);
             this.pictureBoxBlockListFeeChart2.Name = "pictureBoxBlockListFeeChart2";
             this.pictureBoxBlockListFeeChart2.Size = new System.Drawing.Size(16, 12);
@@ -1920,8 +1940,9 @@
             // 
             // pictureBoxBlockListFeeRangeChart2
             // 
+            this.pictureBoxBlockListFeeRangeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeRangeChart2.BackgroundImage")));
+            this.pictureBoxBlockListFeeRangeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeRangeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeRangeChart2.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 127);
             this.pictureBoxBlockListFeeRangeChart2.Name = "pictureBoxBlockListFeeRangeChart2";
             this.pictureBoxBlockListFeeRangeChart2.Size = new System.Drawing.Size(16, 12);
@@ -1933,8 +1954,9 @@
             // 
             // pictureBoxPoolRankingChart
             // 
+            this.pictureBoxPoolRankingChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxPoolRankingChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxPoolRankingChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxPoolRankingChart.Location = new System.Drawing.Point(45, 171);
             this.pictureBoxPoolRankingChart.Name = "pictureBoxPoolRankingChart";
             this.pictureBoxPoolRankingChart.Size = new System.Drawing.Size(16, 12);
@@ -1946,8 +1968,9 @@
             // 
             // pictureBoxMarketCapChart
             // 
+            this.pictureBoxMarketCapChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxMarketCapChart.BackgroundImage")));
+            this.pictureBoxMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxMarketCapChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxMarketCapChart.Location = new System.Drawing.Point(698, 43);
             this.pictureBoxMarketCapChart.Name = "pictureBoxMarketCapChart";
             this.pictureBoxMarketCapChart.Size = new System.Drawing.Size(16, 12);
@@ -1959,8 +1982,9 @@
             // 
             // pictureBoxUniqueAddressesChart
             // 
+            this.pictureBoxUniqueAddressesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxUniqueAddressesChart.BackgroundImage")));
+            this.pictureBoxUniqueAddressesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxUniqueAddressesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxUniqueAddressesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxUniqueAddressesChart.Location = new System.Drawing.Point(430, 107);
             this.pictureBoxUniqueAddressesChart.Name = "pictureBoxUniqueAddressesChart";
             this.pictureBoxUniqueAddressesChart.Size = new System.Drawing.Size(16, 12);
@@ -1972,8 +1996,9 @@
             // 
             // pictureBoxFeeRangeChart
             // 
+            this.pictureBoxFeeRangeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxFeeRangeChart.BackgroundImage")));
+            this.pictureBoxFeeRangeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxFeeRangeChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxFeeRangeChart.Location = new System.Drawing.Point(397, 234);
             this.pictureBoxFeeRangeChart.Name = "pictureBoxFeeRangeChart";
             this.pictureBoxFeeRangeChart.Size = new System.Drawing.Size(16, 12);
@@ -1985,8 +2010,9 @@
             // 
             // pictureBoxBlockFeesChart
             // 
+            this.pictureBoxBlockFeesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockFeesChart.BackgroundImage")));
+            this.pictureBoxBlockFeesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockFeesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockFeesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxBlockFeesChart.Location = new System.Drawing.Point(666, 234);
             this.pictureBoxBlockFeesChart.Name = "pictureBoxBlockFeesChart";
             this.pictureBoxBlockFeesChart.Size = new System.Drawing.Size(16, 12);
@@ -1998,8 +2024,9 @@
             // 
             // pictureBoxLightningCapacityChart
             // 
+            this.pictureBoxLightningCapacityChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningCapacityChart.BackgroundImage")));
+            this.pictureBoxLightningCapacityChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxLightningCapacityChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningCapacityChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxLightningCapacityChart.Location = new System.Drawing.Point(157, 26);
             this.pictureBoxLightningCapacityChart.Name = "pictureBoxLightningCapacityChart";
             this.pictureBoxLightningCapacityChart.Size = new System.Drawing.Size(16, 12);
@@ -2011,8 +2038,9 @@
             // 
             // pictureBoxLightningNodesChart
             // 
+            this.pictureBoxLightningNodesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningNodesChart.BackgroundImage")));
+            this.pictureBoxLightningNodesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxLightningNodesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningNodesChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxLightningNodesChart.Location = new System.Drawing.Point(104, 165);
             this.pictureBoxLightningNodesChart.Name = "pictureBoxLightningNodesChart";
             this.pictureBoxLightningNodesChart.Size = new System.Drawing.Size(16, 12);
@@ -2024,8 +2052,9 @@
             // 
             // pictureBoxLightningChannelsChart
             // 
+            this.pictureBoxLightningChannelsChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningChannelsChart.BackgroundImage")));
+            this.pictureBoxLightningChannelsChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxLightningChannelsChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningChannelsChart.Image = global::SATSuma.Properties.Resources.graphIcon1;
             this.pictureBoxLightningChannelsChart.Location = new System.Drawing.Point(512, 26);
             this.pictureBoxLightningChannelsChart.Name = "pictureBoxLightningChannelsChart";
             this.pictureBoxLightningChannelsChart.Size = new System.Drawing.Size(16, 12);
@@ -8747,6 +8776,55 @@
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
             // 
+            // panel85
+            // 
+            this.panel85.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel85.Controls.Add(this.numericUpDownDashboardRefresh);
+            this.panel85.Controls.Add(this.label198);
+            this.panel85.Location = new System.Drawing.Point(362, 440);
+            this.panel85.Name = "panel85";
+            this.panel85.Size = new System.Drawing.Size(200, 34);
+            this.panel85.TabIndex = 249;
+            // 
+            // numericUpDownDashboardRefresh
+            // 
+            this.numericUpDownDashboardRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.numericUpDownDashboardRefresh.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.numericUpDownDashboardRefresh.Font = new System.Drawing.Font("Consolas", 9F);
+            this.numericUpDownDashboardRefresh.ForeColor = System.Drawing.Color.Silver;
+            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(15, 7);
+            this.numericUpDownDashboardRefresh.Maximum = new decimal(new int[] {
+            1440,
+            0,
+            0,
+            0});
+            this.numericUpDownDashboardRefresh.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDashboardRefresh.Name = "numericUpDownDashboardRefresh";
+            this.numericUpDownDashboardRefresh.Size = new System.Drawing.Size(60, 21);
+            this.numericUpDownDashboardRefresh.TabIndex = 47;
+            this.numericUpDownDashboardRefresh.TabStop = false;
+            this.numericUpDownDashboardRefresh.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDashboardRefresh.ValueChanged += new System.EventHandler(this.NumericUpDownDashboardRefresh_ValueChanged);
+            // 
+            // label198
+            // 
+            this.label198.AutoSize = true;
+            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label198.ForeColor = System.Drawing.Color.Silver;
+            this.label198.Location = new System.Drawing.Point(80, 6);
+            this.label198.Name = "label198";
+            this.label198.Size = new System.Drawing.Size(107, 20);
+            this.label198.TabIndex = 240;
+            this.label198.Text = "(1 - 1440 mins)";
+            // 
             // panel84
             // 
             this.panel84.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
@@ -8756,6 +8834,19 @@
             this.panel84.Name = "panel84";
             this.panel84.Size = new System.Drawing.Size(755, 49);
             this.panel84.TabIndex = 248;
+            // 
+            // lblPrivacyMode
+            // 
+            this.lblPrivacyMode.AutoSize = true;
+            this.lblPrivacyMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblPrivacyMode.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblPrivacyMode.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblPrivacyMode.Location = new System.Drawing.Point(7, 7);
+            this.lblPrivacyMode.Name = "lblPrivacyMode";
+            this.lblPrivacyMode.Size = new System.Drawing.Size(23, 18);
+            this.lblPrivacyMode.TabIndex = 225;
+            this.lblPrivacyMode.Text = "❌";
+            this.lblPrivacyMode.Click += new System.EventHandler(this.LblPrivacyMode_Click);
             // 
             // label167
             // 
@@ -8830,34 +8921,6 @@
             this.label234.TabIndex = 153;
             this.label234.Text = "Data refresh period";
             // 
-            // numericUpDownDashboardRefresh
-            // 
-            this.numericUpDownDashboardRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.numericUpDownDashboardRefresh.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.numericUpDownDashboardRefresh.Font = new System.Drawing.Font("Consolas", 9F);
-            this.numericUpDownDashboardRefresh.ForeColor = System.Drawing.Color.Silver;
-            this.numericUpDownDashboardRefresh.Location = new System.Drawing.Point(15, 7);
-            this.numericUpDownDashboardRefresh.Maximum = new decimal(new int[] {
-            1440,
-            0,
-            0,
-            0});
-            this.numericUpDownDashboardRefresh.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownDashboardRefresh.Name = "numericUpDownDashboardRefresh";
-            this.numericUpDownDashboardRefresh.Size = new System.Drawing.Size(60, 21);
-            this.numericUpDownDashboardRefresh.TabIndex = 47;
-            this.numericUpDownDashboardRefresh.TabStop = false;
-            this.numericUpDownDashboardRefresh.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownDashboardRefresh.ValueChanged += new System.EventHandler(this.NumericUpDownDashboardRefresh_ValueChanged);
-            // 
             // label50
             // 
             this.label50.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -8867,30 +8930,6 @@
             this.label50.Size = new System.Drawing.Size(27, 24);
             this.label50.TabIndex = 245;
             this.label50.Text = "OR";
-            // 
-            // lblPrivacyMode
-            // 
-            this.lblPrivacyMode.AutoSize = true;
-            this.lblPrivacyMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblPrivacyMode.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblPrivacyMode.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblPrivacyMode.Location = new System.Drawing.Point(7, 7);
-            this.lblPrivacyMode.Name = "lblPrivacyMode";
-            this.lblPrivacyMode.Size = new System.Drawing.Size(23, 18);
-            this.lblPrivacyMode.TabIndex = 225;
-            this.lblPrivacyMode.Text = "❌";
-            this.lblPrivacyMode.Click += new System.EventHandler(this.LblPrivacyMode_Click);
-            // 
-            // label198
-            // 
-            this.label198.AutoSize = true;
-            this.label198.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label198.ForeColor = System.Drawing.Color.Silver;
-            this.label198.Location = new System.Drawing.Point(80, 6);
-            this.label198.Name = "label198";
-            this.label198.Size = new System.Drawing.Size(107, 20);
-            this.label198.TabIndex = 240;
-            this.label198.Text = "(1 - 1440 mins)";
             // 
             // panel77
             // 
@@ -12193,16 +12232,6 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
-            // panel85
-            // 
-            this.panel85.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panel85.Controls.Add(this.numericUpDownDashboardRefresh);
-            this.panel85.Controls.Add(this.label198);
-            this.panel85.Location = new System.Drawing.Point(362, 440);
-            this.panel85.Name = "panel85";
-            this.panel85.Size = new System.Drawing.Size(200, 34);
-            this.panel85.TabIndex = 249;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12212,12 +12241,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCurrency);
@@ -12419,13 +12448,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
             this.panelSettings.PerformLayout();
+            this.panel85.ResumeLayout(false);
+            this.panel85.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).EndInit();
             this.panel84.ResumeLayout(false);
             this.panel84.PerformLayout();
             this.panel83.ResumeLayout(false);
             this.panel83.PerformLayout();
             this.panel82.ResumeLayout(false);
             this.panel82.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDashboardRefresh)).EndInit();
             this.panel77.ResumeLayout(false);
             this.panel77.PerformLayout();
             this.panel76.ResumeLayout(false);
@@ -12499,8 +12530,6 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
-            this.panel85.ResumeLayout(false);
-            this.panel85.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -24,6 +24,10 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet and own node
+ * validate block list block height the same way as on block screen
+ * settings screen - add optional number of empty addresses before determining a wallet has no more non-zero addresses
+ * move currency options to settings?
+ * report xpub node status the same way as general node status on settings screen
  */
 
 #region Using
@@ -54,6 +58,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using static SATSuma.SATSuma;
 using static ScottPlot.Plottable.PopulationPlot;
@@ -5463,6 +5468,7 @@ namespace SATSuma
                 }
                 // Add the items to the ListView
                 int counter = 0; // used to count rows in list as they're added
+                panel92.Visible = false;
 
                 foreach (var block in blocks)
                 {
@@ -5471,6 +5477,10 @@ namespace SATSuma
                     string formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
                     ListViewItem item = new ListViewItem(formattedDateTime); // create new row
                     item.SubItems.Add(block.Height.ToString());
+                    if (block.Height == textBoxBlockHeightToStartListFrom.Text)
+                    {
+                        panel92.Visible = true;
+                    }
                     item.SubItems.Add(block.Tx_count.ToString());
                     decimal sizeInMB = block.Size;
                     sizeInMB /= 1000000;
@@ -5514,6 +5524,7 @@ namespace SATSuma
                         break;
                     }
                 }
+
                 if (counter > 0)
                 {
                     listViewBlockList.Items[0].Selected = true;

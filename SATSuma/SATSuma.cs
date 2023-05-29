@@ -24,7 +24,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet and own node
- * validate block list block height the same way as on block screen
  * settings screen - add optional number of empty addresses before determining a wallet has no more non-zero addresses
  * move currency options to settings?
  * report xpub node status the same way as general node status on settings screen
@@ -5341,7 +5340,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "TextBoxBlockHeightToStartListFrom_KeyPress");
+                HandleException(ex, "textBoxBlockHeightToStartListFrom_KeyPress");
             }
         }
 
@@ -5353,13 +5352,20 @@ namespace SATSuma
                 {
                     textBoxBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                     {
-                        textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text;
+                        textBoxBlockHeightToStartListFrom.Text = "0";
                     });
+                   // btnPreviousBlock.Enabled = false;
+                   // btnNextBlock.Enabled = true;
+                }
+                if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
+                {
+                   // btnNextBlock.Enabled = false;
+                   // btnPreviousBlock.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "TextBoxBlockHeightToStartListFrom_TextChanged");
+                HandleException(ex, "textBoxBlockHeightToStartListFrom_TextChanged");
             }
         }
 
@@ -17225,23 +17231,6 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
     }
 }

@@ -24,8 +24,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet and own node
- * settings screen - add optional number of empty addresses before determining a wallet has no more non-zero addresses
- * move currency options to settings?
+ * settings screen - save number of non-zero addresses to settings file on change, and restore number on launch
  */
 
 #region Using
@@ -1131,7 +1130,7 @@ namespace SATSuma
                                         capacityLabel.Text = "disabled";
                                     });
                                 }
-                                var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
+                                //var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
                                 for (int i = 0; i < 10; i++)
                                 {
                                     System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
@@ -1434,6 +1433,7 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = true;
             btnXAU.Enabled = true;
+            btnCurrency.Text = "USD $";
             CloseCurrencyMenuGetMarketDataSaveCurrency();
         }
 
@@ -1443,6 +1443,7 @@ namespace SATSuma
             btnEUR.Enabled = false;
             btnGBP.Enabled = true;
             btnXAU.Enabled = true;
+            btnCurrency.Text = "EUR €";
             CloseCurrencyMenuGetMarketDataSaveCurrency();
         }
 
@@ -1452,6 +1453,7 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = false;
             btnXAU.Enabled = true;
+            btnCurrency.Text = "GBP £";
             CloseCurrencyMenuGetMarketDataSaveCurrency();
         }
 
@@ -1461,6 +1463,7 @@ namespace SATSuma
             btnEUR.Enabled = true;
             btnGBP.Enabled = true;
             btnXAU.Enabled = false;
+            btnCurrency.Text = "XAU 🪙";
             CloseCurrencyMenuGetMarketDataSaveCurrency();
         }
 
@@ -6143,7 +6146,8 @@ namespace SATSuma
                 textBoxXpubNodeURL.Enabled = false;
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
-                int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
+                int MaxNumberOfConsecutiveUnusedAddresses = Convert.ToInt32(numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value - 1);
+                //int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
                 int segwitAddressesWithNonZeroBalance = 0;
                 int legacyAddressesWithNonZeroBalance = 0;
                 int segwitP2SHAddressesWithNonZeroBalance = 0;
@@ -11539,6 +11543,7 @@ namespace SATSuma
                     });
                     textBoxSettingsCustomMempoolURL.Enabled = false;
                     NodeURL = "https://mempool.space/api/";
+                    RunMempoolSpaceLightningAPI = true;
                     CheckNetworkStatus();
                     CreateDataServices();
                     SaveSettingsToBookmarksFile();
@@ -11582,6 +11587,7 @@ namespace SATSuma
                     });
                     textBoxSettingsCustomMempoolURL.Enabled = false;
                     NodeURL = "https://mempool.space/testnet/api/";
+                    RunMempoolSpaceLightningAPI = true;
                     CheckNetworkStatus();
                     CreateDataServices();
                     SaveSettingsToBookmarksFile();
@@ -11628,7 +11634,7 @@ namespace SATSuma
                         lblSettingsCustomNodeStatus.Text = "invalid / node offline";
                     });
                     previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
-
+                    RunMempoolSpaceLightningAPI = false;
                     CheckCustomNodeIsOnline();
                     CheckNetworkStatus();
                 }
@@ -12202,6 +12208,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
+                            btnCurrency.Text = "GBP £";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
@@ -12210,6 +12217,7 @@ namespace SATSuma
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
+                            btnCurrency.Text = "USD $";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
@@ -12218,6 +12226,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
                             btnXAU.Enabled = true;
+                            btnCurrency.Text = "EUR €";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
@@ -12226,12 +12235,14 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = false;
+                            btnCurrency.Text = "XAU 🪙";
                         }
                         if (Convert.ToString(bookmark.Data[1]) == "M")
                         {
                             //mainnet
                             testNet = false;
                             NodeURL = "https://mempool.space/api/";
+                            RunMempoolSpaceLightningAPI = true;
                             CreateDataServices();
                             lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
                             {
@@ -12248,12 +12259,14 @@ namespace SATSuma
                                 lblSettingsNodeCustom.Text = "❌";
                                 lblSettingsNodeCustom.ForeColor = Color.IndianRed;
                             });
+                            textBoxSettingsCustomMempoolURL.Enabled = false;
                         }
                         if (Convert.ToString(bookmark.Data[1]) == "T")
                         {
                             //testnet
                             testNet = true;
                             NodeURL = "https://mempool.space/testnet/api/";
+                            RunMempoolSpaceLightningAPI = true;
                             CreateDataServices();
                             DisableFunctionalityForTestNet();
                             lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
@@ -12275,6 +12288,7 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[1]) == "C")
                         {
                             //custom
+                            RunMempoolSpaceLightningAPI = false;
                             CreateDataServices();
                             lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
                             {
@@ -13543,7 +13557,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings
-                Control[] listSettingsLabelsToColor = { label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label167, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
+                Control[] listSettingsLabelsToColor = { label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13715,7 +13729,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label160, label199, label200, label201, label204, lblURLWarning, label159, label158, label165, label173, lblURLWarning };
+                Control[] listOtherTextToColor = { label160, label199, label200, label201, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;

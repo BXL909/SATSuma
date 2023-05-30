@@ -8779,8 +8779,6 @@
             this.panelSettings.Controls.Add(this.panel76);
             this.panelSettings.Controls.Add(this.panel74);
             this.panelSettings.Controls.Add(this.panel75);
-            this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatus);
-            this.panelSettings.Controls.Add(this.lblSettingsCustomNodeStatusLight);
             this.panelSettings.Controls.Add(this.lblUnused1);
             this.panelSettings.Controls.Add(this.panel34);
             this.panelSettings.Controls.Add(this.label171);
@@ -8789,8 +8787,6 @@
             this.panelSettings.Controls.Add(this.label169);
             this.panelSettings.Controls.Add(this.panel22);
             this.panelSettings.Controls.Add(this.label159);
-            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatusLight);
-            this.panelSettings.Controls.Add(this.lblSettingsXpubNodeStatus);
             this.panelSettings.Controls.Add(this.panel37);
             this.panelSettings.Controls.Add(this.label165);
             this.panelSettings.Location = new System.Drawing.Point(21, 188);
@@ -8891,7 +8887,7 @@
             this.panel83.Location = new System.Drawing.Point(0, 472);
             this.panel83.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel83.Name = "panel83";
-            this.panel83.Size = new System.Drawing.Size(375, 23);
+            this.panel83.Size = new System.Drawing.Size(562, 23);
             this.panel83.TabIndex = 213;
             // 
             // label237
@@ -8927,7 +8923,7 @@
             this.panel82.Location = new System.Drawing.Point(0, 404);
             this.panel82.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel82.Name = "panel82";
-            this.panel82.Size = new System.Drawing.Size(375, 23);
+            this.panel82.Size = new System.Drawing.Size(562, 23);
             this.panel82.TabIndex = 212;
             // 
             // label234
@@ -9243,7 +9239,7 @@
             this.lblSettingsCustomNodeStatus.AutoSize = true;
             this.lblSettingsCustomNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(614, 93);
+            this.lblSettingsCustomNodeStatus.Location = new System.Drawing.Point(280, 2);
             this.lblSettingsCustomNodeStatus.Name = "lblSettingsCustomNodeStatus";
             this.lblSettingsCustomNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsCustomNodeStatus.TabIndex = 232;
@@ -9255,7 +9251,7 @@
             this.lblSettingsCustomNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSettingsCustomNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsCustomNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(585, 96);
+            this.lblSettingsCustomNodeStatusLight.Location = new System.Drawing.Point(256, 4);
             this.lblSettingsCustomNodeStatusLight.Name = "lblSettingsCustomNodeStatusLight";
             this.lblSettingsCustomNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsCustomNodeStatusLight.TabIndex = 231;
@@ -9267,7 +9263,7 @@
             this.lblUnused1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblUnused1.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblUnused1.ForeColor = System.Drawing.Color.Green;
-            this.lblUnused1.Location = new System.Drawing.Point(521, 267);
+            this.lblUnused1.Location = new System.Drawing.Point(527, 223);
             this.lblUnused1.Name = "lblUnused1";
             this.lblUnused1.Size = new System.Drawing.Size(23, 18);
             this.lblUnused1.TabIndex = 229;
@@ -9280,11 +9276,13 @@
             this.panel34.BackColor = System.Drawing.Color.Transparent;
             this.panel34.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel34.BackgroundImage")));
             this.panel34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel34.Controls.Add(this.lblSettingsCustomNodeStatus);
+            this.panel34.Controls.Add(this.lblSettingsCustomNodeStatusLight);
             this.panel34.Controls.Add(this.label163);
             this.panel34.Location = new System.Drawing.Point(0, 0);
             this.panel34.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(375, 23);
+            this.panel34.Size = new System.Drawing.Size(562, 23);
             this.panel34.TabIndex = 209;
             // 
             // label163
@@ -9306,7 +9304,7 @@
             this.label171.AutoSize = true;
             this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label171.ForeColor = System.Drawing.Color.Silver;
-            this.label171.Location = new System.Drawing.Point(540, 291);
+            this.label171.Location = new System.Drawing.Point(546, 247);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(220, 20);
             this.label171.TabIndex = 226;
@@ -9331,7 +9329,7 @@
             this.lblUnused2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblUnused2.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblUnused2.ForeColor = System.Drawing.Color.Green;
-            this.lblUnused2.Location = new System.Drawing.Point(518, 290);
+            this.lblUnused2.Location = new System.Drawing.Point(524, 246);
             this.lblUnused2.Name = "lblUnused2";
             this.lblUnused2.Size = new System.Drawing.Size(23, 18);
             this.lblUnused2.TabIndex = 227;
@@ -9344,7 +9342,7 @@
             this.label169.AutoSize = true;
             this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label169.ForeColor = System.Drawing.Color.Silver;
-            this.label169.Location = new System.Drawing.Point(543, 268);
+            this.label169.Location = new System.Drawing.Point(549, 224);
             this.label169.Name = "label169";
             this.label169.Size = new System.Drawing.Size(160, 20);
             this.label169.TabIndex = 228;
@@ -9356,11 +9354,13 @@
             this.panel22.BackColor = System.Drawing.Color.Transparent;
             this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
             this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel22.Controls.Add(this.lblSettingsXpubNodeStatusLight);
+            this.panel22.Controls.Add(this.lblSettingsXpubNodeStatus);
             this.panel22.Controls.Add(this.label162);
             this.panel22.Location = new System.Drawing.Point(0, 147);
             this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(375, 23);
+            this.panel22.Size = new System.Drawing.Size(562, 23);
             this.panel22.TabIndex = 208;
             // 
             // label162
@@ -9393,7 +9393,7 @@
             this.lblSettingsXpubNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSettingsXpubNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsXpubNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(305, 244);
+            this.lblSettingsXpubNodeStatusLight.Location = new System.Drawing.Point(185, 3);
             this.lblSettingsXpubNodeStatusLight.Name = "lblSettingsXpubNodeStatusLight";
             this.lblSettingsXpubNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsXpubNodeStatusLight.TabIndex = 221;
@@ -9404,7 +9404,7 @@
             this.lblSettingsXpubNodeStatus.AutoSize = true;
             this.lblSettingsXpubNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsXpubNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(326, 241);
+            this.lblSettingsXpubNodeStatus.Location = new System.Drawing.Point(206, 1);
             this.lblSettingsXpubNodeStatus.Name = "lblSettingsXpubNodeStatus";
             this.lblSettingsXpubNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsXpubNodeStatus.TabIndex = 222;
@@ -9419,7 +9419,7 @@
             this.panel37.Location = new System.Drawing.Point(0, 293);
             this.panel37.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(375, 23);
+            this.panel37.Size = new System.Drawing.Size(562, 23);
             this.panel37.TabIndex = 211;
             // 
             // label155
@@ -9444,7 +9444,9 @@
             this.label165.Name = "label165";
             this.label165.Size = new System.Drawing.Size(760, 40);
             this.label165.TabIndex = 210;
-            this.label165.Text = resources.GetString("label165.Text");
+            this.label165.Text = "A few other API\'s are used to gather generic on-chain, price, mempool, etc data. " +
+    "No private data is sent or collected. You can disable individual API\'s here (thi" +
+    "s will disable some functionality)";
             // 
             // btnColorLabels
             // 
@@ -12403,10 +12405,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelLightningDashboard);

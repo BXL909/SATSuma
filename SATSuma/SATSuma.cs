@@ -26,7 +26,6 @@ Version history 🍊
  * further testing of privacy mode, testnet and own node
  * settings screen - add optional number of empty addresses before determining a wallet has no more non-zero addresses
  * move currency options to settings?
- * report xpub node status the same way as general node status on settings screen
  */
 
 #region Using
@@ -7457,7 +7456,8 @@ namespace SATSuma
                     label18.Text = "invalid / node offline";
                     textBoxSubmittedXpub.Text = "";
                     previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
-                    CheckXpubNodeIsOnline();
+                    CheckNetworkStatus();
+                    // CheckXpubNodeIsOnline();
                 }
             }
             catch (Exception ex)
@@ -7522,10 +7522,12 @@ namespace SATSuma
                         {
                             lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                             lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                            label18.ForeColor = Color.IndianRed;
+                            //label18.ForeColor = Color.IndianRed;
                             //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
-                            label18.Text = "node offline";
-                            lblSettingsXpubNodeStatus.Text = "node offline";
+                            Uri uri = new Uri(xpubNodeURL);
+                            string hostname = uri.Host;
+                            label18.Text = hostname;
+                            lblSettingsXpubNodeStatus.Text = hostname;
                             return;
                         }
                     }
@@ -7533,70 +7535,77 @@ namespace SATSuma
                     {
                         lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                        label18.ForeColor = Color.IndianRed;
+                        //label18.ForeColor = Color.IndianRed;
                         //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
-                        label18.Text = "node offline";
-                        lblSettingsXpubNodeStatus.Text = "node offline";
+                        Uri uri = new Uri(xpubNodeURL);
+                        string hostname = uri.Host;
+                        label18.Text = hostname;
+                        lblSettingsXpubNodeStatus.Text = hostname;
                         return;
                     }
                 }
 
-                // handle this being null!
-                PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                if (reply.Status == IPStatus.Success)
+                if (textBoxXpubNodeURL.Text != "")
                 {
-                    lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
-                    lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
-                    label18.ForeColor = Color.OliveDrab;
-                    //lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
-                    label18.Text = "node online";
-                    lblSettingsXpubNodeStatus.Text = "node online";
-                    // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
-                    DateTime today = DateTime.Today;
-                    string bookmarkData;
-                    string keyCheck = "21m";
-                    bookmarkData = textBoxXpubNodeURL.Text;
-                    textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
-                    var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
-                    if (!xpubNodeURLAlreadySavedInFile)
+                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                    if (reply.Status == IPStatus.Success)
                     {
-
-                        // Read the existing bookmarks from the JSON file
-                        var bookmarks = ReadBookmarksFromJsonFile();
-
-                        // Add the new bookmark to the list
-                        bookmarks.Add(newBookmark);
-
-                        // Write the updated list of bookmarks back to the JSON file
-                        WriteBookmarksToJsonFile(bookmarks);
-                        xpubNodeURLAlreadySavedInFile = true;
-                        xpubNodeURLInFile = bookmarkData;
-                    }
-                    else
-                    {
-                        if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
+                        Uri uri = new Uri(xpubNodeURL);
+                        string hostname = uri.Host;
+                        lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        //label18.ForeColor = Color.OliveDrab;
+                        //lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
+                        label18.Text = hostname;
+                        //label18.Text = "node online";
+                        lblSettingsXpubNodeStatus.Text = hostname;
+                        // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
+                        DateTime today = DateTime.Today;
+                        string bookmarkData;
+                        string keyCheck = "21m";
+                        bookmarkData = textBoxXpubNodeURL.Text;
+                        textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
+                        var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                        if (!xpubNodeURLAlreadySavedInFile)
                         {
-                            //delete the currently saved node url
-                            DeleteBookmarkFromJsonFile(xpubNodeURLInFile);
+
                             // Read the existing bookmarks from the JSON file
                             var bookmarks = ReadBookmarksFromJsonFile();
+
                             // Add the new bookmark to the list
                             bookmarks.Add(newBookmark);
+
                             // Write the updated list of bookmarks back to the JSON file
                             WriteBookmarksToJsonFile(bookmarks);
                             xpubNodeURLAlreadySavedInFile = true;
                             xpubNodeURLInFile = bookmarkData;
                         }
+                        else
+                        {
+                            if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
+                            {
+                                //delete the currently saved node url
+                                DeleteBookmarkFromJsonFile(xpubNodeURLInFile);
+                                // Read the existing bookmarks from the JSON file
+                                var bookmarks = ReadBookmarksFromJsonFile();
+                                // Add the new bookmark to the list
+                                bookmarks.Add(newBookmark);
+                                // Write the updated list of bookmarks back to the JSON file
+                                WriteBookmarksToJsonFile(bookmarks);
+                                xpubNodeURLAlreadySavedInFile = true;
+                                xpubNodeURLInFile = bookmarkData;
+                            }
+                        }
+                        textBoxSubmittedXpub.Enabled = true;
                     }
-                    textBoxSubmittedXpub.Enabled = true;
-                }
-                else
-                {
-                    // API is not online
-                    lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                    lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                    label18.Text = "invalid / node offline";
-                    lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+                    else
+                    {
+                        // API is not online
+                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        label18.Text = "invalid / node offline";
+                        lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+                    }
                 }
             }
             catch (HttpRequestException)
@@ -11782,68 +11791,71 @@ namespace SATSuma
                         return;
                     }
                 }
-                // handle this being null!
-                PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                if (reply.Status == IPStatus.Success)
+
+                if (textBoxSettingsCustomMempoolURL.Text != "")
                 {
-                    lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
-                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                    if (reply.Status == IPStatus.Success)
                     {
-                        lblSettingsCustomNodeStatus.Text = "node online";
-                    });
-                    if (lblSettingsNodeCustom.Text == "✔️")
-                    {
-                        CreateDataServices();
-                        SaveSettingsToBookmarksFile();
-                        GetBlockTip();
-                        LookupBlockList();
-                        UpdateBitcoinAndLightningDashboards();
-                    }
-                    
-                    // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
-                    DateTime today = DateTime.Today;
-                    string bookmarkData;
-                    string keyCheck = "21m";
-                    bookmarkData = textBoxSettingsCustomMempoolURL.Text;
-                    var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
-                    if (!nodeURLAlreadySavedInFile)
-                    {
-                        // Read the existing bookmarks from the JSON file
-                        var bookmarks = ReadBookmarksFromJsonFile();
-
-                        // Add the new bookmark to the list
-                        bookmarks.Add(newBookmark);
-
-                        // Write the updated list of bookmarks back to the JSON file
-                        WriteBookmarksToJsonFile(bookmarks);
-                        nodeURLAlreadySavedInFile = true;
-                        nodeURLInFile = bookmarkData;
-                    }
-                    else
-                    {
-                        if (nodeURLInFile != textBoxSettingsCustomMempoolURL.Text)
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.OliveDrab;
+                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            //delete the currently saved node url
-                            DeleteBookmarkFromJsonFile(nodeURLInFile);
+                            lblSettingsCustomNodeStatus.Text = "node online";
+                        });
+                        if (lblSettingsNodeCustom.Text == "✔️")
+                        {
+                            CreateDataServices();
+                            SaveSettingsToBookmarksFile();
+                            GetBlockTip();
+                            LookupBlockList();
+                            UpdateBitcoinAndLightningDashboards();
+                        }
+
+                        // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
+                        DateTime today = DateTime.Today;
+                        string bookmarkData;
+                        string keyCheck = "21m";
+                        bookmarkData = textBoxSettingsCustomMempoolURL.Text;
+                        var newBookmark = new Bookmark { DateAdded = today, Type = "node", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                        if (!nodeURLAlreadySavedInFile)
+                        {
                             // Read the existing bookmarks from the JSON file
                             var bookmarks = ReadBookmarksFromJsonFile();
+
                             // Add the new bookmark to the list
                             bookmarks.Add(newBookmark);
+
                             // Write the updated list of bookmarks back to the JSON file
                             WriteBookmarksToJsonFile(bookmarks);
                             nodeURLAlreadySavedInFile = true;
                             nodeURLInFile = bookmarkData;
                         }
+                        else
+                        {
+                            if (nodeURLInFile != textBoxSettingsCustomMempoolURL.Text)
+                            {
+                                //delete the currently saved node url
+                                DeleteBookmarkFromJsonFile(nodeURLInFile);
+                                // Read the existing bookmarks from the JSON file
+                                var bookmarks = ReadBookmarksFromJsonFile();
+                                // Add the new bookmark to the list
+                                bookmarks.Add(newBookmark);
+                                // Write the updated list of bookmarks back to the JSON file
+                                WriteBookmarksToJsonFile(bookmarks);
+                                nodeURLAlreadySavedInFile = true;
+                                nodeURLInFile = bookmarkData;
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    // API is not online
-                    lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                    else
                     {
-                        lblSettingsCustomNodeStatus.Text = "invalid / node offline";
-                    });
+                        // API is not online
+                        lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                        });
+                    }
                 }
             }
             catch (HttpRequestException)
@@ -14870,6 +14882,22 @@ namespace SATSuma
                         {
                             headerNetworkName.Text = hostnameForDisplay;
                         });
+                        lblSettingsXpubNodeStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        });
+                        lblSettingsXpubNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsXpubNodeStatus.Text = hostnameForDisplay;
+                        });
+                        label18.Invoke((MethodInvoker)delegate
+                        {
+                            label18.Text = hostnameForDisplay;
+                        });
+                        lblXpubNodeStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        });
                     }
                     else
                     {
@@ -14880,6 +14908,22 @@ namespace SATSuma
                         headerNetworkName.Invoke((MethodInvoker)delegate
                         {
                             headerNetworkName.Text = hostnameForDisplay;
+                        });
+                        lblSettingsXpubNodeStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        });
+                        lblSettingsXpubNodeStatus.Invoke((MethodInvoker)delegate
+                        {
+                            lblSettingsXpubNodeStatus.Text = hostnameForDisplay;
+                        });
+                        label18.Invoke((MethodInvoker)delegate
+                        {
+                            label18.Text = hostnameForDisplay;
+                        });
+                        lblXpubNodeStatusLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
                         });
                     }
                 }
@@ -15101,15 +15145,6 @@ namespace SATSuma
                         headerNetworkStatusLight.Location = new Point(headerNetworkName.Location.X - headerNetworkStatusLight.Width, headerNetworkStatusLight.Location.Y);
                     });
 
-                    lblSettingsCustomNodeStatusLight.Invoke((MethodInvoker)delegate
-                    {
-                        lblSettingsCustomNodeStatusLight.Location = new Point(panel75.Location.X + panel75.Width, lblSettingsCustomNodeStatus.Location.Y + 3);
-                    });
-
-                    lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblSettingsCustomNodeStatus.Location = new Point(lblSettingsCustomNodeStatusLight.Location.X + lblSettingsCustomNodeStatusLight.Width, lblSettingsCustomNodeStatus.Location.Y);
-                    });
                 }
             }
             catch (Exception ex)

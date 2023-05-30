@@ -10069,9 +10069,6 @@
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="label165.Text" xml:space="preserve">
-    <value>A few other API's are used to gather generic on-chain, price, mempool, etc data. No private data is sent or collected. You can disable disable individual API's here (this will disable some functionality)</value>
-  </data>
   <data name="btnColorLabels.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADwAAAASCAYAAAAHWr00AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6

@@ -24,6 +24,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet, own node
+ * deal with scrollbar panels colours when using a custom theme
  */
 
 #region Using
@@ -191,7 +192,7 @@ namespace SATSuma
         bool privacyMode = false; // disables all comms apart from to full node
         bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
-        readonly Color subItemBackColor = Color.FromArgb(21, 21, 21);
+        Color subItemBackColor = Color.FromArgb(21, 21, 21);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
@@ -6217,6 +6218,7 @@ namespace SATSuma
                 lblP2SHUsedAddresses.Visible = true;
                 label140.Visible = true;
                 label141.Visible = true;
+                btnViewAddressFromXpub.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
 
@@ -7279,6 +7281,7 @@ namespace SATSuma
             lblP2SHUsedAddresses.Visible = false;
             label140.Visible = false;
             label141.Visible = false;
+            btnViewAddressFromXpub.Visible = false;
 
             // validate the inputted xpub before proceeding
             try
@@ -10621,14 +10624,17 @@ namespace SATSuma
                     if (item.Selected)
                     {
                         item.EnsureVisible();
-                        if (label18.Text == "node online")
+                        if (item.SubItems[1].Text == "xpub")
                         {
-                            btnViewBookmark.Enabled = true;
-                        }
-                        else
-                        {
-                            lblAlert.Text = "⚠️";
-                            lblErrorMessage.Text = "a url to a connected full node must be provided on the Xpub screen before the selected Xpub can be viewed.";
+                            if (lblXpubNodeStatusLight.ForeColor == Color.OliveDrab)
+                            {
+                                btnViewBookmark.Enabled = true;
+                            }
+                            else
+                            {
+                                lblAlert.Text = "⚠️";
+                                lblErrorMessage.Text = "you need to connect to a full node before the selected Xpub can be viewed.";
+                            }
                         }
                         
                         btnDeleteBookmark.Enabled = true;
@@ -13581,7 +13587,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings
-                Control[] listSettingsLabelsToColor = { label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label186, label185, label187, label189, label191 };
+                Control[] listSettingsLabelsToColor = { label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label189, label191 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13652,7 +13658,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195 };
+                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13682,13 +13688,13 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight };
+                Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight, label6 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
                 }
                 //transaction
-                Control[] listTransactionHeadingsToColor = { label102, label102 };
+                Control[] listTransactionHeadingsToColor = { label102, label107 };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13753,7 +13759,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label160, label199, label200, label201, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning };
+                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13928,7 +13934,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel16, panel18, panel21, panel15, panel19, panel61 };
+                Control[] listLinesToColor = { panel14, panel17, panel16, panel18, panel21, panel15, panel19, panel61, panel92, panel95, panel96, panel97, panel98 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -13945,7 +13951,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
+                Control[] listTextBoxesToColor = { numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -14038,7 +14044,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14073,7 +14079,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+                Control[] listBlockListHeadingsToColor = { panel93, panel13, panel45 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14135,7 +14141,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14170,7 +14176,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+                Control[] listBlockListHeadingsToColor = { panel93, panel13, panel45 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14216,7 +14222,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72 };
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14251,7 +14257,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel13, panel45 };
+                Control[] listBlockListHeadingsToColor = { panel93, panel13, panel45 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14289,13 +14295,14 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77 };
+                Control[] listPanelsToColor = { panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
                         control.BackColor = thiscolor;
                     }
                 }
+                subItemBackColor = thiscolor;
             }
             catch (Exception ex)
             {

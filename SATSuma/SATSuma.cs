@@ -23,8 +23,7 @@ Version history 🍊
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
- * further testing of privacy mode, testnet and own node
- * settings screen - save number of non-zero addresses to settings file on change, and restore number on launch
+ * further testing of privacy mode, testnet, own node
  */
 
 #region Using
@@ -7961,6 +7960,17 @@ namespace SATSuma
             }
         }
 
+        private void numberUpDownDerivationPathsToCheck_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveSettingsToBookmarksFile();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "numberUpDownDerivationPathsToCheck_ValueChanged");
+            }
+        }
         #endregion
 
         #region ⚡CHARTS SCREEN⚡
@@ -12093,7 +12103,19 @@ namespace SATSuma
             }
         }
 
-        // settings entry in the bookmark file = M111111nnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnn = refresh freq.
+        private void numericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveSettingsToBookmarksFile();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "numericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged");
+            }
+        }   
+
+        // settings entry in the bookmark file = DM111111nnnnnnnnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnnn = refresh freq, nn = max number of consecutive non-zero addresses on xpub scan, nnn = number of derivation paths to check.
 
         private void SaveSettingsToBookmarksFile()
         {
@@ -12154,7 +12176,7 @@ namespace SATSuma
 
                 // write the settings to the bookmarks file for auto retrieval next time
                 DateTime today = DateTime.Today;
-                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + PrivacyModeSelected + unused1 + unused2 + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'); ;
+                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + PrivacyModeSelected + unused1 + unused2 + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0') + numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0') + numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0'); 
                 string keyCheck = "21m";
                 var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                 if (!settingsAlreadySavedInFile)
@@ -12435,6 +12457,8 @@ namespace SATSuma
                             lblUnused2.Enabled = false;
                         }
                         numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
+                        numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(bookmark.Data.Substring(12, 2));
+                        numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(bookmark.Data.Substring(14,3));
                         break;
                     }
                 }
@@ -12542,7 +12566,7 @@ namespace SATSuma
                 HandleException(ex, "EnableFunctionalityForMainNet");
             }
         }
-
+        
         #endregion
 
         #region ⚡APPEARANCE SCREEN⚡
@@ -17280,6 +17304,7 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
         #endregion
     }
 }

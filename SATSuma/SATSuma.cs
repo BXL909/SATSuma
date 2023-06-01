@@ -24,7 +24,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet, own node
- * deal with scrollbar panels colours when using a custom theme (only tx screen left to do)
  * documentation/website
  * check all textbox foreground colors are consistent and possibly include them in the 'other text' list
  */
@@ -13680,7 +13679,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //xpub
-                Control[] listXpubLabelsToColor = { label114, label139, label146, label18, label140, label141, label123, label111, label119, label135, label133, label129, label121 };
+                Control[] listXpubLabelsToColor = { label114, label139, label146, label18, label140, label141, label123, label111, label119, label135, label133, label129, label121, lblXpubStatus };
                 foreach (Control control in listXpubLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14040,7 +14039,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panel30, panel33, panel100, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panel30, panel33, panel100, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     {

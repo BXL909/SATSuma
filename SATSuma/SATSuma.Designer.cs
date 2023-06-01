@@ -665,6 +665,9 @@
             this.btnColorButtonText = new System.Windows.Forms.Button();
             this.panelAppearance = new System.Windows.Forms.Panel();
             this.panel91 = new System.Windows.Forms.Panel();
+            this.label242 = new System.Windows.Forms.Label();
+            this.lblBackgroundSatsumaSelected = new System.Windows.Forms.Label();
+            this.pictureBoxSatsuma = new System.Windows.Forms.PictureBox();
             this.lblBackgroundBTCdirSelected = new System.Windows.Forms.Label();
             this.lblBackgroundCustomColorSelected = new System.Windows.Forms.Label();
             this.lblBackgroundCustomImageSelected = new System.Windows.Forms.Label();
@@ -831,6 +834,8 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
+            this.panel100 = new System.Windows.Forms.Panel();
+            this.panel101 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -957,6 +962,7 @@
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
             this.panel91.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).BeginInit();
             this.panel63.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).BeginInit();
@@ -6052,7 +6058,7 @@
             this.btnOlder15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOlder15Blocks.ForeColor = System.Drawing.Color.White;
             this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 299);
-            this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(1);
+            this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(0);
             this.btnOlder15Blocks.Name = "btnOlder15Blocks";
             this.btnOlder15Blocks.Size = new System.Drawing.Size(70, 22);
             this.btnOlder15Blocks.TabIndex = 155;
@@ -6965,12 +6971,11 @@
             // 
             this.panelTransactionMiddle.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panelTransactionMiddle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.panelTransactionMiddle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelTransactionMiddle.Controls.Add(this.label132);
             this.panelTransactionMiddle.Controls.Add(this.label130);
             this.panelTransactionMiddle.Controls.Add(this.lblTransactionSize);
             this.panelTransactionMiddle.Controls.Add(this.lblTransactionWeight);
-            this.panelTransactionMiddle.Location = new System.Drawing.Point(336, 135);
+            this.panelTransactionMiddle.Location = new System.Drawing.Point(335, 135);
             this.panelTransactionMiddle.Name = "panelTransactionMiddle";
             this.panelTransactionMiddle.Size = new System.Drawing.Size(80, 80);
             this.panelTransactionMiddle.TabIndex = 0;
@@ -7146,6 +7151,7 @@
             this.panelXpub.Controls.Add(this.lblSegwitSummary);
             this.panelXpub.Controls.Add(this.textBoxSubmittedXpub);
             this.panelXpub.Controls.Add(this.label146);
+            this.panelXpub.Controls.Add(this.panel101);
             this.panelXpub.Location = new System.Drawing.Point(21, 188);
             this.panelXpub.Name = "panelXpub";
             this.panelXpub.Size = new System.Drawing.Size(773, 556);
@@ -7202,7 +7208,7 @@
             0,
             0,
             0});
-            this.numberUpDownDerivationPathsToCheck.ValueChanged += new System.EventHandler(this.numberUpDownDerivationPathsToCheck_ValueChanged);
+            this.numberUpDownDerivationPathsToCheck.ValueChanged += new System.EventHandler(this.NumberUpDownDerivationPathsToCheck_ValueChanged);
             this.numberUpDownDerivationPathsToCheck.Validating += new System.ComponentModel.CancelEventHandler(this.NumberUpDownDerivationPathsToCheck_Validating);
             // 
             // label139
@@ -7354,9 +7360,9 @@
             this.panel30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel30.Controls.Add(this.btnXpubAddressesDown);
             this.panel30.Controls.Add(this.btnXpubAddressUp);
-            this.panel30.Location = new System.Drawing.Point(713, 68);
+            this.panel30.Location = new System.Drawing.Point(713, 78);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(37, 456);
+            this.panel30.Size = new System.Drawing.Size(37, 445);
             this.panel30.TabIndex = 214;
             // 
             // btnXpubAddressesDown
@@ -7369,9 +7375,9 @@
             this.btnXpubAddressesDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXpubAddressesDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXpubAddressesDown.ForeColor = System.Drawing.Color.White;
-            this.btnXpubAddressesDown.Location = new System.Drawing.Point(10, 432);
+            this.btnXpubAddressesDown.Location = new System.Drawing.Point(6, 420);
             this.btnXpubAddressesDown.Name = "btnXpubAddressesDown";
-            this.btnXpubAddressesDown.Size = new System.Drawing.Size(24, 24);
+            this.btnXpubAddressesDown.Size = new System.Drawing.Size(28, 24);
             this.btnXpubAddressesDown.TabIndex = 212;
             this.btnXpubAddressesDown.TabStop = false;
             this.btnXpubAddressesDown.Text = "▼";
@@ -7392,9 +7398,9 @@
             this.btnXpubAddressUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXpubAddressUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXpubAddressUp.ForeColor = System.Drawing.Color.White;
-            this.btnXpubAddressUp.Location = new System.Drawing.Point(10, 9);
+            this.btnXpubAddressUp.Location = new System.Drawing.Point(6, 0);
             this.btnXpubAddressUp.Name = "btnXpubAddressUp";
-            this.btnXpubAddressUp.Size = new System.Drawing.Size(24, 24);
+            this.btnXpubAddressUp.Size = new System.Drawing.Size(28, 24);
             this.btnXpubAddressUp.TabIndex = 214;
             this.btnXpubAddressUp.TabStop = false;
             this.btnXpubAddressUp.Text = "▲";
@@ -7408,8 +7414,8 @@
             // panelXpubContainer
             // 
             this.panelXpubContainer.AutoScroll = true;
-            this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
             this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
+            this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
             this.panelXpubContainer.Location = new System.Drawing.Point(250, 78);
             this.panelXpubContainer.Name = "panelXpubContainer";
             this.panelXpubContainer.Size = new System.Drawing.Size(500, 446);
@@ -8304,9 +8310,9 @@
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel33.Controls.Add(this.btnBookmarksListDown);
             this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Location = new System.Drawing.Point(712, 27);
+            this.panel33.Location = new System.Drawing.Point(712, 37);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(36, 419);
+            this.panel33.Size = new System.Drawing.Size(36, 408);
             this.panel33.TabIndex = 214;
             // 
             // btnBookmarksListDown
@@ -8319,9 +8325,9 @@
             this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListDown.Location = new System.Drawing.Point(10, 393);
+            this.btnBookmarksListDown.Location = new System.Drawing.Point(6, 384);
             this.btnBookmarksListDown.Name = "btnBookmarksListDown";
-            this.btnBookmarksListDown.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListDown.Size = new System.Drawing.Size(28, 24);
             this.btnBookmarksListDown.TabIndex = 212;
             this.btnBookmarksListDown.TabStop = false;
             this.btnBookmarksListDown.Text = "▼";
@@ -8341,9 +8347,9 @@
             this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.Location = new System.Drawing.Point(10, 9);
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(6, 0);
             this.btnBookmarksListUp.Name = "btnBookmarksListUp";
-            this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListUp.Size = new System.Drawing.Size(28, 24);
             this.btnBookmarksListUp.TabIndex = 214;
             this.btnBookmarksListUp.TabStop = false;
             this.btnBookmarksListUp.Text = "▲";
@@ -8357,6 +8363,7 @@
             // 
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
+            this.panelBookmarksContainer.Controls.Add(this.panel100);
             this.panelBookmarksContainer.Location = new System.Drawing.Point(0, 37);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
             this.panelBookmarksContainer.Size = new System.Drawing.Size(747, 408);
@@ -8374,14 +8381,14 @@
             this.listViewBookmarks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBookmarks.HideSelection = false;
             this.listViewBookmarks.LabelWrap = false;
-            this.listViewBookmarks.Location = new System.Drawing.Point(7, 0);
+            this.listViewBookmarks.Location = new System.Drawing.Point(1, 0);
             this.listViewBookmarks.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBookmarks.MultiSelect = false;
             this.listViewBookmarks.Name = "listViewBookmarks";
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(703, 409);
+            this.listViewBookmarks.Size = new System.Drawing.Size(712, 409);
             this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
             this.listViewBookmarks.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewBookmarks.TabIndex = 164;
@@ -8926,7 +8933,7 @@
             0,
             0,
             0});
-            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.ValueChanged += new System.EventHandler(this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged);
+            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.ValueChanged += new System.EventHandler(this.NumericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged);
             // 
             // label239
             // 
@@ -9910,6 +9917,9 @@
             // panel91
             // 
             this.panel91.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel91.Controls.Add(this.label242);
+            this.panel91.Controls.Add(this.lblBackgroundSatsumaSelected);
+            this.panel91.Controls.Add(this.pictureBoxSatsuma);
             this.panel91.Controls.Add(this.lblBackgroundBTCdirSelected);
             this.panel91.Controls.Add(this.lblBackgroundCustomColorSelected);
             this.panel91.Controls.Add(this.lblBackgroundCustomImageSelected);
@@ -9927,6 +9937,43 @@
             this.panel91.Name = "panel91";
             this.panel91.Size = new System.Drawing.Size(505, 178);
             this.panel91.TabIndex = 301;
+            // 
+            // label242
+            // 
+            this.label242.AutoSize = true;
+            this.label242.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label242.ForeColor = System.Drawing.Color.Silver;
+            this.label242.Location = new System.Drawing.Point(255, 146);
+            this.label242.Name = "label242";
+            this.label242.Size = new System.Drawing.Size(75, 20);
+            this.label242.TabIndex = 294;
+            this.label242.Text = "\'Satsuma\'";
+            // 
+            // lblBackgroundSatsumaSelected
+            // 
+            this.lblBackgroundSatsumaSelected.AutoSize = true;
+            this.lblBackgroundSatsumaSelected.BackColor = System.Drawing.Color.Transparent;
+            this.lblBackgroundSatsumaSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBackgroundSatsumaSelected.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBackgroundSatsumaSelected.ForeColor = System.Drawing.Color.Green;
+            this.lblBackgroundSatsumaSelected.Location = new System.Drawing.Point(258, 34);
+            this.lblBackgroundSatsumaSelected.Name = "lblBackgroundSatsumaSelected";
+            this.lblBackgroundSatsumaSelected.Size = new System.Drawing.Size(25, 20);
+            this.lblBackgroundSatsumaSelected.TabIndex = 293;
+            this.lblBackgroundSatsumaSelected.Text = "✔️";
+            this.lblBackgroundSatsumaSelected.Visible = false;
+            // 
+            // pictureBoxSatsuma
+            // 
+            this.pictureBoxSatsuma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxSatsuma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxSatsuma.Image = global::SATSuma.Properties.Resources.SatsumaThumb;
+            this.pictureBoxSatsuma.Location = new System.Drawing.Point(255, 31);
+            this.pictureBoxSatsuma.Name = "pictureBoxSatsuma";
+            this.pictureBoxSatsuma.Size = new System.Drawing.Size(112, 112);
+            this.pictureBoxSatsuma.TabIndex = 292;
+            this.pictureBoxSatsuma.TabStop = false;
+            this.pictureBoxSatsuma.Click += new System.EventHandler(this.PictureBoxSatsuma_Click);
             // 
             // lblBackgroundBTCdirSelected
             // 
@@ -9949,7 +9996,7 @@
             this.lblBackgroundCustomColorSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundCustomColorSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundCustomColorSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundCustomColorSelected.Location = new System.Drawing.Point(258, 34);
+            this.lblBackgroundCustomColorSelected.Location = new System.Drawing.Point(381, 34);
             this.lblBackgroundCustomColorSelected.Name = "lblBackgroundCustomColorSelected";
             this.lblBackgroundCustomColorSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundCustomColorSelected.TabIndex = 290;
@@ -9963,7 +10010,7 @@
             this.lblBackgroundCustomImageSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBackgroundCustomImageSelected.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBackgroundCustomImageSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundCustomImageSelected.Location = new System.Drawing.Point(381, 34);
+            this.lblBackgroundCustomImageSelected.Location = new System.Drawing.Point(381, 102);
             this.lblBackgroundCustomImageSelected.Name = "lblBackgroundCustomImageSelected";
             this.lblBackgroundCustomImageSelected.Size = new System.Drawing.Size(25, 20);
             this.lblBackgroundCustomImageSelected.TabIndex = 289;
@@ -10038,9 +10085,9 @@
             this.pictureBoxCustomColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.pictureBoxCustomColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxCustomColor.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.pictureBoxCustomColor.Location = new System.Drawing.Point(255, 31);
+            this.pictureBoxCustomColor.Location = new System.Drawing.Point(378, 31);
             this.pictureBoxCustomColor.Name = "pictureBoxCustomColor";
-            this.pictureBoxCustomColor.Size = new System.Drawing.Size(112, 112);
+            this.pictureBoxCustomColor.Size = new System.Drawing.Size(112, 44);
             this.pictureBoxCustomColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxCustomColor.TabIndex = 265;
             this.pictureBoxCustomColor.TabStop = false;
@@ -10073,7 +10120,7 @@
             this.label180.AutoSize = true;
             this.label180.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label180.ForeColor = System.Drawing.Color.Silver;
-            this.label180.Location = new System.Drawing.Point(255, 146);
+            this.label180.Location = new System.Drawing.Point(378, 78);
             this.label180.Name = "label180";
             this.label180.Size = new System.Drawing.Size(115, 20);
             this.label180.TabIndex = 268;
@@ -10081,11 +10128,12 @@
             // 
             // pictureBoxCustomImage
             // 
+            this.pictureBoxCustomImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBoxCustomImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxCustomImage.Image = global::SATSuma.Properties.Resources.CustomImage;
-            this.pictureBoxCustomImage.Location = new System.Drawing.Point(378, 31);
+            this.pictureBoxCustomImage.Location = new System.Drawing.Point(378, 99);
             this.pictureBoxCustomImage.Name = "pictureBoxCustomImage";
-            this.pictureBoxCustomImage.Size = new System.Drawing.Size(112, 112);
+            this.pictureBoxCustomImage.Size = new System.Drawing.Size(112, 44);
             this.pictureBoxCustomImage.TabIndex = 283;
             this.pictureBoxCustomImage.TabStop = false;
             this.pictureBoxCustomImage.Click += new System.EventHandler(this.PictureBoxCustomImage_Click);
@@ -12479,6 +12527,22 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
+            // panel100
+            // 
+            this.panel100.BackColor = System.Drawing.Color.IndianRed;
+            this.panel100.Location = new System.Drawing.Point(1, -10);
+            this.panel100.Name = "panel100";
+            this.panel100.Size = new System.Drawing.Size(725, 420);
+            this.panel100.TabIndex = 165;
+            // 
+            // panel101
+            // 
+            this.panel101.BackColor = System.Drawing.Color.IndianRed;
+            this.panel101.Location = new System.Drawing.Point(250, 78);
+            this.panel101.Name = "panel101";
+            this.panel101.Size = new System.Drawing.Size(499, 448);
+            this.panel101.TabIndex = 239;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12488,11 +12552,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBlock);
@@ -12500,7 +12565,6 @@
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.headerNetworkName);
             this.Controls.Add(this.headerNetworkStatusLight);
             this.Controls.Add(this.panelFees);
@@ -12732,6 +12796,7 @@
             this.panelAppearance.ResumeLayout(false);
             this.panel91.ResumeLayout(false);
             this.panel91.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).EndInit();
             this.panel63.ResumeLayout(false);
             this.panel63.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).EndInit();
@@ -13602,6 +13667,11 @@
         private System.Windows.Forms.NumericUpDown numericUpDownMaxNumberOfConsecutiveUnusedAddresses;
         private System.Windows.Forms.Label label239;
         private System.Windows.Forms.Label label240;
+        private System.Windows.Forms.Label label242;
+        private System.Windows.Forms.Label lblBackgroundSatsumaSelected;
+        private System.Windows.Forms.PictureBox pictureBoxSatsuma;
+        private System.Windows.Forms.Panel panel100;
+        private System.Windows.Forms.Panel panel101;
     }
 }
 

@@ -510,6 +510,7 @@
             this.label123 = new System.Windows.Forms.Label();
             this.textBoxSubmittedXpub = new System.Windows.Forms.TextBox();
             this.label146 = new System.Windows.Forms.Label();
+            this.panel101 = new System.Windows.Forms.Panel();
             this.timerHideProgressBars = new System.Windows.Forms.Timer(this.components);
             this.XpubScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.btnAddToBookmarks = new System.Windows.Forms.Button();
@@ -554,6 +555,7 @@
             this.btnBookmarksListUp = new System.Windows.Forms.Button();
             this.panelBookmarksContainer = new System.Windows.Forms.Panel();
             this.listViewBookmarks = new System.Windows.Forms.ListView();
+            this.panel100 = new System.Windows.Forms.Panel();
             this.panel36 = new System.Windows.Forms.Panel();
             this.lblBookmarkTotalCount = new System.Windows.Forms.Label();
             this.label144 = new System.Windows.Forms.Label();
@@ -834,8 +836,6 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.panel100 = new System.Windows.Forms.Panel();
-            this.panel101 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -7735,6 +7735,14 @@
             this.label146.TabIndex = 6;
             this.label146.Text = "Xpub";
             // 
+            // panel101
+            // 
+            this.panel101.BackColor = System.Drawing.Color.IndianRed;
+            this.panel101.Location = new System.Drawing.Point(250, 78);
+            this.panel101.Name = "panel101";
+            this.panel101.Size = new System.Drawing.Size(499, 448);
+            this.panel101.TabIndex = 239;
+            // 
             // timerHideProgressBars
             // 
             this.timerHideProgressBars.Interval = 2000;
@@ -8310,9 +8318,9 @@
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel33.Controls.Add(this.btnBookmarksListDown);
             this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Location = new System.Drawing.Point(712, 37);
+            this.panel33.Location = new System.Drawing.Point(717, 37);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(36, 408);
+            this.panel33.Size = new System.Drawing.Size(36, 403);
             this.panel33.TabIndex = 214;
             // 
             // btnBookmarksListDown
@@ -8325,7 +8333,7 @@
             this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListDown.Location = new System.Drawing.Point(6, 384);
+            this.btnBookmarksListDown.Location = new System.Drawing.Point(1, 384);
             this.btnBookmarksListDown.Name = "btnBookmarksListDown";
             this.btnBookmarksListDown.Size = new System.Drawing.Size(28, 24);
             this.btnBookmarksListDown.TabIndex = 212;
@@ -8347,7 +8355,7 @@
             this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.Location = new System.Drawing.Point(6, 0);
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(1, 0);
             this.btnBookmarksListUp.Name = "btnBookmarksListUp";
             this.btnBookmarksListUp.Size = new System.Drawing.Size(28, 24);
             this.btnBookmarksListUp.TabIndex = 214;
@@ -8388,7 +8396,7 @@
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(712, 409);
+            this.listViewBookmarks.Size = new System.Drawing.Size(717, 409);
             this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
             this.listViewBookmarks.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewBookmarks.TabIndex = 164;
@@ -8399,6 +8407,14 @@
             this.listViewBookmarks.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBookmarks.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBookmarks_DrawSubItem);
             this.listViewBookmarks.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBookmarks_ItemSelectionChanged);
+            // 
+            // panel100
+            // 
+            this.panel100.BackColor = System.Drawing.Color.IndianRed;
+            this.panel100.Location = new System.Drawing.Point(1, -10);
+            this.panel100.Name = "panel100";
+            this.panel100.Size = new System.Drawing.Size(725, 420);
+            this.panel100.TabIndex = 165;
             // 
             // panel36
             // 
@@ -9023,7 +9039,7 @@
             this.label240.AutoSize = true;
             this.label240.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label240.ForeColor = System.Drawing.Color.Silver;
-            this.label240.Location = new System.Drawing.Point(29, 8);
+            this.label240.Location = new System.Drawing.Point(36, 8);
             this.label240.Name = "label240";
             this.label240.Size = new System.Drawing.Size(240, 20);
             this.label240.TabIndex = 53;
@@ -9035,7 +9051,7 @@
             this.lblPrivacyMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblPrivacyMode.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblPrivacyMode.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblPrivacyMode.Location = new System.Drawing.Point(7, 7);
+            this.lblPrivacyMode.Location = new System.Drawing.Point(15, 9);
             this.lblPrivacyMode.Name = "lblPrivacyMode";
             this.lblPrivacyMode.Size = new System.Drawing.Size(23, 18);
             this.lblPrivacyMode.TabIndex = 225;
@@ -12527,22 +12543,6 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
-            // panel100
-            // 
-            this.panel100.BackColor = System.Drawing.Color.IndianRed;
-            this.panel100.Location = new System.Drawing.Point(1, -10);
-            this.panel100.Name = "panel100";
-            this.panel100.Size = new System.Drawing.Size(725, 420);
-            this.panel100.TabIndex = 165;
-            // 
-            // panel101
-            // 
-            this.panel101.BackColor = System.Drawing.Color.IndianRed;
-            this.panel101.Location = new System.Drawing.Point(250, 78);
-            this.panel101.Name = "panel101";
-            this.panel101.Size = new System.Drawing.Size(499, 448);
-            this.panel101.TabIndex = 239;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12552,12 +12552,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBlock);

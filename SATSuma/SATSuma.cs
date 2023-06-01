@@ -26,9 +26,7 @@ Version history 🍊
  * further testing of privacy mode, testnet, own node
  * deal with scrollbar panels colours when using a custom theme (only tx screen left to do)
  * documentation/website
- * include checkboxes as textboxes when applying theme
  * check all textbox foreground colors are consistent and possibly include them in the 'other text' list
- * remake button image for 'custom image'
  */
 
 #region Using
@@ -14004,7 +14002,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList };
+                Control[] listTextBoxesToColor = { lblShowClock, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblSettingsNodeCustom, lblSettingsNodeMainnet, lblSettingsNodeTestnet, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblPrivacyMode };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;

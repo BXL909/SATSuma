@@ -28,6 +28,7 @@ Version history 🍊
  * documentation/website
  * include checkboxes as textboxes when applying theme
  * check all textbox foreground colors are consistent and possibly include them in the 'other text' list
+ * remake button image for 'custom image'
  */
 
 #region Using

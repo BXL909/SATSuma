@@ -25,7 +25,8 @@ Version history 🍊
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet, own node
  * documentation/website
- * check all textbox foreground colors are consistent and possibly include them in the 'other text' list
+ * disable mouse controls on pie chart
+ * chart grid colors, etc
  */
 
 #region Using
@@ -183,8 +184,8 @@ namespace SATSuma
         bool privacyMode = false; // disables all comms apart from to full node
         bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
-        Color subItemBackColor = Color.FromArgb(20,20,20);
-        readonly Color chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+        Color subItemBackColor = Color.FromArgb(20, 20, 20);
+        Color chartsBackgroundColor = Color.FromArgb(20, 20, 20);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
@@ -236,7 +237,7 @@ namespace SATSuma
                 formsPlot3.Plot.Style(ScottPlot.Style.Black);
                 formsPlot3.RightClicked -= formsPlot3.DefaultRightClickEvent; // disable default right-click event
                 formsPlot3.Configuration.DoubleClickBenchmark = false;
-                
+
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: chartsBackgroundColor);
@@ -246,7 +247,7 @@ namespace SATSuma
                 formsPlot3.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: chartsBackgroundColor);
-                
+
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
                 formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
                 formsPlot3.Plot.Palette = ScottPlot.Palette.Amber;
@@ -1030,7 +1031,7 @@ namespace SATSuma
                                     lblClearnetTorNodes.Text = "Disabled";
                                 });
                             }
-                            pictureBoxLightningNodesChart.Invoke((MethodInvoker)delegate 
+                            pictureBoxLightningNodesChart.Invoke((MethodInvoker)delegate
                             {
                                 pictureBoxLightningNodesChart.Location = new Point(label40.Location.X + label40.Width + 5, pictureBoxLightningNodesChart.Location.Y);
                             });
@@ -1224,7 +1225,7 @@ namespace SATSuma
                                 lblBlockchainSize.Text = "unavailable on TestNet";
                             });
                         }
-                        pictureBoxPoolRankingChart.Invoke((MethodInvoker)delegate 
+                        pictureBoxPoolRankingChart.Invoke((MethodInvoker)delegate
                         {
                             pictureBoxPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width + 5, pictureBoxPoolRankingChart.Location.Y);
                         });
@@ -1756,7 +1757,7 @@ namespace SATSuma
         {
             try
             {
-                
+
                 using WebClient client = new WebClient();
                 var response = client.DownloadString(NodeURL + "mempool");
                 if (testNet)
@@ -3360,13 +3361,13 @@ namespace SATSuma
                 }
 
                 var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
-//                ToggleLoadingAnimation("enable"); // start the loading animation
-//                DisableEnableBlockButtons("disable"); // disable buttons during operation
+                //                ToggleLoadingAnimation("enable"); // start the loading animation
+                //                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 await GetFifteenBlocks(blockNumber);
                 string BlockHashToGetTransactionsFor = lblBlockHash.Text;
                 await GetTransactionsForBlock(BlockHashToGetTransactionsFor, "0");
-//                ToggleLoadingAnimation("disable"); // stop the loading animation
-//                DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
+                //                ToggleLoadingAnimation("disable"); // stop the loading animation
+                //                DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
             }
             catch (Exception ex)
             {
@@ -3576,7 +3577,7 @@ namespace SATSuma
 
                     if (TotalBlockTransactionRowsAdded <= rowsReturnedByBlockTransactionsAPI) // we must still be on first results so there are no previous
                     {
-                        btnPreviousBlockTransactions.Enabled = false; 
+                        btnPreviousBlockTransactions.Enabled = false;
                     }
                     else
                     {
@@ -3644,8 +3645,8 @@ namespace SATSuma
         {
             try
             {
-//                ToggleLoadingAnimation("enable"); // start the loading animation
-//                DisableEnableBlockButtons("disable"); // disable buttons during operation
+                //                ToggleLoadingAnimation("enable"); // start the loading animation
+                //                DisableEnableBlockButtons("disable"); // disable buttons during operation
                 var blockHash = lblBlockHash.Text; // Get the blockHash from the label again
                 if (TotalBlockTransactionRowsAdded % rowsReturnedByBlockTransactionsAPI == 0) // API expects last seen transaction to be a multiple of 25. If it is we can just subtract 50 for the prev page
                 {
@@ -3659,8 +3660,8 @@ namespace SATSuma
                 }
                 var lastSeenBlockTransaction = Convert.ToString(TotalBlockTransactionRowsAdded); // the JSON uses the count to restart fetching, rather than txid.
                 await GetTransactionsForBlock(blockHash, lastSeenBlockTransaction); // Call the GetConfirmedTransactionsForBlock method with the updated lastSeenTxId
-//                DisableEnableBlockButtons("enable"); // enable the buttons that were previously enabled again
-//                ToggleLoadingAnimation("disable"); // stop the loading animation
+                                                                                    //                DisableEnableBlockButtons("enable"); // enable the buttons that were previously enabled again
+                                                                                    //                ToggleLoadingAnimation("disable"); // stop the loading animation
                 btnViewTransactionFromBlock.Visible = false;
             }
             catch (Exception ex)
@@ -5348,13 +5349,13 @@ namespace SATSuma
                     {
                         textBoxBlockHeightToStartListFrom.Text = "0";
                     });
-                   // btnPreviousBlock.Enabled = false;
-                   // btnNextBlock.Enabled = true;
+                    // btnPreviousBlock.Enabled = false;
+                    // btnNextBlock.Enabled = true;
                 }
                 if (textBoxBlockHeightToStartListFrom.Text == lblBlockNumber.Text)
                 {
-                   // btnNextBlock.Enabled = false;
-                   // btnPreviousBlock.Enabled = true;
+                    // btnNextBlock.Enabled = false;
+                    // btnPreviousBlock.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -5506,7 +5507,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        btnNewer15Blocks.Enabled = true; 
+                        btnNewer15Blocks.Enabled = true;
 
                     }
 
@@ -8093,6 +8094,7 @@ namespace SATSuma
                 pie.SliceFont.Size = 11;
                 pie.SliceFont.Bold = false;
                 pie.SliceLabels = labelsAndValuesArray;
+                pie.SliceLabelColors = colorSpectrum;
                 pie.SliceLabelPosition = 0.60;
 
                 var padding = new ScottPlot.PixelPadding(
@@ -8116,7 +8118,7 @@ namespace SATSuma
                 HandleException(ex, "Generating pools ranking chart");
             }
         }
-            
+
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
             try
@@ -10628,7 +10630,7 @@ namespace SATSuma
                                 lblErrorMessage.Text = "you need to connect to a full node before the selected Xpub can be viewed.";
                             }
                         }
-                        
+
                         btnDeleteBookmark.Enabled = true;
                         item.BackColor = Color.Blue;
                         item.ForeColor = Color.White;
@@ -11233,7 +11235,7 @@ namespace SATSuma
                     bookmarkData = lblBookmarkProposalData.Text;
                 }
 
-                var newBookmark = new Bookmark { DateAdded = today, Type = lblBookmarkProposalType.Text, Data = bookmarkData, Note = bookmarkNote, Encrypted = toBeEncrypted, KeyCheck = keyCheck};
+                var newBookmark = new Bookmark { DateAdded = today, Type = lblBookmarkProposalType.Text, Data = bookmarkData, Note = bookmarkNote, Encrypted = toBeEncrypted, KeyCheck = keyCheck };
 
                 // Read the existing bookmarks from the JSON file
                 var bookmarks = ReadBookmarksFromJsonFile();
@@ -12111,7 +12113,7 @@ namespace SATSuma
             {
                 HandleException(ex, "numericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged");
             }
-        }   
+        }
 
         // settings entry in the bookmark file = DM111111nnnnnnnnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnnn = refresh freq, nn = max number of consecutive non-zero addresses on xpub scan, nnn = number of derivation paths to check.
 
@@ -12174,7 +12176,7 @@ namespace SATSuma
 
                 // write the settings to the bookmarks file for auto retrieval next time
                 DateTime today = DateTime.Today;
-                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + PrivacyModeSelected + unused1 + unused2 + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0') + numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0') + numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0'); 
+                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + PrivacyModeSelected + unused1 + unused2 + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0') + numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0') + numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0');
                 string keyCheck = "21m";
                 var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                 if (!settingsAlreadySavedInFile)
@@ -12456,7 +12458,7 @@ namespace SATSuma
                         }
                         numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
                         numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(bookmark.Data.Substring(12, 2));
-                        numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(bookmark.Data.Substring(14,3));
+                        numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(bookmark.Data.Substring(14, 3));
                         break;
                     }
                 }
@@ -12541,7 +12543,7 @@ namespace SATSuma
             {
                 HandleException(ex, "DisableFunctionalityForTestNet");
             }
-        }    
+        }
 
         private void EnableFunctionalityForMainNet()
         {
@@ -12564,7 +12566,7 @@ namespace SATSuma
                 HandleException(ex, "EnableFunctionalityForMainNet");
             }
         }
-        
+
         #endregion
 
         #region ⚡APPEARANCE SCREEN⚡
@@ -12775,7 +12777,7 @@ namespace SATSuma
                 HandleException(ex, "BtnColorTableText_Click");
             }
         }
-        
+
         private void BtnColorOtherText_Click(object sender, EventArgs e)
         {
             try
@@ -12894,6 +12896,87 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "LblShowClock_Click");
+            }
+        }
+
+        private void LblChartsLightBackground_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblChartsLightBackground.Text == "✔️")
+                {
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.IndianRed;
+                        lblChartsLightBackground.Text = "❌";
+                    });
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.Green;
+                        lblChartsDarkBackground.Text = "✔️";
+                    });
+                    chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+                }
+                else
+                {
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.Green;
+                        lblChartsLightBackground.Text = "✔️";
+                    });
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                        lblChartsDarkBackground.Text = "❌";
+                    });
+                    chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                }
+                CustomiseCharts();
+            }
+
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblChartsLightBackground_Click");
+            }
+        }
+
+        private void LblChartsDarkBackground_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblChartsDarkBackground.Text == "✔️")
+                {
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                        lblChartsDarkBackground.Text = "❌";
+                    });
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.Green;
+                        lblChartsLightBackground.Text = "✔️";
+                    });
+                    chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                }
+                else
+                {
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.Green;
+                        lblChartsDarkBackground.Text = "✔️";
+                    });
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.IndianRed;
+                        lblChartsLightBackground.Text = "❌";
+                    });
+                    chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+                }
+                CustomiseCharts();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblChartsDarkBackground_Click");
             }
         }
 
@@ -13296,6 +13379,12 @@ namespace SATSuma
                 Color tablebackgrounds = panel66.BackColor;
                 Color tabletitlebars = panel67.BackColor;
                 Color panels = panel73.BackColor;
+                bool chartsDark = false;
+                if (lblChartsDarkBackground.Text == "✔️")
+                {
+                    chartsDark = true;
+                }
+
                 bool showtime = lblTime.Visible;
                 bool headingbgdefault = false;
                 if (lblTitleBackgroundDefault.Text == "✔️")
@@ -13369,7 +13458,7 @@ namespace SATSuma
                         }
                     }
                 }
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma ,BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels };
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -13439,6 +13528,35 @@ namespace SATSuma
                 ColorTableBackgrounds(theme.TableBackgrounds);
                 ColorTableTitleBars(theme.TableTitleBars);
                 ColorPanels(theme.Panels);
+                if (theme.ChartsDark == true)
+                {
+                    chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.IndianRed;
+                        lblChartsLightBackground.Text = "❌";
+                    });
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.Green;
+                        lblChartsDarkBackground.Text = "✔️";
+                    });
+                }
+                else
+                {
+                    chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.Green;
+                        lblChartsLightBackground.Text = "✔️";
+                    });
+                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                        lblChartsDarkBackground.Text = "❌";
+                    });
+                }
+                CustomiseCharts();
                 if (theme.ShowTime == false)
                 {
                     lblShowClock.Invoke((MethodInvoker)delegate
@@ -13520,7 +13638,7 @@ namespace SATSuma
                     lblBackgroundCustomColorSelected.Visible = false;
                     lblBackgroundCustomImageSelected.Visible = false;
                     this.BackgroundImage = Properties.Resources.Satsuma3;
-                }    
+                }
                 if (theme.BackgroundCustomColor == true)
                 {
                     lblBackgroundCustomColorSelected.ForeColor = Color.Green;
@@ -13547,6 +13665,30 @@ namespace SATSuma
             {
                 HandleException(ex, "RestoreTheme");
             }
+        }
+
+        private void CustomiseCharts()
+        {
+            formsPlot1.Plot.Style(
+                figureBackground: Color.Transparent,
+                dataBackground: chartsBackgroundColor);
+            formsPlot2.Plot.Style(
+                figureBackground: Color.Transparent,
+                dataBackground: chartsBackgroundColor);
+            formsPlot3.Plot.Style(
+                figureBackground: Color.Transparent,
+                dataBackground: chartsBackgroundColor);
+            panelFeeRatesKey.BackColor = chartsBackgroundColor;
+            panelCirculationKey.BackColor = chartsBackgroundColor;
+            panelPriceScaleButtons.BackColor = chartsBackgroundColor;
+            panelChartMarketCapScaleButtons.BackColor = chartsBackgroundColor;
+            panelChartUTXOScaleButtons.BackColor = chartsBackgroundColor;
+            panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
+            panelLightningNodeNetwork.BackColor = chartsBackgroundColor;
+            
+            formsPlot1.Refresh();
+            formsPlot2.Refresh();
+            formsPlot3.Refresh();
         }
 
         private void ColorDataFields(Color thisColor)
@@ -13809,7 +13951,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning };
+                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning, textBoxXpubNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxBlockHeightToStartListFrom, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsCustomMempoolURL, textBoxSettingsXpubMempoolURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeImage, textBoxThemeName, textBox1, comboBoxThemeList };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -16232,6 +16374,8 @@ namespace SATSuma
             public bool BackgroundCustomColor { get; set; }
             public bool BackgroundCustomImage { get; set; }
             public Color Panels { get; set; }
+            public bool ChartsDark { get; set; }
+
         }
 
         // ------------------------------------- Address Transactions -----------------------------------

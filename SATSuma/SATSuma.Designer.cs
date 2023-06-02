@@ -106,6 +106,8 @@
             this.pictureBoxLightningCapacityChart = new System.Windows.Forms.PictureBox();
             this.pictureBoxLightningNodesChart = new System.Windows.Forms.PictureBox();
             this.pictureBoxLightningChannelsChart = new System.Windows.Forms.PictureBox();
+            this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
+            this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -423,6 +425,20 @@
             this.panelRefreshStatusBar = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
             this.panelTransaction = new System.Windows.Forms.Panel();
+            this.panel27 = new System.Windows.Forms.Panel();
+            this.label102 = new System.Windows.Forms.Label();
+            this.panel28 = new System.Windows.Forms.Panel();
+            this.label107 = new System.Windows.Forms.Label();
+            this.panel25 = new System.Windows.Forms.Panel();
+            this.btnTransactionOutputsUp = new System.Windows.Forms.Button();
+            this.btnTransactionOutputsDown = new System.Windows.Forms.Button();
+            this.panel24 = new System.Windows.Forms.Panel();
+            this.btnTransactionInputsUp = new System.Windows.Forms.Button();
+            this.btnTransactionInputDown = new System.Windows.Forms.Button();
+            this.panelTransactionOutputs = new System.Windows.Forms.Panel();
+            this.listViewTransactionOutputs = new System.Windows.Forms.ListView();
+            this.panelTransactionInputs = new System.Windows.Forms.Panel();
+            this.listViewTransactionInputs = new System.Windows.Forms.ListView();
             this.lblInvalidTransaction = new System.Windows.Forms.Label();
             this.panelTransactionHeadline = new System.Windows.Forms.Panel();
             this.lblTransactionConfirmations = new System.Windows.Forms.Label();
@@ -450,6 +466,7 @@
             this.lblTransactionOutputCount = new System.Windows.Forms.Label();
             this.textBoxTransactionID = new System.Windows.Forms.TextBox();
             this.label136 = new System.Windows.Forms.Label();
+            this.panel102 = new System.Windows.Forms.Panel();
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
@@ -650,6 +667,13 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btnColorButtonText = new System.Windows.Forms.Button();
             this.panelAppearance = new System.Windows.Forms.Panel();
+            this.panel103 = new System.Windows.Forms.Panel();
+            this.lblChartsDarkBackground = new System.Windows.Forms.Label();
+            this.label246 = new System.Windows.Forms.Label();
+            this.lblChartsLightBackground = new System.Windows.Forms.Label();
+            this.label243 = new System.Windows.Forms.Label();
+            this.panel104 = new System.Windows.Forms.Panel();
+            this.label244 = new System.Windows.Forms.Label();
             this.panel91 = new System.Windows.Forms.Panel();
             this.label242 = new System.Windows.Forms.Label();
             this.lblBackgroundSatsumaSelected = new System.Windows.Forms.Label();
@@ -820,23 +844,6 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.listViewTransactionInputs = new System.Windows.Forms.ListView();
-            this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
-            this.panelTransactionInputs = new System.Windows.Forms.Panel();
-            this.listViewTransactionOutputs = new System.Windows.Forms.ListView();
-            this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
-            this.panelTransactionOutputs = new System.Windows.Forms.Panel();
-            this.btnTransactionInputDown = new System.Windows.Forms.Button();
-            this.btnTransactionInputsUp = new System.Windows.Forms.Button();
-            this.panel24 = new System.Windows.Forms.Panel();
-            this.btnTransactionOutputsDown = new System.Windows.Forms.Button();
-            this.btnTransactionOutputsUp = new System.Windows.Forms.Button();
-            this.panel25 = new System.Windows.Forms.Panel();
-            this.label107 = new System.Windows.Forms.Label();
-            this.panel28 = new System.Windows.Forms.Panel();
-            this.label102 = new System.Windows.Forms.Label();
-            this.panel27 = new System.Windows.Forms.Panel();
-            this.panel102 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -912,6 +919,12 @@
             this.panel20.SuspendLayout();
             this.panelRefreshStatusBar.SuspendLayout();
             this.panelTransaction.SuspendLayout();
+            this.panel27.SuspendLayout();
+            this.panel28.SuspendLayout();
+            this.panel25.SuspendLayout();
+            this.panel24.SuspendLayout();
+            this.panelTransactionOutputs.SuspendLayout();
+            this.panelTransactionInputs.SuspendLayout();
             this.panelTransactionHeadline.SuspendLayout();
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
@@ -956,6 +969,8 @@
             this.panel58.SuspendLayout();
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
+            this.panel103.SuspendLayout();
+            this.panel104.SuspendLayout();
             this.panel91.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).BeginInit();
             this.panel63.SuspendLayout();
@@ -994,12 +1009,6 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
-            this.panelTransactionInputs.SuspendLayout();
-            this.panelTransactionOutputs.SuspendLayout();
-            this.panel24.SuspendLayout();
-            this.panel25.SuspendLayout();
-            this.panel28.SuspendLayout();
-            this.panel27.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -2057,6 +2066,48 @@
             this.pictureBoxLightningChannelsChart.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxLightningChannelsChart, "view chart");
             this.pictureBoxLightningChannelsChart.Click += new System.EventHandler(this.PictureBoxLightningChannelsChart_Click);
+            // 
+            // btnViewAddressFromTXInput
+            // 
+            this.btnViewAddressFromTXInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXInput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromTXInput.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromTXInput.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromTXInput.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromTXInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromTXInput.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewAddressFromTXInput.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromTXInput.Location = new System.Drawing.Point(66, 28);
+            this.btnViewAddressFromTXInput.Margin = new System.Windows.Forms.Padding(0);
+            this.btnViewAddressFromTXInput.Name = "btnViewAddressFromTXInput";
+            this.btnViewAddressFromTXInput.Size = new System.Drawing.Size(20, 15);
+            this.btnViewAddressFromTXInput.TabIndex = 216;
+            this.btnViewAddressFromTXInput.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXInput, "View address");
+            this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromTXInput.Visible = false;
+            this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
+            // 
+            // btnViewAddressFromTXOutput
+            // 
+            this.btnViewAddressFromTXOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXOutput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromTXOutput.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromTXOutput.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromTXOutput.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnViewAddressFromTXOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromTXOutput.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewAddressFromTXOutput.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromTXOutput.Location = new System.Drawing.Point(98, 20);
+            this.btnViewAddressFromTXOutput.Margin = new System.Windows.Forms.Padding(0);
+            this.btnViewAddressFromTXOutput.Name = "btnViewAddressFromTXOutput";
+            this.btnViewAddressFromTXOutput.Size = new System.Drawing.Size(20, 15);
+            this.btnViewAddressFromTXOutput.TabIndex = 217;
+            this.btnViewAddressFromTXOutput.Text = "▶️";
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXOutput, "View address");
+            this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromTXOutput.Visible = false;
+            this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
             // 
             // label134
             // 
@@ -6479,6 +6530,250 @@
             this.panelTransaction.Visible = false;
             this.panelTransaction.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // panel27
+            // 
+            this.panel27.BackColor = System.Drawing.Color.Transparent;
+            this.panel27.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel27.BackgroundImage")));
+            this.panel27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel27.Controls.Add(this.label102);
+            this.panel27.Location = new System.Drawing.Point(7, 420);
+            this.panel27.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel27.Name = "panel27";
+            this.panel27.Size = new System.Drawing.Size(370, 23);
+            this.panel27.TabIndex = 197;
+            this.panel27.Visible = false;
+            // 
+            // label102
+            // 
+            this.label102.AutoSize = true;
+            this.label102.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label102.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label102.ForeColor = System.Drawing.Color.Gray;
+            this.label102.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label102.Location = new System.Drawing.Point(3, 2);
+            this.label102.Name = "label102";
+            this.label102.Size = new System.Drawing.Size(123, 17);
+            this.label102.TabIndex = 153;
+            this.label102.Text = "Transaction inputs";
+            // 
+            // panel28
+            // 
+            this.panel28.BackColor = System.Drawing.Color.Transparent;
+            this.panel28.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel28.BackgroundImage")));
+            this.panel28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel28.Controls.Add(this.label107);
+            this.panel28.Location = new System.Drawing.Point(388, 420);
+            this.panel28.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel28.Name = "panel28";
+            this.panel28.Size = new System.Drawing.Size(370, 23);
+            this.panel28.TabIndex = 198;
+            this.panel28.Visible = false;
+            // 
+            // label107
+            // 
+            this.label107.AutoSize = true;
+            this.label107.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label107.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label107.ForeColor = System.Drawing.Color.Gray;
+            this.label107.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label107.Location = new System.Drawing.Point(3, 2);
+            this.label107.Name = "label107";
+            this.label107.Size = new System.Drawing.Size(134, 17);
+            this.label107.TabIndex = 153;
+            this.label107.Text = "Transaction outputs";
+            // 
+            // panel25
+            // 
+            this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel25.Controls.Add(this.btnTransactionOutputsUp);
+            this.panel25.Controls.Add(this.btnTransactionOutputsDown);
+            this.panel25.Location = new System.Drawing.Point(734, 451);
+            this.panel25.Name = "panel25";
+            this.panel25.Size = new System.Drawing.Size(21, 105);
+            this.panel25.TabIndex = 215;
+            // 
+            // btnTransactionOutputsUp
+            // 
+            this.btnTransactionOutputsUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnTransactionOutputsUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnTransactionOutputsUp.FlatAppearance.BorderSize = 0;
+            this.btnTransactionOutputsUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionOutputsUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionOutputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTransactionOutputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTransactionOutputsUp.ForeColor = System.Drawing.Color.White;
+            this.btnTransactionOutputsUp.Location = new System.Drawing.Point(0, 0);
+            this.btnTransactionOutputsUp.Name = "btnTransactionOutputsUp";
+            this.btnTransactionOutputsUp.Size = new System.Drawing.Size(20, 20);
+            this.btnTransactionOutputsUp.TabIndex = 210;
+            this.btnTransactionOutputsUp.TabStop = false;
+            this.btnTransactionOutputsUp.Text = "▲";
+            this.btnTransactionOutputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnTransactionOutputsUp.UseVisualStyleBackColor = false;
+            this.btnTransactionOutputsUp.Visible = false;
+            this.btnTransactionOutputsUp.Click += new System.EventHandler(this.BtnTransactionOutputsUp_Click);
+            this.btnTransactionOutputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseDown);
+            this.btnTransactionOutputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseUp);
+            // 
+            // btnTransactionOutputsDown
+            // 
+            this.btnTransactionOutputsDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnTransactionOutputsDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnTransactionOutputsDown.FlatAppearance.BorderSize = 0;
+            this.btnTransactionOutputsDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionOutputsDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionOutputsDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTransactionOutputsDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTransactionOutputsDown.ForeColor = System.Drawing.Color.White;
+            this.btnTransactionOutputsDown.Location = new System.Drawing.Point(0, 84);
+            this.btnTransactionOutputsDown.Name = "btnTransactionOutputsDown";
+            this.btnTransactionOutputsDown.Size = new System.Drawing.Size(20, 20);
+            this.btnTransactionOutputsDown.TabIndex = 211;
+            this.btnTransactionOutputsDown.TabStop = false;
+            this.btnTransactionOutputsDown.Text = "▼";
+            this.btnTransactionOutputsDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnTransactionOutputsDown.UseVisualStyleBackColor = false;
+            this.btnTransactionOutputsDown.Visible = false;
+            this.btnTransactionOutputsDown.Click += new System.EventHandler(this.BtnTransactionOutputsDown_Click);
+            this.btnTransactionOutputsDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsDown_MouseDown);
+            this.btnTransactionOutputsDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsDown_MouseUp);
+            // 
+            // panel24
+            // 
+            this.panel24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel24.Controls.Add(this.btnTransactionInputsUp);
+            this.panel24.Controls.Add(this.btnTransactionInputDown);
+            this.panel24.Location = new System.Drawing.Point(356, 451);
+            this.panel24.Name = "panel24";
+            this.panel24.Size = new System.Drawing.Size(26, 105);
+            this.panel24.TabIndex = 213;
+            // 
+            // btnTransactionInputsUp
+            // 
+            this.btnTransactionInputsUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnTransactionInputsUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnTransactionInputsUp.FlatAppearance.BorderSize = 0;
+            this.btnTransactionInputsUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionInputsUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionInputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTransactionInputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTransactionInputsUp.ForeColor = System.Drawing.Color.White;
+            this.btnTransactionInputsUp.Location = new System.Drawing.Point(0, 0);
+            this.btnTransactionInputsUp.Name = "btnTransactionInputsUp";
+            this.btnTransactionInputsUp.Size = new System.Drawing.Size(20, 20);
+            this.btnTransactionInputsUp.TabIndex = 210;
+            this.btnTransactionInputsUp.TabStop = false;
+            this.btnTransactionInputsUp.Text = "▲";
+            this.btnTransactionInputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnTransactionInputsUp.UseVisualStyleBackColor = false;
+            this.btnTransactionInputsUp.Visible = false;
+            this.btnTransactionInputsUp.Click += new System.EventHandler(this.BtnTransactionInputsUp_Click);
+            this.btnTransactionInputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseDown);
+            this.btnTransactionInputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseUp);
+            // 
+            // btnTransactionInputDown
+            // 
+            this.btnTransactionInputDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnTransactionInputDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnTransactionInputDown.FlatAppearance.BorderSize = 0;
+            this.btnTransactionInputDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionInputDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnTransactionInputDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTransactionInputDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTransactionInputDown.ForeColor = System.Drawing.Color.White;
+            this.btnTransactionInputDown.Location = new System.Drawing.Point(0, 84);
+            this.btnTransactionInputDown.Name = "btnTransactionInputDown";
+            this.btnTransactionInputDown.Size = new System.Drawing.Size(20, 20);
+            this.btnTransactionInputDown.TabIndex = 211;
+            this.btnTransactionInputDown.TabStop = false;
+            this.btnTransactionInputDown.Text = "▼";
+            this.btnTransactionInputDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnTransactionInputDown.UseVisualStyleBackColor = false;
+            this.btnTransactionInputDown.Visible = false;
+            this.btnTransactionInputDown.Click += new System.EventHandler(this.BtnTransactionInputsDown_Click);
+            this.btnTransactionInputDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseDown);
+            this.btnTransactionInputDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseUp);
+            // 
+            // panelTransactionOutputs
+            // 
+            this.panelTransactionOutputs.AutoScroll = true;
+            this.panelTransactionOutputs.Controls.Add(this.btnViewAddressFromTXOutput);
+            this.panelTransactionOutputs.Controls.Add(this.listViewTransactionOutputs);
+            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 451);
+            this.panelTransactionOutputs.Name = "panelTransactionOutputs";
+            this.panelTransactionOutputs.Size = new System.Drawing.Size(363, 104);
+            this.panelTransactionOutputs.TabIndex = 214;
+            this.panelTransactionOutputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionOutputs_Paint);
+            // 
+            // listViewTransactionOutputs
+            // 
+            this.listViewTransactionOutputs.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewTransactionOutputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewTransactionOutputs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewTransactionOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewTransactionOutputs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewTransactionOutputs.FullRowSelect = true;
+            this.listViewTransactionOutputs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewTransactionOutputs.HideSelection = false;
+            this.listViewTransactionOutputs.LabelWrap = false;
+            this.listViewTransactionOutputs.Location = new System.Drawing.Point(0, 0);
+            this.listViewTransactionOutputs.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewTransactionOutputs.MultiSelect = false;
+            this.listViewTransactionOutputs.Name = "listViewTransactionOutputs";
+            this.listViewTransactionOutputs.OwnerDraw = true;
+            this.listViewTransactionOutputs.Scrollable = false;
+            this.listViewTransactionOutputs.ShowGroups = false;
+            this.listViewTransactionOutputs.Size = new System.Drawing.Size(345, 88);
+            this.listViewTransactionOutputs.SmallImageList = this.imageListUpDownArrows;
+            this.listViewTransactionOutputs.TabIndex = 165;
+            this.listViewTransactionOutputs.TabStop = false;
+            this.listViewTransactionOutputs.UseCompatibleStateImageBehavior = false;
+            this.listViewTransactionOutputs.View = System.Windows.Forms.View.Details;
+            this.listViewTransactionOutputs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewTransactionOutputs_ColumnWidthChanging);
+            this.listViewTransactionOutputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
+            this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
+            // 
+            // panelTransactionInputs
+            // 
+            this.panelTransactionInputs.AutoScroll = true;
+            this.panelTransactionInputs.Controls.Add(this.btnViewAddressFromTXInput);
+            this.panelTransactionInputs.Controls.Add(this.listViewTransactionInputs);
+            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 451);
+            this.panelTransactionInputs.Name = "panelTransactionInputs";
+            this.panelTransactionInputs.Size = new System.Drawing.Size(363, 104);
+            this.panelTransactionInputs.TabIndex = 212;
+            this.panelTransactionInputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionInputs_Paint);
+            // 
+            // listViewTransactionInputs
+            // 
+            this.listViewTransactionInputs.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewTransactionInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewTransactionInputs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewTransactionInputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewTransactionInputs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewTransactionInputs.FullRowSelect = true;
+            this.listViewTransactionInputs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewTransactionInputs.HideSelection = false;
+            this.listViewTransactionInputs.LabelWrap = false;
+            this.listViewTransactionInputs.Location = new System.Drawing.Point(0, 0);
+            this.listViewTransactionInputs.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewTransactionInputs.MultiSelect = false;
+            this.listViewTransactionInputs.Name = "listViewTransactionInputs";
+            this.listViewTransactionInputs.OwnerDraw = true;
+            this.listViewTransactionInputs.Scrollable = false;
+            this.listViewTransactionInputs.ShowGroups = false;
+            this.listViewTransactionInputs.Size = new System.Drawing.Size(345, 88);
+            this.listViewTransactionInputs.SmallImageList = this.imageListUpDownArrows;
+            this.listViewTransactionInputs.TabIndex = 165;
+            this.listViewTransactionInputs.TabStop = false;
+            this.listViewTransactionInputs.UseCompatibleStateImageBehavior = false;
+            this.listViewTransactionInputs.View = System.Windows.Forms.View.Details;
+            this.listViewTransactionInputs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewTransactionInputs_ColumnWidthChanging);
+            this.listViewTransactionInputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewTransactionInputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionInputs_DrawSubItem);
+            this.listViewTransactionInputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionInputs_ItemSelectionChanged);
+            // 
             // lblInvalidTransaction
             // 
             this.lblInvalidTransaction.AutoSize = true;
@@ -6814,6 +7109,13 @@
             this.label136.Size = new System.Drawing.Size(152, 20);
             this.label136.TabIndex = 6;
             this.label136.Text = "Enter transaction ID";
+            // 
+            // panel102
+            // 
+            this.panel102.Location = new System.Drawing.Point(9, 450);
+            this.panel102.Name = "panel102";
+            this.panel102.Size = new System.Drawing.Size(745, 110);
+            this.panel102.TabIndex = 216;
             // 
             // TXInScrollTimer
             // 
@@ -9632,6 +9934,7 @@
             // panelAppearance
             // 
             this.panelAppearance.BackColor = System.Drawing.Color.Transparent;
+            this.panelAppearance.Controls.Add(this.panel103);
             this.panelAppearance.Controls.Add(this.panel91);
             this.panelAppearance.Controls.Add(this.panel90);
             this.panelAppearance.Controls.Add(this.panel89);
@@ -9645,6 +9948,93 @@
             this.panelAppearance.Size = new System.Drawing.Size(773, 556);
             this.panelAppearance.TabIndex = 249;
             this.panelAppearance.Visible = false;
+            // 
+            // panel103
+            // 
+            this.panel103.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel103.Controls.Add(this.lblChartsDarkBackground);
+            this.panel103.Controls.Add(this.label246);
+            this.panel103.Controls.Add(this.lblChartsLightBackground);
+            this.panel103.Controls.Add(this.label243);
+            this.panel103.Controls.Add(this.panel104);
+            this.panel103.Location = new System.Drawing.Point(534, 0);
+            this.panel103.Name = "panel103";
+            this.panel103.Size = new System.Drawing.Size(221, 64);
+            this.panel103.TabIndex = 297;
+            // 
+            // lblChartsDarkBackground
+            // 
+            this.lblChartsDarkBackground.AutoSize = true;
+            this.lblChartsDarkBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblChartsDarkBackground.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblChartsDarkBackground.ForeColor = System.Drawing.Color.Green;
+            this.lblChartsDarkBackground.Location = new System.Drawing.Point(101, 34);
+            this.lblChartsDarkBackground.Name = "lblChartsDarkBackground";
+            this.lblChartsDarkBackground.Size = new System.Drawing.Size(23, 18);
+            this.lblChartsDarkBackground.TabIndex = 264;
+            this.lblChartsDarkBackground.Text = "✔️";
+            this.lblChartsDarkBackground.Click += new System.EventHandler(this.LblChartsDarkBackground_Click);
+            // 
+            // label246
+            // 
+            this.label246.AutoSize = true;
+            this.label246.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label246.ForeColor = System.Drawing.Color.Silver;
+            this.label246.Location = new System.Drawing.Point(123, 34);
+            this.label246.Name = "label246";
+            this.label246.Size = new System.Drawing.Size(43, 20);
+            this.label246.TabIndex = 263;
+            this.label246.Text = "Dark";
+            // 
+            // lblChartsLightBackground
+            // 
+            this.lblChartsLightBackground.AutoSize = true;
+            this.lblChartsLightBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblChartsLightBackground.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblChartsLightBackground.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblChartsLightBackground.Location = new System.Drawing.Point(9, 34);
+            this.lblChartsLightBackground.Name = "lblChartsLightBackground";
+            this.lblChartsLightBackground.Size = new System.Drawing.Size(23, 18);
+            this.lblChartsLightBackground.TabIndex = 262;
+            this.lblChartsLightBackground.Text = "❌";
+            this.lblChartsLightBackground.Click += new System.EventHandler(this.LblChartsLightBackground_Click);
+            // 
+            // label243
+            // 
+            this.label243.AutoSize = true;
+            this.label243.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label243.ForeColor = System.Drawing.Color.Silver;
+            this.label243.Location = new System.Drawing.Point(31, 34);
+            this.label243.Name = "label243";
+            this.label243.Size = new System.Drawing.Size(43, 20);
+            this.label243.TabIndex = 261;
+            this.label243.Text = "Light";
+            // 
+            // panel104
+            // 
+            this.panel104.BackColor = System.Drawing.Color.Transparent;
+            this.panel104.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel104.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel104.Controls.Add(this.label244);
+            this.panel104.Location = new System.Drawing.Point(0, 0);
+            this.panel104.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel104.Name = "panel104";
+            this.panel104.Size = new System.Drawing.Size(224, 23);
+            this.panel104.TabIndex = 213;
+            // 
+            // label244
+            // 
+            this.label244.AutoSize = true;
+            this.label244.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label244.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label244.ForeColor = System.Drawing.Color.Gray;
+            this.label244.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label244.Location = new System.Drawing.Point(0, 2);
+            this.label244.Margin = new System.Windows.Forms.Padding(0);
+            this.label244.Name = "label244";
+            this.label244.Size = new System.Drawing.Size(151, 20);
+            this.label244.TabIndex = 153;
+            this.label244.Text = "Chart backgrounds";
             // 
             // panel91
             // 
@@ -10518,7 +10908,7 @@
             this.panel86.Controls.Add(this.panel62);
             this.panel86.Location = new System.Drawing.Point(250, 0);
             this.panel86.Name = "panel86";
-            this.panel86.Size = new System.Drawing.Size(505, 64);
+            this.panel86.Size = new System.Drawing.Size(273, 64);
             this.panel86.TabIndex = 296;
             // 
             // lblShowClock
@@ -10541,9 +10931,9 @@
             this.label178.ForeColor = System.Drawing.Color.Silver;
             this.label178.Location = new System.Drawing.Point(31, 34);
             this.label178.Name = "label178";
-            this.label178.Size = new System.Drawing.Size(330, 20);
+            this.label178.Size = new System.Drawing.Size(290, 20);
             this.label178.TabIndex = 261;
-            this.label178.Text = "Show local time (\'Genesis\' background only)";
+            this.label178.Text = "Show time (\'Genesis\' background only)";
             // 
             // panel62
             // 
@@ -12259,299 +12649,6 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
-            // listViewTransactionInputs
-            // 
-            this.listViewTransactionInputs.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listViewTransactionInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listViewTransactionInputs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewTransactionInputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewTransactionInputs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listViewTransactionInputs.FullRowSelect = true;
-            this.listViewTransactionInputs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewTransactionInputs.HideSelection = false;
-            this.listViewTransactionInputs.LabelWrap = false;
-            this.listViewTransactionInputs.Location = new System.Drawing.Point(0, 0);
-            this.listViewTransactionInputs.Margin = new System.Windows.Forms.Padding(0);
-            this.listViewTransactionInputs.MultiSelect = false;
-            this.listViewTransactionInputs.Name = "listViewTransactionInputs";
-            this.listViewTransactionInputs.OwnerDraw = true;
-            this.listViewTransactionInputs.Scrollable = false;
-            this.listViewTransactionInputs.ShowGroups = false;
-            this.listViewTransactionInputs.Size = new System.Drawing.Size(345, 88);
-            this.listViewTransactionInputs.SmallImageList = this.imageListUpDownArrows;
-            this.listViewTransactionInputs.TabIndex = 165;
-            this.listViewTransactionInputs.TabStop = false;
-            this.listViewTransactionInputs.UseCompatibleStateImageBehavior = false;
-            this.listViewTransactionInputs.View = System.Windows.Forms.View.Details;
-            this.listViewTransactionInputs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewTransactionInputs_ColumnWidthChanging);
-            this.listViewTransactionInputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
-            this.listViewTransactionInputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionInputs_DrawSubItem);
-            this.listViewTransactionInputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionInputs_ItemSelectionChanged);
-            // 
-            // btnViewAddressFromTXInput
-            // 
-            this.btnViewAddressFromTXInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXInput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressFromTXInput.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressFromTXInput.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnViewAddressFromTXInput.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnViewAddressFromTXInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressFromTXInput.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnViewAddressFromTXInput.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressFromTXInput.Location = new System.Drawing.Point(66, 28);
-            this.btnViewAddressFromTXInput.Margin = new System.Windows.Forms.Padding(0);
-            this.btnViewAddressFromTXInput.Name = "btnViewAddressFromTXInput";
-            this.btnViewAddressFromTXInput.Size = new System.Drawing.Size(20, 15);
-            this.btnViewAddressFromTXInput.TabIndex = 216;
-            this.btnViewAddressFromTXInput.Text = "▶️";
-            this.toolTip1.SetToolTip(this.btnViewAddressFromTXInput, "View address");
-            this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
-            this.btnViewAddressFromTXInput.Visible = false;
-            this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
-            // 
-            // panelTransactionInputs
-            // 
-            this.panelTransactionInputs.AutoScroll = true;
-            this.panelTransactionInputs.Controls.Add(this.btnViewAddressFromTXInput);
-            this.panelTransactionInputs.Controls.Add(this.listViewTransactionInputs);
-            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 451);
-            this.panelTransactionInputs.Name = "panelTransactionInputs";
-            this.panelTransactionInputs.Size = new System.Drawing.Size(363, 104);
-            this.panelTransactionInputs.TabIndex = 212;
-            this.panelTransactionInputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionInputs_Paint);
-            // 
-            // listViewTransactionOutputs
-            // 
-            this.listViewTransactionOutputs.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listViewTransactionOutputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listViewTransactionOutputs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewTransactionOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewTransactionOutputs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listViewTransactionOutputs.FullRowSelect = true;
-            this.listViewTransactionOutputs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewTransactionOutputs.HideSelection = false;
-            this.listViewTransactionOutputs.LabelWrap = false;
-            this.listViewTransactionOutputs.Location = new System.Drawing.Point(0, 0);
-            this.listViewTransactionOutputs.Margin = new System.Windows.Forms.Padding(0);
-            this.listViewTransactionOutputs.MultiSelect = false;
-            this.listViewTransactionOutputs.Name = "listViewTransactionOutputs";
-            this.listViewTransactionOutputs.OwnerDraw = true;
-            this.listViewTransactionOutputs.Scrollable = false;
-            this.listViewTransactionOutputs.ShowGroups = false;
-            this.listViewTransactionOutputs.Size = new System.Drawing.Size(345, 88);
-            this.listViewTransactionOutputs.SmallImageList = this.imageListUpDownArrows;
-            this.listViewTransactionOutputs.TabIndex = 165;
-            this.listViewTransactionOutputs.TabStop = false;
-            this.listViewTransactionOutputs.UseCompatibleStateImageBehavior = false;
-            this.listViewTransactionOutputs.View = System.Windows.Forms.View.Details;
-            this.listViewTransactionOutputs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewTransactionOutputs_ColumnWidthChanging);
-            this.listViewTransactionOutputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
-            this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
-            this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
-            // 
-            // btnViewAddressFromTXOutput
-            // 
-            this.btnViewAddressFromTXOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXOutput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressFromTXOutput.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressFromTXOutput.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnViewAddressFromTXOutput.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnViewAddressFromTXOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressFromTXOutput.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnViewAddressFromTXOutput.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressFromTXOutput.Location = new System.Drawing.Point(98, 20);
-            this.btnViewAddressFromTXOutput.Margin = new System.Windows.Forms.Padding(0);
-            this.btnViewAddressFromTXOutput.Name = "btnViewAddressFromTXOutput";
-            this.btnViewAddressFromTXOutput.Size = new System.Drawing.Size(20, 15);
-            this.btnViewAddressFromTXOutput.TabIndex = 217;
-            this.btnViewAddressFromTXOutput.Text = "▶️";
-            this.toolTip1.SetToolTip(this.btnViewAddressFromTXOutput, "View address");
-            this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
-            this.btnViewAddressFromTXOutput.Visible = false;
-            this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
-            // 
-            // panelTransactionOutputs
-            // 
-            this.panelTransactionOutputs.AutoScroll = true;
-            this.panelTransactionOutputs.Controls.Add(this.btnViewAddressFromTXOutput);
-            this.panelTransactionOutputs.Controls.Add(this.listViewTransactionOutputs);
-            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 451);
-            this.panelTransactionOutputs.Name = "panelTransactionOutputs";
-            this.panelTransactionOutputs.Size = new System.Drawing.Size(363, 104);
-            this.panelTransactionOutputs.TabIndex = 214;
-            this.panelTransactionOutputs.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionOutputs_Paint);
-            // 
-            // btnTransactionInputDown
-            // 
-            this.btnTransactionInputDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnTransactionInputDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnTransactionInputDown.FlatAppearance.BorderSize = 0;
-            this.btnTransactionInputDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionInputDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionInputDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTransactionInputDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTransactionInputDown.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionInputDown.Location = new System.Drawing.Point(0, 84);
-            this.btnTransactionInputDown.Name = "btnTransactionInputDown";
-            this.btnTransactionInputDown.Size = new System.Drawing.Size(20, 20);
-            this.btnTransactionInputDown.TabIndex = 211;
-            this.btnTransactionInputDown.TabStop = false;
-            this.btnTransactionInputDown.Text = "▼";
-            this.btnTransactionInputDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnTransactionInputDown.UseVisualStyleBackColor = false;
-            this.btnTransactionInputDown.Visible = false;
-            this.btnTransactionInputDown.Click += new System.EventHandler(this.BtnTransactionInputsDown_Click);
-            this.btnTransactionInputDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseDown);
-            this.btnTransactionInputDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsDown_MouseUp);
-            // 
-            // btnTransactionInputsUp
-            // 
-            this.btnTransactionInputsUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnTransactionInputsUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnTransactionInputsUp.FlatAppearance.BorderSize = 0;
-            this.btnTransactionInputsUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionInputsUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionInputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTransactionInputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTransactionInputsUp.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionInputsUp.Location = new System.Drawing.Point(0, 0);
-            this.btnTransactionInputsUp.Name = "btnTransactionInputsUp";
-            this.btnTransactionInputsUp.Size = new System.Drawing.Size(20, 20);
-            this.btnTransactionInputsUp.TabIndex = 210;
-            this.btnTransactionInputsUp.TabStop = false;
-            this.btnTransactionInputsUp.Text = "▲";
-            this.btnTransactionInputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnTransactionInputsUp.UseVisualStyleBackColor = false;
-            this.btnTransactionInputsUp.Visible = false;
-            this.btnTransactionInputsUp.Click += new System.EventHandler(this.BtnTransactionInputsUp_Click);
-            this.btnTransactionInputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseDown);
-            this.btnTransactionInputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionInputsUp_MouseUp);
-            // 
-            // panel24
-            // 
-            this.panel24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel24.Controls.Add(this.btnTransactionInputsUp);
-            this.panel24.Controls.Add(this.btnTransactionInputDown);
-            this.panel24.Location = new System.Drawing.Point(356, 451);
-            this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(26, 105);
-            this.panel24.TabIndex = 213;
-            // 
-            // btnTransactionOutputsDown
-            // 
-            this.btnTransactionOutputsDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnTransactionOutputsDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnTransactionOutputsDown.FlatAppearance.BorderSize = 0;
-            this.btnTransactionOutputsDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionOutputsDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionOutputsDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTransactionOutputsDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTransactionOutputsDown.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionOutputsDown.Location = new System.Drawing.Point(0, 84);
-            this.btnTransactionOutputsDown.Name = "btnTransactionOutputsDown";
-            this.btnTransactionOutputsDown.Size = new System.Drawing.Size(20, 20);
-            this.btnTransactionOutputsDown.TabIndex = 211;
-            this.btnTransactionOutputsDown.TabStop = false;
-            this.btnTransactionOutputsDown.Text = "▼";
-            this.btnTransactionOutputsDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnTransactionOutputsDown.UseVisualStyleBackColor = false;
-            this.btnTransactionOutputsDown.Visible = false;
-            this.btnTransactionOutputsDown.Click += new System.EventHandler(this.BtnTransactionOutputsDown_Click);
-            this.btnTransactionOutputsDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsDown_MouseDown);
-            this.btnTransactionOutputsDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsDown_MouseUp);
-            // 
-            // btnTransactionOutputsUp
-            // 
-            this.btnTransactionOutputsUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnTransactionOutputsUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnTransactionOutputsUp.FlatAppearance.BorderSize = 0;
-            this.btnTransactionOutputsUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionOutputsUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnTransactionOutputsUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTransactionOutputsUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTransactionOutputsUp.ForeColor = System.Drawing.Color.White;
-            this.btnTransactionOutputsUp.Location = new System.Drawing.Point(0, 0);
-            this.btnTransactionOutputsUp.Name = "btnTransactionOutputsUp";
-            this.btnTransactionOutputsUp.Size = new System.Drawing.Size(20, 20);
-            this.btnTransactionOutputsUp.TabIndex = 210;
-            this.btnTransactionOutputsUp.TabStop = false;
-            this.btnTransactionOutputsUp.Text = "▲";
-            this.btnTransactionOutputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnTransactionOutputsUp.UseVisualStyleBackColor = false;
-            this.btnTransactionOutputsUp.Visible = false;
-            this.btnTransactionOutputsUp.Click += new System.EventHandler(this.BtnTransactionOutputsUp_Click);
-            this.btnTransactionOutputsUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseDown);
-            this.btnTransactionOutputsUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnTransactionOutputsUp_MouseUp);
-            // 
-            // panel25
-            // 
-            this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel25.Controls.Add(this.btnTransactionOutputsUp);
-            this.panel25.Controls.Add(this.btnTransactionOutputsDown);
-            this.panel25.Location = new System.Drawing.Point(734, 451);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(21, 105);
-            this.panel25.TabIndex = 215;
-            // 
-            // label107
-            // 
-            this.label107.AutoSize = true;
-            this.label107.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label107.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label107.ForeColor = System.Drawing.Color.Gray;
-            this.label107.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label107.Location = new System.Drawing.Point(3, 2);
-            this.label107.Name = "label107";
-            this.label107.Size = new System.Drawing.Size(134, 17);
-            this.label107.TabIndex = 153;
-            this.label107.Text = "Transaction outputs";
-            // 
-            // panel28
-            // 
-            this.panel28.BackColor = System.Drawing.Color.Transparent;
-            this.panel28.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel28.BackgroundImage")));
-            this.panel28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel28.Controls.Add(this.label107);
-            this.panel28.Location = new System.Drawing.Point(388, 420);
-            this.panel28.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(370, 23);
-            this.panel28.TabIndex = 198;
-            this.panel28.Visible = false;
-            // 
-            // label102
-            // 
-            this.label102.AutoSize = true;
-            this.label102.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label102.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label102.ForeColor = System.Drawing.Color.Gray;
-            this.label102.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label102.Location = new System.Drawing.Point(3, 2);
-            this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(123, 17);
-            this.label102.TabIndex = 153;
-            this.label102.Text = "Transaction inputs";
-            // 
-            // panel27
-            // 
-            this.panel27.BackColor = System.Drawing.Color.Transparent;
-            this.panel27.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel27.BackgroundImage")));
-            this.panel27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel27.Controls.Add(this.label102);
-            this.panel27.Location = new System.Drawing.Point(7, 420);
-            this.panel27.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(370, 23);
-            this.panel27.TabIndex = 197;
-            this.panel27.Visible = false;
-            // 
-            // panel102
-            // 
-            this.panel102.Location = new System.Drawing.Point(9, 450);
-            this.panel102.Name = "panel102";
-            this.panel102.Size = new System.Drawing.Size(745, 110);
-            this.panel102.TabIndex = 216;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12561,17 +12658,17 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.headerNetworkName);
@@ -12719,6 +12816,14 @@
             this.panelRefreshStatusBar.PerformLayout();
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
+            this.panel27.ResumeLayout(false);
+            this.panel27.PerformLayout();
+            this.panel28.ResumeLayout(false);
+            this.panel28.PerformLayout();
+            this.panel25.ResumeLayout(false);
+            this.panel24.ResumeLayout(false);
+            this.panelTransactionOutputs.ResumeLayout(false);
+            this.panelTransactionInputs.ResumeLayout(false);
             this.panelTransactionHeadline.ResumeLayout(false);
             this.panelTransactionHeadline.PerformLayout();
             this.panelTransactionDiagram.ResumeLayout(false);
@@ -12795,6 +12900,10 @@
             this.panel59.ResumeLayout(false);
             this.panel59.PerformLayout();
             this.panelAppearance.ResumeLayout(false);
+            this.panel103.ResumeLayout(false);
+            this.panel103.PerformLayout();
+            this.panel104.ResumeLayout(false);
+            this.panel104.PerformLayout();
             this.panel91.ResumeLayout(false);
             this.panel91.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).EndInit();
@@ -12860,14 +12969,6 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
-            this.panelTransactionInputs.ResumeLayout(false);
-            this.panelTransactionOutputs.ResumeLayout(false);
-            this.panel24.ResumeLayout(false);
-            this.panel25.ResumeLayout(false);
-            this.panel28.ResumeLayout(false);
-            this.panel28.PerformLayout();
-            this.panel27.ResumeLayout(false);
-            this.panel27.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -13682,6 +13783,13 @@
         private System.Windows.Forms.Button btnViewAddressFromTXInput;
         private System.Windows.Forms.ListView listViewTransactionInputs;
         private System.Windows.Forms.Panel panel102;
+        private System.Windows.Forms.Panel panel103;
+        private System.Windows.Forms.Label lblChartsLightBackground;
+        private System.Windows.Forms.Label label243;
+        private System.Windows.Forms.Panel panel104;
+        private System.Windows.Forms.Label label244;
+        private System.Windows.Forms.Label lblChartsDarkBackground;
+        private System.Windows.Forms.Label label246;
     }
 }
 

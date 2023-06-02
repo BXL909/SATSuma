@@ -25,7 +25,6 @@ Version history 🍊
  * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet, own node
  * documentation/website
- * disable mouse controls on pie chart
  * chart grid colors, etc
  */
 
@@ -222,40 +221,12 @@ namespace SATSuma
                 textBoxBlockHeightToStartListFrom.Text = lblBlockNumber.Text; //setup block list screen
                 LookupBlockList(); // fetch the first 15 blocks automatically for the block list initial view.
                 AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
-                dontDisableButtons = false; // from here on, buttons are disabled during queries
-
-                //initialise chart and pre-populate it with hashrate data
-                formsPlot1.Plot.Margins(x: .1, y: .1);
-                formsPlot1.Plot.Style(ScottPlot.Style.Black);
-                formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
-                formsPlot1.Configuration.DoubleClickBenchmark = false;
-                formsPlot2.Plot.Margins(x: .1, y: .1);
-                formsPlot2.Plot.Style(ScottPlot.Style.Black);
-                formsPlot2.RightClicked -= formsPlot2.DefaultRightClickEvent; // disable default right-click event
-                formsPlot2.Configuration.DoubleClickBenchmark = false;
-                formsPlot3.Plot.Margins(x: .1, y: .1);
-                formsPlot3.Plot.Style(ScottPlot.Style.Black);
-                formsPlot3.RightClicked -= formsPlot3.DefaultRightClickEvent; // disable default right-click event
-                formsPlot3.Configuration.DoubleClickBenchmark = false;
-
-                formsPlot1.Plot.Style(
-                    figureBackground: Color.Transparent,
-                    dataBackground: chartsBackgroundColor);
-                formsPlot2.Plot.Style(
-                    figureBackground: Color.Transparent,
-                    dataBackground: chartsBackgroundColor);
-                formsPlot3.Plot.Style(
-                    figureBackground: Color.Transparent,
-                    dataBackground: chartsBackgroundColor);
-
-                formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
-                formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
-                formsPlot3.Plot.Palette = ScottPlot.Palette.Amber;
-                formsPlot3.Plot.YAxis.AxisLabel.IsVisible = false;
-
+                // prepopulate chart with fee rates
                 btnChartPeriodAll.Enabled = false;
                 BtnChartFeeRates_Click(sender, e);
                 formsPlot1.Refresh();
+
+                dontDisableButtons = false; // from here on, buttons are disabled during queries
             }
             catch (WebException ex)
             {
@@ -8369,6 +8340,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -8448,6 +8424,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
 
                 // refresh the graph
                 formsPlot1.Refresh();
@@ -8529,6 +8510,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -8608,6 +8594,11 @@ namespace SATSuma
                 formsPlot3.Plot.YAxis.SetBoundary(-3, 45);
                 formsPlot3.Plot.Layout(left: 100);
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot3.Refresh();
                 formsPlot3.Visible = true;
@@ -8678,6 +8669,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
 
                 // refresh the graph
                 formsPlot1.Refresh();
@@ -8750,6 +8746,10 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -8830,6 +8830,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -8906,6 +8911,12 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9091,6 +9102,12 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9277,6 +9294,12 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9462,6 +9485,12 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9646,6 +9675,11 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
 
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9730,6 +9764,12 @@ namespace SATSuma
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
                 panelCirculationKey.Visible = true;
+
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Ticks(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -13669,6 +13709,29 @@ namespace SATSuma
 
         private void CustomiseCharts()
         {
+            formsPlot1.Plot.Margins(x: .1, y: .1);
+            formsPlot1.Plot.Style(ScottPlot.Style.Black);
+            formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
+            formsPlot1.Configuration.DoubleClickBenchmark = false;
+            formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
+            formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
+
+            formsPlot2.Plot.Margins(x: .1, y: .1);
+            formsPlot2.Plot.Style(ScottPlot.Style.Black);
+            formsPlot2.RightClicked -= formsPlot2.DefaultRightClickEvent; // disable default right-click event
+            formsPlot2.Configuration.DoubleClickBenchmark = false;
+            formsPlot2.Configuration.Pan = false;
+            formsPlot2.Configuration.RightClickDragZoom = false;
+            formsPlot2.Configuration.LeftClickDragPan = false;
+            formsPlot2.Configuration.Zoom = false;
+
+            formsPlot3.Plot.Margins(x: .1, y: .1);
+            formsPlot3.Plot.Style(ScottPlot.Style.Black);
+            formsPlot3.RightClicked -= formsPlot3.DefaultRightClickEvent; // disable default right-click event
+            formsPlot3.Configuration.DoubleClickBenchmark = false;
+            formsPlot3.Plot.Palette = ScottPlot.Palette.Amber;
+            formsPlot3.Plot.YAxis.AxisLabel.IsVisible = false;
+
             formsPlot1.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor);
@@ -13685,7 +13748,14 @@ namespace SATSuma
             panelChartUTXOScaleButtons.BackColor = chartsBackgroundColor;
             panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
             panelLightningNodeNetwork.BackColor = chartsBackgroundColor;
-            
+            Color newGridlineColor = Color.FromArgb(40, 40, 40);
+            if (lblChartsLightBackground.Text == "✔️")
+            {
+                newGridlineColor = Color.FromArgb(220, 220, 220);
+            }
+
+            // Update the Grid color
+            formsPlot1.Plot.Style(grid: newGridlineColor);
             formsPlot1.Refresh();
             formsPlot2.Refresh();
             formsPlot3.Refresh();
@@ -14552,7 +14622,7 @@ namespace SATSuma
         {
             try
             {
-                if (Convert.ToString(comboBoxThemeList.SelectedValue) == "Genesis (default)" || Convert.ToString(comboBoxThemeList.SelectedValue) == "BTCdir")
+                if (Convert.ToString(comboBoxThemeList.SelectedValue) == "Genesis (preset)" || Convert.ToString(comboBoxThemeList.SelectedValue) == "BTCdir (preset)" || Convert.ToString(comboBoxThemeList.SelectedValue) == "Satsuma (preset)")
                 {
                     btnDeleteTheme.Enabled = false;
                 }

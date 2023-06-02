@@ -12645,7 +12645,7 @@
             this.formsPlot2.Location = new System.Drawing.Point(100, 0);
             this.formsPlot2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.formsPlot2.Name = "formsPlot2";
-            this.formsPlot2.Size = new System.Drawing.Size(682, 521);
+            this.formsPlot2.Size = new System.Drawing.Size(682, 514);
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 

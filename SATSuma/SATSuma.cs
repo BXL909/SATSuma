@@ -22,10 +22,8 @@ Version history 🍊
  * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * table text not being set properly when changing theme on some screens (sometimes!)
  * further testing of privacy mode, testnet, own node
  * documentation/website
- * chart grid colors, etc
  */
 
 #region Using
@@ -12810,6 +12808,10 @@ namespace SATSuma
                 if (colorDlgForTableText.ShowDialog() == DialogResult.OK)
                 {
                     ColorTables(colorDlgForTableText.Color);
+                    // reload the listviews to apply the new color
+                    LookupBlockList();
+                    LookupBlock();
+                    SetupBookmarksScreen();
                 }
             }
             catch (Exception ex)

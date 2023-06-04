@@ -173,6 +173,7 @@
             this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "splash";
+            this.Load += new System.EventHandler(this.Splash_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Splash_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

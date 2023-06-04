@@ -12658,8 +12658,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);

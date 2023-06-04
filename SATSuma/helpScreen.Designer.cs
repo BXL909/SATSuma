@@ -40,14 +40,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnHelpTextUp = new System.Windows.Forms.Button();
             this.comboBoxSelectHelp = new System.Windows.Forms.ComboBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel22.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel22
             // 
             this.panel22.BackColor = System.Drawing.Color.Transparent;
-            this.panel22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel22.BackgroundImage")));
             this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel22.Controls.Add(this.lblHelpHeading);
             this.panel22.Location = new System.Drawing.Point(10, 10);
@@ -70,15 +72,16 @@
             // 
             // textBoxHelpText
             // 
-            this.textBoxHelpText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.textBoxHelpText.BackColor = System.Drawing.Color.Black;
             this.textBoxHelpText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxHelpText.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxHelpText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxHelpText.ForeColor = System.Drawing.Color.Silver;
-            this.textBoxHelpText.Location = new System.Drawing.Point(0, 0);
+            this.textBoxHelpText.Location = new System.Drawing.Point(0, 5);
             this.textBoxHelpText.Multiline = true;
             this.textBoxHelpText.Name = "textBoxHelpText";
             this.textBoxHelpText.ReadOnly = true;
-            this.textBoxHelpText.Size = new System.Drawing.Size(495, 675);
+            this.textBoxHelpText.Size = new System.Drawing.Size(530, 675);
             this.textBoxHelpText.TabIndex = 201;
             this.textBoxHelpText.TabStop = false;
             this.textBoxHelpText.TextChanged += new System.EventHandler(this.TextBoxHelpText_TextChanged);
@@ -106,10 +109,11 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.textBoxHelpText);
-            this.panel1.Location = new System.Drawing.Point(13, 66);
+            this.panel1.Location = new System.Drawing.Point(10, 66);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(523, 693);
+            this.panel1.Size = new System.Drawing.Size(562, 693);
             this.panel1.TabIndex = 204;
             // 
             // btnHelpTextDown
@@ -122,7 +126,7 @@
             this.btnHelpTextDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextDown.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextDown.Location = new System.Drawing.Point(542, 729);
+            this.btnHelpTextDown.Location = new System.Drawing.Point(0, 682);
             this.btnHelpTextDown.Name = "btnHelpTextDown";
             this.btnHelpTextDown.Size = new System.Drawing.Size(30, 30);
             this.btnHelpTextDown.TabIndex = 207;
@@ -141,8 +145,10 @@
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel2.Location = new System.Drawing.Point(503, 53);
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.btnHelpTextUp);
+            this.panel2.Controls.Add(this.btnHelpTextDown);
+            this.panel2.Location = new System.Drawing.Point(541, 45);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(33, 719);
             this.panel2.TabIndex = 208;
@@ -157,7 +163,7 @@
             this.btnHelpTextUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextUp.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextUp.Location = new System.Drawing.Point(542, 66);
+            this.btnHelpTextUp.Location = new System.Drawing.Point(0, 21);
             this.btnHelpTextUp.Name = "btnHelpTextUp";
             this.btnHelpTextUp.Size = new System.Drawing.Size(30, 30);
             this.btnHelpTextUp.TabIndex = 209;
@@ -176,19 +182,34 @@
             this.comboBoxSelectHelp.ForeColor = System.Drawing.Color.Silver;
             this.comboBoxSelectHelp.FormattingEnabled = true;
             this.comboBoxSelectHelp.Items.AddRange(new object[] {
+            "Select...",
             "Recent blocks",
             "Block",
             "Address",
             "Transaction",
             "Xpub",
-            "Bitcoin stats",
-            "Lightning stats",
-            "Bookmarks"});
+            "Charts",
+            "Bitcoin dashboard",
+            "Lightning dashboard",
+            "Bookmarks",
+            "Settings",
+            "Appearance"});
             this.comboBoxSelectHelp.Location = new System.Drawing.Point(15, 775);
             this.comboBoxSelectHelp.Name = "comboBoxSelectHelp";
             this.comboBoxSelectHelp.Size = new System.Drawing.Size(169, 24);
             this.comboBoxSelectHelp.TabIndex = 210;
             this.comboBoxSelectHelp.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelectHelp_SelectedIndexChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(10, 37);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(530, 2);
+            this.pictureBox1.TabIndex = 219;
+            this.pictureBox1.TabStop = false;
             // 
             // HelpScreen
             // 
@@ -197,10 +218,9 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(584, 811);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.comboBoxSelectHelp);
-            this.Controls.Add(this.btnHelpTextUp);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.btnHelpTextDown);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.panel22);
@@ -214,6 +234,8 @@
             this.panel22.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -229,5 +251,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnHelpTextUp;
         private System.Windows.Forms.ComboBox comboBoxSelectHelp;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

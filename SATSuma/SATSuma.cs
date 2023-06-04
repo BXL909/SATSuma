@@ -13850,8 +13850,8 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
-                //settings
-                Control[] listSettingsLabelsToColor = { label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label189, label191 };
+                //settings and appearance
+                Control[] listSettingsLabelsToColor = { label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label189, label191 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13921,8 +13921,8 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
-                //settings
-                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237 };
+                //settings & appearance
+                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14215,7 +14215,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblSettingsNodeCustom, lblSettingsNodeMainnet, lblSettingsNodeTestnet, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblPrivacyMode };
+                Control[] listTextBoxesToColor = { lblShowClock, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblSettingsNodeCustom, lblSettingsNodeMainnet, lblSettingsNodeTestnet, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblPrivacyMode, lblChartsDarkBackground, lblChartsLightBackground };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -14307,8 +14307,8 @@ namespace SATSuma
                     control.BackColor = Color.Transparent;
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
-                //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
+                //settings & appearance
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14404,8 +14404,8 @@ namespace SATSuma
                     control.BackColor = Color.Transparent;
                     control.BackgroundImage = null;
                 }
-                //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
+                //settings & appearance
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14485,8 +14485,8 @@ namespace SATSuma
                     control.BackgroundImage = null;
                     control.BackColor = titleBackgroundColor;
                 }
-                //settings
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83 };
+                //settings & appearance
+                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14559,7 +14559,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle };
+                Control[] listPanelsToColor = { panel103, panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -15497,7 +15497,15 @@ namespace SATSuma
                 var modalWindow = new HelpScreen
                 {
                     Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent // Set the start position to center of parent
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    TextColor = label77.ForeColor, // random label color to pass to the help screen
+                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor,
+                    TextBoxBackColor = chartsBackgroundColor,
+                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
+                    WindowBackgroundColor = BackColor,
+                    WindowBackgroundImage = BackgroundImage
                 };
                 modalWindow.ShowDialog();
             }
@@ -15519,8 +15527,19 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 24;
                 });
-                Splash splash = new Splash(); // invoke the about/splash screen
-                splash.ShowDialog();
+                //Splash splash = new Splash(); // invoke the about/splash screen
+                //splash.ShowDialog();
+                var modalWindow = new Splash
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    WindowBackgroundColor = panel88.BackColor,
+                    LabelColor = label26.ForeColor,
+                    LinksColor = lblHeaderMarketCap.ForeColor,
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor
+                };
+                modalWindow.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -16149,7 +16168,16 @@ namespace SATSuma
                 var modalWindow = new HelpScreen
                 {
                     Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent // Set the start position to center of parent
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    TextColor = label77.ForeColor, // random label color to pass to the help screen
+                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor,
+                    TextBoxBackColor = chartsBackgroundColor,
+                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
+                    WindowBackgroundColor = BackColor,
+                    WindowBackgroundImage = BackgroundImage
+                    
                 };
                 modalWindow.ShowDialog();
             }
@@ -16202,6 +16230,11 @@ namespace SATSuma
         public Panel GetPanelBookmarks() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelBookmarks;
+        }
+
+        public Panel GetPanelAppearance() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelAppearance;
         }
 
         public Panel GetPanelSettings() // enables help screen to get state (visible) of panel to determine which help text to show

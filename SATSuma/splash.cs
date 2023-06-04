@@ -12,6 +12,12 @@ namespace SATSuma
 {
     public partial class Splash : Form
     {
+        public Color WindowBackgroundColor { get; set; }
+        public Color LabelColor { get; set; }
+        public Color LinksColor { get; set; }
+        public Color ButtonBackColor { get; set; }
+        public Color ButtonTextColor { get; set; }
+
         public Splash()
         {
             InitializeComponent();
@@ -40,6 +46,18 @@ namespace SATSuma
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/BXL909/SATSuma");
+        }
+
+        private void Splash_Load(object sender, EventArgs e)
+        {
+            BackColor = WindowBackgroundColor;
+            label2.ForeColor = LabelColor;
+            linkLabel1.ForeColor = LinksColor;
+            linkLabel2.ForeColor = LinksColor; 
+            linkLabel3.ForeColor = LinksColor;
+            linkLabel4.ForeColor = LinksColor;
+            btnExit.BackColor = ButtonBackColor;
+            btnExit.ForeColor = ButtonTextColor;
         }
     }
 }

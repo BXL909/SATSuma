@@ -14,9 +14,19 @@ namespace SATSuma
 {
     public partial class HelpScreen : Form
     {
+        public Color TextColor { get; set; }
+        public Color HeadingTextColor { get; set; }
+        public Color ButtonTextColor { get; set; }
+        public Color ButtonBackColor { get; set; }
+        public Color TextBoxBackColor { get; set; }
+        public Color TextBoxForeColor { get; set; }
+        public Image WindowBackgroundImage { get; set; }
+        public Color WindowBackgroundColor { get; set; }
+
         public HelpScreen()
         {
             InitializeComponent();
+            
         }
 
         readonly string blockHelpText = "Shows all transactions for the provided block. Displays the transaction ID, fee paid, number of transaction inputs and outputs and the amount of bitcoin moved in the transaction.\r\n\r\nPress the ▶ button on a selected transaction/row to view more detail about that individual transaction.\r\n\r\nFurther information related to the selected block (left-hand column) includes the block time, count of all transactions included in the block, the block size and weight, the total amount of fees across all transactions in the block, the total block rewards, the minimum, maximum, median fee rate, average fee, the block hash, nonce and the name of the mining pool that mined the block.\r\n\r\nDefinitions:\r\n\r\nHash - the block hash.\r\n\r\nBlock time - date and time that the block was mined.\r\n\r\nTransaction count - the number of transactions within the block.\r\n\r\nBlock size - size of the block in megabytes (MB).\r\n\r\nBlock weight - measures the size of a block in terms of the resources required to propagate and validate it. Measured in Million Weight Units (MWU).\r\n\r\nTotal fees - the total amount of fees paid by all transactions in the block.\r\n\r\nReward - the total reward received by the miner (sum of the reward and the total fees)\r\n\r\nFee range - Minimum, maximum and median fees for the block (sat/vB)\r\n\r\nAverage fee - the average transaction fee paid within the block (in sats).\r\n\r\nNonce - the nonce is used during the mining process to try to find a valid block hash.\r\n\r\nMiner/Pool - the mining pool or miner that mined the block.\r\n\r\nTransaction ID - a unique identifier for the transaction.\r\n\r\nFee - the fee paid to include the transaction in the block.\r\n\r\nInputs (I/P) - the number of inputs in the transaction.\r\n\r\nOutput (O/P) - the number of outputs in the transaction.\r\n\r\nAmount - the amount of bitcoin transacted.\r\n";
@@ -27,12 +37,36 @@ namespace SATSuma
         readonly string transactionHelpText = "Shows all inputs and outputs for the provided transaction ID. Press the ▶️ button on a selected input or output to view that address.\r\n\r\nDefinitions:\r\n\r\nIncluded in block - The block number in which this transaction was added to the blockchain.\r\n\r\nBlock time - the tme and date that the block containing the transaction was mined.\r\n\r\nLock time - the lock time sets the earliest time at which a transaction can be mined into a block.\r\n\r\nVersion - Each transaction is prefixed by a four-byte transaction version number which tells Bitcoin peers and miners which set of rules to use to validate it.\r\n\r\nInputs - the total number of inputs in the transaction and their total value.\r\n\r\nOutputs - the total number of outputs in the transaction and their total value.\r\n\r\nFee - the miner fee paid for this transaction.\r\n\r\nSize - the size of the transaction in bytes.\r\n\r\nWeight - measures the size of a transaction in terms of the resources required to propagate and validate it. Measured in Million Weight Units (MWU).\r\n\r\nTransaction inputs (table) - List all the inputs to a transaction, showing the sending addresses and amounts.\r\n\r\nTransaction outputs (table) - List all the outputs to a transaction, showing the receiving addresses and amounts.";
         readonly string xpubHelpText = "Shows all used addresses associated with a provided Xpub. Generates the first 500 addresses for Segwit, Legacy and Segwit P2SH address types, then checks each in turn to find all used addresses, along with their total amounts received, spent and unspent. After 20 consecutive unused addresses it is assumed that all used addresses have been found. All unused addresses that were scanned are also displayed.\r\n\r\nThis feature is only available by connecting to your own full node running a local installation of mempool.space. The most recent valid/connected node url is automatically saved for next time. The Xpub you provide is not sent or stored anywhere other than your own node, unless you choose to bookmark it, in which case all that is stored is a SHA-256 hash of the password on your local machine in the installation directory. Because you are only connecting to your own node, no third-party is involved when using the Xpub screen, giving you complete privacy.\r\n\r\nDefinitions:\r\n\r\nStatus - shows the progress of the scan for all used addresses associated with the Xpub. The upper progress bar indicates the number of consecutive unused addresses for the address type being scanned, and the lower progress bar indicates the total progress of all address type scans.\r\n\r\nUsed addresses - summarizes the number of used addresses identified for each address type and their total amounts received, spent and unspent.\r\n\r\nTotals - the total amounts received, spent and unspent across all address types.\r\n\r\nTable:\r\n\r\nTX's - the number of transactions associated with that address.\r\n\r\nReceived - the total amount received by that address.\r\n\r\nSpent - the total amount spent by that address.\r\n\r\nUnspent - the total amount unspent (balance) held by that address.";
         readonly string chartsHelpText = "Charts help text...";
+        readonly string appearanceHelpText = "Appearance help text...";
         readonly string bookmarksHelpText = "Adding a bookmark\r\n\r\nAny address, xpub, block or transaction can be bookmarked. The ❤️ button will open a tab to add the currently viewed item as a bookmark.\r\n\r\nAn optional note or description can also be added. Bookmarks are stored in a bookmarks.json file in the SATSuma installation directory. This file can be accessed by anyone who have access to your computer. You can encrypt your bookmarks and notes using SHA-256 by supplying an optional encryption key/password. This key is not stored anywhere and there is no way to recover it. Each bookmark has its own individual key, so you need to provide a key for every bookmark you want encrypted, although you can re-use the same key multiple times if you wish.\r\n\r\nViewing a bookmark\r\n\r\nThe bookmarks screen shows all currently saved bookmarks, along with the time and date they were created. A red 🔒 means that the bookmark is encrypted and will need the key provided (press the unlock button after selecting the row) before it can be viewed properly.\r\n\r\nPress the ‘view’ button to go to the appropriate screen to see that bookmark or press ‘delete’ button to instantly delete it.";
         readonly string settingsHelpText = "All settings are automatically saved.\r\n\r\nNetwork – on-chain queries (exc. Xpub)\r\n\r\nThis setting affects all queries on the address, block, block list and transaction screens, as well as a subset of the data shown on the Bitcoin Dashboard. The options in the ‘mempool.space’ panel will connect SATSuma to the public mempool.space API on either the mainnet or testnet network.\r\n\r\nSelecting ‘custom’ requires you to have your own installation of mempool.space on your own Bitcoin full node, running either Electrs or Fulcrum. Provide the full path to your mempool.space api.\r\n\r\nNetwork – on-chain queries (exc. Xpub)\r\n\r\nThe Xpub screen can ONLY be used with your own Bitcoin full node, running either Electrs or Fulcrum. This ensures total privacy, avoiding the need to send your Xpub keys to any third-party. If you are already using your own node for all other on-chain queries, then this would normally be set to the same URL, although it doesn’t have to be.\r\n\r\nDashboards\r\n\r\nThe dashboards connect to a variety of data sources using public API’s to gather generic on-chain, price, mempool, etc data. Because of the generic nature of this data, none of your own data is sent in these requests, however you may still wish not to use one or more of these API’s. Disabling a dashboard with disable all the associated API’s at once and restrict access to the dashboards.\r\n\r\nRefresh frequency\r\n\r\nThe refresh frequency dictates how often the dashboard data and header data (price, block height, etc) gets updated. The address, block, block list, transaction and Xpub screens are not affected by this setting. The refresh frequency is measured in minutes and can be set anywhere between 1 minute and 1440 minutes (24 hours).\r\n\r\nWhere are my settings stored?\r\n\r\nYour settings are saved in the bookmarks.json file, which can be found in the SATSuma install directory. SATSuma continually saves your settings so hopefully you won’t need to manually edit this file. If you do need to edit it, open it in a text editor (e.g Notepad) and search for “settings” you should find something resembling this:\r\n\r\n \"Type\":\"settings\",\"Data\":\"PM1111110001\" \r\n\r\n1st character – currency (P = GBP, D = USD, E = EUR, G = XAU).\r\n2nd character – network (M = MainNet, T = TestNet, C = own node).\r\n3rd character – blockchair API (boolean 1 or 0).\r\n4th character – bitcoinexplorer API (boolean 1 or 0).\r\n5th character – blockchain.info API (boolean 1 or 0).\r\n6th character – Bitcoin dashboard (boolean 1 or 0).\r\n7th character – Lightning dashboard (boolean 1 or 0).\r\n8th character – mempool.space lightning API (boolean 1 or 0).\r\nThe remaining 4 numeric characters are the refresh frequency in minutes.\r\n\r\nYour node and Xpub node settings are also stored in the bookmarks.json file:\r\n\r\n \"Type\":\"node\",\"Data\":\"http://umbrel.local:3006/api/\" \r\n\r\n \"Type\":\"xpubnode\",\"Data\":\"http://umbrel.local:3006/api/\" \r\n\r\nas well as your default theme:\r\n\r\n \"Type\":\"defaulttheme\",\"Data\":\"BTCdir\" \r\n\r\nIf you don’t want SATSuma to communicate with anything other than your own full node, select ‘custom’ network and disable the 4 API’s.";
 
 
         private void HelpScreen_Load(object sender, EventArgs e)
         {
+            comboBoxSelectHelp.SelectedIndex = 0;
+            textBoxHelpText.ForeColor = TextColor;
+            textBoxHelpText.BackColor = TextBoxBackColor;
+            panel1.BackColor = TextBoxBackColor;
+            lblHelpHeading.ForeColor = HeadingTextColor;
+            btnExit.ForeColor = ButtonTextColor;
+            btnHelpTextUp.ForeColor = ButtonTextColor;
+            btnHelpTextDown.ForeColor = ButtonTextColor;
+            btnExit.BackColor = ButtonBackColor;
+            btnHelpTextUp.BackColor = ButtonBackColor;
+            btnHelpTextDown.BackColor = ButtonBackColor;
+            comboBoxSelectHelp.BackColor = TextBoxBackColor;
+            comboBoxSelectHelp.ForeColor = TextBoxForeColor;
+            if (WindowBackgroundColor != null)
+            {
+                this.BackColor = WindowBackgroundColor;
+            }
+            if (WindowBackgroundImage != null)
+            {
+                this.BackgroundImage = WindowBackgroundImage;
+            }
+
+
             panel1.VerticalScroll.Visible = false;
             if (((SATSuma)this.Owner).GetPanelMenu().Visible == true && ((SATSuma)this.Owner).GetPanelMenu().Height > 24) // menu is open so main help page has been requested
             {
@@ -109,6 +143,13 @@ namespace SATSuma
             {
                 lblHelpHeading.Text = "Settings";
                 textBoxHelpText.Text = settingsHelpText;
+                btnExit.Focus();
+            }
+            else
+            if (((SATSuma)this.Owner).GetPanelAppearance().Visible == true)
+            {
+                lblHelpHeading.Text = "Appearance";
+                textBoxHelpText.Text = appearanceHelpText;
                 btnExit.Focus();
             }
         }
@@ -222,46 +263,64 @@ namespace SATSuma
 
         private void ComboBoxSelectHelp_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxSelectHelp.SelectedIndex == 0)
+            if (comboBoxSelectHelp.SelectedIndex == 1)
             {
                 lblHelpHeading.Text = "Blocks";
                 textBoxHelpText.Text = blockListHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 1)
+            if (comboBoxSelectHelp.SelectedIndex == 2)
             {
                 lblHelpHeading.Text = "Block";
                 textBoxHelpText.Text = blockHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 2)
+            if (comboBoxSelectHelp.SelectedIndex == 3)
             {
                 lblHelpHeading.Text = "Address";
                 textBoxHelpText.Text = addressHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 3)
+            if (comboBoxSelectHelp.SelectedIndex == 4)
             {
                 lblHelpHeading.Text = "Transaction";
                 textBoxHelpText.Text = transactionHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 4)
+            if (comboBoxSelectHelp.SelectedIndex == 5)
             {
                 lblHelpHeading.Text = "Xpub";
                 textBoxHelpText.Text = xpubHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 5)
+            if (comboBoxSelectHelp.SelectedIndex == 6)
+            {
+                lblHelpHeading.Text = "Charts";
+                textBoxHelpText.Text = chartsHelpText;
+            }
+
+            if (comboBoxSelectHelp.SelectedIndex == 7)
             {
                 lblHelpHeading.Text = "Bitcoin stats";
                 textBoxHelpText.Text = bitcoinDashboardHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 6)
+            if (comboBoxSelectHelp.SelectedIndex == 8)
             {
                 lblHelpHeading.Text = "Lightning stats";
                 textBoxHelpText.Text = lightningDashboardHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 7)
+            if (comboBoxSelectHelp.SelectedIndex == 9)
             {
                 lblHelpHeading.Text = "Bookmarks";
                 textBoxHelpText.Text = bookmarksHelpText;
             }
+            if (comboBoxSelectHelp.SelectedIndex == 10)
+            {
+                lblHelpHeading.Text = "Settings";
+                textBoxHelpText.Text = settingsHelpText;
+            }
+            if (comboBoxSelectHelp.SelectedIndex == 11)
+            {
+                lblHelpHeading.Text = "Appearance";
+                textBoxHelpText.Text = appearanceHelpText;
+            }
         }
+
+
     }
 }

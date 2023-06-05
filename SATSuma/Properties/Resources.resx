@@ -121,6 +121,9 @@
   <data name="SatsumaBTCdir1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="graphIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="titleBGLongerOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -130,11 +133,11 @@
   <data name="logoNoText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logoNoText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SatsumaBTCdir" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="graphIcondisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\graphIcondisabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Satsuma3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Satsuma3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tinylogo1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tinylogo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,23 +145,26 @@
   <data name="title" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="titleBGLongerOrangeFlipped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\titleBGLongerOrangeFlipped.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="fyj01dbo0i" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fyj01dbo0i.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="chartIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\chartIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="graphIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SATSumaLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SATSumaLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Satsuma3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Satsuma3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="spectrum2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\spectrum2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="graphIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SatsumaThumb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SatsumaThumb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="spectrumStripe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\spectrumStripe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,13 +175,16 @@
   <data name="AppBackground2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AppBackground2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SatsumaBTCdir" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SatsumaBTCdir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="infinityTransparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\infinityTransparent.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="titleBGLongerOrangeFlipped" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\titleBGLongerOrangeFlipped.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="InfinityTrans" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\InfinityTrans.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SatsumaThumb" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SatsumaThumb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SATSumaLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SATSumaLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

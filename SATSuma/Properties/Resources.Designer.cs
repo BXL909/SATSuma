@@ -133,9 +133,39 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap InfinityTrans {
+            get {
+                object obj = ResourceManager.GetObject("InfinityTrans", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap infinityTransparent {
+            get {
+                object obj = ResourceManager.GetObject("infinityTransparent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logoNoText {
             get {
                 object obj = ResourceManager.GetObject("logoNoText", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OrangeInfinity {
+            get {
+                object obj = ResourceManager.GetObject("OrangeInfinity", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

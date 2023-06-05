@@ -12940,6 +12940,86 @@ namespace SATSuma
             }
         }
 
+        private void labelInfinity1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblInfinity1.Text == "✔️")
+                {
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.IndianRed;
+                        lblInfinity1.Text = "❌";
+                    });
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.Green;
+                        lblInfinity2.Text = "✔️";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                }
+                else
+                {
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.Green;
+                        lblInfinity1.Text = "✔️";
+                    });
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.IndianRed;
+                        lblInfinity2.Text = "❌";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                HandleException(ex, "lbllblInfinity1_Click");
+            }
+        }
+
+        private void lblInfinity2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblInfinity2.Text == "✔️")
+                {
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.IndianRed;
+                        lblInfinity2.Text = "❌";
+                    });
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.Green;
+                        lblInfinity1.Text = "✔️";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                }
+                else
+                {
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.Green;
+                        lblInfinity2.Text = "✔️";
+                    });
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.IndianRed;
+                        lblInfinity1.Text = "❌";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                HandleException(ex, "lbllblInfinity1_Click");
+            }
+        }
+
         private void LblChartsLightBackground_Click(object sender, EventArgs e)
         {
             try
@@ -13499,7 +13579,12 @@ namespace SATSuma
                         }
                     }
                 }
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark };
+                bool orangeinfinity = true;
+                if (lblInfinity1.Text == "✔️")
+                {
+                    orangeinfinity = false;
+                }
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -13701,6 +13786,34 @@ namespace SATSuma
                     lblBackgroundCustomImageSelected.Visible = true;
                     this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
                 }
+                if (theme.OrangeInfinity == true)
+                {
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.Green;
+                        lblInfinity2.Text = "✔️";
+                    });
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.IndianRed;
+                        lblInfinity1.Text = "❌";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                }
+                else
+                {
+                    lblInfinity2.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity2.ForeColor = Color.IndianRed;
+                        lblInfinity2.Text = "❌";
+                    });
+                    lblInfinity1.Invoke((MethodInvoker)delegate
+                    {
+                        lblInfinity1.ForeColor = Color.Green;
+                        lblInfinity1.Text = "✔️";
+                    });
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                }
             }
             catch (Exception ex)
             {
@@ -13850,7 +13963,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label189, label191 };
+                Control[] listSettingsLabelsToColor = { label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13921,7 +14034,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244 };
+                Control[] listSettingsHeadingsToColor = { label248, label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14307,7 +14420,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
+                Control[] listSettingsHeadingsToColor = { panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14404,7 +14517,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
+                Control[] listSettingsHeadingsToColor = { panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14485,7 +14598,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
+                Control[] listSettingsHeadingsToColor = { panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14558,7 +14671,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel103, panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle };
+                Control[] listPanelsToColor = { panel46, panel103, panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -16479,7 +16592,7 @@ namespace SATSuma
             public bool BackgroundCustomImage { get; set; }
             public Color Panels { get; set; }
             public bool ChartsDark { get; set; }
-
+            public bool OrangeInfinity { get; set; }
         }
 
         // ------------------------------------- Address Transactions -----------------------------------
@@ -17612,5 +17725,7 @@ namespace SATSuma
         }
 
         #endregion
+
+
     }
 }

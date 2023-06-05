@@ -296,12 +296,12 @@ namespace SATSuma
 
             if (comboBoxSelectHelp.SelectedIndex == 7)
             {
-                lblHelpHeading.Text = "Bitcoin stats";
+                lblHelpHeading.Text = "Bitcoin dashboard";
                 textBoxHelpText.Text = bitcoinDashboardHelpText;
             }
             if (comboBoxSelectHelp.SelectedIndex == 8)
             {
-                lblHelpHeading.Text = "Lightning stats";
+                lblHelpHeading.Text = "Lightning dashboard                                                          ";
                 textBoxHelpText.Text = lightningDashboardHelpText;
             }
             if (comboBoxSelectHelp.SelectedIndex == 9)

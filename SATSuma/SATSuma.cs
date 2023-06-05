@@ -19,7 +19,6 @@ Version history 🍊
 0.8 this work in progress
 
  * Stuff to do:
- * handle tabbing and focus better
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  * further testing of privacy mode, testnet, own node
@@ -3328,7 +3327,7 @@ namespace SATSuma
                         lblBlockHash.Text = BlockHash;
                     });
                 }
-
+                lblBlockBlockHeight.Text = "Block " + textBoxSubmittedBlockNumber.Text;
                 var blockNumber = Convert.ToString(textBoxSubmittedBlockNumber.Text);
                 //                ToggleLoadingAnimation("enable"); // start the loading animation
                 //                DisableEnableBlockButtons("disable"); // disable buttons during operation
@@ -13768,7 +13767,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate, lblBlockBlockHeight };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -13875,7 +13874,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //block
-                Control[] listBlockLabelsToColor = { label60, lblBlockTXPositionInList };
+                Control[] listBlockLabelsToColor = { label64, label60, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71 };
                 foreach (Control control in listBlockLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -13945,15 +13944,15 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
-                //block
-                Control[] listBlockHeadingsToColor = { label64, label145, label69, label68, label74, label72, label66, label70, label65, label62, label71 };
-                foreach (Control control in listBlockHeadingsToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight, label6 };
                 foreach (Control control in listBlockListHeadingsToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //block
+                Control[] listBlockHeadingsToColor = { lblBlockBlockHeight };
+                foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
                 }
@@ -14336,7 +14335,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+                Control[] listBlockHeadingsToColor = { panel105 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14433,7 +14432,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+                Control[] listBlockHeadingsToColor = { panel105 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14514,7 +14513,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel46, panel47, panel48, panel49, panel50, panel51, panel52, panel53, panel54, panel55 };
+                Control[] listBlockHeadingsToColor = { panel105 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14790,7 +14789,7 @@ namespace SATSuma
                     lblBlockchainInfoEndpoints.Enabled = false;
                 });
                 RunBlockchainInfoEndpointAPI = false;
-
+                RunMempoolSpaceLightningAPI = false;
                 PrivacyModeSelected = "1";
                 blockchairComJSONSelected = "0";
                 bitcoinExplorerEnpointsSelected = "0";

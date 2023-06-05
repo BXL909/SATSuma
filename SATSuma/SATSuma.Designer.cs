@@ -293,26 +293,6 @@
             this.panel56 = new System.Windows.Forms.Panel();
             this.label64 = new System.Windows.Forms.Label();
             this.lblBlockHash = new System.Windows.Forms.Label();
-            this.panel55 = new System.Windows.Forms.Panel();
-            this.label71 = new System.Windows.Forms.Label();
-            this.panel54 = new System.Windows.Forms.Panel();
-            this.label62 = new System.Windows.Forms.Label();
-            this.panel53 = new System.Windows.Forms.Panel();
-            this.label65 = new System.Windows.Forms.Label();
-            this.panel52 = new System.Windows.Forms.Panel();
-            this.label70 = new System.Windows.Forms.Label();
-            this.panel51 = new System.Windows.Forms.Panel();
-            this.label66 = new System.Windows.Forms.Label();
-            this.panel50 = new System.Windows.Forms.Panel();
-            this.label72 = new System.Windows.Forms.Label();
-            this.panel49 = new System.Windows.Forms.Panel();
-            this.label74 = new System.Windows.Forms.Label();
-            this.panel48 = new System.Windows.Forms.Panel();
-            this.label68 = new System.Windows.Forms.Label();
-            this.panel47 = new System.Windows.Forms.Panel();
-            this.label69 = new System.Windows.Forms.Label();
-            this.panel46 = new System.Windows.Forms.Panel();
-            this.label145 = new System.Windows.Forms.Label();
             this.btnPreviousBlock = new System.Windows.Forms.Button();
             this.btnNextBlock = new System.Windows.Forms.Button();
             this.lblNonce = new System.Windows.Forms.Label();
@@ -844,6 +824,18 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
+            this.panel105 = new System.Windows.Forms.Panel();
+            this.lblBlockBlockHeight = new System.Windows.Forms.Label();
+            this.label145 = new System.Windows.Forms.Label();
+            this.label69 = new System.Windows.Forms.Label();
+            this.label68 = new System.Windows.Forms.Label();
+            this.label74 = new System.Windows.Forms.Label();
+            this.label72 = new System.Windows.Forms.Label();
+            this.label66 = new System.Windows.Forms.Label();
+            this.label70 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.label62 = new System.Windows.Forms.Label();
+            this.label71 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -899,16 +891,6 @@
             this.panelBlock.SuspendLayout();
             this.panelOwnNodeBlockTXInfo.SuspendLayout();
             this.panel56.SuspendLayout();
-            this.panel55.SuspendLayout();
-            this.panel54.SuspendLayout();
-            this.panel53.SuspendLayout();
-            this.panel52.SuspendLayout();
-            this.panel51.SuspendLayout();
-            this.panel50.SuspendLayout();
-            this.panel49.SuspendLayout();
-            this.panel48.SuspendLayout();
-            this.panel47.SuspendLayout();
-            this.panel46.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).BeginInit();
             this.panelMenu.SuspendLayout();
             this.panelBlockList.SuspendLayout();
@@ -1009,6 +991,7 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
+            this.panel105.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1778,7 +1761,7 @@
             this.pictureBoxBlockScreenChartFeeRange.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartFeeRange.BackgroundImage")));
             this.pictureBoxBlockScreenChartFeeRange.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartFeeRange.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartFeeRange.Location = new System.Drawing.Point(137, 354);
+            this.pictureBoxBlockScreenChartFeeRange.Location = new System.Drawing.Point(137, 302);
             this.pictureBoxBlockScreenChartFeeRange.Name = "pictureBoxBlockScreenChartFeeRange";
             this.pictureBoxBlockScreenChartFeeRange.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenChartFeeRange.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1792,7 +1775,7 @@
             this.pictureBoxBlockScreenChartReward.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartReward.BackgroundImage")));
             this.pictureBoxBlockScreenChartReward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartReward.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartReward.Location = new System.Drawing.Point(137, 306);
+            this.pictureBoxBlockScreenChartReward.Location = new System.Drawing.Point(137, 266);
             this.pictureBoxBlockScreenChartReward.Name = "pictureBoxBlockScreenChartReward";
             this.pictureBoxBlockScreenChartReward.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenChartReward.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1806,7 +1789,7 @@
             this.pictureBoxBlockScreenChartBlockSize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartBlockSize.BackgroundImage")));
             this.pictureBoxBlockScreenChartBlockSize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenChartBlockSize.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(137, 162);
+            this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(146, 158);
             this.pictureBoxBlockScreenChartBlockSize.Name = "pictureBoxBlockScreenChartBlockSize";
             this.pictureBoxBlockScreenChartBlockSize.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenChartBlockSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1904,7 +1887,7 @@
             this.pictureBoxBlockFeeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockFeeChart.BackgroundImage")));
             this.pictureBoxBlockFeeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockFeeChart.Location = new System.Drawing.Point(137, 258);
+            this.pictureBoxBlockFeeChart.Location = new System.Drawing.Point(146, 230);
             this.pictureBoxBlockFeeChart.Name = "pictureBoxBlockFeeChart";
             this.pictureBoxBlockFeeChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockFeeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1918,7 +1901,7 @@
             this.pictureBoxBlockScreenPoolRankingChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenPoolRankingChart.BackgroundImage")));
             this.pictureBoxBlockScreenPoolRankingChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockScreenPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 498);
+            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 410);
             this.pictureBoxBlockScreenPoolRankingChart.Name = "pictureBoxBlockScreenPoolRankingChart";
             this.pictureBoxBlockScreenPoolRankingChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockScreenPoolRankingChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4547,42 +4530,43 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.label71);
+            this.panelBlock.Controls.Add(this.label62);
+            this.panelBlock.Controls.Add(this.label65);
+            this.panelBlock.Controls.Add(this.label70);
+            this.panelBlock.Controls.Add(this.label66);
+            this.panelBlock.Controls.Add(this.label72);
+            this.panelBlock.Controls.Add(this.label74);
+            this.panelBlock.Controls.Add(this.label68);
+            this.panelBlock.Controls.Add(this.label69);
+            this.panelBlock.Controls.Add(this.label145);
+            this.panelBlock.Controls.Add(this.panel105);
             this.panelBlock.Controls.Add(this.pictureBoxBlockScreenPoolRankingChart);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockFeeChart);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartFeeRange);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartReward);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartBlockSize);
             this.panelBlock.Controls.Add(this.panelOwnNodeBlockTXInfo);
             this.panelBlock.Controls.Add(this.panel56);
-            this.panelBlock.Controls.Add(this.panel55);
-            this.panelBlock.Controls.Add(this.panel54);
-            this.panelBlock.Controls.Add(this.panel53);
-            this.panelBlock.Controls.Add(this.panel52);
-            this.panelBlock.Controls.Add(this.panel51);
-            this.panelBlock.Controls.Add(this.panel50);
-            this.panelBlock.Controls.Add(this.panel49);
-            this.panelBlock.Controls.Add(this.panel48);
-            this.panelBlock.Controls.Add(this.panel47);
-            this.panelBlock.Controls.Add(this.panel46);
+            this.panelBlock.Controls.Add(this.pictureBoxBlockFeeChart);
             this.panelBlock.Controls.Add(this.btnPreviousBlock);
             this.panelBlock.Controls.Add(this.btnNextBlock);
-            this.panelBlock.Controls.Add(this.lblNonce);
-            this.panelBlock.Controls.Add(this.lblTotalFees);
+            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartFeeRange);
             this.panelBlock.Controls.Add(this.btnViewTransactionFromBlock);
             this.panelBlock.Controls.Add(this.listViewBlockTransactions);
+            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartReward);
             this.panelBlock.Controls.Add(this.lblBlockTXPositionInList);
             this.panelBlock.Controls.Add(this.btnPreviousBlockTransactions);
+            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartBlockSize);
             this.panelBlock.Controls.Add(this.btnNextBlockTransactions);
-            this.panelBlock.Controls.Add(this.lblBlockTime);
-            this.panelBlock.Controls.Add(this.lblBlockFeeRangeAndMedianFee);
-            this.panelBlock.Controls.Add(this.lblMiner);
-            this.panelBlock.Controls.Add(this.lblBlockAverageFee);
-            this.panelBlock.Controls.Add(this.lblNumberOfTXInBlock);
-            this.panelBlock.Controls.Add(this.lblReward);
-            this.panelBlock.Controls.Add(this.lblBlockWeight);
-            this.panelBlock.Controls.Add(this.lblSizeOfBlock);
             this.panelBlock.Controls.Add(this.textBoxSubmittedBlockNumber);
             this.panelBlock.Controls.Add(this.label60);
+            this.panelBlock.Controls.Add(this.lblSizeOfBlock);
+            this.panelBlock.Controls.Add(this.lblBlockWeight);
+            this.panelBlock.Controls.Add(this.lblReward);
+            this.panelBlock.Controls.Add(this.lblNumberOfTXInBlock);
+            this.panelBlock.Controls.Add(this.lblBlockAverageFee);
+            this.panelBlock.Controls.Add(this.lblMiner);
+            this.panelBlock.Controls.Add(this.lblBlockFeeRangeAndMedianFee);
+            this.panelBlock.Controls.Add(this.lblBlockTime);
+            this.panelBlock.Controls.Add(this.lblTotalFees);
+            this.panelBlock.Controls.Add(this.lblNonce);
             this.panelBlock.Location = new System.Drawing.Point(21, 188);
             this.panelBlock.Name = "panelBlock";
             this.panelBlock.Size = new System.Drawing.Size(773, 556);
@@ -4643,266 +4627,6 @@
             this.lblBlockHash.TabIndex = 8;
             this.lblBlockHash.Text = "no data";
             // 
-            // panel55
-            // 
-            this.panel55.BackColor = System.Drawing.Color.Transparent;
-            this.panel55.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel55.BackgroundImage")));
-            this.panel55.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel55.Controls.Add(this.label71);
-            this.panel55.Location = new System.Drawing.Point(0, 467);
-            this.panel55.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel55.Name = "panel55";
-            this.panel55.Size = new System.Drawing.Size(196, 23);
-            this.panel55.TabIndex = 211;
-            // 
-            // label71
-            // 
-            this.label71.AutoSize = true;
-            this.label71.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label71.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label71.ForeColor = System.Drawing.Color.Gray;
-            this.label71.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label71.Location = new System.Drawing.Point(3, 2);
-            this.label71.Margin = new System.Windows.Forms.Padding(0);
-            this.label71.Name = "label71";
-            this.label71.Size = new System.Drawing.Size(98, 20);
-            this.label71.TabIndex = 153;
-            this.label71.Text = "Miner / Pool";
-            // 
-            // panel54
-            // 
-            this.panel54.BackColor = System.Drawing.Color.Transparent;
-            this.panel54.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel54.BackgroundImage")));
-            this.panel54.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel54.Controls.Add(this.label62);
-            this.panel54.Location = new System.Drawing.Point(0, 419);
-            this.panel54.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel54.Name = "panel54";
-            this.panel54.Size = new System.Drawing.Size(196, 23);
-            this.panel54.TabIndex = 210;
-            // 
-            // label62
-            // 
-            this.label62.AutoSize = true;
-            this.label62.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label62.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label62.ForeColor = System.Drawing.Color.Gray;
-            this.label62.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label62.Location = new System.Drawing.Point(3, 2);
-            this.label62.Margin = new System.Windows.Forms.Padding(0);
-            this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(59, 20);
-            this.label62.TabIndex = 153;
-            this.label62.Text = "Nonce";
-            // 
-            // panel53
-            // 
-            this.panel53.BackColor = System.Drawing.Color.Transparent;
-            this.panel53.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel53.BackgroundImage")));
-            this.panel53.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel53.Controls.Add(this.label65);
-            this.panel53.Location = new System.Drawing.Point(0, 371);
-            this.panel53.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel53.Name = "panel53";
-            this.panel53.Size = new System.Drawing.Size(196, 23);
-            this.panel53.TabIndex = 209;
-            // 
-            // label65
-            // 
-            this.label65.AutoSize = true;
-            this.label65.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label65.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label65.ForeColor = System.Drawing.Color.Gray;
-            this.label65.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label65.Location = new System.Drawing.Point(3, 2);
-            this.label65.Margin = new System.Windows.Forms.Padding(0);
-            this.label65.Name = "label65";
-            this.label65.Size = new System.Drawing.Size(145, 20);
-            this.label65.TabIndex = 153;
-            this.label65.Text = "Average fee (sats)";
-            // 
-            // panel52
-            // 
-            this.panel52.BackColor = System.Drawing.Color.Transparent;
-            this.panel52.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
-            this.panel52.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel52.Controls.Add(this.label70);
-            this.panel52.Location = new System.Drawing.Point(0, 323);
-            this.panel52.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel52.Name = "panel52";
-            this.panel52.Size = new System.Drawing.Size(196, 23);
-            this.panel52.TabIndex = 209;
-            // 
-            // label70
-            // 
-            this.label70.AutoSize = true;
-            this.label70.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label70.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label70.ForeColor = System.Drawing.Color.Gray;
-            this.label70.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label70.Location = new System.Drawing.Point(3, 2);
-            this.label70.Margin = new System.Windows.Forms.Padding(0);
-            this.label70.Name = "label70";
-            this.label70.Size = new System.Drawing.Size(224, 20);
-            this.label70.TabIndex = 153;
-            this.label70.Text = "Fee range / Med fee (sat/vB)";
-            // 
-            // panel51
-            // 
-            this.panel51.BackColor = System.Drawing.Color.Transparent;
-            this.panel51.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel51.BackgroundImage")));
-            this.panel51.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel51.Controls.Add(this.label66);
-            this.panel51.Location = new System.Drawing.Point(0, 275);
-            this.panel51.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel51.Name = "panel51";
-            this.panel51.Size = new System.Drawing.Size(196, 23);
-            this.panel51.TabIndex = 209;
-            // 
-            // label66
-            // 
-            this.label66.AutoSize = true;
-            this.label66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label66.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label66.ForeColor = System.Drawing.Color.Gray;
-            this.label66.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label66.Location = new System.Drawing.Point(3, 2);
-            this.label66.Margin = new System.Windows.Forms.Padding(0);
-            this.label66.Name = "label66";
-            this.label66.Size = new System.Drawing.Size(181, 20);
-            this.label66.TabIndex = 153;
-            this.label66.Text = "Reward (subsidy + fees)";
-            // 
-            // panel50
-            // 
-            this.panel50.BackColor = System.Drawing.Color.Transparent;
-            this.panel50.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel50.BackgroundImage")));
-            this.panel50.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel50.Controls.Add(this.label72);
-            this.panel50.Location = new System.Drawing.Point(0, 227);
-            this.panel50.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel50.Name = "panel50";
-            this.panel50.Size = new System.Drawing.Size(196, 23);
-            this.panel50.TabIndex = 209;
-            // 
-            // label72
-            // 
-            this.label72.AutoSize = true;
-            this.label72.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label72.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label72.ForeColor = System.Drawing.Color.Gray;
-            this.label72.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label72.Location = new System.Drawing.Point(3, 2);
-            this.label72.Margin = new System.Windows.Forms.Padding(0);
-            this.label72.Name = "label72";
-            this.label72.Size = new System.Drawing.Size(77, 20);
-            this.label72.TabIndex = 153;
-            this.label72.Text = "Total fees";
-            // 
-            // panel49
-            // 
-            this.panel49.BackColor = System.Drawing.Color.Transparent;
-            this.panel49.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel49.BackgroundImage")));
-            this.panel49.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel49.Controls.Add(this.label74);
-            this.panel49.Location = new System.Drawing.Point(0, 179);
-            this.panel49.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel49.Name = "panel49";
-            this.panel49.Size = new System.Drawing.Size(196, 23);
-            this.panel49.TabIndex = 209;
-            // 
-            // label74
-            // 
-            this.label74.AutoSize = true;
-            this.label74.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label74.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label74.ForeColor = System.Drawing.Color.Gray;
-            this.label74.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label74.Location = new System.Drawing.Point(3, 2);
-            this.label74.Margin = new System.Windows.Forms.Padding(0);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(159, 20);
-            this.label74.TabIndex = 153;
-            this.label74.Text = "Block weight (MWU)";
-            // 
-            // panel48
-            // 
-            this.panel48.BackColor = System.Drawing.Color.Transparent;
-            this.panel48.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel48.BackgroundImage")));
-            this.panel48.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel48.Controls.Add(this.label68);
-            this.panel48.Location = new System.Drawing.Point(0, 131);
-            this.panel48.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel48.Name = "panel48";
-            this.panel48.Size = new System.Drawing.Size(196, 23);
-            this.panel48.TabIndex = 209;
-            // 
-            // label68
-            // 
-            this.label68.AutoSize = true;
-            this.label68.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label68.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label68.ForeColor = System.Drawing.Color.Gray;
-            this.label68.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label68.Location = new System.Drawing.Point(3, 2);
-            this.label68.Margin = new System.Windows.Forms.Padding(0);
-            this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(78, 20);
-            this.label68.TabIndex = 153;
-            this.label68.Text = "Block size";
-            // 
-            // panel47
-            // 
-            this.panel47.BackColor = System.Drawing.Color.Transparent;
-            this.panel47.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel47.BackgroundImage")));
-            this.panel47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel47.Controls.Add(this.label69);
-            this.panel47.Location = new System.Drawing.Point(0, 85);
-            this.panel47.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel47.Name = "panel47";
-            this.panel47.Size = new System.Drawing.Size(196, 23);
-            this.panel47.TabIndex = 209;
-            // 
-            // label69
-            // 
-            this.label69.AutoSize = true;
-            this.label69.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label69.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label69.ForeColor = System.Drawing.Color.Gray;
-            this.label69.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label69.Location = new System.Drawing.Point(3, 2);
-            this.label69.Margin = new System.Windows.Forms.Padding(0);
-            this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(138, 20);
-            this.label69.TabIndex = 153;
-            this.label69.Text = "Transaction count";
-            // 
-            // panel46
-            // 
-            this.panel46.BackColor = System.Drawing.Color.Transparent;
-            this.panel46.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
-            this.panel46.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel46.Controls.Add(this.label145);
-            this.panel46.Location = new System.Drawing.Point(0, 37);
-            this.panel46.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel46.Name = "panel46";
-            this.panel46.Size = new System.Drawing.Size(196, 23);
-            this.panel46.TabIndex = 208;
-            // 
-            // label145
-            // 
-            this.label145.AutoSize = true;
-            this.label145.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label145.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label145.ForeColor = System.Drawing.Color.Gray;
-            this.label145.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label145.Location = new System.Drawing.Point(3, 2);
-            this.label145.Margin = new System.Windows.Forms.Padding(0);
-            this.label145.Name = "label145";
-            this.label145.Size = new System.Drawing.Size(84, 20);
-            this.label145.TabIndex = 153;
-            this.label145.Text = "Block time";
-            // 
             // btnPreviousBlock
             // 
             this.btnPreviousBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -4947,10 +4671,10 @@
             // 
             this.lblNonce.AutoSize = true;
             this.lblNonce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblNonce.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNonce.Location = new System.Drawing.Point(0, 445);
+            this.lblNonce.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNonce.Location = new System.Drawing.Point(0, 369);
             this.lblNonce.Name = "lblNonce";
-            this.lblNonce.Size = new System.Drawing.Size(87, 23);
+            this.lblNonce.Size = new System.Drawing.Size(80, 22);
             this.lblNonce.TabIndex = 168;
             this.lblNonce.Text = "no data";
             // 
@@ -4958,10 +4682,10 @@
             // 
             this.lblTotalFees.AutoSize = true;
             this.lblTotalFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTotalFees.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalFees.Location = new System.Drawing.Point(0, 253);
+            this.lblTotalFees.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalFees.Location = new System.Drawing.Point(0, 225);
             this.lblTotalFees.Name = "lblTotalFees";
-            this.lblTotalFees.Size = new System.Drawing.Size(87, 23);
+            this.lblTotalFees.Size = new System.Drawing.Size(80, 22);
             this.lblTotalFees.TabIndex = 166;
             this.lblTotalFees.Text = "no data";
             // 
@@ -5052,10 +4776,10 @@
             // 
             this.lblBlockTime.AutoSize = true;
             this.lblBlockTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockTime.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockTime.Location = new System.Drawing.Point(0, 61);
+            this.lblBlockTime.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockTime.Location = new System.Drawing.Point(0, 81);
             this.lblBlockTime.Name = "lblBlockTime";
-            this.lblBlockTime.Size = new System.Drawing.Size(87, 23);
+            this.lblBlockTime.Size = new System.Drawing.Size(80, 22);
             this.lblBlockTime.TabIndex = 152;
             this.lblBlockTime.Text = "no data";
             // 
@@ -5063,10 +4787,10 @@
             // 
             this.lblBlockFeeRangeAndMedianFee.AutoSize = true;
             this.lblBlockFeeRangeAndMedianFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(0, 349);
+            this.lblBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(0, 297);
             this.lblBlockFeeRangeAndMedianFee.Name = "lblBlockFeeRangeAndMedianFee";
-            this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(87, 23);
+            this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(80, 22);
             this.lblBlockFeeRangeAndMedianFee.TabIndex = 150;
             this.lblBlockFeeRangeAndMedianFee.Text = "no data";
             // 
@@ -5074,10 +4798,10 @@
             // 
             this.lblMiner.AutoSize = true;
             this.lblMiner.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblMiner.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMiner.Location = new System.Drawing.Point(0, 493);
+            this.lblMiner.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMiner.Location = new System.Drawing.Point(0, 405);
             this.lblMiner.Name = "lblMiner";
-            this.lblMiner.Size = new System.Drawing.Size(87, 23);
+            this.lblMiner.Size = new System.Drawing.Size(80, 22);
             this.lblMiner.TabIndex = 148;
             this.lblMiner.Text = "no data";
             // 
@@ -5085,10 +4809,10 @@
             // 
             this.lblBlockAverageFee.AutoSize = true;
             this.lblBlockAverageFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockAverageFee.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockAverageFee.Location = new System.Drawing.Point(0, 397);
+            this.lblBlockAverageFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockAverageFee.Location = new System.Drawing.Point(0, 333);
             this.lblBlockAverageFee.Name = "lblBlockAverageFee";
-            this.lblBlockAverageFee.Size = new System.Drawing.Size(87, 23);
+            this.lblBlockAverageFee.Size = new System.Drawing.Size(80, 22);
             this.lblBlockAverageFee.TabIndex = 144;
             this.lblBlockAverageFee.Text = "no data";
             // 
@@ -5096,10 +4820,10 @@
             // 
             this.lblNumberOfTXInBlock.AutoSize = true;
             this.lblNumberOfTXInBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblNumberOfTXInBlock.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumberOfTXInBlock.Location = new System.Drawing.Point(0, 109);
+            this.lblNumberOfTXInBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNumberOfTXInBlock.Location = new System.Drawing.Point(0, 117);
             this.lblNumberOfTXInBlock.Name = "lblNumberOfTXInBlock";
-            this.lblNumberOfTXInBlock.Size = new System.Drawing.Size(87, 23);
+            this.lblNumberOfTXInBlock.Size = new System.Drawing.Size(80, 22);
             this.lblNumberOfTXInBlock.TabIndex = 142;
             this.lblNumberOfTXInBlock.Text = "no data";
             // 
@@ -5107,10 +4831,10 @@
             // 
             this.lblReward.AutoSize = true;
             this.lblReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblReward.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReward.Location = new System.Drawing.Point(0, 301);
+            this.lblReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblReward.Location = new System.Drawing.Point(0, 261);
             this.lblReward.Name = "lblReward";
-            this.lblReward.Size = new System.Drawing.Size(87, 23);
+            this.lblReward.Size = new System.Drawing.Size(80, 22);
             this.lblReward.TabIndex = 140;
             this.lblReward.Text = "no data";
             // 
@@ -5118,10 +4842,10 @@
             // 
             this.lblBlockWeight.AutoSize = true;
             this.lblBlockWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockWeight.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockWeight.Location = new System.Drawing.Point(0, 205);
+            this.lblBlockWeight.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockWeight.Location = new System.Drawing.Point(0, 189);
             this.lblBlockWeight.Name = "lblBlockWeight";
-            this.lblBlockWeight.Size = new System.Drawing.Size(87, 23);
+            this.lblBlockWeight.Size = new System.Drawing.Size(80, 22);
             this.lblBlockWeight.TabIndex = 138;
             this.lblBlockWeight.Text = "no data";
             // 
@@ -5129,10 +4853,10 @@
             // 
             this.lblSizeOfBlock.AutoSize = true;
             this.lblSizeOfBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSizeOfBlock.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSizeOfBlock.Location = new System.Drawing.Point(0, 157);
+            this.lblSizeOfBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSizeOfBlock.Location = new System.Drawing.Point(0, 153);
             this.lblSizeOfBlock.Name = "lblSizeOfBlock";
-            this.lblSizeOfBlock.Size = new System.Drawing.Size(87, 23);
+            this.lblSizeOfBlock.Size = new System.Drawing.Size(80, 22);
             this.lblSizeOfBlock.TabIndex = 136;
             this.lblSizeOfBlock.Text = "no data";
             // 
@@ -12649,6 +12373,162 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
+            // panel105
+            // 
+            this.panel105.BackColor = System.Drawing.Color.Transparent;
+            this.panel105.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel105.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel105.Controls.Add(this.lblBlockBlockHeight);
+            this.panel105.Location = new System.Drawing.Point(0, 36);
+            this.panel105.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel105.Name = "panel105";
+            this.panel105.Size = new System.Drawing.Size(196, 23);
+            this.panel105.TabIndex = 209;
+            // 
+            // lblBlockBlockHeight
+            // 
+            this.lblBlockBlockHeight.AutoSize = true;
+            this.lblBlockBlockHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockBlockHeight.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockBlockHeight.ForeColor = System.Drawing.Color.Gray;
+            this.lblBlockBlockHeight.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblBlockBlockHeight.Location = new System.Drawing.Point(3, 2);
+            this.lblBlockBlockHeight.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockBlockHeight.Name = "lblBlockBlockHeight";
+            this.lblBlockBlockHeight.Size = new System.Drawing.Size(53, 20);
+            this.lblBlockBlockHeight.TabIndex = 153;
+            this.lblBlockBlockHeight.Text = "Block ";
+            // 
+            // label145
+            // 
+            this.label145.AutoSize = true;
+            this.label145.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label145.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label145.ForeColor = System.Drawing.Color.Silver;
+            this.label145.Location = new System.Drawing.Point(0, 66);
+            this.label145.Margin = new System.Windows.Forms.Padding(0);
+            this.label145.Name = "label145";
+            this.label145.Size = new System.Drawing.Size(84, 20);
+            this.label145.TabIndex = 211;
+            this.label145.Text = "Block time";
+            // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label69.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label69.ForeColor = System.Drawing.Color.Silver;
+            this.label69.Location = new System.Drawing.Point(0, 102);
+            this.label69.Margin = new System.Windows.Forms.Padding(0);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(138, 20);
+            this.label69.TabIndex = 241;
+            this.label69.Text = "Transaction count";
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label68.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label68.ForeColor = System.Drawing.Color.Silver;
+            this.label68.Location = new System.Drawing.Point(0, 138);
+            this.label68.Margin = new System.Windows.Forms.Padding(0);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(78, 20);
+            this.label68.TabIndex = 242;
+            this.label68.Text = "Block size";
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label74.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label74.ForeColor = System.Drawing.Color.Silver;
+            this.label74.Location = new System.Drawing.Point(0, 174);
+            this.label74.Margin = new System.Windows.Forms.Padding(0);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(159, 20);
+            this.label74.TabIndex = 243;
+            this.label74.Text = "Block weight (MWU)";
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label72.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label72.ForeColor = System.Drawing.Color.Silver;
+            this.label72.Location = new System.Drawing.Point(0, 210);
+            this.label72.Margin = new System.Windows.Forms.Padding(0);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(77, 20);
+            this.label72.TabIndex = 244;
+            this.label72.Text = "Total fees";
+            // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label66.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label66.ForeColor = System.Drawing.Color.Silver;
+            this.label66.Location = new System.Drawing.Point(0, 246);
+            this.label66.Margin = new System.Windows.Forms.Padding(0);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(181, 20);
+            this.label66.TabIndex = 245;
+            this.label66.Text = "Reward (subsidy + fees)";
+            // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label70.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label70.ForeColor = System.Drawing.Color.Silver;
+            this.label70.Location = new System.Drawing.Point(0, 282);
+            this.label70.Margin = new System.Windows.Forms.Padding(0);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(224, 20);
+            this.label70.TabIndex = 246;
+            this.label70.Text = "Fee range / Med fee (sat/vB)";
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label65.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label65.ForeColor = System.Drawing.Color.Silver;
+            this.label65.Location = new System.Drawing.Point(0, 318);
+            this.label65.Margin = new System.Windows.Forms.Padding(0);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(145, 20);
+            this.label65.TabIndex = 247;
+            this.label65.Text = "Average fee (sats)";
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label62.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label62.ForeColor = System.Drawing.Color.Silver;
+            this.label62.Location = new System.Drawing.Point(0, 354);
+            this.label62.Margin = new System.Windows.Forms.Padding(0);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(59, 20);
+            this.label62.TabIndex = 248;
+            this.label62.Text = "Nonce";
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label71.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label71.ForeColor = System.Drawing.Color.Silver;
+            this.label71.Location = new System.Drawing.Point(0, 390);
+            this.label71.Margin = new System.Windows.Forms.Padding(0);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(99, 20);
+            this.label71.TabIndex = 249;
+            this.label71.Text = "Miner / pool";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -12658,14 +12538,14 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
@@ -12778,26 +12658,6 @@
             this.panelOwnNodeBlockTXInfo.ResumeLayout(false);
             this.panel56.ResumeLayout(false);
             this.panel56.PerformLayout();
-            this.panel55.ResumeLayout(false);
-            this.panel55.PerformLayout();
-            this.panel54.ResumeLayout(false);
-            this.panel54.PerformLayout();
-            this.panel53.ResumeLayout(false);
-            this.panel53.PerformLayout();
-            this.panel52.ResumeLayout(false);
-            this.panel52.PerformLayout();
-            this.panel51.ResumeLayout(false);
-            this.panel51.PerformLayout();
-            this.panel50.ResumeLayout(false);
-            this.panel50.PerformLayout();
-            this.panel49.ResumeLayout(false);
-            this.panel49.PerformLayout();
-            this.panel48.ResumeLayout(false);
-            this.panel48.PerformLayout();
-            this.panel47.ResumeLayout(false);
-            this.panel47.PerformLayout();
-            this.panel46.ResumeLayout(false);
-            this.panel46.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).EndInit();
             this.panelMenu.ResumeLayout(false);
             this.panelBlockList.ResumeLayout(false);
@@ -12969,6 +12829,8 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
+            this.panel105.ResumeLayout(false);
+            this.panel105.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -13435,26 +13297,6 @@
         private System.Windows.Forms.Panel panel41;
         private System.Windows.Forms.Panel panel45;
         private System.Windows.Forms.Label label143;
-        private System.Windows.Forms.Panel panel47;
-        private System.Windows.Forms.Label label69;
-        private System.Windows.Forms.Panel panel46;
-        private System.Windows.Forms.Label label145;
-        private System.Windows.Forms.Panel panel55;
-        private System.Windows.Forms.Label label71;
-        private System.Windows.Forms.Panel panel54;
-        private System.Windows.Forms.Label label62;
-        private System.Windows.Forms.Panel panel53;
-        private System.Windows.Forms.Label label65;
-        private System.Windows.Forms.Panel panel52;
-        private System.Windows.Forms.Label label70;
-        private System.Windows.Forms.Panel panel51;
-        private System.Windows.Forms.Label label66;
-        private System.Windows.Forms.Panel panel50;
-        private System.Windows.Forms.Label label72;
-        private System.Windows.Forms.Panel panel49;
-        private System.Windows.Forms.Label label74;
-        private System.Windows.Forms.Panel panel48;
-        private System.Windows.Forms.Label label68;
         private System.Windows.Forms.Panel panel56;
         private System.Windows.Forms.Label lblHeaderPrice;
         private System.Windows.Forms.Label lblHeaderMarketCap;
@@ -13790,6 +13632,18 @@
         private System.Windows.Forms.Label label244;
         private System.Windows.Forms.Label lblChartsDarkBackground;
         private System.Windows.Forms.Label label246;
+        private System.Windows.Forms.Panel panel105;
+        private System.Windows.Forms.Label lblBlockBlockHeight;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.Label label72;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.Label label145;
     }
 }
 

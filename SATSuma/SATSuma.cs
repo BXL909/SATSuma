@@ -12612,7 +12612,10 @@ namespace SATSuma
         {
             try
             {
-                panelThemeMenu.Height = 24;
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
+                });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
@@ -12637,7 +12640,10 @@ namespace SATSuma
         {
             try
             {
-                panelThemeMenu.Height = 24;
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
+                });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
@@ -12662,7 +12668,10 @@ namespace SATSuma
         {
             try
             {
-                panelThemeMenu.Height = 24;
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
+                });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
@@ -17844,8 +17853,5 @@ namespace SATSuma
 
 
         #endregion
-
-
-
     }
 }

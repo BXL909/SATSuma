@@ -659,6 +659,13 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btnColorButtonText = new System.Windows.Forms.Button();
             this.panelAppearance = new System.Windows.Forms.Panel();
+            this.panel46 = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.lblInfinity2 = new System.Windows.Forms.Label();
+            this.lblInfinity1 = new System.Windows.Forms.Label();
+            this.panel47 = new System.Windows.Forms.Panel();
+            this.label248 = new System.Windows.Forms.Label();
             this.panel103 = new System.Windows.Forms.Panel();
             this.lblChartsDarkBackground = new System.Windows.Forms.Label();
             this.label246 = new System.Windows.Forms.Label();
@@ -835,13 +842,12 @@
             this.btnChartHashrate = new System.Windows.Forms.Button();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.panel46 = new System.Windows.Forms.Panel();
-            this.lblInfinity2 = new System.Windows.Forms.Label();
-            this.lblInfinity1 = new System.Windows.Forms.Label();
-            this.panel47 = new System.Windows.Forms.Panel();
-            this.label248 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.panelThemeMenu = new System.Windows.Forms.Panel();
+            this.btnMenuThemeCustom = new System.Windows.Forms.Button();
+            this.BtnMenuThemeGenesis = new System.Windows.Forms.Button();
+            this.btnThemeMenu = new System.Windows.Forms.Button();
+            this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
+            this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -958,6 +964,10 @@
             this.panel58.SuspendLayout();
             this.panel59.SuspendLayout();
             this.panelAppearance.SuspendLayout();
+            this.panel46.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panel47.SuspendLayout();
             this.panel103.SuspendLayout();
             this.panel104.SuspendLayout();
             this.panel91.SuspendLayout();
@@ -998,10 +1008,7 @@
             this.panel78.SuspendLayout();
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
-            this.panel46.SuspendLayout();
-            this.panel47.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.panelThemeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -5092,7 +5099,7 @@
             this.panelMenu.Controls.Add(this.btnMenuAddress);
             this.panelMenu.Controls.Add(this.btnMenuBitcoinDashboard);
             this.panelMenu.Controls.Add(this.btnMenuLightningDashboard);
-            this.panelMenu.Location = new System.Drawing.Point(587, 11);
+            this.panelMenu.Location = new System.Drawing.Point(416, 11);
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(114, 24);
             this.panelMenu.TabIndex = 152;
@@ -7671,7 +7678,7 @@
             this.btnAddToBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddToBookmarks.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddToBookmarks.ForeColor = System.Drawing.Color.White;
-            this.btnAddToBookmarks.Location = new System.Drawing.Point(557, 11);
+            this.btnAddToBookmarks.Location = new System.Drawing.Point(678, 11);
             this.btnAddToBookmarks.Name = "btnAddToBookmarks";
             this.btnAddToBookmarks.Size = new System.Drawing.Size(24, 24);
             this.btnAddToBookmarks.TabIndex = 2;
@@ -8663,7 +8670,7 @@
             this.panelCurrency.Controls.Add(this.btnCurrency);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(490, 11);
+            this.panelCurrency.Location = new System.Drawing.Point(612, 11);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(61, 24);
             this.panelCurrency.TabIndex = 159;
@@ -9839,6 +9846,93 @@
             this.panelAppearance.Size = new System.Drawing.Size(773, 556);
             this.panelAppearance.TabIndex = 249;
             this.panelAppearance.Visible = false;
+            // 
+            // panel46
+            // 
+            this.panel46.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel46.Controls.Add(this.pictureBox3);
+            this.panel46.Controls.Add(this.pictureBox2);
+            this.panel46.Controls.Add(this.lblInfinity2);
+            this.panel46.Controls.Add(this.lblInfinity1);
+            this.panel46.Controls.Add(this.panel47);
+            this.panel46.Location = new System.Drawing.Point(534, 77);
+            this.panel46.Name = "panel46";
+            this.panel46.Size = new System.Drawing.Size(221, 64);
+            this.panel46.TabIndex = 298;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox3.Image = global::SATSuma.Properties.Resources.OrangeInfinity;
+            this.pictureBox3.Location = new System.Drawing.Point(132, 33);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(40, 20);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox3.TabIndex = 265;
+            this.pictureBox3.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Image = global::SATSuma.Properties.Resources.InfinityTrans;
+            this.pictureBox2.Location = new System.Drawing.Point(40, 34);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(40, 20);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 250;
+            this.pictureBox2.TabStop = false;
+            // 
+            // lblInfinity2
+            // 
+            this.lblInfinity2.AutoSize = true;
+            this.lblInfinity2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblInfinity2.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblInfinity2.ForeColor = System.Drawing.Color.Green;
+            this.lblInfinity2.Location = new System.Drawing.Point(101, 34);
+            this.lblInfinity2.Name = "lblInfinity2";
+            this.lblInfinity2.Size = new System.Drawing.Size(23, 18);
+            this.lblInfinity2.TabIndex = 264;
+            this.lblInfinity2.Text = "✔️";
+            this.lblInfinity2.Click += new System.EventHandler(this.lblInfinity2_Click);
+            // 
+            // lblInfinity1
+            // 
+            this.lblInfinity1.AutoSize = true;
+            this.lblInfinity1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblInfinity1.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblInfinity1.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblInfinity1.Location = new System.Drawing.Point(9, 34);
+            this.lblInfinity1.Name = "lblInfinity1";
+            this.lblInfinity1.Size = new System.Drawing.Size(23, 18);
+            this.lblInfinity1.TabIndex = 262;
+            this.lblInfinity1.Text = "❌";
+            this.lblInfinity1.Click += new System.EventHandler(this.labelInfinity1_Click);
+            // 
+            // panel47
+            // 
+            this.panel47.BackColor = System.Drawing.Color.Transparent;
+            this.panel47.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel47.Controls.Add(this.label248);
+            this.panel47.Location = new System.Drawing.Point(0, 0);
+            this.panel47.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel47.Name = "panel47";
+            this.panel47.Size = new System.Drawing.Size(224, 23);
+            this.panel47.TabIndex = 213;
+            // 
+            // label248
+            // 
+            this.label248.AutoSize = true;
+            this.label248.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label248.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label248.ForeColor = System.Drawing.Color.Gray;
+            this.label248.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label248.Location = new System.Drawing.Point(0, 2);
+            this.label248.Margin = new System.Windows.Forms.Padding(0);
+            this.label248.Name = "label248";
+            this.label248.Size = new System.Drawing.Size(144, 20);
+            this.label248.TabIndex = 153;
+            this.label248.Text = "Loading animation";
             // 
             // panel103
             // 
@@ -12528,92 +12622,128 @@
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
             // 
-            // panel46
+            // panelThemeMenu
             // 
-            this.panel46.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel46.Controls.Add(this.pictureBox3);
-            this.panel46.Controls.Add(this.pictureBox2);
-            this.panel46.Controls.Add(this.lblInfinity2);
-            this.panel46.Controls.Add(this.lblInfinity1);
-            this.panel46.Controls.Add(this.panel47);
-            this.panel46.Location = new System.Drawing.Point(534, 77);
-            this.panel46.Name = "panel46";
-            this.panel46.Size = new System.Drawing.Size(221, 64);
-            this.panel46.TabIndex = 298;
+            this.panelThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeCustom);
+            this.panelThemeMenu.Controls.Add(this.BtnMenuThemeGenesis);
+            this.panelThemeMenu.Controls.Add(this.btnThemeMenu);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeBTCdir);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
+            this.panelThemeMenu.Location = new System.Drawing.Point(535, 11);
+            this.panelThemeMenu.Name = "panelThemeMenu";
+            this.panelThemeMenu.Size = new System.Drawing.Size(72, 24);
+            this.panelThemeMenu.TabIndex = 160;
             // 
-            // lblInfinity2
+            // btnMenuThemeCustom
             // 
-            this.lblInfinity2.AutoSize = true;
-            this.lblInfinity2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblInfinity2.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblInfinity2.ForeColor = System.Drawing.Color.Green;
-            this.lblInfinity2.Location = new System.Drawing.Point(101, 34);
-            this.lblInfinity2.Name = "lblInfinity2";
-            this.lblInfinity2.Size = new System.Drawing.Size(23, 18);
-            this.lblInfinity2.TabIndex = 264;
-            this.lblInfinity2.Text = "✔️";
-            this.lblInfinity2.Click += new System.EventHandler(this.lblInfinity2_Click);
+            this.btnMenuThemeCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeCustom.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeCustom.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeCustom.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeCustom.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeCustom.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeCustom.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeCustom.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeCustom.Location = new System.Drawing.Point(0, 96);
+            this.btnMenuThemeCustom.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeCustom.Name = "btnMenuThemeCustom";
+            this.btnMenuThemeCustom.Size = new System.Drawing.Size(72, 24);
+            this.btnMenuThemeCustom.TabIndex = 155;
+            this.btnMenuThemeCustom.TabStop = false;
+            this.btnMenuThemeCustom.Text = "custom";
+            this.btnMenuThemeCustom.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuThemeCustom.UseVisualStyleBackColor = false;
+            this.btnMenuThemeCustom.Click += new System.EventHandler(this.btnMenuThemeCustom_Click);
             // 
-            // lblInfinity1
+            // BtnMenuThemeGenesis
             // 
-            this.lblInfinity1.AutoSize = true;
-            this.lblInfinity1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblInfinity1.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblInfinity1.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblInfinity1.Location = new System.Drawing.Point(9, 34);
-            this.lblInfinity1.Name = "lblInfinity1";
-            this.lblInfinity1.Size = new System.Drawing.Size(23, 18);
-            this.lblInfinity1.TabIndex = 262;
-            this.lblInfinity1.Text = "❌";
-            this.lblInfinity1.Click += new System.EventHandler(this.labelInfinity1_Click);
+            this.BtnMenuThemeGenesis.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BtnMenuThemeGenesis.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BtnMenuThemeGenesis.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.BtnMenuThemeGenesis.FlatAppearance.BorderSize = 0;
+            this.BtnMenuThemeGenesis.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.BtnMenuThemeGenesis.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.BtnMenuThemeGenesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMenuThemeGenesis.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnMenuThemeGenesis.ForeColor = System.Drawing.Color.White;
+            this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(0, 24);
+            this.BtnMenuThemeGenesis.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnMenuThemeGenesis.Name = "BtnMenuThemeGenesis";
+            this.BtnMenuThemeGenesis.Size = new System.Drawing.Size(72, 24);
+            this.BtnMenuThemeGenesis.TabIndex = 154;
+            this.BtnMenuThemeGenesis.TabStop = false;
+            this.BtnMenuThemeGenesis.Text = "genesis";
+            this.BtnMenuThemeGenesis.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnMenuThemeGenesis.UseVisualStyleBackColor = false;
+            this.BtnMenuThemeGenesis.Click += new System.EventHandler(this.btnMenuThemeGenesis_Click);
             // 
-            // panel47
+            // btnThemeMenu
             // 
-            this.panel47.BackColor = System.Drawing.Color.Transparent;
-            this.panel47.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
-            this.panel47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel47.Controls.Add(this.label248);
-            this.panel47.Location = new System.Drawing.Point(0, 0);
-            this.panel47.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel47.Name = "panel47";
-            this.panel47.Size = new System.Drawing.Size(224, 23);
-            this.panel47.TabIndex = 213;
+            this.btnThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnThemeMenu.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnThemeMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnThemeMenu.FlatAppearance.BorderSize = 0;
+            this.btnThemeMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnThemeMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnThemeMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemeMenu.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThemeMenu.ForeColor = System.Drawing.Color.White;
+            this.btnThemeMenu.Location = new System.Drawing.Point(0, 0);
+            this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
+            this.btnThemeMenu.Name = "btnThemeMenu";
+            this.btnThemeMenu.Size = new System.Drawing.Size(72, 24);
+            this.btnThemeMenu.TabIndex = 1;
+            this.btnThemeMenu.TabStop = false;
+            this.btnThemeMenu.Text = "THEME";
+            this.btnThemeMenu.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnThemeMenu.UseVisualStyleBackColor = false;
+            this.btnThemeMenu.Click += new System.EventHandler(this.btnThemeMenu_Click);
             // 
-            // label248
+            // btnMenuThemeBTCdir
             // 
-            this.label248.AutoSize = true;
-            this.label248.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label248.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label248.ForeColor = System.Drawing.Color.Gray;
-            this.label248.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label248.Location = new System.Drawing.Point(0, 2);
-            this.label248.Margin = new System.Windows.Forms.Padding(0);
-            this.label248.Name = "label248";
-            this.label248.Size = new System.Drawing.Size(144, 20);
-            this.label248.TabIndex = 153;
-            this.label248.Text = "Loading animation";
+            this.btnMenuThemeBTCdir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeBTCdir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeBTCdir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeBTCdir.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeBTCdir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeBTCdir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeBTCdir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeBTCdir.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeBTCdir.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeBTCdir.Location = new System.Drawing.Point(0, 48);
+            this.btnMenuThemeBTCdir.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeBTCdir.Name = "btnMenuThemeBTCdir";
+            this.btnMenuThemeBTCdir.Size = new System.Drawing.Size(72, 24);
+            this.btnMenuThemeBTCdir.TabIndex = 150;
+            this.btnMenuThemeBTCdir.TabStop = false;
+            this.btnMenuThemeBTCdir.Text = "btcdir";
+            this.btnMenuThemeBTCdir.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuThemeBTCdir.UseVisualStyleBackColor = false;
+            this.btnMenuThemeBTCdir.Click += new System.EventHandler(this.btnMenuThemeBTCdir_Click);
             // 
-            // pictureBox2
+            // btnMenuThemeSatsuma
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = global::SATSuma.Properties.Resources.InfinityTrans;
-            this.pictureBox2.Location = new System.Drawing.Point(40, 34);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(40, 20);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 250;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox3.Image = global::SATSuma.Properties.Resources.OrangeInfinity;
-            this.pictureBox3.Location = new System.Drawing.Point(132, 33);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(40, 20);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.TabIndex = 265;
-            this.pictureBox3.TabStop = false;
+            this.btnMenuThemeSatsuma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeSatsuma.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeSatsuma.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeSatsuma.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeSatsuma.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeSatsuma.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnMenuThemeSatsuma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeSatsuma.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeSatsuma.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(0, 72);
+            this.btnMenuThemeSatsuma.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeSatsuma.Name = "btnMenuThemeSatsuma";
+            this.btnMenuThemeSatsuma.Size = new System.Drawing.Size(72, 24);
+            this.btnMenuThemeSatsuma.TabIndex = 92;
+            this.btnMenuThemeSatsuma.TabStop = false;
+            this.btnMenuThemeSatsuma.Text = "satsuma";
+            this.btnMenuThemeSatsuma.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMenuThemeSatsuma.UseVisualStyleBackColor = false;
+            this.btnMenuThemeSatsuma.Click += new System.EventHandler(this.btnMenuThemeSatsuma_Click);
             // 
             // SATSuma
             // 
@@ -12624,6 +12754,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelThemeMenu);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlock);
@@ -12848,6 +12979,12 @@
             this.panel59.ResumeLayout(false);
             this.panel59.PerformLayout();
             this.panelAppearance.ResumeLayout(false);
+            this.panel46.ResumeLayout(false);
+            this.panel46.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panel47.ResumeLayout(false);
+            this.panel47.PerformLayout();
             this.panel103.ResumeLayout(false);
             this.panel103.PerformLayout();
             this.panel104.ResumeLayout(false);
@@ -12917,12 +13054,7 @@
             this.panelCirculationKey.PerformLayout();
             this.panelFeeRatesKey.ResumeLayout(false);
             this.panelFeeRatesKey.PerformLayout();
-            this.panel46.ResumeLayout(false);
-            this.panel46.PerformLayout();
-            this.panel47.ResumeLayout(false);
-            this.panel47.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.panelThemeMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -13742,6 +13874,12 @@
         private System.Windows.Forms.Label lblInfinity1;
         private System.Windows.Forms.Panel panel47;
         private System.Windows.Forms.Label label248;
+        private System.Windows.Forms.Panel panelThemeMenu;
+        private System.Windows.Forms.Button btnMenuThemeCustom;
+        private System.Windows.Forms.Button BtnMenuThemeGenesis;
+        private System.Windows.Forms.Button btnThemeMenu;
+        private System.Windows.Forms.Button btnMenuThemeBTCdir;
+        private System.Windows.Forms.Button btnMenuThemeSatsuma;
     }
 }
 

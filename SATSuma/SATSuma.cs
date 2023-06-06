@@ -12608,6 +12608,112 @@ namespace SATSuma
 
         #region ⚡APPEARANCE SCREEN⚡
 
+        private void btnMenuThemeGenesis_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelThemeMenu.Height = 24;
+                var themes = ReadThemesFromJsonFile();
+                foreach (Theme theme in themes)
+                {
+                    if (theme.ThemeName == "Genesis (preset)")
+                    {
+                        RestoreTheme(theme);
+                        SaveThemeAsDefault(theme.ThemeName);
+                        // reload the listviews to apply the new color
+                        LookupBlockList();
+                        LookupBlock();
+                        SetupBookmarksScreen();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuThemeGenesis_Click");
+            }
+        }
+
+        private void btnMenuThemeBTCdir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelThemeMenu.Height = 24;
+                var themes = ReadThemesFromJsonFile();
+                foreach (Theme theme in themes)
+                {
+                    if (theme.ThemeName == "BTCdir (preset)")
+                    {
+                        RestoreTheme(theme);
+                        SaveThemeAsDefault(theme.ThemeName);
+                        // reload the listviews to apply the new color
+                        LookupBlockList();
+                        LookupBlock();
+                        SetupBookmarksScreen();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuThemeBTCdir_Click");
+            }
+        }
+
+        private void btnMenuThemeSatsuma_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                panelThemeMenu.Height = 24;
+                var themes = ReadThemesFromJsonFile();
+                foreach (Theme theme in themes)
+                {
+                    if (theme.ThemeName == "Satsuma (preset)")
+                    {
+                        RestoreTheme(theme);
+                        SaveThemeAsDefault(theme.ThemeName);
+                        // reload the listviews to apply the new color
+                        LookupBlockList();
+                        LookupBlock();
+                        SetupBookmarksScreen();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuThemeSatsuma_Click");
+            }
+        }
+
+        private void btnMenuThemeCustom_Click(object sender, EventArgs e)
+        {
+            panelThemeMenu.Height = 24;
+            BtnAppearance_Click(sender, e);
+        }
+
+        private void btnThemeMenu_Click(object sender, EventArgs e)
+        {
+            panelMenu.Height = 24;
+            panelCurrency.Height = 24;
+            panelThemeMenu.BringToFront();
+            if (panelThemeMenu.Height == 24)
+            {
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 120;
+                });
+                panelMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelMenu.Height = 24;
+                });
+            }
+            else
+            {
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
+                });
+            }
+        }
+
         private void BtnColorDataFields_Click(object sender, EventArgs e)
         {
             try
@@ -13625,6 +13731,10 @@ namespace SATSuma
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
+                        // reload the listviews to apply the new color
+                        LookupBlockList();
+                        LookupBlock();
+                        SetupBookmarksScreen();
                     }
                 }
             }
@@ -13957,7 +14067,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { headerNetworkName, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29 };
+                Control[] listHeaderLabelsToColor = { headerNetworkName, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14181,7 +14291,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub };
+                Control[] listHeaderButtonsToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -14246,7 +14356,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis };
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -15592,6 +15702,10 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 24;
                 });
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
+                });
             }
             else
             {
@@ -15671,6 +15785,10 @@ namespace SATSuma
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
                     panelMenu.Height = 24;
+                });
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 24;
                 });
             }
             else
@@ -17724,7 +17842,9 @@ namespace SATSuma
             }
         }
 
+
         #endregion
+
 
 
     }

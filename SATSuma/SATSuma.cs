@@ -181,6 +181,7 @@ namespace SATSuma
         bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         Color subItemBackColor = Color.FromArgb(20, 20, 20);
+        Color labelColor = Color.FromArgb(20, 20, 20);
         Color chartsBackgroundColor = Color.FromArgb(20, 20, 20);
         Color linesColor = Color.FromArgb(106, 72, 9);
         Color titleBackgroundColor = Color.FromArgb(0, 0, 0);
@@ -7959,7 +7960,7 @@ namespace SATSuma
                 int desiredSpacing = 98; // spacing added to title to force left-align in
                 string spacing = new string('\u00A0', desiredSpacing);
                 string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
-                formsPlot2.Plot.Title(title, size: 13, color: subItemBackColor, bold: true);
+                formsPlot2.Plot.Title(title, size: 13, color: labelColor, bold: true);
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
@@ -13758,6 +13759,7 @@ namespace SATSuma
             try
             {
                 ColorDataFields(theme.DataFields);
+                labelColor = theme.Labels; // (only used for poolranking chart title)
                 ColorLabels(theme.Labels);
                 ColorHeadings(theme.Headings);
                 ColorTables(theme.Tables);
@@ -14139,6 +14141,12 @@ namespace SATSuma
                 //bookmarks
                 Control[] listBookmarksLabelsToColor = { label144, label153, label151, label147, label142, lblSelectedBookmarkType, label138 };
                 foreach (Control control in listBookmarksLabelsToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //charts
+                Control[] listChartsLabelsToColor = { label236, label220, label225, label226, label229, label230, label233, label232, label202, label203, label205, label206, label207, label208, label209, label236 };
+                foreach (Control control in listChartsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
                 }

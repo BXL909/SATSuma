@@ -13073,6 +13073,7 @@ namespace SATSuma
                         lblInfinity2.Text = "✔️";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                 }
                 else
                 {
@@ -13087,6 +13088,7 @@ namespace SATSuma
                         lblInfinity2.Text = "❌";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                 }
             }
 
@@ -13113,6 +13115,7 @@ namespace SATSuma
                         lblInfinity1.Text = "✔️";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                 }
                 else
                 {
@@ -13127,6 +13130,7 @@ namespace SATSuma
                         lblInfinity1.Text = "❌";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                 }
             }
 
@@ -13920,6 +13924,7 @@ namespace SATSuma
                         lblInfinity1.Text = "❌";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                 }
                 else
                 {
@@ -13934,6 +13939,7 @@ namespace SATSuma
                         lblInfinity1.Text = "✔️";
                     });
                     pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                 }
             }
             catch (Exception ex)

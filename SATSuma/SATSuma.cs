@@ -7959,7 +7959,7 @@ namespace SATSuma
                 int desiredSpacing = 98; // spacing added to title to force left-align in
                 string spacing = new string('\u00A0', desiredSpacing);
                 string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
-                formsPlot2.Plot.Title(title, size: 13, color: Color.Silver, bold: true);
+                formsPlot2.Plot.Title(title, size: 13, color: subItemBackColor, bold: true);
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
@@ -8102,7 +8102,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -8151,7 +8151,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("sats per v/byte");
+                formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
@@ -8200,7 +8200,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, bold: true);
 
                 PrepareLinearScaleChart();
 
@@ -8244,7 +8244,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("lightning nodes per network");
+                formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
@@ -8292,7 +8292,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, bold: true);
 
                 PrepareLinearScaleChart();
 
@@ -8323,7 +8323,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("EH/s");
+                formsPlot1.Plot.YAxis.Label("EH/s", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8377,7 +8377,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -8408,7 +8408,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Capacity (BTC)");
+                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8462,7 +8462,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -8493,7 +8493,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Capacity (BTC)");
+                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8541,7 +8541,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot3.Plot.Clear();
-                formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: 13, color: Color.Silver, bold: true);
+                formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: 13, bold: true);
 
                 // switch to linear scaling in case it was log before
                 formsPlot3.Plot.YAxis.MinorLogScale(false);
@@ -8628,7 +8628,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -8653,7 +8653,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("BTC");
+                formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8705,7 +8705,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -8729,7 +8729,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("BTC");
+                formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8787,7 +8787,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates/hashrates/difficulties
@@ -8813,7 +8813,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("trillion");
+                formsPlot1.Plot.YAxis.Label("trillion", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8872,7 +8872,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -8895,7 +8895,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Unique addresses");
+                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -8956,7 +8956,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -9007,7 +9007,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Unique addresses");
+                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9063,7 +9063,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -9086,7 +9086,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)");
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9147,7 +9147,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
@@ -9198,7 +9198,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)");
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9255,7 +9255,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -9278,7 +9278,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)");
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9339,7 +9339,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of market cap data
                 var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
@@ -9390,7 +9390,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)");
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9446,7 +9446,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -9469,7 +9469,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("valid UTXO count");
+                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9530,7 +9530,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
                 var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
@@ -9581,7 +9581,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("valid UTXO count");
+                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9626,7 +9626,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9658,7 +9658,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Block size (MB)");
+                formsPlot1.Plot.YAxis.Label("Block size (MB)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -9715,7 +9715,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlot1.Plot.Clear();
-                formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, color: Color.Silver, bold: true);
+                formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates and amounts of btc in circulation
@@ -9747,7 +9747,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)");
+                formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
                 formsPlot1.Plot.SaveFig("ticks_dateTime.png");
                 // prevent navigating beyond the data
@@ -13948,7 +13948,8 @@ namespace SATSuma
             formsPlot1.Configuration.DoubleClickBenchmark = false;
             formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
             formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
-
+            
+            
             formsPlot2.Plot.Margins(x: .1, y: .1);
             formsPlot2.Plot.Style(ScottPlot.Style.Black);
             formsPlot2.RightClicked -= formsPlot2.DefaultRightClickEvent; // disable default right-click event
@@ -13967,13 +13968,19 @@ namespace SATSuma
 
             formsPlot1.Plot.Style(
                 figureBackground: Color.Transparent,
-                dataBackground: chartsBackgroundColor);
+                dataBackground: chartsBackgroundColor,
+                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
             formsPlot2.Plot.Style(
                 figureBackground: Color.Transparent,
-                dataBackground: chartsBackgroundColor);
+                dataBackground: chartsBackgroundColor,
+                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
             formsPlot3.Plot.Style(
                 figureBackground: Color.Transparent,
-                dataBackground: chartsBackgroundColor);
+                dataBackground: chartsBackgroundColor,
+                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
             panelFeeRatesKey.BackColor = chartsBackgroundColor;
             panelCirculationKey.BackColor = chartsBackgroundColor;
             panelPriceScaleButtons.BackColor = chartsBackgroundColor;

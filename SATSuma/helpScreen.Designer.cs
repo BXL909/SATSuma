@@ -52,10 +52,10 @@
             this.panel22.BackColor = System.Drawing.Color.Transparent;
             this.panel22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel22.Controls.Add(this.lblHelpHeading);
-            this.panel22.Location = new System.Drawing.Point(10, 10);
-            this.panel22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel22.Location = new System.Drawing.Point(8, 8);
+            this.panel22.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(526, 23);
+            this.panel22.Size = new System.Drawing.Size(394, 19);
             this.panel22.TabIndex = 198;
             // 
             // lblHelpHeading
@@ -65,8 +65,9 @@
             this.lblHelpHeading.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHelpHeading.ForeColor = System.Drawing.Color.Silver;
             this.lblHelpHeading.Location = new System.Drawing.Point(1, 0);
+            this.lblHelpHeading.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHelpHeading.Name = "lblHelpHeading";
-            this.lblHelpHeading.Size = new System.Drawing.Size(181, 19);
+            this.lblHelpHeading.Size = new System.Drawing.Size(149, 17);
             this.lblHelpHeading.TabIndex = 36;
             this.lblHelpHeading.Text = "Help screen heading";
             // 
@@ -77,11 +78,12 @@
             this.textBoxHelpText.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxHelpText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxHelpText.ForeColor = System.Drawing.Color.Silver;
-            this.textBoxHelpText.Location = new System.Drawing.Point(0, 5);
+            this.textBoxHelpText.Location = new System.Drawing.Point(0, 4);
+            this.textBoxHelpText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxHelpText.Multiline = true;
             this.textBoxHelpText.Name = "textBoxHelpText";
             this.textBoxHelpText.ReadOnly = true;
-            this.textBoxHelpText.Size = new System.Drawing.Size(530, 675);
+            this.textBoxHelpText.Size = new System.Drawing.Size(398, 548);
             this.textBoxHelpText.TabIndex = 201;
             this.textBoxHelpText.TabStop = false;
             this.textBoxHelpText.TextChanged += new System.EventHandler(this.TextBoxHelpText_TextChanged);
@@ -97,10 +99,10 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(542, 9);
+            this.btnExit.Location = new System.Drawing.Point(406, 7);
             this.btnExit.Margin = new System.Windows.Forms.Padding(0);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(30, 30);
+            this.btnExit.Size = new System.Drawing.Size(22, 24);
             this.btnExit.TabIndex = 202;
             this.btnExit.Text = "❌";
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -111,9 +113,10 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.textBoxHelpText);
-            this.panel1.Location = new System.Drawing.Point(10, 66);
+            this.panel1.Location = new System.Drawing.Point(8, 54);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(562, 693);
+            this.panel1.Size = new System.Drawing.Size(422, 563);
             this.panel1.TabIndex = 204;
             // 
             // btnHelpTextDown
@@ -126,15 +129,15 @@
             this.btnHelpTextDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextDown.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextDown.Location = new System.Drawing.Point(0, 682);
+            this.btnHelpTextDown.Location = new System.Drawing.Point(0, 554);
+            this.btnHelpTextDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnHelpTextDown.Name = "btnHelpTextDown";
-            this.btnHelpTextDown.Size = new System.Drawing.Size(30, 30);
+            this.btnHelpTextDown.Size = new System.Drawing.Size(22, 24);
             this.btnHelpTextDown.TabIndex = 207;
             this.btnHelpTextDown.TabStop = false;
             this.btnHelpTextDown.Text = "▼";
             this.btnHelpTextDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelpTextDown.UseVisualStyleBackColor = false;
-            this.btnHelpTextDown.Click += new System.EventHandler(this.BtnHelp_Click);
             this.btnHelpTextDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextDown_MouseDown);
             this.btnHelpTextDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnHelpTextDown_MouseUp);
             // 
@@ -148,9 +151,10 @@
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.btnHelpTextUp);
             this.panel2.Controls.Add(this.btnHelpTextDown);
-            this.panel2.Location = new System.Drawing.Point(541, 45);
+            this.panel2.Location = new System.Drawing.Point(406, 37);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(33, 719);
+            this.panel2.Size = new System.Drawing.Size(25, 584);
             this.panel2.TabIndex = 208;
             // 
             // btnHelpTextUp
@@ -163,9 +167,10 @@
             this.btnHelpTextUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextUp.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextUp.Location = new System.Drawing.Point(0, 21);
+            this.btnHelpTextUp.Location = new System.Drawing.Point(0, 17);
+            this.btnHelpTextUp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnHelpTextUp.Name = "btnHelpTextUp";
-            this.btnHelpTextUp.Size = new System.Drawing.Size(30, 30);
+            this.btnHelpTextUp.Size = new System.Drawing.Size(22, 24);
             this.btnHelpTextUp.TabIndex = 209;
             this.btnHelpTextUp.TabStop = false;
             this.btnHelpTextUp.Text = "▲";
@@ -194,9 +199,10 @@
             "Bookmarks",
             "Settings",
             "Appearance"});
-            this.comboBoxSelectHelp.Location = new System.Drawing.Point(15, 775);
+            this.comboBoxSelectHelp.Location = new System.Drawing.Point(11, 630);
+            this.comboBoxSelectHelp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBoxSelectHelp.Name = "comboBoxSelectHelp";
-            this.comboBoxSelectHelp.Size = new System.Drawing.Size(169, 24);
+            this.comboBoxSelectHelp.Size = new System.Drawing.Size(128, 21);
             this.comboBoxSelectHelp.TabIndex = 210;
             this.comboBoxSelectHelp.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelectHelp_SelectedIndexChanged);
             // 
@@ -205,19 +211,20 @@
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Location = new System.Drawing.Point(10, 37);
+            this.pictureBox1.Location = new System.Drawing.Point(8, 30);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(530, 2);
+            this.pictureBox1.Size = new System.Drawing.Size(398, 2);
             this.pictureBox1.TabIndex = 219;
             this.pictureBox1.TabStop = false;
             // 
             // HelpScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(584, 811);
+            this.ClientSize = new System.Drawing.Size(438, 659);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.comboBoxSelectHelp);
             this.Controls.Add(this.panel2);
@@ -225,6 +232,7 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.panel22);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "HelpScreen";
             this.Text = "helpScreen";

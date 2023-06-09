@@ -356,28 +356,17 @@
   <ItemGroup>
     <Content Include="BTC48.ico" />
     <None Include="Resources\OrangeInfinity.gif" />
-    <None Include="Resources\infinityTransparent.gif" />
     <None Include="Resources\SatsumaThumb.png" />
     <None Include="Resources\Satsuma3.png" />
-    <None Include="Resources\spectrumStripe.png" />
     <None Include="Resources\graphIcondisabled.png" />
     <None Include="Resources\graphIcon.png" />
-    <None Include="Resources\chartIcon.png" />
-    <None Include="Resources\fyj01dbo0i.gif" />
-    <None Include="Resources\SATSumaLogo.png" />
-    <None Include="Resources\CustomImage.png" />
     <None Include="Resources\SatsumaBTCdir.png" />
     <None Include="Resources\logoNoText.png" />
     <None Include="Resources\PnVlfRPD_400x400.png" />
     <None Include="Resources\AppBackground2.jpg" />
     <None Include="Resources\spectrum2.png" />
-    <None Include="Resources\titleBGLongerOrangeFlipped.png" />
     <None Include="Resources\titleBGLongerOrange.png" />
-    <None Include="Resources\tinylogo1.png" />
-    <None Include="Resources\tinylogo.png" />
-    <None Include="Resources\title.png" />
     <None Include="Resources\InfinityTrans.gif" />
-    <None Include="Resources\infinity.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

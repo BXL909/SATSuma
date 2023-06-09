@@ -11936,6 +11936,7 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = false;
                     blockchairComJSONSelected = "0";
+                    DisableChartsThatDontUseMempoolSpace();
                 }
                 else
                 {
@@ -11946,8 +11947,10 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = true;
                     blockchairComJSONSelected = "1";
+                    EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
+                TimerAPIRefreshPeriod_Tick(sender, e);
             }
             catch (Exception ex)
             {
@@ -11969,6 +11972,7 @@ namespace SATSuma
                     RunBitcoinExplorerEndpointAPI = false;
                     RunBitcoinExplorerOrgJSONAPI = false;
                     bitcoinExplorerEnpointsSelected = "0";
+                    DisableChartsThatDontUseMempoolSpace();
                 }
                 else
                 {
@@ -11980,8 +11984,10 @@ namespace SATSuma
                     RunBitcoinExplorerEndpointAPI = true;
                     RunBitcoinExplorerOrgJSONAPI = true;
                     bitcoinExplorerEnpointsSelected = "1";
+                    EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
+                TimerAPIRefreshPeriod_Tick(sender, e);
             }
             catch (Exception ex)
             {
@@ -12016,6 +12022,7 @@ namespace SATSuma
                     EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
+                TimerAPIRefreshPeriod_Tick(sender, e);
             }
             catch (Exception ex)
             {
@@ -12609,7 +12616,7 @@ namespace SATSuma
 
         #region ⚡APPEARANCE SCREEN⚡
 
-        private void btnMenuThemeGenesis_Click(object sender, EventArgs e)
+        private void BtnMenuThemeGenesis_Click(object sender, EventArgs e)
         {
             try
             {
@@ -12637,7 +12644,7 @@ namespace SATSuma
             }
         }
 
-        private void btnMenuThemeBTCdir_Click(object sender, EventArgs e)
+        private void BtnMenuThemeBTCdir_Click(object sender, EventArgs e)
         {
             try
             {
@@ -12665,7 +12672,7 @@ namespace SATSuma
             }
         }
 
-        private void btnMenuThemeSatsuma_Click(object sender, EventArgs e)
+        private void BtnMenuThemeSatsuma_Click(object sender, EventArgs e)
         {
             try
             {
@@ -12693,13 +12700,13 @@ namespace SATSuma
             }
         }
 
-        private void btnMenuThemeCustom_Click(object sender, EventArgs e)
+        private void BtnMenuThemeCustom_Click(object sender, EventArgs e)
         {
             panelThemeMenu.Height = 24;
             BtnAppearance_Click(sender, e);
         }
 
-        private void btnThemeMenu_Click(object sender, EventArgs e)
+        private void BtnThemeMenu_Click(object sender, EventArgs e)
         {
             panelMenu.Height = 24;
             panelCurrency.Height = 24;
@@ -13056,7 +13063,7 @@ namespace SATSuma
             }
         }
 
-        private void labelInfinity1_Click(object sender, EventArgs e)
+        private void LabelInfinity1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -13098,7 +13105,7 @@ namespace SATSuma
             }
         }
 
-        private void lblInfinity2_Click(object sender, EventArgs e)
+        private void LblInfinity2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -16863,8 +16870,8 @@ namespace SATSuma
         public class Vin_AddressTransactions
         {
             public Prevout_AddressTransactions Prevout { get; set; }
-            public decimal Value { get; set; }
-            public decimal Amount { get; set; }
+            //public decimal Value { get; set; }
+            //public decimal Amount { get; set; }
         }
 
         public class Prevout_AddressTransactions
@@ -16876,9 +16883,9 @@ namespace SATSuma
         public class Vout_AddressTransactions
         {
             public double Value { get; set; }
-            public decimal Amount { get; set; }
+           // public decimal Amount { get; set; }
             public string Scriptpubkey_address { get; set; }
-            public string Scriptpubkey_asm { get; set; }
+           // public string Scriptpubkey_asm { get; set; }
         }
 
         public class Status_AddressTransactions
@@ -16932,18 +16939,18 @@ namespace SATSuma
         public class Block
         {
             public Block_extras Extras { get; set; }
-            public string Id { get; set; }
+          //  public string Id { get; set; }
             public string Height { get; set; }
             public string Version { get; set; }
             public string Timestamp { get; set; }
-            public string Bits { get; set; }
+          //  public string Bits { get; set; }
             public string Nonce { get; set; }
-            public string Difficulty { get; set; }
-            public string Merkle_root { get; set; }
+           // public string Difficulty { get; set; }
+           // public string Merkle_root { get; set; }
             public int Tx_count { get; set; }
             public int Size { get; set; }
             public string Weight { get; set; }
-            public string Previousblockhash { get; set; }
+           // public string Previousblockhash { get; set; }
         }
 
         public class Block_extras
@@ -16953,11 +16960,11 @@ namespace SATSuma
             public decimal[] FeeRange { get; set; }
             public int TotalFees { get; set; }
             public string AvgFee { get; set; }
-            public string AvgFeeRate { get; set; }
+            //  public string AvgFeeRate { get; set; }
             public string AvgTxSize { get; set; }
             public string TotalInputs { get; set; }
             public string TotalOutputs { get; set; }
-            public string TotalOutputAmt { get; set; }
+           // public string TotalOutputAmt { get; set; }
             public Block_pool Pool { get; set; }
 
         }
@@ -17004,7 +17011,7 @@ namespace SATSuma
 
         public class Transaction
         {
-            public string Txid { get; set; }
+          //  public string Txid { get; set; }
             public int Version { get; set; }
             public int Locktime { get; set; }
             public TransactionVin[] Vin { get; set; }
@@ -17017,39 +17024,39 @@ namespace SATSuma
 
         public class TransactionStatus
         {
-            public bool Confirmed { get; set; }
+          //  public bool Confirmed { get; set; }
             public int Block_height { get; set; }
-            public string Block_hash { get; set; }
+           // public string Block_hash { get; set; }
             public int Block_time { get; set; }
         }
 
         public class TransactionVin
         {
-            public string Txid { get; set; }
-            public long Vout { get; set; }
+          //  public string Txid { get; set; }
+          //  public long Vout { get; set; }
             public TransactionVinPrevout Prevout { get; set; }
-            public string Scriptsig { get; set; }
-            public string Scriptsig_asm { get; set; }
-            public string[] Witness { get; set; }
+           // public string Scriptsig { get; set; }
+           // public string Scriptsig_asm { get; set; }
+           // public string[] Witness { get; set; }
             public bool Is_coinbase { get; set; }
-            public long Sequence { get; set; }
-            public string Inner_redeemscript_asm { get; set; }
+           // public long Sequence { get; set; }
+           // public string Inner_redeemscript_asm { get; set; }
         }
 
         public class TransactionVinPrevout
         {
-            public string Scriptpubkey { get; set; }
-            public string Scriptpubkey_asm { get; set; }
-            public string Scriptpubkey_type { get; set; }
+           // public string Scriptpubkey { get; set; }
+           // public string Scriptpubkey_asm { get; set; }
+           // public string Scriptpubkey_type { get; set; }
             public string Scriptpubkey_address { get; set; }
             public long Value { get; set; }
         }
 
         public class TransactionVout
         {
-            public string Scriptpubkey { get; set; }
+          //  public string Scriptpubkey { get; set; }
             public string Scriptpubkey_asm { get; set; }
-            public string Scriptpubkey_type { get; set; }
+          //  public string Scriptpubkey_type { get; set; }
             public string Scriptpubkey_address { get; set; }
             public long Value { get; set; }
         }
@@ -17107,31 +17114,8 @@ namespace SATSuma
 
         public class Vin_BlockTransactions
         {
-            //   public string txid { get; set; }
-            //   public string vout { get; set; }
-            //    public List<Prevout_BlockTransactions> prevout { get; set; }
-            //    public string scriptsig { get; set; }
-            //   public string scriptsig_asm { get; set; }
-            //   public List<string> witness { get; set; }
-            public string Is_coinbase { get; set; }
-            //   public string sequence { get; set; }
-        }
-
-        public class Prevout_BlockTransactions
-        {
-            public string Scriptpubkey { get; set; }
-            public string Scriptpubkey_asm { get; set; }
-            public string Scriptpubkey_type { get; set; }
-            public string Scriptpubkey_address { get; set; }
-            public string Value { get; set; }
-        }
-
-        public class Status_BlockTransactions
-        {
-            public string Confirmed { get; set; }
-            public string Block_height { get; set; }
-            public string Block_hash { get; set; }
-            public string Block_time { get; set; }
+            //public string Is_coinbase { get; set; }
+            //public string sequence { get; set; }
         }
 
         public class Vout_BlockTransactions
@@ -17154,20 +17138,6 @@ namespace SATSuma
 
         //---------------------------charts-----------------------------------------------
         //-------------------historic price chart
-        public class HistoricPriceData
-        {
-            public string Status { get; set; }
-            public string Name { get; set; }
-            public string Unit { get; set; }
-            public string Period { get; set; }
-            public string Description { get; set; }
-            public PriceCoordinates[] Values { get; set; }
-        }
-        public class PriceCoordinates
-        {
-            public string X { get; set; } // date
-            public decimal Y { get; set; } // price
-        }
 
         public class PriceCoordinatesList
         {
@@ -17179,7 +17149,7 @@ namespace SATSuma
         {
             public async Task<string> GetHistoricPriceDataAsync(string chartPeriod)
             {
-                int retryCount = 3;
+                int retryCount = 3; 
                 while (retryCount > 0)
                 {
                     using var client = new HttpClient();
@@ -17230,20 +17200,6 @@ namespace SATSuma
         }
 
         //-------------------historic market cap chart
-        public class MarketCapData
-        {
-            public string Status { get; set; }
-            public string Name { get; set; }
-            public string Unit { get; set; }
-            public string Period { get; set; }
-            public string Description { get; set; }
-            public MarketCapCoordinates[] Values { get; set; }
-        }
-        public class MarketCapCoordinates
-        {
-            public string X { get; set; } // date
-            public decimal Y { get; set; } // price
-        }
 
         public class MarketCapCoordinatesList
         {
@@ -17309,31 +17265,23 @@ namespace SATSuma
 
         public class HistoricRewardsAndPrice
         {
-            public string AvgHeight { get; set; }
+          //  public string AvgHeight { get; set; }
             public string Timestamp { get; set; }
             public decimal AvgRewards { get; set; }
-            public decimal USD { get; set; }
+          //  public decimal USD { get; set; }
         }
 
         //-------------------historic fees (& price) chart
 
         public class HistoricFeesAndPrice
         {
-            public string AvgHeight { get; set; }
+         //   public string AvgHeight { get; set; }
             public string Timestamp { get; set; }
             public decimal AvgFees { get; set; }
-            public decimal USD { get; set; }
+          //  public decimal USD { get; set; }
         }
 
         //-------------------historic hashrate and difficulty chart
-
-        public class HashrateAndDifficultySnapshot
-        {
-            public HashrateSnapshot[] Hashrates { get; set; }
-            public DifficultySnapshot[] Difficulty { get; set; }
-            public decimal CurrentHashrate { get; set; }
-            public decimal CurrentDifficulty { get; set; }
-        }
 
         public class HashrateSnapshot
         {
@@ -17344,9 +17292,9 @@ namespace SATSuma
         public class DifficultySnapshot
         {
             public string Time { get; set; }
-            public long Height { get; set; }
+         //   public long Height { get; set; }
             public decimal Difficulty { get; set; }
-            public decimal Adjustment { get; set; }
+          //  public decimal Adjustment { get; set; }
         }
 
         public class HashrateAndDifficultyService
@@ -17387,7 +17335,7 @@ namespace SATSuma
 
         public class BlockFeeRates
         {
-            public string AvgHeight { get; set; }
+          //  public string AvgHeight { get; set; }
             public string Timestamp { get; set; }
             public double AvgFee_0 { get; set; }
             public double AvgFee_10 { get; set; }
@@ -17433,15 +17381,7 @@ namespace SATSuma
         }
 
         //------------------- BTC in circulation
-        public class BitcoinsInCirculation
-        {
-            public string Status { get; set; }
-            public string Name { get; set; }
-            public string Unit { get; set; }
-            public string Period { get; set; }
-            public string Description { get; set; }
-            public BTCInCircChartCoordinates[] Values { get; set; }
-        }
+
         public class BTCInCircChartCoordinates
         {
             public string X { get; set; } // date
@@ -17504,24 +17444,18 @@ namespace SATSuma
 
         //------------------- block size and weight chart
 
-        public class BlockSizeAndWeight
-        {
-            public Sizes[] Sizes { get; set; }
-            public Weights[] Weights { get; set; }
-        }
-
         public class Sizes
         {
-            public string AvgHeight { get; set; }
+         //   public string AvgHeight { get; set; }
             public string Timestamp { get; set; }
             public decimal AvgSize { get; set; }
         }
 
         public class Weights
         {
-            public string AvgHeight { get; set; }
-            public string Timestamp { get; set; }
-            public decimal AvgWeight { get; set; }
+         //   public string AvgHeight { get; set; }
+          //  public string Timestamp { get; set; }
+         //   public decimal AvgWeight { get; set; }
         }
 
         public class BlockSizeAndWeightService
@@ -17559,20 +17493,6 @@ namespace SATSuma
         }
 
         //------------------- unique addresses chart
-        public class UniqueAddressesData
-        {
-            public string Status { get; set; }
-            public string Name { get; set; }
-            public string Unit { get; set; }
-            public string Period { get; set; }
-            public string Description { get; set; }
-            public PriceCoordinates[] Values { get; set; }
-        }
-        public class UniqueAddresses
-        {
-            public string X { get; set; } // date
-            public decimal Y { get; set; } // price
-        }
 
         public class UniqueAddressesList
         {
@@ -17635,20 +17555,6 @@ namespace SATSuma
         }
 
         //------------------- UTXO count chart
-        public class UTXOData
-        {
-            public string Status { get; set; }
-            public string Name { get; set; }
-            public string Unit { get; set; }
-            public string Period { get; set; }
-            public string Description { get; set; }
-            public UTXOCoordinates[] Values { get; set; }
-        }
-        public class UTXOCoordinates
-        {
-            public string X { get; set; } // date
-            public decimal Y { get; set; } // price
-        }
 
         public class UTXOList
         {
@@ -17711,34 +17617,17 @@ namespace SATSuma
         }
 
         //------------------- Pools ranking chart
-        public class PoolsRankingData
-        {
-            public PoolsRanking[] Values { get; set; }
-            public string BlockCount { get; set; }
-            public string LastEstimatedHashrate { get; set; }
-        }
+
         public class PoolsRanking
         {
-            public string PoolId { get; set; } 
+           // public string PoolId { get; set; } 
             public string Name { get; set; }
-            public string Link { get; set; }
+            //public string Link { get; set; }
             public string BlockCount { get; set; }
-            public string Rank { get; set; }
-            public string EmptyBlocks { get; set; }
-            public string Slug { get; set; }
-            public string AvgMatchRate { get; set; }
-        }
-
-        public class PoolsRankingList
-        {
-            public string PoolId { get; set; }
-            public string Name { get; set; }
-            public string Link { get; set; }
-            public string BlockCount { get; set; }
-            public string Rank { get; set; }
-            public string EmptyBlocks { get; set; }
-            public string Slug { get; set; }
-            public string AvgMatchRate { get; set; }
+            //public string Rank { get; set; }
+            //public string EmptyBlocks { get; set; }
+            //public string Slug { get; set; }
+            //public string AvgMatchRate { get; set; }
         }
 
         public class PoolsRankingDataService
@@ -17824,7 +17713,7 @@ namespace SATSuma
 
         //------------------- lightning nodes by country
 
-        public class CountryName
+        public class CountryName 
         {
             public string En { get; set; }
         }
@@ -17832,10 +17721,10 @@ namespace SATSuma
         public class LightningNodeCountry
         {
             public CountryName Name { get; set; }
-            public string Iso { get; set; }
+         //   public string Iso { get; set; }
             public decimal Count { get; set; }
-            public decimal Share { get; set; }
-            public decimal? Capacity { get; set; } // Nullable decimal
+         //   public decimal Share { get; set; }
+         //   public decimal? Capacity { get; set; } // Nullable decimal
         }
 
         public class LightningNodesByCountryService
@@ -17871,8 +17760,6 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-
         #endregion
     }
 }

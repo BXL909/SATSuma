@@ -14098,13 +14098,13 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { headerNetworkName, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle };
+                Control[] listHeaderLabelsToColor = { headerNetworkName, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191 };
+                Control[] listSettingsLabelsToColor = { label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191, label197 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;

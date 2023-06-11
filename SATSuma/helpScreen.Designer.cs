@@ -76,6 +76,7 @@
             this.textBoxHelpText.BackColor = System.Drawing.Color.Black;
             this.textBoxHelpText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxHelpText.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxHelpText.Enabled = false;
             this.textBoxHelpText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxHelpText.ForeColor = System.Drawing.Color.Silver;
             this.textBoxHelpText.Location = new System.Drawing.Point(0, 4);

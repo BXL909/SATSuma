@@ -73,29 +73,9 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chartIcon {
-            get {
-                object obj = ResourceManager.GetObject("chartIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap CustomImage {
             get {
                 object obj = ResourceManager.GetObject("CustomImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap fyj01dbo0i {
-            get {
-                object obj = ResourceManager.GetObject("fyj01dbo0i", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -136,16 +116,6 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap InfinityTrans {
             get {
                 object obj = ResourceManager.GetObject("InfinityTrans", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap infinityTransparent {
-            get {
-                object obj = ResourceManager.GetObject("infinityTransparent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,16 +183,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SATSumaLogo {
-            get {
-                object obj = ResourceManager.GetObject("SATSumaLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap SatsumaThumb {
             get {
                 object obj = ResourceManager.GetObject("SatsumaThumb", resourceCulture);
@@ -243,16 +203,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap spectrumStripe {
-            get {
-                object obj = ResourceManager.GetObject("spectrumStripe", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap tinylogo1 {
             get {
                 object obj = ResourceManager.GetObject("tinylogo1", resourceCulture);
@@ -263,29 +213,9 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap title {
-            get {
-                object obj = ResourceManager.GetObject("title", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap titleBGLongerOrange {
             get {
                 object obj = ResourceManager.GetObject("titleBGLongerOrange", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap titleBGLongerOrangeFlipped {
-            get {
-                object obj = ResourceManager.GetObject("titleBGLongerOrangeFlipped", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

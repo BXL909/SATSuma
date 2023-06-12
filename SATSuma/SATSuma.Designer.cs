@@ -4465,7 +4465,7 @@
             // AddressQRCodePicturebox
             // 
             this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(0, 36);
+            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(5, 36);
             this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
             this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
             this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4524,7 +4524,7 @@
             // 
             this.lblAddressType.AutoSize = true;
             this.lblAddressType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressType.Location = new System.Drawing.Point(-1, 163);
+            this.lblAddressType.Location = new System.Drawing.Point(5, 163);
             this.lblAddressType.Name = "lblAddressType";
             this.lblAddressType.Size = new System.Drawing.Size(56, 14);
             this.lblAddressType.TabIndex = 3;
@@ -12752,6 +12752,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
@@ -12760,7 +12761,6 @@
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelThemeMenu);

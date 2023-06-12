@@ -49,7 +49,7 @@
             this.label2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label2.Location = new System.Drawing.Point(238, 91);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 18);
+            this.label2.Size = new System.Drawing.Size(91, 14);
             this.label2.TabIndex = 9;
             this.label2.Text = "SATSuma v0.8";
             // 
@@ -61,7 +61,7 @@
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabel1.Location = new System.Drawing.Point(220, 119);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(136, 18);
+            this.linkLabel1.Size = new System.Drawing.Size(119, 14);
             this.linkLabel1.TabIndex = 10;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "bxl909.github.io";
@@ -76,7 +76,7 @@
             this.linkLabel2.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabel2.Location = new System.Drawing.Point(217, 138);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(144, 18);
+            this.linkLabel2.Size = new System.Drawing.Size(126, 14);
             this.linkLabel2.TabIndex = 11;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "check for updates";
@@ -107,9 +107,9 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::SATSuma.Properties.Resources.logoNoText;
-            this.pictureBox2.Location = new System.Drawing.Point(254, 33);
+            this.pictureBox2.Location = new System.Drawing.Point(254, 28);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(60, 55);
+            this.pictureBox2.Size = new System.Drawing.Size(60, 60);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 150;
             this.pictureBox2.TabStop = false;
@@ -132,7 +132,7 @@
             this.linkLabel3.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabel3.Location = new System.Drawing.Point(266, 176);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(40, 18);
+            this.linkLabel3.Size = new System.Drawing.Size(35, 14);
             this.linkLabel3.TabIndex = 152;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "tips";
@@ -147,7 +147,7 @@
             this.linkLabel4.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabel4.Location = new System.Drawing.Point(242, 157);
             this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(96, 18);
+            this.linkLabel4.Size = new System.Drawing.Size(84, 14);
             this.linkLabel4.TabIndex = 153;
             this.linkLabel4.TabStop = true;
             this.linkLabel4.Text = "view source";
@@ -156,7 +156,7 @@
             // 
             // Splash
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(378, 209);

@@ -48,6 +48,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SATSuma.SATSuma;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
@@ -13054,7 +13055,18 @@ namespace SATSuma
                         lblShowClock.ForeColor = Color.Green;
                         lblShowClock.Text = "✔️";
                     });
-                    lblTime.Visible = true;
+                    if (lblBackgroundGenesisSelected.Visible == true)
+                    {
+                        lblTime.Font = new Font(lblTime.Font.FontFamily, 14, lblTime.Font.Style);
+                        lblTime.Location = new Point(697, 91);
+                        lblTime.Visible = true;
+                        lblTime.BringToFront();
+                    }
+                    else
+                    {
+                        lblTime.Visible = false;
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -15790,8 +15802,6 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 24;
                 });
-                //Splash splash = new Splash(); // invoke the about/splash screen
-                //splash.ShowDialog();
                 var modalWindow = new Splash
                 {
                     Owner = this, // Set the parent window as the owner of the modal window

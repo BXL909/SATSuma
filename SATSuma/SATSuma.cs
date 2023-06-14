@@ -33,6 +33,7 @@ using Newtonsoft.Json.Linq;
 using QRCoder;
 using ScottPlot;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,12 +50,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static SATSuma.SATSuma;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
-
-
 #endregion
 
 namespace SATSuma
@@ -11300,8 +11298,10 @@ namespace SATSuma
 
         private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
-            string filePath = "bookmarks.json";
-
+            string bookmarksFileName = "bookmarks.json";
+            string bookmarksFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bookmarksFileName);
+            string filePath = bookmarksFilePath;
+            
             if (!System.IO.File.Exists(filePath))
             {
                 System.IO.File.Create(filePath).Dispose();
@@ -11322,8 +11322,12 @@ namespace SATSuma
             // Serialize the list of bookmark objects into a JSON string
             string json = JsonConvert.SerializeObject(bookmarks);
 
+            string bookmarksFileName = "bookmarks.json";
+            string bookmarksFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bookmarksFileName);
+            string filePath = bookmarksFilePath;
+
             // Write the JSON string to the bookmarks.json file
-            System.IO.File.WriteAllText("bookmarks.json", json);
+            System.IO.File.WriteAllText(filePath, json);
         }
 
         private void HideBookmarksShowFees(object sender, EventArgs e)
@@ -13580,7 +13584,9 @@ namespace SATSuma
 
         private static List<Theme> ReadThemesFromJsonFile()
         {
-            string filePath = "themes.json";
+            string themesFileName = "themes.json";
+            string themesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, themesFileName);
+            string filePath = themesFilePath;
 
             if (!System.IO.File.Exists(filePath))
             {
@@ -13603,8 +13609,12 @@ namespace SATSuma
             // Serialize the list of bookmark objects into a JSON string
             string json = JsonConvert.SerializeObject(themes);
 
-            // Write the JSON string to the bookmarks.json file
-            System.IO.File.WriteAllText("themes.json", json);
+            string themesFileName = "themes.json";
+            string themesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, themesFileName);
+            string filePath = themesFilePath;
+
+            // Write the JSON string to the themes.json file
+            System.IO.File.WriteAllText(filePath, json);
         }
 
         private void TextBoxThemeName_TextChanged(object sender, EventArgs e)

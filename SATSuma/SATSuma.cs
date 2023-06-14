@@ -11,9 +11,9 @@
 ⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   transactions. Xpub queries will only work on the 
 ⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   user's own node. Keys to unlock encrypted bookmarks
 ⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   are not stored anywhere and are uncrecoverable. The
-⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   bookmarks file is bookmarks.json, in the installation
-⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   directory. Themes are stored in themes.json, in the
-⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   installation directory
+⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   bookmarks file is SATSuma_bookmarks.json, and the
+⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   themes file is SATSuma_themes.json, both are in the
+⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
 0.8 this work in progress
@@ -23,7 +23,6 @@ Version history 🍊
  * Taproot support on xpub screen
  * further testing of privacy mode, testnet, own node
  * documentation/website
- * change references to bookmarks.json and themes.json so that they're always found by the installed version
  */
 
 #region Using
@@ -11298,10 +11297,10 @@ namespace SATSuma
 
         private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
-            string bookmarksFileName = "bookmarks.json";
-            string bookmarksFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bookmarksFileName);
+            string bookmarksFileName = "SATSuma_bookmarks.json";
+            string bookmarksFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), bookmarksFileName);
             string filePath = bookmarksFilePath;
-            
+
             if (!System.IO.File.Exists(filePath))
             {
                 System.IO.File.Create(filePath).Dispose();
@@ -11322,8 +11321,8 @@ namespace SATSuma
             // Serialize the list of bookmark objects into a JSON string
             string json = JsonConvert.SerializeObject(bookmarks);
 
-            string bookmarksFileName = "bookmarks.json";
-            string bookmarksFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, bookmarksFileName);
+            string bookmarksFileName = "SATSuma_bookmarks.json";
+            string bookmarksFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), bookmarksFileName);
             string filePath = bookmarksFilePath;
 
             // Write the JSON string to the bookmarks.json file
@@ -13584,8 +13583,8 @@ namespace SATSuma
 
         private static List<Theme> ReadThemesFromJsonFile()
         {
-            string themesFileName = "themes.json";
-            string themesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, themesFileName);
+            string themesFileName = "SATSuma_themes.json";
+            string themesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), themesFileName);
             string filePath = themesFilePath;
 
             if (!System.IO.File.Exists(filePath))
@@ -13609,8 +13608,8 @@ namespace SATSuma
             // Serialize the list of bookmark objects into a JSON string
             string json = JsonConvert.SerializeObject(themes);
 
-            string themesFileName = "themes.json";
-            string themesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, themesFileName);
+            string themesFileName = "SATSuma_themes.json";
+            string themesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), themesFileName);
             string filePath = themesFilePath;
 
             // Write the JSON string to the themes.json file

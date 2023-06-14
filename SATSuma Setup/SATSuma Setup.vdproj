@@ -165,12 +165,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1793A0E5A09BAE945570E7E88FCB533A"
-        "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_17C67811D0D3B3FD1D05D30D89E9D4C6"
         "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
@@ -1594,12 +1588,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6247214E67DFC73E0F9F56C6EBB2E219"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1829,12 +1817,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7A1DB1F3308BAC7B6D41FD560FBEC2C8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1793A0E5A09BAE945570E7E88FCB533A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2485,6 +2467,12 @@
         "OwnerKey" = "8:_13543DC6A8B443472E50788123D5EB86"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6247214E67DFC73E0F9F56C6EBB2E219"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -2503,6 +2491,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -2519,6 +2523,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -2903,37 +2923,6 @@
                     }
                 }
             "SourcePath" = "8:Microsoft.Bcl.AsyncInterfaces.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1793A0E5A09BAE945570E7E88FCB533A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:BetterListViewExpress-net35, Version=3.15.0.0, Culture=neutral, PublicKeyToken=e6c91a3add447be2, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_1793A0E5A09BAE945570E7E88FCB533A"
-                    {
-                    "Name" = "8:BetterListViewExpress-net35.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:BetterListViewExpress-net35.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
@@ -3667,9 +3656,9 @@
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_33F7DA9CD4E24605B37EDBC9974AE542"
             {
             "SourcePath" = "8:..\\SATSuma\\bin\\Debug\\themes.json"
-            "TargetName" = "8:themes.json"
+            "TargetName" = "8:SATSuma_themes.json"
             "Tag" = "8:"
-            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
+            "Folder" = "8:_075DD943DF7D4594901B3D603DC0BD8B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6300,9 +6289,9 @@
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D218E59DB6814C2294DE07F95CBE78D5"
             {
             "SourcePath" = "8:..\\SATSuma\\bin\\Debug\\bookmarks.json"
-            "TargetName" = "8:bookmarks.json"
+            "TargetName" = "8:SATSuma_bookmarks.json"
             "Tag" = "8:"
-            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
+            "Folder" = "8:_075DD943DF7D4594901B3D603DC0BD8B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7222,6 +7211,17 @@
         }
         "Folder"
         {
+            "{1525181F-901A-416C-8A58-119130FE478E}:_075DD943DF7D4594901B3D603DC0BD8B"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                }
+            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_0B7C2453A58D46BDB8F12DF4D197D0B3"
             {
             "Name" = "8:#1916"
@@ -7284,7 +7284,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SATSuma"
         "ProductCode" = "8:{C5961ACB-4C41-461C-9977-463DD6EE62E9}"
-        "PackageCode" = "8:{C5DEBAB1-AE9C-440B-86F1-A4F9CB659D9A}"
+        "PackageCode" = "8:{8EB5220A-42F7-4533-B994-31A446223A9D}"
         "UpgradeCode" = "8:{3A6E09CA-281D-4814-9845-7B9394FA3174}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -7301,7 +7301,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:https://github.com/BXL909/SATSuma"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_9E8D543BCC3741BAB9139C80A7720BEC"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SATSuma", "SATSuma\SATSuma.csproj", "{EAC158F1-252F-40DE-9DE9-B72E43C213C4}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SATSuma Setup", "SATSuma Setup\SATSuma Setup.vdproj", "{48E81032-4F62-4F1B-BB22-217711889253}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{EAC158F1-252F-40DE-9DE9-B72E43C213C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAC158F1-252F-40DE-9DE9-B72E43C213C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAC158F1-252F-40DE-9DE9-B72E43C213C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48E81032-4F62-4F1B-BB22-217711889253}.Debug|Any CPU.ActiveCfg = Debug
+		{48E81032-4F62-4F1B-BB22-217711889253}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

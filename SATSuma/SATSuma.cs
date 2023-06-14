@@ -23,6 +23,7 @@ Version history 🍊
  * Taproot support on xpub screen
  * further testing of privacy mode, testnet, own node
  * documentation/website
+ * change references to bookmarks.json and themes.json so that they're always found by the installed version
  */
 
 #region Using
@@ -15802,6 +15803,9 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 24;
                 });
+
+                //panel48.BackColor = Color.FromArgb(100, 0, 0, 0);
+
                 var modalWindow = new Splash
                 {
                     Owner = this, // Set the parent window as the owner of the modal window

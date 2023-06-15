@@ -7284,7 +7284,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SATSuma"
         "ProductCode" = "8:{C5961ACB-4C41-461C-9977-463DD6EE62E9}"
-        "PackageCode" = "8:{8EB5220A-42F7-4533-B994-31A446223A9D}"
+        "PackageCode" = "8:{29157470-821E-40D9-8B95-25CAB1193CDF}"
         "UpgradeCode" = "8:{3A6E09CA-281D-4814-9845-7B9394FA3174}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -7608,7 +7608,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:SATSuma is free and open source."
+                            "Value" = "8:SATSuma by BXL909. Free and open source."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -7762,7 +7762,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:SATSuma is free and open source."
+                            "Value" = "8:SATSuma by BXL909. Free and open source."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }

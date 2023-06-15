@@ -3658,7 +3658,7 @@
             "SourcePath" = "8:..\\SATSuma\\bin\\Debug\\themes.json"
             "TargetName" = "8:SATSuma_themes.json"
             "Tag" = "8:"
-            "Folder" = "8:_075DD943DF7D4594901B3D603DC0BD8B"
+            "Folder" = "8:_98934864EFDB4CB1A3332C79B3F6EAA4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6291,7 +6291,7 @@
             "SourcePath" = "8:..\\SATSuma\\bin\\Debug\\bookmarks.json"
             "TargetName" = "8:SATSuma_bookmarks.json"
             "Tag" = "8:"
-            "Folder" = "8:_075DD943DF7D4594901B3D603DC0BD8B"
+            "Folder" = "8:_98934864EFDB4CB1A3332C79B3F6EAA4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7220,6 +7220,17 @@
             "Property" = "8:AppDataFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_98934864EFDB4CB1A3332C79B3F6EAA4"
+                    {
+                    "Name" = "8:SATSuma"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8701815665C4438980A54C3B141B33B9"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_0B7C2453A58D46BDB8F12DF4D197D0B3"

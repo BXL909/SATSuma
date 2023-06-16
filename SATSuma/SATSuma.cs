@@ -15750,8 +15750,15 @@ namespace SATSuma
                     {
                         headerNetworkStatusLight.Location = new Point(headerNetworkName.Location.X - headerNetworkStatusLight.Width, headerNetworkStatusLight.Location.Y);
                     });
-
                 }
+                headerNetworkName.Invoke((MethodInvoker)delegate
+                {
+                    headerNetworkName.Location = new Point(774 - headerNetworkName.Width, headerNetworkName.Location.Y);
+                });
+                headerNetworkStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    headerNetworkStatusLight.Location = new Point(headerNetworkName.Location.X - 13, headerNetworkStatusLight.Location.Y);
+                });
             }
             catch (Exception ex)
             {

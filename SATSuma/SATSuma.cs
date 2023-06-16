@@ -21,8 +21,6 @@ Version history 🍊
  * Stuff to do:
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * further testing of privacy mode, testnet, own node
- * documentation/website
  */
 
 #region Using

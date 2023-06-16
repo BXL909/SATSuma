@@ -11297,9 +11297,6 @@ namespace SATSuma
 
         private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
-            //string bookmarksFileName = "SATSuma_bookmarks.json";
-            //string bookmarksFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), bookmarksFileName);
-            //string filePath = bookmarksFilePath;
             string bookmarksFileName = "SATSuma_bookmarks.json";
             string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
@@ -11307,8 +11304,6 @@ namespace SATSuma
             Directory.CreateDirectory(applicationDirectory);
             string bookmarksFilePath = Path.Combine(applicationDirectory, bookmarksFileName);
             string filePath = bookmarksFilePath;
-
-
 
             if (!System.IO.File.Exists(filePath))
             {
@@ -11336,11 +11331,6 @@ namespace SATSuma
             // Create the application directory if it doesn't exist
             Directory.CreateDirectory(applicationDirectory);
             string bookmarksFilePath = Path.Combine(applicationDirectory, bookmarksFileName);
-
-
-
-//            string bookmarksFileName = "SATSuma_bookmarks.json";
-//            string bookmarksFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), bookmarksFileName);
             string filePath = bookmarksFilePath;
 
             // Write the JSON string to the bookmarks.json file
@@ -13601,11 +13591,6 @@ namespace SATSuma
 
         private static List<Theme> ReadThemesFromJsonFile()
         {
-            //string themesFileName = "SATSuma_themes.json";
-            //string themesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), themesFileName);
-            //string filePath = themesFilePath;
-
-
             string themesFileName = "SATSuma_themes.json";
             string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
@@ -13613,8 +13598,6 @@ namespace SATSuma
             Directory.CreateDirectory(applicationDirectory);
             string themesFilePath = Path.Combine(applicationDirectory, themesFileName);
             string filePath = themesFilePath;
-
-
 
             if (!System.IO.File.Exists(filePath))
             {
@@ -13636,10 +13619,6 @@ namespace SATSuma
         {
             // Serialize the list of bookmark objects into a JSON string
             string json = JsonConvert.SerializeObject(themes);
-
-            //string themesFileName = "SATSuma_themes.json";
-            //string themesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), themesFileName);
-            //string filePath = themesFilePath;
 
             string themesFileName = "SATSuma_themes.json";
             string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

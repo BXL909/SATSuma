@@ -8151,8 +8151,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
-
+                
                 // Set the tick and gridline settings
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Ticks(true);
@@ -8244,7 +8243,6 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
 
                 // Set the tick and gridline settings
                 formsPlot1.Plot.XAxis.Ticks(true);
@@ -8323,7 +8321,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("EH/s", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8408,7 +8406,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValuesCapacity.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8493,7 +8491,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValuesChannels.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8653,7 +8651,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8729,7 +8727,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8813,7 +8811,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("trillion", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -8895,7 +8893,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -9007,7 +9005,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
                 //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -9086,7 +9084,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -9198,7 +9196,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
                 //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -9278,7 +9276,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -9390,7 +9388,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
                 //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -9469,7 +9467,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -9581,7 +9579,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
                 //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
@@ -9658,7 +9656,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Block size (MB)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
@@ -9747,7 +9745,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                formsPlot1.Plot.SaveFig("ticks_dateTime.png");
+
                 // prevent navigating beyond the data
                 formsPlot1.Plot.YAxis.SetBoundary(0, 22500000);
                 formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());

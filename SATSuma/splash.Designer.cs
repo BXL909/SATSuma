@@ -49,9 +49,9 @@
             this.label2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label2.Location = new System.Drawing.Point(238, 91);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(91, 14);
+            this.label2.Size = new System.Drawing.Size(98, 14);
             this.label2.TabIndex = 9;
-            this.label2.Text = "SATSuma v0.8";
+            this.label2.Text = "SATSuma v0.81";
             // 
             // linkLabel1
             // 

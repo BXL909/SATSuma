@@ -16,7 +16,8 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
-0.8 this work in progress
+0.81 added ability to save charts as image files. Fixed documentation typos. Added introductory text to installer
+0.8 initial release
 
  * Stuff to do:
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
@@ -10195,7 +10196,7 @@ namespace SATSuma
                             // update coordinate data label below chart
                             lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
                         }
-                        lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width, lblChartMousePositionData.Location.Y);
+                        lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width - btnSaveChart.Width - 10, lblChartMousePositionData.Location.Y);
                     }
                 }
             }
@@ -17801,5 +17802,34 @@ namespace SATSuma
             }
         }
         #endregion
+
+        private void btnSaveChart_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                FileName = "SATSuma.png",
+                Filter = "PNG Files (*.png)|*.png;*.png" +
+                 "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
+                 "|BMP Files (*.bmp)|*.bmp;*.bmp" +
+                 "|All files (*.*)|*.*"
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if (formsPlot1.Visible == true)
+                {
+                    formsPlot1.Plot.SaveFig(sfd.FileName);
+                }
+                if (formsPlot2.Visible == true)
+                {
+                    formsPlot2.Plot.SaveFig(sfd.FileName);
+                }
+                if (formsPlot3.Visible == true)
+                {
+                    formsPlot3.Plot.SaveFig(sfd.FileName);
+                }
+            }
+                
+        }
     }
 }

@@ -848,6 +848,7 @@
             this.btnThemeMenu = new System.Windows.Forms.Button();
             this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
+            this.btnSaveChart = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -11227,6 +11228,7 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.btnSaveChart);
             this.panelCharts.Controls.Add(this.panelChartMarketCapScaleButtons);
             this.panelCharts.Controls.Add(this.btnChartMarketCap);
             this.panelCharts.Controls.Add(this.panelChartLoading);
@@ -11915,7 +11917,7 @@
             // 
             this.lblChartMousePositionData.AutoSize = true;
             this.lblChartMousePositionData.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChartMousePositionData.Location = new System.Drawing.Point(713, 504);
+            this.lblChartMousePositionData.Location = new System.Drawing.Point(550, 504);
             this.lblChartMousePositionData.Name = "lblChartMousePositionData";
             this.lblChartMousePositionData.Size = new System.Drawing.Size(72, 17);
             this.lblChartMousePositionData.TabIndex = 177;
@@ -12743,6 +12745,29 @@
             this.btnMenuThemeSatsuma.UseVisualStyleBackColor = false;
             this.btnMenuThemeSatsuma.Click += new System.EventHandler(this.BtnMenuThemeSatsuma_Click);
             // 
+            // btnSaveChart
+            // 
+            this.btnSaveChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSaveChart.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveChart.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnSaveChart.FlatAppearance.BorderSize = 0;
+            this.btnSaveChart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnSaveChart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveChart.ForeColor = System.Drawing.Color.White;
+            this.btnSaveChart.Location = new System.Drawing.Point(734, 501);
+            this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSaveChart.Name = "btnSaveChart";
+            this.btnSaveChart.Size = new System.Drawing.Size(28, 24);
+            this.btnSaveChart.TabIndex = 275;
+            this.btnSaveChart.TabStop = false;
+            this.btnSaveChart.Text = "💾";
+            this.btnSaveChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.toolTip1.SetToolTip(this.btnSaveChart, "Save chart image");
+            this.btnSaveChart.UseVisualStyleBackColor = false;
+            this.btnSaveChart.Click += new System.EventHandler(this.btnSaveChart_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -12752,12 +12777,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
@@ -13878,6 +13903,7 @@
         private System.Windows.Forms.Button btnThemeMenu;
         private System.Windows.Forms.Button btnMenuThemeBTCdir;
         private System.Windows.Forms.Button btnMenuThemeSatsuma;
+        private System.Windows.Forms.Button btnSaveChart;
     }
 }
 

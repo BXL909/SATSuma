@@ -40,7 +40,7 @@ namespace SATSuma
 
         private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/tips/");
+            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/support/");
         }
 
         private void LinkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -52,7 +52,6 @@ namespace SATSuma
         {
             BackColor = WindowBackgroundColor;
             label2.ForeColor = LabelColor;
-            linkLabel1.ForeColor = LinksColor;
             linkLabel2.ForeColor = LinksColor; 
             linkLabel3.ForeColor = LinksColor;
             linkLabel4.ForeColor = LinksColor;

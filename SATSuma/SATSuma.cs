@@ -16,6 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.82 minor change to 'about' window
 0.81 added ability to save charts as image files. Fixed documentation typos. Added introductory text to installer
 0.8 initial release
 
@@ -10410,6 +10411,35 @@ namespace SATSuma
                 HandleException(ex, "Enabling non-mempool.space charts");
             }
         }
+
+        private void BtnSaveChart_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                FileName = "SATSuma.png",
+                Filter = "PNG Files (*.png)|*.png;*.png" +
+                 "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
+                 "|BMP Files (*.bmp)|*.bmp;*.bmp" +
+                 "|All files (*.*)|*.*"
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if (formsPlot1.Visible == true)
+                {
+                    formsPlot1.Plot.SaveFig(sfd.FileName);
+                }
+                if (formsPlot2.Visible == true)
+                {
+                    formsPlot2.Plot.SaveFig(sfd.FileName);
+                }
+                if (formsPlot3.Visible == true)
+                {
+                    formsPlot3.Plot.SaveFig(sfd.FileName);
+                }
+            }
+
+        }
         #endregion
 
         #region ⚡BOOKMARKS SCREEN⚡
@@ -17802,34 +17832,5 @@ namespace SATSuma
             }
         }
         #endregion
-
-        private void BtnSaveChart_Click(object sender, EventArgs e)
-        {
-            var sfd = new SaveFileDialog
-            {
-                FileName = "SATSuma.png",
-                Filter = "PNG Files (*.png)|*.png;*.png" +
-                 "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
-                 "|BMP Files (*.bmp)|*.bmp;*.bmp" +
-                 "|All files (*.*)|*.*"
-            };
-
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                if (formsPlot1.Visible == true)
-                {
-                    formsPlot1.Plot.SaveFig(sfd.FileName);
-                }
-                if (formsPlot2.Visible == true)
-                {
-                    formsPlot2.Plot.SaveFig(sfd.FileName);
-                }
-                if (formsPlot3.Visible == true)
-                {
-                    formsPlot3.Plot.SaveFig(sfd.FileName);
-                }
-            }
-                
-        }
     }
 }

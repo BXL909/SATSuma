@@ -12766,7 +12766,7 @@
             this.btnSaveChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.toolTip1.SetToolTip(this.btnSaveChart, "Save chart image");
             this.btnSaveChart.UseVisualStyleBackColor = false;
-            this.btnSaveChart.Click += new System.EventHandler(this.btnSaveChart_Click);
+            this.btnSaveChart.Click += new System.EventHandler(this.BtnSaveChart_Click);
             // 
             // SATSuma
             // 

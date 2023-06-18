@@ -17803,7 +17803,7 @@ namespace SATSuma
         }
         #endregion
 
-        private void btnSaveChart_Click(object sender, EventArgs e)
+        private void BtnSaveChart_Click(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog
             {

@@ -14,6 +14,8 @@ All user data is stored in two files (SATSuma_bookmarks.json & SATSuma_themes.js
 SATSuma is completely free and open source. If you like it and want to support the project it would be hugely appreciated. 
 
 https://satsuma.btcdir.org/
+
 https://satsuma.btcdir.org/support/
+
 https://github.com/BXL909/SATSuma
 

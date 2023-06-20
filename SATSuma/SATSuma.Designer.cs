@@ -108,6 +108,7 @@
             this.pictureBoxLightningChannelsChart = new System.Windows.Forms.PictureBox();
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
+            this.btnSaveChart = new System.Windows.Forms.Button();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -848,7 +849,6 @@
             this.btnThemeMenu = new System.Windows.Forms.Button();
             this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
-            this.btnSaveChart = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -2108,6 +2108,29 @@
             this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXOutput.Visible = false;
             this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
+            // 
+            // btnSaveChart
+            // 
+            this.btnSaveChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSaveChart.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveChart.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnSaveChart.FlatAppearance.BorderSize = 0;
+            this.btnSaveChart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnSaveChart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveChart.ForeColor = System.Drawing.Color.White;
+            this.btnSaveChart.Location = new System.Drawing.Point(734, 501);
+            this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSaveChart.Name = "btnSaveChart";
+            this.btnSaveChart.Size = new System.Drawing.Size(28, 24);
+            this.btnSaveChart.TabIndex = 275;
+            this.btnSaveChart.TabStop = false;
+            this.btnSaveChart.Text = "💾";
+            this.btnSaveChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.toolTip1.SetToolTip(this.btnSaveChart, "Save chart image");
+            this.btnSaveChart.UseVisualStyleBackColor = false;
+            this.btnSaveChart.Click += new System.EventHandler(this.BtnSaveChart_Click);
             // 
             // label134
             // 
@@ -8295,6 +8318,7 @@
             // listViewBookmarks
             // 
             this.listViewBookmarks.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewBookmarks.AutoArrange = false;
             this.listViewBookmarks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.listViewBookmarks.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listViewBookmarks.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -8312,7 +8336,6 @@
             this.listViewBookmarks.ShowGroups = false;
             this.listViewBookmarks.Size = new System.Drawing.Size(717, 409);
             this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
-            this.listViewBookmarks.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
             this.listViewBookmarks.UseCompatibleStateImageBehavior = false;
@@ -12745,29 +12768,6 @@
             this.btnMenuThemeSatsuma.UseVisualStyleBackColor = false;
             this.btnMenuThemeSatsuma.Click += new System.EventHandler(this.BtnMenuThemeSatsuma_Click);
             // 
-            // btnSaveChart
-            // 
-            this.btnSaveChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnSaveChart.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSaveChart.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnSaveChart.FlatAppearance.BorderSize = 0;
-            this.btnSaveChart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnSaveChart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveChart.ForeColor = System.Drawing.Color.White;
-            this.btnSaveChart.Location = new System.Drawing.Point(734, 501);
-            this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSaveChart.Name = "btnSaveChart";
-            this.btnSaveChart.Size = new System.Drawing.Size(28, 24);
-            this.btnSaveChart.TabIndex = 275;
-            this.btnSaveChart.TabStop = false;
-            this.btnSaveChart.Text = "💾";
-            this.btnSaveChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.toolTip1.SetToolTip(this.btnSaveChart, "Save chart image");
-            this.btnSaveChart.UseVisualStyleBackColor = false;
-            this.btnSaveChart.Click += new System.EventHandler(this.BtnSaveChart_Click);
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -12777,13 +12777,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelLightningDashboard);

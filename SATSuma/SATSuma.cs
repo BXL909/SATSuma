@@ -16,6 +16,8 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.84 bookmarks are now always displayed in descending date order
+0.83 bug fix (market cap chart no longer becomes permanently disabled). Bug fix (bookmarks will always decrypt with the correct key now). Bug fix (bookmarks can now be deleted when being viewed in their decrypted state)
 0.82 minor change to 'about' window
 0.81 added ability to save charts as image files. Fixed documentation typos. Added introductory text to installer
 0.8 initial release
@@ -23,6 +25,7 @@ Version history 🍊
  * Stuff to do:
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
+ * Make sure bookmarks can be deleted once decrypted (currently have to go back to encryped view first)
  */
 
 #region Using
@@ -52,6 +55,7 @@ using System.Windows.Forms;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
+using System.Collections;
 #endregion
 
 namespace SATSuma
@@ -190,7 +194,6 @@ namespace SATSuma
         private ScottPlot.Plottable.ScatterPlot scatter; // chart data gets plotted onto this
         private ScottPlot.Plottable.MarkerPlot HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
         #endregion
-
         #region ⚡INITIALISE⚡
 
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
@@ -231,7 +234,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
@@ -305,7 +307,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡BITCOIN AND LIGHTNING DASHBOARD SCREENS⚡
         //==============================================================================================================================================================================================
         //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
@@ -1975,7 +1976,6 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
         #endregion
-
         #region ⚡ADDRESS SCREEN⚡
         //==============================================================================================================================================================================================
         //======================== ADDRESS TAB =========================================================================================================================================================
@@ -3122,7 +3122,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡BLOCK SCREEN⚡
         //==============================================================================================================================================================================================
         //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
@@ -3964,7 +3963,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡TRANSACTION SCREEN⚡
         //==============================================================================================================================================================================================
         //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
@@ -5161,7 +5159,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡BLOCK LIST SCREEN⚡
         //==============================================================================================================================================================================================
         //====================== BLOCK LIST SCREEN STUFF ==============================================================================================================================================
@@ -6066,7 +6063,6 @@ namespace SATSuma
         }
 
         #endregion
-
         #region ⚡XPUB SCREEN⚡
         //==============================================================================================================================================================================================
         //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
@@ -7936,7 +7932,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡CHARTS SCREEN⚡
 
         private async void BtnChartPoolsRanking_Click(object sender, EventArgs e)
@@ -9819,6 +9814,7 @@ namespace SATSuma
             btnChartUTXO.Enabled = true;
             btnChartNodesByCountry.Enabled = true;
             btnChartPoolsRanking.Enabled = true;
+            btnChartMarketCap.Enabled = true;
         }
 
         private void HideAllChartKeysAndPanels()
@@ -10441,14 +10437,13 @@ namespace SATSuma
 
         }
         #endregion
-
         #region ⚡BOOKMARKS SCREEN⚡
+        
         private void SetupBookmarksScreen()
         {
             try
             {
                 var bookmarks = ReadBookmarksFromJsonFile();
-
                 btnViewBookmark.Enabled = false;
                 btnDeleteBookmark.Enabled = false;
                 lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
@@ -10592,6 +10587,7 @@ namespace SATSuma
                     }
                 }
 
+
                 listViewBookmarks.Items[0].Selected = true;
 
                 lblBookmarkXpubsCount.Invoke((MethodInvoker)delegate
@@ -10647,7 +10643,7 @@ namespace SATSuma
                 HandleException(ex, "SetupBookmarksScreen");
             }
         }
-
+        
         private static void DeleteBookmarkFromJsonFile(string bookmarkDataToDelete)
         {
             // Read the existing bookmarks from the JSON file
@@ -10949,7 +10945,15 @@ namespace SATSuma
         {
             try
             {
-                string bookmarkDataToDelete = lblBookmarkDataInFull.Text;
+                string bookmarkDataToDelete = "";
+
+                foreach (ListViewItem item in listViewBookmarks.Items)
+                {
+                    if (item.Selected)
+                    {
+                        bookmarkDataToDelete = item.SubItems[3].Text;
+                    }
+                }
                 DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
                 lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
                 lblBookmarkStatusMessage.Text = "bookmark deleted";
@@ -11121,14 +11125,15 @@ namespace SATSuma
 
         private void TextBoxBookmarkKey_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBoxBookmarkProposedNote.Text))
+            if (string.IsNullOrWhiteSpace(textBoxBookmarkKey.Text))
             {
                 textBoxBookmarkKey.Invoke((MethodInvoker)delegate
                 {
                     textBoxBookmarkKey.Text = "enter key to unlock";
+                    textBoxBookmarkKey.ForeColor = Color.Gray;
+                    isBookmarkKeyWatermarkTextDisplayed = true;
                 });
-                textBoxBookmarkKey.ForeColor = Color.Gray;
-                isBookmarkKeyWatermarkTextDisplayed = true;
+               
             }
         }
 
@@ -11164,7 +11169,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡ADD TO BOOKMARKS TAB⚡
         //==============================================================================================================
         //---------------------- ADD TO BOOKMARKS ---------------------------------------------------------------------
@@ -11344,6 +11348,7 @@ namespace SATSuma
 
             // If the JSON file doesn't exist or is empty, return an empty list
             bookmarks ??= new List<Bookmark>();
+            bookmarks = bookmarks.OrderByDescending(b => b.DateAdded).ToList();
             return bookmarks;
         }
 
@@ -11483,7 +11488,6 @@ namespace SATSuma
             hideBookmarkStatusMessageTimer.Stop();
         }
         #endregion
-
         #region ⚡SETTINGS SCREEN⚡
 
         private void TextBoxSettingsXpubMempoolURL_Enter(object sender, EventArgs e)
@@ -12653,7 +12657,6 @@ namespace SATSuma
         }
 
         #endregion
-
         #region ⚡APPEARANCE SCREEN⚡
 
         private void BtnMenuThemeGenesis_Click(object sender, EventArgs e)
@@ -15022,7 +15025,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡REUSEABLE STUFF⚡
         //==============================================================================================================================================================================================
         //====================== COMMON CODE ++=========================================================================================================================================================
@@ -15793,7 +15795,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
         //=============================================================================================================        
         //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
@@ -16585,7 +16586,6 @@ namespace SATSuma
             return this.panelMenu;
         }
         #endregion
-
         #region ⚡MISC UI STUFF⚡
         //=============================================================================================================
         //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
@@ -16773,7 +16773,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region CLASSES
 
         public class Bookmark

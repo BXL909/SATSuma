@@ -72,8 +72,9 @@
     <ApplicationIcon>BTC48.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ColorProgressBar">
-      <HintPath>C:\Users\ben90.DESKTOP-KI3LU8K\Desktop\ColorProgressBar\ColorProgressBar\bin\Release\ColorProgressBar.dll</HintPath>
+    <Reference Include="ColorProgressBar, Version=1.0.1583.20617, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ColorProgressBar\ColorProgressBar\bin\Release\ColorProgressBar.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Connections.Abstractions, Version=7.0.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Connections.Abstractions.7.0.5\lib\net462\Microsoft.AspNetCore.Connections.Abstractions.dll</HintPath>

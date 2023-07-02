@@ -411,12 +411,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3774C6193AA218B781592070A616675B"
-        "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3833EBEC4C2129F3332FB7DC12C73D1C"
         "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
@@ -969,12 +963,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8BBF655641474C0DA7679C4039F5B660"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8D97AE50BBBD03FDC9354AFF0294FBA3"
         "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
@@ -1169,6 +1157,12 @@
         {
         "MsmKey" = "8:_B74CC11EF293CE3E2C64C912A6B68EA9"
         "OwnerKey" = "8:_792E1E282BB0850EEA0BC697C32D696A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B9FFD8069429E44568D09FFCEB1C5DD3"
+        "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1594,6 +1588,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B9FFD8069429E44568D09FFCEB1C5DD3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A6C99835F902359C839AC8D57E8CB04B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1817,12 +1817,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7A1DB1F3308BAC7B6D41FD560FBEC2C8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3774C6193AA218B781592070A616675B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3704,37 +3698,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3774C6193AA218B781592070A616675B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ColorProgressBar, Version=1.0.1583.20617, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_3774C6193AA218B781592070A616675B"
-                    {
-                    "Name" = "8:ColorProgressBar.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ColorProgressBar.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3833EBEC4C2129F3332FB7DC12C73D1C"
             {
             "AssemblyRegister" = "3:1"
@@ -5161,26 +5124,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8BBF655641474C0DA7679C4039F5B660"
-            {
-            "SourcePath" = "8:C:\\Users\\ben90.DESKTOP-KI3LU8K\\Desktop\\SetupBanner.jpg"
-            "TargetName" = "8:SetupBanner.jpg"
-            "Tag" = "8:"
-            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8D97AE50BBBD03FDC9354AFF0294FBA3"
             {
             "AssemblyRegister" = "3:1"
@@ -5897,6 +5840,37 @@
                     }
                 }
             "SourcePath" = "8:System.ValueTuple.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B9FFD8069429E44568D09FFCEB1C5DD3"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ColorProgressBar, Version=1.0.1583.20617, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_B9FFD8069429E44568D09FFCEB1C5DD3"
+                    {
+                    "Name" = "8:ColorProgressBar.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ColorProgressBar.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A005B5299E42465ABF6335A43ACA8167"
@@ -7295,7 +7269,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SATSuma"
         "ProductCode" = "8:{C5961ACB-4C41-461C-9977-463DD6EE62E9}"
-        "PackageCode" = "8:{9D5439A7-038E-4AA0-AD8F-883DAC33EA79}"
+        "PackageCode" = "8:{9DE41DA4-AE7A-4F7C-A54D-D1DAB8EEEAB0}"
         "UpgradeCode" = "8:{3A6E09CA-281D-4814-9845-7B9394FA3174}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -7470,8 +7444,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -7502,8 +7475,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
@@ -7547,8 +7519,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "InstallAllUsersVisible"
@@ -7583,8 +7554,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -7606,8 +7576,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -7664,8 +7633,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -7715,8 +7683,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -7760,8 +7727,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -7809,8 +7775,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -7832,8 +7797,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:2"
-                            "Value" = "8:_8BBF655641474C0DA7679C4039F5B660"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }

@@ -18,6 +18,8 @@ namespace SATSuma
         public Color HeadingTextColor { get; set; }
         public Color ButtonTextColor { get; set; }
         public Color ButtonBackColor { get; set; }
+        public Color ButtonTextColor2 { get; set; }
+        public Color ButtonBackColor2 { get; set; }
         public Color TextBoxBackColor { get; set; }
         public Color TextBoxForeColor { get; set; }
         public Image WindowBackgroundImage { get; set; }
@@ -52,11 +54,11 @@ namespace SATSuma
             panel1.BackColor = TextBoxBackColor;
             lblHelpHeading.ForeColor = HeadingTextColor;
             btnExit.ForeColor = ButtonTextColor;
-            btnHelpTextUp.ForeColor = ButtonTextColor;
-            btnHelpTextDown.ForeColor = ButtonTextColor;
+            btnHelpTextUp.ForeColor = ButtonTextColor2;
+            btnHelpTextDown.ForeColor = ButtonTextColor2;
             btnExit.BackColor = ButtonBackColor;
-            btnHelpTextUp.BackColor = ButtonBackColor;
-            btnHelpTextDown.BackColor = ButtonBackColor;
+            btnHelpTextUp.BackColor = ButtonBackColor2;
+            btnHelpTextDown.BackColor = ButtonBackColor2;
             comboBoxSelectHelp.BackColor = TextBoxBackColor;
             comboBoxSelectHelp.ForeColor = TextBoxForeColor;
             if (WindowBackgroundColor != null)

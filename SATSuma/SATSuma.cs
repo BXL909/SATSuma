@@ -16,6 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.90 updated dependancies. Chart plots are now cleared as soon as they're not required. Added logarithmic hashrate and difficulty charts. Changed location & text of lin/log buttons. Added BTC/fiat/gold value converter to charts screen. Valid/invalid notifications for inputted addresses, TX's or Xpubs are now all consistent. Minor change to node status alerts. Currency buttons no longer omitted from theme changes. Menu items no longer included in themed buttons, but instead inherit from chart background. Button hover colors are now derived from the button's background color, rather than hardcoded.
 0.84 bookmarks are now always displayed in descending date order
 0.83 bug fix (market cap chart no longer becomes permanently disabled). Bug fix (bookmarks will always decrypt with the correct key now). Bug fix (bookmarks can now be deleted when being viewed in their decrypted state)
 0.82 minor change to 'about' window
@@ -23,9 +24,10 @@ Version history 🍊
 0.8 initial release
 
  * Stuff to do:
+ * make mouse hover effects on buttons universal for all buttons, derived from panel (same as main menu now)
+ * finish header menu buttons
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
- * Make sure bookmarks can be deleted once decrypted (currently have to go back to encryped view first)
  */
 
 #region Using
@@ -56,6 +58,7 @@ using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
 using System.Collections;
+using ScottPlot.Renderable;
 #endregion
 
 namespace SATSuma
@@ -63,24 +66,74 @@ namespace SATSuma
     public partial class SATSuma : Form
     {
         #region ⚡VARIABLE DECLARATION⚡
+        #region timers
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
         private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api refreshes
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
+        #endregion
+        #region address screen variables
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
-        private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
+        int rowsReturnedByAddressTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        private string addressScreenConfUnconfOrAllTx = "chain"; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
+        bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
+        #endregion
+        #region transaction screen variables
         private int TransactionOutputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
         private int TransactionInputsScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        private bool isInputButtonPressed = false;
+        private bool InputDownButtonPressed = false;
+        private bool InputUpButtonPressed = false;
+        private bool isOutputButtonPressed = false;
+        private bool OutputDownButtonPressed = false;
+        private bool OutputUpButtonPressed = false;
+        private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
+        #endregion
+        #region xpub screen variables
+        private bool xpubValid = false;
+        private bool isTextBoxMempoolURLWatermarkTextDisplayed = true;
+        private bool isXpubButtonPressed = false;
+        private bool XpubDownButtonPressed = false;
+        private bool XpubUpButtonPressed = false;
+        private string previousXpubNodeStringToCompare = "";
         private int XpubAddressesScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
-        private int LastHighlightedIndex = -1; // used by charts for mousemove events to highlight plots closest to pointer
-        int rowsReturnedByAddressTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        #endregion
+        #region block screen variables
+        private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         int rowsReturnedByBlockTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        #endregion
+        #region bookmark screen variables
+        private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
+        string bookmarkDataInFullPreserved = string.Empty;
+        string bookmarkNoteInFullPreserved = string.Empty;
+        string bookmarkKeyCheckPreserved = string.Empty;
+        private bool isBookmarksButtonPressed = false;
+        private bool bookmarksDownButtonPressed = false;
+        private bool bookmarksUpButtonPressed = false;
+        private bool isBookmarkKeyWatermarkTextDisplayed = true;
+        #endregion
+        #region add bookmark tab variables
+        private bool isBookmarkNoteWatermarkTextDisplayed = true;
+        private bool isEncryptionKeyWatermarkTextDisplayed = true;
+        #endregion
+        #region blocks screen variables
+        private string storedLastSeenBlockNumber = "0"; // restart point to retrieve blocks for block list
+        #endregion
+        #region btc dashboard variables
+        private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
+        #endregion
+        #region settings variables
+        bool privacyMode = false; // disables all comms apart from to full node
+        bool testNet = false; // testnet or mainnet
+        bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
+        bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
+        bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
+        bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
+        bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
+        bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private string xpubNodeURL = ""; // no default value. User must provide path to own node
-        private string addressScreenConfUnconfOrAllTx = "chain"; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
-        private string storedLastSeenBlockNumber = "0"; // restart point to retrieve blocks for block list
         string xpubNodeURLInFile = ""; // stores the xpub node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         string nodeURLInFile = ""; // stores the node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
         string settingsInFile = ""; // stores the settings from the file to check whether any have changed, in which case we'll update the file
@@ -93,9 +146,9 @@ namespace SATSuma
         string PrivacyModeSelected = "0"; // for settings record in bookmarks file 
         string unused1 = "1"; // for settings record in bookmarks file
         string unused2 = "1"; // for settings record in bookmarks file
-        string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
-        string chartType = ""; // keeps track of what type of chart is being displayed
         string previousCustomNodeStringToCompare = ""; // settings screen - to check whether settings have changed before saving them
+        #endregion
+        #region data services
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
@@ -111,21 +164,16 @@ namespace SATSuma
         private UTXODataService _utxoDataService;
         private PoolsRankingDataService _poolsRankingDataService;
         private LightningNodesByCountryService _lightningNodesByCountryService;
-        private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
-        private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
+        #endregion
+        #region api use flag variables
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
         private bool RunBlockchainInfoEndpointAPI = true; // enable/disable API
         private bool RunBitcoinExplorerOrgJSONAPI = true; // enable/disable API
         private bool RunBlockchairComJSONAPI = true; // enable/disable API
         private bool RunMempoolSpaceLightningAPI = true; // enable/disable API
-        bool testNet = false; // testnet or mainnet
+        #endregion
+        #region variables to hold button states
         bool dontDisableButtons = true; // ignore button disables during initial setup
-        bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
-        bool nodeURLAlreadySavedInFile = false; // keeps track of whether a node URL is already saved
-        bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
-        bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
-        bool PartOfAnAllAddressTransactionsRequest = false; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
-        bool ignoreMouseMoveOnChart = false; // ignore mouse move event while chart is still drawing
         bool btnShowAllAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowConfirmedAddressTXWasEnabled = false; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
@@ -162,6 +210,10 @@ namespace SATSuma
         bool btnChartPeriodAllWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartBlockSizeWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartUniqueAddressesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnHashrateScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnHashrateScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartDifficultyLinearWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartDifficultyLogWasEnabled = false; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartAddressScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartAddressScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnPriceChartScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
@@ -174,15 +226,15 @@ namespace SATSuma
         bool btnChartLightningChannelsWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartMarketCapWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartMarketCapLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnPriceConverterWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnViewAddressFromTXInputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnViewAddressFromTXOutputWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
-        bool privacyMode = false; // disables all comms apart from to full node
-        bool isTextBoxSettingsXpubMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
-        bool isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
+        #endregion
+        #region colour variables
         Color subItemBackColor = Color.FromArgb(20, 20, 20);
         Color labelColor = Color.FromArgb(20, 20, 20);
         Color chartsBackgroundColor = Color.FromArgb(20, 20, 20);
@@ -191,11 +243,18 @@ namespace SATSuma
         Color listViewHeaderColor = Color.FromArgb(50, 50, 50);
         Color listViewHeaderTextColor = Color.Silver;
         Color tableTextColor = Color.FromArgb(255, 153, 0);
+        #endregion
+        #region variables specific to chart screen
+        private int LastHighlightedIndex = -1; // used by charts for mousemove events to highlight plots closest to pointer
         private ScottPlot.Plottable.ScatterPlot scatter; // chart data gets plotted onto this
         private ScottPlot.Plottable.MarkerPlot HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
+        bool ignoreMouseMoveOnChart = false; // ignore mouse move event while chart is still drawing
+        string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
+        string chartType = ""; // keeps track of what type of chart is being displayed
         #endregion
-        #region ⚡INITIALISE⚡
+        #endregion
 
+        #region ⚡INITIALISE⚡
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]  // needed for the code that moves the form as not using a standard control
         private extern static void ReleaseCapture();
 
@@ -224,8 +283,6 @@ namespace SATSuma
                 // prepopulate chart with fee rates
                 btnChartPeriodAll.Enabled = false;
                 BtnChartFeeRates_Click(sender, e);
-                formsPlot1.Refresh();
-
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
             }
             catch (WebException ex)
@@ -234,6 +291,7 @@ namespace SATSuma
             }
         }
         #endregion
+
         #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
@@ -255,7 +313,7 @@ namespace SATSuma
             }
         }
 
-        private void Timer1Sec_Tick(object sender, EventArgs e) // update the calendar time and date
+        private void Timer1Sec_Tick(object sender, EventArgs e) // update the time (if displayed) and refresh countdowns, countups, etc
         {
             try
             {
@@ -280,26 +338,24 @@ namespace SATSuma
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
                 CheckNetworkStatus();
-                if (headerNetworkStatusLight.ForeColor == Color.OliveDrab) // get latest block tip and update bitcoin & lightning dashboards
+                using (WebClient client = new WebClient())
                 {
-                    using (WebClient client = new WebClient())
+                    try
                     {
-                        try
+                        string BlockTipURL = NodeURL + "blocks/tip/height";
+                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                        lblBlockNumber.Invoke((MethodInvoker)delegate
                         {
-                            string BlockTipURL = NodeURL + "blocks/tip/height";
-                            string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                            lblBlockNumber.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockNumber.Text = BlockTip;
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleException(ex, "TimerAPIRefreshPeriod_Tick");
-                        }
+                            lblBlockNumber.Text = BlockTip;
+                        });
                     }
-                    UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "TimerAPIRefreshPeriod_Tick");
+                    }
                 }
+                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards
+                PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
             }
             catch (WebException ex)
             {
@@ -307,10 +363,9 @@ namespace SATSuma
             }
         }
         #endregion
-        #region ⚡BITCOIN AND LIGHTNING DASHBOARD SCREENS⚡
-        //==============================================================================================================================================================================================
-        //======================BITCOIN AND LIGHTNING DASHBOARD SPECIFIC STUFF==========================================================================================================================
 
+        #region ⚡BITCOIN AND LIGHTNING DASHBOARD SCREENS⚡
+        #region update dashboards
         public async void UpdateBitcoinAndLightningDashboards()
         {
             ToggleLoadingAnimation("enable");
@@ -318,7 +373,7 @@ namespace SATSuma
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
-
+                #region mempool.space api's
                 Task task0 = Task.Run(async () => // mempool.space api's
                 {
                     // current block height, size and transaction count
@@ -371,7 +426,6 @@ namespace SATSuma
                     try
                     {
                         var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
-                        // move returned data to the labels on the form
                         lblfeesHighPriority.Invoke((MethodInvoker)delegate
                         {
                             lblfeesHighPriority.Text = fastestFee;
@@ -399,7 +453,6 @@ namespace SATSuma
                     try
                     {
                         var (currentHashrate, currentDifficulty) = GetHashrate();
-                        // move returned data to the labels on the form
                         lblHeaderHashrate.Invoke((MethodInvoker)delegate
                         {
                             lblHeaderHashrate.Text = currentHashrate;
@@ -440,11 +493,11 @@ namespace SATSuma
 
                         lblProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate
                         {
-                            lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
+                            lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")";
                         });
                         lblBlockListProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate //Block List
                         {
-                            lblBlockListProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; // update label with truncated value
+                            lblBlockListProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")"; 
                         });
                         decimal progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
                         progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
@@ -534,354 +587,6 @@ namespace SATSuma
                         HandleException(ex, "UpdateAPIGroup1DataFields(GetMempool)");
                     }
 
-                });
-                Task task1 = Task.Run(() =>  // bitcoinexplorer.org JSON for market data
-                {
-                    if (!privacyMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunBitcoinExplorerEndpointAPI)
-                                {
-                                    GetMarketData();
-                                }
-                                else
-                                {
-                                    lblPriceUSD.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblPriceUSD.Text = "disabled";
-                                    });
-
-                                    lblMoscowTime.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblMoscowTime.Text = "disabled";
-                                    });
-                                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblMarketCapUSD.Text = "disabled";
-                                    });
-                                    lblHeaderPrice.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderPrice.Text = "disabled";
-                                    });
-
-                                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderMoscowTime.Text = "disabled";
-                                    });
-                                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderMarketCap.Text = "disabled";
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                lblPriceUSD.Invoke((MethodInvoker)delegate
-                                {
-                                    lblPriceUSD.Text = "0 (TestNet)";
-                                });
-                                lblMoscowTime.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMoscowTime.Text = "0 (TestNet)";
-                                });
-                                lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMarketCapUSD.Text = "0 (TestNet)";
-                                });
-                                lblHeaderPrice.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderPrice.Text = "0 (TestNet)";
-                                });
-                                lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderMoscowTime.Text = "0 (TestNet)";
-                                });
-                                lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderMarketCap.Text = "0 (TestNet)";
-                                });
-                            }
-                            pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + 5, pictureBoxMarketCapChart.Location.Y);
-                            });
-                            pictureBoxPriceChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 5, pictureBoxPriceChart.Location.Y);
-                            });
-                            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
-                            });
-                            SetLightsMessagesAndResetTimers();
-                        }
-                        catch (Exception ex)
-                        {
-                            errorOccurred = true;
-                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task1)");
-                        }
-                    }
-                });
-                Task task2 = Task.Run(() => // blockchain.info endpoints 
-                {
-                    if (!privacyMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunBlockchainInfoEndpointAPI)
-                                {
-                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
-                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblAvgNoTransactions.Text = avgNoTransactions;
-                                    });
-                                    lblBlockReward.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockReward.Text = blockReward;
-                                    });
-                                    decimal DecBlockReward = Convert.ToDecimal(blockReward);
-                                    decimal NextBlockReward = DecBlockReward / 2;
-                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
-                                    });
-                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListBlockReward.Text = blockReward;
-                                    });
-                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBTCInCirc.Text = btcInCirc + " / 21000000";
-                                    });
-                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHashesToSolve.Text = hashesToSolve;
-                                    });
-                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
-                                    });
-                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourTransCount.Text = twentyFourHourTransCount;
-                                    });
-                                    lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourBTCSent.Text = twentyFourHourBTCSent;
-                                    });
-                                }
-                                else
-                                {
-                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblAvgNoTransactions.Text = "disabled";
-                                    });
-                                    lblBlockReward.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockReward.Text = "disabled";
-                                    });
-                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListBlockReward.Text = "disabled";
-                                    });
-                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockRewardAfterHalving.Text = "disabled";
-                                    });
-                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBTCInCirc.Text = "disabled";
-                                    });
-                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHashesToSolve.Text = "disabled";
-                                    });
-                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListAttemptsToSolveBlock.Text = "disabled";
-                                    });
-                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourTransCount.Text = "disabled";
-                                    });
-                                    lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourBTCSent.Text = "disabled";
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                lblAvgNoTransactions.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAvgNoTransactions.Text = "unavailable on TestNet";
-                                });
-                                lblBlockReward.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockReward.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListBlockReward.Text = "unavailable on TestNet";
-                                });
-                                lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockRewardAfterHalving.Text = "unavailable on TestNet";
-                                });
-                                lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBTCInCirc.Text = "unavailable on TestNet";
-                                });
-                                lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHashesToSolve.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListAttemptsToSolveBlock.Text = "unavailable on TestNet";
-                                });
-                                lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lbl24HourTransCount.Text = "unavailable on TestNet";
-                                });
-                                lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                {
-                                    lbl24HourBTCSent.Text = "unavailable on TestNet";
-                                });
-                            }
-                            pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + 5, pictureBoxChartCirculation.Location.Y);
-                            });
-                            SetLightsMessagesAndResetTimers();
-                        }
-                        catch (Exception ex)
-                        {
-                            errorOccurred = true;
-                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task2)");
-                        }
-                    }
-                });
-                Task task3 = Task.Run(() => // Bitcoinexplorer.org JSON
-                {
-                    if (!privacyMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunBitcoinExplorerOrgJSONAPI)
-                                {
-                                    var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
-                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblTransInNextBlock.Text = txInNextBlock;
-                                    });
-                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTXInNextBlock.Text = txInNextBlock;
-                                    });
-                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                                    });
-                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                                    });
-                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFees.Text = nextBlockTotalFees;
-                                    });
-                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
-                                    });
-                                }
-                                else
-                                {
-                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblTransInNextBlock.Text = "disabled";
-                                    });
-                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTXInNextBlock.Text = "disabled";
-                                    });
-                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockMinMaxFee.Text = "disabled";
-                                    });
-                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
-                                    });
-                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFees.Text = "disabled";
-                                    });
-                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTotalFeesInNextBlock.Text = "disabled";
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                lblTransInNextBlock.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTransInNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListTXInNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNextBlockMinMaxFee.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListMinMaxInFeeNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNextBlockTotalFees.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
-                                });
-                            }
-                            pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width + 5, pictureBoxBlockFeesChart.Location.Y);
-                            });
-                            pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + 5, pictureBoxFeeRangeChart.Location.Y);
-                            });
-                            pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + 5, pictureBoxBlockListFeeRangeChart2.Location.Y);
-                            });
-                            pictureBoxBlockListFeeChart2.Invoke((MethodInvoker)delegate
-                            {
-                                pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width + 5, pictureBoxBlockListFeeChart2.Location.Y);
-                            });
-                            SetLightsMessagesAndResetTimers();
-                        }
-                        catch (Exception ex)
-                        {
-                            errorOccurred = true;
-                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task3)");
-                        }
-                    }
                 });
                 Task task4 = Task.Run(() => // mempool.space lightning JSON
                 {
@@ -1116,6 +821,360 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task6)");
                     }
                 });
+                #endregion
+                #region bitcoinexplorer.org api
+                Task task1 = Task.Run(() =>  // bitcoinexplorer.org JSON for market data
+                {
+                    if (!privacyMode)
+                    {
+                        try
+                        {
+                            if (!testNet)
+                            {
+                                if (RunBitcoinExplorerEndpointAPI)
+                                {
+                                    GetMarketData();
+                                }
+                                else
+                                {
+                                    lblPriceUSD.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblPriceUSD.Text = "disabled";
+                                    });
+
+                                    lblMoscowTime.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblMoscowTime.Text = "disabled";
+                                    });
+                                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblMarketCapUSD.Text = "disabled";
+                                    });
+                                    lblHeaderPrice.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderPrice.Text = "disabled";
+                                    });
+
+                                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderMoscowTime.Text = "disabled";
+                                    });
+                                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderMarketCap.Text = "disabled";
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                lblPriceUSD.Invoke((MethodInvoker)delegate
+                                {
+                                    lblPriceUSD.Text = "0 (TestNet)";
+                                });
+                                lblMoscowTime.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMoscowTime.Text = "0 (TestNet)";
+                                });
+                                lblMarketCapUSD.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMarketCapUSD.Text = "0 (TestNet)";
+                                });
+                                lblHeaderPrice.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPrice.Text = "0 (TestNet)";
+                                });
+                                lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderMoscowTime.Text = "0 (TestNet)";
+                                });
+                                lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderMarketCap.Text = "0 (TestNet)";
+                                });
+                            }
+                            pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + 5, pictureBoxMarketCapChart.Location.Y);
+                            });
+                            pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 5, pictureBoxPriceChart.Location.Y);
+                            });
+                            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                            });
+                            SetLightsMessagesAndResetTimers();
+                        }
+                        catch (Exception ex)
+                        {
+                            errorOccurred = true;
+                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task1)");
+                        }
+                    }
+                });
+                Task task3 = Task.Run(() => // Bitcoinexplorer.org JSON
+                {
+                    if (!privacyMode)
+                    {
+                        try
+                        {
+                            if (!testNet)
+                            {
+                                if (RunBitcoinExplorerOrgJSONAPI)
+                                {
+                                    var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
+                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblTransInNextBlock.Text = txInNextBlock;
+                                    });
+                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListTXInNextBlock.Text = txInNextBlock;
+                                    });
+                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                    });
+                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                    });
+                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblNextBlockTotalFees.Text = nextBlockTotalFees;
+                                    });
+                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
+                                    });
+                                }
+                                else
+                                {
+                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblTransInNextBlock.Text = "disabled";
+                                    });
+                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListTXInNextBlock.Text = "disabled";
+                                    });
+                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblNextBlockMinMaxFee.Text = "disabled";
+                                    });
+                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
+                                    });
+                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblNextBlockTotalFees.Text = "disabled";
+                                    });
+                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                    {
+                                        lblBlockListTotalFeesInNextBlock.Text = "disabled";
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTransInNextBlock.Text = "unavailable on TestNet";
+                                });
+                                lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTXInNextBlock.Text = "unavailable on TestNet";
+                                });
+                                lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockMinMaxFee.Text = "unavailable on TestNet";
+                                });
+                                lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListMinMaxInFeeNextBlock.Text = "unavailable on TestNet";
+                                });
+                                lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
+                                {
+                                    lblNextBlockTotalFees.Text = "unavailable on TestNet";
+                                });
+                                lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                                {
+                                    lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
+                                });
+                            }
+                            pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width + 5, pictureBoxBlockFeesChart.Location.Y);
+                            });
+                            pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + 5, pictureBoxFeeRangeChart.Location.Y);
+                            });
+                            pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + 5, pictureBoxBlockListFeeRangeChart2.Location.Y);
+                            });
+                            pictureBoxBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width + 5, pictureBoxBlockListFeeChart2.Location.Y);
+                            });
+                            SetLightsMessagesAndResetTimers();
+                        }
+                        catch (Exception ex)
+                        {
+                            errorOccurred = true;
+                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task3)");
+                        }
+                    }
+                });
+                #endregion
+                #region blockchain.info api
+                Task task2 = Task.Run(() => // blockchain.info endpoints 
+                {
+                    if (!privacyMode)
+                    {
+                        try
+                        {
+                            if (!testNet)
+                            {
+                                if (RunBlockchainInfoEndpointAPI)
+                                {
+                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
+                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblAvgNoTransactions.Text = avgNoTransactions;
+                                    });
+                                    lblBlockReward.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBlockReward.Text = blockReward;
+                                    });
+                                    decimal DecBlockReward = Convert.ToDecimal(blockReward);
+                                    decimal NextBlockReward = DecBlockReward / 2;
+                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
+                                    });
+                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
+                                    {
+                                        lblBlockListBlockReward.Text = blockReward;
+                                    });
+                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBTCInCirc.Text = btcInCirc + " / 21000000";
+                                    });
+                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHashesToSolve.Text = hashesToSolve;
+                                    });
+                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                                    {
+                                        lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
+                                    });
+                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
+                                    {
+                                        lbl24HourTransCount.Text = twentyFourHourTransCount;
+                                    });
+                                    lbl24HourBTCSent.Invoke((MethodInvoker)delegate
+                                    {
+                                        lbl24HourBTCSent.Text = twentyFourHourBTCSent;
+                                    });
+                                }
+                                else
+                                {
+                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblAvgNoTransactions.Text = "disabled";
+                                    });
+                                    lblBlockReward.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBlockReward.Text = "disabled";
+                                    });
+                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
+                                    {
+                                        lblBlockListBlockReward.Text = "disabled";
+                                    });
+                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBlockRewardAfterHalving.Text = "disabled";
+                                    });
+                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBTCInCirc.Text = "disabled";
+                                    });
+                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHashesToSolve.Text = "disabled";
+                                    });
+                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                                    {
+                                        lblBlockListAttemptsToSolveBlock.Text = "disabled";
+                                    });
+                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
+                                    {
+                                        lbl24HourTransCount.Text = "disabled";
+                                    });
+                                    lbl24HourBTCSent.Invoke((MethodInvoker)delegate
+                                    {
+                                        lbl24HourBTCSent.Text = "disabled";
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAvgNoTransactions.Text = "unavailable on TestNet";
+                                });
+                                lblBlockReward.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockReward.Text = "unavailable on TestNet";
+                                });
+                                lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListBlockReward.Text = "unavailable on TestNet";
+                                });
+                                lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockRewardAfterHalving.Text = "unavailable on TestNet";
+                                });
+                                lblBTCInCirc.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBTCInCirc.Text = "unavailable on TestNet";
+                                });
+                                lblHashesToSolve.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHashesToSolve.Text = "unavailable on TestNet";
+                                });
+                                lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                                {
+                                    lblBlockListAttemptsToSolveBlock.Text = "unavailable on TestNet";
+                                });
+                                lbl24HourTransCount.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourTransCount.Text = "unavailable on TestNet";
+                                });
+                                lbl24HourBTCSent.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourBTCSent.Text = "unavailable on TestNet";
+                                });
+                            }
+                            pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + 5, pictureBoxChartCirculation.Location.Y);
+                            });
+                            SetLightsMessagesAndResetTimers();
+                        }
+                        catch (Exception ex)
+                        {
+                            errorOccurred = true;
+                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task2)");
+                        }
+                    }
+                });
+                #endregion
+                #region blockchair.com api
                 Task task5 = Task.Run(() =>  // blockchair.com JSON for chain stats
                 {
                     try
@@ -1298,10 +1357,9 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task8)");
                     }
                 });
-
+                #endregion
                 await Task.WhenAll(task0, task1, task2, task3, task4, task5, task6);
 
-                // If any errors occurred with any of the API calls, a decent error message has already been displayed. Now display the red light and generic error.
                 if (errorOccurred)
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
@@ -1311,7 +1369,7 @@ namespace SATSuma
                     });
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusLight.Text = "🔴"; // red light
+                        lblStatusLight.Text = "🔴"; 
                     });
                     lblRefreshSuccessOrFailMessage.Invoke((MethodInvoker)delegate
                     {
@@ -1321,7 +1379,8 @@ namespace SATSuma
             }
             ToggleLoadingAnimation("disable");
         }
-
+        #endregion
+        #region chart icon clicks
         private void PictureBoxHashrateChart_Click(object sender, EventArgs e)
         {
             BtnChartHashrate_Click(sender, e);
@@ -1387,216 +1446,8 @@ namespace SATSuma
             BtnChartLightningChannels_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
-        //------------------------------------ CURRENCY --------------------------------------------------------------
-
-        private void BtnUSD_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = false;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = true;
-            btnCurrency.Text = "USD $";
-            CloseCurrencyMenuGetMarketDataSaveCurrency();
-        }
-
-        private void BtnEUR_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = false;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = true;
-            btnCurrency.Text = "EUR €";
-            CloseCurrencyMenuGetMarketDataSaveCurrency();
-        }
-
-        private void BtnGBP_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = false;
-            btnXAU.Enabled = true;
-            btnCurrency.Text = "GBP £";
-            CloseCurrencyMenuGetMarketDataSaveCurrency();
-        }
-
-        private void BtnXAU_Click(object sender, EventArgs e)
-        {
-            btnUSD.Enabled = true;
-            btnEUR.Enabled = true;
-            btnGBP.Enabled = true;
-            btnXAU.Enabled = false;
-            btnCurrency.Text = "XAU 🪙";
-            CloseCurrencyMenuGetMarketDataSaveCurrency();
-        }
-
-        private void CloseCurrencyMenuGetMarketDataSaveCurrency()
-        {
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            GetMarketData();
-            SaveSettingsToBookmarksFile();
-        }
-
-        private void GetMarketData()
-        {
-            try
-            {
-                if (!privacyMode)
-                {
-                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                    var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
-                    var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
-                    if (testNet)
-                    {
-                        priceUSD = "0 (TestNet)";
-                        priceGBP = "0 (TestNet)";
-                        priceEUR = "0 (TestNet)";
-                        priceXAU = "0 (TestNet)";
-                        mCapUSD = "0 (TestNet)";
-                        mCapGBP = "0 (TestNet)";
-                        mCapEUR = "0 (TestNet)";
-                        mCapXAU = "0 (TestNet)";
-                        satsUSD = "0 (TestNet)";
-                        satsGBP = "0 (TestNet)";
-                        satsEUR = "0 (TestNet)";
-                        satsXAU = "0 (TestNet)";
-                    }
-                    string price = "";
-                    string mCap = "";
-                    string satsPerUnit = "";
-                    if (!btnUSD.Enabled)
-                    {
-                        price = "$" + priceUSD;
-                        mCap = "$" + mCapUSD;
-                        satsPerUnit = satsUSD;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 USD / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / USD";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (USD)";
-                        });
-                    }
-                    if (!btnEUR.Enabled)
-                    {
-                        price = "€" + priceEUR;
-                        mCap = "€" + mCapEUR;
-                        satsPerUnit = satsEUR;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 EUR / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / EUR";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (EUR)";
-                        });
-                    }
-                    if (!btnGBP.Enabled)
-                    {
-                        price = "£" + priceGBP;
-                        mCap = "£" + mCapGBP;
-                        satsPerUnit = satsGBP;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 GBP / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / GBP";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (GBP)";
-                        });
-                    }
-                    if (!btnXAU.Enabled)
-                    {
-                        price = "🪙" + priceXAU;
-                        mCap = "🪙" + mCapXAU;
-                        satsPerUnit = satsXAU;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 XAU / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / XAU";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (XAU)";
-                        });
-                    }
-
-                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
-                    });
-                    lblPriceUSD.Invoke((MethodInvoker)delegate
-                    {
-                        lblPriceUSD.Text = price;
-                    });
-                    lblHeaderPrice.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderPrice.Text = price;
-                    });
-                    pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                    {
-                        pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
-                    });
-                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                    {
-                        lblMarketCapUSD.Text = mCap;
-                    });
-                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMarketCap.Text = mCap;
-                    });
-                    lblMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblMoscowTime.Text = satsPerUnit;
-                    });
-                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMoscowTime.Text = satsPerUnit;
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "getting market data");
-            }
-        }
-
-        //-----------------------BITCOIN AND LIGHTNING DASHBOARD API CALLS---------------------------------------------
-
+        #endregion
+        #region api calls for dashboards
         private (string currentHashrate, string currentDifficulty) GetHashrate()
         {
             try
@@ -1913,16 +1764,16 @@ namespace SATSuma
                 var response2 = client.GetAsync("https://bitcoinexplorer.org/api/mining/next-block").Result;
                 var json2 = response2.Content.ReadAsStringAsync().Result;
                 var data2 = JObject.Parse(json2);
-                var txInNextBlock = (string)data2["txCount"]; //transaction count
-                var nextBlockMinFee = (string)data2["minFeeRate"]; // minimum fee rate
+                var txInNextBlock = (string)data2["txCount"];
+                var nextBlockMinFee = (string)data2["minFeeRate"];
                 double valuetoround = Convert.ToDouble(nextBlockMinFee);
                 double roundedValue = Math.Round(valuetoround, 2);
                 nextBlockMinFee = Convert.ToString(roundedValue);
-                var nextBlockMaxFee = (string)data2["maxFeeRate"]; // maximum fee rate
+                var nextBlockMaxFee = (string)data2["maxFeeRate"];
                 valuetoround = Convert.ToDouble(nextBlockMaxFee);
                 roundedValue = Math.Round(valuetoround, 2);
                 nextBlockMaxFee = Convert.ToString(roundedValue);
-                var nextBlockTotalFees = (string)data2["totalFees"]; // total fees
+                var nextBlockTotalFees = (string)data2["totalFees"];
                 valuetoround = Convert.ToDouble(nextBlockTotalFees);
                 roundedValue = Math.Round(valuetoround, 2);
                 nextBlockTotalFees = Convert.ToString(roundedValue);
@@ -1976,11 +1827,80 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
         #endregion
-        #region ⚡ADDRESS SCREEN⚡
-        //==============================================================================================================================================================================================
-        //======================== ADDRESS TAB =========================================================================================================================================================
+        #region update seconds to halving
+        private void UpdateSecondsToHalving()
+        {
+            try
+            {
+                if (!testNet)
+                {
+                    if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
+                    {
+                        string secondsString = lblHalvingSecondsRemaining.Text;
+                        try
+                        {
+                            int SecondsToHalving = int.Parse(secondsString);
+                            if (SecondsToHalving > 0)
+                            {
+                                SecondsToHalving--; // one second closer to the halvening!
+                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
+                                });
+                            }
+                        }
+                        catch
+                        {
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalvingSecondsRemaining.Text = "disabled";
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "UpdateSecondsToHalving");
+            }
+        }
+        #endregion
+        #region draw lines between fields on lightning dashboard
+        private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                using Pen pen = new Pen(linesColor, 1);
+                // Capacity connecting lines
+                e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorCapacity.Top + (lblTorCapacity.Height / 2), lblTorCapacity.Left, lblTorCapacity.Top + (lblTorCapacity.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2), lblUnknownCapacity.Left, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
+                // Node connecting lines
+                e.Graphics.DrawLine(pen, lblNodeCount.Right, lblNodeCount.Top + (lblNodeCount.Height / 2), lblTorNodes.Left, lblTorNodes.Top + (lblTorNodes.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorNodes.Top + (lblTorNodes.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2), lblClearnetNodes.Left, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2), lblClearnetTorNodes.Left, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2));
+                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2), lblUnannouncedNodes.Left, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
+                // Channel connecting lines
+                e.Graphics.DrawLine(pen, lblChannelCount.Right, lblChannelCount.Top + (lblChannelCount.Height / 2), lblAverageCapacity.Left, lblAverageCapacity.Top + (lblAverageCapacity.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblChannelCount.Top + (lblChannelCount.Height / 2), (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2), lblAverageFeeRate.Left, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2), lblAverageBaseFeeMtokens.Left, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedCapacity.Top + (lblMedCapacity.Height / 2), lblMedCapacity.Left, lblMedCapacity.Top + (lblMedCapacity.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2), lblMedFeeRate.Left, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2));
+                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "Drawing connectors on lightning dashboard");
+            }
+        }
+        #endregion
+        #endregion
 
-        //--------------- VALIDATE BITCOIN ADDRESS,GENERATE QR, BALANCE, TX, ETC---------------------------------------
+        #region ⚡ADDRESS SCREEN⚡
+        #region setup address screen
         private async void TboxSubmittedAddress_TextChanged(object sender, EventArgs e)
         {
             try
@@ -1991,11 +1911,17 @@ namespace SATSuma
                 TotalAddressTransactionRowsAdded = 0;
 
                 string addressString = textboxSubmittedAddress.Text; // supplied address
+
                 string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
                 if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
                 {
                     ToggleLoadingAnimation("enable"); // start the loading animation
                     DisableEnableAddressButtons("disable"); // disable buttons during operation
+                    lblInvalidAddressIndicator.Invoke((MethodInvoker)delegate
+                    {
+                        lblInvalidAddressIndicator.ForeColor = Color.OliveDrab;
+                        lblInvalidAddressIndicator.Text = "✔️ valid address";
+                    });
                     AddressValidShowControls();
                     lblAddressType.Invoke((MethodInvoker)delegate
                     {
@@ -2035,6 +1961,21 @@ namespace SATSuma
                 }
                 else
                 {
+                    if (addressString == "")
+                    {
+                        lblInvalidAddressIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidAddressIndicator.Text = "";
+                        });
+                    }
+                    else
+                    {
+                        lblInvalidAddressIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidAddressIndicator.ForeColor = Color.IndianRed;
+                            lblInvalidAddressIndicator.Text = "✖️ invalid address";
+                        });
+                    }
                     lblAddressType.Invoke((MethodInvoker)delegate
                     {
                         lblAddressType.Text = "Invalid address format";
@@ -2611,7 +2552,8 @@ namespace SATSuma
                 HandleException(ex, "GetTransactionsForAddress");
             }
         }
-
+        #endregion
+        #region show prev/next tx's
         //------------------------ GET NEXT TRANSACTIONS FOR ADDRESS --------------------------------------------------
         private async void BtnGetNextTransactionsForAddress(object sender, EventArgs e)
         {
@@ -2672,7 +2614,8 @@ namespace SATSuma
                 HandleException(ex, "BtnFirstTransactionForAddress_Click");
             }
         }
-
+        #endregion
+        #region confirmed/mempool/both
         //------------------------ SHOW TRANSACTIONS IN MEMPOOL ------------------------------------------------------
         private void BtnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
         {
@@ -2773,7 +2716,8 @@ namespace SATSuma
                 HandleException(ex, "BtnShowAllTXForAddress_Click");
             }
         }
-
+        #endregion
+        #region navigate from tx row to other screen
         //------------------------ VIEW THE BLOCK CONTAINING THIS TRANSACTION ------------------------------------------
         private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
@@ -2829,7 +2773,8 @@ namespace SATSuma
                 HandleException(ex, "BtnViewTransactionFromAddress_Click");
             }
         }
-
+        #endregion
+        #region listview appearance
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
         private void ListViewAddressTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -2982,7 +2927,8 @@ namespace SATSuma
                 HandleException(ex, "ListViewAddressTransactions_ColumnWidthChanging");
             }
         }
-
+        #endregion
+        #region configure controls
         //------------------------ SHOW ALL THE ADDRESS CONTROLS ------------------------------------------------------
         private void AddressValidShowControls() // show all address related controls
         {
@@ -3108,25 +3054,11 @@ namespace SATSuma
                 HandleException(ex, "DisableEnableAddressButtons");
             }
         }
-
-        private void PanelAddress_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                textboxSubmittedAddress.Location = new Point(label58.Location.X + label58.Width, textboxSubmittedAddress.Location.Y);
-                textboxSubmittedAddress.Width = panel35.Width - textboxSubmittedAddress.Location.X;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PanelAddress_Paint");
-            }
-        }
         #endregion
-        #region ⚡BLOCK SCREEN⚡
-        //==============================================================================================================================================================================================
-        //====================== BLOCK SCREEN STUFF ====================================================================================================================================================
+        #endregion
 
-        //-------------------- PREVENT ANYTHING OTHER THAN NUMERICS IN BLOCK TEXTBOX ----------------------------------
+        #region ⚡BLOCK SCREEN⚡
+        #region user input
         private void TextBoxSubmittedBlockNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3291,7 +3223,8 @@ namespace SATSuma
                 HandleException(ex, "TextBoxSubmittedBlockNumber_TextChanged");
             }
         }
-
+        #endregion
+        #region get the data
         //------------------------ LOOK UP THE BLOCK ------------------------------------------------------------------
         private async void LookupBlock()
         {
@@ -3586,7 +3519,8 @@ namespace SATSuma
                 HandleException(ex, "GetTransactionsForBlocks");
             }
         }
-
+        #endregion
+        #region prev/next transactions
         //------------------------ GET NEXT BATCH OF TRANSACTIONS FOR BLOCK -------------------------------------------
         private async void BtnNextBlockTransactions_Click(object sender, EventArgs e)
         {
@@ -3636,7 +3570,8 @@ namespace SATSuma
                 HandleException(ex, "BtnPreviousBlockTransactions_Click");
             }
         }
-
+        #endregion
+        #region prev/next block
         //------------------------ VIEW PREVIOUS BLOCK ------------------------------------------------------------------
         private void BtnPreviousBlock_Click(object sender, EventArgs e) // decrease block number by 1 and populate block data
         {
@@ -3672,7 +3607,8 @@ namespace SATSuma
                 HandleException(ex, "BtnNextBlock_Click");
             }
         }
-
+        #endregion
+        #region listview appearance
         //------------------------ USER SELECTED A TRANSACTION ROW -----------------------------------------------------
         private void ListViewBlockTransactions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -3832,8 +3768,8 @@ namespace SATSuma
                 HandleException(ex, "ListViewBlockTransactions_DrawSubItem");
             }
         }
-
-        //------------------------ GO TO THE TRANSACTION SCREEN ----------------------------------------------------------
+        #endregion
+        #region navigate from listview to tx screen
         private void BtnViewTransactionFromBlock_Click(object sender, EventArgs e)
         {
             try
@@ -3856,7 +3792,8 @@ namespace SATSuma
                 HandleException(ex, "BtnViewTransactionFromBlock_Click");
             }
         }
-
+        #endregion
+        #region enable/disable buttons
         private void DisableEnableBlockButtons(string enableOrDisableBlockButtons)
         {
             try
@@ -3897,7 +3834,8 @@ namespace SATSuma
                 HandleException(ex, "DisableEnableBlockButtons");
             }
         }
-
+        #endregion
+        #region chart icon clicks
         private void PictureBoxBlockScreenChartBlockSize_Click(object sender, EventArgs e)
         {
             try
@@ -3963,10 +3901,10 @@ namespace SATSuma
             }
         }
         #endregion
-        #region ⚡TRANSACTION SCREEN⚡
-        //==============================================================================================================================================================================================
-        //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
+        #endregion
 
+        #region ⚡TRANSACTION SCREEN⚡
+        #region user input
         private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3992,12 +3930,17 @@ namespace SATSuma
             try
             {
                 string transactionIdToValidate = textBoxTransactionID.Text;
+
                 if (ValidateTransactionId(transactionIdToValidate)) // check if the entered string is valid
                 {
                     bool exists = await TransactionExists(transactionIdToValidate); // then check if it actually exists
                     if (exists)
                     {
-                        lblInvalidTransaction.Visible = false;
+                        lblInvalidTransaction.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidTransaction.ForeColor = Color.OliveDrab;
+                            lblInvalidTransaction.Text = "✔️ valid transaction ID";
+                        });
                         panelTransactionHeadline.Visible = true;
                         panelTransactionDiagram.Visible = true;
                         panel27.Visible = true;
@@ -4026,7 +3969,11 @@ namespace SATSuma
                         listViewTransactionOutputs.Visible = false;
                         btnViewAddressFromTXInput.Visible = false;
                         btnViewAddressFromTXOutput.Visible = false;
-                        lblInvalidTransaction.Visible = true;
+                        lblInvalidTransaction.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidTransaction.ForeColor = Color.IndianRed;
+                            lblInvalidTransaction.Text = "✖️ invalid transaction ID";
+                        });
                     }
                 }
                 else
@@ -4043,7 +3990,21 @@ namespace SATSuma
                     listViewTransactionOutputs.Visible = false;
                     btnViewAddressFromTXInput.Visible = false;
                     btnViewAddressFromTXOutput.Visible = false;
-                    lblInvalidTransaction.Visible = true;
+                    if (transactionIdToValidate == "")
+                    {
+                        lblInvalidTransaction.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidTransaction.Text = "";
+                        });
+                    }
+                    else
+                    {
+                        lblInvalidTransaction.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidTransaction.ForeColor = Color.IndianRed;
+                            lblInvalidTransaction.Text = "✖️ invalid transaction ID";
+                        });
+                    }
                 }
             }
             catch (Exception ex)
@@ -4051,7 +4012,8 @@ namespace SATSuma
                 HandleException(ex, "TextBoxTransactionID_TextChanged");
             }
         }
-
+        #endregion
+        #region validation
         //-------------------- CHECK ITS A VALID TRANSACTION ID FORMAT -----------------------------------------
         private bool ValidateTransactionId(string transactionId) // checks if transaction ID is in a valid format
         {
@@ -4078,7 +4040,8 @@ namespace SATSuma
             DisableEnableTransactionButtons("enable"); // disable buttons during operation
             return response.IsSuccessStatusCode;
         }
-
+        #endregion
+        #region set up transaction screen
         //-------------------- LOOKUP THE TRANSACTION ----------------------------------------------------------
         private async void LookupTransaction()
         {
@@ -4505,7 +4468,8 @@ namespace SATSuma
                 HandleException(ex, "GetTransaction");
             }
         }
-
+        #endregion
+        #region listview appearance
         //-------------------- AN INPUT ROW HAS BEEN SELECTED --------------------------------------------------
         private void ListViewTransactionInputs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -4756,26 +4720,8 @@ namespace SATSuma
                 HandleException(ex, "ListViewTransactionOutputs_DrawSubItem");
             }
         }
-
-        //-------DRAW LINES ON TRANSACTION DIAGRAM FROM PREVIOUSLY STORED LIST-----------------------------------
-        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                Pen pen = new Pen(linesColor);
-
-                // Iterate over the stored list of points and draw lines between them
-                for (int i = 0; i < linePoints.Count - 1; i += 2)
-                {
-                    e.Graphics.DrawLine(pen, linePoints[i], linePoints[i + 1]);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PanelTransactionDiagram_Paint");
-            }
-        }
-
+        #endregion
+        #region listview scrolling
         //-------------------- SCROLL-DOWN INPUTS CLICKED -------------------------------------------------------
         private void BtnTransactionInputsDown_Click(object sender, EventArgs e)
         {
@@ -4807,13 +4753,6 @@ namespace SATSuma
                 HandleException(ex, "BtnTransactionOutputsDown_Click");
             }
         }
-
-        private bool isInputButtonPressed = false;
-        private bool InputDownButtonPressed = false;
-        private bool InputUpButtonPressed = false;
-        private bool isOutputButtonPressed = false;
-        private bool OutputDownButtonPressed = false;
-        private bool OutputUpButtonPressed = false;
 
         //-------------------- SCROLL-DOWN MOUSE-DOWN --------------------------------------------------------
         private void BtnTransactionInputsDown_MouseDown(object sender, MouseEventArgs e)
@@ -5041,6 +4980,59 @@ namespace SATSuma
             }
         }
 
+        //-------------------- PREVENT LIST-VIEW FROM JUMPING TO TOP WHEN PAINTED ------------------------
+        private void PanelTransactionInputs_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
+                {
+                    panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "PanelTransactionInputs_Paint");
+            }
+        }
+
+        private void PanelTransactionOutputs_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
+                {
+                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "PanelTransactionOutputs_Paint");
+            }
+        }
+
+        #endregion
+        #region draw transaction diagram
+        //-------DRAW LINES ON TRANSACTION DIAGRAM FROM PREVIOUSLY STORED LIST-----------------------------------
+        private void PanelTransactionDiagram_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                Pen pen = new Pen(linesColor);
+
+                // Iterate over the stored list of points and draw lines between them
+                for (int i = 0; i < linePoints.Count - 1; i += 2)
+                {
+                    e.Graphics.DrawLine(pen, linePoints[i], linePoints[i + 1]);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "PanelTransactionDiagram_Paint");
+            }
+        }
+        #endregion
+        #region navigate from listview to address screen
         //-------------------- VIEW ADDRESS ------------------------------------------------------------
         private void BtnViewAddressFromTXInput_Click(object sender, EventArgs e)
         {
@@ -5085,38 +5077,8 @@ namespace SATSuma
                 HandleException(ex, "BtnViewAddressFromTXOutput_Click");
             }
         }
-
-        //-------------------- PREVENT LIST-VIEW FROM JUMPING TO TOP WHEN PAINTED ------------------------
-        private void PanelTransactionInputs_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
-                {
-                    panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PanelTransactionInputs_Paint");
-            }
-        }
-
-        private void PanelTransactionOutputs_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
-                {
-                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PanelTransactionOutputs_Paint");
-            }
-        }
-
+        #endregion
+        #region enable/disable buttons
         private void DisableEnableTransactionButtons(string enableOrDisableTransactionButtons)
         {
             try
@@ -5159,11 +5121,10 @@ namespace SATSuma
             }
         }
         #endregion
-        #region ⚡BLOCK LIST SCREEN⚡
-        //==============================================================================================================================================================================================
-        //====================== BLOCK LIST SCREEN STUFF ==============================================================================================================================================
+        #endregion
 
-        //-------------------- VALIDATE BLOCK LIST HEIGHT TO START LIST FROM ------------------------------------------------
+        #region ⚡BLOCK LIST SCREEN⚡
+        #region user input
         private void TextBoxBlockHeightToStartListFrom_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -5328,7 +5289,8 @@ namespace SATSuma
                 HandleException(ex, "textBoxBlockHeightToStartListFrom_TextChanged");
             }
         }
-
+        #endregion
+        #region set up block list screen
         private async void LookupBlockList()
         {
             try
@@ -5520,7 +5482,8 @@ namespace SATSuma
                 HandleException(ex, "GetFifteenBlocksForBlockList");
             }
         }
-
+        #endregion
+        #region prev/next batch of blocks
         //-------------------- GET THE PREVIOUS FIFTEEN BLOCKS --------------------------------------------------------------
         private async void BtnOlder15Blocks_Click(object sender, EventArgs e)
         {
@@ -5554,7 +5517,8 @@ namespace SATSuma
                 HandleException(ex, "BtnNewer15Blocks_Click");
             }
         }
-
+        #endregion
+        #region listview appearance
         private void ListViewBlockList_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -5579,6 +5543,160 @@ namespace SATSuma
             }
         }
 
+        //-------------------- USER TRYING TO CHANGE COLUMN WIDTH -----------------------------------------------------------
+        private void ListViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == 0)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 115) // min width
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 115;
+                    }
+                }
+                if (e.ColumnIndex == 1)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 60;
+                    }
+                }
+                if (e.ColumnIndex == 2)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 60;
+                    }
+                }
+                if (e.ColumnIndex == 3)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 50;
+                    }
+                }
+                if (e.ColumnIndex == 4)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 75) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 75;
+                    }
+                }
+                if (e.ColumnIndex == 5)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 50;
+                    }
+                }
+                if (e.ColumnIndex == 6)
+                {
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 90) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = 90;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewBlockList_ColumnWidthChanging");
+            }
+        }
+
+        //---------------------- FORMAT THE DATA IN THE LISTVIEW ------------------------------------------------------------
+        private void ListViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+                if (text[0] == '+') // if the string is a change to an amount and positive
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
+                }
+                else
+                if (text[0] == '-') // if the string is a change to an amount and negative
+                {
+                    e.SubItem.ForeColor = Color.IndianRed; // make it red
+                }
+
+                var font = listViewBlockList.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    // Clear the background
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    // Clear the background
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewBlockList_DrawSubItem");
+            }
+        }
+        #endregion
+        #region navigate from listview to block screen
+        //-------------------- VIEW INDIVIDUAL BLOCK ------------------------------------------------------------------------
+        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckNetworkStatus();
+                // Get the selected item
+                ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
+                // Get the second subitem in the selected item (index 1)
+                string submittedBlockNumber = selectedItem.SubItems[1].Text;
+                // Set the text of the textBoxSubmittedBlockNumber control
+                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedBlockNumber.Text = submittedBlockNumber; // copy block number to block screen
+                });
+                LookupBlock();
+                //show the block screen
+                BtnMenuBlock_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewBlockFromBlockList_Click");
+            }
+        }
+        #endregion
+        #region detail selected block row
         //-------------------- A ROW HAS BEEN CLICKED ON BLOCKLIST ----------------------------------------------------------
         private async void ListViewBlockList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -5753,159 +5871,8 @@ namespace SATSuma
             }
 
         }
-
-        //-------------------- VIEW INDIVIDUAL BLOCK ------------------------------------------------------------------------
-        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                CheckNetworkStatus();
-                // Get the selected item
-                ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
-                // Get the second subitem in the selected item (index 1)
-                string submittedBlockNumber = selectedItem.SubItems[1].Text;
-                // Set the text of the textBoxSubmittedBlockNumber control
-                textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    textBoxSubmittedBlockNumber.Text = submittedBlockNumber; // copy block number to block screen
-                });
-                LookupBlock();
-                //show the block screen
-                BtnMenuBlock_Click(sender, e);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnViewBlockFromBlockList_Click");
-            }
-        }
-
-        //-------------------- USER TRYING TO CHANGE COLUMN WIDTH -----------------------------------------------------------
-        private void ListViewBlockList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            try
-            {
-                if (e.ColumnIndex == 0)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 115) // min width
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 115;
-                    }
-                }
-                if (e.ColumnIndex == 1)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 60;
-                    }
-                }
-                if (e.ColumnIndex == 2)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 60;
-                    }
-                }
-                if (e.ColumnIndex == 3)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 50;
-                    }
-                }
-                if (e.ColumnIndex == 4)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 75) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 75;
-                    }
-                }
-                if (e.ColumnIndex == 5)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 50;
-                    }
-                }
-                if (e.ColumnIndex == 6)
-                {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 90) // don't allow this one to change
-                    {
-                        e.Cancel = true;
-                        e.NewWidth = 90;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ListViewBlockList_ColumnWidthChanging");
-            }
-        }
-
-        ////-------------------- FORMAT THE DATA IN THE LISTVIEW ------------------------------------------------------------
-        private void ListViewBlockList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
-
-                if (text[0] == '+') // if the string is a change to an amount and positive
-                {
-                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
-                }
-                else
-                if (text[0] == '-') // if the string is a change to an amount and negative
-                {
-                    e.SubItem.ForeColor = Color.IndianRed; // make it red
-                }
-
-                var font = listViewBlockList.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    // Clear the background
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    // Clear the background
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewBlockList.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ListViewBlockList_DrawSubItem");
-            }
-        }
-
+        #endregion
+        #region chart icon clicks
         //---------------------- VIEW CHARTS --------------------------------------------------------------------------------
         private void PictureBoxBlockListDifficultyChart_Click(object sender, EventArgs e)
         {
@@ -6023,7 +5990,8 @@ namespace SATSuma
                 HandleException(ex, "PictureBoxBlockListFeeRangeChart2_Click");
             }
         }
-
+        #endregion
+        #region disable/enable buttons
         private void DisableEnableBlockListButtons(string enableOrDisableBlockListButtons)
         {
             try
@@ -6061,14 +6029,12 @@ namespace SATSuma
                 HandleException(ex, "DisableEnableBlockListButtons");
             }
         }
-
         #endregion
+        #endregion
+
         #region ⚡XPUB SCREEN⚡
-        //==============================================================================================================================================================================================
-        //====================== TRANSACTION SCREEN STUFF ==============================================================================================================================================
-
-        private bool xpubValid = false;
-
+        #region user input & validation
+        //-------------------- VALIDATE AND LOOK UP XPUB --------------------------------------------------------------------
         private void TextBoxSubmittedXpub_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -6094,6 +6060,336 @@ namespace SATSuma
             }
         }
 
+        private void TextBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
+        {
+            xpubValid = false;
+            panel26.Visible = false;
+            lblXpubStatus.Visible = false;
+            panel23.Visible = false;
+            label123.Visible = false;
+            lblSegwitUsedAddresses.Visible = false;
+            lblSegwitSummary.Visible = false;
+            label111.Visible = false;
+            lblLegacyUsedAddresses.Visible = false;
+            lblLegacySummary.Visible = false;
+            label119.Visible = false;
+            lblSegwitP2SHUsedAddresses.Visible = false;
+            lblSegwitP2SHSummary.Visible = false;
+            panel29.Visible = false;
+            label133.Visible = false;
+            lblXpubConfirmedReceived.Visible = false;
+            label129.Visible = false;
+            lblXpubConfirmedSpent.Visible = false;
+            label121.Visible = false;
+            lblXpubConfirmedUnspent.Visible = false;
+            btnXpubAddressUp.Visible = false;
+            btnXpubAddressesDown.Visible = false;
+            listViewXpubAddresses.Visible = false;
+            label135.Visible = false;
+            lblP2SHSummary.Visible = false;
+            lblP2SHUsedAddresses.Visible = false;
+            label140.Visible = false;
+            label141.Visible = false;
+            btnViewAddressFromXpub.Visible = false;
+
+            if (textBoxSubmittedXpub.Text == "")
+            {
+                lblValidXpubIndicator.Invoke((MethodInvoker)delegate
+                {
+                    lblValidXpubIndicator.Text = "";
+                });
+                return;
+            }
+
+            // validate the inputted xpub before proceeding
+            try
+            {
+                string xpubString = textBoxSubmittedXpub.Text;
+                BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
+                PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
+            }
+            catch
+            {
+                xpubValid = false;
+                lblValidXpubIndicator.Invoke((MethodInvoker)delegate
+                {
+                    lblValidXpubIndicator.ForeColor = Color.IndianRed;
+                    lblValidXpubIndicator.Text = "✖️ invalid Xpub";
+                });
+
+                return;
+            }
+            xpubValid = true;
+            lblValidXpubIndicator.Invoke((MethodInvoker)delegate
+            {
+                lblValidXpubIndicator.ForeColor = Color.OliveDrab;
+                lblValidXpubIndicator.Text = "✔️ valid Xpub";
+            });
+            LookupXpub();
+        }
+
+        //-------------------- VALIDATE NODE URL ENTRY ---------------------------------------------------------------------------
+        private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isTextBoxMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxXpubNodeURL.Text = "";
+                    textBoxXpubNodeURL.ForeColor = Color.White;
+                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxMempoolURL_Enter");
+            }
+        }
+
+        private void TextBoxMempoolURL_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBoxXpubNodeURL.Text))
+                {
+                    textBoxXpubNodeURL.Text = "e.g http://umbrel.local:3006/api/";
+                    textBoxXpubNodeURL.ForeColor = Color.Gray;
+                    isTextBoxMempoolURLWatermarkTextDisplayed = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxMempoolURL_Leave");
+            }
+        }
+
+        private void TextBoxMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isTextBoxMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxXpubNodeURL.ForeColor = Color.White;
+                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxMempoolURL_TextChanged");
+            }
+        }
+
+        private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (isTextBoxMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxXpubNodeURL.Text = "";
+                    textBoxXpubNodeURL.ForeColor = Color.White;
+                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
+                }
+                else
+                {
+                    previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxMempoolURL_KeyPress");
+            }
+        }
+
+        private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (previousXpubNodeStringToCompare != textBoxXpubNodeURL.Text)
+                {
+                    textBoxSubmittedXpub.Enabled = false;
+                    lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                    label18.Text = "invalid / node offline";
+                    textBoxSubmittedXpub.Text = "";
+                    previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
+                    CheckNetworkStatus();
+                    // CheckXpubNodeIsOnline();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxMempoolURL_KeyUp");
+            }
+        }
+
+        //-------------------- DERIVATION PATHS ---------------------------------------------------------------------------
+        private void NumberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                if (numberUpDownDerivationPathsToCheck.Value > 100)
+                {
+                    numberUpDownDerivationPathsToCheck.Value = 100;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "NumberUpDownDerivationPathsToCheck_Validating");
+            }
+        }
+
+        private void NumberUpDownDerivationPathsToCheck_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveSettingsToBookmarksFile();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "numberUpDownDerivationPathsToCheck_ValueChanged");
+            }
+        }
+
+        #endregion
+        #region check node online
+        //-------------------- CHECK NODE ONLINE -------------------------------------------------------
+        private async void CheckXpubNodeIsOnline()
+        {
+            using var client = new HttpClient();
+            try
+            {
+                Ping pingSender = new Ping();
+                string pingAddress = "";
+
+
+                if (textBoxXpubNodeURL.Text != "")
+                {
+                    // get the contents of the textbox
+                    string url = textBoxXpubNodeURL.Text;
+
+                    // create a regex pattern to match URLs
+                    string pattern = @"^(http|https):\/\/.*\/api\/$";
+
+                    // create a regex object
+                    Regex regex = new Regex(pattern);
+
+                    // use the regex object to match the contents of the textbox
+                    if (regex.IsMatch(url)) // (at least partially) valid url
+                    {
+                        try
+                        {
+                            xpubNodeURL = textBoxXpubNodeURL.Text;
+                            // get the hostname from the URL
+                            // parse the URL to extract the hostname
+                            Uri uri = new Uri(xpubNodeURL);
+                            string hostname = uri.Host;
+
+                            // resolve the hostname to an IP address
+                            IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
+                            IPAddress ipAddress = hostEntry.AddressList[0];
+                            pingAddress = ipAddress.ToString();
+                        }
+                        catch
+                        {
+                            lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                            lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                            //label18.ForeColor = Color.IndianRed;
+                            //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
+                            Uri uri = new Uri(xpubNodeURL);
+                            string hostname = uri.Host;
+                            label18.Text = hostname;
+                            lblSettingsXpubNodeStatus.Text = hostname;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        //label18.ForeColor = Color.IndianRed;
+                        //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
+                        Uri uri = new Uri(xpubNodeURL);
+                        string hostname = uri.Host;
+                        label18.Text = hostname;
+                        lblSettingsXpubNodeStatus.Text = hostname;
+                        return;
+                    }
+                }
+
+                if (textBoxXpubNodeURL.Text != "")
+                {
+                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        Uri uri = new Uri(xpubNodeURL);
+                        string hostname = uri.Host;
+                        lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
+                        headerNetworkStatusLight.ForeColor = Color.OliveDrab;
+                        //label18.ForeColor = Color.OliveDrab;
+                        //lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
+                        label18.Text = hostname;
+                        //label18.Text = "node online";
+                        lblSettingsXpubNodeStatus.Text = hostname;
+                        // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
+                        DateTime today = DateTime.Today;
+                        string bookmarkData;
+                        string keyCheck = "21m";
+                        bookmarkData = textBoxXpubNodeURL.Text;
+                        textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
+                        var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
+                        if (!xpubNodeURLAlreadySavedInFile)
+                        {
+
+                            // Read the existing bookmarks from the JSON file
+                            var bookmarks = ReadBookmarksFromJsonFile();
+
+                            // Add the new bookmark to the list
+                            bookmarks.Add(newBookmark);
+
+                            // Write the updated list of bookmarks back to the JSON file
+                            WriteBookmarksToJsonFile(bookmarks);
+                            xpubNodeURLAlreadySavedInFile = true;
+                            xpubNodeURLInFile = bookmarkData;
+                        }
+                        else
+                        {
+                            if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
+                            {
+                                //delete the currently saved node url
+                                DeleteBookmarkFromJsonFile(xpubNodeURLInFile);
+                                // Read the existing bookmarks from the JSON file
+                                var bookmarks = ReadBookmarksFromJsonFile();
+                                // Add the new bookmark to the list
+                                bookmarks.Add(newBookmark);
+                                // Write the updated list of bookmarks back to the JSON file
+                                WriteBookmarksToJsonFile(bookmarks);
+                                xpubNodeURLAlreadySavedInFile = true;
+                                xpubNodeURLInFile = bookmarkData;
+                            }
+                        }
+                        textBoxSubmittedXpub.Enabled = true;
+                    }
+                    else
+                    {
+                        // API is not online
+                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                        label18.Text = "invalid / node offline";
+                        lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+                    }
+                }
+            }
+            catch (HttpRequestException)
+            {
+                // API is not online
+                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
+                label18.Text = "invalid / node offline";
+                lblSettingsXpubNodeStatus.Text = "invalid / node offline";
+            }
+        }
+        #endregion
+        #region set up xpub screen
         //-----DERIVE ADDRESSES FOR DIFFERENT ADDRESS TYPES, SCAN FOR TX'S AND OUTPUT TO LIST -------------------------------------
         private async void LookupXpub()
         {
@@ -6104,7 +6400,6 @@ namespace SATSuma
                 // NOT SUPPORTED var newAddress = pubkey.Derive(0).Derive(0).PubKey.GetAddress(ScriptPubKeyType.TaprootBIP86, Network.Main); //Taproot P2SH
 
                 int MaxNumberOfConsecutiveUnusedAddresses = Convert.ToInt32(numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value - 1);
-                //int MaxNumberOfConsecutiveUnusedAddresses = 19; // loop does this amount + 1
                 int segwitAddressesWithNonZeroBalance = 0;
                 int legacyAddressesWithNonZeroBalance = 0;
                 int segwitP2SHAddressesWithNonZeroBalance = 0;
@@ -6178,7 +6473,7 @@ namespace SATSuma
                 btnViewAddressFromXpub.Visible = true;
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
-
+                #region set up the listview
                 //LIST VIEW
                 listViewXpubAddresses.Invoke((MethodInvoker)delegate
                 {
@@ -6222,10 +6517,10 @@ namespace SATSuma
                         listViewXpubAddresses.Columns.Add("Unspent", 100);
                     });
                 }
-
-                // -------------------------------------------------------- TAPROOT :(
-
-                // -------------------------------------------------------- P2WPKH (Bech32 SegWit)
+                #endregion
+                #region Taproot - not yet implemented :(
+                #endregion
+                #region P2WPKH (Bech32 SegWit)
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
                     for (uint i = 0; i < 500; i++)
@@ -6460,8 +6755,8 @@ namespace SATSuma
 
                 }
                 DerivationPath = 0;
-
-                // -------------------------------------------------------- P2PKH legacy
+                #endregion
+                #region P2PKH legacy
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
                     for (uint i = 0; i < 500; i++)
@@ -6696,8 +6991,8 @@ namespace SATSuma
                     legacyAddresses.Clear();
                 }
                 DerivationPath = 0;
-
-                // -------------------------------------------------------- P2SH-P2WPKH
+                #endregion
+                #region P2SH-P2WPKH
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
                     for (uint i = 0; i < 500; i++)
@@ -6934,8 +7229,8 @@ namespace SATSuma
                     segwitP2SHAddresses.Clear();
                 }
                 DerivationPath = 0;
-
-                // -------------------------------------------------------- P2SH
+                #endregion
+                #region P2SH
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
                     for (uint i = 0; i < 500; i++)
@@ -7176,7 +7471,8 @@ namespace SATSuma
                 }
 
                 DerivationPath = 0;
-
+                #endregion
+                #region totals after processing, hide progress bars, re-enable textboxes
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
                     lblXpubStatus.Text = "Finished scanning addresses\r\n" + numberOfAddressesChecked + " addresses checked";
@@ -7196,71 +7492,15 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxXpubNodeURL.Enabled = true;
                 timerHideProgressBars.Start();
+                #endregion
             }
             catch (Exception ex)
             {
                 HandleException(ex, "LookupXpub");
             }
         }
-
-        //-------------------- VALIDATE INPUT AND LOOK UP XPUB --------------------------------------------------------------------
-        private void TextBoxSubmittedXpub_TextChanged(object sender, EventArgs e)
-        {
-            if (textBoxSubmittedXpub.Text == "")
-            {
-                lblValidXpubIndicator.Text = "";
-            }
-            xpubValid = false;
-            panel26.Visible = false;
-            lblXpubStatus.Visible = false;
-            panel23.Visible = false;
-            label123.Visible = false;
-            lblSegwitUsedAddresses.Visible = false;
-            lblSegwitSummary.Visible = false;
-            label111.Visible = false;
-            lblLegacyUsedAddresses.Visible = false;
-            lblLegacySummary.Visible = false;
-            label119.Visible = false;
-            lblSegwitP2SHUsedAddresses.Visible = false;
-            lblSegwitP2SHSummary.Visible = false;
-            panel29.Visible = false;
-            label133.Visible = false;
-            lblXpubConfirmedReceived.Visible = false;
-            label129.Visible = false;
-            lblXpubConfirmedSpent.Visible = false;
-            label121.Visible = false;
-            lblXpubConfirmedUnspent.Visible = false;
-            btnXpubAddressUp.Visible = false;
-            btnXpubAddressesDown.Visible = false;
-            listViewXpubAddresses.Visible = false;
-            label135.Visible = false;
-            lblP2SHSummary.Visible = false;
-            lblP2SHUsedAddresses.Visible = false;
-            label140.Visible = false;
-            label141.Visible = false;
-            btnViewAddressFromXpub.Visible = false;
-
-            // validate the inputted xpub before proceeding
-            try
-            {
-                string xpubString = textBoxSubmittedXpub.Text;
-                BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
-                PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
-            }
-            catch
-            {
-                xpubValid = false;
-                lblValidXpubIndicator.ForeColor = Color.IndianRed;
-                lblValidXpubIndicator.Text = "✖️ Invalid Xpub";
-
-                return;
-            }
-            xpubValid = true;
-            lblValidXpubIndicator.ForeColor = Color.OliveDrab;
-            lblValidXpubIndicator.Text = "✔️ valid Xpub";
-            LookupXpub();
-        }
-
+        #endregion
+        #region listview appearance
         //-------------------- FORMAT DATA IN LISTVIEW ----------------------------------------------------------------------------
         private void ListViewXpubAddresses_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -7329,255 +7569,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "ListViewXpubAddresses_DrawSubItem");
-            }
-        }
-
-        private bool isTextBoxMempoolURLWatermarkTextDisplayed = true;
-
-        //-------------------- VALIDATE NODE URL ENTRY ---------------------------------------------------------------------------
-        private void TextBoxMempoolURL_Enter(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubNodeURL.Text = "";
-                    textBoxXpubNodeURL.ForeColor = Color.White;
-                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxMempoolURL_Enter");
-            }
-        }
-
-        private void TextBoxMempoolURL_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(textBoxXpubNodeURL.Text))
-                {
-                    textBoxXpubNodeURL.Text = "e.g http://umbrel.local:3006/api/";
-                    textBoxXpubNodeURL.ForeColor = Color.Gray;
-                    isTextBoxMempoolURLWatermarkTextDisplayed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxMempoolURL_Leave");
-            }
-        }
-
-        private void TextBoxMempoolURL_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubNodeURL.ForeColor = Color.White;
-                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxMempoolURL_TextChanged");
-            }
-        }
-
-        private string previousXpubNodeStringToCompare = "";
-
-        private void TextBoxMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            try
-            {
-                if (isTextBoxMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubNodeURL.Text = "";
-                    textBoxXpubNodeURL.ForeColor = Color.White;
-                    isTextBoxMempoolURLWatermarkTextDisplayed = false;
-                }
-                else
-                {
-                    previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxMempoolURL_KeyPress");
-            }
-        }
-
-        private void TextBoxMempoolURL_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (previousXpubNodeStringToCompare != textBoxXpubNodeURL.Text)
-                {
-                    textBoxSubmittedXpub.Enabled = false;
-                    lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                    label18.Text = "invalid / node offline";
-                    textBoxSubmittedXpub.Text = "";
-                    previousXpubNodeStringToCompare = textBoxXpubNodeURL.Text;
-                    CheckNetworkStatus();
-                    // CheckXpubNodeIsOnline();
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxMempoolURL_KeyUp");
-            }
-        }
-
-        private void LblSegwitUsedAddresses_Paint(object sender, PaintEventArgs e)
-        {
-            lblSegwitUsedAddresses.Location = new Point(label123.Location.X + label123.Width, label123.Location.Y);
-        }
-
-        private void LblLegacyUsedAddresses_Paint(object sender, PaintEventArgs e)
-        {
-            lblLegacyUsedAddresses.Location = new Point(label111.Location.X + label111.Width, label111.Location.Y);
-        }
-
-        private void LblSegwitP2SHUsedAddresses_Paint(object sender, PaintEventArgs e)
-        {
-            lblSegwitP2SHUsedAddresses.Location = new Point(label119.Location.X + label119.Width, label119.Location.Y);
-        }
-
-        //-------------------- CHECK NODE ONLINE -------------------------------------------------------
-        private async void CheckXpubNodeIsOnline()
-        {
-            using var client = new HttpClient();
-            try
-            {
-                Ping pingSender = new Ping();
-                string pingAddress = "";
-
-
-                if (textBoxXpubNodeURL.Text != "")
-                {
-                    // get the contents of the textbox
-                    string url = textBoxXpubNodeURL.Text;
-
-                    // create a regex pattern to match URLs
-                    string pattern = @"^(http|https):\/\/.*\/api\/$";
-
-                    // create a regex object
-                    Regex regex = new Regex(pattern);
-
-                    // use the regex object to match the contents of the textbox
-                    if (regex.IsMatch(url)) // (at least partially) valid url
-                    {
-                        try
-                        {
-                            xpubNodeURL = textBoxXpubNodeURL.Text;
-                            // get the hostname from the URL
-                            // parse the URL to extract the hostname
-                            Uri uri = new Uri(xpubNodeURL);
-                            string hostname = uri.Host;
-
-                            // resolve the hostname to an IP address
-                            IPHostEntry hostEntry = Dns.GetHostEntry(hostname);
-                            IPAddress ipAddress = hostEntry.AddressList[0];
-                            pingAddress = ipAddress.ToString();
-                        }
-                        catch
-                        {
-                            lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                            lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                            //label18.ForeColor = Color.IndianRed;
-                            //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
-                            Uri uri = new Uri(xpubNodeURL);
-                            string hostname = uri.Host;
-                            label18.Text = hostname;
-                            lblSettingsXpubNodeStatus.Text = hostname;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                        //label18.ForeColor = Color.IndianRed;
-                        //lblSettingsXpubNodeStatus.ForeColor = Color.IndianRed;
-                        Uri uri = new Uri(xpubNodeURL);
-                        string hostname = uri.Host;
-                        label18.Text = hostname;
-                        lblSettingsXpubNodeStatus.Text = hostname;
-                        return;
-                    }
-                }
-
-                if (textBoxXpubNodeURL.Text != "")
-                {
-                    PingReply reply = await pingSender.SendPingAsync(pingAddress);
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        Uri uri = new Uri(xpubNodeURL);
-                        string hostname = uri.Host;
-                        lblXpubNodeStatusLight.ForeColor = Color.OliveDrab;
-                        lblSettingsXpubNodeStatusLight.ForeColor = Color.OliveDrab;
-                        //label18.ForeColor = Color.OliveDrab;
-                        //lblSettingsXpubNodeStatus.ForeColor = Color.OliveDrab;
-                        label18.Text = hostname;
-                        //label18.Text = "node online";
-                        lblSettingsXpubNodeStatus.Text = hostname;
-                        // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
-                        DateTime today = DateTime.Today;
-                        string bookmarkData;
-                        string keyCheck = "21m";
-                        bookmarkData = textBoxXpubNodeURL.Text;
-                        textBoxSettingsXpubMempoolURL.Text = bookmarkData; // write it back to the settings screen too
-                        var newBookmark = new Bookmark { DateAdded = today, Type = "xpubnode", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
-                        if (!xpubNodeURLAlreadySavedInFile)
-                        {
-
-                            // Read the existing bookmarks from the JSON file
-                            var bookmarks = ReadBookmarksFromJsonFile();
-
-                            // Add the new bookmark to the list
-                            bookmarks.Add(newBookmark);
-
-                            // Write the updated list of bookmarks back to the JSON file
-                            WriteBookmarksToJsonFile(bookmarks);
-                            xpubNodeURLAlreadySavedInFile = true;
-                            xpubNodeURLInFile = bookmarkData;
-                        }
-                        else
-                        {
-                            if (xpubNodeURLInFile != textBoxXpubNodeURL.Text)
-                            {
-                                //delete the currently saved node url
-                                DeleteBookmarkFromJsonFile(xpubNodeURLInFile);
-                                // Read the existing bookmarks from the JSON file
-                                var bookmarks = ReadBookmarksFromJsonFile();
-                                // Add the new bookmark to the list
-                                bookmarks.Add(newBookmark);
-                                // Write the updated list of bookmarks back to the JSON file
-                                WriteBookmarksToJsonFile(bookmarks);
-                                xpubNodeURLAlreadySavedInFile = true;
-                                xpubNodeURLInFile = bookmarkData;
-                            }
-                        }
-                        textBoxSubmittedXpub.Enabled = true;
-                    }
-                    else
-                    {
-                        // API is not online
-                        lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                        lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                        label18.Text = "invalid / node offline";
-                        lblSettingsXpubNodeStatus.Text = "invalid / node offline";
-                    }
-                }
-            }
-            catch (HttpRequestException)
-            {
-                // API is not online
-                lblXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                lblSettingsXpubNodeStatusLight.ForeColor = Color.IndianRed;
-                label18.Text = "invalid / node offline";
-                lblSettingsXpubNodeStatus.Text = "invalid / node offline";
             }
         }
 
@@ -7659,26 +7650,6 @@ namespace SATSuma
             }
         }
 
-        //-------------------- HIDE PROGRESS BARS, ETC AFTER A PERIOD ----------------------------------
-        private void TimerHideProgressBars_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                progressBarCheckAllAddressTypes.Visible = false;
-                progressBarCheckEachAddressType.Visible = false;
-                lblCheckAllAddressTypesCount.Visible = false;
-                lblCheckEachAddressTypeCount.Visible = false;
-                label140.Visible = false;
-                label141.Visible = false;
-
-                timerHideProgressBars.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TimerHideProgressBars_Tick");
-            }
-        }
-
         //-------------------- ROW SELECTED ON THE LISTVIEW --------------------------------------------
         private void ListViewXpubAddresses_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -7721,7 +7692,29 @@ namespace SATSuma
                 HandleException(ex, "listViewXpubAddresses_ItemSelectionChanged");
             }
         }
+        #endregion
+        #region reposition & hide elements
+        //-------------------- HIDE PROGRESS BARS, ETC AFTER A PERIOD ----------------------------------
+        private void TimerHideProgressBars_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                progressBarCheckAllAddressTypes.Visible = false;
+                progressBarCheckEachAddressType.Visible = false;
+                lblCheckAllAddressTypesCount.Visible = false;
+                lblCheckEachAddressTypeCount.Visible = false;
+                label140.Visible = false;
+                label141.Visible = false;
 
+                timerHideProgressBars.Stop();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TimerHideProgressBars_Tick");
+            }
+        }
+        #endregion
+        #region listview scrolling
         //-------------------- SCROLL-DOWN LISTVIEW ----------------------------------------------------
         private void BtnXpubAddressesDown_Click(object sender, EventArgs e)
         {
@@ -7737,10 +7730,6 @@ namespace SATSuma
                 HandleException(ex, "BtnXpubAddressesDown_Click");
             }
         }
-
-        private bool isXpubButtonPressed = false;
-        private bool XpubDownButtonPressed = false;
-        private bool XpubUpButtonPressed = false;
 
         private void BtnXpubAddressesDown_MouseDown(object sender, MouseEventArgs e)
         {
@@ -7853,20 +7842,6 @@ namespace SATSuma
             }
         }
 
-        private void PanelXpub_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                textBoxSubmittedXpub.Location = new Point(label146.Location.X + label146.Width, textBoxSubmittedXpub.Location.Y);
-                textBoxXpubNodeURL.Location = new Point(label114.Location.X + label114.Width + 4, textBoxXpubNodeURL.Location.Y);
-                lblValidXpubIndicator.Location = new Point(textBoxSubmittedXpub.Location.X + textBoxSubmittedXpub.Width, lblValidXpubIndicator.Location.Y);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PanelXpub_Paint");
-            }
-        }
-
         private void PanelXpubContainer_Paint(object sender, PaintEventArgs e)
         {
             try
@@ -7881,7 +7856,8 @@ namespace SATSuma
                 HandleException(ex, "PanelXpubContainer_Paint");
             }
         }
-
+        #endregion
+        #region navigate from listview to address screen
         //-------------------- VIEW ADDRESS --------------------------------------------------------------
         private void BtnViewAddressFromXpub_Click(object sender, EventArgs e)
         {
@@ -7904,36 +7880,11 @@ namespace SATSuma
                 HandleException(ex, "btnViewAddressFromXpub_Click");
             }
         }
-
-        private void NumberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
-        {
-            try
-            {
-                if (numberUpDownDerivationPathsToCheck.Value > 100)
-                {
-                    numberUpDownDerivationPathsToCheck.Value = 100;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "NumberUpDownDerivationPathsToCheck_Validating");
-            }
-        }
-
-        private void NumberUpDownDerivationPathsToCheck_ValueChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                SaveSettingsToBookmarksFile();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "numberUpDownDerivationPathsToCheck_ValueChanged");
-            }
-        }
         #endregion
-        #region ⚡CHARTS SCREEN⚡
+        #endregion
 
+        #region ⚡CHARTS SCREEN⚡
+        #region chart - pools ranking
         private async void BtnChartPoolsRanking_Click(object sender, EventArgs e)
         {
             try
@@ -7950,7 +7901,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot2.Plot.Clear();
+                ClearAllChartData();
                 int desiredSpacing = 98; // spacing added to title to force left-align in
                 string spacing = new string('\u00A0', desiredSpacing);
                 string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
@@ -8081,7 +8032,8 @@ namespace SATSuma
                 HandleException(ex, "Generating pools ranking chart");
             }
         }
-
+        #endregion
+        #region chart - fee rates
         private async void BtnChartFeeRates_Click(object sender, EventArgs e)
         {
             try
@@ -8096,7 +8048,7 @@ namespace SATSuma
                 btnChartFeeRates.Enabled = false;
                 DisableIrrelevantTimePeriods();
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8148,7 +8100,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 11, bold: true);
                 formsPlot1.Plot.XAxis.Label("");
-                
+
                 // Set the tick and gridline settings
                 formsPlot1.Plot.XAxis.Ticks(true);
                 formsPlot1.Plot.YAxis.Ticks(true);
@@ -8169,7 +8121,8 @@ namespace SATSuma
                 HandleException(ex, "Generating fee rates chart");
             }
         }
-
+        #endregion
+        #region chart - nodes by network
         private async void BtnChartNodesByNetwork_Click(object sender, EventArgs e)
         {
             try
@@ -8193,7 +8146,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, bold: true);
 
                 PrepareLinearScaleChart();
@@ -8263,7 +8216,8 @@ namespace SATSuma
                 HandleException(ex, "Generating nodes by network chart");
             }
         }
-
+        #endregion
+        #region chart - hashrate linear and log
         private async void BtnChartHashrate_Click(object sender, EventArgs e)
         {
             try
@@ -8272,6 +8226,8 @@ namespace SATSuma
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
                 formsPlot3.Visible = false;
+                btnHashrateScaleLinear.Enabled = false;
+                btnHashrateScaleLog.Enabled = true;
                 chartType = "hashrate";
                 // if chart period too short for this chart, set it to max instead
                 if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
@@ -8284,7 +8240,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, bold: true);
 
                 PrepareLinearScaleChart();
@@ -8338,6 +8294,8 @@ namespace SATSuma
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
+
+                panelHashrateScaleButtons.Visible = true;
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -8348,6 +8306,119 @@ namespace SATSuma
             }
         }
 
+        private async void BtnHashrateScaleLog_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ShowChartLoadingPanel();
+                HideAllChartKeysAndPanels();
+                formsPlot2.Visible = false;
+                formsPlot3.Visible = false;
+                btnHashrateScaleLinear.Enabled = true;
+                btnHashrateScaleLog.Enabled = false;
+                chartType = "hashratelog";
+
+                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+                {
+                    chartPeriod = "all";
+                    btnChartPeriodAll.Enabled = false;
+                }
+
+                EnableAllCharts();
+                btnChartHashrate.Enabled = false;
+                DisableIrrelevantTimePeriods();
+
+                ToggleLoadingAnimation("enable");
+                DisableEnableChartButtons("disable");
+
+                // clear any previous graph
+                ClearAllChartData();
+                formsPlot1.Plot.Title("Hashrate (terrahash per second) - " + chartPeriod + " (log scale)", size: 13, bold: true);
+
+                // get a series of historic dates/hashrates/difficulties
+                var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
+                JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
+
+                //split the data into two lists
+                List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+
+                // set the number of points on the graph
+                int pointCount = hashratesList.Count;
+
+                // create arrays of doubles of the hashrates and the dates
+                double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E12)).ToArray(); // divide by 1E12 to get terrahash
+                                                                                                                 // create a new list of the dates, this time in DateTime format
+                List<DateTime> dateTimes = hashratesList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
+                double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+
+                List<double> filteredYValues = new List<double>();
+                List<double> filteredXValues = new List<double>();
+
+                for (int i = 0; i < hashratesList.Count; i++)
+                {
+                    //double yValue = (double)hashratesList[i].AvgHashrate;
+                    double yValue = (double)yValues[i];
+                    if (yValue > 0)
+                    {
+                        filteredYValues.Add(Math.Log10(yValue));
+                        filteredXValues.Add(xValues[i]);
+                    }
+                }
+
+                double[] yValues2 = filteredYValues.ToArray();
+                double[] xValuesFiltered = filteredXValues.ToArray();
+
+
+                double minY = yValues2.Min();
+                double maxY = yValues2.Max() * 1.05;
+                formsPlot1.Plot.SetAxisLimits(xValuesFiltered.Min(), xValuesFiltered.Max(), minY, maxY);
+                scatter = formsPlot1.Plot.AddScatter(xValuesFiltered, yValues2, lineWidth: 1, markerSize: 1);
+
+                // Use a custom formatter to control the label for each tick mark
+                static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
+                formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
+
+                // Use log-spaced minor tick marks and grid lines
+                formsPlot1.Plot.YAxis.MinorLogScale(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MinorGrid(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+
+                formsPlot1.Plot.XAxis.DateTimeFormat(true);
+                formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Label("TH/s", size: 11, bold: true);
+                formsPlot1.Plot.XAxis.Label("");
+
+                // prevent navigating beyond the data
+                formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
+                //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+                // Add a red circle we can move around later as a highlighted point indicator
+                HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+                HighlightedPoint.Color = Color.Red;
+                HighlightedPoint.MarkerSize = 10;
+                HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+                HighlightedPoint.IsVisible = false;
+                // refresh the graph
+                formsPlot1.Refresh();
+                formsPlot1.Visible = true;
+                panelHashrateScaleButtons.Visible = true;
+
+                ToggleLoadingAnimation("disable");
+                DisableEnableChartButtons("enable");
+                HideChartLoadingPanel();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Generating hashrate chart (log) chart");
+            }
+        }
+        #endregion
+        #region chart - lightning capacity
         private async void BtnChartLightningCapacity_Click(object sender, EventArgs e)
         {
             try
@@ -8369,7 +8440,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8432,7 +8503,8 @@ namespace SATSuma
                 HandleException(ex, "Generating lightning capacity chart");
             }
         }
-
+        #endregion
+        #region chart - lightning channels
         private async void BtnChartLightningChannels_Click(object sender, EventArgs e)
         {
             try
@@ -8454,7 +8526,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8517,7 +8589,8 @@ namespace SATSuma
                 HandleException(ex, "Generating lightning channels chart");
             }
         }
-
+        #endregion
+        #region chart - nodes by country
         private async void BtnChartNodesByCountry_Click(object sender, EventArgs e)
         {
             try
@@ -8533,7 +8606,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot3.Plot.Clear();
+                ClearAllChartData();
                 formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: 13, bold: true);
 
                 // switch to linear scaling in case it was log before
@@ -8601,7 +8674,8 @@ namespace SATSuma
                 HandleException(ex, "Generating nodes by country chart");
             }
         }
-
+        #endregion
+        #region chart - block reward
         private async void BtnChartReward_Click(object sender, EventArgs e)
         {
             try
@@ -8620,7 +8694,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8678,7 +8752,8 @@ namespace SATSuma
                 HandleException(ex, "Generating block reward chart");
             }
         }
-
+        #endregion
+        #region chart - block fees
         private async void BtnChartBlockFees_Click(object sender, EventArgs e)
         {
             try
@@ -8697,7 +8772,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8753,7 +8828,8 @@ namespace SATSuma
                 HandleException(ex, "Generating block fees chart");
             }
         }
-
+        #endregion
+        #region chart - difficulty linear and log
         private async void BtnChartDifficulty_Click(object sender, EventArgs e)
         {
             try
@@ -8762,6 +8838,8 @@ namespace SATSuma
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
                 formsPlot3.Visible = false;
+                btnChartDifficultyLinear.Enabled = false;
+                btnChartDifficultyLog.Enabled = true;
                 chartType = "difficulty";
 
                 // if chart period too short for this chart, set it to max instead
@@ -8779,7 +8857,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8828,6 +8906,7 @@ namespace SATSuma
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
+                panelChartDifficultyScaleButtons.Visible = true;
 
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
@@ -8839,6 +8918,119 @@ namespace SATSuma
             }
         }
 
+        private async void BtnChartDifficultyLog_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ShowChartLoadingPanel();
+                HideAllChartKeysAndPanels();
+                formsPlot2.Visible = false;
+                formsPlot3.Visible = false;
+                btnChartDifficultyLinear.Enabled = true;
+                btnChartDifficultyLog.Enabled = false;
+                chartType = "difficultylog";
+
+                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+                {
+                    chartPeriod = "all";
+                    btnChartPeriodAll.Enabled = false;
+                }
+
+                EnableAllCharts();
+                btnChartDifficulty.Enabled = false;
+                DisableIrrelevantTimePeriods();
+
+                ToggleLoadingAnimation("enable");
+                DisableEnableChartButtons("disable");
+
+                // clear any previous graph
+                ClearAllChartData();
+                formsPlot1.Plot.Title("Difficulty - " + chartPeriod + " (log scale)", size: 13, bold: true);
+
+                // get a series of historic dates/hashrates/difficulties
+                var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
+                JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
+
+                //split the data into two lists
+                List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+
+                // set the number of points on the graph
+                int pointCount = difficultyList.Count;
+
+                // create arrays of doubles of the difficulties and the dates
+                double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
+                                                                                                                 // create a new list of the dates, this time in DateTime format
+                List<DateTime> dateTimes = difficultyList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Time)).LocalDateTime).ToList();
+                double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
+
+
+                List<double> filteredYValues = new List<double>();
+                List<double> filteredXValues = new List<double>();
+
+                for (int i = 0; i < difficultyList.Count; i++)
+                {
+                    //double yValue = (double)hashratesList[i].AvgHashrate;
+                    double yValue = (double)yValues[i];
+                    if (yValue > 0)
+                    {
+                        filteredYValues.Add(Math.Log10(yValue));
+                        filteredXValues.Add(xValues[i]);
+                    }
+                }
+
+                double[] yValues2 = filteredYValues.ToArray();
+                double[] xValuesFiltered = filteredXValues.ToArray();
+
+
+                double minY = yValues2.Min();
+                double maxY = yValues2.Max() * 1.05;
+                formsPlot1.Plot.SetAxisLimits(xValuesFiltered.Min(), xValuesFiltered.Max(), minY, maxY);
+                scatter = formsPlot1.Plot.AddScatter(xValuesFiltered, yValues2, lineWidth: 1, markerSize: 1);
+
+                // Use a custom formatter to control the label for each tick mark
+                static string logTickLabels(double y) => Math.Pow(10, y).ToString("N0");
+                formsPlot1.Plot.YAxis.TickLabelFormat(logTickLabels);
+
+                // Use log-spaced minor tick marks and grid lines
+                formsPlot1.Plot.YAxis.MinorLogScale(true);
+                formsPlot1.Plot.YAxis.MajorGrid(true);
+                formsPlot1.Plot.YAxis.MinorGrid(true);
+                formsPlot1.Plot.XAxis.MajorGrid(true);
+
+                formsPlot1.Plot.XAxis.DateTimeFormat(true);
+                formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                formsPlot1.Plot.XAxis.Ticks(true);
+                formsPlot1.Plot.YAxis.Label("trillion", size: 11, bold: true);
+                formsPlot1.Plot.XAxis.Label("");
+
+                // prevent navigating beyond the data
+                formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
+                //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
+
+                // Add a red circle we can move around later as a highlighted point indicator
+                HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
+                HighlightedPoint.Color = Color.Red;
+                HighlightedPoint.MarkerSize = 10;
+                HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
+                HighlightedPoint.IsVisible = false;
+                // refresh the graph
+                formsPlot1.Refresh();
+                formsPlot1.Visible = true;
+                panelChartDifficultyScaleButtons.Visible = true;
+
+                ToggleLoadingAnimation("disable");
+                DisableEnableChartButtons("enable");
+                HideChartLoadingPanel();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Generating difficulty chart (log) chart");
+            }
+        }
+        #endregion
+        #region chart - unique addresses linear and log
         private async void BtnChartUniqueAddresses_Click(object sender, EventArgs e)
         {
             try
@@ -8864,7 +9056,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -8948,7 +9140,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
@@ -9028,7 +9220,8 @@ namespace SATSuma
                 HandleException(ex, "Generating unique addresses (log) chart");
             }
         }
-
+        #endregion
+        #region chart - price linear and log
         private async void BtnChartPrice_Click(object sender, EventArgs e)
         {
             try
@@ -9055,7 +9248,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -9139,7 +9332,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
@@ -9219,7 +9412,8 @@ namespace SATSuma
                 HandleException(ex, "Generating price (log) chart");
             }
         }
-
+        #endregion
+        #region chart - market cap linear and log
         private async void BtnChartMarketCap_Click(object sender, EventArgs e)
         {
             try
@@ -9247,7 +9441,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -9324,6 +9518,7 @@ namespace SATSuma
                 }
 
                 EnableAllCharts();
+                btnChartMarketCap.Enabled = false;
                 btnChartMarketCapScaleLog.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
@@ -9331,7 +9526,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of market cap data
@@ -9411,7 +9606,8 @@ namespace SATSuma
                 HandleException(ex, "Generating market cap (log) chart");
             }
         }
-
+        #endregion
+        #region chart - utxo count linear and log
         private async void BtnChartUTXO_Click(object sender, EventArgs e)
         {
             try
@@ -9438,7 +9634,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -9522,7 +9718,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: 13, bold: true);
 
                 // get a series of historic price data
@@ -9602,7 +9798,8 @@ namespace SATSuma
                 HandleException(ex, "Generating UTXO (log) chart");
             }
         }
-
+        #endregion
+        #region chart - block size
         private async void BtnChartBlockSize_Click(object sender, EventArgs e)
         {
             try
@@ -9618,7 +9815,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -9682,7 +9879,8 @@ namespace SATSuma
                 HandleException(ex, "Generating block size chart");
             }
         }
-
+        #endregion
+        #region chart - circulation
         private async void BtnChartCirculation_Click(object sender, EventArgs e)
         {
             try
@@ -9707,7 +9905,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // clear any previous graph
-                formsPlot1.Plot.Clear();
+                ClearAllChartData();
                 formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
 
@@ -9773,30 +9971,700 @@ namespace SATSuma
                 HandleException(ex, "Generating circulation chart");
             }
         }
-
-        private void PrepareLinearScaleChart()
+        #endregion
+        #region chart - price converter
+        #region set up chart area
+        private void BtnPriceConverter_Click(object sender, EventArgs e)
+        {
+            HideAllChartKeysAndPanels();
+            formsPlot1.Visible = false;
+            formsPlot2.Visible = false;
+            formsPlot3.Visible = false;
+            panelPriceConverter.Visible = true;
+            EnableAllCharts();
+            btnPriceConverter.Enabled = false;
+            ToggleLoadingAnimation("enable");
+            DisableEnableChartButtons("disable");
+            // clear any previous graph
+            ClearAllChartData();
+            PopulateConverterScreen();
+            ToggleLoadingAnimation("disable");
+            DisableEnableChartButtons("enable");
+            HideChartLoadingPanel();
+        }
+        #endregion
+        #region populate data
+        private void PopulateConverterScreen()
         {
             try
             {
-                // switch to linear scaling in case it was log before
-                formsPlot1.Plot.YAxis.MinorLogScale(false);
-                formsPlot1.Plot.YAxis.MajorGrid(false);
-                formsPlot1.Plot.YAxis.MinorGrid(false);
+                if (!privacyMode)
+                {
+                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
 
-                // Define a new tick label formatter for the linear scale
-                static string linearTickLabels(double y) => y.ToString("N0");
-                formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
-
-                // Revert back to automatic data area
-                formsPlot1.Plot.ResetLayout();
-                formsPlot1.Plot.AxisAuto();
+                    #region USD list
+                    labelPCUSD1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD1.Text = (Convert.ToDecimal(priceUSD) / 100000000).ToString("0.00");
+                    });
+                    labelPCUSD2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD2.Text = (Convert.ToDecimal(priceUSD) / 10000000).ToString("0.00");
+                    });
+                    labelPCUSD3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD3.Text = (Convert.ToDecimal(priceUSD) / 1000000).ToString("0.00");
+                    });
+                    labelPCUSD4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD4.Text = (Convert.ToDecimal(priceUSD) / 100000).ToString("0.00");
+                    });
+                    labelPCUSD5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD5.Text = (Convert.ToDecimal(priceUSD) / 10000).ToString("0.00");
+                    });
+                    labelPCUSD6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD6.Text = (Convert.ToDecimal(priceUSD) / 1000).ToString("0.00");
+                    });
+                    labelPCUSD7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD7.Text = (Convert.ToDecimal(priceUSD) / 100).ToString("0.00");
+                    });
+                    labelPCUSD8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD8.Text = (Convert.ToDecimal(priceUSD) / 10).ToString("0.00");
+                    });
+                    labelPCUSD9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD9.Text = (Convert.ToDecimal(priceUSD)).ToString("0.00");
+                    });
+                    labelPCUSD10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD10.Text = (Convert.ToDecimal(priceUSD) * 10).ToString("0.00");
+                    });
+                    labelPCUSD11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD11.Text = (Convert.ToDecimal(priceUSD) * 100).ToString("0.00");
+                    });
+                    labelPCUSD12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD12.Text = (Convert.ToDecimal(priceUSD) * 1000).ToString("0.00");
+                    });
+                    labelPCUSD13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD13.Text = (Convert.ToDecimal(priceUSD) * 10000).ToString("0.00");
+                    });
+                    labelPCUSD14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD14.Text = (Convert.ToDecimal(priceUSD) * 100000).ToString("0.00");
+                    });
+                    labelPCUSD15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD15.Text = (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00");
+                    });
+                    labelPCUSD16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD16.Text = (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00");
+                    });
+                    labelPCUSD17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region EUR list
+                    labelPCEUR1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR1.Text = (Convert.ToDecimal(priceEUR) / 100000000).ToString("0.00");
+                    });
+                    labelPCEUR2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR2.Text = (Convert.ToDecimal(priceEUR) / 10000000).ToString("0.00");
+                    });
+                    labelPCEUR3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR3.Text = (Convert.ToDecimal(priceEUR) / 1000000).ToString("0.00");
+                    });
+                    labelPCEUR4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR4.Text = (Convert.ToDecimal(priceEUR) / 100000).ToString("0.00");
+                    });
+                    labelPCEUR5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR5.Text = (Convert.ToDecimal(priceEUR) / 10000).ToString("0.00");
+                    });
+                    labelPCEUR6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR6.Text = (Convert.ToDecimal(priceEUR) / 1000).ToString("0.00");
+                    });
+                    labelPCEUR7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR7.Text = (Convert.ToDecimal(priceEUR) / 100).ToString("0.00");
+                    });
+                    labelPCEUR8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR8.Text = (Convert.ToDecimal(priceEUR) / 10).ToString("0.00");
+                    });
+                    labelPCEUR9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR9.Text = (Convert.ToDecimal(priceEUR)).ToString("0.00");
+                    });
+                    labelPCEUR10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR10.Text = (Convert.ToDecimal(priceEUR) * 10).ToString("0.00");
+                    });
+                    labelPCEUR11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR11.Text = (Convert.ToDecimal(priceEUR) * 100).ToString("0.00");
+                    });
+                    labelPCEUR12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR12.Text = (Convert.ToDecimal(priceEUR) * 1000).ToString("0.00");
+                    });
+                    labelPCEUR13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR13.Text = (Convert.ToDecimal(priceEUR) * 10000).ToString("0.00");
+                    });
+                    labelPCEUR14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR14.Text = (Convert.ToDecimal(priceEUR) * 100000).ToString("0.00");
+                    });
+                    labelPCEUR15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR15.Text = (Convert.ToDecimal(priceEUR) * 1000000).ToString("0.00");
+                    });
+                    labelPCEUR16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR16.Text = (Convert.ToDecimal(priceEUR) * 10000000).ToString("0.00");
+                    });
+                    labelPCEUR17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR17.Text = (Convert.ToDecimal(priceEUR) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region GBP list
+                    labelPCGBP1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP1.Text = (Convert.ToDecimal(priceGBP) / 100000000).ToString("0.00");
+                    });
+                    labelPCGBP2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP2.Text = (Convert.ToDecimal(priceGBP) / 10000000).ToString("0.00");
+                    });
+                    labelPCGBP3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP3.Text = (Convert.ToDecimal(priceGBP) / 1000000).ToString("0.00");
+                    });
+                    labelPCGBP4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP4.Text = (Convert.ToDecimal(priceGBP) / 100000).ToString("0.00");
+                    });
+                    labelPCGBP5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP5.Text = (Convert.ToDecimal(priceGBP) / 10000).ToString("0.00");
+                    });
+                    labelPCGBP6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP6.Text = (Convert.ToDecimal(priceGBP) / 1000).ToString("0.00");
+                    });
+                    labelPCGBP7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP7.Text = (Convert.ToDecimal(priceGBP) / 100).ToString("0.00");
+                    });
+                    labelPCGBP8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP8.Text = (Convert.ToDecimal(priceGBP) / 10).ToString("0.00");
+                    });
+                    labelPCGBP9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP9.Text = (Convert.ToDecimal(priceGBP)).ToString("0.00");
+                    });
+                    labelPCGBP10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP10.Text = (Convert.ToDecimal(priceGBP) * 10).ToString("0.00");
+                    });
+                    labelPCGBP11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP11.Text = (Convert.ToDecimal(priceGBP) * 100).ToString("0.00");
+                    });
+                    labelPCGBP12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP12.Text = (Convert.ToDecimal(priceGBP) * 1000).ToString("0.00");
+                    });
+                    labelPCGBP13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP13.Text = (Convert.ToDecimal(priceGBP) * 10000).ToString("0.00");
+                    });
+                    labelPCGBP14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP14.Text = (Convert.ToDecimal(priceGBP) * 100000).ToString("0.00");
+                    });
+                    labelPCGBP15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP15.Text = (Convert.ToDecimal(priceGBP) * 1000000).ToString("0.00");
+                    });
+                    labelPCGBP16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP16.Text = (Convert.ToDecimal(priceGBP) * 10000000).ToString("0.00");
+                    });
+                    labelPCGBP17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP17.Text = (Convert.ToDecimal(priceGBP) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region XAU list
+                    labelPCXAU1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU1.Text = (Convert.ToDecimal(priceXAU) / 100000000).ToString("0.00");
+                    });
+                    labelPCXAU2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU2.Text = (Convert.ToDecimal(priceXAU) / 10000000).ToString("0.00");
+                    });
+                    labelPCXAU3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU3.Text = (Convert.ToDecimal(priceXAU) / 1000000).ToString("0.00");
+                    });
+                    labelPCXAU4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU4.Text = (Convert.ToDecimal(priceXAU) / 100000).ToString("0.00");
+                    });
+                    labelPCXAU5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU5.Text = (Convert.ToDecimal(priceXAU) / 10000).ToString("0.00");
+                    });
+                    labelPCXAU6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU6.Text = (Convert.ToDecimal(priceXAU) / 1000).ToString("0.00");
+                    });
+                    labelPCXAU7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU7.Text = (Convert.ToDecimal(priceXAU) / 100).ToString("0.00");
+                    });
+                    labelPCXAU8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU8.Text = (Convert.ToDecimal(priceXAU) / 10).ToString("0.00");
+                    });
+                    labelPCXAU9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU9.Text = (Convert.ToDecimal(priceXAU)).ToString("0.00");
+                    });
+                    labelPCXAU10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU10.Text = (Convert.ToDecimal(priceXAU) * 10).ToString("0.00");
+                    });
+                    labelPCXAU11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU11.Text = (Convert.ToDecimal(priceXAU) * 100).ToString("0.00");
+                    });
+                    labelPCXAU12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU12.Text = (Convert.ToDecimal(priceXAU) * 1000).ToString("0.00");
+                    });
+                    labelPCXAU13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU13.Text = (Convert.ToDecimal(priceXAU) * 10000).ToString("0.00");
+                    });
+                    labelPCXAU14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU14.Text = (Convert.ToDecimal(priceXAU) * 100000).ToString("0.00");
+                    });
+                    labelPCXAU15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU15.Text = (Convert.ToDecimal(priceXAU) * 1000000).ToString("0.00");
+                    });
+                    labelPCXAU16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU16.Text = (Convert.ToDecimal(priceXAU) * 10000000).ToString("0.00");
+                    });
+                    labelPCXAU17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region calculate fields derived from user input
+                    SetCalculatedFiatAmounts();
+                    SetCalculatedUSDAmount();
+                    SetCalculatedEURAmount();
+                    SetCalculatedGBPAmount();
+                    SetCalculatedXAUAmount();
+                    #endregion
+                }
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                HandleException(ex, "switching to linear scale chart");
+                HandleException(ex, "getting market data");
+            }
+        }
+        #endregion
+        #region clear contents of textboxes on focus
+        private void TextBoxConvertUSDtoBTC_Enter(object sender, EventArgs e)
+        {
+            textBoxConvertUSDtoBTC.Invoke((MethodInvoker)delegate
+            {
+                textBoxConvertUSDtoBTC.Text = "";
+            });
+        }
+
+        private void TextBoxConvertEURtoBTC_Enter(object sender, EventArgs e)
+        {
+            textBoxConvertEURtoBTC.Invoke((MethodInvoker)delegate
+            {
+                textBoxConvertEURtoBTC.Text = "";
+            });
+        }
+
+        private void TextBoxConvertGBPtoBTC_Enter(object sender, EventArgs e)
+        {
+            textBoxConvertGBPtoBTC.Invoke((MethodInvoker)delegate
+            {
+                textBoxConvertGBPtoBTC.Text = "";
+            });
+        }
+
+        private void TextBoxConvertXAUtoBTC_Enter(object sender, EventArgs e)
+        {
+            textBoxConvertXAUtoBTC.Invoke((MethodInvoker)delegate
+            {
+                textBoxConvertXAUtoBTC.Text = "";
+            });
+        }
+
+        private void TextBoxConvertBTCtoFiat_Enter(object sender, EventArgs e)
+        {
+            textBoxConvertBTCtoFiat.Invoke((MethodInvoker)delegate
+            {
+                textBoxConvertBTCtoFiat.Text = "";
+            });
+        }
+        #endregion
+        #region set textboxes to 0 if left empty by user
+        private void TextBoxConvertUSDtoBTC_Leave(object sender, EventArgs e)
+        {
+            if (textBoxConvertUSDtoBTC.Text == "")
+            {
+                textBoxConvertUSDtoBTC.Invoke((MethodInvoker)delegate
+                {
+                    textBoxConvertUSDtoBTC.Text = "0";
+                });
             }
         }
 
+        private void TextBoxConvertEURtoBTC_Leave(object sender, EventArgs e)
+        {
+            if (textBoxConvertEURtoBTC.Text == "")
+            {
+                textBoxConvertEURtoBTC.Invoke((MethodInvoker)delegate
+                {
+                    textBoxConvertEURtoBTC.Text = "0";
+                });
+            }
+        }
+
+        private void TextBoxConvertGBPtoBTC_Leave(object sender, EventArgs e)
+        {
+            if (textBoxConvertGBPtoBTC.Text == "")
+            {
+                textBoxConvertGBPtoBTC.Invoke((MethodInvoker)delegate
+                {
+                    textBoxConvertGBPtoBTC.Text = "0";
+                });
+            }
+        }
+
+        private void TextBoxConvertXAUtoBTC_Leave(object sender, EventArgs e)
+        {
+            if (textBoxConvertXAUtoBTC.Text == "")
+            {
+                textBoxConvertXAUtoBTC.Invoke((MethodInvoker)delegate
+                {
+                    textBoxConvertXAUtoBTC.Text = "0";
+                });
+            }
+        }
+
+        private void TextBoxConvertBTCtoFiat_Leave(object sender, EventArgs e)
+        {
+            if (textBoxConvertBTCtoFiat.Text == "")
+            {
+                textBoxConvertBTCtoFiat.Invoke((MethodInvoker)delegate
+                {
+                    textBoxConvertBTCtoFiat.Text = "0";
+                });
+            }
+        }
+        #endregion
+        #region validate user inputs
+        private void CurrencyTextBoxes_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                TextBox textBox = sender as TextBox;
+                string text = textBox.Text;
+
+                // Allow digits, backspace, and decimal point
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Only allow one decimal point
+                if (e.KeyChar == '.' && text.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Get the current caret position
+                int caretPos = textBox.SelectionStart;
+
+                // Check if the new character is being inserted after the decimal point
+                if (text.Contains('.') && caretPos > text.IndexOf('.'))
+                {
+                    // Allow two digits after the decimal point
+                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
+                    if (decimalPlaces >= 2)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                // Combine the current text with the newly typed character
+                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+
+                // Remove any commas in the text
+                string strippedText = newText.Replace(",", "");
+
+                // max = 100 trillion
+                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
+                {
+                    if (value > 100000000000000)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "CurrencyTextBoxes_KeyPress - validating currency input");
+            }
+        }
+
+        private void TextBoxConvertBTCtoFiat_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                TextBox textBox = sender as TextBox;
+                string text = textBox.Text;
+
+                // Allow digits, backspace, and decimal point
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Only allow one decimal point
+                if (e.KeyChar == '.' && text.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Get the current caret position
+                int caretPos = textBox.SelectionStart;
+
+                // Check if the new character is being inserted after the decimal point
+                if (text.Contains('.') && caretPos > text.IndexOf('.'))
+                {
+                    // Allow 8 digits after the decimal point
+                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
+                    if (decimalPlaces >= 8)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                // Combine the current text with the newly typed character
+                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+
+                // Remove any commas in the text
+                string strippedText = newText.Replace(",", "");
+
+                // max = 21 million
+                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
+                {
+                    if (value > 21000000)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "textBoxConvertBTCtoFiat_KeyPress - validating BTC input");
+            }
+        }
+        #endregion
+        #region respond to and calculate from user inputs
+        private void TextBoxConvertBTCtoFiat_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxConvertBTCtoFiat.Text != "")
+            {
+                SetCalculatedFiatAmounts();
+            }
+        }
+
+        private void SetCalculatedFiatAmounts()
+        {
+            labelPCUSDcustom.Invoke((MethodInvoker)delegate
+            {
+                labelPCUSDcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00");
+            });
+            labelPCEURcustom.Invoke((MethodInvoker)delegate
+            {
+                labelPCEURcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00");
+            });
+            labelPCGBPcustom.Invoke((MethodInvoker)delegate
+            {
+                labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
+            });
+            labelPCXAUcustom.Invoke((MethodInvoker)delegate
+            {
+                labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
+            });
+        }
+
+        private void FiatAmountTextBoxes_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxConvertUSDtoBTC.Text != "")
+            {
+                SetCalculatedUSDAmount();
+            }
+            if (textBoxConvertEURtoBTC.Text != "")
+            {
+                SetCalculatedEURAmount();
+            }
+            if (textBoxConvertGBPtoBTC.Text != "")
+            {
+                SetCalculatedGBPAmount();
+            }
+            if (textBoxConvertXAUtoBTC.Text != "")
+            {
+                SetCalculatedXAUAmount();
+            }
+        }
+
+        private void SetCalculatedUSDAmount()
+        {
+            if (labelPCUSD9.Text != "USD" && Convert.ToDecimal(labelPCUSD9.Text) > 0)
+            {
+                lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedUSDFromBTCAmount.Text = (Convert.ToDecimal(textBoxConvertUSDtoBTC.Text) / Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00000000");
+                });
+                label267.Invoke((MethodInvoker)delegate
+                {
+                    label267.Text = "$" + textBoxConvertUSDtoBTC.Text + " USD (US dollar) =";
+                });
+                lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - 4, lblCalculatedUSDFromBTCAmount.Location.Y);
+                });
+                label273.Invoke((MethodInvoker)delegate
+                {
+                    label273.Location = new Point(lblCalculatedUSDFromBTCAmount.Location.X + lblCalculatedUSDFromBTCAmount.Width, label273.Location.Y);
+                });
+            }
+        }
+        private void SetCalculatedEURAmount()
+        {
+            if (labelPCEUR9.Text != "EUR" && Convert.ToDecimal(labelPCEUR9.Text) > 0)
+            {
+                lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedEURFromBTCAmount.Text = (Convert.ToDecimal(textBoxConvertEURtoBTC.Text) / Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00000000");
+                });
+                label270.Invoke((MethodInvoker)delegate
+                {
+                    label270.Text = "€" + textBoxConvertEURtoBTC.Text + " EUR (European euro) =";
+                });
+                lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - 4, lblCalculatedEURFromBTCAmount.Location.Y);
+                });
+                label274.Invoke((MethodInvoker)delegate
+                {
+                    label274.Location = new Point(lblCalculatedEURFromBTCAmount.Location.X + lblCalculatedEURFromBTCAmount.Width, label274.Location.Y);
+                });
+            }
+        }
+        private void SetCalculatedGBPAmount()
+        {
+            if (labelPCGBP9.Text != "GBP" && Convert.ToDecimal(labelPCGBP9.Text) > 0)
+            {
+                lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedGBPFromBTCAmount.Text = (Convert.ToDecimal(textBoxConvertGBPtoBTC.Text) / Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00000000");
+                });
+                label269.Invoke((MethodInvoker)delegate
+                {
+                    label269.Text = "£" + textBoxConvertGBPtoBTC.Text + " GBP (British pound sterling) =";
+                });
+                lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - 4, lblCalculatedGBPFromBTCAmount.Location.Y);
+                });
+                label276.Invoke((MethodInvoker)delegate
+                {
+                    label276.Location = new Point(lblCalculatedGBPFromBTCAmount.Location.X + lblCalculatedGBPFromBTCAmount.Width, label276.Location.Y);
+                });
+            }
+        }
+        private void SetCalculatedXAUAmount()
+        {
+            if (labelPCXAU9.Text != "XAU" && Convert.ToDecimal(labelPCXAU9.Text) > 0)
+            {
+                lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedXAUFromBTCAmount.Text = (Convert.ToDecimal(textBoxConvertXAUtoBTC.Text) / Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00000000");
+                });
+                label268.Invoke((MethodInvoker)delegate
+                {
+                    label268.Text = "🪙" + textBoxConvertXAUtoBTC.Text + " XAU (ounce of gold) =";
+                });
+                lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
+                {
+                    lblCalculatedXAUFromBTCAmount.Location = new Point(label268.Location.X + label268.Width - 4, lblCalculatedXAUFromBTCAmount.Location.Y);
+                });
+                label275.Invoke((MethodInvoker)delegate
+                {
+                    label275.Location = new Point(lblCalculatedXAUFromBTCAmount.Location.X + lblCalculatedXAUFromBTCAmount.Width, label275.Location.Y);
+                });
+            }
+        }
+        #endregion
+        #endregion
+        #region show/hide chart loading panel
+        private void ShowChartLoadingPanel()
+        {
+            pictureBoxChartLoadingAnimation.Enabled = true;
+            panelChartLoading.Visible = true;
+        }
+
+        private void HideChartLoadingPanel()
+        {
+            pictureBoxChartLoadingAnimation.Enabled = false;
+            panelChartLoading.Visible = false;
+        }
+        #endregion
+        #region disable/enable charts, time periods, hide panels, etc
         private void EnableAllCharts()
         {
             btnChartHashrate.Enabled = true;
@@ -9815,10 +10683,19 @@ namespace SATSuma
             btnChartNodesByCountry.Enabled = true;
             btnChartPoolsRanking.Enabled = true;
             btnChartMarketCap.Enabled = true;
+            btnPriceConverter.Enabled = true;
+        }
+
+        private void ClearAllChartData()
+        {
+            formsPlot1.Plot.Clear();
+            formsPlot2.Plot.Clear();
+            formsPlot3.Plot.Clear();
         }
 
         private void HideAllChartKeysAndPanels()
         {
+            panelHashrateScaleButtons.Visible = false;
             panelChartUTXOScaleButtons.Visible = false;
             panelUniqueAddressesScaleButtons.Visible = false;
             panelPriceScaleButtons.Visible = false;
@@ -9826,94 +10703,8 @@ namespace SATSuma
             panelCirculationKey.Visible = false;
             panelFeeRatesKey.Visible = false;
             panelChartMarketCapScaleButtons.Visible = false;
-        }
-
-        private void BtnChartPeriod_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Control[] chartPeriodButtons = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll };
-
-                Button clickedButton = (Button)sender;
-                clickedButton.Enabled = false;
-
-                foreach (Control control in chartPeriodButtons)
-                {
-                    if (control is Button && control == clickedButton)
-                    {
-                        chartPeriod = clickedButton.Text;
-                    }
-                    if (control is Button && control != clickedButton)
-                    {
-                        control.Enabled = true;
-                    }
-                }
-
-                if (chartType == "hashrate")
-                {
-                    BtnChartHashrate_Click(sender, e);
-                }
-                if (chartType == "blockfees")
-                {
-                    BtnChartBlockFees_Click(sender, e);
-                }
-                if (chartType == "difficulty")
-                {
-                    BtnChartDifficulty_Click(sender, e);
-                }
-                if (chartType == "price")
-                {
-                    BtnChartPrice_Click(sender, e);
-                }
-                if (chartType == "pricelog")
-                {
-                    BtnChartPriceLog_Click(sender, e);
-                }
-                if (chartType == "reward")
-                {
-                    BtnChartReward_Click(sender, e);
-                }
-                if (chartType == "feerates")
-                {
-                    BtnChartFeeRates_Click(sender, e);
-                }
-                if (chartType == "blocksize")
-                {
-                    BtnChartBlockSize_Click(sender, e);
-                }
-                if (chartType == "addresses")
-                {
-                    BtnChartUniqueAddresses_Click(sender, e);
-                }
-                if (chartType == "addresseslog")
-                {
-                    BtnChartUniqueAddressesLog_Click(sender, e);
-                }
-                if (chartType == "poolranking")
-                {
-                    BtnChartPoolsRanking_Click(sender, e);
-                }
-                if (chartType == "lightningnodesbynetwork")
-                {
-                    BtnChartNodesByNetwork_Click(sender, e);
-                }
-                if (chartType == "lightningcapacity")
-                {
-                    BtnChartLightningCapacity_Click(sender, e);
-                }
-                if (chartType == "lightningchannels")
-                {
-                    BtnChartLightningChannels_Click(sender, e);
-                }
-                if (chartType == "marketcap")
-                {
-                    BtnChartMarketCap_Click(sender, e);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "switching chart time period");
-            }
+            panelChartDifficultyScaleButtons.Visible = false;
+            panelPriceConverter.Visible = false;
         }
 
         private void DisableIrrelevantTimePeriods()
@@ -9953,7 +10744,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (chartType == "difficulty")
+                    if (chartType == "difficulty" || chartType == "difficultylog")
                     {
                         btnChartPeriod24h.Enabled = false;
                         btnChartPeriod3d.Enabled = false;
@@ -10153,56 +10944,6 @@ namespace SATSuma
             }
         }
 
-        private void FormsPlot1_MouseMove(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                if (!ignoreMouseMoveOnChart)
-                {
-                    if (chartType != "feerates" && chartType != "poolranking" && chartType != "lightningnodesbynetwork" && chartType != "nodesbycountry")
-                    {
-                        // determine point nearest the cursor
-                        (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
-                        double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
-                        (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
-
-                        // place the highlight over the point of interest
-                        HighlightedPoint.X = pointX;
-                        HighlightedPoint.Y = pointY;
-                        HighlightedPoint.IsVisible = true;
-
-                        // render if the highlighted point chnaged
-                        if (LastHighlightedIndex != pointIndex)
-                        {
-                            LastHighlightedIndex = pointIndex;
-                            formsPlot1.Render();
-                        }
-                        // Convert pointX to a DateTime object
-                        DateTime pointXDate = DateTime.FromOADate(pointX);
-
-                        // Format the DateTime object using the desired format string
-                        string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
-
-                        if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog" || chartType == "marketcaplog")
-                        {
-                            double originalY = Math.Pow(10, pointY); // Convert back to the original scale
-                            lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
-                        }
-                        else
-                        {
-                            // update coordinate data label below chart
-                            lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
-                        }
-                        lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width - btnSaveChart.Width - 10, lblChartMousePositionData.Location.Y);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "rendering mouse-over chart coordinates data");
-            }
-        }
-
         private void DisableEnableChartButtons(string enableOrDisableAllButtons)
         {
             try
@@ -10230,6 +10971,8 @@ namespace SATSuma
                     btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
                     btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
                     btnChartUniqueAddressesWasEnabled = btnChartUniqueAddresses.Enabled;
+                    btnHashrateScaleLogWasEnabled = btnHashrateScaleLog.Enabled;
+                    btnHashrateScaleLinearWasEnabled = btnHashrateScaleLinear.Enabled;
                     btnChartAddressScaleLinearWasEnabled = btnChartAddressScaleLinear.Enabled;
                     btnChartAddressScaleLogWasEnabled = btnChartAddressScaleLog.Enabled;
                     btnPriceChartScaleLogWasEnabled = btnPriceChartScaleLog.Enabled;
@@ -10242,6 +10985,9 @@ namespace SATSuma
                     btnChartLightningChannelsWasEnabled = btnChartLightningChannels.Enabled;
                     btnChartMarketCapWasEnabled = btnChartMarketCap.Enabled;
                     btnChartMarketCapLogWasEnabled = btnChartMarketCapScaleLog.Enabled;
+                    btnChartDifficultyLinearWasEnabled = btnChartDifficultyLinear.Enabled;
+                    btnChartDifficultyLogWasEnabled = btnChartDifficultyLog.Enabled;
+                    btnPriceConverterWasEnabled = btnPriceConverter.Enabled;
 
                     //disable them all
                     btnChartBlockFees.Enabled = false;
@@ -10263,6 +11009,8 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                     btnChartBlockSize.Enabled = false;
                     btnChartUniqueAddresses.Enabled = false;
+                    btnHashrateScaleLinear.Enabled = false;
+                    btnHashrateScaleLog.Enabled = false;
                     btnChartAddressScaleLinear.Enabled = false;
                     btnChartAddressScaleLog.Enabled = false;
                     btnPriceChartScaleLog.Enabled = false;
@@ -10275,6 +11023,9 @@ namespace SATSuma
                     btnChartLightningChannels.Enabled = false;
                     btnChartMarketCap.Enabled = false;
                     btnChartMarketCapScaleLog.Enabled = false;
+                    btnChartDifficultyLinear.Enabled = false;
+                    btnChartDifficultyLog.Enabled = false;
+                    btnPriceConverter.Enabled = false;
                 }
                 else
                 {
@@ -10301,6 +11052,8 @@ namespace SATSuma
                     btnChartUniqueAddresses.Enabled = btnChartUniqueAddressesWasEnabled;
                     btnChartAddressScaleLinear.Enabled = btnChartAddressScaleLinearWasEnabled;
                     btnChartAddressScaleLog.Enabled = btnChartAddressScaleLogWasEnabled;
+                    btnHashrateScaleLinear.Enabled = btnHashrateScaleLinearWasEnabled;
+                    btnHashrateScaleLog.Enabled = btnHashrateScaleLogWasEnabled;
                     btnPriceChartScaleLog.Enabled = btnPriceChartScaleLogWasEnabled;
                     btnPriceChartScaleLinear.Enabled = btnPriceChartScaleLinearWasEnabled;
                     btnChartUTXO.Enabled = btnChartUTXOWasEnabled;
@@ -10311,6 +11064,9 @@ namespace SATSuma
                     btnChartLightningChannels.Enabled = btnChartLightningChannelsWasEnabled;
                     btnChartMarketCap.Enabled = btnChartMarketCapWasEnabled;
                     btnChartMarketCapScaleLog.Enabled = btnChartMarketCapLogWasEnabled;
+                    btnChartDifficultyLinear.Enabled = btnChartDifficultyLinearWasEnabled;
+                    btnChartDifficultyLog.Enabled = btnChartDifficultyLogWasEnabled;
+                    btnPriceConverter.Enabled = btnPriceConverterWasEnabled;
                     ignoreMouseMoveOnChart = false;
                 }
                 // disable charts where corresponding API is disabled
@@ -10329,6 +11085,7 @@ namespace SATSuma
         {
             try
             {
+                btnPriceConverter.Enabled = false;
                 btnChartCirculation.Enabled = false;
                 btnChartMarketCap.Enabled = false;
                 btnChartPrice.Enabled = false;
@@ -10371,6 +11128,7 @@ namespace SATSuma
         {
             try
             {
+                btnPriceConverter.Enabled = true;
                 btnChartCirculation.Enabled = true;
                 btnChartMarketCap.Enabled = true;
                 btnChartPrice.Enabled = true;
@@ -10408,6 +11166,180 @@ namespace SATSuma
             }
         }
 
+        #endregion
+        #region prepare for linear scale chart
+        private void PrepareLinearScaleChart()
+        {
+            try
+            {
+                // switch to linear scaling in case it was log before
+                formsPlot1.Plot.YAxis.MinorLogScale(false);
+                formsPlot1.Plot.YAxis.MajorGrid(false);
+                formsPlot1.Plot.YAxis.MinorGrid(false);
+
+                // Define a new tick label formatter for the linear scale
+                static string linearTickLabels(double y) => y.ToString("N0");
+                formsPlot1.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+                // Revert back to automatic data area
+                formsPlot1.Plot.ResetLayout();
+                formsPlot1.Plot.AxisAuto();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "switching to linear scale chart");
+            }
+        }
+        #endregion
+        #region change chart time period
+        private void BtnChartPeriod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control[] chartPeriodButtons = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll };
+
+                Button clickedButton = (Button)sender;
+                clickedButton.Enabled = false;
+
+                foreach (Control control in chartPeriodButtons)
+                {
+                    if (control is Button && control == clickedButton)
+                    {
+                        chartPeriod = clickedButton.Text;
+                    }
+                    if (control is Button && control != clickedButton)
+                    {
+                        control.Enabled = true;
+                    }
+                }
+
+                if (chartType == "hashrate")
+                {
+                    BtnChartHashrate_Click(sender, e);
+                }
+                if (chartType == "hashratelog")
+                {
+                    BtnHashrateScaleLog_Click(sender, e);
+                }
+                if (chartType == "blockfees")
+                {
+                    BtnChartBlockFees_Click(sender, e);
+                }
+                if (chartType == "difficulty")
+                {
+                    BtnChartDifficulty_Click(sender, e);
+                }
+                if (chartType == "difficultylog")
+                {
+                    BtnChartDifficultyLog_Click(sender, e);
+                }
+                if (chartType == "price")
+                {
+                    BtnChartPrice_Click(sender, e);
+                }
+                if (chartType == "pricelog")
+                {
+                    BtnChartPriceLog_Click(sender, e);
+                }
+                if (chartType == "reward")
+                {
+                    BtnChartReward_Click(sender, e);
+                }
+                if (chartType == "feerates")
+                {
+                    BtnChartFeeRates_Click(sender, e);
+                }
+                if (chartType == "blocksize")
+                {
+                    BtnChartBlockSize_Click(sender, e);
+                }
+                if (chartType == "addresses")
+                {
+                    BtnChartUniqueAddresses_Click(sender, e);
+                }
+                if (chartType == "addresseslog")
+                {
+                    BtnChartUniqueAddressesLog_Click(sender, e);
+                }
+                if (chartType == "poolranking")
+                {
+                    BtnChartPoolsRanking_Click(sender, e);
+                }
+                if (chartType == "lightningnodesbynetwork")
+                {
+                    BtnChartNodesByNetwork_Click(sender, e);
+                }
+                if (chartType == "lightningcapacity")
+                {
+                    BtnChartLightningCapacity_Click(sender, e);
+                }
+                if (chartType == "lightningchannels")
+                {
+                    BtnChartLightningChannels_Click(sender, e);
+                }
+                if (chartType == "marketcap")
+                {
+                    BtnChartMarketCap_Click(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "switching chart time period");
+            }
+        }
+        #endregion
+        #region track mouse position to show nearest data point
+        private void FormsPlot1_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (!ignoreMouseMoveOnChart)
+                {
+                    if (chartType != "feerates" && chartType != "poolranking" && chartType != "lightningnodesbynetwork" && chartType != "nodesbycountry")
+                    {
+                        // determine point nearest the cursor
+                        (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
+                        double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
+                        (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+
+                        // place the highlight over the point of interest
+                        HighlightedPoint.X = pointX;
+                        HighlightedPoint.Y = pointY;
+                        HighlightedPoint.IsVisible = true;
+
+                        // render if the highlighted point chnaged
+                        if (LastHighlightedIndex != pointIndex)
+                        {
+                            LastHighlightedIndex = pointIndex;
+                            formsPlot1.Render();
+                        }
+                        // Convert pointX to a DateTime object
+                        DateTime pointXDate = DateTime.FromOADate(pointX);
+
+                        // Format the DateTime object using the desired format string
+                        string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
+
+                        if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog" || chartType == "marketcaplog" || chartType == "hashratelog" || chartType == "difficultylog")
+                        {
+                            double originalY = Math.Pow(10, pointY); // Convert back to the original scale
+                            lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
+                        }
+                        else
+                        {
+                            // update coordinate data label below chart
+                            lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
+                        }
+                        lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width - btnSaveChart.Width - 10, lblChartMousePositionData.Location.Y);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "rendering mouse-over chart coordinates data");
+            }
+        }
+        #endregion
+        #region save chart image
         private void BtnSaveChart_Click(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog
@@ -10437,8 +11369,10 @@ namespace SATSuma
 
         }
         #endregion
+        #endregion
+
         #region ⚡BOOKMARKS SCREEN⚡
-        
+        #region set up bookmarks screen
         private void SetupBookmarksScreen()
         {
             try
@@ -10643,30 +11577,8 @@ namespace SATSuma
                 HandleException(ex, "SetupBookmarksScreen");
             }
         }
-        
-        private static void DeleteBookmarkFromJsonFile(string bookmarkDataToDelete)
-        {
-            // Read the existing bookmarks from the JSON file
-            var bookmarks = ReadBookmarksFromJsonFile();
-
-            // Find the index of the bookmark with the specified data
-            int index = bookmarks.FindIndex(bookmark =>
-                bookmark.Data == bookmarkDataToDelete);
-
-            // If a matching bookmark was found, remove it from the list
-            if (index >= 0)
-            {
-                bookmarks.RemoveAt(index);
-
-                // Write the updated list of bookmarks back to the JSON file
-                WriteBookmarksToJsonFile(bookmarks);
-            }
-        }
-
-        string bookmarkDataInFullPreserved = string.Empty;
-        string bookmarkNoteInFullPreserved = string.Empty;
-        string bookmarkKeyCheckPreserved = string.Empty;
-
+        #endregion
+        #region view and unlock bookmarks
         private void ListViewBookmarks_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             try
@@ -10744,6 +11656,138 @@ namespace SATSuma
             }
         }
 
+        private void BtnBookmarkUnlock_Click(object sender, EventArgs e)
+        {
+            if (textBoxBookmarkKey.Visible)
+            {
+                textBoxBookmarkKey.Visible = false;
+                btnDecryptBookmark.Visible = false;
+            }
+            else
+            {
+                textBoxBookmarkKey.Visible = true;
+                btnDecryptBookmark.Visible = true;
+            }
+        }
+
+        private void BtnViewBookmark_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckNetworkStatus();
+                if (lblSelectedBookmarkType.Text == "block")
+                {
+                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedBlockNumber.Text = lblBookmarkDataInFull.Text;
+                    });
+                    try
+                    {
+                        LookupBlock();
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "btnViewBookmark_Click");
+                    }
+                    //show the block screen
+                    BtnMenuBlock_Click(sender, e);
+                }
+                if (lblSelectedBookmarkType.Text == "address")
+                {
+                    textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                    {
+                        textboxSubmittedAddress.Text = lblBookmarkDataInFull.Text;
+                    });
+                    //show the address screen
+                    BtnMenuAddress_Click(sender, e);
+                }
+                if (lblSelectedBookmarkType.Text == "transaction")
+                {
+                    textBoxTransactionID.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxTransactionID.Text = lblBookmarkDataInFull.Text;
+                    });
+                    //show the transaction screen
+                    BtnMenuTransaction_Click(sender, e);
+                }
+                if (lblSelectedBookmarkType.Text == "xpub")
+                {
+                    textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSubmittedXpub.Text = lblBookmarkDataInFull.Text;
+                    });
+                    BtnMenuXpub_Click(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewBookmark_Click");
+            }
+        }
+        #endregion
+        #region delete bookmark
+        private static void DeleteBookmarkFromJsonFile(string bookmarkDataToDelete)
+        {
+            // Read the existing bookmarks from the JSON file
+            var bookmarks = ReadBookmarksFromJsonFile();
+
+            // Find the index of the bookmark with the specified data
+            int index = bookmarks.FindIndex(bookmark =>
+                bookmark.Data == bookmarkDataToDelete);
+
+            // If a matching bookmark was found, remove it from the list
+            if (index >= 0)
+            {
+                bookmarks.RemoveAt(index);
+
+                // Write the updated list of bookmarks back to the JSON file
+                WriteBookmarksToJsonFile(bookmarks);
+            }
+        }
+
+        private void BtnDeleteBoookmark_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string bookmarkDataToDelete = "";
+
+                foreach (ListViewItem item in listViewBookmarks.Items)
+                {
+                    if (item.Selected)
+                    {
+                        bookmarkDataToDelete = item.SubItems[3].Text;
+                    }
+                }
+                DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
+                lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
+                lblBookmarkStatusMessage.Text = "bookmark deleted";
+                lblBookmarkStatusMessage.Visible = true;
+                hideBookmarkStatusMessageTimer.Start();
+                SetupBookmarksScreen();
+                lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblBookmarkDataInFull.Text = "";
+                });
+                lblBookmarkNoteInFull.Invoke((MethodInvoker)delegate
+                {
+                    lblBookmarkNoteInFull.Text = "";
+                });
+                label138.Invoke((MethodInvoker)delegate
+                {
+                    label138.Text = "";
+                });
+                lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
+                {
+                    lblSelectedBookmarkType.Text = "";
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnDeleteBookmark_Click");
+            }
+        }
+        #endregion
+        #region listview appearance
         private void ListViewBookmarks_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -10885,104 +11929,8 @@ namespace SATSuma
                 HandleException(ex, "ListViewBookmarks_DrawSubItem");
             }
         }
-
-        private void BtnViewBookmark_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                CheckNetworkStatus();
-                if (lblSelectedBookmarkType.Text == "block")
-                {
-                    textBoxSubmittedBlockNumber.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSubmittedBlockNumber.Text = lblBookmarkDataInFull.Text;
-                    });
-                    try
-                    {
-                        LookupBlock();
-                    }
-                    catch (Exception ex)
-                    {
-                        HandleException(ex, "btnViewBookmark_Click");
-                    }
-                    //show the block screen
-                    BtnMenuBlock_Click(sender, e);
-                }
-                if (lblSelectedBookmarkType.Text == "address")
-                {
-                    textboxSubmittedAddress.Invoke((MethodInvoker)delegate
-                    {
-                        textboxSubmittedAddress.Text = lblBookmarkDataInFull.Text;
-                    });
-                    //show the address screen
-                    BtnMenuAddress_Click(sender, e);
-                }
-                if (lblSelectedBookmarkType.Text == "transaction")
-                {
-                    textBoxTransactionID.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxTransactionID.Text = lblBookmarkDataInFull.Text;
-                    });
-                    //show the transaction screen
-                    BtnMenuTransaction_Click(sender, e);
-                }
-                if (lblSelectedBookmarkType.Text == "xpub")
-                {
-                    textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSubmittedXpub.Text = lblBookmarkDataInFull.Text;
-                    });
-                    BtnMenuXpub_Click(sender, e);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnViewBookmark_Click");
-            }
-        }
-
-        private void BtnDeleteBoookmark_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string bookmarkDataToDelete = "";
-
-                foreach (ListViewItem item in listViewBookmarks.Items)
-                {
-                    if (item.Selected)
-                    {
-                        bookmarkDataToDelete = item.SubItems[3].Text;
-                    }
-                }
-                DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
-                lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
-                lblBookmarkStatusMessage.Text = "bookmark deleted";
-                lblBookmarkStatusMessage.Visible = true;
-                hideBookmarkStatusMessageTimer.Start();
-                SetupBookmarksScreen();
-                lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
-                {
-                    lblBookmarkDataInFull.Text = "";
-                });
-                lblBookmarkNoteInFull.Invoke((MethodInvoker)delegate
-                {
-                    lblBookmarkNoteInFull.Text = "";
-                });
-                label138.Invoke((MethodInvoker)delegate
-                {
-                    label138.Text = "";
-                });
-                lblSelectedBookmarkType.Invoke((MethodInvoker)delegate
-                {
-                    lblSelectedBookmarkType.Text = "";
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "btnDeleteBookmark_Click");
-            }
-        }
-
+        #endregion
+        #region scroll listview
         private void BtnDecryptBookmark_Click(object sender, EventArgs e)
         {
             try
@@ -11023,10 +11971,6 @@ namespace SATSuma
                 panelBookmarksContainer.VerticalScroll.Value++;
             }
         }
-
-        private bool isBookmarksButtonPressed = false;
-        private bool bookmarksDownButtonPressed = false;
-        private bool bookmarksUpButtonPressed = false;
 
         private void BtnBookmarksListDown_MouseDown(object sender, MouseEventArgs e)
         {
@@ -11095,8 +12039,16 @@ namespace SATSuma
             }
         }
 
-        private bool isBookmarkKeyWatermarkTextDisplayed = true;
+        private void PanelBookmarksContainer_Paint(object sender, PaintEventArgs e)
+        {
+            if (btnViewBookmark.Enabled)
+            {
+                panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
 
+            }
+        }
+        #endregion
+        #region user input
         private void TextBoxBookmarkKey_Enter(object sender, EventArgs e)
         {
             if (isBookmarkKeyWatermarkTextDisplayed)
@@ -11145,34 +12097,11 @@ namespace SATSuma
                 isBookmarkKeyWatermarkTextDisplayed = false;
             }
         }
-
-        private void BtnBookmarkUnlock_Click(object sender, EventArgs e)
-        {
-            if (textBoxBookmarkKey.Visible)
-            {
-                textBoxBookmarkKey.Visible = false;
-                btnDecryptBookmark.Visible = false;
-            }
-            else
-            {
-                textBoxBookmarkKey.Visible = true;
-                btnDecryptBookmark.Visible = true;
-            }
-        }
-
-        private void PanelBookmarksContainer_Paint(object sender, PaintEventArgs e)
-        {
-            if (btnViewBookmark.Enabled)
-            {
-                panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
-
-            }
-        }
         #endregion
-        #region ⚡ADD TO BOOKMARKS TAB⚡
-        //==============================================================================================================
-        //---------------------- ADD TO BOOKMARKS ---------------------------------------------------------------------
+        #endregion
 
+        #region ⚡ADD TO BOOKMARKS TAB⚡
+        #region show, populate or hide the add bookmark tab
         private void BtnAddToBookmarks_Click(object sender, EventArgs e)
         {
             if (!panelAddToBookmarks.Visible)
@@ -11189,12 +12118,6 @@ namespace SATSuma
                 panelAddToBookmarks.Visible = false;
                 panelFees.Visible = true;
             }
-        }
-
-        private void BtnCancelAddToBookmarks_Click(object sender, EventArgs e)
-        {
-            panelAddToBookmarks.Visible = false;
-            panelFees.Visible = true;
         }
 
         private void PanelAddToBookmarks_Paint(object sender, PaintEventArgs e)
@@ -11257,6 +12180,18 @@ namespace SATSuma
             }
         }
 
+        private void BtnCancelAddToBookmarks_Click(object sender, EventArgs e)
+        {
+            HideBookmarksShowFees(sender,e);
+        }
+
+        private void HideBookmarksShowFees(object sender, EventArgs e)
+        {
+            panelAddToBookmarks.Visible = false;
+            panelFees.Visible = true;
+        }
+        #endregion
+        #region create bookmark record to be saved
         private void BtnCommitToBookmarks_Click(object sender, EventArgs e)
         {
             try
@@ -11325,7 +12260,8 @@ namespace SATSuma
                 HandleException(ex, "BtnCommitToBookmarks_Click");
             }
         }
-
+        #endregion
+        #region read bookmarks from file
         private static List<Bookmark> ReadBookmarksFromJsonFile()
         {
             string bookmarksFileName = "SATSuma_bookmarks.json";
@@ -11351,7 +12287,8 @@ namespace SATSuma
             bookmarks = bookmarks.OrderByDescending(b => b.DateAdded).ToList();
             return bookmarks;
         }
-
+        #endregion
+        #region write bookmarks to file
         private static void WriteBookmarksToJsonFile(List<Bookmark> bookmarks)
         {
             // Serialize the list of bookmark objects into a JSON string
@@ -11368,15 +12305,8 @@ namespace SATSuma
             // Write the JSON string to the bookmarks.json file
             System.IO.File.WriteAllText(filePath, json);
         }
-
-        private void HideBookmarksShowFees(object sender, EventArgs e)
-        {
-            panelAddToBookmarks.Visible = false;
-            panelFees.Visible = true;
-        }
-
-        private bool isBookmarkNoteWatermarkTextDisplayed = true;
-
+        #endregion
+        #region user input
         private void TextBoxBookmarkProposedNote_Enter(object sender, EventArgs e)
         {
             if (isBookmarkNoteWatermarkTextDisplayed)
@@ -11425,8 +12355,6 @@ namespace SATSuma
             }
         }
 
-        private bool isEncryptionKeyWatermarkTextDisplayed = true;
-
         private void TextBoxBookmarkEncryptionKey_Enter(object sender, EventArgs e)
         {
             if (isEncryptionKeyWatermarkTextDisplayed)
@@ -11474,7 +12402,8 @@ namespace SATSuma
                 isEncryptionKeyWatermarkTextDisplayed = false;
             }
         }
-
+        #endregion
+        #region timer to hide add bookmark panel after adding
         private void HideAddToBookmarks_Tick(object sender, EventArgs e)
         {
             panelAddToBookmarks.Visible = false;
@@ -11488,8 +12417,10 @@ namespace SATSuma
             hideBookmarkStatusMessageTimer.Stop();
         }
         #endregion
-        #region ⚡SETTINGS SCREEN⚡
+        #endregion
 
+        #region ⚡SETTINGS SCREEN⚡
+        #region user input xpub url
         private void TextBoxSettingsXpubMempoolURL_Enter(object sender, EventArgs e)
         {
             try
@@ -11610,7 +12541,108 @@ namespace SATSuma
                 HandleException(ex, "TextBoxSettingsXpubMempoolURL_KeyUp");
             }
         }
+        #endregion
+        #region user input mempool url
+        private void TextBoxSettingsCustomMempoolURL_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSettingsCustomMempoolURL.Text = "";
+                        textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                    });
+                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxSettingsCustomMempoolURL_Enter");
+            }
+        }
 
+        private void TextBoxSettingsCustomMempoolURL_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBoxSettingsCustomMempoolURL.Text))
+                {
+                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
+                        textBoxSettingsCustomMempoolURL.ForeColor = Color.Gray;
+                    });
+                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxSettingsCustomMempoolURL_Leave");
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxSettingsCustomMempoolURL.Text = "";
+                        textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                    });
+                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+                }
+                else
+                {
+                    previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxSettingsCustomMempoolURL_KeyPress");
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                });
+                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+                CheckCustomNodeIsOnline();
+                CheckNetworkStatus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxSettingsCustomMempoolURL_KeyUp");
+            }
+        }
+
+        private void TextBoxSettingsCustomMempoolURL_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
+                {
+                    textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
+                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TextBoxSettingsCustomMempoolURL_TextChanged");
+            }
+        }
+        #endregion
+        #region node selection
         private void LblSettingsNodeMainnet_Click(object sender, EventArgs e)
         {
             try
@@ -11736,106 +12768,8 @@ namespace SATSuma
                 HandleException(ex, "LblSettingsNodeCustom_Click");
             }
         }
-
-        private void TextBoxSettingsCustomMempoolURL_Enter(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSettingsCustomMempoolURL.Text = "";
-                        textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
-                    });
-                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxSettingsCustomMempoolURL_Enter");
-            }
-        }
-
-        private void TextBoxSettingsCustomMempoolURL_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(textBoxSettingsCustomMempoolURL.Text))
-                {
-                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSettingsCustomMempoolURL.Text = "e.g http://umbrel.local:3006/api/";
-                        textBoxSettingsCustomMempoolURL.ForeColor = Color.Gray;
-                    });
-                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxSettingsCustomMempoolURL_Leave");
-            }
-        }
-
-        private void TextBoxSettingsCustomMempoolURL_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            try
-            {
-                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxSettingsCustomMempoolURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSettingsCustomMempoolURL.Text = "";
-                        textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
-                    });
-                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
-                }
-                else
-                {
-                    previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxSettingsCustomMempoolURL_KeyPress");
-            }
-        }
-
-        private void TextBoxSettingsCustomMempoolURL_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
-                });
-                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
-                CheckCustomNodeIsOnline();
-                CheckNetworkStatus();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxSettingsCustomMempoolURL_KeyUp");
-            }
-        }
-
-        private void TextBoxSettingsCustomMempoolURL_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed)
-                {
-                    textBoxSettingsCustomMempoolURL.ForeColor = Color.White;
-                    isTextBoxSettingsCustomMempoolURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxSettingsCustomMempoolURL_TextChanged");
-            }
-        }
-
+        #endregion
+        #region check custom node online
         private async void CheckCustomNodeIsOnline()
         {
             using var client = new HttpClient();
@@ -11966,7 +12900,8 @@ namespace SATSuma
                 });
             }
         }
-
+        #endregion
+        #region enable/disable api's
         private void LblBlockchairComJSON_Click(object sender, EventArgs e)
         {
             try
@@ -12073,7 +13008,7 @@ namespace SATSuma
                 HandleException(ex, "LblBlockchainInfoEndpoints_Click");
             }
         }
-
+        #region enable/disable privacy mode
         private void LblPrivacyMode_Click(object sender, EventArgs e)
         {
             try
@@ -12093,7 +13028,138 @@ namespace SATSuma
                 HandleException(ex, "LblPrivacyMode_Click");
             }
         }
+        
+        private void DisablePrivacyMode()
+        {
+            try
+            {
+                privacyMode = false;
+                lblPrivacyMode.Invoke((MethodInvoker)delegate
+                {
+                    lblPrivacyMode.ForeColor = Color.IndianRed;
+                    lblPrivacyMode.Text = "❌";
+                });
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                    lblBlockchairComJSON.Text = "❌";
+                    lblBlockchairComJSON.Enabled = true;
+                });
+                RunBlockchairComJSONAPI = false;
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                    lblBitcoinExplorerEndpoints.Text = "❌";
+                    lblBitcoinExplorerEndpoints.Enabled = true;
+                });
+                RunBitcoinExplorerEndpointAPI = false;
+                RunBitcoinExplorerOrgJSONAPI = false;
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                    lblBlockchainInfoEndpoints.Text = "❌";
+                    lblBlockchainInfoEndpoints.Enabled = true;
+                });
+                RunBlockchainInfoEndpointAPI = false;
 
+                PrivacyModeSelected = "0";
+                blockchairComJSONSelected = "0";
+                bitcoinExplorerEnpointsSelected = "0";
+                blockchainInfoEndpointsSelected = "0";
+
+                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeTestnet.Enabled = true;
+                });
+                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
+                    lblSettingsNodeMainnet.Enabled = true;
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "DisablePrivacyMode");
+            }
+        }
+
+        private void EnablePrivacyMode()
+        {
+            try
+            {
+                privacyMode = true;
+                lblPrivacyMode.Invoke((MethodInvoker)delegate
+                {
+                    lblPrivacyMode.ForeColor = Color.Green;
+                    lblPrivacyMode.Text = "✔️";
+                });
+                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchairComJSON.ForeColor = Color.Gray;
+                    lblBlockchairComJSON.Text = "❌";
+                    lblBlockchairComJSON.Enabled = false;
+                });
+                RunBlockchairComJSONAPI = false;
+                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBitcoinExplorerEndpoints.ForeColor = Color.Gray;
+                    lblBitcoinExplorerEndpoints.Text = "❌";
+                    lblBitcoinExplorerEndpoints.Enabled = false;
+                });
+                RunBitcoinExplorerEndpointAPI = false;
+                RunBitcoinExplorerOrgJSONAPI = false;
+                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockchainInfoEndpoints.ForeColor = Color.Gray;
+                    lblBlockchainInfoEndpoints.Text = "❌";
+                    lblBlockchainInfoEndpoints.Enabled = false;
+                });
+                RunBlockchainInfoEndpointAPI = false;
+                RunMempoolSpaceLightningAPI = false;
+                PrivacyModeSelected = "1";
+                blockchairComJSONSelected = "0";
+                bitcoinExplorerEnpointsSelected = "0";
+                blockchainInfoEndpointsSelected = "0";
+
+                lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeCustom.ForeColor = Color.Green;
+                    lblSettingsNodeCustom.Text = "✔️";
+                });
+                testNet = false;
+                textBoxSettingsCustomMempoolURL.Enabled = true;
+                textBoxSettingsCustomMempoolURL.Focus();
+
+                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
+                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
+                });
+                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
+
+                CheckCustomNodeIsOnline();
+                CheckNetworkStatus();
+
+                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeTestnet.ForeColor = Color.Gray;
+                    lblSettingsNodeTestnet.Enabled = false;
+                });
+                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
+                {
+                    lblSettingsNodeMainnet.ForeColor = Color.Gray;
+                    lblSettingsNodeMainnet.Enabled = false;
+                });
+                DisableChartsThatDontUseMempoolSpace();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "EnablePrivacyMode");
+            }
+        }
+        #endregion
+        #region unused settings
         private void LblUnused1_Click(object sender, EventArgs e)
         {
             /*
@@ -12173,7 +13239,9 @@ namespace SATSuma
             SaveSettingsToBookmarksFile();
             */
         }
-
+        #endregion
+        #endregion
+        #region numeric up/down control changes
         private void NumericUpDownDashboardRefresh_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -12203,11 +13271,52 @@ namespace SATSuma
                 HandleException(ex, "numericUpDownMaxNumberOfConsecutiveUnusedAddresses_ValueChanged");
             }
         }
+        #endregion
+        #region enable/disable functionality depending on mainnet/testnet
+        private void DisableFunctionalityForTestNet()
+        {
+            try
+            {
+                Control[] DisableThisStuffForTestnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxChartCirculation, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxHeaderPriceChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxMarketCapChart, pictureBoxPoolRankingChart, pictureBoxPriceChart, pictureBoxUniqueAddressesChart };
+                foreach (Control control in DisableThisStuffForTestnet)
+                {
+                    control.Enabled = false;
+                    control.BackgroundImage = Properties.Resources.graphIcondisabled;
+                }
+                btnMenuCharts.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "DisableFunctionalityForTestNet");
+            }
+        }
 
-        // settings entry in the bookmark file = DM111111nnnnnnnnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnnn = refresh freq, nn = max number of consecutive non-zero addresses on xpub scan, nnn = number of derivation paths to check.
-
+        private void EnableFunctionalityForMainNet()
+        {
+            try
+            {
+                btnMenuCharts.Enabled = true;
+                if (RunBlockchainInfoEndpointAPI == true && privacyMode == false)
+                {
+                    EnableChartsThatDontUseMempoolSpace();
+                }
+                Control[] EnableThisStuffForMainnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxPoolRankingChart };
+                foreach (Control control in EnableThisStuffForMainnet)
+                {
+                    control.Enabled = true;
+                    control.BackgroundImage = Properties.Resources.graphIcon;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "EnableFunctionalityForMainNet");
+            }
+        }
+        #endregion
+        #region save settings (to bookmarks file)
         private void SaveSettingsToBookmarksFile()
         {
+            // settings entry in the bookmark file = DM111111nnnnnnnnn... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, unused, unused, nnnn = refresh freq, nn = max number of consecutive non-zero addresses on xpub scan, nnn = number of derivation paths to check.
             try
             {
                 if (btnUSD.Enabled == false)
@@ -12298,7 +13407,8 @@ namespace SATSuma
                 HandleException(ex, "SaveSettingsToBookmarksFile");
             }
         }
-
+        #endregion
+        #region restore settings
         private void RestoreSavedSettings()
         {
             try
@@ -12315,6 +13425,15 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[0]) == "P")
                         {
                             //GBP
+                            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
+                            });
+                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnGBP.Location.X, btnGBP.Location.Y + 5);
+                            });
                             btnGBP.Enabled = false;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
@@ -12324,6 +13443,15 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
                             //USD
+                            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonText.Text = "USD $";
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
+                            });
+                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnUSD.Location.X, btnUSD.Location.Y + 5);
+                            });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
@@ -12333,6 +13461,15 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
                             //EUR
+                            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
+                            });
+                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnEUR.Location.X, btnEUR.Location.Y + 5);
+                            });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
@@ -12342,6 +13479,15 @@ namespace SATSuma
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
                             //XAU
+                            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
+                            });
+                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            {
+                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnXAU.Location.X, btnXAU.Location.Y + 5);
+                            });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
@@ -12601,6 +13747,77 @@ namespace SATSuma
                         {
                             if (theme.ThemeName == bookmark.Data)
                             {
+                                if (theme.ThemeName == "Genesis (preset)")
+                                {
+                                    BtnMenuThemeGenesis.Enabled = false;
+                                    btnMenuThemeBTCdir.Enabled = true;
+                                    btnMenuThemeSatsuma.Enabled = true;
+                                    btnMenuThemeCustom.Enabled = true;
+                                    lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonText.Text = "genesis";
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
+                                    });
+                                    lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
+                                    });
+                                }
+                                else
+                                {
+                                    if (theme.ThemeName == "BTCdir (preset)")
+                                    {
+                                        BtnMenuThemeGenesis.Enabled = true;
+                                        btnMenuThemeBTCdir.Enabled = false;
+                                        btnMenuThemeSatsuma.Enabled = true;
+                                        btnMenuThemeCustom.Enabled = true;
+                                        lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblThemeMenuHighlightedButtonText.Text = "btcdir";
+                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
+                                        });
+                                        lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
+                                        });
+                                    }
+                                    else
+                                    {
+                                        if (theme.ThemeName == "Satsuma (preset)")
+                                        {
+                                            BtnMenuThemeGenesis.Enabled = true;
+                                            btnMenuThemeBTCdir.Enabled = true;
+                                            btnMenuThemeSatsuma.Enabled = false;
+                                            btnMenuThemeCustom.Enabled = true;
+                                            lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                            {
+                                                lblThemeMenuHighlightedButtonText.Text = "satsuma";
+                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
+                                            });
+                                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                            {
+                                                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
+                                            });
+                                        }
+                                        else
+                                        {
+                                            BtnMenuThemeGenesis.Enabled = true;
+                                            btnMenuThemeBTCdir.Enabled = true;
+                                            btnMenuThemeSatsuma.Enabled = true;
+                                            btnMenuThemeCustom.Enabled = true;
+                                            lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                            {
+                                                lblThemeMenuHighlightedButtonText.Text = "custom";
+                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCustom.Location.X + (btnMenuThemeCustom.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCustom.Location.Y + 3);
+                                            });
+                                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                            {
+                                                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeCustom.Location.X, btnMenuThemeCustom.Location.Y + 5);
+                                            });
+                                        }
+                                    }
+                                }
+
                                 RestoreTheme(theme);
                                 defaultThemeInFile = bookmark.Data;
                                 defaultThemeAlreadySavedInFile = true;
@@ -12615,57 +13832,49 @@ namespace SATSuma
                 HandleException(ex, "RestoreSavedSettings");
             }
         }
-
-        private void DisableFunctionalityForTestNet()
-        {
-            try
-            {
-                Control[] DisableThisStuffForTestnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxChartCirculation, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxHeaderPriceChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxMarketCapChart, pictureBoxPoolRankingChart, pictureBoxPriceChart, pictureBoxUniqueAddressesChart };
-                foreach (Control control in DisableThisStuffForTestnet)
-                {
-                    control.Enabled = false;
-                    control.BackgroundImage = Properties.Resources.graphIcondisabled;
-                }
-                btnMenuCharts.Enabled = false;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "DisableFunctionalityForTestNet");
-            }
-        }
-
-        private void EnableFunctionalityForMainNet()
-        {
-            try
-            {
-                btnMenuCharts.Enabled = true;
-                if (RunBlockchainInfoEndpointAPI == true && privacyMode == false)
-                {
-                    EnableChartsThatDontUseMempoolSpace();
-                }
-                Control[] EnableThisStuffForMainnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxPoolRankingChart };
-                foreach (Control control in EnableThisStuffForMainnet)
-                {
-                    control.Enabled = true;
-                    control.BackgroundImage = Properties.Resources.graphIcon;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "EnableFunctionalityForMainNet");
-            }
-        }
-
         #endregion
-        #region ⚡APPEARANCE SCREEN⚡
+        #endregion
 
+        #region ⚡APPEARANCE SCREEN⚡
+        #region top menu theme switching buttons
+        private void BtnThemeMenu_Click(object sender, EventArgs e)
+        {
+            CloseMainMenu();
+            CloseCurrencyMenu();
+            panelThemeMenu.BringToFront();
+            if (panelThemeMenu.Height == 24)
+            {
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.Height = 122;
+                });
+                btnThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    btnThemeMenu.BackColor = panelMenu.BackColor;
+                });
+            }
+            else
+            {
+                CloseThemeMenu();
+            }
+        }
         private void BtnMenuThemeGenesis_Click(object sender, EventArgs e)
         {
             try
             {
-                panelThemeMenu.Invoke((MethodInvoker)delegate
+                CloseThemeMenu();
+                BtnMenuThemeGenesis.Enabled = false;
+                btnMenuThemeBTCdir.Enabled = true;
+                btnMenuThemeSatsuma.Enabled = true;
+                btnMenuThemeCustom.Enabled = true;
+                lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelThemeMenu.Height = 24;
+                    lblThemeMenuHighlightedButtonText.Text = "genesis";
+                    lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
+                });
+                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
@@ -12691,9 +13900,19 @@ namespace SATSuma
         {
             try
             {
-                panelThemeMenu.Invoke((MethodInvoker)delegate
+                CloseThemeMenu();
+                BtnMenuThemeGenesis.Enabled = true;
+                btnMenuThemeBTCdir.Enabled = false;
+                btnMenuThemeSatsuma.Enabled = true;
+                btnMenuThemeCustom.Enabled = true;
+                lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelThemeMenu.Height = 24;
+                    lblThemeMenuHighlightedButtonText.Text = "genesis";
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
+                });
+                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
@@ -12719,9 +13938,19 @@ namespace SATSuma
         {
             try
             {
-                panelThemeMenu.Invoke((MethodInvoker)delegate
+                CloseThemeMenu();
+                BtnMenuThemeGenesis.Enabled = true;
+                btnMenuThemeBTCdir.Enabled = true;
+                btnMenuThemeSatsuma.Enabled = false;
+                btnMenuThemeCustom.Enabled = true;
+                lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelThemeMenu.Height = 24;
+                    lblThemeMenuHighlightedButtonText.Text = "satsuma";
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
+                });
+                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
@@ -12745,35 +13974,24 @@ namespace SATSuma
 
         private void BtnMenuThemeCustom_Click(object sender, EventArgs e)
         {
-            panelThemeMenu.Height = 24;
+            CloseThemeMenu();
+            BtnMenuThemeGenesis.Enabled = true;
+            btnMenuThemeBTCdir.Enabled = true;
+            btnMenuThemeSatsuma.Enabled = true;
+            btnMenuThemeCustom.Enabled = true;
+            lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+            {
+                lblThemeMenuHighlightedButtonText.Text = "genesis";
+                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCustom.Location.X + (btnMenuThemeCustom.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCustom.Location.Y + 3);
+            });
+            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            {
+                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeCustom.Location.X, btnMenuThemeCustom.Location.Y + 5);
+            });
             BtnAppearance_Click(sender, e);
         }
-
-        private void BtnThemeMenu_Click(object sender, EventArgs e)
-        {
-            panelMenu.Height = 24;
-            panelCurrency.Height = 24;
-            panelThemeMenu.BringToFront();
-            if (panelThemeMenu.Height == 24)
-            {
-                panelThemeMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelThemeMenu.Height = 120;
-                });
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
-            }
-            else
-            {
-                panelThemeMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelThemeMenu.Height = 24;
-                });
-            }
-        }
-
+        #endregion
+        #region select colours
         private void BtnColorDataFields_Click(object sender, EventArgs e)
         {
             try
@@ -13077,6 +14295,77 @@ namespace SATSuma
             }
         }
 
+        private void BtnColorTableBackground_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ColorDialog colorDlgForTableBackgrounds = new ColorDialog
+                {
+                    AllowFullOpen = true,
+                    AnyColor = true,
+                    SolidColorOnly = true,
+                    Color = Color.Black
+                };
+
+                if (colorDlgForTableBackgrounds.ShowDialog() == DialogResult.OK)
+                {
+                    ColorTableBackgrounds(colorDlgForTableBackgrounds.Color);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnColorTableBackground_Click");
+            }
+        }
+
+        private void BtnColorTableTitleBar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ColorDialog colorDlgForlistViewTitleBarBG = new ColorDialog
+                {
+                    AllowFullOpen = true,
+                    AnyColor = true,
+                    SolidColorOnly = true,
+                    Color = Color.Black
+                };
+
+                if (colorDlgForlistViewTitleBarBG.ShowDialog() == DialogResult.OK)
+                {
+                    ColorTableTitleBars(colorDlgForlistViewTitleBarBG.Color);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnColorTableTitleBar_Click");
+            }
+        }
+
+        private void BtnListViewHeadingColor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ColorDialog colorDlgForTableHeadings = new ColorDialog
+                {
+                    AllowFullOpen = true,
+                    AnyColor = true,
+                    SolidColorOnly = true,
+                    Color = Color.Black
+                };
+
+                if (colorDlgForTableHeadings.ShowDialog() == DialogResult.OK)
+                {
+                    ColorTableHeadings(colorDlgForTableHeadings.Color);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnListViewHeadingColor_Click");
+            }
+        }
+
+        #endregion
+        #region enable/disable realtime clock in genesis background
         private void LblShowClock_Click(object sender, EventArgs e)
         {
             try
@@ -13116,7 +14405,8 @@ namespace SATSuma
                 HandleException(ex, "LblShowClock_Click");
             }
         }
-
+        #endregion
+        #region select loading animation
         private void LabelInfinity1_Click(object sender, EventArgs e)
         {
             try
@@ -13200,7 +14490,8 @@ namespace SATSuma
                 HandleException(ex, "lbllblInfinity1_Click");
             }
         }
-
+        #endregion
+        #region charts background colour
         private void LblChartsLightBackground_Click(object sender, EventArgs e)
         {
             try
@@ -13281,7 +14572,8 @@ namespace SATSuma
                 HandleException(ex, "lblChartsDarkBackground_Click");
             }
         }
-
+        #endregion
+        #region background picture/colour
         private void PictureBoxGenesis_Click(object sender, EventArgs e)
         {
             try
@@ -13364,6 +14656,37 @@ namespace SATSuma
 
         }
 
+        private void PictureBoxCustomImage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog
+                {
+                    Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG;|" + "All files (*.*)|*.*"
+                };
+
+                //openFileDialog1.ShowDialog();
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFilePath = openFileDialog1.FileName;
+                    this.BackgroundImage = System.Drawing.Image.FromFile(selectedFilePath);
+                    pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(selectedFilePath);
+                    lblBackgroundGenesisSelected.Visible = false;
+                    lblBackgroundSatsumaSelected.Visible = false;
+                    lblBackgroundBTCdirSelected.Visible = false;
+                    lblBackgroundCustomColorSelected.Visible = false;
+                    lblBackgroundCustomImageSelected.Visible = true;
+                    lblTime.Visible = false;
+                    label194.Enabled = true;
+                    textBoxThemeImage.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "PictureBoxCustomImage_Click");
+            }
+        }
+
         private void PictureBoxCustomColor_Click(object sender, EventArgs e)
         {
             try
@@ -13406,7 +14729,8 @@ namespace SATSuma
                 HandleException(ex, "PictureBoxCustomColor_Click");
             }
         }
-
+        #endregion
+        #region title backgrounds
         private void LblTitleBackgroundNone_Click(object sender, EventArgs e)
         {
             try
@@ -13518,107 +14842,8 @@ namespace SATSuma
                 HandleException(ex, "SetCustomTitleBackgroundColor");
             }
         }
-
-        private void BtnColorTableBackground_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ColorDialog colorDlgForTableBackgrounds = new ColorDialog
-                {
-                    AllowFullOpen = true,
-                    AnyColor = true,
-                    SolidColorOnly = true,
-                    Color = Color.Black
-                };
-
-                if (colorDlgForTableBackgrounds.ShowDialog() == DialogResult.OK)
-                {
-                    ColorTableBackgrounds(colorDlgForTableBackgrounds.Color);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnColorTableBackground_Click");
-            }
-        }
-
-        private void BtnColorTableTitleBar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ColorDialog colorDlgForlistViewTitleBarBG = new ColorDialog
-                {
-                    AllowFullOpen = true,
-                    AnyColor = true,
-                    SolidColorOnly = true,
-                    Color = Color.Black
-                };
-
-                if (colorDlgForlistViewTitleBarBG.ShowDialog() == DialogResult.OK)
-                {
-                    ColorTableTitleBars(colorDlgForlistViewTitleBarBG.Color);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnColorTableTitleBar_Click");
-            }
-        }
-
-        private void BtnListViewHeadingColor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ColorDialog colorDlgForTableHeadings = new ColorDialog
-                {
-                    AllowFullOpen = true,
-                    AnyColor = true,
-                    SolidColorOnly = true,
-                    Color = Color.Black
-                };
-
-                if (colorDlgForTableHeadings.ShowDialog() == DialogResult.OK)
-                {
-                    ColorTableHeadings(colorDlgForTableHeadings.Color);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnListViewHeadingColor_Click");
-            }
-        }
-
-        private void PictureBoxCustomImage_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Windows.Forms.OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog
-                {
-                    Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG;|" + "All files (*.*)|*.*"
-                };
-
-                //openFileDialog1.ShowDialog();
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    string selectedFilePath = openFileDialog1.FileName;
-                    this.BackgroundImage = System.Drawing.Image.FromFile(selectedFilePath);
-                    pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(selectedFilePath);
-                    lblBackgroundGenesisSelected.Visible = false;
-                    lblBackgroundSatsumaSelected.Visible = false;
-                    lblBackgroundBTCdirSelected.Visible = false;
-                    lblBackgroundCustomColorSelected.Visible = false;
-                    lblBackgroundCustomImageSelected.Visible = true;
-                    lblTime.Visible = false;
-                    label194.Enabled = true;
-                    textBoxThemeImage.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PictureBoxCustomImage_Click");
-            }
-        }
-
+        #endregion
+        #region read theme from file
         private static List<Theme> ReadThemesFromJsonFile()
         {
             string themesFileName = "SATSuma_themes.json";
@@ -13644,24 +14869,8 @@ namespace SATSuma
 
             return themes;
         }
-
-        private static void WriteThemeToJsonFile(List<Theme> themes)
-        {
-            // Serialize the list of bookmark objects into a JSON string
-            string json = JsonConvert.SerializeObject(themes);
-
-            string themesFileName = "SATSuma_themes.json";
-            string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
-            // Create the application directory if it doesn't exist
-            Directory.CreateDirectory(applicationDirectory);
-            string themesFilePath = Path.Combine(applicationDirectory, themesFileName);
-            string filePath = themesFilePath;
-
-            // Write the JSON string to the themes.json file
-            System.IO.File.WriteAllText(filePath, json);
-        }
-
+        #endregion
+        #region construct theme record to be saved
         private void TextBoxThemeName_TextChanged(object sender, EventArgs e)
         {
             if (textBoxThemeName.Text.Length > 0)
@@ -13808,7 +15017,26 @@ namespace SATSuma
                 HandleException(ex, "btnSaveTheme_Click");
             }
         }
+        #endregion
+        #region write theme to file
+        private static void WriteThemeToJsonFile(List<Theme> themes)
+        {
+            // Serialize the list of bookmark objects into a JSON string
+            string json = JsonConvert.SerializeObject(themes);
 
+            string themesFileName = "SATSuma_themes.json";
+            string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
+            // Create the application directory if it doesn't exist
+            Directory.CreateDirectory(applicationDirectory);
+            string themesFilePath = Path.Combine(applicationDirectory, themesFileName);
+            string filePath = themesFilePath;
+
+            // Write the JSON string to the themes.json file
+            System.IO.File.WriteAllText(filePath, json);
+        }
+        #endregion
+        #region select previously saved theme from list
         private void BtnLoadTheme_Click(object sender, EventArgs e)
         {
             try
@@ -13818,6 +15046,77 @@ namespace SATSuma
                 {
                     if (theme.ThemeName == comboBoxThemeList.Text)
                     {
+                        if (theme.ThemeName == "Genesis (preset)")
+                        {
+                            BtnMenuThemeGenesis.Enabled = false;
+                            btnMenuThemeBTCdir.Enabled = true;
+                            btnMenuThemeSatsuma.Enabled = true;
+                            btnMenuThemeCustom.Enabled = true;
+                            lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                            {
+                                lblThemeMenuHighlightedButtonText.Text = "genesis";
+                                lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
+                            });
+                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            {
+                                lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
+                            });
+                        }
+                        else
+                        {
+                            if (theme.ThemeName == "BTCdir (preset)")
+                            {
+                                BtnMenuThemeGenesis.Enabled = true;
+                                btnMenuThemeBTCdir.Enabled = false;
+                                btnMenuThemeSatsuma.Enabled = true;
+                                btnMenuThemeCustom.Enabled = true;
+                                lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                {
+                                    lblThemeMenuHighlightedButtonText.Text = "btcdir";
+                                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
+                                });
+                                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                {
+                                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
+                                });
+                            }
+                            else
+                            {
+                                if (theme.ThemeName == "Satsuma (preset)")
+                                {
+                                    BtnMenuThemeGenesis.Enabled = true;
+                                    btnMenuThemeBTCdir.Enabled = true;
+                                    btnMenuThemeSatsuma.Enabled = false;
+                                    btnMenuThemeCustom.Enabled = true;
+                                    lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonText.Text = "satsuma";
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
+                                    });
+                                    lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
+                                    });
+                                }
+                                else
+                                {
+                                    BtnMenuThemeGenesis.Enabled = true;
+                                    btnMenuThemeBTCdir.Enabled = true;
+                                    btnMenuThemeSatsuma.Enabled = true;
+                                    btnMenuThemeCustom.Enabled = true;
+                                    lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonText.Text = "custom";
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCustom.Location.X + (btnMenuThemeCustom.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCustom.Location.Y + 3);
+                                    });
+                                    lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeCustom.Location.X, btnMenuThemeCustom.Location.Y + 5);
+                                    });
+                                }
+                            }
+                        }
+
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         // reload the listviews to apply the new color
@@ -13832,28 +15131,12 @@ namespace SATSuma
                 HandleException(ex, "btnLoadTheme_Click");
             }
         }
-
+        #endregion
+        #region restore theme
         private void RestoreTheme(Theme theme)
         {
             try
             {
-                ColorDataFields(theme.DataFields);
-                labelColor = theme.Labels; // (only used for poolranking chart title)
-                ColorLabels(theme.Labels);
-                ColorHeadings(theme.Headings);
-                ColorTables(theme.Tables);
-                ColorTableHeadings(theme.TableHeadings);
-                ColorOtherText(theme.OtherText);
-                ColorPriceBlock(theme.PriceBlock);
-                ColorStatusError(theme.StatusErrors);
-                ColorButtons(theme.Buttons);
-                ColorButtonText(theme.ButtonText);
-                ColorLines(theme.Lines);
-                ColorTextBoxes(theme.TextBoxes);
-                ColorProgressBars(theme.ProgressBars);
-                ColorTableBackgrounds(theme.TableBackgrounds);
-                ColorTableTitleBars(theme.TableTitleBars);
-                ColorPanels(theme.Panels);
                 if (theme.ChartsDark == true)
                 {
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
@@ -13883,6 +15166,24 @@ namespace SATSuma
                     });
                 }
                 CustomiseCharts();
+                ColorDataFields(theme.DataFields);
+                labelColor = theme.Labels; // (only used for poolranking chart title)
+                ColorLabels(theme.Labels);
+                ColorHeadings(theme.Headings);
+                ColorTables(theme.Tables);
+                ColorTableHeadings(theme.TableHeadings);
+                ColorOtherText(theme.OtherText);
+                ColorPriceBlock(theme.PriceBlock);
+                ColorStatusError(theme.StatusErrors);
+                ColorButtons(theme.Buttons);
+                ColorButtonText(theme.ButtonText);
+                ColorLines(theme.Lines);
+                ColorTextBoxes(theme.TextBoxes);
+                ColorProgressBars(theme.ProgressBars);
+                ColorTableBackgrounds(theme.TableBackgrounds);
+                ColorTableTitleBars(theme.TableTitleBars);
+                ColorPanels(theme.Panels);
+
                 if (theme.ShowTime == false)
                 {
                     lblShowClock.Invoke((MethodInvoker)delegate
@@ -14022,7 +15323,8 @@ namespace SATSuma
                 HandleException(ex, "RestoreTheme");
             }
         }
-
+        #endregion
+        #region apply changes to lists of controls
         private void CustomiseCharts()
         {
             formsPlot1.Plot.Margins(x: .1, y: .1);
@@ -14071,6 +15373,7 @@ namespace SATSuma
             panelChartUTXOScaleButtons.BackColor = chartsBackgroundColor;
             panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
             panelLightningNodeNetwork.BackColor = chartsBackgroundColor;
+            panelPriceConvert.BackColor = chartsBackgroundColor;
             Color newGridlineColor = Color.FromArgb(40, 40, 40);
             if (lblChartsLightBackground.Text == "✔️")
             {
@@ -14149,7 +15452,7 @@ namespace SATSuma
                     control.ForeColor = thisColor;
                 }
                 //charts
-                Control[] listChartsDataFieldsToColor = { lblChartMousePositionData };
+                Control[] listChartsDataFieldsToColor = { lblChartMousePositionData, labelPCUSD1, labelPCUSD2, labelPCUSD3, labelPCUSD4, labelPCUSD5, labelPCUSD6, labelPCUSD7, labelPCUSD8, labelPCUSD9, labelPCUSD10, labelPCUSD11, labelPCUSD12, labelPCUSD13, labelPCUSD14, labelPCUSD15, labelPCUSD16, labelPCUSD17, labelPCUSDcustom, labelPCEUR1, labelPCEUR2, labelPCEUR3, labelPCEUR4, labelPCEUR5, labelPCEUR6, labelPCEUR7, labelPCEUR8, labelPCEUR9, labelPCEUR10, labelPCEUR11, labelPCEUR12, labelPCEUR13, labelPCEUR14, labelPCEUR15, labelPCEUR16, labelPCEUR17, labelPCEURcustom, labelPCGBP1, labelPCGBP2, labelPCGBP3, labelPCGBP4, labelPCGBP5, labelPCGBP6, labelPCGBP7, labelPCGBP8, labelPCGBP9, labelPCGBP10, labelPCGBP11, labelPCGBP12, labelPCGBP13, labelPCGBP14, labelPCGBP15, labelPCGBP16, labelPCGBP17, labelPCGBPcustom, labelPCXAU1, labelPCXAU2, labelPCXAU3, labelPCXAU4, labelPCXAU5, labelPCXAU6, labelPCXAU7, labelPCXAU8, labelPCXAU9, labelPCXAU10, labelPCXAU11, labelPCXAU12, labelPCXAU13, labelPCXAU14, labelPCXAU15, labelPCXAU16, labelPCXAU17, labelPCXAUcustom, lblCalculatedUSDFromBTCAmount, lblCalculatedEURFromBTCAmount, lblCalculatedGBPFromBTCAmount, lblCalculatedXAUFromBTCAmount };
                 foreach (Control control in listChartsDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -14226,7 +15529,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsLabelsToColor = { label236, label220, label225, label226, label229, label230, label233, label232, label202, label203, label205, label206, label207, label208, label209, label236 };
+                Control[] listChartsLabelsToColor = { label236, label220, label225, label226, label229, label230, label233, label232, label202, label203, label205, label206, label207, label208, label209, label236, label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
                 foreach (Control control in listChartsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14303,7 +15606,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { label228, label218, label231, label217 };
+                Control[] listChartsHeadingsToColor = { label228, label218, label231, label217, label271, label272 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14396,11 +15699,17 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis };
+                Control[] listHeaderButtonsToColor = { lblMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, lblMenuHighlightedButtonMarker, btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.BackColor = chartsBackgroundColor;
                 }
+                lblCurrencyMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
+                lblMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
+                lblThemeMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
+                lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
+                lblMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
+                lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 //settings
                 Control[] listSettingsButtonsToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme };
                 foreach (Control control in listSettingsButtonsToColor)
@@ -14444,7 +15753,7 @@ namespace SATSuma
                     control.BackColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog };
+                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart };
                 foreach (Control control in listChartsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -14461,11 +15770,15 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeCustom, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.ForeColor = Color.Silver;
                 }
+                lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
+
                 //settings
                 Control[] listSettingsButtonTextToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme };
                 foreach (Control control in listSettingsButtonTextToColor)
@@ -14509,7 +15822,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog };
+                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -14542,7 +15855,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblSettingsNodeCustom, lblSettingsNodeMainnet, lblSettingsNodeTestnet, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblPrivacyMode, lblChartsDarkBackground, lblChartsLightBackground };
+                Control[] listTextBoxesToColor = { lblShowClock, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBlockHeightToStartListFrom, textBoxXpubNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsXpubMempoolURL, textBoxSettingsCustomMempoolURL, numericUpDownDashboardRefresh, textBoxThemeImage, textBoxThemeName, comboBoxThemeList, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblSettingsNodeCustom, lblSettingsNodeMainnet, lblSettingsNodeTestnet, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblPrivacyMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -14691,7 +16004,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14788,7 +16101,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -14869,7 +16182,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78 };
+                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -14886,7 +16199,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel46, panel103, panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo };
+                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel70, panel71, panel73, panel20, panel32, panel74, panel75, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -14901,6 +16214,249 @@ namespace SATSuma
             }
         }
 
+        // all menu buttons derive their colour from chartbackgroundcolor
+        private void BtnMenuButtons_MouseEnter(object sender, EventArgs e)
+        {
+            if (sender == btnMenuBitcoinDashboard)
+            {
+                btnMenuBitcoinDashboard.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenu)
+            {
+                btnMenu.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuAddress)
+            {
+                btnMenuAddress.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuAppearance)
+            {
+                btnMenuAppearance.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuBlock)
+            {
+                btnMenuBlock.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuBlockList)
+            {
+                btnMenuBlockList.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuBookmarks)
+            {
+                btnMenuBookmarks.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuCharts)
+            {
+                btnMenuCharts.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuHelp)
+            {
+                btnMenuHelp.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuLightningDashboard)
+            {
+                btnMenuLightningDashboard.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuSettings2)
+            {
+                btnMenuSettings2.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuTransaction)
+            {
+                btnMenuTransaction.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuXpub)
+            {
+                btnMenuXpub.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuSplash)
+            {
+                btnMenuSplash.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuThemeBTCdir)
+            {
+                btnMenuThemeBTCdir.BackColor = panelMenu.BackColor;
+            }
+            if (sender == BtnMenuThemeGenesis)
+            {
+                BtnMenuThemeGenesis.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuThemeSatsuma)
+            {
+                btnMenuThemeSatsuma.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMenuThemeCustom)
+            {
+                btnMenuThemeCustom.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnThemeMenu)
+            {
+                btnThemeMenu.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnUSD)
+            {
+                btnUSD.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnEUR)
+            {
+                btnEUR.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnGBP)
+            {
+                btnGBP.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnXAU)
+            {
+                btnXAU.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnCurrency)
+            {
+                btnCurrency.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnHelp)
+            {
+                btnHelp.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnMinimise)
+            {
+                btnMinimise.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnExit)
+            {
+                btnExit.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnAddToBookmarks)
+            {
+                btnAddToBookmarks.BackColor = panelMenu.BackColor;
+            }
+        }
+
+        private void BtnMenuButtons_MouseLeave(object sender, EventArgs e)
+        {
+            if (sender == btnMenuBitcoinDashboard)
+            {
+                btnMenuBitcoinDashboard.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenu)
+            {
+                if (panelMenu.Height == 24)
+                {
+                    btnMenu.BackColor = chartsBackgroundColor;
+                }
+            }
+            if (sender == btnMenuAddress)
+            {
+                btnMenuAddress.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuAppearance)
+            {
+                btnMenuAppearance.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuBlock)
+            {
+                btnMenuBlock.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuBlockList)
+            {
+                btnMenuBlockList.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuBookmarks)
+            {
+                btnMenuBookmarks.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuCharts)
+            {
+                btnMenuCharts.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuHelp)
+            {
+                btnMenuHelp.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuLightningDashboard)
+            {
+                btnMenuLightningDashboard.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuSettings2)
+            {
+                btnMenuSettings2.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuTransaction)
+            {
+                btnMenuTransaction.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuXpub)
+            {
+                btnMenuXpub.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuSplash)
+            {
+                btnMenuSplash.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuThemeBTCdir)
+            {
+                btnMenuThemeBTCdir.BackColor = chartsBackgroundColor;
+            }
+            if (sender == BtnMenuThemeGenesis)
+            {
+                BtnMenuThemeGenesis.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuThemeSatsuma)
+            {
+                btnMenuThemeSatsuma.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMenuThemeCustom)
+            {
+                btnMenuThemeCustom.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnThemeMenu)
+            {
+                if (panelThemeMenu.Height == 24)
+                {
+                    btnThemeMenu.BackColor = chartsBackgroundColor;
+                }
+            }
+            if (sender == btnUSD)
+            {
+                btnUSD.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnEUR)
+            {
+                btnEUR.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnGBP)
+            {
+                btnGBP.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnXAU)
+            {
+                btnXAU.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnCurrency)
+            {
+                if (panelCurrency.Height == 24)
+                {
+                    btnCurrency.BackColor = chartsBackgroundColor;
+                }
+            }
+            if (sender == btnHelp)
+            {
+                btnHelp.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnMinimise)
+            {
+                btnMinimise.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnExit)
+            {
+                btnExit.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnAddToBookmarks)
+            {
+                btnAddToBookmarks.BackColor = chartsBackgroundColor;
+            }
+        }
+        #endregion
+        #region save theme as default
         private void SaveThemeAsDefault(string themename)
         {
             try
@@ -14946,7 +16502,8 @@ namespace SATSuma
                 HandleException(ex, "SaveThemeAsDefault");
             }
         }
-
+        #endregion
+        #region delete theme
         private void ComboBoxThemeList_SelectedValueChanged(object sender, EventArgs e)
         {
             try
@@ -14998,7 +16555,8 @@ namespace SATSuma
                 HandleException(ex, "BtnDeleteTheme_Click");
             }
         }
-
+        #endregion region
+        #region timers to hide saved/deleted messages after display
         private void HideThemeSavedTimer_Tick(object sender, EventArgs e)
         {
             try
@@ -15025,177 +16583,143 @@ namespace SATSuma
             }
         }
         #endregion
-        #region ⚡REUSEABLE STUFF⚡
-        //==============================================================================================================================================================================================
-        //====================== COMMON CODE ++=========================================================================================================================================================
+        #endregion
 
-        private void DisablePrivacyMode()
+        #region ⚡COMMON CODE⚡
+        #region form paint - border round window, relocate objects, set window title, bookmark button state
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
             try
             {
-                privacyMode = false;
-                lblPrivacyMode.Invoke((MethodInvoker)delegate
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid); // place a 1px border around the form
+                if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
                 {
-                    lblPrivacyMode.ForeColor = Color.IndianRed;
-                    lblPrivacyMode.Text = "❌";
-                });
-                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                    lblBlockchairComJSON.Text = "❌";
-                    lblBlockchairComJSON.Enabled = true;
-                });
-                RunBlockchairComJSONAPI = false;
-                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                    lblBitcoinExplorerEndpoints.Text = "❌";
-                    lblBitcoinExplorerEndpoints.Enabled = true;
-                });
-                RunBitcoinExplorerEndpointAPI = false;
-                RunBitcoinExplorerOrgJSONAPI = false;
-                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                    lblBlockchainInfoEndpoints.Text = "❌";
-                    lblBlockchainInfoEndpoints.Enabled = true;
-                });
-                RunBlockchainInfoEndpointAPI = false;
-
-                PrivacyModeSelected = "0";
-                blockchairComJSONSelected = "0";
-                bitcoinExplorerEnpointsSelected = "0";
-                blockchainInfoEndpointsSelected = "0";
-
-                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsNodeTestnet.ForeColor = Color.IndianRed;
-                    lblSettingsNodeTestnet.Enabled = true;
-                });
-                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
-                    lblSettingsNodeMainnet.Enabled = true;
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "DisablePrivacyMode");
-            }
-        }
-
-        private void EnablePrivacyMode()
-        {
-            try
-            {
-                privacyMode = true;
-                lblPrivacyMode.Invoke((MethodInvoker)delegate
-                {
-                    lblPrivacyMode.ForeColor = Color.Green;
-                    lblPrivacyMode.Text = "✔️";
-                });
-                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchairComJSON.ForeColor = Color.Gray;
-                    lblBlockchairComJSON.Text = "❌";
-                    lblBlockchairComJSON.Enabled = false;
-                });
-                RunBlockchairComJSONAPI = false;
-                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBitcoinExplorerEndpoints.ForeColor = Color.Gray;
-                    lblBitcoinExplorerEndpoints.Text = "❌";
-                    lblBitcoinExplorerEndpoints.Enabled = false;
-                });
-                RunBitcoinExplorerEndpointAPI = false;
-                RunBitcoinExplorerOrgJSONAPI = false;
-                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockchainInfoEndpoints.ForeColor = Color.Gray;
-                    lblBlockchainInfoEndpoints.Text = "❌";
-                    lblBlockchainInfoEndpoints.Enabled = false;
-                });
-                RunBlockchainInfoEndpointAPI = false;
-                RunMempoolSpaceLightningAPI = false;
-                PrivacyModeSelected = "1";
-                blockchairComJSONSelected = "0";
-                bitcoinExplorerEnpointsSelected = "0";
-                blockchainInfoEndpointsSelected = "0";
-
-                lblSettingsNodeCustom.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsNodeCustom.ForeColor = Color.Green;
-                    lblSettingsNodeCustom.Text = "✔️";
-                });
-                testNet = false;
-                textBoxSettingsCustomMempoolURL.Enabled = true;
-                textBoxSettingsCustomMempoolURL.Focus();
-
-                lblSettingsCustomNodeStatusLight.ForeColor = Color.IndianRed;
-                lblSettingsCustomNodeStatus.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsCustomNodeStatus.Text = "invalid / node offline";
-                });
-                previousCustomNodeStringToCompare = textBoxSettingsCustomMempoolURL.Text;
-
-                CheckCustomNodeIsOnline();
-                CheckNetworkStatus();
-
-                lblSettingsNodeTestnet.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsNodeTestnet.ForeColor = Color.Gray;
-                    lblSettingsNodeTestnet.Enabled = false;
-                });
-                lblSettingsNodeMainnet.Invoke((MethodInvoker)delegate
-                {
-                    lblSettingsNodeMainnet.ForeColor = Color.Gray;
-                    lblSettingsNodeMainnet.Enabled = false;
-                });
-                DisableChartsThatDontUseMempoolSpace();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "EnablePrivacyMode");
-            }
-        }
-
-        private void UpdateSecondsToHalving()
-        {
-            try
-            {
-                if (!testNet)
-                {
-                    if (ObtainedHalvingSecondsRemainingYet) // only want to do this if we've already retrieved seconds remaining until halvening
+                    if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
                     {
-                        string secondsString = lblHalvingSecondsRemaining.Text;
-                        try
+                        btnAddToBookmarks.Enabled = true;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
                         {
-                            int SecondsToHalving = int.Parse(secondsString);
-                            if (SecondsToHalving > 0)
-                            {
-                                SecondsToHalving--; // one second closer to the halvening!
-                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
-                                });
-                            }
-                        }
-                        catch
-                        {
-                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalvingSecondsRemaining.Text = "disabled";
-                            });
-                        }
+                            lblNowViewing.Text = "Address";
+                        });
                     }
+                    if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
+                    {
+                        btnAddToBookmarks.Enabled = false;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Address";
+                        });
+                    }
+                    if (panelBlock.Visible && lblBlockHash.Text != "")
+                    {
+                        btnAddToBookmarks.Enabled = true;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Block";
+                        });
+                    }
+                    if (panelBlock.Visible && lblBlockHash.Text == "")
+                    {
+                        btnAddToBookmarks.Enabled = false;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Block";
+                        });
+                    }
+                    if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
+                    {
+                        btnAddToBookmarks.Enabled = true;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Transaction";
+                        });
+                    }
+                    if (panelTransaction.Visible && lblInvalidTransaction.Visible)
+                    {
+                        btnAddToBookmarks.Enabled = false;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Transaction";
+                        });
+                    }
+                    if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
+                    {
+                        btnAddToBookmarks.Enabled = false;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Xpub";
+                        });
+                    }
+                    if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
+                    {
+                        btnAddToBookmarks.Enabled = true;
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Xpub";
+                        });
+                    }
+                }
+                else
+                {
+                    if (panelBitcoinDashboard.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Bitcoin dashboard";
+                        });
+                    }
+                    if (panelLightningDashboard.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Lightning dashboard";
+                        });
+                    }
+                    if (panelBlockList.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Blocks";
+                        });
+                    }
+                    if (panelBookmarks.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Bookmarks";
+                        });
+                    }
+                    if (panelSettings.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Settings";
+                        });
+                    }
+                    if (panelAppearance.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Appearance";
+                        });
+                    }
+                    if (panelCharts.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Charts";
+                        });
+                    }
+                    btnAddToBookmarks.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "UpdateSecondsToHalving");
+                HandleException(ex, "Form_paint");
             }
         }
-
+        #endregion
+        #region status message/alert at bottom of window
         private void UpdateOnScreenElapsedTimeSinceUpdate()
         {
             try
@@ -15222,107 +16746,6 @@ namespace SATSuma
             }
         }
 
-        private void CreateDataServices()
-        {
-            _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
-            _blockService = new BlockDataService(NodeURL);
-            _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
-            _transactionService = new TransactionService(NodeURL);
-            _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
-            _historicPriceDataService = new HistoricPriceDataService();
-            _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
-            _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService();
-            _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
-            _uniqueAddressesDataService = new UniqueAddressesDataService();
-            _utxoDataService = new UTXODataService();
-            _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
-            _lightningNodesByCountryService = new LightningNodesByCountryService(NodeURL);
-            _marketCapDataService = new MarketCapDataService();
-        }
-
-        // Get current block tip
-        private void GetBlockTip()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                string BlockTipURL = NodeURL + "blocks/tip/height";
-                string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                lblBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockNumber.Text = BlockTip;
-                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "GetBlockTip");
-            }
-        }
-
-        // Method to encrypt a string using SHA-256
-        private string Encrypt(string input, string key)
-        {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-            using var sha256 = new SHA256Managed();
-            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
-            byte[] encryptedBytes = new byte[inputBytes.Length];
-            for (int i = 0; i < inputBytes.Length; i++)
-            {
-                encryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
-            }
-            return Convert.ToBase64String(encryptedBytes);
-        }
-
-        // Method to decrypt a string using SHA-256
-        private string Decrypt(string input, string key)
-        {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-            byte[] inputBytes = Convert.FromBase64String(input);
-            using var sha256 = new SHA256Managed();
-            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
-            byte[] decryptedBytes = new byte[inputBytes.Length];
-            for (int i = 0; i < inputBytes.Length; i++)
-            {
-                decryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
-            }
-            return Encoding.UTF8.GetString(decryptedBytes);
-        }
-
-        //=============================================================================================================
-        //--------------- ERROR HANDLER -------------------------------------------------------------------------------
-
-        private void HandleException(Exception ex, string methodName)
-        {
-            string errorMessage;
-            if (ex is WebException)
-            {
-                errorMessage = $"Web exception in {methodName}: {ex.Message}";
-            }
-            else if (ex is HttpRequestException)
-            {
-                errorMessage = $"HTTP Request error in {methodName}: {ex.Message}";
-            }
-            else if (ex is JsonException)
-            {
-                errorMessage = $"JSON parsing error in {methodName}: {ex.Message}";
-            }
-            else
-            {
-                errorMessage = $"Error in {methodName}: {ex.Message}";
-            }
-
-            lblErrorMessage.Invoke((MethodInvoker)delegate
-            {
-                lblErrorMessage.Text = errorMessage;
-            });
-            ShowAlertSymbol();
-        }
-
-        //=============================================================================================================
-        //--------------- SHOW ALERT SYMBOL -------------------------------------------------------------------------------
-
         private void ShowAlertSymbol()
         {
             lblAlert.Invoke((MethodInvoker)delegate
@@ -15330,43 +16753,6 @@ namespace SATSuma
                 lblAlert.Text = "⚠️";
             });
         }
-
-        //=============================================================================================================
-        //--------------- OVERRIDE COLOURS FOR LISTVIEW HEADINGS ------------------------------------------------------
-
-        private void AllListViews_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            try
-            {
-                SolidBrush brush = new SolidBrush(listViewHeaderColor);
-                e.Graphics.FillRectangle(brush, e.Bounds);
-                // Change text color and alignment
-                SolidBrush textBrush = new SolidBrush(listViewHeaderTextColor);
-                StringFormat format = new StringFormat
-                {
-                    Alignment = StringAlignment.Near,
-                    LineAlignment = StringAlignment.Center
-                };
-                e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "AllListViews_DrawColumnHeader");
-            }
-        }
-
-        //=============================================================================================================
-        //-------------------- CONVERT SATS TO BITCOIN ----------------------------------------------------------------
-
-        private decimal ConvertSatsToBitcoin(string numerics)
-        {
-            decimal number = decimal.Parse(numerics);
-            decimal result = number / 100000000;
-            return result;
-        }
-
-        //=============================================================================================================
-        //------------------------DISABLE/ENABLE THE LOADING ANIMATIONS-------------------------------------------------
 
         private void ToggleLoadingAnimation(string enableOrDisableAnimation)
         {
@@ -15389,20 +16775,6 @@ namespace SATSuma
             }
         }
 
-        private void ShowChartLoadingPanel()
-        {
-            pictureBoxChartLoadingAnimation.Enabled = true;
-            panelChartLoading.Visible = true;
-        }
-
-        private void HideChartLoadingPanel()
-        {
-            pictureBoxChartLoadingAnimation.Enabled = false;
-            panelChartLoading.Visible = false;
-        }
-
-        //=============================================================================================================
-        //--------------------COUNTDOWN, ERROR MESSAGES AND STATUS LIGHTS----------------------------------------------
         private void UpdateOnScreenCountdownAndFlashLights()
         {
             try
@@ -15492,9 +16864,134 @@ namespace SATSuma
                 HandleException(ex, "SetLightsMessagesAndResetTimers");
             }
         }
+        #endregion
+        #region create data services
+        private void CreateDataServices()
+        {
+            _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
+            _blockService = new BlockDataService(NodeURL);
+            _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
+            _transactionService = new TransactionService(NodeURL);
+            _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
+            _historicPriceDataService = new HistoricPriceDataService();
+            _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
+            _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService();
+            _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
+            _uniqueAddressesDataService = new UniqueAddressesDataService();
+            _utxoDataService = new UTXODataService();
+            _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
+            _lightningNodesByCountryService = new LightningNodesByCountryService(NodeURL);
+            _marketCapDataService = new MarketCapDataService();
+        }
+        #endregion
+        #region get block tip
+        private void GetBlockTip()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                string BlockTipURL = NodeURL + "blocks/tip/height";
+                string BlockTip = client.DownloadString(BlockTipURL); 
+                lblBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockNumber.Text = BlockTip;
+                    textBoxBlockHeightToStartListFrom.Text = BlockTip;
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetBlockTip");
+            }
+        }
+        #endregion
+        #region encrypt/decrypt string using SHA-256
+        private string Encrypt(string input, string key) // encrypt a string using SHA-256
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            using var sha256 = new SHA256Managed();
+            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
+            byte[] encryptedBytes = new byte[inputBytes.Length];
+            for (int i = 0; i < inputBytes.Length; i++)
+            {
+                encryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
+            }
+            return Convert.ToBase64String(encryptedBytes);
+        } 
+                
+        private string Decrypt(string input, string key) // decrypt a string using SHA-256
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] inputBytes = Convert.FromBase64String(input);
+            using var sha256 = new SHA256Managed();
+            byte[] hashedBytes = sha256.ComputeHash(keyBytes);
+            byte[] decryptedBytes = new byte[inputBytes.Length];
+            for (int i = 0; i < inputBytes.Length; i++)
+            {
+                decryptedBytes[i] = (byte)(inputBytes[i] ^ hashedBytes[i % hashedBytes.Length]);
+            }
+            return Encoding.UTF8.GetString(decryptedBytes);
+        } 
+        #endregion
+        #region error handler
+        private void HandleException(Exception ex, string methodName)
+        {
+            string errorMessage;
+            if (ex is WebException)
+            {
+                errorMessage = $"Web exception in {methodName}: {ex.Message}";
+            }
+            else if (ex is HttpRequestException)
+            {
+                errorMessage = $"HTTP Request error in {methodName}: {ex.Message}";
+            }
+            else if (ex is JsonException)
+            {
+                errorMessage = $"JSON parsing error in {methodName}: {ex.Message}";
+            }
+            else
+            {
+                errorMessage = $"Error in {methodName}: {ex.Message}";
+            }
 
-        //=============================================================================================================        
-        //-------------------------- CHECK API ONLINE STATUS ----------------------------------------------------------
+            lblErrorMessage.Invoke((MethodInvoker)delegate
+            {
+                lblErrorMessage.Text = errorMessage;
+            });
+            ShowAlertSymbol();
+        }
+        #endregion
+        #region override colours for listview headings
+        private void AllListViews_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            try
+            {
+                SolidBrush brush = new SolidBrush(listViewHeaderColor);
+                e.Graphics.FillRectangle(brush, e.Bounds);
+                // Change text color and alignment
+                SolidBrush textBrush = new SolidBrush(listViewHeaderTextColor);
+                StringFormat format = new StringFormat
+                {
+                    Alignment = StringAlignment.Near,
+                    LineAlignment = StringAlignment.Center
+                };
+                e.Graphics.DrawString(e.Header.Text, e.Font, textBrush, e.Bounds, format);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "AllListViews_DrawColumnHeader");
+            }
+        }
+        #endregion
+        #region convert sats to bitcoin
+        private decimal ConvertSatsToBitcoin(string numerics)
+        {
+            decimal number = decimal.Parse(numerics);
+            decimal result = number / 100000000;
+            return result;
+        }
+        #endregion
+        #region check network status
         private async void CheckNetworkStatus()
         {
             try
@@ -15515,7 +17012,7 @@ namespace SATSuma
                         });
                         headerNetworkName.Invoke((MethodInvoker)delegate
                         {
-                            headerNetworkName.Text = hostnameForDisplay;
+                            headerNetworkName.Text = hostnameForDisplay + " (Xpub queries only)";
                         });
                         lblSettingsXpubNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -15542,7 +17039,7 @@ namespace SATSuma
                         });
                         headerNetworkName.Invoke((MethodInvoker)delegate
                         {
-                            headerNetworkName.Text = hostnameForDisplay;
+                            headerNetworkName.Text = hostnameForDisplay + " (Xpub queries only)";
                         });
                         lblSettingsXpubNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -15795,10 +17292,27 @@ namespace SATSuma
             }
         }
         #endregion
-        #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
-        //=============================================================================================================        
-        //-------------------------- GENERAL FORM NAVIGATION/BUTTON CONTROLS-------------------------------------------
+        #region update genesis background clock
+        private void UpdateOnScreenClock()
+        {
+            try
+            {
+                lblTime.Invoke((MethodInvoker)delegate
+                {
+                    lblTime.Text = DateTime.Now.ToString("HH:mm:ss");
+                });
 
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "UpdateOnScreenClock");
+            }
+        }
+        #endregion
+        #endregion
+
+        #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
+        #region main menu
         private void BtnMenu_Click(object sender, EventArgs e)
         {
             panelMenu.BringToFront();
@@ -15806,161 +17320,35 @@ namespace SATSuma
             {
                 panelMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 336;
+                    panelMenu.Height = 338;
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                btnMenu.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    btnMenu.BackColor = panelMenu.BackColor;
                 });
-                panelThemeMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelThemeMenu.Height = 24;
-                });
+                CloseCurrencyMenu();
+                CloseThemeMenu();
             }
             else
             {
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
+                CloseMainMenu();
             }
-        }
-
-        private void BtnMenuHelp_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var modalWindow = new HelpScreen
-                {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    TextColor = label77.ForeColor, // random label color to pass to the help screen
-                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor,
-                    TextBoxBackColor = chartsBackgroundColor,
-                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
-                    WindowBackgroundColor = BackColor,
-                    WindowBackgroundImage = BackgroundImage
-                };
-                modalWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnMenuHelp_Click");
-            }
-        }
-
-        private void BtnMenuSplash_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
-                panelCurrency.Invoke((MethodInvoker)delegate
-                {
-                    panelCurrency.Height = 24;
-                });
-
-                var modalWindow = new Splash
-                {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    WindowBackgroundColor = panel88.BackColor,
-                    LabelColor = label26.ForeColor,
-                    LinksColor = lblHeaderMarketCap.ForeColor,
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor
-                };
-                modalWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnMenuSplash_Click");
-            }
-        }
-
-        private void BtnCurrency_Click(object sender, EventArgs e)
-        {
-            panelCurrency.BringToFront();
-            if (panelCurrency.Height == 24)
-            {
-                panelCurrency.Invoke((MethodInvoker)delegate
-                {
-                    panelCurrency.Height = 120;
-                });
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 24;
-                });
-                panelThemeMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelThemeMenu.Height = 24;
-                });
-            }
-            else
-            {
-                panelCurrency.Invoke((MethodInvoker)delegate
-                {
-                    panelCurrency.Height = 24;
-                });
-            }
-        }
-
-        private void BtnExit_Click(object sender, EventArgs e) // exit
-        {
-            this.Close();
-        }
-
-        private void BtnMinimise_Click(object sender, EventArgs e) // minimise the form
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void BtnMoveWindow_MouseDown(object sender, MouseEventArgs e) // move the form when the move control is used
-        {
-            panelMenu.Invoke((MethodInvoker)delegate
-            {
-                panelMenu.Height = 24; //close menu
-            });
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        private void BtnMoveWindow_MouseUp(object sender, MouseEventArgs e) // reset colour of the move form control
-        {
-            btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
-        }
-
-        private void BtnMoveWindow_Click(object sender, EventArgs e)
-        {
-            panelMenu.Invoke((MethodInvoker)delegate
-            {
-                panelMenu.Height = 24; //close menu
-            });
-            panelCurrency.Invoke((MethodInvoker)delegate
-            {
-                panelCurrency.Height = 24;
-            });
         }
 
         private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "₿ dashboard";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBitcoinDashboard.Location.X + (btnMenuBitcoinDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBitcoinDashboard.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBitcoinDashboard.Location.X, btnMenuBitcoinDashboard.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -16001,13 +17389,16 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "⚡dashboard";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuLightningDashboard.Location.X + (btnMenuLightningDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuLightningDashboard.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuLightningDashboard.Location.X, btnMenuLightningDashboard.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -16048,13 +17439,16 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "charts";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuCharts.Location.X + (btnMenuCharts.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuCharts.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuCharts.Location.X, btnMenuCharts.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -16092,13 +17486,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "address";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuAddress.Location.X + (btnMenuAddress.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuAddress.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuAddress.Location.X, btnMenuAddress.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = false;
@@ -16137,13 +17533,16 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "block";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBlock.Location.X + (btnMenuBlock.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlock.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBlock.Location.X, btnMenuBlock.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlock.Enabled = false;
@@ -16190,13 +17589,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "xpub";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuXpub.Location.X + (btnMenuXpub.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuXpub.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuXpub.Location.X, btnMenuXpub.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = false;
                 btnMenuBlock.Enabled = true;
@@ -16235,13 +17636,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "blocks";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBlockList.Location.X + (btnMenuBlockList.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlockList.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBlockList.Location.X, btnMenuBlockList.Location.Y + 5);
                 });
                 btnMenuBlockList.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -16288,13 +17691,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "transaction";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuTransaction.Location.X + (btnMenuTransaction.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuTransaction.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuTransaction.Location.X, btnMenuTransaction.Location.Y + 5);
                 });
                 btnMenuTransaction.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -16334,13 +17739,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "bookmarks";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBookmarks.Location.X + (btnMenuBookmarks.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBookmarks.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBookmarks.Location.X, btnMenuBookmarks.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -16382,13 +17789,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "settings";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuSettings2.Location.X + (btnMenuSettings2.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuSettings2.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuSettings2.Location.X, btnMenuSettings2.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -16429,13 +17838,15 @@ namespace SATSuma
         {
             try
             {
-                panelMenu.Invoke((MethodInvoker)delegate
+                CloseMainMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
-                    panelMenu.Height = 24;
+                    lblMenuHighlightedButtonText.Text = "appearance";
+                    lblMenuHighlightedButtonText.Location = new Point((btnMenuAppearance.Location.X + (btnMenuAppearance.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuAppearance.Location.Y + 3);
                 });
-                panelCurrency.Invoke((MethodInvoker)delegate
+                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
-                    panelCurrency.Height = 24;
+                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuAppearance.Location.X, btnMenuAppearance.Location.Y + 5);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -16474,8 +17885,386 @@ namespace SATSuma
             {
                 HandleException(ex, "btnAppearance_Click");
             }
-}
+        }
 
+        #endregion
+        #region show help screen
+        private void BtnMenuHelp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var modalWindow = new HelpScreen
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    TextColor = label77.ForeColor, // random label color to pass to the help screen
+                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor,
+                    ButtonTextColor2 = btnPreviousBlock.ForeColor,
+                    ButtonBackColor2 = btnPreviousBlock.BackColor,
+                    TextBoxBackColor = chartsBackgroundColor,
+                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
+                    WindowBackgroundColor = BackColor,
+                    WindowBackgroundImage = BackgroundImage
+                };
+                modalWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuHelp_Click");
+            }
+        }
+
+        private void BtnHelp_Click(object sender, EventArgs e) // help screen
+        {
+            try
+            {
+                var modalWindow = new HelpScreen
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    TextColor = label77.ForeColor, // random label color to pass to the help screen
+                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor,
+                    ButtonTextColor2 = btnPreviousBlock.ForeColor,
+                    ButtonBackColor2 = btnPreviousBlock.BackColor,
+                    TextBoxBackColor = chartsBackgroundColor,
+                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
+                    WindowBackgroundColor = BackColor,
+                    WindowBackgroundImage = BackgroundImage
+
+                };
+                modalWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnHelp_Click");
+            }
+        }
+        #endregion
+        #region show about screen
+        private void BtnMenuSplash_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CloseMainMenu();
+
+                var modalWindow = new Splash
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    WindowBackgroundColor = panel88.BackColor,
+                    LabelColor = label26.ForeColor,
+                    LinksColor = lblHeaderMarketCap.ForeColor,
+                    ButtonTextColor = btnMenu.ForeColor,
+                    ButtonBackColor = btnMenu.BackColor,
+                };
+                modalWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuSplash_Click");
+            }
+        }
+        #endregion
+        #region currency menu & get market data
+        private void BtnCurrency_Click(object sender, EventArgs e)
+        {
+            panelCurrency.BringToFront();
+            if (panelCurrency.Height == 24)
+            {
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.Height = 122;
+                });
+                btnCurrency.Invoke((MethodInvoker)delegate
+                {
+                    btnCurrency.BackColor = panelMenu.BackColor;
+                });
+                CloseMainMenu();
+                CloseThemeMenu();
+            }
+            else
+            {
+                CloseCurrencyMenu();
+            }
+        }
+
+        private void BtnUSD_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = false;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            btnCurrency.Text = "USD $";
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonText.Text = "USD $";
+                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
+            });
+            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnUSD.Location.X, btnUSD.Location.Y + 5);
+            });
+        }
+
+        private void BtnEUR_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = false;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = true;
+            btnCurrency.Text = "EUR €";
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
+                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
+            });
+            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnEUR.Location.X, btnEUR.Location.Y + 5);
+            });
+        }
+
+        private void BtnGBP_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = false;
+            btnXAU.Enabled = true;
+            btnCurrency.Text = "GBP £";
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
+                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
+            });
+            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnGBP.Location.X, btnGBP.Location.Y + 5);
+            });
+        }
+
+        private void BtnXAU_Click(object sender, EventArgs e)
+        {
+            btnUSD.Enabled = true;
+            btnEUR.Enabled = true;
+            btnGBP.Enabled = true;
+            btnXAU.Enabled = false;
+            btnCurrency.Text = "XAU 🪙";
+            CloseCurrencyMenuGetMarketDataSaveCurrency();
+            lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
+                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
+            });
+            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            {
+                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnXAU.Location.X, btnXAU.Location.Y + 5);
+            });
+        }
+
+        private void CloseCurrencyMenuGetMarketDataSaveCurrency()
+        {
+            CloseCurrencyMenu();
+            GetMarketData();
+            SaveSettingsToBookmarksFile();
+        }
+
+        private void GetMarketData()
+        {
+            try
+            {
+                if (!privacyMode)
+                {
+                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
+                    var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+                    if (testNet)
+                    {
+                        priceUSD = "0 (TestNet)";
+                        priceGBP = "0 (TestNet)";
+                        priceEUR = "0 (TestNet)";
+                        priceXAU = "0 (TestNet)";
+                        mCapUSD = "0 (TestNet)";
+                        mCapGBP = "0 (TestNet)";
+                        mCapEUR = "0 (TestNet)";
+                        mCapXAU = "0 (TestNet)";
+                        satsUSD = "0 (TestNet)";
+                        satsGBP = "0 (TestNet)";
+                        satsEUR = "0 (TestNet)";
+                        satsXAU = "0 (TestNet)";
+                    }
+                    string price = "";
+                    string mCap = "";
+                    string satsPerUnit = "";
+                    if (!btnUSD.Enabled)
+                    {
+                        price = "$" + priceUSD;
+                        mCap = "$" + mCapUSD;
+                        satsPerUnit = satsUSD;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 USD / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / USD";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (USD)";
+                        });
+                    }
+                    if (!btnEUR.Enabled)
+                    {
+                        price = "€" + priceEUR;
+                        mCap = "€" + mCapEUR;
+                        satsPerUnit = satsEUR;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 EUR / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / EUR";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (EUR)";
+                        });
+                    }
+                    if (!btnGBP.Enabled)
+                    {
+                        price = "£" + priceGBP;
+                        mCap = "£" + mCapGBP;
+                        satsPerUnit = satsGBP;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 GBP / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / GBP";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (GBP)";
+                        });
+                    }
+                    if (!btnXAU.Enabled)
+                    {
+                        price = "🪙" + priceXAU;
+                        mCap = "🪙" + mCapXAU;
+                        satsPerUnit = satsXAU;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 XAU / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / XAU";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (XAU)";
+                        });
+                    }
+
+                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
+                    });
+                    lblPriceUSD.Invoke((MethodInvoker)delegate
+                    {
+                        lblPriceUSD.Text = price;
+                    });
+                    lblHeaderPrice.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderPrice.Text = price;
+                    });
+                    pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                    });
+                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
+                    {
+                        lblMarketCapUSD.Text = mCap;
+                    });
+                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderMarketCap.Text = mCap;
+                    });
+                    lblMoscowTime.Invoke((MethodInvoker)delegate
+                    {
+                        lblMoscowTime.Text = satsPerUnit;
+                    });
+                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderMoscowTime.Text = satsPerUnit;
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "getting market data");
+            }
+        }
+        #endregion
+        #region minimise/exit window
+        private void BtnExit_Click(object sender, EventArgs e) // exit
+        {
+            this.Close();
+        }
+
+        private void BtnMinimise_Click(object sender, EventArgs e) // minimise the form
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+        #endregion
+        #region move window
+        private void BtnMoveWindow_MouseDown(object sender, MouseEventArgs e) // move the form when the move control is used
+        {
+            CloseMainMenu();
+            CloseCurrencyMenu();
+            CloseThemeMenu();
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void BtnMoveWindow_MouseUp(object sender, MouseEventArgs e) // reset colour of the move form control
+        {
+            btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
+        }
+
+        private void BtnMoveWindow_Click(object sender, EventArgs e)
+        {
+            CloseMainMenu();
+            CloseCurrencyMenu();
+            CloseThemeMenu();
+        }
+        #endregion
+        #region chart icons in header area
         private void PictureBoxHeaderHashrateChart_Click(object sender, EventArgs e)
         {
             BtnChartHashrate_Click(sender, e);
@@ -16499,33 +18288,8 @@ namespace SATSuma
             BtnChartCirculation_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
-
-        private void BtnHelp_Click(object sender, EventArgs e) // help screen
-        {
-            try
-            {
-                var modalWindow = new HelpScreen
-                {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    TextColor = label77.ForeColor, // random label color to pass to the help screen
-                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor,
-                    TextBoxBackColor = chartsBackgroundColor,
-                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
-                    WindowBackgroundColor = BackColor,
-                    WindowBackgroundImage = BackgroundImage
-                    
-                };
-                modalWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnHelp_Click");
-            }
-        }
-
+        #endregion
+        #region get panel states
         public Panel GetPanelBlock() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelBlock;
@@ -16586,196 +18350,47 @@ namespace SATSuma
             return this.panelMenu;
         }
         #endregion
-        #region ⚡MISC UI STUFF⚡
-        //=============================================================================================================
-        //--------------------------ON-SCREEN CLOCK--------------------------------------------------------------------
-        private void UpdateOnScreenClock()
+        #region close menus
+        private void CloseMainMenu()
         {
-            try
+            panelMenu.Invoke((MethodInvoker)delegate
             {
-                lblTime.Invoke((MethodInvoker)delegate
-                {
-                    lblTime.Text = DateTime.Now.ToString("HH:mm:ss");
-                });
-
-            }
-            catch (Exception ex)
+                panelMenu.Height = 24;
+            });
+            btnMenu.Invoke((MethodInvoker)delegate
             {
-                HandleException(ex, "UpdateOnScreenClock");
-            }
+                btnMenu.BackColor = chartsBackgroundColor;
+            });
+        }
+        private void CloseThemeMenu()
+        {
+            panelThemeMenu.Invoke((MethodInvoker)delegate
+            {
+                panelThemeMenu.Height = 24;
+            });
+            btnThemeMenu.Invoke((MethodInvoker)delegate
+            {
+                btnThemeMenu.BackColor = chartsBackgroundColor;
+            });
         }
 
-        //=============================================================================================================
-        //---------------------- BORDER AROUND WINDOW------------------------------------------------------------------
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void CloseCurrencyMenu()
         {
-            try
+            panelCurrency.Invoke((MethodInvoker)delegate
             {
-                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid); // place a 1px border around the form
-                lblXpubNodeStatusLight.Location = new Point(textBoxXpubNodeURL.Location.X + textBoxXpubNodeURL.Width, textBoxXpubNodeURL.Location.Y + 4);
-                label18.Location = new Point(lblXpubNodeStatusLight.Location.X + lblXpubNodeStatusLight.Width, textBoxXpubNodeURL.Location.Y);
-                if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
-                {
-                    if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
-                    {
-                        btnAddToBookmarks.Enabled = true;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Address";
-                        });
-                    }
-                    if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
-                    {
-                        btnAddToBookmarks.Enabled = false;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Address";
-                        });
-                    }
-                    if (panelBlock.Visible && lblBlockHash.Text != "")
-                    {
-                        btnAddToBookmarks.Enabled = true;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Block";
-                        });
-                    }
-                    if (panelBlock.Visible && lblBlockHash.Text == "")
-                    {
-                        btnAddToBookmarks.Enabled = false;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Block";
-                        });
-                    }
-                    if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
-                    {
-                        btnAddToBookmarks.Enabled = true;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Transaction";
-                        });
-                    }
-                    if (panelTransaction.Visible && lblInvalidTransaction.Visible)
-                    {
-                        btnAddToBookmarks.Enabled = false;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Transaction";
-                        });
-                    }
-                    if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
-                    {
-                        btnAddToBookmarks.Enabled = false;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Xpub";
-                        });
-                    }
-                    if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
-                    {
-                        btnAddToBookmarks.Enabled = true;
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Xpub";
-                        });
-                    }
-                }
-                else
-                {
-                    if (panelBitcoinDashboard.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Bitcoin dashboard";
-                        });
-                    }
-                    if (panelLightningDashboard.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Lightning dashboard";
-                        });
-                    }
-                    if (panelBlockList.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Blocks";
-                        });
-                    }
-                    if (panelBookmarks.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Bookmarks";
-                        });
-                    }
-                    if (panelSettings.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Settings";
-                        });
-                    }
-                    if (panelAppearance.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Appearance";
-                        });
-                    }
-                    if (panelCharts.Visible)
-                    {
-                        lblNowViewing.Invoke((MethodInvoker)delegate
-                        {
-                            lblNowViewing.Text = "Charts";
-                        });
-                    }
-                    btnAddToBookmarks.Enabled = false;
-                }
-            }
-            catch (Exception ex)
+                panelCurrency.Height = 24;
+            });
+            btnCurrency.Invoke((MethodInvoker)delegate
             {
-                HandleException(ex, "Form_paint");
-            }
+                btnCurrency.BackColor = chartsBackgroundColor;
+            });
         }
+#endregion
+#endregion
 
-        //---------------------- CONNECTING LINES BETWEEN FIELDS ON LIGHTNING DASHBOARD -------------------------------
-        private void PanelLightningDashboard_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                using Pen pen = new Pen(linesColor, 1);
-                // Capacity connecting lines
-                e.Graphics.DrawLine(pen, lblTotalCapacity.Right, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), lblClearnetCapacity.Left, lblClearnetCapacity.Top + (lblClearnetCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTotalCapacity.Top + (lblTotalCapacity.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorCapacity.Top + (lblTorCapacity.Height / 2), lblTorCapacity.Left, lblTorCapacity.Top + (lblTorCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2), lblUnknownCapacity.Left, lblUnknownCapacity.Top + (lblUnknownCapacity.Height / 2));
-                // Node connecting lines
-                e.Graphics.DrawLine(pen, lblNodeCount.Right, lblNodeCount.Top + (lblNodeCount.Height / 2), lblTorNodes.Left, lblTorNodes.Top + (lblTorNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblTorNodes.Top + (lblTorNodes.Height / 2), (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2), lblClearnetNodes.Left, lblClearnetNodes.Top + (lblClearnetNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2), lblClearnetTorNodes.Left, lblClearnetTorNodes.Top + (lblClearnetTorNodes.Height / 2));
-                e.Graphics.DrawLine(pen, (lblTotalCapacity.Right + lblClearnetCapacity.Left) / 2, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2), lblUnannouncedNodes.Left, lblUnannouncedNodes.Top + (lblUnannouncedNodes.Height / 2));
-                // Channel connecting lines
-                e.Graphics.DrawLine(pen, lblChannelCount.Right, lblChannelCount.Top + (lblChannelCount.Height / 2), lblAverageCapacity.Left, lblAverageCapacity.Top + (lblAverageCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblChannelCount.Top + (lblChannelCount.Height / 2), (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2), lblAverageFeeRate.Left, lblAverageFeeRate.Top + (lblAverageFeeRate.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2), lblAverageBaseFeeMtokens.Left, lblAverageBaseFeeMtokens.Top + (lblAverageBaseFeeMtokens.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedCapacity.Top + (lblMedCapacity.Height / 2), lblMedCapacity.Left, lblMedCapacity.Top + (lblMedCapacity.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2), lblMedFeeRate.Left, lblMedFeeRate.Top + (lblMedFeeRate.Height / 2));
-                e.Graphics.DrawLine(pen, (lblChannelCount.Right + lblAverageCapacity.Left) / 2, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2), lblMedBaseFeeTokens.Left, lblMedBaseFeeTokens.Top + (lblMedBaseFeeTokens.Height / 2));
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "Drawing connectors on lightning dashboard");
-            }
-        }
-        #endregion
         #region CLASSES
-
-        public class Bookmark
+        #region bookmark
+public class Bookmark
         {
             public DateTime DateAdded { get; set; }
             public string Type { get; set; }
@@ -16784,7 +18399,8 @@ namespace SATSuma
             public bool Encrypted { get; set; }
             public string KeyCheck { get; set; }
         }
-
+        #endregion
+        #region theme
         public class Theme
         {
             public string ThemeName { get; set; }
@@ -16819,7 +18435,8 @@ namespace SATSuma
             public bool ChartsDark { get; set; }
             public bool OrangeInfinity { get; set; }
         }
-
+        #endregion
+        #region address transactions
         // ------------------------------------- Address Transactions -----------------------------------
         public class TransactionsForAddressService
         {
@@ -16963,8 +18580,8 @@ namespace SATSuma
             public int Block_height { get; set; }
             public string Confirmed { get; set; }
         }
-
-        // ------------------------------------- Blocks -------------------------------------------------
+        #endregion
+        #region blocks
         public class BlockDataService
         {
             private readonly string _nodeUrl;
@@ -17043,8 +18660,8 @@ namespace SATSuma
         {
             public string Name { get; set; }
         }
-
-        // ------------------------------------- Transaction --------------------------------------------
+        #endregion
+        #region transaction
         public class TransactionService
         {
             private readonly string _nodeUrl;
@@ -17130,8 +18747,8 @@ namespace SATSuma
             public string Scriptpubkey_address { get; set; }
             public long Value { get; set; }
         }
-
-        // ------------------------------------- Block Transactions -------------------------------------
+        #endregion
+        #region block transactions
         public class TransactionsForBlockService
         {
             private readonly string _nodeUrl;
@@ -17196,7 +18813,8 @@ namespace SATSuma
             //    public string scriptpubkey_address { get; set; }
             public string Value { get; set; }
         }
-
+        #endregion
+        #region date/time
         public static class DateTimeExtensions
         {
             public static DateTime FromUnixTimeMilliseconds(long milliseconds)
@@ -17205,10 +18823,9 @@ namespace SATSuma
                 return dateTimeOffset.UtcDateTime;
             }
         }
-
-        //---------------------------charts-----------------------------------------------
-        //-------------------historic price chart
-
+        #endregion
+        #region charts
+        #region price chart
         public class PriceCoordinatesList
         {
             public string X { get; set; }
@@ -17268,9 +18885,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //-------------------historic market cap chart
-
+        #endregion
+        #region market cap chart
         public class MarketCapCoordinatesList
         {
             public string X { get; set; }
@@ -17330,9 +18946,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //-------------------historic rewards (& price) chart
-
+        #endregion
+        #region reward chart
         public class HistoricRewardsAndPrice
         {
           //  public string AvgHeight { get; set; }
@@ -17340,9 +18955,8 @@ namespace SATSuma
             public decimal AvgRewards { get; set; }
           //  public decimal USD { get; set; }
         }
-
-        //-------------------historic fees (& price) chart
-
+        #endregion
+        #region fees chart
         public class HistoricFeesAndPrice
         {
          //   public string AvgHeight { get; set; }
@@ -17350,9 +18964,8 @@ namespace SATSuma
             public decimal AvgFees { get; set; }
           //  public decimal USD { get; set; }
         }
-
-        //-------------------historic hashrate and difficulty chart
-
+        #endregion
+        #region hashrate and difficulty charts
         public class HashrateSnapshot
         {
             public string Timestamp { get; set; }
@@ -17400,9 +19013,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        // ---------- block fee rates chart
-
+        #endregion
+        #region fee rates chart
         public class BlockFeeRates
         {
           //  public string AvgHeight { get; set; }
@@ -17449,9 +19061,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- BTC in circulation
-
+        #endregion
+        #region circulation chart
         public class BTCInCircChartCoordinates
         {
             public string X { get; set; } // date
@@ -17511,9 +19122,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- block size and weight chart
-
+        #endregion
+        #region block size chart
         public class Sizes
         {
          //   public string AvgHeight { get; set; }
@@ -17561,9 +19171,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- unique addresses chart
-
+        #endregion
+        #region unique addresses chart
         public class UniqueAddressesList
         {
             public string X { get; set; }
@@ -17623,9 +19232,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- UTXO count chart
-
+        #endregion
+        #region utxo chart
         public class UTXOList
         {
             public string X { get; set; }
@@ -17685,9 +19293,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- Pools ranking chart
-
+        #endregion
+        #region pools ranking chart
         public class PoolsRanking
         {
            // public string PoolId { get; set; } 
@@ -17733,9 +19340,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        // ---------- block fee rates chart
-
+        #endregion
+        #region nodes per network, channels and capacity charts
         public class NodesPerNetworkAndCapacity
         {
             public string Added { get; set; }
@@ -17780,9 +19386,8 @@ namespace SATSuma
                 return string.Empty;
             }
         }
-
-        //------------------- lightning nodes by country
-
+        #endregion
+        #region nodes by country chart
         public class CountryName 
         {
             public string En { get; set; }
@@ -17830,6 +19435,10 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+        #endregion
+
+        #endregion
+
         #endregion
     }
 }

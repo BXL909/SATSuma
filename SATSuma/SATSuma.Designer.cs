@@ -581,6 +581,8 @@
             this.panel39 = new System.Windows.Forms.Panel();
             this.label22 = new System.Windows.Forms.Label();
             this.panelCurrency = new System.Windows.Forms.Panel();
+            this.lblCurrencyMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
+            this.lblCurrencyMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnXAU = new System.Windows.Forms.Button();
             this.btnUSD = new System.Windows.Forms.Button();
             this.btnCurrency = new System.Windows.Forms.Button();
@@ -976,15 +978,13 @@
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.formsPlot2 = new ScottPlot.FormsPlot();
             this.panelThemeMenu = new System.Windows.Forms.Panel();
+            this.lblThemeMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
+            this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuThemeCustom = new System.Windows.Forms.Button();
             this.BtnMenuThemeGenesis = new System.Windows.Forms.Button();
             this.btnThemeMenu = new System.Windows.Forms.Button();
             this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
-            this.lblCurrencyMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
-            this.lblCurrencyMenuHighlightedButtonText = new System.Windows.Forms.Label();
-            this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
-            this.lblThemeMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -5242,9 +5242,9 @@
             this.panelMenu.Controls.Add(this.btnMenuAddress);
             this.panelMenu.Controls.Add(this.btnMenuBitcoinDashboard);
             this.panelMenu.Controls.Add(this.btnMenuLightningDashboard);
-            this.panelMenu.Location = new System.Drawing.Point(376, 11);
+            this.panelMenu.Location = new System.Drawing.Point(352, 11);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(114, 24);
+            this.panelMenu.Size = new System.Drawing.Size(122, 24);
             this.panelMenu.TabIndex = 152;
             // 
             // lblMenuHighlightedButtonMarker
@@ -5283,7 +5283,7 @@
             this.btnMenuCharts.ForeColor = System.Drawing.Color.White;
             this.btnMenuCharts.Location = new System.Drawing.Point(2, 144);
             this.btnMenuCharts.Name = "btnMenuCharts";
-            this.btnMenuCharts.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuCharts.Size = new System.Drawing.Size(118, 24);
             this.btnMenuCharts.TabIndex = 161;
             this.btnMenuCharts.TabStop = false;
             this.btnMenuCharts.Text = "charts";
@@ -5303,7 +5303,7 @@
             this.btnMenuAppearance.ForeColor = System.Drawing.Color.White;
             this.btnMenuAppearance.Location = new System.Drawing.Point(2, 264);
             this.btnMenuAppearance.Name = "btnMenuAppearance";
-            this.btnMenuAppearance.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuAppearance.Size = new System.Drawing.Size(118, 24);
             this.btnMenuAppearance.TabIndex = 160;
             this.btnMenuAppearance.TabStop = false;
             this.btnMenuAppearance.Text = "appearance";
@@ -5323,7 +5323,7 @@
             this.btnMenuSettings2.ForeColor = System.Drawing.Color.White;
             this.btnMenuSettings2.Location = new System.Drawing.Point(2, 240);
             this.btnMenuSettings2.Name = "btnMenuSettings2";
-            this.btnMenuSettings2.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuSettings2.Size = new System.Drawing.Size(118, 24);
             this.btnMenuSettings2.TabIndex = 159;
             this.btnMenuSettings2.TabStop = false;
             this.btnMenuSettings2.Text = "settings";
@@ -5343,7 +5343,7 @@
             this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
             this.btnMenuHelp.Location = new System.Drawing.Point(2, 312);
             this.btnMenuHelp.Name = "btnMenuHelp";
-            this.btnMenuHelp.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuHelp.Size = new System.Drawing.Size(118, 24);
             this.btnMenuHelp.TabIndex = 158;
             this.btnMenuHelp.TabStop = false;
             this.btnMenuHelp.Text = "help";
@@ -5363,7 +5363,7 @@
             this.btnMenuBookmarks.ForeColor = System.Drawing.Color.White;
             this.btnMenuBookmarks.Location = new System.Drawing.Point(2, 216);
             this.btnMenuBookmarks.Name = "btnMenuBookmarks";
-            this.btnMenuBookmarks.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuBookmarks.Size = new System.Drawing.Size(118, 24);
             this.btnMenuBookmarks.TabIndex = 157;
             this.btnMenuBookmarks.TabStop = false;
             this.btnMenuBookmarks.Text = "bookmarks";
@@ -5385,7 +5385,7 @@
             this.btnMenuXpub.Location = new System.Drawing.Point(2, 120);
             this.btnMenuXpub.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuXpub.Name = "btnMenuXpub";
-            this.btnMenuXpub.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuXpub.Size = new System.Drawing.Size(118, 24);
             this.btnMenuXpub.TabIndex = 156;
             this.btnMenuXpub.TabStop = false;
             this.btnMenuXpub.Text = "xpub";
@@ -5407,7 +5407,7 @@
             this.btnMenuTransaction.Location = new System.Drawing.Point(2, 96);
             this.btnMenuTransaction.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuTransaction.Name = "btnMenuTransaction";
-            this.btnMenuTransaction.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuTransaction.Size = new System.Drawing.Size(118, 24);
             this.btnMenuTransaction.TabIndex = 155;
             this.btnMenuTransaction.TabStop = false;
             this.btnMenuTransaction.Text = "transaction";
@@ -5430,7 +5430,7 @@
             this.btnMenuBlockList.Location = new System.Drawing.Point(2, 24);
             this.btnMenuBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBlockList.Name = "btnMenuBlockList";
-            this.btnMenuBlockList.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuBlockList.Size = new System.Drawing.Size(118, 24);
             this.btnMenuBlockList.TabIndex = 154;
             this.btnMenuBlockList.TabStop = false;
             this.btnMenuBlockList.Text = "blocks";
@@ -5452,7 +5452,7 @@
             this.btnMenu.Location = new System.Drawing.Point(0, 0);
             this.btnMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(114, 24);
+            this.btnMenu.Size = new System.Drawing.Size(122, 24);
             this.btnMenu.TabIndex = 3;
             this.btnMenu.TabStop = false;
             this.btnMenu.Text = "MENU";
@@ -5472,7 +5472,7 @@
             this.btnMenuSplash.ForeColor = System.Drawing.Color.White;
             this.btnMenuSplash.Location = new System.Drawing.Point(2, 288);
             this.btnMenuSplash.Name = "btnMenuSplash";
-            this.btnMenuSplash.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuSplash.Size = new System.Drawing.Size(118, 24);
             this.btnMenuSplash.TabIndex = 151;
             this.btnMenuSplash.TabStop = false;
             this.btnMenuSplash.Text = "about";
@@ -5494,7 +5494,7 @@
             this.btnMenuBlock.Location = new System.Drawing.Point(2, 48);
             this.btnMenuBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBlock.Name = "btnMenuBlock";
-            this.btnMenuBlock.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuBlock.Size = new System.Drawing.Size(118, 24);
             this.btnMenuBlock.TabIndex = 150;
             this.btnMenuBlock.TabStop = false;
             this.btnMenuBlock.Text = "block";
@@ -5516,7 +5516,7 @@
             this.btnMenuAddress.Location = new System.Drawing.Point(2, 72);
             this.btnMenuAddress.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuAddress.Name = "btnMenuAddress";
-            this.btnMenuAddress.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuAddress.Size = new System.Drawing.Size(118, 24);
             this.btnMenuAddress.TabIndex = 92;
             this.btnMenuAddress.TabStop = false;
             this.btnMenuAddress.Text = "address";
@@ -5538,7 +5538,7 @@
             this.btnMenuBitcoinDashboard.Location = new System.Drawing.Point(2, 168);
             this.btnMenuBitcoinDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBitcoinDashboard.Name = "btnMenuBitcoinDashboard";
-            this.btnMenuBitcoinDashboard.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuBitcoinDashboard.Size = new System.Drawing.Size(118, 24);
             this.btnMenuBitcoinDashboard.TabIndex = 88;
             this.btnMenuBitcoinDashboard.TabStop = false;
             this.btnMenuBitcoinDashboard.Text = "₿ dashboard";
@@ -5560,7 +5560,7 @@
             this.btnMenuLightningDashboard.Location = new System.Drawing.Point(2, 192);
             this.btnMenuLightningDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuLightningDashboard.Name = "btnMenuLightningDashboard";
-            this.btnMenuLightningDashboard.Size = new System.Drawing.Size(110, 24);
+            this.btnMenuLightningDashboard.Size = new System.Drawing.Size(118, 24);
             this.btnMenuLightningDashboard.TabIndex = 87;
             this.btnMenuLightningDashboard.TabStop = false;
             this.btnMenuLightningDashboard.Text = "⚡dashboard";
@@ -8806,10 +8806,36 @@
             this.panelCurrency.Controls.Add(this.btnCurrency);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(592, 11);
+            this.panelCurrency.Location = new System.Drawing.Point(584, 11);
             this.panelCurrency.Name = "panelCurrency";
-            this.panelCurrency.Size = new System.Drawing.Size(81, 24);
+            this.panelCurrency.Size = new System.Drawing.Size(89, 24);
             this.panelCurrency.TabIndex = 159;
+            // 
+            // lblCurrencyMenuHighlightedButtonMarker
+            // 
+            this.lblCurrencyMenuHighlightedButtonMarker.AutoSize = true;
+            this.lblCurrencyMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
+            this.lblCurrencyMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrencyMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblCurrencyMenuHighlightedButtonMarker.Location = new System.Drawing.Point(1, 27);
+            this.lblCurrencyMenuHighlightedButtonMarker.Name = "lblCurrencyMenuHighlightedButtonMarker";
+            this.lblCurrencyMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
+            this.lblCurrencyMenuHighlightedButtonMarker.TabIndex = 164;
+            this.lblCurrencyMenuHighlightedButtonMarker.Text = "▶";
+            this.lblCurrencyMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblCurrencyMenuHighlightedButtonText
+            // 
+            this.lblCurrencyMenuHighlightedButtonText.AutoSize = true;
+            this.lblCurrencyMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
+            this.lblCurrencyMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrencyMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblCurrencyMenuHighlightedButtonText.Location = new System.Drawing.Point(19, 27);
+            this.lblCurrencyMenuHighlightedButtonText.Name = "lblCurrencyMenuHighlightedButtonText";
+            this.lblCurrencyMenuHighlightedButtonText.Size = new System.Drawing.Size(42, 17);
+            this.lblCurrencyMenuHighlightedButtonText.TabIndex = 165;
+            this.lblCurrencyMenuHighlightedButtonText.Text = "USD $";
+            this.lblCurrencyMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnXAU
             // 
@@ -8823,7 +8849,7 @@
             this.btnXAU.Location = new System.Drawing.Point(2, 96);
             this.btnXAU.Margin = new System.Windows.Forms.Padding(0);
             this.btnXAU.Name = "btnXAU";
-            this.btnXAU.Size = new System.Drawing.Size(77, 24);
+            this.btnXAU.Size = new System.Drawing.Size(85, 24);
             this.btnXAU.TabIndex = 155;
             this.btnXAU.TabStop = false;
             this.btnXAU.Text = "XAU🪙";
@@ -8846,7 +8872,7 @@
             this.btnUSD.Location = new System.Drawing.Point(2, 24);
             this.btnUSD.Margin = new System.Windows.Forms.Padding(0);
             this.btnUSD.Name = "btnUSD";
-            this.btnUSD.Size = new System.Drawing.Size(77, 24);
+            this.btnUSD.Size = new System.Drawing.Size(85, 24);
             this.btnUSD.TabIndex = 154;
             this.btnUSD.TabStop = false;
             this.btnUSD.Text = "USD $";
@@ -8868,7 +8894,7 @@
             this.btnCurrency.Location = new System.Drawing.Point(0, 0);
             this.btnCurrency.Margin = new System.Windows.Forms.Padding(0);
             this.btnCurrency.Name = "btnCurrency";
-            this.btnCurrency.Size = new System.Drawing.Size(81, 24);
+            this.btnCurrency.Size = new System.Drawing.Size(89, 24);
             this.btnCurrency.TabIndex = 1;
             this.btnCurrency.TabStop = false;
             this.btnCurrency.Text = "USD $";
@@ -8890,7 +8916,7 @@
             this.btnEUR.Location = new System.Drawing.Point(2, 48);
             this.btnEUR.Margin = new System.Windows.Forms.Padding(0);
             this.btnEUR.Name = "btnEUR";
-            this.btnEUR.Size = new System.Drawing.Size(77, 24);
+            this.btnEUR.Size = new System.Drawing.Size(85, 24);
             this.btnEUR.TabIndex = 150;
             this.btnEUR.TabStop = false;
             this.btnEUR.Text = "EUR €";
@@ -8912,7 +8938,7 @@
             this.btnGBP.Location = new System.Drawing.Point(2, 72);
             this.btnGBP.Margin = new System.Windows.Forms.Padding(0);
             this.btnGBP.Name = "btnGBP";
-            this.btnGBP.Size = new System.Drawing.Size(77, 24);
+            this.btnGBP.Size = new System.Drawing.Size(85, 24);
             this.btnGBP.TabIndex = 92;
             this.btnGBP.TabStop = false;
             this.btnGBP.Text = "GBP £";
@@ -14527,10 +14553,36 @@
             this.panelThemeMenu.Controls.Add(this.btnThemeMenu);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeBTCdir);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
-            this.panelThemeMenu.Location = new System.Drawing.Point(495, 11);
+            this.panelThemeMenu.Location = new System.Drawing.Point(479, 11);
             this.panelThemeMenu.Name = "panelThemeMenu";
-            this.panelThemeMenu.Size = new System.Drawing.Size(92, 24);
+            this.panelThemeMenu.Size = new System.Drawing.Size(100, 24);
             this.panelThemeMenu.TabIndex = 160;
+            // 
+            // lblThemeMenuHighlightedButtonMarker
+            // 
+            this.lblThemeMenuHighlightedButtonMarker.AutoSize = true;
+            this.lblThemeMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
+            this.lblThemeMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThemeMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblThemeMenuHighlightedButtonMarker.Location = new System.Drawing.Point(1, 27);
+            this.lblThemeMenuHighlightedButtonMarker.Name = "lblThemeMenuHighlightedButtonMarker";
+            this.lblThemeMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
+            this.lblThemeMenuHighlightedButtonMarker.TabIndex = 166;
+            this.lblThemeMenuHighlightedButtonMarker.Text = "▶";
+            this.lblThemeMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblThemeMenuHighlightedButtonText
+            // 
+            this.lblThemeMenuHighlightedButtonText.AutoSize = true;
+            this.lblThemeMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
+            this.lblThemeMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(22, 27);
+            this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
+            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(52, 17);
+            this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
+            this.lblThemeMenuHighlightedButtonText.Text = "genesis";
+            this.lblThemeMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnMenuThemeCustom
             // 
@@ -14544,7 +14596,7 @@
             this.btnMenuThemeCustom.Location = new System.Drawing.Point(2, 96);
             this.btnMenuThemeCustom.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeCustom.Name = "btnMenuThemeCustom";
-            this.btnMenuThemeCustom.Size = new System.Drawing.Size(88, 24);
+            this.btnMenuThemeCustom.Size = new System.Drawing.Size(96, 24);
             this.btnMenuThemeCustom.TabIndex = 155;
             this.btnMenuThemeCustom.TabStop = false;
             this.btnMenuThemeCustom.Text = "custom";
@@ -14566,7 +14618,7 @@
             this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(2, 24);
             this.BtnMenuThemeGenesis.Margin = new System.Windows.Forms.Padding(0);
             this.BtnMenuThemeGenesis.Name = "BtnMenuThemeGenesis";
-            this.BtnMenuThemeGenesis.Size = new System.Drawing.Size(88, 24);
+            this.BtnMenuThemeGenesis.Size = new System.Drawing.Size(96, 24);
             this.BtnMenuThemeGenesis.TabIndex = 154;
             this.BtnMenuThemeGenesis.TabStop = false;
             this.BtnMenuThemeGenesis.Text = "genesis";
@@ -14588,7 +14640,7 @@
             this.btnThemeMenu.Location = new System.Drawing.Point(0, 0);
             this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnThemeMenu.Name = "btnThemeMenu";
-            this.btnThemeMenu.Size = new System.Drawing.Size(92, 24);
+            this.btnThemeMenu.Size = new System.Drawing.Size(100, 24);
             this.btnThemeMenu.TabIndex = 1;
             this.btnThemeMenu.TabStop = false;
             this.btnThemeMenu.Text = "THEME";
@@ -14610,7 +14662,7 @@
             this.btnMenuThemeBTCdir.Location = new System.Drawing.Point(2, 48);
             this.btnMenuThemeBTCdir.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeBTCdir.Name = "btnMenuThemeBTCdir";
-            this.btnMenuThemeBTCdir.Size = new System.Drawing.Size(88, 24);
+            this.btnMenuThemeBTCdir.Size = new System.Drawing.Size(96, 24);
             this.btnMenuThemeBTCdir.TabIndex = 150;
             this.btnMenuThemeBTCdir.TabStop = false;
             this.btnMenuThemeBTCdir.Text = "btcdir";
@@ -14632,7 +14684,7 @@
             this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(2, 72);
             this.btnMenuThemeSatsuma.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeSatsuma.Name = "btnMenuThemeSatsuma";
-            this.btnMenuThemeSatsuma.Size = new System.Drawing.Size(88, 24);
+            this.btnMenuThemeSatsuma.Size = new System.Drawing.Size(96, 24);
             this.btnMenuThemeSatsuma.TabIndex = 92;
             this.btnMenuThemeSatsuma.TabStop = false;
             this.btnMenuThemeSatsuma.Text = "satsuma";
@@ -14641,58 +14693,6 @@
             this.btnMenuThemeSatsuma.Click += new System.EventHandler(this.BtnMenuThemeSatsuma_Click);
             this.btnMenuThemeSatsuma.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuThemeSatsuma.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
-            // lblCurrencyMenuHighlightedButtonMarker
-            // 
-            this.lblCurrencyMenuHighlightedButtonMarker.AutoSize = true;
-            this.lblCurrencyMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
-            this.lblCurrencyMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrencyMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblCurrencyMenuHighlightedButtonMarker.Location = new System.Drawing.Point(1, 27);
-            this.lblCurrencyMenuHighlightedButtonMarker.Name = "lblCurrencyMenuHighlightedButtonMarker";
-            this.lblCurrencyMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
-            this.lblCurrencyMenuHighlightedButtonMarker.TabIndex = 164;
-            this.lblCurrencyMenuHighlightedButtonMarker.Text = "▶";
-            this.lblCurrencyMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblCurrencyMenuHighlightedButtonText
-            // 
-            this.lblCurrencyMenuHighlightedButtonText.AutoSize = true;
-            this.lblCurrencyMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
-            this.lblCurrencyMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrencyMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblCurrencyMenuHighlightedButtonText.Location = new System.Drawing.Point(19, 27);
-            this.lblCurrencyMenuHighlightedButtonText.Name = "lblCurrencyMenuHighlightedButtonText";
-            this.lblCurrencyMenuHighlightedButtonText.Size = new System.Drawing.Size(42, 17);
-            this.lblCurrencyMenuHighlightedButtonText.TabIndex = 165;
-            this.lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-            this.lblCurrencyMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblThemeMenuHighlightedButtonText
-            // 
-            this.lblThemeMenuHighlightedButtonText.AutoSize = true;
-            this.lblThemeMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
-            this.lblThemeMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(22, 27);
-            this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
-            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(52, 17);
-            this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
-            this.lblThemeMenuHighlightedButtonText.Text = "genesis";
-            this.lblThemeMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblThemeMenuHighlightedButtonMarker
-            // 
-            this.lblThemeMenuHighlightedButtonMarker.AutoSize = true;
-            this.lblThemeMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
-            this.lblThemeMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThemeMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblThemeMenuHighlightedButtonMarker.Location = new System.Drawing.Point(1, 27);
-            this.lblThemeMenuHighlightedButtonMarker.Name = "lblThemeMenuHighlightedButtonMarker";
-            this.lblThemeMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
-            this.lblThemeMenuHighlightedButtonMarker.TabIndex = 166;
-            this.lblThemeMenuHighlightedButtonMarker.Text = "▶";
-            this.lblThemeMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SATSuma
             // 
@@ -14703,6 +14703,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
@@ -14714,7 +14715,6 @@
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelThemeMenu);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.headerNetworkName);

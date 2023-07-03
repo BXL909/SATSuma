@@ -50,7 +50,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 14);
             this.label2.TabIndex = 9;
-            this.label2.Text = "SATSuma v0.90.1";
+            this.label2.Text = "SATSuma v0.90.2";
             // 
             // linkLabel2
             // 

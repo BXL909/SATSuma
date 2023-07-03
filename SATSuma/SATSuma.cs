@@ -16,6 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.90.2 marker to show current selection on menus no longer overlaps longest strings
 0.90.1 bug fix - fixed incorrect text on theme menu.
 0.90 updated dependancies. Chart plots are now cleared as soon as they're not required. Added logarithmic hashrate and difficulty charts. Changed location & text of lin/log buttons. Added BTC/fiat/gold value converter to charts screen. Valid/invalid notifications for inputted addresses, TX's or Xpubs are now all consistent. Minor change to node status alerts. Currency buttons no longer omitted from theme changes. Menu items no longer included in themed buttons, but instead inherit from chart background. Button hover colors are now derived from the button's background color, rather than hardcoded.
 0.84 bookmarks are now always displayed in descending date order

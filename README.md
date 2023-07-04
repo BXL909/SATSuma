@@ -1,7 +1,7 @@
 # SATSuma 🍊
 
-Version history
-━━━━━━━━━━━━━━━
+### Version history 🍊
+
 0.91 application now contained in a single exe. Significantly smaller install size.
 0.90.2 marker to show current selection on menus no longer overlaps longest strings
 0.90.1 bug fix - fixed incorrect text on theme menu.
@@ -12,8 +12,8 @@ Version history
 0.81 added ability to save charts as image files. Fixed documentation typos. Added introductory text to installer
 0.8 Initial release
 
-Description
-━━━━━━━━━━━
+### Description 🍊
+
 SATSuma (for Windows) is a Bitcoin explorer, Xpub viewer, Bitcoin & Lightning dashboard with the option to create encrypted bookmarks and notes for addresses, blocks, xpubs and transactions, view network, on-chain and market charts or use as a 'watch-only' wallet.
 
 SATSuma can connect to either your own full node (running Electrs/Fulcrum and mempool.space) or to the public mempool.space API. Xpub queries are restricted to the user's own node only, to maximise privacy. Keys to unlock encrypted bookmarks are not stored anywhere and are unrecoverable.
@@ -24,8 +24,7 @@ All user data is stored in two files (SATSuma_bookmarks.json & SATSuma_themes.js
 
 SATSuma is completely free and open source. If you like it and want to support the project it would be hugely appreciated. 
 
-Links
-━━━━━
+### Links 🍊
 
 https://satsuma.btcdir.org/
 

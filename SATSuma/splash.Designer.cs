@@ -46,11 +46,11 @@
             this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Silver;
             this.label2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label2.Location = new System.Drawing.Point(230, 97);
+            this.label2.Location = new System.Drawing.Point(236, 97);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 14);
+            this.label2.Size = new System.Drawing.Size(98, 14);
             this.label2.TabIndex = 9;
-            this.label2.Text = "SATSuma v0.90.2";
+            this.label2.Text = "SATSuma v0.91";
             // 
             // linkLabel2
             // 

@@ -16,6 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.91 application now contained in a single exe. Significantly smaller install size.
 0.90.2 marker to show current selection on menus no longer overlaps longest strings
 0.90.1 bug fix - fixed incorrect text on theme menu.
 0.90 updated dependancies. Chart plots are now cleared as soon as they're not required. Added logarithmic hashrate and difficulty charts. Changed location & text of lin/log buttons. Added BTC/fiat/gold value converter to charts screen. Valid/invalid notifications for inputted addresses, TX's or Xpubs are now all consistent. Minor change to node status alerts. Currency buttons no longer omitted from theme changes. Menu items no longer included in themed buttons, but instead inherit from chart background. Button hover colors are now derived from the button's background color, rather than hardcoded.
@@ -59,8 +60,6 @@ using System.Windows.Forms;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
-using System.Collections;
-using ScottPlot.Renderable;
 #endregion
 
 namespace SATSuma

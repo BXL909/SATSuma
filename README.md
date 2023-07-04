@@ -1,5 +1,7 @@
 # SATSuma 🍊
 
+![](https://satsuma.btcdir.org/wp-content/uploads/2023/07/TwitterGraphic-1.jpg)
+
 ### Version history 🍊
 
 - 0.91 application now contained in a single exe. Significantly smaller install size.

@@ -28,9 +28,9 @@ SATSuma is completely free and open source. If you like it and want to support t
 
 ### Links 🍊
 
-https://satsuma.btcdir.org/
+download - https://satsuma.btcdir.org/
 
-https://satsuma.btcdir.org/support/
+donate - https://satsuma.btcdir.org/support/
 
-https://github.com/BXL909/SATSuma
+source - https://github.com/BXL909/SATSuma
 

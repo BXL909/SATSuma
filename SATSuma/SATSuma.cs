@@ -16,6 +16,7 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
 
 Version history 🍊
+0.92 If SATSuma icon was missing from the add/remove programs list, it will be back now. Help text updated to mention BTC/fiat/gold converter. 
 0.91 application now contained in a single exe. Significantly smaller install size.
 0.90.2 marker to show current selection on menus no longer overlaps longest strings
 0.90.1 bug fix - fixed incorrect text on theme menu.

@@ -1,35 +1,30 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                      
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v0.93    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
 ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⢠⣶⣶⣤⡀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡆  ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A Bitcoin explorer, Xpub viewer, bitcoin & lightning
+⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   dashboard with the ability to create encryted 
-⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   bookmarks and notes for addresses, blocks, xpubs and
+⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   bookmarks and notes for addresses, blocks, xpubs &
 ⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   transactions. Xpub queries will only work on the 
 ⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   user's own node. Keys to unlock encrypted bookmarks
 ⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   are not stored anywhere and are uncrecoverable. The
 ⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   bookmarks file is SATSuma_bookmarks.json, and the
 ⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   themes file is SATSuma_themes.json, both are in the
-⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory
+⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory.
 
-Version history 🍊
-0.92 If SATSuma icon was missing from the add/remove programs list, it will be back now. Help text updated to mention BTC/fiat/gold converter. 
-0.91 application now contained in a single exe. Significantly smaller install size.
-0.90.2 marker to show current selection on menus no longer overlaps longest strings
-0.90.1 bug fix - fixed incorrect text on theme menu.
-0.90 updated dependancies. Chart plots are now cleared as soon as they're not required. Added logarithmic hashrate and difficulty charts. Changed location & text of lin/log buttons. Added BTC/fiat/gold value converter to charts screen. Valid/invalid notifications for inputted addresses, TX's or Xpubs are now all consistent. Minor change to node status alerts. Currency buttons no longer omitted from theme changes. Menu items no longer included in themed buttons, but instead inherit from chart background. Button hover colors are now derived from the button's background color, rather than hardcoded.
-0.84 bookmarks are now always displayed in descending date order
-0.83 bug fix (market cap chart no longer becomes permanently disabled). Bug fix (bookmarks will always decrypt with the correct key now). Bug fix (bookmarks can now be deleted when being viewed in their decrypted state)
-0.82 minor change to 'about' window
-0.81 added ability to save charts as image files. Fixed documentation typos. Added introductory text to installer
-0.8 initial release
+🍊 Homepage
+https://satsuma.btcdir.org/
+
+🍊 Version history 
+https://satsuma.btcdir.org/version-history/
+
+🍊 Download
+https://satsuma.btcdir.org/download/
 
  * Stuff to do:
- * make mouse hover effects on buttons universal for all buttons, derived from panel (same as main menu now)
- * finish header menu buttons
  * check paging when reaching the end of the block list (block 0) then pressing previous. It should work the same way as transactions work on the block screen
  * Taproot support on xpub screen
  */
@@ -412,9 +407,13 @@ namespace SATSuma
                                 double sizeInMB = (double)sizeInBytes / (1000 * 1000);
                                 sizeString = $"{sizeInMB:N2} MB";
                             }
-                            lblBlockSize.Invoke((MethodInvoker)delegate
+                            lblHeaderBlockSize.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockSize.Text = sizeString;
+                                lblHeaderBlockSize.Text = sizeString;
+                            });
+                            pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width + 10, pictureBoxHeaderBlockSizeChart.Location.Y);
                             });
                         }
                     }
@@ -905,6 +904,14 @@ namespace SATSuma
                             pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
                             {
                                 pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                            });
+                            pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width + 10, pictureBoxHeaderConverterChart.Location.Y);
+                            });
+                            pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width + 10, pictureBoxHeaderMarketCapChart.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -5728,7 +5735,7 @@ namespace SATSuma
                             lblBlockListBlockHash.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockListBlockHash.Text = BlockHash;
-                                lblBlockListBlockHash.Location = new Point(label90.Location.X + label90.Width, label90.Location.Y);
+                                lblBlockListBlockHash.Location = new Point(label90.Location.X + label90.Width, label90.Location.Y + 2);
                             });
                         }
                         string blockNumber = item.SubItems[1].Text;
@@ -5742,7 +5749,7 @@ namespace SATSuma
                         lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
-                            lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, label91.Location.Y);
+                            lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, label91.Location.Y + 2);
                         });
                         long sizeInBytes = blocks[0].Size;
                         string sizeString = ""; // convert display to bytes/kb/mb accordingly
@@ -5763,7 +5770,7 @@ namespace SATSuma
                         lblBlockListBlockSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockSize.Text = sizeString;
-                            lblBlockListBlockSize.Location = new Point(label105.Location.X + label105.Width, label105.Location.Y);
+                            lblBlockListBlockSize.Location = new Point(label105.Location.X + label105.Width, label105.Location.Y + 2);
                         });
                         string strWeight = Convert.ToString(blocks[0].Weight);
                         decimal decWeight = decimal.Parse(strWeight) / 1000000m; // convert to MWU
@@ -5771,66 +5778,66 @@ namespace SATSuma
                         lblBlockListBlockWeight.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockWeight.Text = strFormattedWeight;
-                            lblBlockListBlockWeight.Location = new Point(label103.Location.X + label103.Width, label103.Location.Y);
+                            lblBlockListBlockWeight.Location = new Point(label103.Location.X + label103.Width, label103.Location.Y + 2);
                         });
                         long nonceLong = Convert.ToInt64(blocks[0].Nonce);
                         lblBlockListNonce.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
-                            lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, label24.Location.Y);
+                            lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, label24.Location.Y + 2);
                         });
                         lblBlockListMiner.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
-                            lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, label95.Location.Y);
+                            lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, label95.Location.Y + 2);
                         });
                         lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
-                            lblBlockListTransactionCount.Location = new Point(label99.Location.X + label99.Width, label99.Location.Y);
+                            lblBlockListTransactionCount.Location = new Point(label99.Location.X + label99.Width, label99.Location.Y + 2);
                         });
                         string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
                         TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                         lblBlockListTotalFees.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalFees.Text = TotalBlockFees;
-                            lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, label88.Location.Y);
+                            lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, label88.Location.Y + 2);
                         });
                         string Reward = Convert.ToString(blocks[0].Extras.Reward);
                         lblBlockListReward.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-                            lblBlockListReward.Location = new Point(label101.Location.X + label101.Width, label101.Location.Y);
+                            lblBlockListReward.Location = new Point(label101.Location.X + label101.Width, label101.Location.Y + 2);
                         });
                         lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
-                            lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y);
+                            lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y + 2);
                         });
                         lblBlockListAverageFee.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
-                            lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, label97.Location.Y);
+                            lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, label97.Location.Y + 2);
                         });
                         lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
-                            lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, label89.Location.Y);
+                            lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, label89.Location.Y + 2);
                         });
                         lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
-                            lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, label94.Location.Y);
+                            lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, label94.Location.Y + 2);
                         });
                         lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListAverageTransactionSize.Text = Convert.ToString(blocks[0].Extras.AvgTxSize);
-                            lblBlockListAverageTransactionSize.Location = new Point(label92.Location.X + label92.Width, label92.Location.Y);
+                            lblBlockListAverageTransactionSize.Location = new Point(label92.Location.X + label92.Width, label92.Location.Y + 2);
                         });
                         lblBlockListVersion.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListVersion.Text = Convert.ToString(blocks[0].Version);
-                            lblBlockListVersion.Location = new Point(label96.Location.X + label96.Width, label96.Location.Y);
+                            lblBlockListVersion.Location = new Point(label96.Location.X + label96.Width, label96.Location.Y + 2);
                         });
                         lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                         {
@@ -5838,23 +5845,23 @@ namespace SATSuma
                         });
                         pictureBoxBlockListPoolRanking.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width + 5, pictureBoxBlockListPoolRanking.Location.Y);
+                            pictureBoxBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width + 5, lblBlockListMiner.Location.Y);
                         });
                         pictureBoxBlockListFeeChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width + 5, pictureBoxBlockListFeeChart.Location.Y);
+                            pictureBoxBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width + 5, lblBlockListTotalFees.Location.Y);
                         });
                         pictureBoxBlockListRewardChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width + 5, pictureBoxBlockListRewardChart.Location.Y);
+                            pictureBoxBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width + 5, lblBlockListReward.Location.Y);
                         });
                         pictureBoxBlockListFeeRangeChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width + 5, pictureBoxBlockListFeeRangeChart.Location.Y);
+                            pictureBoxBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width + 5, lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
                         });
                         pictureBoxBlockListBlockSizeChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width + 5, pictureBoxBlockListBlockSizeChart.Location.Y);
+                            pictureBoxBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width + 5, lblBlockListBlockSize.Location.Y);
                         });
                     }
                     else
@@ -11118,6 +11125,21 @@ namespace SATSuma
                 {
                     pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcondisabled;
                 });
+                pictureBoxHeaderConverterChart.Enabled = false;
+                pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderConverterChart.BackgroundImage = Properties.Resources.graphIcondisabled;
+                });
+                pictureBoxHeaderBlockSizeChart.Enabled = false;
+                pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderBlockSizeChart.BackgroundImage = Properties.Resources.graphIcondisabled;
+                });
+                pictureBoxHeaderMarketCapChart.Enabled = false;
+                pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderMarketCapChart.BackgroundImage = Properties.Resources.graphIcondisabled;
+                });
             }
             catch (Exception ex)
             {
@@ -11160,6 +11182,21 @@ namespace SATSuma
                 pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
                 {
                     pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcon;
+                });
+                pictureBoxHeaderConverterChart.Enabled = true;
+                pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderConverterChart.BackgroundImage = Properties.Resources.graphIcon;
+                });
+                pictureBoxHeaderBlockSizeChart.Enabled = true;
+                pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderBlockSizeChart.BackgroundImage = Properties.Resources.graphIcon;
+                });
+                pictureBoxHeaderMarketCapChart.Enabled = true;
+                pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxHeaderMarketCapChart.BackgroundImage = Properties.Resources.graphIcon;
                 });
             }
             catch (Exception ex)
@@ -14526,7 +14563,7 @@ namespace SATSuma
                     });
                     chartsBackgroundColor = Color.FromArgb(255, 255, 255);
                 }
-                CustomiseCharts();
+                CustomiseCharts(lblHeaderPrice.ForeColor);
             }
 
             catch (Exception ex)
@@ -14567,7 +14604,7 @@ namespace SATSuma
                     });
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
                 }
-                CustomiseCharts();
+                CustomiseCharts(lblHeaderPrice.ForeColor);
             }
             catch (Exception ex)
             {
@@ -15167,7 +15204,7 @@ namespace SATSuma
                         lblChartsDarkBackground.Text = "❌";
                     });
                 }
-                CustomiseCharts();
+                CustomiseCharts(theme.PriceBlock);
                 ColorDataFields(theme.DataFields);
                 labelColor = theme.Labels; // (only used for poolranking chart title)
                 ColorLabels(theme.Labels);
@@ -15327,7 +15364,7 @@ namespace SATSuma
         }
         #endregion
         #region apply changes to lists of controls
-        private void CustomiseCharts()
+        private void CustomiseCharts(Color thisColor)
         {
             formsPlot1.Plot.Margins(x: .1, y: .1);
             formsPlot1.Plot.Style(ScottPlot.Style.Black);
@@ -15356,18 +15393,24 @@ namespace SATSuma
             formsPlot1.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                titleLabel: thisColor, // using any random label to get the color from
+                //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                axisLabel: thisColor); // using any random label to get the color from
             formsPlot2.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                titleLabel: thisColor, // using any random label to get the color from
+                                                      //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                axisLabel: thisColor); // using any random label to get the color from
             formsPlot3.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
+                titleLabel: thisColor, // using any random label to get the color from
+                                                      //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
+                axisLabel: thisColor); // using any random label to get the color from
             panelFeeRatesKey.BackColor = chartsBackgroundColor;
             panelCirculationKey.BackColor = chartsBackgroundColor;
             panelPriceScaleButtons.BackColor = chartsBackgroundColor;
@@ -15394,7 +15437,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate, lblBlockBlockHeight };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblHeaderBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate, lblBlockBlockHeight };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -18217,6 +18260,10 @@ namespace SATSuma
                     {
                         lblHeaderMarketCap.Text = mCap;
                     });
+                    pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, pictureBoxHeaderMarketCapChart.Location.Y);
+                    });
                     lblMoscowTime.Invoke((MethodInvoker)delegate
                     {
                         lblMoscowTime.Text = satsPerUnit;
@@ -18224,6 +18271,10 @@ namespace SATSuma
                     lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderMoscowTime.Text = satsPerUnit;
+                    });
+                    pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, pictureBoxHeaderConverterChart.Location.Y);
                     });
                 }
             }
@@ -18288,6 +18339,24 @@ namespace SATSuma
         private void PictureBoxChartCirculation_Click(object sender, EventArgs e)
         {
             BtnChartCirculation_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxHeaderBlockSizeChart_Click(object sender, EventArgs e)
+        {
+            BtnChartBlockSize_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxHeaderConverterChart_Click(object sender, EventArgs e)
+        {
+            BtnPriceConverter_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxHeaderMarketCapChart_Click(object sender, EventArgs e)
+        {
+            BtnChartMarketCap_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
         #endregion
@@ -19437,6 +19506,8 @@ public class Bookmark
                 return string.Empty;
             }
         }
+
+
         #endregion
 
         #endregion

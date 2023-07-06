@@ -114,7 +114,7 @@
             this.lblHeaderPrice = new System.Windows.Forms.Label();
             this.lblBlockchainSize = new System.Windows.Forms.Label();
             this.lblTransactions = new System.Windows.Forms.Label();
-            this.lblBlockSize = new System.Windows.Forms.Label();
+            this.lblHeaderBlockSize = new System.Windows.Forms.Label();
             this.lblElapsedSinceUpdate = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard = new System.Windows.Forms.Panel();
             this.progressBarProgressToHalving = new ColorProgressBar.ColorProgressBar();
@@ -985,6 +985,9 @@
             this.btnThemeMenu = new System.Windows.Forms.Button();
             this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
+            this.pictureBoxHeaderBlockSizeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderConverterChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderMarketCapChart = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -1152,6 +1155,9 @@
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
             this.panelThemeMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -2319,18 +2325,18 @@
             this.lblTransactions.TabIndex = 59;
             this.lblTransactions.Text = "no data";
             // 
-            // lblBlockSize
+            // lblHeaderBlockSize
             // 
-            this.lblBlockSize.AutoSize = true;
-            this.lblBlockSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockSize.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockSize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblBlockSize.Location = new System.Drawing.Point(68, 85);
-            this.lblBlockSize.Margin = new System.Windows.Forms.Padding(0);
-            this.lblBlockSize.Name = "lblBlockSize";
-            this.lblBlockSize.Size = new System.Drawing.Size(55, 17);
-            this.lblBlockSize.TabIndex = 60;
-            this.lblBlockSize.Text = "no data";
+            this.lblHeaderBlockSize.AutoSize = true;
+            this.lblHeaderBlockSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderBlockSize.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderBlockSize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblHeaderBlockSize.Location = new System.Drawing.Point(68, 85);
+            this.lblHeaderBlockSize.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderBlockSize.Name = "lblHeaderBlockSize";
+            this.lblHeaderBlockSize.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderBlockSize.TabIndex = 60;
+            this.lblHeaderBlockSize.Text = "no data";
             // 
             // lblElapsedSinceUpdate
             // 
@@ -4422,9 +4428,9 @@
             this.label58.ForeColor = System.Drawing.Color.Silver;
             this.label58.Location = new System.Drawing.Point(0, 3);
             this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(131, 17);
+            this.label58.Size = new System.Drawing.Size(98, 17);
             this.label58.TabIndex = 5;
-            this.label58.Text = "Enter Bitcoin address";
+            this.label58.Text = "Bitcoin address";
             // 
             // textboxSubmittedAddress
             // 
@@ -4432,10 +4438,10 @@
             this.textboxSubmittedAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxSubmittedAddress.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSubmittedAddress.ForeColor = System.Drawing.Color.White;
-            this.textboxSubmittedAddress.Location = new System.Drawing.Point(140, 0);
+            this.textboxSubmittedAddress.Location = new System.Drawing.Point(103, 0);
             this.textboxSubmittedAddress.MaxLength = 80;
             this.textboxSubmittedAddress.Name = "textboxSubmittedAddress";
-            this.textboxSubmittedAddress.Size = new System.Drawing.Size(417, 22);
+            this.textboxSubmittedAddress.Size = new System.Drawing.Size(454, 22);
             this.textboxSubmittedAddress.TabIndex = 2;
             this.textboxSubmittedAddress.TextChanged += new System.EventHandler(this.TboxSubmittedAddress_TextChanged);
             // 
@@ -4922,7 +4928,7 @@
             this.panel56.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel56.Controls.Add(this.label64);
             this.panel56.Controls.Add(this.lblBlockHash);
-            this.panel56.Location = new System.Drawing.Point(252, 3);
+            this.panel56.Location = new System.Drawing.Point(246, 3);
             this.panel56.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel56.Name = "panel56";
             this.panel56.Size = new System.Drawing.Size(501, 23);
@@ -4957,7 +4963,7 @@
             this.btnPreviousBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreviousBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPreviousBlock.ForeColor = System.Drawing.Color.White;
-            this.btnPreviousBlock.Location = new System.Drawing.Point(125, 3);
+            this.btnPreviousBlock.Location = new System.Drawing.Point(95, 3);
             this.btnPreviousBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnPreviousBlock.Name = "btnPreviousBlock";
             this.btnPreviousBlock.Size = new System.Drawing.Size(23, 23);
@@ -4975,7 +4981,7 @@
             this.btnNextBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextBlock.ForeColor = System.Drawing.Color.White;
-            this.btnNextBlock.Location = new System.Drawing.Point(220, 3);
+            this.btnNextBlock.Location = new System.Drawing.Point(190, 3);
             this.btnNextBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnNextBlock.Name = "btnNextBlock";
             this.btnNextBlock.Size = new System.Drawing.Size(23, 23);
@@ -5070,7 +5076,7 @@
             this.textBoxSubmittedBlockNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSubmittedBlockNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSubmittedBlockNumber.ForeColor = System.Drawing.Color.White;
-            this.textBoxSubmittedBlockNumber.Location = new System.Drawing.Point(154, 3);
+            this.textBoxSubmittedBlockNumber.Location = new System.Drawing.Point(124, 3);
             this.textBoxSubmittedBlockNumber.MaxLength = 80;
             this.textBoxSubmittedBlockNumber.Name = "textBoxSubmittedBlockNumber";
             this.textBoxSubmittedBlockNumber.Size = new System.Drawing.Size(60, 22);
@@ -5086,9 +5092,9 @@
             this.label60.ForeColor = System.Drawing.Color.Silver;
             this.label60.Location = new System.Drawing.Point(-3, 5);
             this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(122, 17);
+            this.label60.Size = new System.Drawing.Size(88, 17);
             this.label60.TabIndex = 6;
-            this.label60.Text = "Enter block number";
+            this.label60.Text = "Block number";
             // 
             // lblSizeOfBlock
             // 
@@ -7143,10 +7149,10 @@
             this.textBoxTransactionID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTransactionID.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxTransactionID.ForeColor = System.Drawing.Color.White;
-            this.textBoxTransactionID.Location = new System.Drawing.Point(121, 3);
+            this.textBoxTransactionID.Location = new System.Drawing.Point(91, 3);
             this.textBoxTransactionID.MaxLength = 80;
             this.textBoxTransactionID.Name = "textBoxTransactionID";
-            this.textBoxTransactionID.Size = new System.Drawing.Size(479, 22);
+            this.textBoxTransactionID.Size = new System.Drawing.Size(509, 22);
             this.textBoxTransactionID.TabIndex = 7;
             this.textBoxTransactionID.TextChanged += new System.EventHandler(this.TextBoxTransactionID_TextChanged);
             this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxTransactionID_KeyPress);
@@ -7158,9 +7164,9 @@
             this.label136.ForeColor = System.Drawing.Color.Silver;
             this.label136.Location = new System.Drawing.Point(-3, 5);
             this.label136.Name = "label136";
-            this.label136.Size = new System.Drawing.Size(124, 17);
+            this.label136.Size = new System.Drawing.Size(91, 17);
             this.label136.TabIndex = 6;
-            this.label136.Text = "Enter transaction ID";
+            this.label136.Text = "Transaction ID";
             // 
             // panel102
             // 
@@ -8617,6 +8623,8 @@
             // 
             this.panelHeaderPrice.BackColor = System.Drawing.Color.Transparent;
             this.panelHeaderPrice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelHeaderPrice.Controls.Add(this.pictureBoxHeaderMarketCapChart);
+            this.panelHeaderPrice.Controls.Add(this.pictureBoxHeaderConverterChart);
             this.panelHeaderPrice.Controls.Add(this.pictureBoxHeaderPriceChart);
             this.panelHeaderPrice.Controls.Add(this.lblHeaderMoscowTimeLabel);
             this.panelHeaderPrice.Controls.Add(this.lblHeaderMarketCap);
@@ -8626,7 +8634,7 @@
             this.panelHeaderPrice.Controls.Add(this.lblHeaderPrice);
             this.panelHeaderPrice.Location = new System.Drawing.Point(21, 40);
             this.panelHeaderPrice.Name = "panelHeaderPrice";
-            this.panelHeaderPrice.Size = new System.Drawing.Size(202, 114);
+            this.panelHeaderPrice.Size = new System.Drawing.Size(234, 114);
             this.panelHeaderPrice.TabIndex = 216;
             // 
             // lblHeaderMoscowTimeLabel
@@ -8648,7 +8656,7 @@
             this.lblHeaderMarketCap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblHeaderMarketCap.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHeaderMarketCap.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblHeaderMarketCap.Location = new System.Drawing.Point(84, 66);
+            this.lblHeaderMarketCap.Location = new System.Drawing.Point(53, 66);
             this.lblHeaderMarketCap.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMarketCap.Name = "lblHeaderMarketCap";
             this.lblHeaderMarketCap.Size = new System.Drawing.Size(22, 17);
@@ -8664,9 +8672,9 @@
             this.label77.Location = new System.Drawing.Point(6, 66);
             this.label77.Margin = new System.Windows.Forms.Padding(0);
             this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(80, 17);
+            this.label77.Size = new System.Drawing.Size(49, 17);
             this.label77.TabIndex = 211;
-            this.label77.Text = "Market cap.";
+            this.label77.Text = "M.cap.";
             // 
             // lblHeaderMoscowTime
             // 
@@ -8733,12 +8741,13 @@
             // 
             this.panelHeaderBlockHeight.BackColor = System.Drawing.Color.Transparent;
             this.panelHeaderBlockHeight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelHeaderBlockHeight.Controls.Add(this.pictureBoxHeaderBlockSizeChart);
             this.panelHeaderBlockHeight.Controls.Add(this.lblTransactions);
             this.panelHeaderBlockHeight.Controls.Add(this.label148);
             this.panelHeaderBlockHeight.Controls.Add(this.label149);
             this.panelHeaderBlockHeight.Controls.Add(this.panel39);
             this.panelHeaderBlockHeight.Controls.Add(this.lblBlockNumber);
-            this.panelHeaderBlockHeight.Controls.Add(this.lblBlockSize);
+            this.panelHeaderBlockHeight.Controls.Add(this.lblHeaderBlockSize);
             this.panelHeaderBlockHeight.Location = new System.Drawing.Point(261, 40);
             this.panelHeaderBlockHeight.Name = "panelHeaderBlockHeight";
             this.panelHeaderBlockHeight.Size = new System.Drawing.Size(202, 114);
@@ -9728,7 +9737,7 @@
             this.btnColorLabels.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorLabels.ForeColor = System.Drawing.Color.White;
             this.btnColorLabels.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorLabels.Location = new System.Drawing.Point(135, 56);
+            this.btnColorLabels.Location = new System.Drawing.Point(145, 56);
             this.btnColorLabels.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorLabels.Name = "btnColorLabels";
             this.btnColorLabels.Size = new System.Drawing.Size(65, 18);
@@ -9761,7 +9770,7 @@
             this.btnColorDataFields.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorDataFields.ForeColor = System.Drawing.Color.White;
             this.btnColorDataFields.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorDataFields.Location = new System.Drawing.Point(135, 31);
+            this.btnColorDataFields.Location = new System.Drawing.Point(145, 31);
             this.btnColorDataFields.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorDataFields.Name = "btnColorDataFields";
             this.btnColorDataFields.Size = new System.Drawing.Size(65, 18);
@@ -9846,7 +9855,7 @@
             this.btnColorHeadings.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorHeadings.ForeColor = System.Drawing.Color.White;
             this.btnColorHeadings.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorHeadings.Location = new System.Drawing.Point(135, 81);
+            this.btnColorHeadings.Location = new System.Drawing.Point(145, 81);
             this.btnColorHeadings.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorHeadings.Name = "btnColorHeadings";
             this.btnColorHeadings.Size = new System.Drawing.Size(65, 18);
@@ -9894,7 +9903,7 @@
             this.btnColorProgressBars.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorProgressBars.ForeColor = System.Drawing.Color.White;
             this.btnColorProgressBars.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorProgressBars.Location = new System.Drawing.Point(135, 132);
+            this.btnColorProgressBars.Location = new System.Drawing.Point(145, 132);
             this.btnColorProgressBars.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorProgressBars.Name = "btnColorProgressBars";
             this.btnColorProgressBars.Size = new System.Drawing.Size(65, 18);
@@ -9935,7 +9944,7 @@
             this.btnColorButtons.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtons.ForeColor = System.Drawing.Color.White;
             this.btnColorButtons.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtons.Location = new System.Drawing.Point(135, 31);
+            this.btnColorButtons.Location = new System.Drawing.Point(145, 31);
             this.btnColorButtons.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtons.Name = "btnColorButtons";
             this.btnColorButtons.Size = new System.Drawing.Size(65, 18);
@@ -9976,7 +9985,7 @@
             this.btnColorButtonText.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorButtonText.ForeColor = System.Drawing.Color.White;
             this.btnColorButtonText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorButtonText.Location = new System.Drawing.Point(135, 231);
+            this.btnColorButtonText.Location = new System.Drawing.Point(145, 231);
             this.btnColorButtonText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorButtonText.Name = "btnColorButtonText";
             this.btnColorButtonText.Size = new System.Drawing.Size(65, 18);
@@ -10304,7 +10313,7 @@
             this.panel63.Location = new System.Drawing.Point(0, 0);
             this.panel63.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel63.Name = "panel63";
-            this.panel63.Size = new System.Drawing.Size(224, 23);
+            this.panel63.Size = new System.Drawing.Size(230, 23);
             this.panel63.TabIndex = 214;
             // 
             // label182
@@ -10465,7 +10474,7 @@
             this.btnColorTableBackground.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableBackground.ForeColor = System.Drawing.Color.White;
             this.btnColorTableBackground.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableBackground.Location = new System.Drawing.Point(135, 56);
+            this.btnColorTableBackground.Location = new System.Drawing.Point(145, 56);
             this.btnColorTableBackground.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableBackground.Name = "btnColorTableBackground";
             this.btnColorTableBackground.Size = new System.Drawing.Size(65, 18);
@@ -10487,7 +10496,7 @@
             this.btnColorTableTitleBar.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableTitleBar.ForeColor = System.Drawing.Color.White;
             this.btnColorTableTitleBar.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableTitleBar.Location = new System.Drawing.Point(135, 31);
+            this.btnColorTableTitleBar.Location = new System.Drawing.Point(145, 31);
             this.btnColorTableTitleBar.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableTitleBar.Name = "btnColorTableTitleBar";
             this.btnColorTableTitleBar.Size = new System.Drawing.Size(65, 18);
@@ -10618,7 +10627,7 @@
             this.btnColorPanels.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorPanels.ForeColor = System.Drawing.Color.White;
             this.btnColorPanels.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorPanels.Location = new System.Drawing.Point(135, 106);
+            this.btnColorPanels.Location = new System.Drawing.Point(145, 106);
             this.btnColorPanels.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorPanels.Name = "btnColorPanels";
             this.btnColorPanels.Size = new System.Drawing.Size(65, 18);
@@ -10660,7 +10669,7 @@
             this.btnColorLines.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorLines.ForeColor = System.Drawing.Color.White;
             this.btnColorLines.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorLines.Location = new System.Drawing.Point(135, 56);
+            this.btnColorLines.Location = new System.Drawing.Point(145, 56);
             this.btnColorLines.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorLines.Name = "btnColorLines";
             this.btnColorLines.Size = new System.Drawing.Size(65, 18);
@@ -10695,7 +10704,7 @@
             this.btnColorTextBox.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTextBox.ForeColor = System.Drawing.Color.White;
             this.btnColorTextBox.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTextBox.Location = new System.Drawing.Point(135, 81);
+            this.btnColorTextBox.Location = new System.Drawing.Point(145, 81);
             this.btnColorTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTextBox.Name = "btnColorTextBox";
             this.btnColorTextBox.Size = new System.Drawing.Size(65, 18);
@@ -10744,7 +10753,7 @@
             this.btnColorStatusError.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorStatusError.ForeColor = System.Drawing.Color.White;
             this.btnColorStatusError.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorStatusError.Location = new System.Drawing.Point(135, 206);
+            this.btnColorStatusError.Location = new System.Drawing.Point(145, 206);
             this.btnColorStatusError.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorStatusError.Name = "btnColorStatusError";
             this.btnColorStatusError.Size = new System.Drawing.Size(65, 18);
@@ -10777,7 +10786,7 @@
             this.btnColorPriceBlock.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorPriceBlock.ForeColor = System.Drawing.Color.White;
             this.btnColorPriceBlock.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorPriceBlock.Location = new System.Drawing.Point(135, 181);
+            this.btnColorPriceBlock.Location = new System.Drawing.Point(145, 181);
             this.btnColorPriceBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorPriceBlock.Name = "btnColorPriceBlock";
             this.btnColorPriceBlock.Size = new System.Drawing.Size(65, 18);
@@ -10799,7 +10808,7 @@
             this.btnListViewHeadingColor.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnListViewHeadingColor.ForeColor = System.Drawing.Color.White;
             this.btnListViewHeadingColor.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnListViewHeadingColor.Location = new System.Drawing.Point(135, 131);
+            this.btnListViewHeadingColor.Location = new System.Drawing.Point(145, 131);
             this.btnListViewHeadingColor.Margin = new System.Windows.Forms.Padding(0);
             this.btnListViewHeadingColor.Name = "btnListViewHeadingColor";
             this.btnListViewHeadingColor.Size = new System.Drawing.Size(65, 18);
@@ -10816,9 +10825,9 @@
             this.label175.ForeColor = System.Drawing.Color.DimGray;
             this.label175.Location = new System.Drawing.Point(11, 181);
             this.label175.Name = "label175";
-            this.label175.Size = new System.Drawing.Size(76, 17);
+            this.label175.Size = new System.Drawing.Size(130, 17);
             this.label175.TabIndex = 257;
-            this.label175.Text = "Price, Block";
+            this.label175.Text = "Price/Block (header)";
             // 
             // panel68
             // 
@@ -10853,7 +10862,7 @@
             this.btnColorOtherText.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorOtherText.ForeColor = System.Drawing.Color.White;
             this.btnColorOtherText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorOtherText.Location = new System.Drawing.Point(135, 156);
+            this.btnColorOtherText.Location = new System.Drawing.Point(145, 156);
             this.btnColorOtherText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorOtherText.Name = "btnColorOtherText";
             this.btnColorOtherText.Size = new System.Drawing.Size(65, 18);
@@ -10886,7 +10895,7 @@
             this.btnColorTableText.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableText.ForeColor = System.Drawing.Color.White;
             this.btnColorTableText.Image = global::SATSuma.Properties.Resources.spectrum2;
-            this.btnColorTableText.Location = new System.Drawing.Point(135, 106);
+            this.btnColorTableText.Location = new System.Drawing.Point(145, 106);
             this.btnColorTableText.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableText.Name = "btnColorTableText";
             this.btnColorTableText.Size = new System.Drawing.Size(65, 18);
@@ -11014,7 +11023,7 @@
             this.panel64.Location = new System.Drawing.Point(0, 0);
             this.panel64.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel64.Name = "panel64";
-            this.panel64.Size = new System.Drawing.Size(224, 23);
+            this.panel64.Size = new System.Drawing.Size(230, 23);
             this.panel64.TabIndex = 215;
             // 
             // label183
@@ -11075,7 +11084,7 @@
             this.panel62.Location = new System.Drawing.Point(0, 0);
             this.panel62.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel62.Name = "panel62";
-            this.panel62.Size = new System.Drawing.Size(224, 23);
+            this.panel62.Size = new System.Drawing.Size(230, 23);
             this.panel62.TabIndex = 213;
             // 
             // label181
@@ -11252,7 +11261,7 @@
             this.panel69.Location = new System.Drawing.Point(0, 0);
             this.panel69.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel69.Name = "panel69";
-            this.panel69.Size = new System.Drawing.Size(224, 23);
+            this.panel69.Size = new System.Drawing.Size(230, 23);
             this.panel69.TabIndex = 215;
             // 
             // label192
@@ -11265,9 +11274,9 @@
             this.label192.Location = new System.Drawing.Point(0, 2);
             this.label192.Margin = new System.Windows.Forms.Padding(0);
             this.label192.Name = "label192";
-            this.label192.Size = new System.Drawing.Size(81, 17);
+            this.label192.Size = new System.Drawing.Size(136, 17);
             this.label192.TabIndex = 153;
-            this.label192.Text = "Save theme";
+            this.label192.Text = "Save as a new theme";
             // 
             // label193
             // 
@@ -14694,6 +14703,48 @@
             this.btnMenuThemeSatsuma.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuThemeSatsuma.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
+            // pictureBoxHeaderBlockSizeChart
+            // 
+            this.pictureBoxHeaderBlockSizeChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderBlockSizeChart.Location = new System.Drawing.Point(136, 87);
+            this.pictureBoxHeaderBlockSizeChart.Name = "pictureBoxHeaderBlockSizeChart";
+            this.pictureBoxHeaderBlockSizeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderBlockSizeChart.TabIndex = 236;
+            this.pictureBoxHeaderBlockSizeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderBlockSizeChart, "view chart");
+            this.pictureBoxHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
+            // 
+            // pictureBoxHeaderConverterChart
+            // 
+            this.pictureBoxHeaderConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderConverterChart.Location = new System.Drawing.Point(108, 87);
+            this.pictureBoxHeaderConverterChart.Name = "pictureBoxHeaderConverterChart";
+            this.pictureBoxHeaderConverterChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderConverterChart.TabIndex = 237;
+            this.pictureBoxHeaderConverterChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderConverterChart, "view chart");
+            this.pictureBoxHeaderConverterChart.Click += new System.EventHandler(this.PictureBoxHeaderConverterChart_Click);
+            // 
+            // pictureBoxHeaderMarketCapChart
+            // 
+            this.pictureBoxHeaderMarketCapChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderMarketCapChart.Location = new System.Drawing.Point(114, 68);
+            this.pictureBoxHeaderMarketCapChart.Name = "pictureBoxHeaderMarketCapChart";
+            this.pictureBoxHeaderMarketCapChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderMarketCapChart.TabIndex = 238;
+            this.pictureBoxHeaderMarketCapChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderMarketCapChart, "view chart");
+            this.pictureBoxHeaderMarketCapChart.Click += new System.EventHandler(this.PictureBoxHeaderMarketCapChart_Click);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -14703,18 +14754,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelThemeMenu);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.headerNetworkName);
@@ -15016,6 +15067,9 @@
             this.panelFeeRatesKey.PerformLayout();
             this.panelThemeMenu.ResumeLayout(false);
             this.panelThemeMenu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -15036,7 +15090,7 @@
         private System.Windows.Forms.Label lblAlert;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lblTransactions;
-        private System.Windows.Forms.Label lblBlockSize;
+        private System.Windows.Forms.Label lblHeaderBlockSize;
         private System.Windows.Forms.Label lblElapsedSinceUpdate;
         private System.Windows.Forms.Panel panelBitcoinDashboard;
         private System.Windows.Forms.Label label33;
@@ -15978,6 +16032,9 @@
         private System.Windows.Forms.Label lblCurrencyMenuHighlightedButtonText;
         private System.Windows.Forms.Label lblThemeMenuHighlightedButtonMarker;
         private System.Windows.Forms.Label lblThemeMenuHighlightedButtonText;
+        private System.Windows.Forms.PictureBox pictureBoxHeaderBlockSizeChart;
+        private System.Windows.Forms.PictureBox pictureBoxHeaderConverterChart;
+        private System.Windows.Forms.PictureBox pictureBoxHeaderMarketCapChart;
     }
 }
 

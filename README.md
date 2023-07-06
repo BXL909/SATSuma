@@ -4,6 +4,7 @@
 
 ### Version history 🍊
 
+- 0.92 If the SATSuma icon was missing from the add/remove programs list, it will be back now. Help text updated to mention BTC/fiat/gold converter.
 - 0.91 application now contained in a single exe. Significantly smaller install size.
 - 0.90.2 marker to show current selection on menus no longer overlaps longest strings
 - 0.90.1 bug fix - fixed incorrect text on theme menu.
@@ -28,9 +29,9 @@ SATSuma is completely free and open source. If you like it and want to support t
 
 ### Links 🍊
 
-https://satsuma.btcdir.org/
+download - https://satsuma.btcdir.org/
 
-https://satsuma.btcdir.org/support/
+donate - https://satsuma.btcdir.org/support/
 
-https://github.com/BXL909/SATSuma
+source - https://github.com/BXL909/SATSuma
 

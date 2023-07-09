@@ -109,6 +109,10 @@
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
             this.btnSaveChart = new System.Windows.Forms.Button();
+            this.pictureBoxHeaderBlockSizeChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderConverterChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHeaderMarketCapChart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxConverterChart = new System.Windows.Forms.PictureBox();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -985,9 +989,8 @@
             this.btnThemeMenu = new System.Windows.Forms.Button();
             this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
-            this.pictureBoxHeaderBlockSizeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderConverterChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderMarketCapChart = new System.Windows.Forms.PictureBox();
+            this.lblCurrentVersion = new System.Windows.Forms.Label();
+            this.lblUpdateAvailable = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -1017,6 +1020,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConverterChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -1155,9 +1162,6 @@
             this.panelCirculationKey.SuspendLayout();
             this.panelFeeRatesKey.SuspendLayout();
             this.panelThemeMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -2264,6 +2268,62 @@
             this.btnSaveChart.UseVisualStyleBackColor = false;
             this.btnSaveChart.Click += new System.EventHandler(this.BtnSaveChart_Click);
             // 
+            // pictureBoxHeaderBlockSizeChart
+            // 
+            this.pictureBoxHeaderBlockSizeChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderBlockSizeChart.Location = new System.Drawing.Point(136, 87);
+            this.pictureBoxHeaderBlockSizeChart.Name = "pictureBoxHeaderBlockSizeChart";
+            this.pictureBoxHeaderBlockSizeChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderBlockSizeChart.TabIndex = 236;
+            this.pictureBoxHeaderBlockSizeChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderBlockSizeChart, "view chart");
+            this.pictureBoxHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
+            // 
+            // pictureBoxHeaderConverterChart
+            // 
+            this.pictureBoxHeaderConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderConverterChart.Location = new System.Drawing.Point(108, 87);
+            this.pictureBoxHeaderConverterChart.Name = "pictureBoxHeaderConverterChart";
+            this.pictureBoxHeaderConverterChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderConverterChart.TabIndex = 237;
+            this.pictureBoxHeaderConverterChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderConverterChart, "view chart");
+            this.pictureBoxHeaderConverterChart.Click += new System.EventHandler(this.PictureBoxHeaderConverterChart_Click);
+            // 
+            // pictureBoxHeaderMarketCapChart
+            // 
+            this.pictureBoxHeaderMarketCapChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxHeaderMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHeaderMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxHeaderMarketCapChart.Location = new System.Drawing.Point(114, 68);
+            this.pictureBoxHeaderMarketCapChart.Name = "pictureBoxHeaderMarketCapChart";
+            this.pictureBoxHeaderMarketCapChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxHeaderMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxHeaderMarketCapChart.TabIndex = 238;
+            this.pictureBoxHeaderMarketCapChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxHeaderMarketCapChart, "view chart");
+            this.pictureBoxHeaderMarketCapChart.Click += new System.EventHandler(this.PictureBoxHeaderMarketCapChart_Click);
+            // 
+            // pictureBoxConverterChart
+            // 
+            this.pictureBoxConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
+            this.pictureBoxConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxConverterChart.Location = new System.Drawing.Point(354, 43);
+            this.pictureBoxConverterChart.Name = "pictureBoxConverterChart";
+            this.pictureBoxConverterChart.Size = new System.Drawing.Size(16, 12);
+            this.pictureBoxConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxConverterChart.TabIndex = 239;
+            this.pictureBoxConverterChart.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxConverterChart, "view chart");
+            this.pictureBoxConverterChart.Click += new System.EventHandler(this.PictureBoxConverterChart_Click);
+            // 
             // label134
             // 
             this.label134.AutoSize = true;
@@ -2353,6 +2413,7 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxConverterChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxBlockFeesChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxFeeRangeChart);
             this.panelBitcoinDashboard.Controls.Add(this.pictureBoxUniqueAddressesChart);
@@ -5481,7 +5542,7 @@
             this.btnMenuSplash.Size = new System.Drawing.Size(118, 24);
             this.btnMenuSplash.TabIndex = 151;
             this.btnMenuSplash.TabStop = false;
-            this.btnMenuSplash.Text = "about";
+            this.btnMenuSplash.Text = "about/update";
             this.btnMenuSplash.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuSplash.UseVisualStyleBackColor = false;
             this.btnMenuSplash.Click += new System.EventHandler(this.BtnMenuSplash_Click);
@@ -14703,47 +14764,32 @@
             this.btnMenuThemeSatsuma.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuThemeSatsuma.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // pictureBoxHeaderBlockSizeChart
+            // lblCurrentVersion
             // 
-            this.pictureBoxHeaderBlockSizeChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderBlockSizeChart.Location = new System.Drawing.Point(136, 87);
-            this.pictureBoxHeaderBlockSizeChart.Name = "pictureBoxHeaderBlockSizeChart";
-            this.pictureBoxHeaderBlockSizeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderBlockSizeChart.TabIndex = 236;
-            this.pictureBoxHeaderBlockSizeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderBlockSizeChart, "view chart");
-            this.pictureBoxHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
+            this.lblCurrentVersion.AutoSize = true;
+            this.lblCurrentVersion.BackColor = System.Drawing.Color.Transparent;
+            this.lblCurrentVersion.Font = new System.Drawing.Font("Arial", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentVersion.ForeColor = System.Drawing.Color.Gray;
+            this.lblCurrentVersion.Location = new System.Drawing.Point(99, 11);
+            this.lblCurrentVersion.Name = "lblCurrentVersion";
+            this.lblCurrentVersion.Size = new System.Drawing.Size(29, 12);
+            this.lblCurrentVersion.TabIndex = 85;
+            this.lblCurrentVersion.Text = "vn.nn";
             // 
-            // pictureBoxHeaderConverterChart
+            // lblUpdateAvailable
             // 
-            this.pictureBoxHeaderConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderConverterChart.Location = new System.Drawing.Point(108, 87);
-            this.pictureBoxHeaderConverterChart.Name = "pictureBoxHeaderConverterChart";
-            this.pictureBoxHeaderConverterChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderConverterChart.TabIndex = 237;
-            this.pictureBoxHeaderConverterChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderConverterChart, "view chart");
-            this.pictureBoxHeaderConverterChart.Click += new System.EventHandler(this.PictureBoxHeaderConverterChart_Click);
-            // 
-            // pictureBoxHeaderMarketCapChart
-            // 
-            this.pictureBoxHeaderMarketCapChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderMarketCapChart.Location = new System.Drawing.Point(114, 68);
-            this.pictureBoxHeaderMarketCapChart.Name = "pictureBoxHeaderMarketCapChart";
-            this.pictureBoxHeaderMarketCapChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderMarketCapChart.TabIndex = 238;
-            this.pictureBoxHeaderMarketCapChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderMarketCapChart, "view chart");
-            this.pictureBoxHeaderMarketCapChart.Click += new System.EventHandler(this.PictureBoxHeaderMarketCapChart_Click);
+            this.lblUpdateAvailable.AutoSize = true;
+            this.lblUpdateAvailable.BackColor = System.Drawing.Color.Transparent;
+            this.lblUpdateAvailable.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblUpdateAvailable.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUpdateAvailable.ForeColor = System.Drawing.Color.Gray;
+            this.lblUpdateAvailable.Location = new System.Drawing.Point(642, 758);
+            this.lblUpdateAvailable.Name = "lblUpdateAvailable";
+            this.lblUpdateAvailable.Size = new System.Drawing.Size(105, 16);
+            this.lblUpdateAvailable.TabIndex = 250;
+            this.lblUpdateAvailable.Text = "update available";
+            this.lblUpdateAvailable.Visible = false;
+            this.lblUpdateAvailable.Click += new System.EventHandler(this.LblUpdateAvailable_Click);
             // 
             // SATSuma
             // 
@@ -14754,15 +14800,17 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelMenu);
+            this.Controls.Add(this.lblUpdateAvailable);
+            this.Controls.Add(this.lblCurrentVersion);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
@@ -14827,6 +14875,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConverterChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -15067,9 +15119,6 @@
             this.panelFeeRatesKey.PerformLayout();
             this.panelThemeMenu.ResumeLayout(false);
             this.panelThemeMenu.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -16035,6 +16084,9 @@
         private System.Windows.Forms.PictureBox pictureBoxHeaderBlockSizeChart;
         private System.Windows.Forms.PictureBox pictureBoxHeaderConverterChart;
         private System.Windows.Forms.PictureBox pictureBoxHeaderMarketCapChart;
+        private System.Windows.Forms.PictureBox pictureBoxConverterChart;
+        private System.Windows.Forms.Label lblCurrentVersion;
+        private System.Windows.Forms.Label lblUpdateAvailable;
     }
 }
 

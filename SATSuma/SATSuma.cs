@@ -62,6 +62,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
+        readonly string CurrentVersion = "0.94";
         #region ⚡VARIABLE DECLARATION⚡
         #region timers
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
@@ -269,6 +270,7 @@ namespace SATSuma
         {
             try
             {
+                lblCurrentVersion.Text = "v" + CurrentVersion;
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
                 GetBlockTip();
@@ -281,6 +283,7 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
                 BtnChartFeeRates_Click(sender, e);
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
+                CheckForUpdates();
             }
             catch (WebException ex)
             {
@@ -901,6 +904,10 @@ namespace SATSuma
                             {
                                 pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 5, pictureBoxPriceChart.Location.Y);
                             });
+                            pictureBoxConverterChart.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width + 5, pictureBoxConverterChart.Location.Y);
+                            });
                             pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
                             {
                                 pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
@@ -1453,6 +1460,12 @@ namespace SATSuma
         private void PictureBoxLightningChannelsChart_Click(object sender, EventArgs e)
         {
             BtnChartLightningChannels_Click(sender, e);
+            BtnMenuCharts_Click(sender, e);
+        }
+
+        private void PictureBoxConverterChart_Click(object sender, EventArgs e)
+        {
+            BtnPriceConverter_Click(sender, e);
             BtnMenuCharts_Click(sender, e);
         }
         #endregion
@@ -11115,6 +11128,11 @@ namespace SATSuma
                 {
                     pictureBoxPriceChart.BackgroundImage = Properties.Resources.graphIcondisabled;
                 });
+                pictureBoxConverterChart.Enabled = false;
+                pictureBoxConverterChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxConverterChart.BackgroundImage = Properties.Resources.graphIcondisabled;
+                });
                 pictureBoxMarketCapChart.Enabled = false;
                 pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
                 {
@@ -11162,6 +11180,11 @@ namespace SATSuma
                 pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
                 {
                     pictureBoxChartCirculation.BackgroundImage = Properties.Resources.graphIcon;
+                });
+                pictureBoxConverterChart.Enabled = true;
+                pictureBoxConverterChart.Invoke((MethodInvoker)delegate
+                {
+                    pictureBoxConverterChart.BackgroundImage = Properties.Resources.graphIcon;
                 });
                 pictureBoxHeaderPriceChart.Enabled = true;
                 pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
@@ -13908,11 +13931,13 @@ namespace SATSuma
                 btnMenuThemeCustom.Enabled = true;
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "genesis";
                     lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
                 });
                 lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonMarker.Visible = true;
                     lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
@@ -13946,11 +13971,13 @@ namespace SATSuma
                 btnMenuThemeCustom.Enabled = true;
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "btcdir";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
                 });
                 lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonMarker.Visible = true;
                     lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
@@ -13984,11 +14011,13 @@ namespace SATSuma
                 btnMenuThemeCustom.Enabled = true;
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "satsuma";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
                 });
                 lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
                 {
+                    lblThemeMenuHighlightedButtonMarker.Visible = true;
                     lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
                 });
                 var themes = ReadThemesFromJsonFile();
@@ -14020,11 +14049,13 @@ namespace SATSuma
             btnMenuThemeCustom.Enabled = true;
             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
             {
+                lblThemeMenuHighlightedButtonText.Visible = false;
                 lblThemeMenuHighlightedButtonText.Text = "custom";
                 lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCustom.Location.X + (btnMenuThemeCustom.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCustom.Location.Y + 3);
             });
             lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
             {
+                lblThemeMenuHighlightedButtonMarker.Visible = false;
                 lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeCustom.Location.X, btnMenuThemeCustom.Location.Y + 5);
             });
             BtnAppearance_Click(sender, e);
@@ -15591,7 +15622,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150 };
+                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150, lblCurrentVersion };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -15698,7 +15729,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning, textBoxXpubNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxBlockHeightToStartListFrom, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsCustomMempoolURL, textBoxSettingsXpubMempoolURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeImage, textBoxThemeName, textBox1, comboBoxThemeList };
+                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning, textBoxXpubNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxBlockHeightToStartListFrom, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsCustomMempoolURL, textBoxSettingsXpubMempoolURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeImage, textBoxThemeName, textBox1, comboBoxThemeList, lblUpdateAvailable, lblCurrentVersion };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -16631,6 +16662,32 @@ namespace SATSuma
         #endregion
 
         #region ⚡COMMON CODE⚡
+        #region check for updates
+        private void CheckForUpdates()
+        {
+            try
+            {
+                if (!privacyMode)
+                {
+                    using WebClient client = new WebClient();
+                    string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";
+                    string LatestVersion = client.DownloadString(VersionURL);
+                    if (LatestVersion != CurrentVersion)
+                    {
+                        lblUpdateAvailable.Visible = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "CheckForUpdates");
+            }
+        }
+        private void LblUpdateAvailable_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/download/");
+        }
+        #endregion
         #region form paint - border round window, relocate objects, set window title, bookmark button state
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -18005,6 +18062,8 @@ namespace SATSuma
                     LinksColor = lblHeaderMarketCap.ForeColor,
                     ButtonTextColor = btnMenu.ForeColor,
                     ButtonBackColor = btnMenu.BackColor,
+                    CurrentVersion = CurrentVersion,
+                    PrivacyMode = privacyMode
                 };
                 modalWindow.ShowDialog();
             }
@@ -18298,6 +18357,7 @@ namespace SATSuma
         #region move window
         private void BtnMoveWindow_MouseDown(object sender, MouseEventArgs e) // move the form when the move control is used
         {
+
             CloseMainMenu();
             CloseCurrencyMenu();
             CloseThemeMenu();
@@ -18307,11 +18367,21 @@ namespace SATSuma
 
         private void BtnMoveWindow_MouseUp(object sender, MouseEventArgs e) // reset colour of the move form control
         {
+            var args = e as MouseEventArgs;
+            if (args.Button == MouseButtons.Right)
+            {
+                return;
+            }
             btnMoveWindow.BackColor = System.Drawing.ColorTranslator.FromHtml("#1D1D1D");
         }
 
         private void BtnMoveWindow_Click(object sender, EventArgs e)
         {
+            var args = e as MouseEventArgs;
+            if (args.Button == MouseButtons.Right)
+            {
+                return;
+            }
             CloseMainMenu();
             CloseCurrencyMenu();
             CloseThemeMenu();
@@ -18457,7 +18527,7 @@ namespace SATSuma
             });
         }
 #endregion
-#endregion
+        #endregion
 
         #region CLASSES
         #region bookmark

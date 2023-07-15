@@ -148,7 +148,7 @@
             this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Silver;
             this.lblErrorMessage.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblErrorMessage.Location = new System.Drawing.Point(199, 1);
+            this.lblErrorMessage.Location = new System.Drawing.Point(216, 9);
             this.lblErrorMessage.Name = "lblErrorMessage";
             this.lblErrorMessage.Size = new System.Drawing.Size(126, 14);
             this.lblErrorMessage.TabIndex = 154;

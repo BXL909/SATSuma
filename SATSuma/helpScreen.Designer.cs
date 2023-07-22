@@ -198,8 +198,9 @@
             "Bitcoin dashboard",
             "Lightning dashboard",
             "Bookmarks",
+            "Directory",
             "Settings",
-            "Appearance"});
+            "Themes"});
             this.comboBoxSelectHelp.Location = new System.Drawing.Point(11, 630);
             this.comboBoxSelectHelp.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxSelectHelp.Name = "comboBoxSelectHelp";

@@ -1618,6 +1618,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6247214E67DFC73E0F9F56C6EBB2E219"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0FCB4975D3D940309775C24E3EF4B33C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2519,12 +2525,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_816169C7C577C89C4EC89EB2EE9A0154"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6247214E67DFC73E0F9F56C6EBB2E219"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -7483,15 +7483,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SATSuma"
-        "ProductCode" = "8:{E1757C0F-B3CF-41CA-8323-839224B7DB74}"
-        "PackageCode" = "8:{3CDD324E-53A3-4C35-B27E-B5CD6BFF4F5A}"
+        "ProductCode" = "8:{160B9A33-45DF-4D7A-85FD-06DC05DFE3E3}"
+        "PackageCode" = "8:{EDC5429A-F82B-48DC-A419-EB9BF8D7F766}"
         "UpgradeCode" = "8:{3A6E09CA-281D-4814-9845-7B9394FA3174}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.95"
+        "ProductVersion" = "8:0.97"
         "Manufacturer" = "8:BXL909"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://satsuma.btcdir.org/"

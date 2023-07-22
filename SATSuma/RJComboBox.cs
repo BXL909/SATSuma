@@ -303,8 +303,7 @@ namespace CustomControls.RJControls
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (OnSelectedIndexChanged != null)
-                OnSelectedIndexChanged.Invoke(sender, e);
+            OnSelectedIndexChanged?.Invoke(sender, e);
             //Refresh text
             lblText.Text = cmbList.Text;
         }

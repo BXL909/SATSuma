@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v0.97    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v0.98    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -61,6 +61,8 @@ using ScottPlot.Plottable;
 using static SATSuma.SATSuma;
 using System.Windows.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Diagnostics;
+using System.Drawing.Text;
 
 #endregion
 
@@ -68,7 +70,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "0.97";
+        readonly string CurrentVersion = "0.98";
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -119,6 +121,9 @@ namespace SATSuma
         #region block screen variables
         private int TotalBlockTransactionRowsAdded = 0; // keeps track of how many rows of Block transactions have been added to the listview
         int rowsReturnedByBlockTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        #endregion
+        #region directory screen variables
+        private bool linkClicked = false; // used to supress multiple events (and multiple browser tabs) when opening external link in default browser
         #endregion
         #region bookmark screen variables
         private int bookmarksScrollPosition = 0; // used to remember position in scrollable panel to return to that position after paint event
@@ -271,7 +276,9 @@ namespace SATSuma
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
         string chartType = ""; // keeps track of what type of chart is being displayed
         #endregion
-        decimal OneBTCinSelectedCurrency = 0;
+        #region misc
+        decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
+        #endregion
         #endregion
 
         #region ⚡INITIALISE⚡
@@ -10435,7 +10442,7 @@ namespace SATSuma
         {
             try
             {
-                if (!privacyMode)
+                if (!privacyMode && !testNet)
                 {
                     var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
 
@@ -12697,7 +12704,7 @@ namespace SATSuma
         #endregion
 
         #region ⚡DIRECTORY SCREEN⚡
-        #region load and style the directory page
+        #region load the directory page
         private void LoadAndStyleDirectoryBrowser()
         {
             if (!privacyMode && enableDirectory)
@@ -12712,7 +12719,7 @@ namespace SATSuma
             }
         }
         #endregion
-        #region manipulate colours to match theme
+        #region manipulate colours to match theme and subscribe links to LinkElement_Click to use default browser
         private void WebBrowserDirectory_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             // Get the page
@@ -12778,6 +12785,13 @@ namespace SATSuma
                 {
                     textElement.Style = $"color: {textColorString}; font-size: 0.76em";
                 }
+            }
+
+            // Attach a custom event handler to all anchor (<a>) elements in the loaded document
+            // to enable links to open in default browser rather than IE
+            foreach (HtmlElement linkElement in webBrowserDirectory.Document.Links)
+            {
+                linkElement.Click += LinkElement_Click;
             }
         }
 
@@ -12861,6 +12875,52 @@ namespace SATSuma
                 scriptElement.SetAttribute("text", script);
                 head.AppendChild(scriptElement);
             }
+        }
+        #endregion
+        #region use default browser for external links
+        private void LinkElement_Click(object sender, HtmlElementEventArgs e)
+        {
+            if (linkClicked) return; // If the link was already clicked less than a second ago, do nothing (linkClicked resets to false 1 sec after clicking link. Not doing this spawns multiple tabs)
+
+            HtmlElement linkElement = sender as HtmlElement;
+            if (linkElement != null)
+            {
+                string url = linkElement.GetAttribute("href");
+
+                // Check if the URL starts with "https://btcdir.org/satsuma-dir"
+                if (url.StartsWith("https://btcdir.org/satsuma-dir"))
+                {
+                    // do nothing (open these links in webbrowser control)
+                    return;
+                }
+
+                // External links open in the default browser
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error opening link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                // Set the linkClicked flag to true to avoid multiple tabs for a single click
+                linkClicked = true;
+                externalLinksTimer.Start();
+
+                // Cancel the default behavior for the link click to stop IE opening
+                e.ReturnValue = false;
+            }
+        }
+
+        private void ExternalLinksTimer_Tick(object sender, EventArgs e)
+        {
+            linkClicked = false;
+            externalLinksTimer.Stop();
         }
         #endregion
         #endregion
@@ -13185,7 +13245,7 @@ namespace SATSuma
         #endregion
 
         #region ⚡SETTINGS SCREEN⚡
-        #region user input xpub url
+        #region user input xpub mempool url
         private void TextBoxSettingsXpubMempoolURL_Enter(object sender, EventArgs e)
         {
             try
@@ -13746,6 +13806,7 @@ namespace SATSuma
                     RunBitcoinExplorerOrgJSONAPI = false;
                     bitcoinExplorerEnpointsSelected = "0";
                     DisableChartsThatDontUseMempoolSpace();
+                    HideAllFiatConversionFields();
                 }
                 else
                 {
@@ -13758,6 +13819,7 @@ namespace SATSuma
                     RunBitcoinExplorerOrgJSONAPI = true;
                     bitcoinExplorerEnpointsSelected = "1";
                     EnableChartsThatDontUseMempoolSpace();
+                    ShowAllFiatConversionFields();
                 }
                 SaveSettingsToBookmarksFile();
                 TimerAPIRefreshPeriod_Tick(sender, e);
@@ -13878,6 +13940,7 @@ namespace SATSuma
                     lblSettingsNodeMainnet.ForeColor = Color.IndianRed;
                     lblSettingsNodeMainnet.Enabled = true;
                 });
+                ShowAllFiatConversionFields();
             }
             catch (Exception ex)
             {
@@ -13961,6 +14024,7 @@ namespace SATSuma
                     lblSettingsNodeMainnet.Enabled = false;
                 });
                 DisableChartsThatDontUseMempoolSpace();
+                HideAllFiatConversionFields();
             }
             catch (Exception ex)
             {
@@ -14051,6 +14115,7 @@ namespace SATSuma
                     control.BackgroundImage = Properties.Resources.graphIcondisabled;
                 }
                 btnMenuCharts.Enabled = false;
+                HideAllFiatConversionFields();
             }
             catch (Exception ex)
             {
@@ -14073,6 +14138,7 @@ namespace SATSuma
                     control.Enabled = true;
                     control.BackgroundImage = Properties.Resources.graphIcon;
                 }
+                ShowAllFiatConversionFields();
             }
             catch (Exception ex)
             {
@@ -14189,6 +14255,7 @@ namespace SATSuma
                     {
                         settingsAlreadySavedInFile = true;
                         settingsInFile = bookmark.Data;
+                        #region restore default fiat currency
                         if (Convert.ToString(bookmark.Data[0]) == "P")
                         {
                             //GBP
@@ -14261,6 +14328,8 @@ namespace SATSuma
                             btnXAU.Enabled = false;
                             btnCurrency.Text = "XAU 🪙";
                         }
+                        #endregion
+                        #region restore network
                         if (Convert.ToString(bookmark.Data[1]) == "M")
                         {
                             //mainnet
@@ -14330,6 +14399,8 @@ namespace SATSuma
                                 lblSettingsNodeCustom.ForeColor = Color.Green;
                             });
                         }
+                        #endregion
+                        #region restore API settings
                         if (Convert.ToString(bookmark.Data[2]) == "1")
                         {
                             RunBlockchairComJSONAPI = true;
@@ -14362,6 +14433,7 @@ namespace SATSuma
                         {
                             RunBitcoinExplorerEndpointAPI = false;
                             RunBitcoinExplorerOrgJSONAPI = false;
+                            HideAllFiatConversionFields();
                             lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                             {
                                 lblBitcoinExplorerEndpoints.Text = "❌";
@@ -14386,6 +14458,8 @@ namespace SATSuma
                                 lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
                             });
                         }
+                        #endregion
+                        #region restore privacy mode settings
                         if (Convert.ToString(bookmark.Data[5]) == "1")
                         {
                             lblPrivacyMode.Invoke((MethodInvoker)delegate
@@ -14412,6 +14486,8 @@ namespace SATSuma
                             lblSettingsNodeTestnet.Enabled = true;
                             lblEnableDirectory.Enabled = true;
                         }
+                        #endregion
+                        #region restore directory settings
                         if (Convert.ToString(bookmark.Data[6]) == "1")
                         {
                             lblEnableDirectory.Invoke((MethodInvoker)delegate
@@ -14432,6 +14508,8 @@ namespace SATSuma
                             enableDirectory = false;
                             LoadAndStyleDirectoryBrowser();
                         }
+                        #endregion
+                        #region restore unused
                         if (Convert.ToString(bookmark.Data[7]) == "1")
                         {
                             lblUnused2.Invoke((MethodInvoker)delegate
@@ -14450,6 +14528,7 @@ namespace SATSuma
                             });
                             lblUnused2.Enabled = false;
                         }
+                        #endregion
                         numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
                         numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(bookmark.Data.Substring(12, 2));
                         numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(bookmark.Data.Substring(14, 3));
@@ -14618,6 +14697,26 @@ namespace SATSuma
         {
             CloseMainMenu();
             CloseCurrencyMenu();
+            #region put correct text on the apply theme menu button depending which theme is in use
+            if (BtnMenuThemeGenesis.Enabled && btnMenuThemeBTCdir.Enabled && btnMenuThemeSatsuma.Enabled) // custom theme
+            {
+                comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxHeaderCustomThemes.Texts = "select theme ▼";
+                });
+                btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuApplyCustomTheme.Text = "custom";
+                });
+            }
+            else // preset theme
+            {
+                btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuApplyCustomTheme.Text = "apply theme";
+                });
+            }
+            #endregion
             panelThemeMenu.BringToFront();
             btnThemeMenu.BringToFront();
             if (panelThemeMenu.Height == 0)
@@ -16877,6 +16976,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 comboBoxCustomizeScreenThemeList.ForeColor = thiscolor;
+                comboBoxCustomizeScreenThemeList.ListTextColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -17098,6 +17198,7 @@ namespace SATSuma
                     control.BackColor = thiscolor;
                 }
                 comboBoxCustomizeScreenThemeList.BackColor = thiscolor;
+                comboBoxCustomizeScreenThemeList.ListBackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -17838,6 +17939,41 @@ namespace SATSuma
         #endregion
 
         #region ⚡COMMON CODE⚡
+        #region hide/show all fiat conversion fields
+        private void HideAllFiatConversionFields()
+        {
+            try
+            {
+                Control[] listFiatConversionsToHide = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat };
+                foreach (Control control in listFiatConversionsToHide)
+                {
+                    control.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "HideAllFiatConversionFields");
+            }
+        }
+        private void ShowAllFiatConversionFields()
+        {
+            try
+            {
+                if (!testNet && !privacyMode && RunBitcoinExplorerEndpointAPI && RunBitcoinExplorerOrgJSONAPI)
+                {
+                    Control[] listFiatConversionsToShow = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat };
+                    foreach (Control control in listFiatConversionsToShow)
+                    {
+                        control.Visible = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "HideAllFiatConversionFields");
+            }
+        }
+        #endregion
         #region populate the theme list comboboxes
         private void PopulateThemeComboboxes()
         {
@@ -17885,22 +18021,6 @@ namespace SATSuma
         {
             try
             {
-                #region put correct text on the apply theme menu button depending which theme is in use
-                if (BtnMenuThemeGenesis.Enabled && btnMenuThemeBTCdir.Enabled && btnMenuThemeSatsuma.Enabled) // custom theme
-                {
-                    btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
-                    {
-                        btnMenuApplyCustomTheme.Text = "custom";
-                    });
-                }
-                else // preset theme
-                {
-                    btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
-                    {
-                        btnMenuApplyCustomTheme.Text = "apply theme";
-                    });
-                }
-                #endregion
                 #region smooth buttons a bit if using a background image
                 if (this.BackgroundImage != null)
                 {
@@ -19334,23 +19454,7 @@ namespace SATSuma
         {
             try
             {
-                //CloseMainMenu();
-                var modalWindow = new HelpScreen
-                {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    TextColor = label77.ForeColor, // random label color to pass to the help screen
-                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor,
-                    ButtonTextColor2 = btnPreviousBlock.ForeColor,
-                    ButtonBackColor2 = btnPreviousBlock.BackColor,
-                    TextBoxBackColor = chartsBackgroundColor,
-                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
-                    WindowBackgroundColor = BackColor,
-                    WindowBackgroundImage = BackgroundImage
-                };
-                modalWindow.ShowDialog();
+                OpenHelpScreen();
             }
             catch (Exception ex)
             {
@@ -19362,28 +19466,59 @@ namespace SATSuma
         {
             try
             {
-                var modalWindow = new HelpScreen
-                {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    TextColor = label77.ForeColor, // random label color to pass to the help screen
-                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor,
-                    ButtonTextColor2 = btnPreviousBlock.ForeColor,
-                    ButtonBackColor2 = btnPreviousBlock.BackColor,
-                    TextBoxBackColor = chartsBackgroundColor,
-                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
-                    WindowBackgroundColor = BackColor,
-                    WindowBackgroundImage = BackgroundImage
-
-                };
-                modalWindow.ShowDialog();
+                OpenHelpScreen();
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BtnHelp_Click");
             }
+        }
+
+        private void OpenHelpScreen()
+        {
+            // take a screenshot of the form and darken it:
+            Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
+            using (Graphics G = Graphics.FromImage(bmp))
+            {
+                G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                double percent = 0.60;
+                Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
+                using Brush brsh = new SolidBrush(darken);
+                G.FillRectangle(brsh, this.ClientRectangle);
+            }
+            // put the darkened screenshot into a Panel and bring it to the front:
+            using (Panel p = new Panel())
+            {
+                p.Location = new Point(0, 0);
+                p.Size = this.ClientRectangle.Size;
+                p.BackgroundImage = bmp;
+                this.Controls.Add(p);
+                p.BringToFront();
+
+                // display your dialog somehow:
+                Form frm = new HelpScreen
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    TextColor = label77.ForeColor, // random label color to pass to the help screen
+                    HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                    ButtonTextColor = btnExit.ForeColor,
+                    ButtonBackColor = btnExit.BackColor,
+                    ButtonTextColor2 = btnPreviousBlock.ForeColor,
+                    ButtonBackColor2 = btnPreviousBlock.BackColor,
+                    TextBoxBackColor = chartsBackgroundColor,
+                    TextBoxForeColor = textBoxBlockHeightToStartListFrom.ForeColor,
+                    WindowBackgroundColor = panel88.BackColor,
+                    WindowBackgroundImage = BackgroundImage,
+                    ButtonRadius = btnExit.BorderRadius,
+                    ButtonBorderColor = btnExit.BorderColor,
+                    ButtonBorderSize = btnExit.BorderSize
+                };
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            } // panel will be disposed and the form will "lighten" again...
+            CloseMainMenu();
         }
         #endregion
         #region show about screen
@@ -19391,21 +19526,46 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
-
-                var modalWindow = new Splash
+                // take a screenshot of the form and darken it:
+                Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
+                using (Graphics G = Graphics.FromImage(bmp))
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    WindowBackgroundColor = panel88.BackColor,
-                    LabelColor = label26.ForeColor,
-                    LinksColor = lblHeaderMarketCap.ForeColor,
-                    ButtonTextColor = btnMenu.ForeColor,
-                    ButtonBackColor = btnMenu.BackColor,
-                    CurrentVersion = CurrentVersion,
-                    PrivacyMode = privacyMode
-                };
-                modalWindow.ShowDialog();
+                    G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                    G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                    double percent = 0.60;
+                    Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
+                    using Brush brsh = new SolidBrush(darken);
+                    G.FillRectangle(brsh, this.ClientRectangle);
+                }
+                // put the darkened screenshot into a Panel and bring it to the front:
+                using (Panel p = new Panel())
+                {
+                    p.Location = new Point(0, 0);
+                    p.Size = this.ClientRectangle.Size;
+                    p.BackgroundImage = bmp;
+                    this.Controls.Add(p);
+                    p.BringToFront();
+
+                    // display your dialog somehow:
+                    Form frm = new Splash
+                    {
+                        Owner = this, // Set the parent window as the owner of the modal window
+                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        WindowBackgroundColor = panel88.BackColor,
+                        LabelColor = label77.ForeColor,
+                        LinksColor = lblHeaderMarketCap.ForeColor,
+                        ButtonTextColor = btnExit.ForeColor,
+                        ButtonBackColor = btnExit.BackColor,
+                        CurrentVersion = CurrentVersion,
+                        PrivacyMode = privacyMode,
+                        ButtonRadius = btnExit.BorderRadius,
+                        ButtonBorderColor = btnExit.BorderColor,
+                        ButtonBorderSize = btnExit.BorderSize
+                    };
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog(this);
+                } // panel will be disposed and the form will "lighten" again...
+                CloseMainMenu();
             }
             catch (Exception ex)
             {
@@ -19481,30 +19641,7 @@ namespace SATSuma
                 return;
             }
             #endregion
-            #region force refresh the address screen
-            string tempSubmittedAddress = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            textboxSubmittedAddress.Text = tempSubmittedAddress;
-            #endregion
-            #region force refresh the transaction screen
-            string tempSubmittedTransaction = textBoxTransactionID.Text;
-            textBoxTransactionID.Text = "";
-            textBoxTransactionID.Text = tempSubmittedTransaction;
-            #endregion
-            #region recalculate fiat values on xpub screen to avoid refreshing it
-            lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            #endregion
+            RefreshFiatValuesEverywhere();
         }
 
         private void BtnEUR_Click(object sender, EventArgs e)
@@ -19551,30 +19688,7 @@ namespace SATSuma
                 return;
             }
             #endregion
-            #region force refresh the address screen
-            string tempSubmittedAddress = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            textboxSubmittedAddress.Text = tempSubmittedAddress;
-            #endregion
-            #region force refresh the transaction screen
-            string tempSubmittedTransaction = textBoxTransactionID.Text;
-            textBoxTransactionID.Text = "";
-            textBoxTransactionID.Text = tempSubmittedTransaction;
-            #endregion
-            #region recalculate fiat values on xpub screen to avoid refreshing it
-            lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            #endregion
+            RefreshFiatValuesEverywhere();
         }
 
         private void BtnGBP_Click(object sender, EventArgs e)
@@ -19621,30 +19735,7 @@ namespace SATSuma
                 return;
             }
             #endregion
-            #region force refresh the address screen
-            string tempSubmittedAddress = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            textboxSubmittedAddress.Text = tempSubmittedAddress;
-            #endregion
-            #region force refresh the transaction screen
-            string tempSubmittedTransaction = textBoxTransactionID.Text;
-            textBoxTransactionID.Text = "";
-            textBoxTransactionID.Text = tempSubmittedTransaction;
-            #endregion
-            #region recalculate fiat values on xpub screen to avoid refreshing it
-            lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            #endregion
+            RefreshFiatValuesEverywhere();
         }
 
         private void BtnXAU_Click(object sender, EventArgs e)
@@ -19691,30 +19782,118 @@ namespace SATSuma
                 return;
             }
             #endregion
-            #region force refresh the address screen
-            string tempSubmittedAddress = textboxSubmittedAddress.Text;
-            textboxSubmittedAddress.Text = "";
-            textboxSubmittedAddress.Text = tempSubmittedAddress;
-            #endregion
-            #region force refresh the transaction screen
-            string tempSubmittedTransaction = textBoxTransactionID.Text;
-            textBoxTransactionID.Text = "";
-            textBoxTransactionID.Text = tempSubmittedTransaction;
-            #endregion
-            #region recalculate fiat values on xpub screen to avoid refreshing it
-            lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
+            RefreshFiatValuesEverywhere();
+        }
+
+        private void RefreshFiatValuesEverywhere()
+        {
+            if (!privacyMode && !testNet && RunBitcoinExplorerEndpointAPI)
             {
-                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
+                #region recalculate fiat values on bitcoin dashboard
+                lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
             {
-                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockRewardAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
             });
-            lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
-            {
-                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
-            });
-            #endregion
+                lblBlockRewardFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
+                {
+                    lbl24HourBTCSentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lbl24HourBTCSent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                #endregion
+                #region recalculate fiat values on xpub screen 
+                lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                #endregion
+                #region recalculate fiat values on blocks screen 
+                lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListBlockReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                });
+                #endregion
+                #region recalculate values on transaction screen
+                if (lblTotalOutputValue.Text != "totalOutputValue")
+                {
+                    lblTotalOutputValueFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblTotalOutputValueFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalOutputValue.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                if (lblTotalInputValue.Text != "totalInputValue")
+                {
+                    lblTotalInputValueFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblTotalInputValueFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalInputValue.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                if (lblTransactionFee.Text != "no data")
+                {
+                    lblTransactionFeeFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblTransactionFeeFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTransactionFee.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                #endregion
+                #region recalculate fiat values on address screen
+                if (lblAddressConfirmedUnspent.Text != "no data")
+                {
+                    lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                if (lblAddressConfirmedSpent.Text != "no data")
+                {
+                    lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                if (lblAddressConfirmedReceived.Text != "no data")
+                {
+                    lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                #endregion
+                #region recalculate fiat values on block screen
+                if (lblReward.Text != "no data")
+                {
+                    lblRewardFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                if (lblTotalFees.Text != "no data")
+                {
+                    lblTotalFeesFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                }
+                #endregion
+            }
         }
 
         private void CloseCurrencyMenuGetMarketDataSaveCurrency()
@@ -19728,7 +19907,7 @@ namespace SATSuma
         {
             try
             {
-                if (!privacyMode)
+                if (!privacyMode && !testNet && RunBitcoinExplorerEndpointAPI)
                 {
                     var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
                     var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
@@ -21138,4 +21317,4 @@ namespace SATSuma
 
         #endregion
     }
-}                   
+}                

@@ -32,7 +32,7 @@
             this.lblVersion = new System.Windows.Forms.Label();
             this.linkLabelDownloadUpdate = new System.Windows.Forms.LinkLabel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.btnExit = new System.Windows.Forms.Button();
+            this.btnExit = new CustomControls.RJControls.RJButton();
             this.linkLabelSupportProject = new System.Windows.Forms.LinkLabel();
             this.linkLabelSourceCode = new System.Windows.Forms.LinkLabel();
             this.lblErrorMessage = new System.Windows.Forms.Label();
@@ -45,7 +45,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::SATSuma.Properties.Resources.PnVlfRPD_400x400;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(192, 206);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -95,20 +95,26 @@
             // btnExit
             // 
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnExit.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnExit.BorderColor = System.Drawing.Color.Empty;
+            this.btnExit.BorderRadius = 0;
+            this.btnExit.BorderSize = 0;
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(345, 9);
+            this.btnExit.Location = new System.Drawing.Point(350, 4);
             this.btnExit.Margin = new System.Windows.Forms.Padding(0);
             this.btnExit.Name = "btnExit";
+            this.btnExit.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.btnExit.Size = new System.Drawing.Size(24, 24);
             this.btnExit.TabIndex = 151;
             this.btnExit.TabStop = false;
             this.btnExit.Text = "❌";
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnExit.TextColor = System.Drawing.Color.White;
             this.btnExit.UseVisualStyleBackColor = false;
             // 
             // linkLabelSupportProject
@@ -189,7 +195,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(378, 209);
+            this.ClientSize = new System.Drawing.Size(378, 206);
             this.Controls.Add(this.lblVersionAvailable);
             this.Controls.Add(this.lblUpToDate);
             this.Controls.Add(this.lblErrorMessage);
@@ -220,11 +226,11 @@
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.LinkLabel linkLabelDownloadUpdate;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.LinkLabel linkLabelSupportProject;
         private System.Windows.Forms.LinkLabel linkLabelSourceCode;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.Label lblUpToDate;
         private System.Windows.Forms.Label lblVersionAvailable;
+        private CustomControls.RJControls.RJButton btnExit;
     }
 }

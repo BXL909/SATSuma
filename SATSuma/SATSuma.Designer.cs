@@ -758,6 +758,8 @@
             this.btnColorLines = new CustomControls.RJControls.RJButton();
             this.btnColorTextBox = new CustomControls.RJControls.RJButton();
             this.panel88 = new System.Windows.Forms.Panel();
+            this.label288 = new System.Windows.Forms.Label();
+            this.btnColorFiatConversionText = new CustomControls.RJControls.RJButton();
             this.btnColorStatusError = new CustomControls.RJControls.RJButton();
             this.label176 = new System.Windows.Forms.Label();
             this.btnColorPriceBlock = new CustomControls.RJControls.RJButton();
@@ -1051,8 +1053,7 @@
             this.btnDirectoryScrollDown = new CustomControls.RJControls.RJButton();
             this.webBrowserDirectory = new System.Windows.Forms.WebBrowser();
             this.label286 = new System.Windows.Forms.Label();
-            this.btnColorFiatConversionText = new CustomControls.RJControls.RJButton();
-            this.label288 = new System.Windows.Forms.Label();
+            this.externalLinksTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -1411,9 +1412,9 @@
             this.lblNextBlockTotalFees.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNextBlockTotalFees.Location = new System.Drawing.Point(549, 230);
             this.lblNextBlockTotalFees.Name = "lblNextBlockTotalFees";
-            this.lblNextBlockTotalFees.Size = new System.Drawing.Size(64, 18);
+            this.lblNextBlockTotalFees.Size = new System.Drawing.Size(16, 18);
             this.lblNextBlockTotalFees.TabIndex = 116;
-            this.lblNextBlockTotalFees.Text = "no data";
+            this.lblNextBlockTotalFees.Text = "0";
             this.toolTip1.SetToolTip(this.lblNextBlockTotalFees, "(estimated)");
             // 
             // label20
@@ -1645,9 +1646,9 @@
             this.lblBlockListTotalFeesInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListTotalFeesInNextBlock.Location = new System.Drawing.Point(0, 233);
             this.lblBlockListTotalFeesInNextBlock.Name = "lblBlockListTotalFeesInNextBlock";
-            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(16, 18);
             this.lblBlockListTotalFeesInNextBlock.TabIndex = 210;
-            this.lblBlockListTotalFeesInNextBlock.Text = "no data";
+            this.lblBlockListTotalFeesInNextBlock.Text = "0";
             this.toolTip1.SetToolTip(this.lblBlockListTotalFeesInNextBlock, "(estimated)");
             // 
             // label108
@@ -1900,7 +1901,7 @@
             this.pictureBoxBlockListDifficultyChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListDifficultyChart.BackgroundImage")));
             this.pictureBoxBlockListDifficultyChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 381);
+            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 379);
             this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
             this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1914,7 +1915,7 @@
             this.pictureBoxBlockListHashrateChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListHashrateChart.BackgroundImage")));
             this.pictureBoxBlockListHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 453);
+            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 451);
             this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
             this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2124,7 +2125,7 @@
             this.pictureBoxBlockListFeeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeChart2.BackgroundImage")));
             this.pictureBoxBlockListFeeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeChart2.Location = new System.Drawing.Point(120, 237);
+            this.pictureBoxBlockListFeeChart2.Location = new System.Drawing.Point(120, 235);
             this.pictureBoxBlockListFeeChart2.Name = "pictureBoxBlockListFeeChart2";
             this.pictureBoxBlockListFeeChart2.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListFeeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2138,7 +2139,7 @@
             this.pictureBoxBlockListFeeRangeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeRangeChart2.BackgroundImage")));
             this.pictureBoxBlockListFeeRangeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxBlockListFeeRangeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 201);
+            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 199);
             this.pictureBoxBlockListFeeRangeChart2.Name = "pictureBoxBlockListFeeRangeChart2";
             this.pictureBoxBlockListFeeRangeChart2.Size = new System.Drawing.Size(16, 12);
             this.pictureBoxBlockListFeeRangeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2830,9 +2831,9 @@
             this.lblBlockRewardAfterHalving.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockRewardAfterHalving.Location = new System.Drawing.Point(549, 533);
             this.lblBlockRewardAfterHalving.Name = "lblBlockRewardAfterHalving";
-            this.lblBlockRewardAfterHalving.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockRewardAfterHalving.Size = new System.Drawing.Size(16, 18);
             this.lblBlockRewardAfterHalving.TabIndex = 200;
-            this.lblBlockRewardAfterHalving.Text = "no data";
+            this.lblBlockRewardAfterHalving.Text = "0";
             // 
             // panel8
             // 
@@ -3030,9 +3031,9 @@
             this.lbl24HourBTCSent.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl24HourBTCSent.Location = new System.Drawing.Point(548, 168);
             this.lbl24HourBTCSent.Name = "lbl24HourBTCSent";
-            this.lbl24HourBTCSent.Size = new System.Drawing.Size(64, 18);
+            this.lbl24HourBTCSent.Size = new System.Drawing.Size(16, 18);
             this.lbl24HourBTCSent.TabIndex = 105;
-            this.lbl24HourBTCSent.Text = "no data";
+            this.lbl24HourBTCSent.Text = "0";
             // 
             // label57
             // 
@@ -3115,9 +3116,9 @@
             this.lblBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockReward.Location = new System.Drawing.Point(549, 368);
             this.lblBlockReward.Name = "lblBlockReward";
-            this.lblBlockReward.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockReward.Size = new System.Drawing.Size(16, 18);
             this.lblBlockReward.TabIndex = 202;
-            this.lblBlockReward.Text = "no data";
+            this.lblBlockReward.Text = "0";
             // 
             // lblMarketCapUSD
             // 
@@ -3274,7 +3275,7 @@
             this.lblBlockListTotalFeesInNextBlockFiat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListTotalFeesInNextBlockFiat.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListTotalFeesInNextBlockFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblBlockListTotalFeesInNextBlockFiat.Location = new System.Drawing.Point(64, 238);
+            this.lblBlockListTotalFeesInNextBlockFiat.Location = new System.Drawing.Point(64, 236);
             this.lblBlockListTotalFeesInNextBlockFiat.Name = "lblBlockListTotalFeesInNextBlockFiat";
             this.lblBlockListTotalFeesInNextBlockFiat.Size = new System.Drawing.Size(49, 13);
             this.lblBlockListTotalFeesInNextBlockFiat.TabIndex = 245;
@@ -3286,7 +3287,7 @@
             this.lblBlockListBlockRewardFiat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBlockListBlockRewardFiat.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListBlockRewardFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblBlockListBlockRewardFiat.Location = new System.Drawing.Point(71, 490);
+            this.lblBlockListBlockRewardFiat.Location = new System.Drawing.Point(71, 488);
             this.lblBlockListBlockRewardFiat.Name = "lblBlockListBlockRewardFiat";
             this.lblBlockListBlockRewardFiat.Size = new System.Drawing.Size(49, 13);
             this.lblBlockListBlockRewardFiat.TabIndex = 244;
@@ -3498,9 +3499,9 @@
             this.lblBlockListBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 485);
             this.lblBlockListBlockReward.Name = "lblBlockListBlockReward";
-            this.lblBlockListBlockReward.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListBlockReward.Size = new System.Drawing.Size(16, 18);
             this.lblBlockListBlockReward.TabIndex = 224;
-            this.lblBlockListBlockReward.Text = "no data";
+            this.lblBlockListBlockReward.Text = "0";
             // 
             // label118
             // 
@@ -5812,9 +5813,9 @@
             this.lblAddressConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspent.Location = new System.Drawing.Point(0, 255);
             this.lblAddressConfirmedUnspent.Name = "lblAddressConfirmedUnspent";
-            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(72, 19);
+            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(18, 19);
             this.lblAddressConfirmedUnspent.TabIndex = 129;
-            this.lblAddressConfirmedUnspent.Text = "no data";
+            this.lblAddressConfirmedUnspent.Text = "0";
             this.lblAddressConfirmedUnspent.Visible = false;
             // 
             // lblAddressConfirmedSpent
@@ -5824,9 +5825,9 @@
             this.lblAddressConfirmedSpent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpent.Location = new System.Drawing.Point(0, 436);
             this.lblAddressConfirmedSpent.Name = "lblAddressConfirmedSpent";
-            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(72, 19);
+            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(18, 19);
             this.lblAddressConfirmedSpent.TabIndex = 127;
-            this.lblAddressConfirmedSpent.Text = "no data";
+            this.lblAddressConfirmedSpent.Text = "0";
             this.lblAddressConfirmedSpent.Visible = false;
             // 
             // lblAddressConfirmedReceived
@@ -5836,9 +5837,9 @@
             this.lblAddressConfirmedReceived.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceived.Location = new System.Drawing.Point(0, 371);
             this.lblAddressConfirmedReceived.Name = "lblAddressConfirmedReceived";
-            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(72, 19);
+            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(18, 19);
             this.lblAddressConfirmedReceived.TabIndex = 125;
-            this.lblAddressConfirmedReceived.Text = "no data";
+            this.lblAddressConfirmedReceived.Text = "0";
             this.lblAddressConfirmedReceived.Visible = false;
             // 
             // lblAddressConfirmedTransactionCount
@@ -6357,9 +6358,9 @@
             this.lblReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReward.Location = new System.Drawing.Point(0, 299);
             this.lblReward.Name = "lblReward";
-            this.lblReward.Size = new System.Drawing.Size(64, 18);
+            this.lblReward.Size = new System.Drawing.Size(16, 18);
             this.lblReward.TabIndex = 140;
-            this.lblReward.Text = "no data";
+            this.lblReward.Text = "0";
             // 
             // lblNumberOfTXInBlock
             // 
@@ -6423,9 +6424,9 @@
             this.lblTotalFees.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalFees.Location = new System.Drawing.Point(0, 245);
             this.lblTotalFees.Name = "lblTotalFees";
-            this.lblTotalFees.Size = new System.Drawing.Size(64, 18);
+            this.lblTotalFees.Size = new System.Drawing.Size(16, 18);
             this.lblTotalFees.TabIndex = 166;
-            this.lblTotalFees.Text = "no data";
+            this.lblTotalFees.Text = "0";
             // 
             // lblNonce
             // 
@@ -7346,9 +7347,9 @@
             this.lblTotalOutputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalOutputValue.Location = new System.Drawing.Point(318, 264);
             this.lblTotalOutputValue.Name = "lblTotalOutputValue";
-            this.lblTotalOutputValue.Size = new System.Drawing.Size(119, 14);
+            this.lblTotalOutputValue.Size = new System.Drawing.Size(14, 14);
             this.lblTotalOutputValue.TabIndex = 170;
-            this.lblTotalOutputValue.Text = "totalOutputValue";
+            this.lblTotalOutputValue.Text = "0";
             // 
             // lblTotalInputValue
             // 
@@ -7357,9 +7358,9 @@
             this.lblTotalInputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalInputValue.Location = new System.Drawing.Point(314, 242);
             this.lblTotalInputValue.Name = "lblTotalInputValue";
-            this.lblTotalInputValue.Size = new System.Drawing.Size(112, 14);
+            this.lblTotalInputValue.Size = new System.Drawing.Size(14, 14);
             this.lblTotalInputValue.TabIndex = 169;
-            this.lblTotalInputValue.Text = "totalInputValue";
+            this.lblTotalInputValue.Text = "0";
             // 
             // lblCoinbase
             // 
@@ -7440,9 +7441,9 @@
             this.lblTransactionFee.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionFee.Location = new System.Drawing.Point(340, 31);
             this.lblTransactionFee.Name = "lblTransactionFee";
-            this.lblTransactionFee.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionFee.Size = new System.Drawing.Size(14, 14);
             this.lblTransactionFee.TabIndex = 166;
-            this.lblTransactionFee.Text = "no data";
+            this.lblTransactionFee.Text = "0";
             // 
             // label104
             // 
@@ -11533,6 +11534,45 @@
             this.panel88.Name = "panel88";
             this.panel88.Size = new System.Drawing.Size(236, 287);
             this.panel88.TabIndex = 298;
+            // 
+            // label288
+            // 
+            this.label288.AutoSize = true;
+            this.label288.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label288.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
+            this.label288.Location = new System.Drawing.Point(65, 260);
+            this.label288.Name = "label288";
+            this.label288.Size = new System.Drawing.Size(138, 17);
+            this.label288.TabIndex = 284;
+            this.label288.Text = "Fiat/Gold conversions";
+            // 
+            // btnColorFiatConversionText
+            // 
+            this.btnColorFiatConversionText.BackColor = System.Drawing.Color.Transparent;
+            this.btnColorFiatConversionText.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnColorFiatConversionText.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnColorFiatConversionText.BackgroundImage")));
+            this.btnColorFiatConversionText.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnColorFiatConversionText.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnColorFiatConversionText.BorderRadius = 12;
+            this.btnColorFiatConversionText.BorderSize = 0;
+            this.btnColorFiatConversionText.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnColorFiatConversionText.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnColorFiatConversionText.FlatAppearance.BorderSize = 0;
+            this.btnColorFiatConversionText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorFiatConversionText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
+            this.btnColorFiatConversionText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnColorFiatConversionText.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnColorFiatConversionText.ForeColor = System.Drawing.Color.White;
+            this.btnColorFiatConversionText.Location = new System.Drawing.Point(11, 259);
+            this.btnColorFiatConversionText.Margin = new System.Windows.Forms.Padding(0);
+            this.btnColorFiatConversionText.Name = "btnColorFiatConversionText";
+            this.btnColorFiatConversionText.Size = new System.Drawing.Size(35, 18);
+            this.btnColorFiatConversionText.TabIndex = 283;
+            this.btnColorFiatConversionText.TabStop = false;
+            this.btnColorFiatConversionText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnColorFiatConversionText.TextColor = System.Drawing.Color.White;
+            this.btnColorFiatConversionText.UseVisualStyleBackColor = false;
+            this.btnColorFiatConversionText.Click += new System.EventHandler(this.BtnColorFiatConversionText_Click);
             // 
             // btnColorStatusError
             // 
@@ -16170,44 +16210,10 @@
             this.label286.Text = "The directory is not available because it is either disabled in settings or becau" +
     "se Privacy Mode is enabled.";
             // 
-            // btnColorFiatConversionText
+            // externalLinksTimer
             // 
-            this.btnColorFiatConversionText.BackColor = System.Drawing.Color.Transparent;
-            this.btnColorFiatConversionText.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnColorFiatConversionText.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnColorFiatConversionText.BackgroundImage")));
-            this.btnColorFiatConversionText.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnColorFiatConversionText.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnColorFiatConversionText.BorderRadius = 12;
-            this.btnColorFiatConversionText.BorderSize = 0;
-            this.btnColorFiatConversionText.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnColorFiatConversionText.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnColorFiatConversionText.FlatAppearance.BorderSize = 0;
-            this.btnColorFiatConversionText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnColorFiatConversionText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(92)))), ((int)(((byte)(29)))));
-            this.btnColorFiatConversionText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnColorFiatConversionText.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnColorFiatConversionText.ForeColor = System.Drawing.Color.White;
-            this.btnColorFiatConversionText.Location = new System.Drawing.Point(11, 259);
-            this.btnColorFiatConversionText.Margin = new System.Windows.Forms.Padding(0);
-            this.btnColorFiatConversionText.Name = "btnColorFiatConversionText";
-            this.btnColorFiatConversionText.Size = new System.Drawing.Size(35, 18);
-            this.btnColorFiatConversionText.TabIndex = 283;
-            this.btnColorFiatConversionText.TabStop = false;
-            this.btnColorFiatConversionText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnColorFiatConversionText.TextColor = System.Drawing.Color.White;
-            this.btnColorFiatConversionText.UseVisualStyleBackColor = false;
-            this.btnColorFiatConversionText.Click += new System.EventHandler(this.BtnColorFiatConversionText_Click);
-            // 
-            // label288
-            // 
-            this.label288.AutoSize = true;
-            this.label288.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label288.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.label288.Location = new System.Drawing.Point(65, 260);
-            this.label288.Name = "label288";
-            this.label288.Size = new System.Drawing.Size(138, 17);
-            this.label288.TabIndex = 284;
-            this.label288.Text = "Fiat/Gold conversions";
+            this.externalLinksTimer.Interval = 1000;
+            this.externalLinksTimer.Tick += new System.EventHandler(this.ExternalLinksTimer_Tick);
             // 
             // SATSuma
             // 
@@ -16219,16 +16225,16 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelDirectory);
-            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.btnThemeMenu);
@@ -17624,6 +17630,7 @@
         private System.Windows.Forms.Label lblNextBlockTotalFeesFiat;
         private CustomControls.RJControls.RJButton btnColorFiatConversionText;
         private System.Windows.Forms.Label label288;
+        private System.Windows.Forms.Timer externalLinksTimer;
     }
 }
 

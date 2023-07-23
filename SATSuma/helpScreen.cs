@@ -1,19 +1,35 @@
-﻿using System;
+﻿#region using
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+#endregion
 
 namespace SATSuma
 {
     public partial class HelpScreen : Form
     {
+        #region rounded form
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+         (
+           int nLeftRect,     // x-coordinate of upper-left corner
+           int nTopRect,      // y-coordinate of upper-left corner
+           int nRightRect,    // x-coordinate of lower-right corner
+           int nBottomRect,   // y-coordinate of lower-right corner
+           int nWidthEllipse, // height of ellipse
+           int nHeightEllipse // width of ellipse
+         );
+        #endregion
+        #region variable declaration
         public Color TextColor { get; set; }
         public Color HeadingTextColor { get; set; }
         public Color ButtonTextColor { get; set; }
@@ -24,11 +40,9 @@ namespace SATSuma
         public Color TextBoxForeColor { get; set; }
         public Image WindowBackgroundImage { get; set; }
         public Color WindowBackgroundColor { get; set; }
-
-        public HelpScreen()
-        {
-            InitializeComponent();
-        }
+        public int ButtonRadius { get; set; }
+        public int ButtonBorderSize { get; set; }
+        public Color ButtonBorderColor { get; set; }
 
         private bool isButtonPressed = false;
         private bool downButtonPressed = false;
@@ -46,31 +60,48 @@ namespace SATSuma
         readonly string bookmarksHelpText = "Adding a bookmark\r\nAny address, xpub, block or transaction can be bookmarked. The \U0001f9e1 button will open a tab to add the currently viewed item as a bookmark.\r\n\r\nAn optional note or description can also be added. Bookmarks are stored in a bookmarks.json file in the SATSuma installation directory. This file can be accessed by anyone who has access to your computer. You can encrypt your bookmarks and notes using SHA-256 by supplying an optional encryption key/password. This key is not stored anywhere and there is no way to recover it. Each bookmark has its own individual key, so you need to provide a key for every bookmark you want encrypted, although you can re-use the same key multiple times if you wish.\r\n\r\nViewing a bookmark\r\nThe bookmarks screen shows all currently saved bookmarks, along with the time and date they were created. A red 🔒 means that the bookmark is encrypted and will need the key provided (press the unlock button after selecting the row) before it can be viewed properly.\r\n\r\nPress the ‘view’ button to go to the appropriate screen to see that bookmark or press ‘delete’ button to instantly delete it.\r\n\r\nWhere are my bookmarks stored?\r\nYour bookmarks are saved in the SATSuma_bookmarks.json file, which can be found in your user application data directory (e.g. C:\\Users\\yourusername\\AppData\\Roaming\\SATSuma).";
         readonly string settingsHelpText = "All settings are automatically saved.\r\n\r\nNetwork – on-chain queries (exc. Xpub)\r\nThis setting affects all queries on the address, block, block list and transaction screens, as well as a subset of the data shown on the Bitcoin Dashboard. The options in the ‘mempool.space’ panel will connect SATSuma to the public mempool.space API on either the mainnet or testnet network.\r\n\r\nSelecting ‘custom’ requires you to have your own installation of mempool.space on your own Bitcoin full node, running either Electrs or Fulcrum. Provide the full path to your mempool.space api.\r\n\r\nNetwork – Xpub queries only\r\nThe Xpub screen can ONLY be used with your own Bitcoin full node, running either Electrs or Fulcrum. This ensures total privacy, avoiding the need to send your Xpub to any third-party. If you are already using your own node for all other on-chain queries, then this would normally be set to the same URL, although it doesn’t have to be.\r\n\r\nWallet balance\r\nWhen scanning an Xpub to determine the balance of a wallet, SATSuma determines that it has found all non-zero balance addresses by assuming that after 20 consecutive non-zero balance addresses that there are no more to be found. 20 is the number commonly used by many wallets to make this assumption, but you can override this number with this setting.\r\n\r\nOther API’s\r\nThe majority of the data that SATSuma draws on can be found on-chain and is accessible either with the public mempool.space API or by connecting to your own full node, as described above. SATSuma also makes use of three other public API’s to fetch data relating to metrics such as price, mining, etc. No personal data is sent or stored but you can disable any/all of these API’s if you prefer. Doing so will disable a few of the charts that relied on these API’s, as well as some of the data on the Bitcoin Dashboard and price information on the header.\r\n\r\nEnable/disable directory\r\nThe Directory screen retrieves its data from the resources at btcdir.org so therefore involves a data request outside of your network. The directory can be enabled or disabled here. It is also automatically disabled when privacy mode is activated.\r\n\r\nRefresh frequency\r\nThe refresh frequency dictates how often the dashboard data and header data (price, block height, etc) gets updated. The address, block, block list, transaction and Xpub screens are not affected by this setting. The refresh frequency is measured in minutes and can be set anywhere between 1 minute and 1440 minutes (24 hours).\r\n\r\nWhere are my settings stored?\r\nYour settings are saved in the SATSuma_bookmarks.json file, which can be found in your user application data directory (e.g. C:\\Users\\yourusername\\AppData\\Roaming\\SATSuma). SATSuma continually saves your settings so you shouldn’t need to manually edit this file. If you do need to edit it, open it in a text editor (e.g Notepad) and search for “settings” you should find something resembling this:\r\n\r\n1st character – currency (P = GBP, D = USD, E = EUR, G = XAU).\r\n2nd character – network (M = MainNet, T = TestNet, C = own node).\r\n3rd character – blockchair API (boolean 1 or 0).\r\n4th character – bitcoinexplorer API (boolean 1 or 0).\r\n5th character – blockchain.info API (boolean 1 or 0).\r\n6th character – privacy mode (boolean 1 or 0).\r\n7th character – enable directory (boolean 1 or 0).\r\n8th character – currently unused (boolean 1 or 0).\r\nCharacters 9-12 – refresh frequency.\r\nCharacters 13-14 – max number of non-zero balance addresses on Xpub scan.\r\nCharacters 15-17 – number of derivation paths to check on Xpub scan.\r\n\r\nYour node and Xpub node settings are also stored in the SATSuma_bookmarks.json file, as well as your default theme.\r\n\r\nPrivacy Mode\r\nPrivacy mode is essentially a shortcut to disabling all API’s and ensuring that SATSuma communicates with nothing other than your own full node.";
         readonly string directoryHelpText = "The directory is a categorized and curated list of bitcoin resources - essays, books, podcasts, documentaries, software, wallets, devices, news, and a lot more. The data is drawn from one of my other projects (btcdir.org). Suggestions for links to be added to the directory can be submitted at https://btcdir.org/submit/.";
+        #endregion
+        #region initialize
+        public HelpScreen()
+        {
+            InitializeComponent();
+            panelHelpTextContainer.Paint += Panel_Paint;
+            #region rounded form
+            this.FormBorderStyle = FormBorderStyle.None;
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 30, 30));
+            #endregion
+            comboBoxSelectTopic.SelectedIndex = 0;
+        }
+        #region assign colours and determine which text to show
         private void HelpScreen_Load(object sender, EventArgs e)
         {
-            comboBoxSelectHelp.SelectedIndex = 0;
             textBoxHelpText.ForeColor = TextColor;
             textBoxHelpText.BackColor = TextBoxBackColor;
-            panel1.BackColor = TextBoxBackColor;
+            panelHelpTextContainer.BackColor = TextBoxBackColor;
+            panelHelpTextContainer.BackColor = TextBoxBackColor;
             lblHelpHeading.ForeColor = HeadingTextColor;
             btnExit.ForeColor = ButtonTextColor;
-            btnHelpTextUp.ForeColor = ButtonTextColor2;
-            btnHelpTextDown.ForeColor = ButtonTextColor2;
+            btnHelpTextUp.ForeColor = ButtonTextColor;
+            btnHelpTextDown.ForeColor = ButtonTextColor;
             btnExit.BackColor = ButtonBackColor;
-            btnHelpTextUp.BackColor = ButtonBackColor2;
-            btnHelpTextDown.BackColor = ButtonBackColor2;
-            comboBoxSelectHelp.BackColor = TextBoxBackColor;
-            comboBoxSelectHelp.ForeColor = TextBoxForeColor;
-            if (WindowBackgroundColor != null)
-            {
-                this.BackColor = WindowBackgroundColor;
-            }
-            if (WindowBackgroundImage != null)
-            {
-                this.BackgroundImage = WindowBackgroundImage;
-            }
+            btnHelpTextUp.BackColor = ButtonBackColor;
+            btnHelpTextDown.BackColor = ButtonBackColor;
+            btnExit.BorderRadius = ButtonRadius;
+            btnExit.BorderSize = ButtonBorderSize;
+            btnExit.BorderColor = ButtonBorderColor;
+            btnHelpTextUp.BorderRadius = ButtonRadius;
+            btnHelpTextUp.BorderSize = ButtonBorderSize;
+            btnHelpTextUp.BorderColor = ButtonBorderColor;
+            btnHelpTextDown.BorderRadius = ButtonRadius;
+            btnHelpTextDown.BorderSize = ButtonBorderSize;
+            btnHelpTextDown.BorderColor = ButtonBorderColor;
+            comboBoxSelectTopic.BackColor = TextBoxBackColor;
+            comboBoxSelectTopic.ForeColor = TextBoxForeColor;
+            comboBoxSelectTopic.ListBackColor = TextBoxBackColor;
+            comboBoxSelectTopic.ListTextColor = TextBoxForeColor;
+            this.BackColor = WindowBackgroundColor;
 
-            panel1.VerticalScroll.Visible = false;
+            panelHelpTextContainer.VerticalScroll.Visible = false;
             if (((SATSuma)this.Owner).GetPanelMenu().Visible == true && ((SATSuma)this.Owner).GetPanelMenu().Height > 24) // menu is open so main help page has been requested
             {
                 ((SATSuma)this.Owner).GetPanelMenu().Height = 0; // close menu on calling window
@@ -163,13 +194,29 @@ namespace SATSuma
                 btnExit.Focus();
             }
         }
+        #endregion
+        #endregion
+        #region rounded form
+        private GraphicsPath GetRoundedRect(Rectangle rectangle, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddArc(rectangle.X, rectangle.Y, radius, radius, 180, 90);
+            path.AddArc(rectangle.Width - radius, rectangle.Y, radius, radius, 270, 90);
+            path.AddArc(rectangle.Width - radius, rectangle.Height - radius, radius, radius, 0, 90);
+            path.AddArc(rectangle.X, rectangle.Height - radius, radius, radius, 90, 90);
+            path.CloseFigure();
+            return path;
+        }
 
         private void HelpScreen_Paint(object sender, PaintEventArgs e)
         {
-
-            ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Gray, ButtonBorderStyle.Solid);
+            using var pen = new Pen(BackColor, 3);
+            var rect = ClientRectangle;
+            rect.Inflate(-1, -1);
+            e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
         }
-
+        #endregion
+        #region size textbox to fix text
         private void ResizeTextBox(TextBox textBox)
         {
             Size textSize = TextRenderer.MeasureText(textBox.Text, textBox.Font, new Size(textBox.Width, int.MaxValue), TextFormatFlags.WordBreak);
@@ -180,6 +227,8 @@ namespace SATSuma
         {
             ResizeTextBox(textBoxHelpText);
         }
+        #endregion
+        #region scroll help text
 
         private void BtnHelpTextDown_MouseDown(object sender, MouseEventArgs e)
         {
@@ -202,17 +251,17 @@ namespace SATSuma
             if (isButtonPressed)
             {   if (downButtonPressed)
                 {
-                    if (panel1.VerticalScroll.Value < panel1.VerticalScroll.Maximum - 4)
+                    if (panelHelpTextContainer.VerticalScroll.Value < panelHelpTextContainer.VerticalScroll.Maximum - 4)
                     {
-                        panel1.VerticalScroll.Value = panel1.VerticalScroll.Value + 4;
+                        panelHelpTextContainer.VerticalScroll.Value = panelHelpTextContainer.VerticalScroll.Value + 4;
                     }
                     timer1.Interval = 2; // set a faster interval while the button is held down
                 }
                 else if (upButtonPressed)
                 {
-                    if (panel1.VerticalScroll.Value > panel1.VerticalScroll.Minimum + 4)
+                    if (panelHelpTextContainer.VerticalScroll.Value > panelHelpTextContainer.VerticalScroll.Minimum + 4)
                     {
-                        panel1.VerticalScroll.Value = panel1.VerticalScroll.Value - 4;
+                        panelHelpTextContainer.VerticalScroll.Value = panelHelpTextContainer.VerticalScroll.Value - 4;
                     }
                     timer1.Interval = 2; // set a faster interval while the button is held down
                 }
@@ -238,71 +287,92 @@ namespace SATSuma
             timer1.Stop();
             timer1.Interval = 50; // reset the interval to its original value
         }
-
-        private void ComboBoxSelectHelp_SelectedIndexChanged(object sender, EventArgs e)
+        #endregion
+        #region handle combobox
+        private void comboBoxSelectTopic_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxSelectHelp.SelectedIndex == 1)
+            if (comboBoxSelectTopic.SelectedIndex == 1)
             {
                 lblHelpHeading.Text = "Blocks";
                 textBoxHelpText.Text = blockListHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 2)
+            if (comboBoxSelectTopic.SelectedIndex == 2)
             {
                 lblHelpHeading.Text = "Block";
                 textBoxHelpText.Text = blockHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 3)
+            if (comboBoxSelectTopic.SelectedIndex == 3)
             {
                 lblHelpHeading.Text = "Address";
                 textBoxHelpText.Text = addressHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 4)
+            if (comboBoxSelectTopic.SelectedIndex == 4)
             {
                 lblHelpHeading.Text = "Transaction";
                 textBoxHelpText.Text = transactionHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 5)
+            if (comboBoxSelectTopic.SelectedIndex == 5)
             {
                 lblHelpHeading.Text = "Xpub";
                 textBoxHelpText.Text = xpubHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 6)
+            if (comboBoxSelectTopic.SelectedIndex == 6)
             {
                 lblHelpHeading.Text = "Charts";
                 textBoxHelpText.Text = chartsHelpText;
             }
-
-            if (comboBoxSelectHelp.SelectedIndex == 7)
+            if (comboBoxSelectTopic.SelectedIndex == 7)
             {
                 lblHelpHeading.Text = "Bitcoin dashboard";
                 textBoxHelpText.Text = bitcoinDashboardHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 8)
+            if (comboBoxSelectTopic.SelectedIndex == 8)
             {
-                lblHelpHeading.Text = "Lightning dashboard"; 
+                lblHelpHeading.Text = "Lightning dashboard";
                 textBoxHelpText.Text = lightningDashboardHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 9)
+            if (comboBoxSelectTopic.SelectedIndex == 9)
             {
                 lblHelpHeading.Text = "Bookmarks";
                 textBoxHelpText.Text = bookmarksHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 10)
+            if (comboBoxSelectTopic.SelectedIndex == 10)
             {
                 lblHelpHeading.Text = "Directory";
                 textBoxHelpText.Text = directoryHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 11)
+            if (comboBoxSelectTopic.SelectedIndex == 11)
             {
                 lblHelpHeading.Text = "Settings";
                 textBoxHelpText.Text = settingsHelpText;
             }
-            if (comboBoxSelectHelp.SelectedIndex == 12)
+            if (comboBoxSelectTopic.SelectedIndex == 12)
             {
                 lblHelpHeading.Text = "Themes";
                 textBoxHelpText.Text = appearanceHelpText;
             }
+            comboBoxSelectTopic.SelectedIndex = 0;
             btnHelpTextDown.Focus();
         }
+        #endregion
+        #region rounded panel
+        private void Panel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            // Create a GraphicsPath object with rounded corners
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            int cornerRadius = ButtonRadius;
+            cornerRadius *= 2;
+            path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
+            path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
+            path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
+            path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
+            path.CloseFigure();
+
+            // Set the panel's region to the rounded path
+            panel.Region = new Region(path);
+        }
+        #endregion
     }
 }

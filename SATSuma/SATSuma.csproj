@@ -427,6 +427,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\marker.png" />
     <None Include="Resources\Untitled-2.png" />
     <None Include="Resources\OrangeInfinity.gif" />
     <None Include="Resources\SatsumaThumb.png" />

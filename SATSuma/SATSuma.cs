@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v0.98    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v0.99    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -20,11 +20,13 @@ https://satsuma.btcdir.org/
 
 🍊 Version history 
 https://satsuma.btcdir.org/version-history/
-
+            
 🍊 Download
 https://satsuma.btcdir.org/download/
 
 * Stuff to do:
+* merge the two node options?
+* option to choose default start screen?
 * Taproot support on xpub screen
 */
 
@@ -63,6 +65,7 @@ using System.Windows.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Diagnostics;
 using System.Drawing.Text;
+using SATSuma.Properties;
 
 #endregion
 
@@ -70,7 +73,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "0.98";
+        readonly string CurrentVersion = "0.99";
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -8356,7 +8359,6 @@ namespace SATSuma
                 formsPlot2.Visible = false;
                 formsPlot3.Visible = false;
                 chartType = "feerates";
-                lblChartMousePositionData.Text = "";
                 EnableAllCharts();
                 btnChartFeeRates.Enabled = false;
                 DisableIrrelevantTimePeriods();
@@ -8411,7 +8413,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // Set the tick and gridline settings
@@ -8445,7 +8447,6 @@ namespace SATSuma
                 formsPlot2.Visible = false;
                 formsPlot3.Visible = false;
                 chartType = "lightningnodesbynetwork";
-                lblChartMousePositionData.Text = "";
 
                 // if chart period too short for this chart, set it to max instead
                 if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
@@ -8504,7 +8505,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // Set the tick and gridline settings
@@ -8585,7 +8586,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("EH/s", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("EH/s", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -8609,6 +8610,7 @@ namespace SATSuma
                 formsPlot1.Visible = true;
 
                 panelHashrateScaleButtons.Visible = true;
+
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -8702,7 +8704,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("TH/s", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("TH/s", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -8785,7 +8787,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -8807,6 +8809,7 @@ namespace SATSuma
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
+                
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -8871,7 +8874,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -8893,6 +8896,7 @@ namespace SATSuma
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
+
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -9033,7 +9037,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("BTC", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9110,7 +9114,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("BTC", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("BTC", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9197,7 +9201,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("trillion", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("trillion", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9314,7 +9318,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("trillion", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("trillion", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9393,7 +9397,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9505,7 +9509,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Unique addresses", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -9519,6 +9523,7 @@ namespace SATSuma
                 HighlightedPoint.MarkerSize = 10;
                 HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                 HighlightedPoint.IsVisible = false;
+
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
@@ -9563,7 +9568,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 12, bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -9583,19 +9588,19 @@ namespace SATSuma
                     {
                         selectedCurrency = Convert.ToDecimal(priceGBP);
                         formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
                     }
                     if (!btnEUR.Enabled) //EUR is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceEUR);
                         formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                     }
                     if (!btnXAU.Enabled) //XAU is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceXAU);
                         formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                     }
                     exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
                 
@@ -9637,13 +9642,12 @@ namespace SATSuma
                 formsPlot1.Plot.YAxis.Ticks(true);
                 formsPlot1.Plot.XAxis.MajorGrid(true);
                 formsPlot1.Plot.YAxis.MajorGrid(true);
-
+                
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
                 panelPriceScaleButtons.Visible = true;
-
-                ToggleLoadingAnimation("disable");
+            ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
             }
@@ -9681,7 +9685,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 12, bold: false);
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
                 JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
@@ -9699,19 +9703,19 @@ namespace SATSuma
                     {
                         selectedCurrency = Convert.ToDecimal(priceGBP);
                         formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
                     }
                     if (!btnEUR.Enabled) //EUR is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceEUR);
                         formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                     }
                     if (!btnXAU.Enabled) //XAU is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceXAU);
                         formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                     }
                     exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
@@ -9781,7 +9785,7 @@ namespace SATSuma
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
                 panelPriceScaleButtons.Visible = true;
-
+                
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -9822,7 +9826,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 12, bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -9842,19 +9846,19 @@ namespace SATSuma
                     {
                         selectedCurrency = Convert.ToDecimal(priceGBP);
                         formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 12, bold: false);
                     }
                     if (!btnEUR.Enabled) //EUR is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceEUR);
                         formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                     }
                     if (!btnXAU.Enabled) //XAU is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceXAU);
                         formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                     }
                     exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
@@ -9940,7 +9944,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 12, bold: false);
                 // get a series of market cap data
                 var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
                 JObject jsonObj = JObject.Parse(MarketCapDataJson);
@@ -9958,19 +9962,19 @@ namespace SATSuma
                     {
                         selectedCurrency = Convert.ToDecimal(priceGBP);
                         formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 12, bold: false);
                     }
                     if (!btnEUR.Enabled) //EUR is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceEUR);
                         formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                     }
                     if (!btnXAU.Enabled) //XAU is selected
                     {
                         selectedCurrency = Convert.ToDecimal(priceXAU);
                         formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                        formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 11, bold: true);
+                        formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                     }
                     exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
@@ -10102,7 +10106,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -10214,7 +10218,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -10292,7 +10296,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Block size (MB)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Block size (MB)", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -10382,7 +10386,7 @@ namespace SATSuma
                 formsPlot1.Plot.XAxis.DateTimeFormat(true);
                 formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
                 formsPlot1.Plot.XAxis.Ticks(true);
-                formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: 11, bold: true);
+                formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: 12, bold: false);
                 formsPlot1.Plot.XAxis.Label("");
 
                 // prevent navigating beyond the data
@@ -10405,7 +10409,7 @@ namespace SATSuma
                 // refresh the graph
                 formsPlot1.Refresh();
                 formsPlot1.Visible = true;
-
+                
                 ToggleLoadingAnimation("disable");
                 DisableEnableChartButtons("enable");
                 HideChartLoadingPanel();
@@ -10421,6 +10425,7 @@ namespace SATSuma
         private void BtnPriceConverter_Click(object sender, EventArgs e)
         {
             HideAllChartKeysAndPanels();
+
             formsPlot1.Visible = false;
             formsPlot2.Visible = false;
             formsPlot3.Visible = false;
@@ -11802,18 +11807,55 @@ namespace SATSuma
 
                         // Format the DateTime object using the desired format string
                         string formattedPointX = pointXDate.ToString("yyyy-MM-dd");
-
+                        
                         if (chartType == "pricelog" || chartType == "addresseslog" || chartType == "utxolog" || chartType == "marketcaplog" || chartType == "hashratelog" || chartType == "difficultylog")
                         {
                             double originalY = Math.Pow(10, pointY); // Convert back to the original scale
-                            lblChartMousePositionData.Text = $"{originalY:N2} ({formattedPointX})";
+                                                                     //annotation to obscure the previous one before drawing the new one
+                            var blankAnnotation = formsPlot1.Plot.AddAnnotation("████████████████████████████████████", Alignment.UpperLeft);
+                            blankAnnotation.Font.Name = "Consolas";
+                            blankAnnotation.Shadow = false;
+                            blankAnnotation.BorderWidth = 0;
+                            blankAnnotation.BorderColor = chartsBackgroundColor;
+                            blankAnnotation.MarginX = 2;
+                            blankAnnotation.MarginY = 2;
+                            blankAnnotation.Font.Color = chartsBackgroundColor;
+                            blankAnnotation.BackgroundColor = chartsBackgroundColor;
+
+                            var actualAnnotation = formsPlot1.Plot.AddAnnotation($"{originalY:N2} ({formattedPointX})", Alignment.UpperLeft);
+                            actualAnnotation.Font.Name = "Consolas";
+                            actualAnnotation.Shadow = false;
+                            actualAnnotation.BorderWidth = 0;
+                            actualAnnotation.BorderColor = chartsBackgroundColor;
+                            actualAnnotation.MarginX = 2;
+                            actualAnnotation.MarginY = 2;
+                            actualAnnotation.Font.Color = label148.ForeColor;
+                            actualAnnotation.BackgroundColor = chartsBackgroundColor;
                         }
                         else
                         {
-                            // update coordinate data label below chart
-                            lblChartMousePositionData.Text = $"{pointY:N2} ({formattedPointX})";
+                            //annotation to obscure the previous one before drawing the new one
+                            var blankAnnotation = formsPlot1.Plot.AddAnnotation("████████████████████████████████████", Alignment.UpperLeft);
+                            blankAnnotation.Font.Name = "Consolas";
+                            blankAnnotation.Shadow = false;
+                            blankAnnotation.BorderWidth = 0;
+                            blankAnnotation.BorderColor = chartsBackgroundColor;
+                            blankAnnotation.MarginX = 2;
+                            blankAnnotation.MarginY = 2;
+                            blankAnnotation.Font.Color = chartsBackgroundColor;
+                            blankAnnotation.BackgroundColor = chartsBackgroundColor;
+
+                            //new annotation
+                            var actualAnnotation = formsPlot1.Plot.AddAnnotation($"{pointY:N2} ({formattedPointX})", Alignment.UpperLeft);
+                            actualAnnotation.Font.Name = "Consolas";
+                            actualAnnotation.Shadow = false;
+                            actualAnnotation.BorderWidth = 0;
+                            actualAnnotation.BorderColor = chartsBackgroundColor;
+                            actualAnnotation.MarginX = 2;
+                            actualAnnotation.MarginY = 2;
+                            actualAnnotation.Font.Color = label148.ForeColor;
+                            actualAnnotation.BackgroundColor = chartsBackgroundColor;
                         }
-                        lblChartMousePositionData.Location = new Point(765 - lblChartMousePositionData.Width - btnSaveChart.Width - 10, lblChartMousePositionData.Location.Y);
                     }
                 }
             }
@@ -14264,9 +14306,10 @@ namespace SATSuma
                                 lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
                                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
                             });
-                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            ClearCurrencyMenuMarkers();
+                            btnGBP.Invoke((MethodInvoker)delegate
                             {
-                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnGBP.Location.X, btnGBP.Location.Y + 5);
+                                btnGBP.BackgroundImage = Resources.marker;
                             });
                             btnGBP.Enabled = false;
                             btnUSD.Enabled = true;
@@ -14282,9 +14325,10 @@ namespace SATSuma
                                 lblCurrencyMenuHighlightedButtonText.Text = "USD $";
                                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
                             });
-                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            ClearCurrencyMenuMarkers();
+                            btnUSD.Invoke((MethodInvoker)delegate
                             {
-                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnUSD.Location.X, btnUSD.Location.Y + 5);
+                                btnUSD.BackgroundImage = Resources.marker;
                             });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = false;
@@ -14300,9 +14344,10 @@ namespace SATSuma
                                 lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
                                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
                             });
-                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            ClearCurrencyMenuMarkers();
+                            btnEUR.Invoke((MethodInvoker)delegate
                             {
-                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnEUR.Location.X, btnEUR.Location.Y + 5);
+                                btnEUR.BackgroundImage = Resources.marker;
                             });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
@@ -14318,9 +14363,10 @@ namespace SATSuma
                                 lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
                                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
                             });
-                            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            ClearCurrencyMenuMarkers();
+                            btnXAU.Invoke((MethodInvoker)delegate
                             {
-                                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnXAU.Location.X, btnXAU.Location.Y + 5);
+                                btnXAU.BackgroundImage = Resources.marker;
                             });
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
@@ -14595,11 +14641,16 @@ namespace SATSuma
                                         lblThemeMenuHighlightedButtonText.Text = "genesis";
                                         lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
                                     });
-                                    lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                    ClearThemeMenuMarkers();
+                                    btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                     {
-                                        lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
-                                        lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                        btnMenuApplyCustomTheme.BackgroundImage = Resources.marker;
                                     });
+                                 //   lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                 //   {
+                                 //       lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
+                                 //       lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                 //   });
                                     btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                     {
                                         btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14617,11 +14668,16 @@ namespace SATSuma
                                             lblThemeMenuHighlightedButtonText.Text = "btcdir";
                                             lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
                                         });
-                                        lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                        ClearThemeMenuMarkers();
+                                        btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
                                         {
-                                            lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
-                                            lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                            btnMenuThemeBTCdir.BackgroundImage = Resources.marker;
                                         });
+                                  //      lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                  //      {
+                                  //          lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
+                                  //          lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                  //      });
                                         btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                         {
                                             btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14639,11 +14695,16 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Text = "satsuma";
                                                 lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
                                             });
-                                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                            ClearThemeMenuMarkers();
+                                            btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
                                             {
-                                                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
-                                                lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                                btnMenuThemeSatsuma.BackgroundImage = Resources.marker;
                                             });
+                                         //   lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                         //   {
+                                         //       lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
+                                         //       lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                         //   });
                                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                             {
                                                 btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14657,12 +14718,17 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Text = "custom";
                                                 lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
                                             });
-                                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                            ClearThemeMenuMarkers();
+                                            btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                             {
-                                                lblThemeMenuHighlightedButtonMarker.Visible = true;
-                                                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
-                                                lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                                btnMenuApplyCustomTheme.BackgroundImage = Resources.marker;
                                             });
+                                     //       lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                     //       {
+                                     //           lblThemeMenuHighlightedButtonMarker.Visible = true;
+                                      //          lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
+                                      //          lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                      //      });
                                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                             {
                                                 btnMenuApplyCustomTheme.Text = "custom";
@@ -14758,12 +14824,17 @@ namespace SATSuma
                     lblThemeMenuHighlightedButtonText.Text = "genesis";
                     lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
                 });
-                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearThemeMenuMarkers();
+                BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
                 {
-                    lblThemeMenuHighlightedButtonMarker.Visible = true;
-                    lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
-                    lblThemeMenuHighlightedButtonMarker.BringToFront();
+                    BtnMenuThemeGenesis.BackgroundImage = Resources.marker;
                 });
+           //     lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+           //     {
+           //         lblThemeMenuHighlightedButtonMarker.Visible = true;
+           //         lblThemeMenuHighlightedButtonMarker.Location = new Point(BtnMenuThemeGenesis.Location.X, BtnMenuThemeGenesis.Location.Y + 5);
+           //         lblThemeMenuHighlightedButtonMarker.BringToFront();
+           //     });
                 btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14810,12 +14881,17 @@ namespace SATSuma
                     lblThemeMenuHighlightedButtonText.Text = "btcdir";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
                 });
-                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearThemeMenuMarkers();
+                btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
                 {
-                    lblThemeMenuHighlightedButtonMarker.Visible = true;
-                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
-                    lblThemeMenuHighlightedButtonMarker.BringToFront();
+                    btnMenuThemeBTCdir.BackgroundImage = Resources.marker;
                 });
+          //      lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+          //      {
+          //          lblThemeMenuHighlightedButtonMarker.Visible = true;
+          //          lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeBTCdir.Location.X, btnMenuThemeBTCdir.Location.Y + 5);
+          //          lblThemeMenuHighlightedButtonMarker.BringToFront();
+          //      });
                 btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14862,12 +14938,17 @@ namespace SATSuma
                     lblThemeMenuHighlightedButtonText.Text = "satsuma";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
                 });
-                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearThemeMenuMarkers();
+                btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
                 {
-                    lblThemeMenuHighlightedButtonMarker.Visible = true;
-                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
-                    lblThemeMenuHighlightedButtonMarker.BringToFront();
+                    btnMenuThemeSatsuma.BackgroundImage = Resources.marker;
                 });
+             //   lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+             //   {
+             //       lblThemeMenuHighlightedButtonMarker.Visible = true;
+             //       lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuThemeSatsuma.Location.X, btnMenuThemeSatsuma.Location.Y + 5);
+             //       lblThemeMenuHighlightedButtonMarker.BringToFront();
+             //   });
                 btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuApplyCustomTheme.Text = "apply theme";
@@ -14905,7 +14986,6 @@ namespace SATSuma
             try
             {
                 CloseThemeMenu();
-                lblMenuHighlightedButtonMarker.Visible = false;
                 lblMenuHighlightedButtonText.Visible = false;
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -14963,11 +15043,16 @@ namespace SATSuma
                                 lblThemeMenuHighlightedButtonText.Text = "custom";
                                 lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
                             });
-                            lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                            ClearThemeMenuMarkers();
+                            btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                             {
-                                lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
-                                lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                btnMenuApplyCustomTheme.BackgroundImage = Resources.marker;
                             });
+                        //    lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                        //    {
+                        //        lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
+                        //        lblThemeMenuHighlightedButtonMarker.BringToFront();
+                         //   });
                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                             {
                                 btnMenuApplyCustomTheme.Text = "custom";
@@ -14993,7 +15078,6 @@ namespace SATSuma
                 {
                     HandleException(ex, "btnLoadTheme_Click");
                 }
-
             }
         }
 
@@ -16172,11 +16256,16 @@ namespace SATSuma
                                                     lblThemeMenuHighlightedButtonText.Text = "custom";
                                                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
                                                 });
-                                                lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                                ClearThemeMenuMarkers();
+                                                btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                                 {
-                                                    lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
-                                                    lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                                    btnMenuApplyCustomTheme.BackgroundImage = Resources.marker;
                                                 });
+                                           //     lblThemeMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                                           //     {
+                                           //         lblThemeMenuHighlightedButtonMarker.Location = new Point(btnMenuApplyCustomTheme.Location.X, btnMenuApplyCustomTheme.Location.Y + 5);
+                                           //         lblThemeMenuHighlightedButtonMarker.BringToFront();
+                                           //     });
                                                 btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
                                                 {
                                                     btnMenuApplyCustomTheme.Text = "custom";
@@ -16628,25 +16717,19 @@ namespace SATSuma
             formsPlot1.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                titleLabel: thisColor, // using any random label to get the color from
-                //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
-                axisLabel: thisColor); // using any random label to get the color from
+                titleLabel: thisColor,
+                axisLabel: label148.ForeColor); // using any random label to get the color from
             formsPlot2.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                titleLabel: thisColor, // using any random label to get the color from
-                                                      //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
-                axisLabel: thisColor); // using any random label to get the color from
+                titleLabel: thisColor, 
+                axisLabel: label148.ForeColor); // using any random label to get the color from
             formsPlot3.Plot.Style(
                 figureBackground: Color.Transparent,
                 dataBackground: chartsBackgroundColor,
-                //titleLabel: headerNetworkName.ForeColor, // using any random label to get the color from
-                titleLabel: thisColor, // using any random label to get the color from
-                                                      //axisLabel: headerNetworkName.ForeColor); // using any random label to get the color from
-                axisLabel: thisColor); // using any random label to get the color from
-            
+                titleLabel: thisColor, 
+                axisLabel: label148.ForeColor); // using any random label to get the color from
+
             panelFeeRatesKey.BackColor = chartsBackgroundColor;
             panelCirculationKey.BackColor = chartsBackgroundColor;
             panelPriceScaleButtons.BackColor = chartsBackgroundColor;
@@ -16739,7 +16822,7 @@ namespace SATSuma
                     control.ForeColor = thisColor;
                 }
                 //charts
-                Control[] listChartsDataFieldsToColor = { lblChartMousePositionData, labelPCUSD1, labelPCUSD2, labelPCUSD3, labelPCUSD4, labelPCUSD5, labelPCUSD6, labelPCUSD7, labelPCUSD8, labelPCUSD9, labelPCUSD10, labelPCUSD11, labelPCUSD12, labelPCUSD13, labelPCUSD14, labelPCUSD15, labelPCUSD16, labelPCUSD17, labelPCUSDcustom, labelPCEUR1, labelPCEUR2, labelPCEUR3, labelPCEUR4, labelPCEUR5, labelPCEUR6, labelPCEUR7, labelPCEUR8, labelPCEUR9, labelPCEUR10, labelPCEUR11, labelPCEUR12, labelPCEUR13, labelPCEUR14, labelPCEUR15, labelPCEUR16, labelPCEUR17, labelPCEURcustom, labelPCGBP1, labelPCGBP2, labelPCGBP3, labelPCGBP4, labelPCGBP5, labelPCGBP6, labelPCGBP7, labelPCGBP8, labelPCGBP9, labelPCGBP10, labelPCGBP11, labelPCGBP12, labelPCGBP13, labelPCGBP14, labelPCGBP15, labelPCGBP16, labelPCGBP17, labelPCGBPcustom, labelPCXAU1, labelPCXAU2, labelPCXAU3, labelPCXAU4, labelPCXAU5, labelPCXAU6, labelPCXAU7, labelPCXAU8, labelPCXAU9, labelPCXAU10, labelPCXAU11, labelPCXAU12, labelPCXAU13, labelPCXAU14, labelPCXAU15, labelPCXAU16, labelPCXAU17, labelPCXAUcustom, lblCalculatedUSDFromBTCAmount, lblCalculatedEURFromBTCAmount, lblCalculatedGBPFromBTCAmount, lblCalculatedXAUFromBTCAmount };
+                Control[] listChartsDataFieldsToColor = { labelPCUSD1, labelPCUSD2, labelPCUSD3, labelPCUSD4, labelPCUSD5, labelPCUSD6, labelPCUSD7, labelPCUSD8, labelPCUSD9, labelPCUSD10, labelPCUSD11, labelPCUSD12, labelPCUSD13, labelPCUSD14, labelPCUSD15, labelPCUSD16, labelPCUSD17, labelPCUSDcustom, labelPCEUR1, labelPCEUR2, labelPCEUR3, labelPCEUR4, labelPCEUR5, labelPCEUR6, labelPCEUR7, labelPCEUR8, labelPCEUR9, labelPCEUR10, labelPCEUR11, labelPCEUR12, labelPCEUR13, labelPCEUR14, labelPCEUR15, labelPCEUR16, labelPCEUR17, labelPCEURcustom, labelPCGBP1, labelPCGBP2, labelPCGBP3, labelPCGBP4, labelPCGBP5, labelPCGBP6, labelPCGBP7, labelPCGBP8, labelPCGBP9, labelPCGBP10, labelPCGBP11, labelPCGBP12, labelPCGBP13, labelPCGBP14, labelPCGBP15, labelPCGBP16, labelPCGBP17, labelPCGBPcustom, labelPCXAU1, labelPCXAU2, labelPCXAU3, labelPCXAU4, labelPCXAU5, labelPCXAU6, labelPCXAU7, labelPCXAU8, labelPCXAU9, labelPCXAU10, labelPCXAU11, labelPCXAU12, labelPCXAU13, labelPCXAU14, labelPCXAU15, labelPCXAU16, labelPCXAU17, labelPCXAUcustom, lblCalculatedUSDFromBTCAmount, lblCalculatedEURFromBTCAmount, lblCalculatedGBPFromBTCAmount, lblCalculatedXAUFromBTCAmount };
                 foreach (Control control in listChartsDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -16762,7 +16845,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label287, label289, label282, label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191, label197 };
+                Control[] listSettingsLabelsToColor = { label289, label282, label243, label246, label242, label239, label240, label199, label200, label201, label50, label198, lblSettingsXpubNodeStatus, lblSettingsCustomNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label169, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191, label197 };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -16970,7 +17053,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning, textBoxXpubNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxBlockHeightToStartListFrom, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsCustomMempoolURL, textBoxSettingsXpubMempoolURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeImage, textBoxThemeName, textBox1, lblCurrentVersion };
+                Control[] listOtherTextToColor = { label287, label235, label238, label160, label204, lblURLWarning, label159, label158, label165, label173, label167, lblURLWarning, textBoxXpubNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxBlockHeightToStartListFrom, textBoxSubmittedBlockNumber, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsCustomMempoolURL, textBoxSettingsXpubMempoolURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeImage, textBoxThemeName, textBox1, lblCurrentVersion };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -17018,14 +17101,11 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { lblMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, lblMenuHighlightedButtonMarker, btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
+                Control[] listHeaderButtonsToColor = { lblMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnExit, btnMenuAddress, btnMenuAppearance, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings2, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = chartsBackgroundColor;
                 }
-                lblCurrencyMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
-                lblMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
-                lblThemeMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
                 lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
@@ -17558,11 +17638,18 @@ namespace SATSuma
         {
             if (sender == btnMenuApplyCustomTheme)
             {
-                btnMenuApplyCustomTheme.BackColor = panelMenu.BackColor;
-                if (lblThemeMenuHighlightedButtonMarker.Location.Y == btnMenuApplyCustomTheme.Location.Y + 5)
+                // set the background color of the marker by darkening it by a similar amount to the default button darkening on mouse hover
+                btnMenuApplyCustomTheme.BackColor = panel32.BackColor;
+/*                if (lblThemeMenuHighlightedButtonMarker.Location.Y == btnMenuApplyCustomTheme.Location.Y + 5)
                 {
-                    lblThemeMenuHighlightedButtonMarker.BackColor = panelMenu.BackColor; 
+                    Color originalBackColor = panelMenu.BackColor;
+                    int darkenPercentage = 20; 
+                    Color hoverColor = GetDarkerColor(originalBackColor, darkenPercentage);
+                    lblThemeMenuHighlightedButtonMarker.BackColor = panel32.BackColor;
+                    lblThemeMenuHighlightedButtonMarker.Visible = false;
+                    
                 }
+*/
             }
 
             if (sender == btnMenuBitcoinDashboard)
@@ -17679,7 +17766,6 @@ namespace SATSuma
         {
             if (sender == btnMenuApplyCustomTheme)
             {
-                lblThemeMenuHighlightedButtonMarker.BackColor = chartsBackgroundColor;
                 btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
             }
             if (sender == btnMenuBitcoinDashboard)
@@ -17986,6 +18072,97 @@ namespace SATSuma
             comboBoxHeaderCustomThemes.Texts = "select theme ▼";
         }
         #endregion
+        #region clear all button markers on theme menu
+        private void ClearThemeMenuMarkers()
+        {
+            btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
+            {
+                btnMenuApplyCustomTheme.BackgroundImage = null;
+            });
+            BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
+            {
+                BtnMenuThemeGenesis.BackgroundImage = null;
+            });
+            btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
+            {
+                btnMenuThemeBTCdir.BackgroundImage = null;
+            });
+            btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
+            {
+                btnMenuThemeSatsuma.BackgroundImage = null;
+            });
+        }
+        #endregion
+        #region clear all button markers on currency menu
+        private void ClearCurrencyMenuMarkers()
+        {
+            btnUSD.Invoke((MethodInvoker)delegate
+            {
+                btnUSD.BackgroundImage = null;
+            });
+            btnEUR.Invoke((MethodInvoker)delegate
+            {
+                btnEUR.BackgroundImage = null;
+            });
+            btnGBP.Invoke((MethodInvoker)delegate
+            {
+                btnGBP.BackgroundImage = null;
+            });
+            btnXAU.Invoke((MethodInvoker)delegate
+            {
+                btnXAU.BackgroundImage = null;
+            });
+        }
+        #endregion
+        #region clear all button markers on main menu
+        private void ClearMainMenuMarkers()
+        {
+            btnMenuBlockList.Invoke((MethodInvoker)delegate
+            {
+                btnMenuBlockList.BackgroundImage = null;
+            });
+            btnMenuBlock.Invoke((MethodInvoker)delegate
+            {
+                btnMenuBlock.BackgroundImage = null;
+            });
+            btnMenuAddress.Invoke((MethodInvoker)delegate
+            {
+                btnMenuAddress.BackgroundImage = null;
+            });
+            btnMenuTransaction.Invoke((MethodInvoker)delegate
+            {
+                btnMenuTransaction.BackgroundImage = null;
+            });
+            btnMenuXpub.Invoke((MethodInvoker)delegate
+            {
+                btnMenuXpub.BackgroundImage = null;
+            });
+            btnMenuCharts.Invoke((MethodInvoker)delegate
+            {
+                btnMenuCharts.BackgroundImage = null;
+            });
+            btnMenuBitcoinDashboard.Invoke((MethodInvoker)delegate
+            {
+                btnMenuBitcoinDashboard.BackgroundImage = null;
+            });
+            btnMenuLightningDashboard.Invoke((MethodInvoker)delegate
+            {
+                btnMenuLightningDashboard.BackgroundImage = null;
+            });
+            btnMenuBookmarks.Invoke((MethodInvoker)delegate
+            {
+                btnMenuBookmarks.BackgroundImage = null;
+            });
+            btnMenuDirectory.Invoke((MethodInvoker)delegate
+            {
+                btnMenuDirectory.BackgroundImage = null;
+            });
+            btnMenuSettings2.Invoke((MethodInvoker)delegate
+            {
+                btnMenuSettings2.BackgroundImage = null;
+            });
+        }
+        #endregion
         #region check for updates
         private void CheckForUpdates()
         {
@@ -18014,6 +18191,16 @@ namespace SATSuma
         private void LblUpdateAvailable_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://satsuma.btcdir.org/download/");
+        }
+        #endregion
+        #region darken a colour by n percent
+        public static Color GetDarkerColor(Color originalColor, int percentage)
+        {
+            int r = Math.Max(0, originalColor.R - percentage);
+            int g = Math.Max(0, originalColor.G - percentage);
+            int b = Math.Max(0, originalColor.B - percentage);
+
+            return Color.FromArgb(r, g, b);
         }
         #endregion
         #region form paint - border round window, relocate objects, set window title, bookmark button state
@@ -18860,16 +19047,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuBitcoinDashboard.Location.X + (btnMenuBitcoinDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBitcoinDashboard.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuBitcoinDashboard.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBitcoinDashboard.Location.X, btnMenuBitcoinDashboard.Location.Y + 5);
+                    btnMenuBitcoinDashboard.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -18913,16 +19100,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuLightningDashboard.Location.X + (btnMenuLightningDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuLightningDashboard.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuLightningDashboard.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuLightningDashboard.Location.X, btnMenuLightningDashboard.Location.Y + 5);
+                    btnMenuLightningDashboard.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -18966,16 +19153,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "charts";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuCharts.Location.X + (btnMenuCharts.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuCharts.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuCharts.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuCharts.Location.X, btnMenuCharts.Location.Y + 5);
+                    btnMenuCharts.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -19016,16 +19203,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "address";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuAddress.Location.X + (btnMenuAddress.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuAddress.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuAddress.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuAddress.Location.X, btnMenuAddress.Location.Y + 5);
+                    btnMenuAddress.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = false;
@@ -19067,16 +19254,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "block";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuBlock.Location.X + (btnMenuBlock.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlock.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuBlock.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBlock.Location.X, btnMenuBlock.Location.Y + 5);
+                    btnMenuBlock.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlock.Enabled = false;
@@ -19126,16 +19313,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "xpub";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuXpub.Location.X + (btnMenuXpub.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuXpub.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuXpub.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuXpub.Location.X, btnMenuXpub.Location.Y + 5);
+                    btnMenuXpub.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = false;
                 btnMenuBlock.Enabled = true;
@@ -19177,16 +19364,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "blocks";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuBlockList.Location.X + (btnMenuBlockList.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlockList.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuBlockList.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBlockList.Location.X, btnMenuBlockList.Location.Y + 5);
+                    btnMenuBlockList.BackgroundImage = Resources.marker;
                 });
                 btnMenuBlockList.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -19236,16 +19423,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "transaction";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuTransaction.Location.X + (btnMenuTransaction.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuTransaction.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuTransaction.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuTransaction.Location.X, btnMenuTransaction.Location.Y + 5);
+                    btnMenuTransaction.BackgroundImage = Resources.marker;
                 });
                 btnMenuTransaction.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -19288,16 +19475,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "bookmarks";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuBookmarks.Location.X + (btnMenuBookmarks.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBookmarks.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuBookmarks.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuBookmarks.Location.X, btnMenuBookmarks.Location.Y + 5);
+                    btnMenuBookmarks.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -19342,16 +19529,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "directory";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuDirectory.Location.X + (btnMenuDirectory.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuDirectory.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuDirectory.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuDirectory.Location.X, btnMenuDirectory.Location.Y + 5);
+                    btnMenuDirectory.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -19395,16 +19582,16 @@ namespace SATSuma
             try
             {
                 CloseMainMenu();
-                lblMenuHighlightedButtonMarker.Visible = true;
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "settings";
                     lblMenuHighlightedButtonText.Location = new Point((btnMenuSettings2.Location.X + (btnMenuSettings2.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuSettings2.Location.Y + 3);
                 });
-                lblMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+                ClearMainMenuMarkers();
+                btnMenuSettings2.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuHighlightedButtonMarker.Location = new Point(btnMenuSettings2.Location.X, btnMenuSettings2.Location.Y + 5);
+                    btnMenuSettings2.BackgroundImage = Resources.marker;
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -19610,9 +19797,10 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Text = "USD $";
                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
             });
-            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            ClearCurrencyMenuMarkers();
+            btnUSD.Invoke((MethodInvoker)delegate
             {
-                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnUSD.Location.X, btnUSD.Location.Y + 5);
+                btnUSD.BackgroundImage = Resources.marker;
             });
             #region update the market charts
             //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
@@ -19657,9 +19845,10 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
             });
-            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            ClearCurrencyMenuMarkers();
+            btnEUR.Invoke((MethodInvoker)delegate
             {
-                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnEUR.Location.X, btnEUR.Location.Y + 5);
+                btnEUR.BackgroundImage = Resources.marker;
             });
             #region update the market charts
             //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
@@ -19704,9 +19893,10 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
             });
-            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            ClearCurrencyMenuMarkers();
+            btnGBP.Invoke((MethodInvoker)delegate
             {
-                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnGBP.Location.X, btnGBP.Location.Y + 5);
+                btnGBP.BackgroundImage = Resources.marker;
             });
             #region update the market charts
             //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
@@ -19751,9 +19941,10 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
                 lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
             });
-            lblCurrencyMenuHighlightedButtonMarker.Invoke((MethodInvoker)delegate
+            ClearCurrencyMenuMarkers();
+            btnXAU.Invoke((MethodInvoker)delegate
             {
-                lblCurrencyMenuHighlightedButtonMarker.Location = new Point(btnXAU.Location.X, btnXAU.Location.Y + 5);
+                btnXAU.BackgroundImage = Resources.marker;
             });
             #region update the market charts
             //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time

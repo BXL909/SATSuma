@@ -411,7 +411,6 @@
             this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
             this.btnUpdateAvailable = new System.Windows.Forms.Button();
-            this.lblMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
             this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuDirectory = new System.Windows.Forms.Button();
             this.panelMainMenuFiller = new System.Windows.Forms.Panel();
@@ -609,7 +608,6 @@
             this.label22 = new System.Windows.Forms.Label();
             this.panelCurrency = new System.Windows.Forms.Panel();
             this.panelCurrencyMenuFiller = new System.Windows.Forms.Panel();
-            this.lblCurrencyMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
             this.lblCurrencyMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnXAU = new System.Windows.Forms.Button();
             this.btnUSD = new System.Windows.Forms.Button();
@@ -984,7 +982,6 @@
             this.btnChartAddressScaleLog = new CustomControls.RJControls.RJButton();
             this.btnChartAddressScaleLinear = new CustomControls.RJControls.RJButton();
             this.btnChartUniqueAddresses = new CustomControls.RJControls.RJButton();
-            this.lblChartMousePositionData = new System.Windows.Forms.Label();
             this.panel78 = new System.Windows.Forms.Panel();
             this.label217 = new System.Windows.Forms.Label();
             this.btnChartBlockSize = new CustomControls.RJControls.RJButton();
@@ -1032,7 +1029,6 @@
             this.panelCustomThemeMenuTitleBG = new System.Windows.Forms.Panel();
             this.label281 = new System.Windows.Forms.Label();
             this.btnMenuApplyCustomTheme = new System.Windows.Forms.Button();
-            this.lblThemeMenuHighlightedButtonMarker = new System.Windows.Forms.Label();
             this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.comboBoxHeaderCustomThemes = new CustomControls.RJControls.RJComboBox();
             this.BtnMenuThemeGenesis = new System.Windows.Forms.Button();
@@ -2366,7 +2362,7 @@
             this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveChart.ForeColor = System.Drawing.Color.White;
-            this.btnSaveChart.Location = new System.Drawing.Point(734, 501);
+            this.btnSaveChart.Location = new System.Drawing.Point(734, 502);
             this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
             this.btnSaveChart.Name = "btnSaveChart";
             this.btnSaveChart.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -6466,7 +6462,6 @@
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
             this.panelMenu.Controls.Add(this.btnUpdateAvailable);
-            this.panelMenu.Controls.Add(this.lblMenuHighlightedButtonMarker);
             this.panelMenu.Controls.Add(this.lblMenuHighlightedButtonText);
             this.panelMenu.Controls.Add(this.btnMenuDirectory);
             this.panelMenu.Controls.Add(this.panelMainMenuFiller);
@@ -6505,19 +6500,6 @@
             this.btnUpdateAvailable.UseVisualStyleBackColor = false;
             this.btnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
             // 
-            // lblMenuHighlightedButtonMarker
-            // 
-            this.lblMenuHighlightedButtonMarker.AutoSize = true;
-            this.lblMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
-            this.lblMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMenuHighlightedButtonMarker.Location = new System.Drawing.Point(2, 17);
-            this.lblMenuHighlightedButtonMarker.Name = "lblMenuHighlightedButtonMarker";
-            this.lblMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
-            this.lblMenuHighlightedButtonMarker.TabIndex = 163;
-            this.lblMenuHighlightedButtonMarker.Text = "▶";
-            this.lblMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lblMenuHighlightedButtonText
             // 
             this.lblMenuHighlightedButtonText.AutoSize = true;
@@ -6534,6 +6516,7 @@
             // btnMenuDirectory
             // 
             this.btnMenuDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuDirectory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuDirectory.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuDirectory.FlatAppearance.BorderSize = 0;
             this.btnMenuDirectory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6562,6 +6545,7 @@
             // btnMenuCharts
             // 
             this.btnMenuCharts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuCharts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuCharts.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuCharts.FlatAppearance.BorderSize = 0;
             this.btnMenuCharts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6582,6 +6566,7 @@
             // btnMenuSettings2
             // 
             this.btnMenuSettings2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuSettings2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuSettings2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuSettings2.FlatAppearance.BorderSize = 0;
             this.btnMenuSettings2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6602,6 +6587,7 @@
             // btnMenuHelp
             // 
             this.btnMenuHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuHelp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuHelp.FlatAppearance.BorderSize = 0;
             this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6622,6 +6608,7 @@
             // btnMenuBookmarks
             // 
             this.btnMenuBookmarks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBookmarks.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBookmarks.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuBookmarks.FlatAppearance.BorderSize = 0;
             this.btnMenuBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6642,6 +6629,7 @@
             // btnMenuXpub
             // 
             this.btnMenuXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuXpub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuXpub.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuXpub.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuXpub.FlatAppearance.BorderSize = 0;
@@ -6664,6 +6652,7 @@
             // btnMenuTransaction
             // 
             this.btnMenuTransaction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuTransaction.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuTransaction.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuTransaction.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuTransaction.FlatAppearance.BorderSize = 0;
@@ -6686,6 +6675,8 @@
             // btnMenuBlockList
             // 
             this.btnMenuBlockList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBlockList.BackgroundImage = global::SATSuma.Properties.Resources.marker;
+            this.btnMenuBlockList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBlockList.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBlockList.Enabled = false;
             this.btnMenuBlockList.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -6709,6 +6700,7 @@
             // btnMenuSplash
             // 
             this.btnMenuSplash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuSplash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuSplash.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuSplash.FlatAppearance.BorderSize = 0;
             this.btnMenuSplash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -6729,6 +6721,7 @@
             // btnMenuBlock
             // 
             this.btnMenuBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBlock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBlock.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuBlock.FlatAppearance.BorderSize = 0;
@@ -6751,6 +6744,7 @@
             // btnMenuAddress
             // 
             this.btnMenuAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuAddress.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuAddress.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuAddress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuAddress.FlatAppearance.BorderSize = 0;
@@ -6773,6 +6767,7 @@
             // btnMenuBitcoinDashboard
             // 
             this.btnMenuBitcoinDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBitcoinDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBitcoinDashboard.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBitcoinDashboard.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuBitcoinDashboard.FlatAppearance.BorderSize = 0;
@@ -6795,6 +6790,7 @@
             // btnMenuLightningDashboard
             // 
             this.btnMenuLightningDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuLightningDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuLightningDashboard.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuLightningDashboard.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuLightningDashboard.FlatAppearance.BorderSize = 0;
@@ -9349,7 +9345,6 @@
             // 
             this.panelCurrency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
             this.panelCurrency.Controls.Add(this.panelCurrencyMenuFiller);
-            this.panelCurrency.Controls.Add(this.lblCurrencyMenuHighlightedButtonMarker);
             this.panelCurrency.Controls.Add(this.lblCurrencyMenuHighlightedButtonText);
             this.panelCurrency.Controls.Add(this.btnXAU);
             this.panelCurrency.Controls.Add(this.btnUSD);
@@ -9368,19 +9363,6 @@
             this.panelCurrencyMenuFiller.Size = new System.Drawing.Size(85, 14);
             this.panelCurrencyMenuFiller.TabIndex = 255;
             // 
-            // lblCurrencyMenuHighlightedButtonMarker
-            // 
-            this.lblCurrencyMenuHighlightedButtonMarker.AutoSize = true;
-            this.lblCurrencyMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
-            this.lblCurrencyMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrencyMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblCurrencyMenuHighlightedButtonMarker.Location = new System.Drawing.Point(2, 17);
-            this.lblCurrencyMenuHighlightedButtonMarker.Name = "lblCurrencyMenuHighlightedButtonMarker";
-            this.lblCurrencyMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
-            this.lblCurrencyMenuHighlightedButtonMarker.TabIndex = 164;
-            this.lblCurrencyMenuHighlightedButtonMarker.Text = "▶";
-            this.lblCurrencyMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lblCurrencyMenuHighlightedButtonText
             // 
             this.lblCurrencyMenuHighlightedButtonText.AutoSize = true;
@@ -9397,6 +9379,7 @@
             // btnXAU
             // 
             this.btnXAU.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnXAU.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnXAU.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnXAU.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnXAU.FlatAppearance.BorderSize = 0;
@@ -9419,6 +9402,7 @@
             // btnUSD
             // 
             this.btnUSD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnUSD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnUSD.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnUSD.Enabled = false;
             this.btnUSD.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -9442,6 +9426,7 @@
             // btnEUR
             // 
             this.btnEUR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnEUR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnEUR.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnEUR.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnEUR.FlatAppearance.BorderSize = 0;
@@ -9464,6 +9449,7 @@
             // btnGBP
             // 
             this.btnGBP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnGBP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnGBP.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnGBP.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnGBP.FlatAppearance.BorderSize = 0;
@@ -12339,7 +12325,6 @@
             this.panelCharts.Controls.Add(this.btnChartUTXO);
             this.panelCharts.Controls.Add(this.panelUniqueAddressesScaleButtons);
             this.panelCharts.Controls.Add(this.btnChartUniqueAddresses);
-            this.panelCharts.Controls.Add(this.lblChartMousePositionData);
             this.panelCharts.Controls.Add(this.panel78);
             this.panelCharts.Controls.Add(this.btnChartBlockSize);
             this.panelCharts.Controls.Add(this.panelCirculationKey);
@@ -12375,7 +12360,7 @@
             this.panelPriceConverter.Controls.Add(this.panelPriceConvert);
             this.panelPriceConverter.Location = new System.Drawing.Point(100, 0);
             this.panelPriceConverter.Name = "panelPriceConverter";
-            this.panelPriceConverter.Size = new System.Drawing.Size(682, 555);
+            this.panelPriceConverter.Size = new System.Drawing.Size(682, 29);
             this.panelPriceConverter.TabIndex = 250;
             this.panelPriceConverter.Visible = false;
             // 
@@ -14960,23 +14945,13 @@
             this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
             this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
             // 
-            // lblChartMousePositionData
-            // 
-            this.lblChartMousePositionData.AutoSize = true;
-            this.lblChartMousePositionData.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChartMousePositionData.Location = new System.Drawing.Point(550, 504);
-            this.lblChartMousePositionData.Name = "lblChartMousePositionData";
-            this.lblChartMousePositionData.Size = new System.Drawing.Size(72, 17);
-            this.lblChartMousePositionData.TabIndex = 177;
-            this.lblChartMousePositionData.Text = "label202";
-            // 
             // panel78
             // 
             this.panel78.BackColor = System.Drawing.Color.Transparent;
             this.panel78.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel78.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel78.Controls.Add(this.label217);
-            this.panel78.Location = new System.Drawing.Point(146, 503);
+            this.panel78.Location = new System.Drawing.Point(146, 504);
             this.panel78.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel78.Name = "panel78";
             this.panel78.Size = new System.Drawing.Size(564, 23);
@@ -15729,7 +15704,6 @@
             this.panelThemeMenu.Controls.Add(this.panelThemeMenuFiller);
             this.panelThemeMenu.Controls.Add(this.panelCustomThemeMenuTitleBG);
             this.panelThemeMenu.Controls.Add(this.btnMenuApplyCustomTheme);
-            this.panelThemeMenu.Controls.Add(this.lblThemeMenuHighlightedButtonMarker);
             this.panelThemeMenu.Controls.Add(this.lblThemeMenuHighlightedButtonText);
             this.panelThemeMenu.Controls.Add(this.btnMenuAppearance);
             this.panelThemeMenu.Controls.Add(this.comboBoxHeaderCustomThemes);
@@ -15774,6 +15748,7 @@
             // btnMenuApplyCustomTheme
             // 
             this.btnMenuApplyCustomTheme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuApplyCustomTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuApplyCustomTheme.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuApplyCustomTheme.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuApplyCustomTheme.FlatAppearance.BorderSize = 0;
@@ -15792,19 +15767,6 @@
             this.btnMenuApplyCustomTheme.Click += new System.EventHandler(this.BtnMenuApplyCustomTheme_Click);
             this.btnMenuApplyCustomTheme.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuApplyCustomTheme.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
-            // lblThemeMenuHighlightedButtonMarker
-            // 
-            this.lblThemeMenuHighlightedButtonMarker.AutoSize = true;
-            this.lblThemeMenuHighlightedButtonMarker.BackColor = System.Drawing.Color.Transparent;
-            this.lblThemeMenuHighlightedButtonMarker.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThemeMenuHighlightedButtonMarker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblThemeMenuHighlightedButtonMarker.Location = new System.Drawing.Point(2, 17);
-            this.lblThemeMenuHighlightedButtonMarker.Name = "lblThemeMenuHighlightedButtonMarker";
-            this.lblThemeMenuHighlightedButtonMarker.Size = new System.Drawing.Size(18, 16);
-            this.lblThemeMenuHighlightedButtonMarker.TabIndex = 166;
-            this.lblThemeMenuHighlightedButtonMarker.Text = "▶";
-            this.lblThemeMenuHighlightedButtonMarker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblThemeMenuHighlightedButtonText
             // 
@@ -15842,6 +15804,7 @@
             // BtnMenuThemeGenesis
             // 
             this.BtnMenuThemeGenesis.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BtnMenuThemeGenesis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.BtnMenuThemeGenesis.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.BtnMenuThemeGenesis.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.BtnMenuThemeGenesis.FlatAppearance.BorderSize = 0;
@@ -15864,6 +15827,7 @@
             // btnMenuThemeBTCdir
             // 
             this.btnMenuThemeBTCdir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeBTCdir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuThemeBTCdir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeBTCdir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeBTCdir.FlatAppearance.BorderSize = 0;
@@ -15886,6 +15850,7 @@
             // btnMenuThemeSatsuma
             // 
             this.btnMenuThemeSatsuma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeSatsuma.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuThemeSatsuma.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeSatsuma.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeSatsuma.FlatAppearance.BorderSize = 0;
@@ -16224,9 +16189,17 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.btnMenu);
+            this.Controls.Add(this.panelMenu);
+            this.Controls.Add(this.btnCurrency);
+            this.Controls.Add(this.panelCurrency);
+            this.Controls.Add(this.btnThemeMenu);
+            this.Controls.Add(this.panelThemeMenu);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
@@ -16234,16 +16207,8 @@
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAddToBookmarks);
-            this.Controls.Add(this.btnThemeMenu);
-            this.Controls.Add(this.panelThemeMenu);
-            this.Controls.Add(this.btnMenu);
-            this.Controls.Add(this.btnCurrency);
-            this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelFees);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.lblCurrentVersion);
             this.Controls.Add(this.headerNetworkName);
             this.Controls.Add(this.headerNetworkStatusLight);
@@ -16551,7 +16516,6 @@
             this.panel69.ResumeLayout(false);
             this.panel69.PerformLayout();
             this.panelCharts.ResumeLayout(false);
-            this.panelCharts.PerformLayout();
             this.panelPriceConverter.ResumeLayout(false);
             this.panelPriceConvert.ResumeLayout(false);
             this.panelPriceConvert.PerformLayout();
@@ -17187,7 +17151,6 @@
         private System.Windows.Forms.PictureBox pictureBoxBlockListDifficultyChart;
         private System.Windows.Forms.PictureBox pictureBoxHeaderPriceChart;
         private System.Windows.Forms.PictureBox pictureBoxPriceChart;
-        private System.Windows.Forms.Label lblChartMousePositionData;
         private System.Windows.Forms.Panel panelFeeRatesKey;
         private System.Windows.Forms.Label label209;
         private System.Windows.Forms.Label label208;
@@ -17458,10 +17421,7 @@
         private System.Windows.Forms.Panel panel48;
         private System.Windows.Forms.Label lblInvalidAddressIndicator;
         private System.Windows.Forms.Label lblMenuHighlightedButtonText;
-        private System.Windows.Forms.Label lblMenuHighlightedButtonMarker;
-        private System.Windows.Forms.Label lblCurrencyMenuHighlightedButtonMarker;
         private System.Windows.Forms.Label lblCurrencyMenuHighlightedButtonText;
-        private System.Windows.Forms.Label lblThemeMenuHighlightedButtonMarker;
         private System.Windows.Forms.Label lblThemeMenuHighlightedButtonText;
         private System.Windows.Forms.PictureBox pictureBoxHeaderBlockSizeChart;
         private System.Windows.Forms.PictureBox pictureBoxHeaderConverterChart;

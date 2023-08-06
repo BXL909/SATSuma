@@ -38,7 +38,7 @@ namespace SATSuma
         public Color ButtonBackColor { get; set; }
         public Color ButtonTextColor { get; set; }
         public string CurrentVersion { get; set; }
-        public bool PrivacyMode { get; set; }
+        public bool OfflineMode { get; set; }
         public int ButtonRadius { get; set; }
         public int ButtonBorderSize { get; set; }
         public Color ButtonBorderColor { get; set; }
@@ -76,7 +76,7 @@ namespace SATSuma
         {
             try
             {
-                if (!PrivacyMode)
+                if (!OfflineMode)
                 {
                     using WebClient client = new WebClient();
                     string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";

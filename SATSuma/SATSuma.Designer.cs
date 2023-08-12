@@ -115,6 +115,7 @@
             this.lblBlockRewardFiat = new System.Windows.Forms.Label();
             this.lblBlockRewardAfterHalvingFiat = new System.Windows.Forms.Label();
             this.lbl24HourBTCSentFiat = new System.Windows.Forms.Label();
+            this.btnPreviewAnimations = new CustomControls.RJControls.RJButton();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -415,12 +416,11 @@
             this.lblSizeOfBlock = new System.Windows.Forms.Label();
             this.label69 = new System.Windows.Forms.Label();
             this.label145 = new System.Windows.Forms.Label();
-            this.pictureBoxSatsumaLogo = new System.Windows.Forms.PictureBox();
             this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.lblHelpOffline = new System.Windows.Forms.Label();
             this.btnUpdateAvailable = new System.Windows.Forms.Button();
-            this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuDirectory = new System.Windows.Forms.Button();
             this.panelMainMenuFiller = new System.Windows.Forms.Panel();
             this.btnMenuCharts = new System.Windows.Forms.Button();
@@ -437,6 +437,8 @@
             this.btnMenuLightningDashboard = new System.Windows.Forms.Button();
             this.btnMenuCreateTheme = new System.Windows.Forms.Button();
             this.panelRefreshStatusBar = new System.Windows.Forms.Panel();
+            this.headerSelectedNodeStatus = new System.Windows.Forms.Label();
+            this.headerSelectedNodeStatusLight = new System.Windows.Forms.Label();
             this.lblOfflineModeActive = new System.Windows.Forms.Label();
             this.panelTransaction = new System.Windows.Forms.Panel();
             this.panelTransactionIDContainer = new System.Windows.Forms.Panel();
@@ -735,7 +737,6 @@
             this.lblInfinity2 = new System.Windows.Forms.Label();
             this.lblInfinity1 = new System.Windows.Forms.Label();
             this.panel47 = new System.Windows.Forms.Panel();
-            this.btnPreviewAnimations = new CustomControls.RJControls.RJButton();
             this.label248 = new System.Windows.Forms.Label();
             this.panel103 = new System.Windows.Forms.Panel();
             this.lblChartsDarkBackground = new System.Windows.Forms.Label();
@@ -843,8 +844,6 @@
             this.btnSaveTheme = new CustomControls.RJControls.RJButton();
             this.label194 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.headerSelectedNodeStatus = new System.Windows.Forms.Label();
-            this.headerSelectedNodeStatusLight = new System.Windows.Forms.Label();
             this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
             this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
@@ -1100,6 +1099,13 @@
             this.timerHideSettingsSaved = new System.Windows.Forms.Timer(this.components);
             this.timerNumUpDownContinuous = new System.Windows.Forms.Timer(this.components);
             this.timerHideThemeNameInUse = new System.Windows.Forms.Timer(this.components);
+            this.panelUniversalSearchContainer = new System.Windows.Forms.Panel();
+            this.textBoxUniversalSearch = new System.Windows.Forms.TextBox();
+            this.btnUniversalSearch = new CustomControls.RJControls.RJButton();
+            this.panelLoadingAnimationContainer = new System.Windows.Forms.Panel();
+            this.btnAnimation = new CustomControls.RJControls.RJButton();
+            this.btnShowGlobalSearch = new CustomControls.RJControls.RJButton();
+            this.panel107 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -1173,7 +1179,6 @@
             this.panelOwnNodeBlockTXInfo.SuspendLayout();
             this.panel56.SuspendLayout();
             this.panel105.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).BeginInit();
             this.panelMenu.SuspendLayout();
             this.panelRefreshStatusBar.SuspendLayout();
             this.panelTransaction.SuspendLayout();
@@ -1318,6 +1323,9 @@
             this.panel16.SuspendLayout();
             this.panel18.SuspendLayout();
             this.panelSettingsSaved.SuspendLayout();
+            this.panelUniversalSearchContainer.SuspendLayout();
+            this.panelLoadingAnimationContainer.SuspendLayout();
+            this.panel107.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -2489,6 +2497,32 @@
             this.lbl24HourBTCSentFiat.TabIndex = 247;
             this.lbl24HourBTCSentFiat.Text = "no data";
             this.toolTip1.SetToolTip(this.lbl24HourBTCSentFiat, "(estimated)");
+            // 
+            // btnPreviewAnimations
+            // 
+            this.btnPreviewAnimations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPreviewAnimations.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPreviewAnimations.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPreviewAnimations.BorderRadius = 12;
+            this.btnPreviewAnimations.BorderSize = 0;
+            this.btnPreviewAnimations.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnPreviewAnimations.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPreviewAnimations.FlatAppearance.BorderSize = 0;
+            this.btnPreviewAnimations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPreviewAnimations.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPreviewAnimations.ForeColor = System.Drawing.Color.White;
+            this.btnPreviewAnimations.Location = new System.Drawing.Point(195, 0);
+            this.btnPreviewAnimations.Margin = new System.Windows.Forms.Padding(0);
+            this.btnPreviewAnimations.Name = "btnPreviewAnimations";
+            this.btnPreviewAnimations.Size = new System.Drawing.Size(29, 20);
+            this.btnPreviewAnimations.TabIndex = 290;
+            this.btnPreviewAnimations.TabStop = false;
+            this.btnPreviewAnimations.Text = "▶";
+            this.btnPreviewAnimations.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnPreviewAnimations.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnPreviewAnimations, "preview");
+            this.btnPreviewAnimations.UseVisualStyleBackColor = false;
+            this.btnPreviewAnimations.Click += new System.EventHandler(this.BtnPreviewAnimations_Click);
             // 
             // label134
             // 
@@ -5934,10 +5968,10 @@
             // 
             this.pictureBoxLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxLoadingAnimation.Enabled = false;
-            this.pictureBoxLoadingAnimation.Image = global::SATSuma.Properties.Resources.InfinityTrans;
-            this.pictureBoxLoadingAnimation.Location = new System.Drawing.Point(750, 752);
+            this.pictureBoxLoadingAnimation.Image = global::SATSuma.Properties.Resources.SatsumaAnimatedWhite;
+            this.pictureBoxLoadingAnimation.Location = new System.Drawing.Point(1, 1);
             this.pictureBoxLoadingAnimation.Name = "pictureBoxLoadingAnimation";
-            this.pictureBoxLoadingAnimation.Size = new System.Drawing.Size(40, 20);
+            this.pictureBoxLoadingAnimation.Size = new System.Drawing.Size(20, 20);
             this.pictureBoxLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxLoadingAnimation.TabIndex = 148;
             this.pictureBoxLoadingAnimation.TabStop = false;
@@ -6607,23 +6641,12 @@
             this.label145.TabIndex = 211;
             this.label145.Text = "Block time";
             // 
-            // pictureBoxSatsumaLogo
-            // 
-            this.pictureBoxSatsumaLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBoxSatsumaLogo.Image = global::SATSuma.Properties.Resources.tinylogo1;
-            this.pictureBoxSatsumaLogo.Location = new System.Drawing.Point(13, 13);
-            this.pictureBoxSatsumaLogo.Name = "pictureBoxSatsumaLogo";
-            this.pictureBoxSatsumaLogo.Size = new System.Drawing.Size(20, 22);
-            this.pictureBoxSatsumaLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxSatsumaLogo.TabIndex = 150;
-            this.pictureBoxSatsumaLogo.TabStop = false;
-            // 
             // lblSatsumaTitle
             // 
             this.lblSatsumaTitle.BackColor = System.Drawing.Color.Transparent;
             this.lblSatsumaTitle.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSatsumaTitle.ForeColor = System.Drawing.Color.Silver;
-            this.lblSatsumaTitle.Location = new System.Drawing.Point(39, 16);
+            this.lblSatsumaTitle.Location = new System.Drawing.Point(35, 15);
             this.lblSatsumaTitle.Name = "lblSatsumaTitle";
             this.lblSatsumaTitle.Size = new System.Drawing.Size(69, 17);
             this.lblSatsumaTitle.TabIndex = 151;
@@ -6653,6 +6676,19 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(122, 0);
             this.panelMenu.TabIndex = 152;
+            // 
+            // lblMenuHighlightedButtonText
+            // 
+            this.lblMenuHighlightedButtonText.AutoSize = true;
+            this.lblMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
+            this.lblMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblMenuHighlightedButtonText.Location = new System.Drawing.Point(34, 17);
+            this.lblMenuHighlightedButtonText.Name = "lblMenuHighlightedButtonText";
+            this.lblMenuHighlightedButtonText.Size = new System.Drawing.Size(46, 17);
+            this.lblMenuHighlightedButtonText.TabIndex = 162;
+            this.lblMenuHighlightedButtonText.Text = "blocks";
+            this.lblMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblHelpOffline
             // 
@@ -6685,19 +6721,6 @@
             this.btnUpdateAvailable.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnUpdateAvailable.UseVisualStyleBackColor = false;
             this.btnUpdateAvailable.Click += new System.EventHandler(this.BtnUpdateAvailable_Click);
-            // 
-            // lblMenuHighlightedButtonText
-            // 
-            this.lblMenuHighlightedButtonText.AutoSize = true;
-            this.lblMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
-            this.lblMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblMenuHighlightedButtonText.Location = new System.Drawing.Point(34, 17);
-            this.lblMenuHighlightedButtonText.Name = "lblMenuHighlightedButtonText";
-            this.lblMenuHighlightedButtonText.Size = new System.Drawing.Size(46, 17);
-            this.lblMenuHighlightedButtonText.TabIndex = 162;
-            this.lblMenuHighlightedButtonText.Text = "blocks";
-            this.lblMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnMenuDirectory
             // 
@@ -7021,27 +7044,52 @@
             // 
             this.panelRefreshStatusBar.BackColor = System.Drawing.Color.Transparent;
             this.panelRefreshStatusBar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panelRefreshStatusBar.Controls.Add(this.lblOfflineModeActive);
             this.panelRefreshStatusBar.Controls.Add(this.lblStatusLight);
             this.panelRefreshStatusBar.Controls.Add(this.lblRefreshSuccessOrFailMessage);
             this.panelRefreshStatusBar.Controls.Add(this.lblElapsedSinceUpdate);
+            this.panelRefreshStatusBar.Controls.Add(this.headerSelectedNodeStatus);
+            this.panelRefreshStatusBar.Controls.Add(this.headerSelectedNodeStatusLight);
             this.panelRefreshStatusBar.Location = new System.Drawing.Point(1, 758);
             this.panelRefreshStatusBar.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panelRefreshStatusBar.Name = "panelRefreshStatusBar";
-            this.panelRefreshStatusBar.Size = new System.Drawing.Size(746, 23);
+            this.panelRefreshStatusBar.Size = new System.Drawing.Size(788, 23);
             this.panelRefreshStatusBar.TabIndex = 197;
+            // 
+            // headerSelectedNodeStatus
+            // 
+            this.headerSelectedNodeStatus.AutoSize = true;
+            this.headerSelectedNodeStatus.BackColor = System.Drawing.Color.Transparent;
+            this.headerSelectedNodeStatus.Font = new System.Drawing.Font("Century Gothic", 6.75F);
+            this.headerSelectedNodeStatus.ForeColor = System.Drawing.Color.Silver;
+            this.headerSelectedNodeStatus.Location = new System.Drawing.Point(651, 2);
+            this.headerSelectedNodeStatus.Name = "headerSelectedNodeStatus";
+            this.headerSelectedNodeStatus.Size = new System.Drawing.Size(126, 13);
+            this.headerSelectedNodeStatus.TabIndex = 241;
+            this.headerSelectedNodeStatus.Text = "mempool.space (mainnet)";
+            // 
+            // headerSelectedNodeStatusLight
+            // 
+            this.headerSelectedNodeStatusLight.AutoSize = true;
+            this.headerSelectedNodeStatusLight.BackColor = System.Drawing.Color.Transparent;
+            this.headerSelectedNodeStatusLight.Font = new System.Drawing.Font("Consolas", 7F);
+            this.headerSelectedNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.headerSelectedNodeStatusLight.Location = new System.Drawing.Point(638, 4);
+            this.headerSelectedNodeStatusLight.Name = "headerSelectedNodeStatusLight";
+            this.headerSelectedNodeStatusLight.Size = new System.Drawing.Size(15, 12);
+            this.headerSelectedNodeStatusLight.TabIndex = 240;
+            this.headerSelectedNodeStatusLight.Text = "🟢";
             // 
             // lblOfflineModeActive
             // 
             this.lblOfflineModeActive.BackColor = System.Drawing.Color.Transparent;
             this.lblOfflineModeActive.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOfflineModeActive.ForeColor = System.Drawing.Color.Gray;
-            this.lblOfflineModeActive.Location = new System.Drawing.Point(562, 2);
+            this.lblOfflineModeActive.Location = new System.Drawing.Point(694, 746);
             this.lblOfflineModeActive.Name = "lblOfflineModeActive";
-            this.lblOfflineModeActive.Size = new System.Drawing.Size(175, 13);
+            this.lblOfflineModeActive.Size = new System.Drawing.Size(100, 13);
             this.lblOfflineModeActive.TabIndex = 85;
-            this.lblOfflineModeActive.Text = "Offline mode. Some features disabled.";
-            this.lblOfflineModeActive.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblOfflineModeActive.Text = "Offline mode active";
+            this.lblOfflineModeActive.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblOfflineModeActive.Visible = false;
             // 
             // panelTransaction
@@ -7798,8 +7846,8 @@
             // panelXpubContainer
             // 
             this.panelXpubContainer.AutoScroll = true;
-            this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
             this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
+            this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
             this.panelXpubContainer.Location = new System.Drawing.Point(249, 85);
             this.panelXpubContainer.Name = "panelXpubContainer";
             this.panelXpubContainer.Size = new System.Drawing.Size(494, 446);
@@ -9638,7 +9686,7 @@
             this.lblNowViewing.BackColor = System.Drawing.Color.Transparent;
             this.lblNowViewing.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNowViewing.ForeColor = System.Drawing.Color.Silver;
-            this.lblNowViewing.Location = new System.Drawing.Point(21, 159);
+            this.lblNowViewing.Location = new System.Drawing.Point(21, 164);
             this.lblNowViewing.Name = "lblNowViewing";
             this.lblNowViewing.Size = new System.Drawing.Size(102, 17);
             this.lblNowViewing.TabIndex = 217;
@@ -9842,9 +9890,9 @@
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Location = new System.Drawing.Point(21, 178);
+            this.pictureBox1.Location = new System.Drawing.Point(21, 183);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(600, 2);
+            this.pictureBox1.Size = new System.Drawing.Size(370, 2);
             this.pictureBox1.TabIndex = 218;
             this.pictureBox1.TabStop = false;
             // 
@@ -11094,7 +11142,7 @@
             this.label295.Name = "label295";
             this.label295.Size = new System.Drawing.Size(121, 17);
             this.label295.TabIndex = 153;
-            this.label295.Text = "Opacity";
+            this.label295.Text = "Window opacity";
             // 
             // panel51
             // 
@@ -11319,31 +11367,6 @@
             this.panel47.Size = new System.Drawing.Size(224, 23);
             this.panel47.TabIndex = 213;
             // 
-            // btnPreviewAnimations
-            // 
-            this.btnPreviewAnimations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPreviewAnimations.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPreviewAnimations.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnPreviewAnimations.BorderRadius = 12;
-            this.btnPreviewAnimations.BorderSize = 0;
-            this.btnPreviewAnimations.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnPreviewAnimations.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPreviewAnimations.FlatAppearance.BorderSize = 0;
-            this.btnPreviewAnimations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreviewAnimations.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPreviewAnimations.ForeColor = System.Drawing.Color.White;
-            this.btnPreviewAnimations.Location = new System.Drawing.Point(195, 0);
-            this.btnPreviewAnimations.Margin = new System.Windows.Forms.Padding(0);
-            this.btnPreviewAnimations.Name = "btnPreviewAnimations";
-            this.btnPreviewAnimations.Size = new System.Drawing.Size(29, 20);
-            this.btnPreviewAnimations.TabIndex = 290;
-            this.btnPreviewAnimations.TabStop = false;
-            this.btnPreviewAnimations.Text = "▶";
-            this.btnPreviewAnimations.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnPreviewAnimations.TextColor = System.Drawing.Color.White;
-            this.btnPreviewAnimations.UseVisualStyleBackColor = false;
-            this.btnPreviewAnimations.Click += new System.EventHandler(this.BtnPreviewAnimations_Click);
-            // 
             // label248
             // 
             this.label248.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -11353,9 +11376,9 @@
             this.label248.Location = new System.Drawing.Point(5, 2);
             this.label248.Margin = new System.Windows.Forms.Padding(0);
             this.label248.Name = "label248";
-            this.label248.Size = new System.Drawing.Size(120, 17);
+            this.label248.Size = new System.Drawing.Size(170, 17);
             this.label248.TabIndex = 153;
-            this.label248.Text = "Loading animation";
+            this.label248.Text = "Chart loading animation";
             // 
             // panel103
             // 
@@ -11435,9 +11458,9 @@
             this.label244.Location = new System.Drawing.Point(5, 2);
             this.label244.Margin = new System.Windows.Forms.Padding(0);
             this.label244.Name = "label244";
-            this.label244.Size = new System.Drawing.Size(121, 17);
+            this.label244.Size = new System.Drawing.Size(210, 17);
             this.label244.TabIndex = 153;
-            this.label244.Text = "Chart backgrounds";
+            this.label244.Text = "Charts && menu buttons";
             // 
             // panel91
             // 
@@ -12835,9 +12858,9 @@
             this.label192.Location = new System.Drawing.Point(5, 2);
             this.label192.Margin = new System.Windows.Forms.Padding(0);
             this.label192.Name = "label192";
-            this.label192.Size = new System.Drawing.Size(136, 17);
+            this.label192.Size = new System.Drawing.Size(220, 17);
             this.label192.TabIndex = 153;
-            this.label192.Text = "Save as a new theme";
+            this.label192.Text = "Save as new custom theme";
             // 
             // lblThemeSaved
             // 
@@ -12902,30 +12925,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Text files (*.txt)|*.txt";
-            // 
-            // headerSelectedNodeStatus
-            // 
-            this.headerSelectedNodeStatus.AutoSize = true;
-            this.headerSelectedNodeStatus.BackColor = System.Drawing.Color.Transparent;
-            this.headerSelectedNodeStatus.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.headerSelectedNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.headerSelectedNodeStatus.Location = new System.Drawing.Point(633, 162);
-            this.headerSelectedNodeStatus.Name = "headerSelectedNodeStatus";
-            this.headerSelectedNodeStatus.Size = new System.Drawing.Size(144, 15);
-            this.headerSelectedNodeStatus.TabIndex = 241;
-            this.headerSelectedNodeStatus.Text = "mempool.space (mainnet)";
-            // 
-            // headerSelectedNodeStatusLight
-            // 
-            this.headerSelectedNodeStatusLight.AutoSize = true;
-            this.headerSelectedNodeStatusLight.BackColor = System.Drawing.Color.Transparent;
-            this.headerSelectedNodeStatusLight.Font = new System.Drawing.Font("Consolas", 6F);
-            this.headerSelectedNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.headerSelectedNodeStatusLight.Location = new System.Drawing.Point(620, 166);
-            this.headerSelectedNodeStatusLight.Name = "headerSelectedNodeStatusLight";
-            this.headerSelectedNodeStatusLight.Size = new System.Drawing.Size(13, 9);
-            this.headerSelectedNodeStatusLight.TabIndex = 240;
-            this.headerSelectedNodeStatusLight.Text = "🟢";
             // 
             // hideThemeSavedTimer
             // 
@@ -13520,9 +13519,9 @@
             this.label272.Location = new System.Drawing.Point(3, 2);
             this.label272.Margin = new System.Windows.Forms.Padding(0);
             this.label272.Name = "label272";
-            this.label272.Size = new System.Drawing.Size(121, 17);
+            this.label272.Size = new System.Drawing.Size(250, 17);
             this.label272.TabIndex = 153;
-            this.label272.Text = "bitcoin to fiat/gold";
+            this.label272.Text = "convert bitcoin to fiat/gold";
             // 
             // label257
             // 
@@ -13557,9 +13556,9 @@
             this.label271.Location = new System.Drawing.Point(3, 2);
             this.label271.Margin = new System.Windows.Forms.Padding(0);
             this.label271.Name = "label271";
-            this.label271.Size = new System.Drawing.Size(121, 17);
+            this.label271.Size = new System.Drawing.Size(250, 17);
             this.label271.TabIndex = 153;
-            this.label271.Text = "fiat/gold to bitcoin";
+            this.label271.Text = "convert fiat/gold to bitcoin";
             // 
             // label258
             // 
@@ -16584,7 +16583,7 @@
             this.lblCurrentVersion.BackColor = System.Drawing.Color.Transparent;
             this.lblCurrentVersion.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentVersion.ForeColor = System.Drawing.Color.Gray;
-            this.lblCurrentVersion.Location = new System.Drawing.Point(104, 16);
+            this.lblCurrentVersion.Location = new System.Drawing.Point(97, 15);
             this.lblCurrentVersion.Name = "lblCurrentVersion";
             this.lblCurrentVersion.Size = new System.Drawing.Size(31, 13);
             this.lblCurrentVersion.TabIndex = 85;
@@ -16922,6 +16921,122 @@
             this.timerHideThemeNameInUse.Interval = 3000;
             this.timerHideThemeNameInUse.Tick += new System.EventHandler(this.TimerHideThemeNameInUse_Tick);
             // 
+            // panelUniversalSearchContainer
+            // 
+            this.panelUniversalSearchContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panelUniversalSearchContainer.Controls.Add(this.textBoxUniversalSearch);
+            this.panelUniversalSearchContainer.Location = new System.Drawing.Point(1, 1);
+            this.panelUniversalSearchContainer.Name = "panelUniversalSearchContainer";
+            this.panelUniversalSearchContainer.Size = new System.Drawing.Size(354, 22);
+            this.panelUniversalSearchContainer.TabIndex = 255;
+            // 
+            // textBoxUniversalSearch
+            // 
+            this.textBoxUniversalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxUniversalSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxUniversalSearch.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxUniversalSearch.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxUniversalSearch.Location = new System.Drawing.Point(6, 4);
+            this.textBoxUniversalSearch.Name = "textBoxUniversalSearch";
+            this.textBoxUniversalSearch.Size = new System.Drawing.Size(340, 15);
+            this.textBoxUniversalSearch.TabIndex = 202;
+            this.textBoxUniversalSearch.Text = "block height, address, transaction ID or xpub...";
+            this.textBoxUniversalSearch.TextChanged += new System.EventHandler(this.TextBoxUniversalSearch_TextChanged);
+            this.textBoxUniversalSearch.Enter += new System.EventHandler(this.TextBoxUniversalSearch_Enter);
+            this.textBoxUniversalSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxUniversalSearch_KeyPress);
+            this.textBoxUniversalSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxUniversalSearch_KeyUp);
+            this.textBoxUniversalSearch.Leave += new System.EventHandler(this.TextBoxUniversalSearch_Leave);
+            // 
+            // btnUniversalSearch
+            // 
+            this.btnUniversalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnUniversalSearch.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnUniversalSearch.BorderColor = System.Drawing.Color.Empty;
+            this.btnUniversalSearch.BorderRadius = 0;
+            this.btnUniversalSearch.BorderSize = 0;
+            this.btnUniversalSearch.Enabled = false;
+            this.btnUniversalSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnUniversalSearch.FlatAppearance.BorderSize = 0;
+            this.btnUniversalSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUniversalSearch.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUniversalSearch.ForeColor = System.Drawing.Color.White;
+            this.btnUniversalSearch.Location = new System.Drawing.Point(358, 1);
+            this.btnUniversalSearch.Name = "btnUniversalSearch";
+            this.btnUniversalSearch.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.btnUniversalSearch.Size = new System.Drawing.Size(22, 22);
+            this.btnUniversalSearch.TabIndex = 257;
+            this.btnUniversalSearch.TabStop = false;
+            this.btnUniversalSearch.Text = "▶";
+            this.btnUniversalSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUniversalSearch.TextColor = System.Drawing.Color.White;
+            this.btnUniversalSearch.UseVisualStyleBackColor = false;
+            this.btnUniversalSearch.Click += new System.EventHandler(this.BtnUniversalSearch_Click);
+            // 
+            // panelLoadingAnimationContainer
+            // 
+            this.panelLoadingAnimationContainer.Controls.Add(this.pictureBoxLoadingAnimation);
+            this.panelLoadingAnimationContainer.Location = new System.Drawing.Point(13, 13);
+            this.panelLoadingAnimationContainer.Name = "panelLoadingAnimationContainer";
+            this.panelLoadingAnimationContainer.Size = new System.Drawing.Size(20, 20);
+            this.panelLoadingAnimationContainer.TabIndex = 258;
+            // 
+            // btnAnimation
+            // 
+            this.btnAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnAnimation.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnAnimation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAnimation.BorderColor = System.Drawing.Color.Empty;
+            this.btnAnimation.BorderRadius = 12;
+            this.btnAnimation.BorderSize = 0;
+            this.btnAnimation.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnAnimation.FlatAppearance.BorderSize = 0;
+            this.btnAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAnimation.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAnimation.ForeColor = System.Drawing.Color.White;
+            this.btnAnimation.Location = new System.Drawing.Point(11, 11);
+            this.btnAnimation.Name = "btnAnimation";
+            this.btnAnimation.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.btnAnimation.Size = new System.Drawing.Size(24, 24);
+            this.btnAnimation.TabIndex = 259;
+            this.btnAnimation.TabStop = false;
+            this.btnAnimation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnAnimation.TextColor = System.Drawing.Color.White;
+            this.btnAnimation.UseVisualStyleBackColor = false;
+            // 
+            // btnShowGlobalSearch
+            // 
+            this.btnShowGlobalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowGlobalSearch.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowGlobalSearch.BorderColor = System.Drawing.Color.Empty;
+            this.btnShowGlobalSearch.BorderRadius = 0;
+            this.btnShowGlobalSearch.BorderSize = 0;
+            this.btnShowGlobalSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowGlobalSearch.FlatAppearance.BorderSize = 0;
+            this.btnShowGlobalSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowGlobalSearch.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowGlobalSearch.ForeColor = System.Drawing.Color.White;
+            this.btnShowGlobalSearch.Location = new System.Drawing.Point(749, 162);
+            this.btnShowGlobalSearch.Name = "btnShowGlobalSearch";
+            this.btnShowGlobalSearch.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.btnShowGlobalSearch.Size = new System.Drawing.Size(24, 24);
+            this.btnShowGlobalSearch.TabIndex = 260;
+            this.btnShowGlobalSearch.TabStop = false;
+            this.btnShowGlobalSearch.Text = "🔎";
+            this.btnShowGlobalSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnShowGlobalSearch.TextColor = System.Drawing.Color.White;
+            this.btnShowGlobalSearch.UseVisualStyleBackColor = false;
+            this.btnShowGlobalSearch.Click += new System.EventHandler(this.btnShowGlobalSearch_Click);
+            // 
+            // panel107
+            // 
+            this.panel107.Controls.Add(this.panelUniversalSearchContainer);
+            this.panel107.Controls.Add(this.btnUniversalSearch);
+            this.panel107.Location = new System.Drawing.Point(366, 162);
+            this.panel107.Name = "panel107";
+            this.panel107.Size = new System.Drawing.Size(394, 24);
+            this.panel107.TabIndex = 261;
+            this.panel107.Visible = false;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -16931,31 +17046,34 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.btnShowGlobalSearch);
+            this.Controls.Add(this.panel107);
+            this.Controls.Add(this.panelLoadingAnimationContainer);
+            this.Controls.Add(this.btnAnimation);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.lblOfflineModeActive);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.btnThemeMenu);
             this.Controls.Add(this.panelThemeMenu);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.btnMoveWindow);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettingsSaved);
             this.Controls.Add(this.btnCurrency);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.lblCurrentVersion);
-            this.Controls.Add(this.headerSelectedNodeStatus);
-            this.Controls.Add(this.headerSelectedNodeStatusLight);
             this.Controls.Add(this.panelHeaderBlockHeight);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.pictureBox1);
@@ -16965,10 +17083,8 @@
             this.Controls.Add(this.btnAddToBookmarks);
             this.Controls.Add(this.btnHelp);
             this.Controls.Add(this.panelRefreshStatusBar);
-            this.Controls.Add(this.pictureBoxSatsumaLogo);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.lblAlert);
-            this.Controls.Add(this.pictureBoxLoadingAnimation);
             this.Controls.Add(this.btnMinimise);
             this.Controls.Add(this.btnExit);
             this.DoubleBuffered = true;
@@ -17065,7 +17181,6 @@
             this.panel56.ResumeLayout(false);
             this.panel56.PerformLayout();
             this.panel105.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).EndInit();
             this.panelMenu.ResumeLayout(false);
             this.panelMenu.PerformLayout();
             this.panelRefreshStatusBar.ResumeLayout(false);
@@ -17260,6 +17375,10 @@
             this.panel16.PerformLayout();
             this.panel18.ResumeLayout(false);
             this.panelSettingsSaved.ResumeLayout(false);
+            this.panelUniversalSearchContainer.ResumeLayout(false);
+            this.panelUniversalSearchContainer.PerformLayout();
+            this.panelLoadingAnimationContainer.ResumeLayout(false);
+            this.panel107.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -17424,7 +17543,6 @@
         private System.Windows.Forms.Button btnViewTransactionFromBlock;
         private System.Windows.Forms.Label lblTotalFees;
         private System.Windows.Forms.Label lblNonce;
-        private System.Windows.Forms.PictureBox pictureBoxSatsumaLogo;
         private System.Windows.Forms.Label lblSatsumaTitle;
         private System.Windows.Forms.Panel panelMenu;
         private System.Windows.Forms.Button btnMenuSplash;
@@ -18337,6 +18455,13 @@
         private System.Windows.Forms.Panel panelPresetThemeMenuTitleBG;
         private System.Windows.Forms.Label label60;
         private System.Windows.Forms.Label lblHelpOffline;
+        private System.Windows.Forms.Panel panelUniversalSearchContainer;
+        private System.Windows.Forms.TextBox textBoxUniversalSearch;
+        private CustomControls.RJControls.RJButton btnUniversalSearch;
+        private System.Windows.Forms.Panel panelLoadingAnimationContainer;
+        private CustomControls.RJControls.RJButton btnAnimation;
+        private CustomControls.RJControls.RJButton btnShowGlobalSearch;
+        private System.Windows.Forms.Panel panel107;
     }
 }
 

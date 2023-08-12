@@ -253,6 +253,26 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SatsumaAnimated {
+            get {
+                object obj = ResourceManager.GetObject("SatsumaAnimated", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SatsumaAnimatedWhite {
+            get {
+                object obj = ResourceManager.GetObject("SatsumaAnimatedWhite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SatsumaBTCdir {
             get {
                 object obj = ResourceManager.GetObject("SatsumaBTCdir", resourceCulture);

@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.0    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.01    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -74,7 +74,8 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.0";
+        readonly string CurrentVersion = "1.01";
+
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -95,6 +96,10 @@ namespace SATSuma
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
         private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
+        #endregion
+        #region header variables
+        bool isTextBoxUniversalSearchWatermarkTextDisplayed = true; // header for watermarked universal search
+        string searchTarget = ""; // used to determine what the search button will search for
         #endregion
         #region address screen variables
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
@@ -356,6 +361,7 @@ namespace SATSuma
             panel53.Paint += Panel_Paint;
             panel96.Paint += Panel_Paint;
             panel106.Paint += Panel_Paint;
+            panel107.Paint += Panel_Paint;
             panelOwnNodeAddressTXInfo.Paint += Panel_Paint;
             panelOwnNodeBlockTXInfo.Paint += Panel_Paint;
             panelTransactionMiddle.Paint += Panel_Paint;
@@ -381,6 +387,7 @@ namespace SATSuma
             panelComboBoxStartupScreenContainer.Paint += Panel_Paint;
             panelCustomizeThemeListContainer.Paint += Panel_Paint;
             panelSelectBlockNumberContainer.Paint += Panel_Paint;
+            panelUniversalSearchContainer.Paint += Panel_Paint;
             panel75.Paint += Panel_Paint;
             panel95.Paint += Panel_Paint;
             panel93.Paint += Panel_Paint;
@@ -429,6 +436,7 @@ namespace SATSuma
             panel37.Paint += Panel_Paint;
             panel97.Paint += Panel_Paint;
             panel108.Paint += Panel_Paint;
+            panelLoadingAnimationContainer.Paint += Panel_Paint;
             #endregion
             #region rounded form
             this.FormBorderStyle = FormBorderStyle.None;
@@ -6970,7 +6978,7 @@ namespace SATSuma
                 lblP2SHUsedAddresses.Visible = true;
                 label140.Visible = true;
                 label141.Visible = true;
-                btnViewAddressFromXpub.Visible = true;
+//                btnViewAddressFromXpub.Visible = true;
                 panel101.Visible = true;
                 panel30.Visible = true;
                 panel30.BringToFront();
@@ -8213,7 +8221,7 @@ namespace SATSuma
                         }
                         btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                         {
-                            btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 2);
+                            btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 1);
                             btnViewAddressFromXpub.Height = item.Bounds.Height;
                         });
                     }
@@ -16137,7 +16145,7 @@ namespace SATSuma
                         lblInfinity3.ForeColor = Color.IndianRed;
                         lblInfinity3.Text = "❌";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    //pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                 }
             }
@@ -16169,7 +16177,7 @@ namespace SATSuma
                         lblInfinity3.ForeColor = Color.IndianRed;
                         lblInfinity3.Text = "❌";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                   // pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                 }
             }
@@ -16201,7 +16209,7 @@ namespace SATSuma
                         lblInfinity2.ForeColor = Color.IndianRed;
                         lblInfinity2.Text = "❌";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                  //  pictureBoxLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                 }
             }
@@ -16256,6 +16264,8 @@ namespace SATSuma
                         lblChartsDarkBackground.Text = "✔️";
                     });
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(20, 20, 20);
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                 }
                 else
                 {
@@ -16270,6 +16280,8 @@ namespace SATSuma
                         lblChartsDarkBackground.Text = "❌";
                     });
                     chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
                 }
                 CustomiseCharts(lblHeaderPrice.ForeColor);
             }
@@ -16297,6 +16309,8 @@ namespace SATSuma
                         lblChartsLightBackground.Text = "✔️";
                     });
                     chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
                 }
                 else
                 {
@@ -16311,6 +16325,8 @@ namespace SATSuma
                         lblChartsLightBackground.Text = "❌";
                     });
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(20, 20, 20);
+                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                 }
                 CustomiseCharts(lblHeaderPrice.ForeColor);
             }
@@ -17063,6 +17079,12 @@ namespace SATSuma
                 if (theme.ChartsDark == true)
                 {
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(20, 20, 20);
+                    pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                    });
                     lblChartsLightBackground.Invoke((MethodInvoker)delegate
                     {
                         lblChartsLightBackground.ForeColor = Color.IndianRed;
@@ -17085,6 +17107,11 @@ namespace SATSuma
                 else
                 {
                     chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
+                    pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                    });
                     lblChartsLightBackground.Invoke((MethodInvoker)delegate
                     {
                         lblChartsLightBackground.ForeColor = Color.Green;
@@ -17292,7 +17319,7 @@ namespace SATSuma
                         lblInfinity3.ForeColor = Color.IndianRed;
                         lblInfinity3.Text = "❌";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    //pictureBoxLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                 }
                 if (theme.OrangeInfinity == 2)
@@ -17312,7 +17339,7 @@ namespace SATSuma
                         lblInfinity3.ForeColor = Color.IndianRed;
                         lblInfinity3.Text = "❌";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                    //pictureBoxLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                 }
                 if (theme.OrangeInfinity == 3)
@@ -17332,7 +17359,7 @@ namespace SATSuma
                         lblInfinity3.ForeColor = Color.IndianRed;
                         lblInfinity3.Text = "✔️";
                     });
-                    pictureBoxLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                    //pictureBoxLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                     pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                 }
 
@@ -17360,7 +17387,7 @@ namespace SATSuma
         private void SetButtonAndPanelRadius(int radius)
         {
             // main menu
-            RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks };
+            RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch };
             foreach (RJButton button in mainMenuButtonBordersToColor)
             {
                 button.BorderRadius = radius;
@@ -17480,6 +17507,7 @@ namespace SATSuma
             panel53.Invalidate();
             panel96.Invalidate();
             panel106.Invalidate();
+            panel107.Invalidate();
             panelOwnNodeAddressTXInfo.Invalidate();
             panelOwnNodeBlockTXInfo.Invalidate();
             panelTransactionMiddle.Invalidate();
@@ -17504,6 +17532,7 @@ namespace SATSuma
             panelComboBoxStartupScreenContainer.Invalidate();
             panelCustomizeThemeListContainer.Invalidate();
             panelSelectBlockNumberContainer.Invalidate();
+            panelUniversalSearchContainer.Invalidate();
             panel75.Invalidate();
             panel95.Invalidate();
             panel93.Invalidate();
@@ -17716,7 +17745,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { headerSelectedNodeStatus, label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -17881,12 +17910,13 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 // also use this colour to set the bordercolor of the top row of buttons (menus, exit, etc)
-                RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks };
+                RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks, btnAnimation, btnShowGlobalSearch };
                 foreach (RJButton button in mainMenuButtonBordersToColor)
                 {
                     button.BorderSize = 1;
                     button.BorderColor = thiscolor;
-                }   
+                }
+                
 
             }
             catch (Exception ex)
@@ -17951,7 +17981,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label235, label160, label159, label158, label169, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion };
+                Control[] listOtherTextToColor = { headerSelectedNodeStatus, label235, label160, label159, label158, label169, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -18001,7 +18031,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
+                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = chartsBackgroundColor;
@@ -18014,6 +18044,9 @@ namespace SATSuma
                 comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
                 comboBoxHeaderCustomThemes.ListBackColor = chartsBackgroundColor;
                 btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
+
+                btnUniversalSearch.BackColor = thiscolor;
+
                 //settings & appearance
                 Control[] listSettingsButtonsToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnUpdateAvailable, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
                 foreach (Control control in listSettingsButtonsToColor)
@@ -18081,7 +18114,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemePlanetBTC, btnMenuThemeCitadel, btnMenuThemeWhale, btnUSD, btnEUR, btnGBP, btnXAU };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemePlanetBTC, btnMenuThemeCitadel, btnMenuThemeWhale, btnUSD, btnEUR, btnGBP, btnXAU };
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
                     control.ForeColor = Color.Silver;
@@ -18094,6 +18127,8 @@ namespace SATSuma
                 lblHelpOffline.ForeColor = Color.DimGray;
                 lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
                 lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+
+                btnUniversalSearch.ForeColor = thiscolor;
 
                 //settings & appearance
                 Control[] listSettingsButtonTextToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnUpdateAvailable, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
@@ -18177,7 +18212,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundWhaleSelected, lblBackgroundCitadelSelected, lblBackgroundPlanetBTCSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblThemeDeleted, lblThemeSaved, lblThemeNameInUse };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundWhaleSelected, lblBackgroundCitadelSelected, lblBackgroundPlanetBTCSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblThemeDeleted, lblThemeSaved, lblThemeNameInUse, panelUniversalSearchContainer, textBoxUniversalSearch };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -18522,7 +18557,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panelSettingsSaved, panel106, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21 };
+                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panelSettingsSaved, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -18656,6 +18691,10 @@ namespace SATSuma
             if (sender == btnMinimise)
             {
                 btnMinimise.BackColor = panelMenu.BackColor;
+            }
+            if (sender == btnShowGlobalSearch)
+            {
+                btnShowGlobalSearch.BackColor = panelMenu.BackColor;
             }
             if (sender == btnMoveWindow)
             {
@@ -18801,6 +18840,10 @@ namespace SATSuma
             if (sender == btnMinimise)
             {
                 btnMinimise.BackColor = chartsBackgroundColor;
+            }
+            if (sender == btnShowGlobalSearch)
+            {
+                btnShowGlobalSearch.BackColor = chartsBackgroundColor;
             }
             if (sender == btnMoveWindow)
             {
@@ -19401,6 +19444,10 @@ namespace SATSuma
                     }
                 }
             }
+            if (panel.Name == "panelLoadingAnimationContainer")
+            {
+                cornerRadius = 12;
+            }
             cornerRadius *= 2;
             path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
             path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
@@ -19460,6 +19507,15 @@ namespace SATSuma
                 {
                     //stop the animation
                     pictureBoxLoadingAnimation.Enabled = false;
+                    //reset the image to return to the original frame in the animation
+                    if (btnMenu.BackColor == Color.FromArgb(20,20,20))
+                    {
+                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                    }
+                    else
+                    {
+                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                    }
                 }
             }
             catch (Exception ex)
@@ -19597,6 +19653,12 @@ namespace SATSuma
             {
                 HandleException(ex, "GetBlockTip");
             }
+        }
+        #endregion
+        #region is string numeric
+        static bool IsNumeric(string input)
+        {
+            return int.TryParse(input, out _);
         }
         #endregion
         #region encrypt/decrypt string using SHA-256
@@ -19999,24 +20061,15 @@ namespace SATSuma
                             lblErrorMessage.Text = "CheckNetworkStatus: " + ex.Message;
                         });
                     }
-
-                    headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
-                    {
-                        headerSelectedNodeStatus.Location = new Point(panelFees.Location.X + panelFees.Width - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
-                    });
-                    headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-                    {
-                        headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - headerSelectedNodeStatusLight.Width, headerSelectedNodeStatusLight.Location.Y);
-                    });
                 }
                 #endregion
                 headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
                 {
-                    headerSelectedNodeStatus.Location = new Point(774 - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
+                    headerSelectedNodeStatus.Location = new Point(panelRefreshStatusBar.Location.X + panelRefreshStatusBar.Width - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
                 });
                 headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
-                    headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - 13, headerSelectedNodeStatusLight.Location.Y);
+                    headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - headerSelectedNodeStatusLight.Width, headerSelectedNodeStatusLight.Location.Y);
                 });
             }
             catch (Exception ex)
@@ -21454,6 +21507,220 @@ namespace SATSuma
             CloseMainMenu();
             CloseCurrencyMenu();
             CloseThemeMenu();
+        }
+        #endregion
+        #region global search
+        private void btnShowGlobalSearch_Click(object sender, EventArgs e)
+        {
+            if (panel107.Visible == false)
+            {
+                panel107.Visible = true;
+            }
+            else
+            {
+                panel107.Visible = false;
+            }
+        }
+        private void TextBoxUniversalSearch_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isTextBoxUniversalSearchWatermarkTextDisplayed)
+                {
+                    textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxUniversalSearch.Text = "";
+                            textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
+                        });
+                    });
+                    isTextBoxUniversalSearchWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "textBoxUniversalSearch_Enter");
+            }
+        }
+
+        private void TextBoxUniversalSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (isTextBoxUniversalSearchWatermarkTextDisplayed)
+                {
+                    textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxUniversalSearch.Text = "";
+                            textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
+                        });
+                    });
+                    isTextBoxUniversalSearchWatermarkTextDisplayed = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "textBoxUniversalSearch_KeyPress");
+            }
+        }
+
+        private void TextBoxUniversalSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "textBoxUniversalSearch_KeyUp");
+            }
+        }
+
+        private void TextBoxUniversalSearch_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBoxUniversalSearch.Text))
+                {
+                    textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxUniversalSearch.Text = "block height, address, transaction ID or xpub...";
+                    });
+                    textBoxUniversalSearch.ForeColor = Color.Gray;
+                    isTextBoxUniversalSearchWatermarkTextDisplayed = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "textBoxUniversalSearch_Leave");
+            }
+        }
+
+        private void TextBoxUniversalSearch_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                btnUniversalSearch.Enabled = false;
+                if (isTextBoxUniversalSearchWatermarkTextDisplayed)
+                {
+                    textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
+                    });
+                    isTextBoxUniversalSearchWatermarkTextDisplayed = false;
+                }
+                else
+                {
+                    // check if it's a block number
+                    if (IsNumeric(textBoxUniversalSearch.Text))
+                    {
+                        if (Convert.ToInt32(textBoxUniversalSearch.Text) <= Convert.ToInt32(lblBlockNumber.Text))
+                        {
+                            searchTarget = "block";
+                            btnUniversalSearch.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        //check if its an address
+                        string addressType = DetermineAddressType(textBoxUniversalSearch.Text); // check address is valid and what type of address
+                        if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
+                        {
+                            searchTarget = "address";
+                            btnUniversalSearch.Enabled = true;
+                        }
+                        else
+                        {
+                            //check if its a transaction id
+                            if (ValidateTransactionId(textBoxUniversalSearch.Text)) // check if the entered string is valid
+                            {
+                                searchTarget = "transaction";
+                                btnUniversalSearch.Enabled = true;
+                            }
+                            else
+                            {
+                                //check if its an xpub
+                                try
+                                {
+                                    BitcoinExtPubKey xpub = new BitcoinExtPubKey(textBoxUniversalSearch.Text, Network.Main);
+                                    PubKey OnlyUsedToCheckIfXpubIsValid = xpub.GetPublicKey();
+                                }
+                                catch
+                                {
+                                    return;
+                                }
+                                searchTarget = "xpub";
+                                btnUniversalSearch.Enabled = true;
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "textBoxUniversalSearch_TextChanged");
+            }
+        }
+
+        private void BtnUniversalSearch_Click(object sender, EventArgs e)
+        {
+            // search for block
+            if (searchTarget == "block")
+            {
+                numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    numericUpDownSubmittedBlockNumber.Text = textBoxUniversalSearch.Text; // copy block number to block screen
+                });
+                LookupBlock();
+                //show the block screen
+                BtnMenuBlock_Click(sender, e);
+            }
+
+            //search for address
+            if (searchTarget == "address")
+            {
+                textboxSubmittedAddress.Invoke((MethodInvoker)delegate
+                {
+                    textboxSubmittedAddress.Text = textBoxUniversalSearch.Text; // copy address to address screen
+                });
+                //show the address screen
+                BtnMenuAddress_Click(sender, e);
+            }
+
+            //search for transaction
+            if (searchTarget == "transaction")
+            {
+                // copy transaction ID to transaction screen
+                textBoxTransactionID.Invoke((MethodInvoker)delegate
+                {
+                    textBoxTransactionID.Text = textBoxUniversalSearch.Text;
+                });
+                //show the transaction screen
+                BtnMenuTransaction_Click(sender, e);
+            }
+
+            //search for xpub
+            if (searchTarget == "xpub")
+            {
+                textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
+                {
+                    textBoxSubmittedXpub.Text = textBoxUniversalSearch.Text;
+                });
+                //show the xpub screen
+                BtnMenuXpub_Click(sender, e);
+            }
+
+            //reset the search
+            textBoxUniversalSearch.Invoke((MethodInvoker)delegate
+            {
+                textBoxUniversalSearch.Text = "block height, address, transaction ID or xpub...";
+                textBoxUniversalSearch.ForeColor = Color.Gray;
+            });
+            isTextBoxUniversalSearchWatermarkTextDisplayed = true;
+            btnUniversalSearch.Enabled = false;
         }
         #endregion
         #region chart icons in header area

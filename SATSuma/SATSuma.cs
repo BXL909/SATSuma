@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.01    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.02    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -74,7 +74,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.01";
+        readonly string CurrentVersion = "1.02";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -697,6 +697,37 @@ namespace SATSuma
                     // current block height, size and transaction count
                     try
                     {
+                        #region determine network age
+                        DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
+                        DateTime currentDate = DateTime.Now; // Current date and time
+
+                        TimeSpan elapsedTime = currentDate - startDate;
+
+                        // Calculate years, months, days, hours, minutes, and seconds
+                        int years = currentDate.Year - startDate.Year;
+                        int months = currentDate.Month - startDate.Month;
+                        int days = currentDate.Day - startDate.Day;
+                        int hours = elapsedTime.Hours;
+                        int minutes = elapsedTime.Minutes;
+                        int seconds = elapsedTime.Seconds;
+
+                        // Adjust negative months and days
+                        if (days < 0)
+                        {
+                            months--;
+                            days += DateTime.DaysInMonth(startDate.Year, startDate.Month);
+                        }
+                        if (months < 0)
+                        {
+                            years--;
+                            months += 12;
+                        }
+                        lblNetworkAge.Invoke((MethodInvoker)delegate
+                        {
+                            lblNetworkAge.Text = $"{years} years, {months} months, {days} days"; 
+                        });
+                        #endregion
+
                         var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
@@ -736,6 +767,11 @@ namespace SATSuma
                             {
                                 pictureBoxHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width + 10, pictureBoxHeaderBlockSizeChart.Location.Y);
                             });
+                            // difficulty epoch = block height / 2016 rounded up to an integer
+                            lblDifficultyEpoch.Invoke((MethodInvoker)delegate
+                            {
+                                lblDifficultyEpoch.Text = Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblBlockNumber.Text)/2016));
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -763,6 +799,10 @@ namespace SATSuma
                         lblFeesNoPriority.Invoke((MethodInvoker)delegate
                         {
                             lblFeesNoPriority.Text = economyFee;
+                        });
+                        pictureBoxHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblFeesNoPriority.Location.X + lblFeesNoPriority.Width + 10, pictureBoxHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -1350,7 +1390,7 @@ namespace SATSuma
                             }
                             pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width + 5, pictureBoxBlockFeesChart.Location.Y);
+                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width + 5, pictureBoxBlockFeesChart.Location.Y);
                             });
                             pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate
                             {
@@ -1394,6 +1434,13 @@ namespace SATSuma
                                     {
                                         lblBlockReward.Text = blockReward;
                                     });
+
+                                    int epoch = (int)(Math.Log(Convert.ToDouble(blockReward) / 50) / Math.Log(0.5)) + 1;
+                                    lblSubsidyEpoch.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblSubsidyEpoch.Text = Convert.ToString(epoch);
+                                    });
+
                                     lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2");
@@ -1422,6 +1469,20 @@ namespace SATSuma
                                     lblBTCInCirc.Invoke((MethodInvoker)delegate
                                     {
                                         lblBTCInCirc.Text = btcInCirc + " / 21000000";
+                                    });
+                                    lblBTCToBeIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBTCToBeIssued.Text = Convert.ToString(21000000 - (Convert.ToDecimal(btcInCirc)));
+                                    });
+                                    decimal percentIssued = Math.Round((100m / 21000000) * Convert.ToDecimal(btcInCirc), 2);
+                                    lblPercentIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblPercentIssued.Text = Convert.ToString(percentIssued);
+                                    });
+                                    
+                                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
                                     });
                                     lblHashesToSolve.Invoke((MethodInvoker)delegate
                                     {
@@ -1483,6 +1544,15 @@ namespace SATSuma
                                     {
                                         lbl24HourBTCSent.Text = "disabled";
                                     });
+                                    lblPercentIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblPercentIssued.Text = "disabled";
+                                    });
+
+                                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        progressBarPercentIssued.Value = 0;
+                                    });
                                 }
                             }
                             else
@@ -1522,6 +1592,15 @@ namespace SATSuma
                                 lbl24HourBTCSent.Invoke((MethodInvoker)delegate
                                 {
                                     lbl24HourBTCSent.Text = "unavailable on TestNet";
+                                });
+                                lblPercentIssued.Invoke((MethodInvoker)delegate
+                                {
+                                    lblPercentIssued.Text = "unavailable on TestNet";
+                                });
+
+                                progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                                {
+                                    progressBarPercentIssued.Value = 0;
                                 });
                             }
                             pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
@@ -1642,9 +1721,9 @@ namespace SATSuma
                             if (RunBlockchairComJSONAPI)
                             {
                                 var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
-                                lblHalveningBlock.Invoke((MethodInvoker)delegate
+                                lblProgressToHalving.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHalveningBlock.Text = halveningBlock + " / " + blocksLeft;
+                                    lblProgressToHalving.Text = halveningBlock + " / " + blocksLeft;
                                 });
                                 int progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
                                 progressBarProgressToHalving.Value = progressBarValue;
@@ -1672,9 +1751,9 @@ namespace SATSuma
                             {
                                 progressBarProgressToHalving.Value = 0;
                                 progressBarBlockListHalvingProgress.Value = 0;
-                                lblHalveningBlock.Invoke((MethodInvoker)delegate
+                                lblProgressToHalving.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHalveningBlock.Text = "disabled";
+                                    lblProgressToHalving.Text = "disabled";
                                 });
                                 lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                                 {
@@ -1695,9 +1774,9 @@ namespace SATSuma
                         {
                             progressBarProgressToHalving.Value = 0;
                             progressBarBlockListHalvingProgress.Value = 0;
-                            lblHalveningBlock.Invoke((MethodInvoker)delegate
+                            lblProgressToHalving.Invoke((MethodInvoker)delegate
                             {
-                                lblHalveningBlock.Text = "unavailable";
+                                lblProgressToHalving.Text = "unavailable";
                             });
                             lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
                             {
@@ -13018,6 +13097,16 @@ namespace SATSuma
             // Get the page
             var document = webBrowserDirectory.Document;
 
+            // set font
+            var spanElements2 = document.GetElementsByTagName("div");
+            foreach (HtmlElement spanElement in spanElements2)
+            {
+                if (spanElement.GetAttribute("className") == "site-content")
+                {
+                    spanElement.Style = "font-family: Century Gothic;";
+                }
+            }
+
             // Modify background color
             var backgroundColor = panel88.BackColor;
             var backgroundColorString = ColorTranslator.ToHtml(backgroundColor);
@@ -13045,7 +13134,7 @@ namespace SATSuma
             {
                 if (spanElement.GetAttribute("className") == "linklistcatclass")
                 {
-                    spanElement.Style = $"color: {spanColorString}; font-weight: bold; font-size: 10pt";
+                    spanElement.Style = "color: {spanColorString}; font-weight: bold; font-size: 11pt;";
                 }
             }
 
@@ -13063,10 +13152,9 @@ namespace SATSuma
                     var backgroundColor2 = panel16.BackColor;
                     var lighterBackgroundColor = MakeColorLighter(backgroundColor2, 10);
                     var lighterBackgroundColorString = ColorTranslator.ToHtml(lighterBackgroundColor);
-                    titleDivBGColorElement.Style = $"border: 1px solid {titleDivBGColorString}; background-color: {lighterBackgroundColorString};";
+                    titleDivBGColorElement.Style = $"border: 1px solid {titleDivBGColorString}; background-color: {lighterBackgroundColorString}; font-size: 10pt;";
                 }
             }
-
 
             // Change the color of all other text
             var textColor = label77.ForeColor;
@@ -16087,7 +16175,7 @@ namespace SATSuma
                     if (lblBackgroundGenesisSelected.Visible == true)
                     {
                         lblTime.Font = new Font(lblTime.Font.FontFamily, 14, lblTime.Font.Style);
-                        lblTime.Location = new Point(697, 91);
+                      //  lblTime.Location = new Point(697, 91);
                         lblTime.Visible = true;
                         lblTime.BringToFront();
                     }
@@ -17172,7 +17260,7 @@ namespace SATSuma
                     if (theme.BackgroundGenesis == true)
                     {
                         lblTime.Font = new Font(lblTime.Font.FontFamily, 14, lblTime.Font.Style);
-                        lblTime.Location = new Point(697, 91);
+                       // lblTime.Location = new Point(697, 91);
                         lblTime.Visible = true;
                         lblTime.BringToFront();
                     }
@@ -17662,7 +17750,7 @@ namespace SATSuma
                     control.ForeColor = thisColor;
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblHalveningBlock, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblSubsidyEpoch };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -17757,7 +17845,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardLabelsToColor = { lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85 };
+                Control[] listBitcoinDashboardLabelsToColor = { label296, label297, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85 };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -18233,6 +18321,7 @@ namespace SATSuma
                 //bitcoindashboard
                 progressBarNextDiffAdj.BarColor = thiscolor;
                 progressBarProgressToHalving.BarColor = thiscolor;
+                progressBarPercentIssued.BarColor = thiscolor;
                 //blocklist
                 progressBarBlockListNextDiffAdj.BarColor = thiscolor;
                 progressBarBlockListHalvingProgress.BarColor = thiscolor;
@@ -21510,7 +21599,7 @@ namespace SATSuma
         }
         #endregion
         #region global search
-        private void btnShowGlobalSearch_Click(object sender, EventArgs e)
+        private void BtnShowGlobalSearch_Click(object sender, EventArgs e)
         {
             if (panel107.Visible == false)
             {

@@ -17225,6 +17225,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.btnCurrency);
+            this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.btnShowGlobalSearch);
@@ -17249,8 +17251,6 @@
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelSettingsSaved);
-            this.Controls.Add(this.btnCurrency);
-            this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblCurrentVersion);
             this.Controls.Add(this.panelHeaderBlockHeight);

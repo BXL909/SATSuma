@@ -17225,6 +17225,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.btnCurrency);
             this.Controls.Add(this.panelCurrency);
             this.Controls.Add(this.panelFees);
@@ -17233,7 +17234,6 @@
             this.Controls.Add(this.panel107);
             this.Controls.Add(this.panelLoadingAnimationContainer);
             this.Controls.Add(this.btnAnimation);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddress);

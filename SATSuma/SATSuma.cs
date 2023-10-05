@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.04    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.05    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -67,7 +67,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.04";
+        readonly string CurrentVersion = "1.05";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -20964,7 +20964,7 @@ namespace SATSuma
                 #region 'Now Viewing' title text and set state of 'add bookmark' button
                 if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
                 {
-                    if (panelAddress.Visible && lblAddressType.Text != "Invalid address format")
+                    if (panelAddress.Visible && lblAddressType.Text != "Invalid address format" && lblAddressType.Text != "no data")
                     {
                         btnAddToBookmarks.Enabled = true;
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -20972,7 +20972,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Address";
                         });
                     }
-                    if (panelAddress.Visible && lblAddressType.Text == "Invalid address format")
+                    if (panelAddress.Visible && (lblAddressType.Text == "Invalid address format" || lblAddressType.Text == "no data"))
                     {
                         btnAddToBookmarks.Enabled = false;
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -20996,7 +20996,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Block";
                         });
                     }
-                    if (panelTransaction.Visible && !lblInvalidTransaction.Visible)
+                    if (panelTransaction.Visible && lblInvalidTransaction.Text == "✔️ valid transaction ID")
                     {
                         btnAddToBookmarks.Enabled = true;
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -21004,7 +21004,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Transaction";
                         });
                     }
-                    if (panelTransaction.Visible && lblInvalidTransaction.Visible)
+                    if (panelTransaction.Visible && lblInvalidTransaction.Text != "✔️ valid transaction ID")
                     {
                         btnAddToBookmarks.Enabled = false;
                         lblNowViewing.Invoke((MethodInvoker)delegate

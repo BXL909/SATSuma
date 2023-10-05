@@ -17225,6 +17225,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(800, 781);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.btnCurrency);
             this.Controls.Add(this.panelCurrency);
@@ -17236,7 +17238,6 @@
             this.Controls.Add(this.btnAnimation);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.lblOfflineModeActive);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.btnMenu);
@@ -17244,7 +17245,6 @@
             this.Controls.Add(this.btnThemeMenu);
             this.Controls.Add(this.panelThemeMenu);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.btnMoveWindow);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelLightningDashboard);

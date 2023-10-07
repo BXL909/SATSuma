@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.05    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.06    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -67,7 +67,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.05";
+        readonly string CurrentVersion = "1.06";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -292,6 +292,17 @@ namespace SATSuma
         bool ignoreMouseMoveOnChart = false; // ignore mouse move event while chart is still drawing
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
         string chartType = ""; // keeps track of what type of chart is being displayed
+        #endregion
+        #region expanding panels
+        private int currentHeightExpandingPanel = 0;
+        private int currentWidthExpandingPanel = 0;
+        private int currentWidthShrinkingPanel = 0;
+        private int panelMaxHeight = 0;
+        private int panelMaxWidth = 0;
+        private int panelMinWidth = 0;
+        private Panel panelToExpandVert = new Panel(); // panel animation vertical
+        private Panel panelToExpand = new Panel(); // panel animation horizontal
+        private Panel panelToShrink = new Panel(); // panel animation horizontal
         #endregion
         #region misc
         decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
@@ -16671,14 +16682,13 @@ namespace SATSuma
                 btnThemeMenu.BringToFront();
                 if (panelThemeMenu.Height == 0)
                 {
-                    panelThemeMenu.Invoke((MethodInvoker)delegate
-                    {
-                        panelThemeMenu.Height = 280;
-                    });
                     btnThemeMenu.Invoke((MethodInvoker)delegate
                     {
                         btnThemeMenu.BackColor = panelMenu.BackColor;
                     });
+                    //expand the panel
+                    currentHeightExpandingPanel = panelThemeMenu.Height;
+                    StartExpandingPanelVert(panelThemeMenu);
                 }
                 else
                 {
@@ -20654,6 +20664,153 @@ namespace SATSuma
         #endregion
 
         #region ⚡COMMON CODE⚡
+
+        #region expanding panels (vert)
+
+        private void StartExpandingPanelVert(Panel panel)
+        {
+            panelToExpandVert = panel;
+            ExpandPanelTimerVert.Start();
+        }
+
+        private void ExpandPanelTimerVert_Tick(object sender, EventArgs e)
+        {
+            currentHeightExpandingPanel += 8;
+            if (panelToExpandVert == panelMenu)
+            {
+                if (btnUpdateAvailable.Visible == false)
+                {
+
+                    panelMaxHeight = 328;
+                }
+                else
+                {
+                    panelMaxHeight = 352;
+                }
+            }
+            if (panelToExpandVert == panelCurrency)
+            {
+                panelMaxHeight = 112;
+            }
+            if (panelToExpandVert == panelThemeMenu)
+            {
+                panelMaxHeight = 280;
+            }
+            if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
+            {
+                panelToExpandVert.Invoke((MethodInvoker)delegate
+                {
+                    panelToExpandVert.Height = panelMaxHeight;
+                });
+                ExpandPanelTimerVert.Stop();
+            }
+            else // expand further
+            {
+                panelToExpandVert.Invoke((MethodInvoker)delegate
+                {
+                    panelToExpandVert.Height = currentHeightExpandingPanel;
+                    panelToExpandVert.Invalidate();
+                });
+            }
+        }
+        #endregion
+        #region expanding panels (horiz)
+
+        private void StartExpandingPanelHoriz(Panel panel)
+        {
+            panelToExpand = panel;
+            ExpandPanelTimerHoriz.Start();
+        }
+
+        private void StartShrinkingPanel(Panel panel)
+        {
+            panelToShrink = panel;
+            ShrinkPanelTimerHoriz.Start();
+        }
+
+        private void ShrinkPanelTimerHoriz_Tick(object sender, EventArgs e)
+        {
+            currentWidthShrinkingPanel -= 6;
+            if (panelToShrink == panel107)
+            {
+                panelMinWidth = 0;
+            }
+
+            if (currentWidthShrinkingPanel <= panelMinWidth) // shrinking is complete
+            {
+                panelToShrink.Invoke((MethodInvoker)delegate
+                {
+                    panelToShrink.Width = panelMinWidth;
+                });
+                if (panelToShrink == panel107)
+                {
+                    panel107.Invoke((MethodInvoker)delegate
+                    {
+                        panel107.Location = new Point(762, panel107.Location.Y);
+                    });
+                }
+                panelToShrink.Invalidate();
+
+                ShrinkPanelTimerHoriz.Stop();
+            }
+            else // shrink further
+            {
+                panelToShrink.Invoke((MethodInvoker)delegate
+                {
+                    panelToShrink.Width = currentWidthShrinkingPanel;
+                });
+                if (panelToExpand == panel107)
+                {
+                    panel107.Invoke((MethodInvoker)delegate
+                    {
+                        panel107.Location = new Point(panel107.Location.X + 6, panel107.Location.Y);
+                    });
+                }
+                panelToShrink.Invalidate();
+            }
+        }
+
+        private void ExpandPanelTimerHoriz_Tick(object sender, EventArgs e)
+        {
+            currentWidthExpandingPanel += 6;
+            if (panelToExpand == panel107)
+            {
+                panelMaxWidth = 394;
+            }
+
+            if (currentWidthExpandingPanel >= panelMaxWidth) // expanding is complete
+            {
+                ExpandPanelTimerHoriz.Stop();
+                panelToExpand.Invoke((MethodInvoker)delegate
+                {
+                    panelToExpand.Width = panelMaxWidth;
+                });
+                if (panelToExpand == panel107)
+                {
+                    panel107.Invoke((MethodInvoker)delegate
+                    {
+                        panel107.Location = new Point(366, panel107.Location.Y);
+                    });
+                }
+            }
+            else // expand further
+            {
+                panelToExpand.Invoke((MethodInvoker)delegate
+                {
+                    panelToExpand.Width = currentWidthExpandingPanel;
+                });
+                if (panelToExpand == panel107)
+                {
+                    panel107.Invoke((MethodInvoker)delegate
+                    {
+                        panel107.Location = new Point(panel107.Location.X - 6, panel107.Location.Y);
+                    });
+                }
+                panelToExpand.Invalidate();
+            }
+        }
+
+        #endregion
         #region hide/show all fiat conversion fields
         private void HideAllFiatConversionFields()
         {
@@ -21923,6 +22080,7 @@ namespace SATSuma
 
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
         #region main menu
+
         private void BtnMenu_Click(object sender, EventArgs e)
         {
             try
@@ -21931,26 +22089,15 @@ namespace SATSuma
                 btnMenu.BringToFront();
                 if (panelMenu.Height == 0)
                 {
-                    if (btnUpdateAvailable.Visible == false)
-                    {
-                        panelMenu.Invoke((MethodInvoker)delegate
-                        {
-                            panelMenu.Height = 328;
-                        });
-                    }
-                    else
-                    {
-                        panelMenu.Invoke((MethodInvoker)delegate
-                        {
-                            panelMenu.Height = 352;
-                        });
-                    }
                     btnMenu.Invoke((MethodInvoker)delegate
                     {
                         btnMenu.BackColor = panelMenu.BackColor;
                     });
                     CloseCurrencyMenu();
                     CloseThemeMenu();
+                    //expand the panel
+                    currentHeightExpandingPanel = panelMenu.Height;
+                    StartExpandingPanelVert(panelMenu);
                 }
                 else
                 {
@@ -22720,14 +22867,13 @@ namespace SATSuma
                 //panelCurrency.BringToFront();
                 if (panelCurrency.Height == 0)
                 {
-                    panelCurrency.Invoke((MethodInvoker)delegate
-                    {
-                        panelCurrency.Height = 112;
-                    });
                     btnCurrency.Invoke((MethodInvoker)delegate
                     {
                         btnCurrency.BackColor = panelMenu.BackColor;
                     });
+                    //expand the panel
+                    currentHeightExpandingPanel = panelCurrency.Height;
+                    StartExpandingPanelVert(panelCurrency);
                 }
                 else
                 {
@@ -23325,18 +23471,22 @@ namespace SATSuma
         }
         #endregion
         #region global search
+
         private void BtnShowGlobalSearch_Click(object sender, EventArgs e)
         {
             try
             {
-                if (panel107.Visible == false)
+                if (panel107.Width == 0)
                 {
-                    panel107.Visible = true;
+                    StartExpandingPanelHoriz(panel107);
+                    currentWidthExpandingPanel = panel107.Width;
                 }
                 else
                 {
-                    panel107.Visible = false;
+                    StartShrinkingPanel(panel107);
+                    currentWidthShrinkingPanel = panel107.Width;
                 }
+
             }
             catch (WebException ex)
             {

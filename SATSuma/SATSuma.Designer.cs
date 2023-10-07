@@ -1119,6 +1119,9 @@
             this.btnAnimation = new CustomControls.RJControls.RJButton();
             this.btnShowGlobalSearch = new CustomControls.RJControls.RJButton();
             this.panel107 = new System.Windows.Forms.Panel();
+            this.ExpandPanelTimerVert = new System.Windows.Forms.Timer(this.components);
+            this.ExpandPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
+            this.ShrinkPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -17210,11 +17213,25 @@
             // 
             this.panel107.Controls.Add(this.panelUniversalSearchContainer);
             this.panel107.Controls.Add(this.btnUniversalSearch);
-            this.panel107.Location = new System.Drawing.Point(366, 162);
+            this.panel107.Location = new System.Drawing.Point(762, 162);
             this.panel107.Name = "panel107";
-            this.panel107.Size = new System.Drawing.Size(394, 24);
+            this.panel107.Size = new System.Drawing.Size(0, 24);
             this.panel107.TabIndex = 261;
-            this.panel107.Visible = false;
+            // 
+            // ExpandPanelTimerVert
+            // 
+            this.ExpandPanelTimerVert.Interval = 1;
+            this.ExpandPanelTimerVert.Tick += new System.EventHandler(this.ExpandPanelTimerVert_Tick);
+            // 
+            // ExpandPanelTimerHoriz
+            // 
+            this.ExpandPanelTimerHoriz.Interval = 1;
+            this.ExpandPanelTimerHoriz.Tick += new System.EventHandler(this.ExpandPanelTimerHoriz_Tick);
+            // 
+            // ShrinkPanelTimerHoriz
+            // 
+            this.ShrinkPanelTimerHoriz.Interval = 1;
+            this.ShrinkPanelTimerHoriz.Tick += new System.EventHandler(this.ShrinkPanelTimerHoriz_Tick);
             // 
             // SATSuma
             // 
@@ -18655,6 +18672,9 @@
         private System.Windows.Forms.Label label299;
         private System.Windows.Forms.Label lblNetworkAge;
         private System.Windows.Forms.Label label301;
+        private System.Windows.Forms.Timer ExpandPanelTimerVert;
+        private System.Windows.Forms.Timer ExpandPanelTimerHoriz;
+        private System.Windows.Forms.Timer ShrinkPanelTimerHoriz;
     }
 }
 

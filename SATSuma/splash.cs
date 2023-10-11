@@ -135,11 +135,20 @@ namespace SATSuma
                 
         private void Splash_Paint(object sender, PaintEventArgs e)
         {
-            // Paint the border with a 1-pixel width
-            using var pen = new Pen(BackColor, 3);
-            var rect = ClientRectangle;
-            rect.Inflate(-1, -1);
-            e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            if (this.BackColor == Color.FromArgb(40, 40, 40) || this.BackColor == Color.FromArgb(51, 47, 45))
+            {
+                using var pen = new Pen(Color.DimGray, 1);
+                var rect = ClientRectangle;
+                rect.Inflate(-1, -1);
+                e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            }
+            else
+            {
+                using var pen = new Pen(WindowBackgroundColor, 3);
+                var rect = ClientRectangle;
+                rect.Inflate(-1, -1);
+                e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            }
         }
         #endregion
         #region handle links

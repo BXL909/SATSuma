@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.06    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.07    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -67,7 +67,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.06";
+        readonly string CurrentVersion = "1.07";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -92,7 +92,9 @@ namespace SATSuma
         #endregion
         #region header variables
         bool isTextBoxUniversalSearchWatermarkTextDisplayed = true; // header for watermarked universal search
+        bool firstTimeGettingBlockTip = true;
         string searchTarget = ""; // used to determine what the search button will search for
+        int totalSecondsSinceLastBlock = 0;
         #endregion
         #region address screen variables
         private int TotalAddressTransactionRowsAdded = 0; // keeps track of how many rows of Address transactions have been added to the listview
@@ -568,6 +570,14 @@ namespace SATSuma
                 {
                     ClearAlertAndErrorMessage();
                 }
+                totalSecondsSinceLastBlock++;
+                int minutesSinceLastBlock = totalSecondsSinceLastBlock / 60;
+                int secondsSinceLastBlock = totalSecondsSinceLastBlock % 60;
+                string formattedTime = $"{minutesSinceLastBlock}m {secondsSinceLastBlock}s ago";
+                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderBlockAge.Text = formattedTime;
+                });
             }
             catch (Exception ex)
             {
@@ -589,10 +599,10 @@ namespace SATSuma
                         string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         if (decimal.TryParse(BlockTip, out decimal blockTipValue))
                         {
-                            lblBlockNumber.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockNumber.Text = BlockTip;
-                            });
+                           // lblBlockNumber.Invoke((MethodInvoker)delegate
+                           // {
+                           //     lblBlockNumber.Text = BlockTip;
+                           // });
                             numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
                             numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
                         }
@@ -665,15 +675,37 @@ namespace SATSuma
                         {
                             if (blocks.Count > 0)
                             {
-                                lblTransactions.Invoke((MethodInvoker)delegate
+                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
                                 {
-                                    lblTransactions.Text = Convert.ToString(blocks[0].Tx_count);
+                                    lblHeaderTransactions.Text = Convert.ToString(blocks[0].Tx_count);
                                 });
 
-                                lblBlockNumber.Invoke((MethodInvoker)delegate
+
+                                string newBlockHeight = blocks[0].Height;
+                                string oldBlockHeight = lblBlockNumber.Text;
+                                if ((newBlockHeight != oldBlockHeight) || (firstTimeGettingBlockTip == true))
                                 {
-                                    lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
-                                });
+                                    long timestamp = long.Parse(blocks[0].Timestamp);
+                                    DateTimeOffset blockTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+                                    TimeSpan timeDifference = DateTimeOffset.Now - blockTime;
+                                    totalSecondsSinceLastBlock = (int)timeDifference.TotalSeconds;
+                                    int minutesSinceLastBlock = totalSecondsSinceLastBlock / 60;
+                                    int secondsSinceLastBlock = totalSecondsSinceLastBlock % 60;
+                                    string formattedTime = $"{minutesSinceLastBlock}m {secondsSinceLastBlock}s ago";
+                                    lblHeaderBlockAge.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderBlockAge.Text = formattedTime;
+                                    });
+                                    lblBlockNumber.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
+                                    });
+                                    firstTimeGettingBlockTip = false;
+                                }
+                                
+
+
+
 
                                 long sizeInBytes = blocks[0].Size;
                                 string sizeString; // convert display to bytes/kb/mb accordingly
@@ -717,25 +749,25 @@ namespace SATSuma
                     try
                     {
                         var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
-                        lblfeesHighPriority.Invoke((MethodInvoker)delegate
+                        lblHeaderfeesHighPriority.Invoke((MethodInvoker)delegate
                         {
-                            lblfeesHighPriority.Text = fastestFee;
+                            lblHeaderfeesHighPriority.Text = fastestFee;
                         });
-                        lblFeesMediumPriority.Invoke((MethodInvoker)delegate
+                        lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
                         {
-                            lblFeesMediumPriority.Text = halfHourFee;
+                            lblHeaderFeesMediumPriority.Text = halfHourFee;
                         });
-                        lblFeesLowPriority.Invoke((MethodInvoker)delegate
+                        lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
                         {
-                            lblFeesLowPriority.Text = hourFee;
+                            lblHeaderFeesLowPriority.Text = hourFee;
                         });
-                        lblFeesNoPriority.Invoke((MethodInvoker)delegate
+                        lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
                         {
-                            lblFeesNoPriority.Text = economyFee;
+                            lblHeaderFeesNoPriority.Text = economyFee;
                         });
                         pictureBoxHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblFeesNoPriority.Location.X + lblFeesNoPriority.Width + 10, pictureBoxHeaderFeeRatesChart.Location.Y);
+                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width + 10, pictureBoxHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -7508,7 +7540,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        // API is not online
+                        // not online
                         lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
                             lblXpubScreenOwnNodeStatusLight.ForeColor = Color.IndianRed;
@@ -7538,7 +7570,6 @@ namespace SATSuma
             }
             catch (HttpRequestException)
             {
-                // API is not online
                 lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
                     lblXpubScreenOwnNodeStatusLight.ForeColor = Color.IndianRed;
@@ -19299,7 +19330,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblTransactions, lblHeaderBlockSize, lblfeesHighPriority, lblFeesMediumPriority, lblFeesLowPriority, lblFeesNoPriority, lblHeaderHashrate, lblBlockBlockHeight };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -19323,7 +19354,7 @@ namespace SATSuma
                     control.ForeColor = thisColor;
                 }
                 //block
-                Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner };
+                Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner, lblBlockBlockHeight };
                 foreach (Control control in listBlockDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -19388,7 +19419,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing, lblHeaderBlockAge };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20234,6 +20265,14 @@ namespace SATSuma
                 {
                     btnMenu.BackColor = panelMenu.BackColor;
                 }
+                if (sender == btnThemeMenu)
+                {
+                    btnThemeMenu.BackColor = panelMenu.BackColor;
+                }
+                if (sender == btnShowGlobalSearch)
+                {
+                    btnShowGlobalSearch.BackColor = panelMenu.BackColor;
+                }
                 if (sender == btnMenuAddress)
                 {
                     btnMenuAddress.BackColor = panelMenu.BackColor;
@@ -20462,6 +20501,10 @@ namespace SATSuma
                     {
                         btnThemeMenu.BackColor = chartsBackgroundColor;
                     }
+                }
+                if (sender == btnShowGlobalSearch)
+                {
+                    btnShowGlobalSearch.BackColor = chartsBackgroundColor;
                 }
                 if (sender == btnUSD)
                 {
@@ -21529,6 +21572,7 @@ namespace SATSuma
                 HandleException(ex, "GetBlockTip");
             }
         }
+
         #endregion
         #region is string numeric
         static bool IsNumeric(string input)

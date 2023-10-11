@@ -42,6 +42,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.externalLinksTimer = new System.Windows.Forms.Timer(this.components);
+            this.panel5 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).BeginInit();
             this.panelComboBoxDocumentationContainer.SuspendLayout();
@@ -71,7 +72,7 @@
             this.panel2.Location = new System.Drawing.Point(428, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(34, 525);
+            this.panel2.Size = new System.Drawing.Size(33, 525);
             this.panel2.TabIndex = 208;
             // 
             // btnHelpTextUp
@@ -85,7 +86,7 @@
             this.btnHelpTextUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextUp.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextUp.Location = new System.Drawing.Point(2, 6);
+            this.btnHelpTextUp.Location = new System.Drawing.Point(4, 0);
             this.btnHelpTextUp.Margin = new System.Windows.Forms.Padding(2);
             this.btnHelpTextUp.Name = "btnHelpTextUp";
             this.btnHelpTextUp.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -111,7 +112,7 @@
             this.btnHelpTextDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHelpTextDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelpTextDown.ForeColor = System.Drawing.Color.White;
-            this.btnHelpTextDown.Location = new System.Drawing.Point(2, 500);
+            this.btnHelpTextDown.Location = new System.Drawing.Point(4, 500);
             this.btnHelpTextDown.Margin = new System.Windows.Forms.Padding(2);
             this.btnHelpTextDown.Name = "btnHelpTextDown";
             this.btnHelpTextDown.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -152,7 +153,7 @@
             // webBrowserDocumentation
             // 
             this.webBrowserDocumentation.IsWebBrowserContextMenuEnabled = false;
-            this.webBrowserDocumentation.Location = new System.Drawing.Point(6, -30);
+            this.webBrowserDocumentation.Location = new System.Drawing.Point(-2, -30);
             this.webBrowserDocumentation.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserDocumentation.Name = "webBrowserDocumentation";
             this.webBrowserDocumentation.ScriptErrorsSuppressed = true;
@@ -176,7 +177,7 @@
             // 
             this.panelComboBoxDocumentationContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelComboBoxDocumentationContainer.Controls.Add(this.comboBoxDocumentation);
-            this.panelComboBoxDocumentationContainer.Location = new System.Drawing.Point(32, 0);
+            this.panelComboBoxDocumentationContainer.Location = new System.Drawing.Point(39, 0);
             this.panelComboBoxDocumentationContainer.Name = "panelComboBoxDocumentationContainer";
             this.panelComboBoxDocumentationContainer.Size = new System.Drawing.Size(152, 24);
             this.panelComboBoxDocumentationContainer.TabIndex = 256;
@@ -228,7 +229,7 @@
             this.panel1.Controls.Add(this.webBrowserDocumentation);
             this.panel1.Location = new System.Drawing.Point(0, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(465, 541);
+            this.panel1.Size = new System.Drawing.Size(461, 526);
             this.panel1.TabIndex = 257;
             // 
             // panel3
@@ -255,6 +256,14 @@
             this.externalLinksTimer.Interval = 1000;
             this.externalLinksTimer.Tick += new System.EventHandler(this.ExternalLinksTimer_Tick);
             // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.panel5.Location = new System.Drawing.Point(10, 555);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(428, 20);
+            this.panel5.TabIndex = 258;
+            // 
             // HelpScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,7 +271,8 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(492, 609);
+            this.ClientSize = new System.Drawing.Size(474, 588);
+            this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.pictureBoxSatsumaLogo);
@@ -301,5 +311,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Timer externalLinksTimer;
+        private System.Windows.Forms.Panel panel5;
     }
 }

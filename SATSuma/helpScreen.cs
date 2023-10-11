@@ -47,10 +47,11 @@ namespace SATSuma
         {
             InitializeComponent();
             panelComboBoxDocumentationContainer.Paint += Panel_Paint;
-            panel1.Paint += Panel_Paint;
+            //panel1.Paint += Panel_Paint;
             #region rounded form
             this.FormBorderStyle = FormBorderStyle.None;
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 30, 30));
+            Padding = new Padding(1);
             #endregion
         }
         #region assign colours and determine which text to show
@@ -86,7 +87,8 @@ namespace SATSuma
             comboBoxDocumentation.ForeColor = TextBoxForeColor;
             comboBoxDocumentation.ListBackColor = TextBoxBackColor;
             comboBoxDocumentation.ListTextColor = TextBoxForeColor;
-            panel1.BackColor = MakeColorLighter(WindowBackgroundColor, 5);
+            //panel1.BackColor = MakeColorLighter(WindowBackgroundColor, 5);
+            panel1.BackColor = WindowBackgroundColor;
             this.BackColor = WindowBackgroundColor;
 
             panel1.VerticalScroll.Visible = false;
@@ -184,10 +186,20 @@ namespace SATSuma
 
         private void HelpScreen_Paint(object sender, PaintEventArgs e)
         {
-            using var pen = new Pen(BackColor, 3);
-            var rect = ClientRectangle;
-            rect.Inflate(-1, -1);
-            e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            if (this.BackColor == Color.FromArgb(40, 40, 40) || this.BackColor == Color.FromArgb(51,47,45))
+            {
+                using var pen = new Pen(Color.DimGray, 1);
+                var rect = ClientRectangle;
+                rect.Inflate(-1, -1);
+                e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            }
+            else
+            {
+                using var pen = new Pen(WindowBackgroundColor, 3);
+                var rect = ClientRectangle;
+                rect.Inflate(-1, -1);
+                e.Graphics.DrawPath(pen, GetRoundedRect(rect, 30));
+            }
         }
         #endregion
         #region scroll help text

@@ -116,6 +116,7 @@
             this.lblBlockRewardAfterHalvingFiat = new System.Windows.Forms.Label();
             this.lbl24HourBTCSentFiat = new System.Windows.Forms.Label();
             this.btnPreviewAnimations = new CustomControls.RJControls.RJButton();
+            this.btnShowGlobalSearch = new CustomControls.RJControls.RJButton();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -1118,7 +1119,6 @@
             this.btnUniversalSearch = new CustomControls.RJControls.RJButton();
             this.panelLoadingAnimationContainer = new System.Windows.Forms.Panel();
             this.btnAnimation = new CustomControls.RJControls.RJButton();
-            this.btnShowGlobalSearch = new CustomControls.RJControls.RJButton();
             this.panel107 = new System.Windows.Forms.Panel();
             this.ExpandPanelTimerVert = new System.Windows.Forms.Timer(this.components);
             this.ExpandPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
@@ -1357,7 +1357,7 @@
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblTime.Size = new System.Drawing.Size(90, 22);
+            this.lblTime.Size = new System.Drawing.Size(116, 27);
             this.lblTime.TabIndex = 1;
             this.lblTime.Text = "88:88:88";
             this.lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1376,7 +1376,7 @@
             this.lblBlockNumber.Location = new System.Drawing.Point(0, 20);
             this.lblBlockNumber.Margin = new System.Windows.Forms.Padding(0);
             this.lblBlockNumber.Name = "lblBlockNumber";
-            this.lblBlockNumber.Size = new System.Drawing.Size(122, 47);
+            this.lblBlockNumber.Size = new System.Drawing.Size(145, 58);
             this.lblBlockNumber.TabIndex = 5;
             this.lblBlockNumber.Text = "000000";
             // 
@@ -1420,7 +1420,7 @@
             this.lblRefreshSuccessOrFailMessage.ForeColor = System.Drawing.Color.Gray;
             this.lblRefreshSuccessOrFailMessage.Location = new System.Drawing.Point(24, 2);
             this.lblRefreshSuccessOrFailMessage.Name = "lblRefreshSuccessOrFailMessage";
-            this.lblRefreshSuccessOrFailMessage.Size = new System.Drawing.Size(129, 13);
+            this.lblRefreshSuccessOrFailMessage.Size = new System.Drawing.Size(168, 17);
             this.lblRefreshSuccessOrFailMessage.TabIndex = 36;
             this.lblRefreshSuccessOrFailMessage.Text = "Data updated successfully.";
             // 
@@ -1432,7 +1432,7 @@
             this.lblStatusLight.ForeColor = System.Drawing.Color.Silver;
             this.lblStatusLight.Location = new System.Drawing.Point(10, 4);
             this.lblStatusLight.Name = "lblStatusLight";
-            this.lblStatusLight.Size = new System.Drawing.Size(15, 12);
+            this.lblStatusLight.Size = new System.Drawing.Size(19, 14);
             this.lblStatusLight.TabIndex = 37;
             this.lblStatusLight.Text = "🟢";
             // 
@@ -1445,7 +1445,7 @@
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Gray;
             this.lblErrorMessage.Location = new System.Drawing.Point(26, 746);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(0, 12);
+            this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
             this.lblErrorMessage.TabIndex = 40;
             // 
             // lblAlert
@@ -1456,7 +1456,7 @@
             this.lblAlert.ForeColor = System.Drawing.Color.IndianRed;
             this.lblAlert.Location = new System.Drawing.Point(10, 746);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(0, 12);
+            this.lblAlert.Size = new System.Drawing.Size(0, 14);
             this.lblAlert.TabIndex = 41;
             // 
             // toolTip1
@@ -1496,7 +1496,7 @@
             this.lblNodes.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNodes.Location = new System.Drawing.Point(264, 458);
             this.lblNodes.Name = "lblNodes";
-            this.lblNodes.Size = new System.Drawing.Size(64, 18);
+            this.lblNodes.Size = new System.Drawing.Size(80, 22);
             this.lblNodes.TabIndex = 132;
             this.lblNodes.Text = "no data";
             this.toolTip1.SetToolTip(this.lblNodes, "(estimated)");
@@ -1508,7 +1508,7 @@
             this.lblNextBlockTotalFees.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNextBlockTotalFees.Location = new System.Drawing.Point(264, 116);
             this.lblNextBlockTotalFees.Name = "lblNextBlockTotalFees";
-            this.lblNextBlockTotalFees.Size = new System.Drawing.Size(16, 18);
+            this.lblNextBlockTotalFees.Size = new System.Drawing.Size(20, 22);
             this.lblNextBlockTotalFees.TabIndex = 116;
             this.lblNextBlockTotalFees.Text = "0";
             this.toolTip1.SetToolTip(this.lblNextBlockTotalFees, "(estimated)");
@@ -1533,7 +1533,7 @@
             this.lblNextBlockMinMaxFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNextBlockMinMaxFee.Location = new System.Drawing.Point(264, 154);
             this.lblNextBlockMinMaxFee.Name = "lblNextBlockMinMaxFee";
-            this.lblNextBlockMinMaxFee.Size = new System.Drawing.Size(64, 18);
+            this.lblNextBlockMinMaxFee.Size = new System.Drawing.Size(80, 22);
             this.lblNextBlockMinMaxFee.TabIndex = 114;
             this.lblNextBlockMinMaxFee.Text = "no data";
             this.toolTip1.SetToolTip(this.lblNextBlockMinMaxFee, "(estimated)");
@@ -1558,7 +1558,7 @@
             this.lblTransInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransInNextBlock.Location = new System.Drawing.Point(264, 78);
             this.lblTransInNextBlock.Name = "lblTransInNextBlock";
-            this.lblTransInNextBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblTransInNextBlock.Size = new System.Drawing.Size(80, 22);
             this.lblTransInNextBlock.TabIndex = 110;
             this.lblTransInNextBlock.Text = "no data";
             this.toolTip1.SetToolTip(this.lblTransInNextBlock, "(estimated)");
@@ -1583,7 +1583,7 @@
             this.lblEstimatedHalvingDate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEstimatedHalvingDate.Location = new System.Drawing.Point(264, 344);
             this.lblEstimatedHalvingDate.Name = "lblEstimatedHalvingDate";
-            this.lblEstimatedHalvingDate.Size = new System.Drawing.Size(64, 18);
+            this.lblEstimatedHalvingDate.Size = new System.Drawing.Size(80, 22);
             this.lblEstimatedHalvingDate.TabIndex = 139;
             this.lblEstimatedHalvingDate.Text = "no data";
             this.toolTip1.SetToolTip(this.lblEstimatedHalvingDate, "(estimated)");
@@ -1595,7 +1595,7 @@
             this.lblHalvingSecondsRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHalvingSecondsRemaining.Location = new System.Drawing.Point(363, 344);
             this.lblHalvingSecondsRemaining.Name = "lblHalvingSecondsRemaining";
-            this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(64, 18);
+            this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(80, 22);
             this.lblHalvingSecondsRemaining.TabIndex = 140;
             this.lblHalvingSecondsRemaining.Text = "no data";
             this.toolTip1.SetToolTip(this.lblHalvingSecondsRemaining, "(estimated)");
@@ -1646,7 +1646,7 @@
             this.lblAvgNoTransactions.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgNoTransactions.Location = new System.Drawing.Point(3, 342);
             this.lblAvgNoTransactions.Name = "lblAvgNoTransactions";
-            this.lblAvgNoTransactions.Size = new System.Drawing.Size(64, 18);
+            this.lblAvgNoTransactions.Size = new System.Drawing.Size(80, 22);
             this.lblAvgNoTransactions.TabIndex = 214;
             this.lblAvgNoTransactions.Text = "no data";
             this.toolTip1.SetToolTip(this.lblAvgNoTransactions, "calculated over the\r\nlast 100 blocks");
@@ -1671,7 +1671,7 @@
             this.lblDifficultyAdjEst.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDifficultyAdjEst.Location = new System.Drawing.Point(525, 192);
             this.lblDifficultyAdjEst.Name = "lblDifficultyAdjEst";
-            this.lblDifficultyAdjEst.Size = new System.Drawing.Size(64, 18);
+            this.lblDifficultyAdjEst.Size = new System.Drawing.Size(80, 22);
             this.lblDifficultyAdjEst.TabIndex = 204;
             this.lblDifficultyAdjEst.Text = "no data";
             this.toolTip1.SetToolTip(this.lblDifficultyAdjEst, "(estimated)");
@@ -1696,7 +1696,7 @@
             this.lblBlockListTXInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListTXInNextBlock.Location = new System.Drawing.Point(0, 161);
             this.lblBlockListTXInNextBlock.Name = "lblBlockListTXInNextBlock";
-            this.lblBlockListTXInNextBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListTXInNextBlock.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListTXInNextBlock.TabIndex = 206;
             this.lblBlockListTXInNextBlock.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockListTXInNextBlock, "(estimated)");
@@ -1708,7 +1708,7 @@
             this.lblBlockListMinMaxInFeeNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListMinMaxInFeeNextBlock.Location = new System.Drawing.Point(0, 197);
             this.lblBlockListMinMaxInFeeNextBlock.Name = "lblBlockListMinMaxInFeeNextBlock";
-            this.lblBlockListMinMaxInFeeNextBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListMinMaxInFeeNextBlock.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListMinMaxInFeeNextBlock.TabIndex = 208;
             this.lblBlockListMinMaxInFeeNextBlock.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockListMinMaxInFeeNextBlock, "(estimated)");
@@ -1733,7 +1733,7 @@
             this.lblBlockListTotalFeesInNextBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListTotalFeesInNextBlock.Location = new System.Drawing.Point(0, 233);
             this.lblBlockListTotalFeesInNextBlock.Name = "lblBlockListTotalFeesInNextBlock";
-            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(16, 18);
+            this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(20, 22);
             this.lblBlockListTotalFeesInNextBlock.TabIndex = 210;
             this.lblBlockListTotalFeesInNextBlock.Text = "0";
             this.toolTip1.SetToolTip(this.lblBlockListTotalFeesInNextBlock, "(estimated)");
@@ -1784,7 +1784,7 @@
             this.lblBlockListNextDifficultyAdjustment.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListNextDifficultyAdjustment.Location = new System.Drawing.Point(0, 377);
             this.lblBlockListNextDifficultyAdjustment.Name = "lblBlockListNextDifficultyAdjustment";
-            this.lblBlockListNextDifficultyAdjustment.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListNextDifficultyAdjustment.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListNextDifficultyAdjustment.TabIndex = 220;
             this.lblBlockListNextDifficultyAdjustment.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockListNextDifficultyAdjustment, "(estimated)");
@@ -1796,7 +1796,7 @@
             this.lblSegwitP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSegwitP2SHSummary.Location = new System.Drawing.Point(-1, 326);
             this.lblSegwitP2SHSummary.Name = "lblSegwitP2SHSummary";
-            this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(14, 14);
+            this.lblSegwitP2SHSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHSummary.TabIndex = 199;
             this.lblSegwitP2SHSummary.Text = "0";
             this.toolTip1.SetToolTip(this.lblSegwitP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
@@ -1809,7 +1809,7 @@
             this.lblLegacySummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLegacySummary.Location = new System.Drawing.Point(-1, 289);
             this.lblLegacySummary.Name = "lblLegacySummary";
-            this.lblLegacySummary.Size = new System.Drawing.Size(14, 14);
+            this.lblLegacySummary.Size = new System.Drawing.Size(16, 18);
             this.lblLegacySummary.TabIndex = 166;
             this.lblLegacySummary.Text = "0";
             this.toolTip1.SetToolTip(this.lblLegacySummary, "Conf.received, Conf.spent, Conf.unspent");
@@ -1822,7 +1822,7 @@
             this.lblSegwitSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSegwitSummary.Location = new System.Drawing.Point(-1, 254);
             this.lblSegwitSummary.Name = "lblSegwitSummary";
-            this.lblSegwitSummary.Size = new System.Drawing.Size(14, 14);
+            this.lblSegwitSummary.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitSummary.TabIndex = 152;
             this.lblSegwitSummary.Text = "0";
             this.toolTip1.SetToolTip(this.lblSegwitSummary, "Conf.received, Conf.spent, Conf.unspent");
@@ -1835,7 +1835,7 @@
             this.lblP2SHSummary.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblP2SHSummary.Location = new System.Drawing.Point(-1, 361);
             this.lblP2SHSummary.Name = "lblP2SHSummary";
-            this.lblP2SHSummary.Size = new System.Drawing.Size(14, 14);
+            this.lblP2SHSummary.Size = new System.Drawing.Size(16, 18);
             this.lblP2SHSummary.TabIndex = 234;
             this.lblP2SHSummary.Text = "0";
             this.toolTip1.SetToolTip(this.lblP2SHSummary, "Conf.received, Conf.spent, Conf.unspent");
@@ -2472,7 +2472,7 @@
             this.lblNextBlockTotalFeesFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblNextBlockTotalFeesFiat.Location = new System.Drawing.Point(335, 120);
             this.lblNextBlockTotalFeesFiat.Name = "lblNextBlockTotalFeesFiat";
-            this.lblNextBlockTotalFeesFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblNextBlockTotalFeesFiat.Size = new System.Drawing.Size(64, 17);
             this.lblNextBlockTotalFeesFiat.TabIndex = 244;
             this.lblNextBlockTotalFeesFiat.Text = "no data";
             this.toolTip1.SetToolTip(this.lblNextBlockTotalFeesFiat, "(estimated)");
@@ -2485,7 +2485,7 @@
             this.lblBlockRewardFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblBlockRewardFiat.Location = new System.Drawing.Point(340, 272);
             this.lblBlockRewardFiat.Name = "lblBlockRewardFiat";
-            this.lblBlockRewardFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockRewardFiat.Size = new System.Drawing.Size(64, 17);
             this.lblBlockRewardFiat.TabIndex = 245;
             this.lblBlockRewardFiat.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockRewardFiat, "(estimated)");
@@ -2498,7 +2498,7 @@
             this.lblBlockRewardAfterHalvingFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblBlockRewardAfterHalvingFiat.Location = new System.Drawing.Point(341, 386);
             this.lblBlockRewardAfterHalvingFiat.Name = "lblBlockRewardAfterHalvingFiat";
-            this.lblBlockRewardAfterHalvingFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockRewardAfterHalvingFiat.Size = new System.Drawing.Size(64, 17);
             this.lblBlockRewardAfterHalvingFiat.TabIndex = 246;
             this.lblBlockRewardAfterHalvingFiat.Text = "no data";
             this.toolTip1.SetToolTip(this.lblBlockRewardAfterHalvingFiat, "(estimated)");
@@ -2511,7 +2511,7 @@
             this.lbl24HourBTCSentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lbl24HourBTCSentFiat.Location = new System.Drawing.Point(70, 500);
             this.lbl24HourBTCSentFiat.Name = "lbl24HourBTCSentFiat";
-            this.lbl24HourBTCSentFiat.Size = new System.Drawing.Size(49, 13);
+            this.lbl24HourBTCSentFiat.Size = new System.Drawing.Size(64, 17);
             this.lbl24HourBTCSentFiat.TabIndex = 247;
             this.lbl24HourBTCSentFiat.Text = "no data";
             this.toolTip1.SetToolTip(this.lbl24HourBTCSentFiat, "(estimated)");
@@ -2542,6 +2542,33 @@
             this.btnPreviewAnimations.UseVisualStyleBackColor = false;
             this.btnPreviewAnimations.Click += new System.EventHandler(this.BtnPreviewAnimations_Click);
             // 
+            // btnShowGlobalSearch
+            // 
+            this.btnShowGlobalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowGlobalSearch.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowGlobalSearch.BorderColor = System.Drawing.Color.Empty;
+            this.btnShowGlobalSearch.BorderRadius = 0;
+            this.btnShowGlobalSearch.BorderSize = 0;
+            this.btnShowGlobalSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowGlobalSearch.FlatAppearance.BorderSize = 0;
+            this.btnShowGlobalSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowGlobalSearch.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowGlobalSearch.ForeColor = System.Drawing.Color.White;
+            this.btnShowGlobalSearch.Location = new System.Drawing.Point(749, 162);
+            this.btnShowGlobalSearch.Name = "btnShowGlobalSearch";
+            this.btnShowGlobalSearch.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.btnShowGlobalSearch.Size = new System.Drawing.Size(24, 24);
+            this.btnShowGlobalSearch.TabIndex = 260;
+            this.btnShowGlobalSearch.TabStop = false;
+            this.btnShowGlobalSearch.Text = "🔎";
+            this.btnShowGlobalSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnShowGlobalSearch.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnShowGlobalSearch, "search for address, block, transaction or Xpub");
+            this.btnShowGlobalSearch.UseVisualStyleBackColor = false;
+            this.btnShowGlobalSearch.Click += new System.EventHandler(this.BtnShowGlobalSearch_Click);
+            this.btnShowGlobalSearch.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnShowGlobalSearch.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            // 
             // label134
             // 
             this.label134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -2561,7 +2588,7 @@
             this.lblBlocksUntilDiffAdj.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlocksUntilDiffAdj.Location = new System.Drawing.Point(525, 268);
             this.lblBlocksUntilDiffAdj.Name = "lblBlocksUntilDiffAdj";
-            this.lblBlocksUntilDiffAdj.Size = new System.Drawing.Size(64, 18);
+            this.lblBlocksUntilDiffAdj.Size = new System.Drawing.Size(80, 22);
             this.lblBlocksUntilDiffAdj.TabIndex = 225;
             this.lblBlocksUntilDiffAdj.Text = "no data";
             // 
@@ -2574,7 +2601,7 @@
             this.lblHeaderPrice.Location = new System.Drawing.Point(0, 20);
             this.lblHeaderPrice.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderPrice.Name = "lblHeaderPrice";
-            this.lblHeaderPrice.Size = new System.Drawing.Size(97, 47);
+            this.lblHeaderPrice.Size = new System.Drawing.Size(116, 58);
             this.lblHeaderPrice.TabIndex = 209;
             this.lblHeaderPrice.Text = "$0.00";
             // 
@@ -2585,7 +2612,7 @@
             this.lblBlockchainSize.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockchainSize.Location = new System.Drawing.Point(264, 496);
             this.lblBlockchainSize.Name = "lblBlockchainSize";
-            this.lblBlockchainSize.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockchainSize.Size = new System.Drawing.Size(80, 22);
             this.lblBlockchainSize.TabIndex = 134;
             this.lblBlockchainSize.Text = "no data";
             // 
@@ -2598,7 +2625,7 @@
             this.lblHeaderTransactions.Location = new System.Drawing.Point(88, 66);
             this.lblHeaderTransactions.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderTransactions.Name = "lblHeaderTransactions";
-            this.lblHeaderTransactions.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderTransactions.Size = new System.Drawing.Size(67, 20);
             this.lblHeaderTransactions.TabIndex = 59;
             this.lblHeaderTransactions.Text = "no data";
             // 
@@ -2611,7 +2638,7 @@
             this.lblHeaderBlockSize.Location = new System.Drawing.Point(68, 85);
             this.lblHeaderBlockSize.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderBlockSize.Name = "lblHeaderBlockSize";
-            this.lblHeaderBlockSize.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderBlockSize.Size = new System.Drawing.Size(67, 20);
             this.lblHeaderBlockSize.TabIndex = 60;
             this.lblHeaderBlockSize.Text = "no data";
             // 
@@ -2623,7 +2650,7 @@
             this.lblElapsedSinceUpdate.ForeColor = System.Drawing.Color.Gray;
             this.lblElapsedSinceUpdate.Location = new System.Drawing.Point(222, 2);
             this.lblElapsedSinceUpdate.Name = "lblElapsedSinceUpdate";
-            this.lblElapsedSinceUpdate.Size = new System.Drawing.Size(145, 13);
+            this.lblElapsedSinceUpdate.Size = new System.Drawing.Size(187, 17);
             this.lblElapsedSinceUpdate.TabIndex = 84;
             this.lblElapsedSinceUpdate.Text = "Last updated xxx seconds ago";
             // 
@@ -2756,7 +2783,7 @@
             this.lblNetworkAge.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNetworkAge.Location = new System.Drawing.Point(525, 420);
             this.lblNetworkAge.Name = "lblNetworkAge";
-            this.lblNetworkAge.Size = new System.Drawing.Size(64, 18);
+            this.lblNetworkAge.Size = new System.Drawing.Size(80, 22);
             this.lblNetworkAge.TabIndex = 240;
             this.lblNetworkAge.Text = "no data";
             // 
@@ -2791,7 +2818,7 @@
             this.lblDifficultyEpoch.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDifficultyEpoch.Location = new System.Drawing.Point(525, 344);
             this.lblDifficultyEpoch.Name = "lblDifficultyEpoch";
-            this.lblDifficultyEpoch.Size = new System.Drawing.Size(64, 18);
+            this.lblDifficultyEpoch.Size = new System.Drawing.Size(80, 22);
             this.lblDifficultyEpoch.TabIndex = 255;
             this.lblDifficultyEpoch.Text = "no data";
             // 
@@ -2802,7 +2829,7 @@
             this.lblSubsidyEpoch.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubsidyEpoch.Location = new System.Drawing.Point(264, 230);
             this.lblSubsidyEpoch.Name = "lblSubsidyEpoch";
-            this.lblSubsidyEpoch.Size = new System.Drawing.Size(16, 18);
+            this.lblSubsidyEpoch.Size = new System.Drawing.Size(20, 22);
             this.lblSubsidyEpoch.TabIndex = 254;
             this.lblSubsidyEpoch.Text = "0";
             // 
@@ -2852,7 +2879,7 @@
             this.lblPercentIssued.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPercentIssued.Location = new System.Drawing.Point(162, 272);
             this.lblPercentIssued.Name = "lblPercentIssued";
-            this.lblPercentIssued.Size = new System.Drawing.Size(49, 13);
+            this.lblPercentIssued.Size = new System.Drawing.Size(56, 15);
             this.lblPercentIssued.TabIndex = 250;
             this.lblPercentIssued.Text = "no data";
             // 
@@ -2875,7 +2902,7 @@
             this.lblBTCToBeIssued.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBTCToBeIssued.Location = new System.Drawing.Point(3, 230);
             this.lblBTCToBeIssued.Name = "lblBTCToBeIssued";
-            this.lblBTCToBeIssued.Size = new System.Drawing.Size(64, 18);
+            this.lblBTCToBeIssued.Size = new System.Drawing.Size(80, 22);
             this.lblBTCToBeIssued.TabIndex = 248;
             this.lblBTCToBeIssued.Text = "no data";
             // 
@@ -2929,7 +2956,7 @@
             this.lblProgressNextDiffAdjPercentage.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProgressNextDiffAdjPercentage.Location = new System.Drawing.Point(680, 233);
             this.lblProgressNextDiffAdjPercentage.Name = "lblProgressNextDiffAdjPercentage";
-            this.lblProgressNextDiffAdjPercentage.Size = new System.Drawing.Size(49, 13);
+            this.lblProgressNextDiffAdjPercentage.Size = new System.Drawing.Size(56, 15);
             this.lblProgressNextDiffAdjPercentage.TabIndex = 227;
             this.lblProgressNextDiffAdjPercentage.Text = "no data";
             // 
@@ -2952,7 +2979,7 @@
             this.lblEstDiffAdjDate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEstDiffAdjDate.Location = new System.Drawing.Point(525, 306);
             this.lblEstDiffAdjDate.Name = "lblEstDiffAdjDate";
-            this.lblEstDiffAdjDate.Size = new System.Drawing.Size(64, 18);
+            this.lblEstDiffAdjDate.Size = new System.Drawing.Size(80, 22);
             this.lblEstDiffAdjDate.TabIndex = 223;
             this.lblEstDiffAdjDate.Text = "no data";
             // 
@@ -3053,7 +3080,7 @@
             this.lblHodlingAddresses.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHodlingAddresses.Location = new System.Drawing.Point(3, 306);
             this.lblHodlingAddresses.Name = "lblHodlingAddresses";
-            this.lblHodlingAddresses.Size = new System.Drawing.Size(64, 18);
+            this.lblHodlingAddresses.Size = new System.Drawing.Size(80, 22);
             this.lblHodlingAddresses.TabIndex = 218;
             this.lblHodlingAddresses.Text = "no data";
             // 
@@ -3086,7 +3113,7 @@
             this.lblAvgTimeBetweenBlocks.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgTimeBetweenBlocks.Location = new System.Drawing.Point(525, 78);
             this.lblAvgTimeBetweenBlocks.Name = "lblAvgTimeBetweenBlocks";
-            this.lblAvgTimeBetweenBlocks.Size = new System.Drawing.Size(64, 18);
+            this.lblAvgTimeBetweenBlocks.Size = new System.Drawing.Size(80, 22);
             this.lblAvgTimeBetweenBlocks.TabIndex = 217;
             this.lblAvgTimeBetweenBlocks.Text = "no data";
             // 
@@ -3097,7 +3124,7 @@
             this.lblBlockRewardAfterHalving.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockRewardAfterHalving.Location = new System.Drawing.Point(264, 382);
             this.lblBlockRewardAfterHalving.Name = "lblBlockRewardAfterHalving";
-            this.lblBlockRewardAfterHalving.Size = new System.Drawing.Size(16, 18);
+            this.lblBlockRewardAfterHalving.Size = new System.Drawing.Size(20, 22);
             this.lblBlockRewardAfterHalving.TabIndex = 200;
             this.lblBlockRewardAfterHalving.Text = "0";
             // 
@@ -3186,7 +3213,7 @@
             this.lblNextDiffAdjBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNextDiffAdjBlock.Location = new System.Drawing.Point(525, 154);
             this.lblNextDiffAdjBlock.Name = "lblNextDiffAdjBlock";
-            this.lblNextDiffAdjBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblNextDiffAdjBlock.Size = new System.Drawing.Size(80, 22);
             this.lblNextDiffAdjBlock.TabIndex = 212;
             this.lblNextDiffAdjBlock.Text = "no data";
             // 
@@ -3209,7 +3236,7 @@
             this.lblHashesToSolve.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHashesToSolve.Location = new System.Drawing.Point(525, 40);
             this.lblHashesToSolve.Name = "lblHashesToSolve";
-            this.lblHashesToSolve.Size = new System.Drawing.Size(64, 18);
+            this.lblHashesToSolve.Size = new System.Drawing.Size(80, 22);
             this.lblHashesToSolve.TabIndex = 210;
             this.lblHashesToSolve.Text = "no data";
             // 
@@ -3232,7 +3259,7 @@
             this.lblBTCInCirc.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBTCInCirc.Location = new System.Drawing.Point(3, 192);
             this.lblBTCInCirc.Name = "lblBTCInCirc";
-            this.lblBTCInCirc.Size = new System.Drawing.Size(64, 18);
+            this.lblBTCInCirc.Size = new System.Drawing.Size(80, 22);
             this.lblBTCInCirc.TabIndex = 208;
             this.lblBTCInCirc.Text = "no data";
             // 
@@ -3255,7 +3282,7 @@
             this.lblEstHashrate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEstHashrate.Location = new System.Drawing.Point(525, 116);
             this.lblEstHashrate.Name = "lblEstHashrate";
-            this.lblEstHashrate.Size = new System.Drawing.Size(64, 18);
+            this.lblEstHashrate.Size = new System.Drawing.Size(80, 22);
             this.lblEstHashrate.TabIndex = 206;
             this.lblEstHashrate.Text = "no data";
             // 
@@ -3266,7 +3293,7 @@
             this.lbl24HourTransCount.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl24HourTransCount.Location = new System.Drawing.Point(3, 458);
             this.lbl24HourTransCount.Name = "lbl24HourTransCount";
-            this.lbl24HourTransCount.Size = new System.Drawing.Size(64, 18);
+            this.lbl24HourTransCount.Size = new System.Drawing.Size(80, 22);
             this.lbl24HourTransCount.TabIndex = 103;
             this.lbl24HourTransCount.Text = "no data";
             // 
@@ -3289,7 +3316,7 @@
             this.lbl24HourBTCSent.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl24HourBTCSent.Location = new System.Drawing.Point(3, 496);
             this.lbl24HourBTCSent.Name = "lbl24HourBTCSent";
-            this.lbl24HourBTCSent.Size = new System.Drawing.Size(16, 18);
+            this.lbl24HourBTCSent.Size = new System.Drawing.Size(20, 22);
             this.lbl24HourBTCSent.TabIndex = 105;
             this.lbl24HourBTCSent.Text = "0";
             // 
@@ -3324,7 +3351,7 @@
             this.lblBlocksIn24Hours.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlocksIn24Hours.Location = new System.Drawing.Point(3, 420);
             this.lblBlocksIn24Hours.Name = "lblBlocksIn24Hours";
-            this.lblBlocksIn24Hours.Size = new System.Drawing.Size(64, 18);
+            this.lblBlocksIn24Hours.Size = new System.Drawing.Size(80, 22);
             this.lblBlocksIn24Hours.TabIndex = 130;
             this.lblBlocksIn24Hours.Text = "no data";
             // 
@@ -3359,7 +3386,7 @@
             this.lblProgressToHalving.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProgressToHalving.Location = new System.Drawing.Point(426, 311);
             this.lblProgressToHalving.Name = "lblProgressToHalving";
-            this.lblProgressToHalving.Size = new System.Drawing.Size(49, 13);
+            this.lblProgressToHalving.Size = new System.Drawing.Size(56, 15);
             this.lblProgressToHalving.TabIndex = 136;
             this.lblProgressToHalving.Text = "no data";
             // 
@@ -3370,7 +3397,7 @@
             this.lblBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockReward.Location = new System.Drawing.Point(265, 268);
             this.lblBlockReward.Name = "lblBlockReward";
-            this.lblBlockReward.Size = new System.Drawing.Size(16, 18);
+            this.lblBlockReward.Size = new System.Drawing.Size(20, 22);
             this.lblBlockReward.TabIndex = 202;
             this.lblBlockReward.Text = "0";
             // 
@@ -3381,7 +3408,7 @@
             this.lblMarketCapUSD.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMarketCapUSD.Location = new System.Drawing.Point(3, 116);
             this.lblMarketCapUSD.Name = "lblMarketCapUSD";
-            this.lblMarketCapUSD.Size = new System.Drawing.Size(64, 18);
+            this.lblMarketCapUSD.Size = new System.Drawing.Size(80, 22);
             this.lblMarketCapUSD.TabIndex = 89;
             this.lblMarketCapUSD.Text = "no data";
             // 
@@ -3416,7 +3443,7 @@
             this.lblMoscowTime.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMoscowTime.Location = new System.Drawing.Point(3, 78);
             this.lblMoscowTime.Name = "lblMoscowTime";
-            this.lblMoscowTime.Size = new System.Drawing.Size(64, 18);
+            this.lblMoscowTime.Size = new System.Drawing.Size(80, 22);
             this.lblMoscowTime.TabIndex = 87;
             this.lblMoscowTime.Text = "no data";
             // 
@@ -3439,7 +3466,7 @@
             this.lblPriceUSD.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPriceUSD.Location = new System.Drawing.Point(3, 40);
             this.lblPriceUSD.Name = "lblPriceUSD";
-            this.lblPriceUSD.Size = new System.Drawing.Size(64, 18);
+            this.lblPriceUSD.Size = new System.Drawing.Size(80, 22);
             this.lblPriceUSD.TabIndex = 85;
             this.lblPriceUSD.Text = "no data";
             // 
@@ -3462,7 +3489,7 @@
             this.lblTXInMempool.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTXInMempool.Location = new System.Drawing.Point(264, 40);
             this.lblTXInMempool.Name = "lblTXInMempool";
-            this.lblTXInMempool.Size = new System.Drawing.Size(64, 18);
+            this.lblTXInMempool.Size = new System.Drawing.Size(80, 22);
             this.lblTXInMempool.TabIndex = 93;
             this.lblTXInMempool.Text = "no data";
             // 
@@ -3527,7 +3554,7 @@
             this.lblBlockListTotalFeesInNextBlockFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblBlockListTotalFeesInNextBlockFiat.Location = new System.Drawing.Point(64, 236);
             this.lblBlockListTotalFeesInNextBlockFiat.Name = "lblBlockListTotalFeesInNextBlockFiat";
-            this.lblBlockListTotalFeesInNextBlockFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockListTotalFeesInNextBlockFiat.Size = new System.Drawing.Size(64, 17);
             this.lblBlockListTotalFeesInNextBlockFiat.TabIndex = 245;
             this.lblBlockListTotalFeesInNextBlockFiat.Text = "no data";
             // 
@@ -3539,7 +3566,7 @@
             this.lblBlockListBlockRewardFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblBlockListBlockRewardFiat.Location = new System.Drawing.Point(71, 488);
             this.lblBlockListBlockRewardFiat.Name = "lblBlockListBlockRewardFiat";
-            this.lblBlockListBlockRewardFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockListBlockRewardFiat.Size = new System.Drawing.Size(64, 17);
             this.lblBlockListBlockRewardFiat.TabIndex = 244;
             this.lblBlockListBlockRewardFiat.Text = "no data";
             // 
@@ -3601,7 +3628,7 @@
             this.label6.Location = new System.Drawing.Point(5, 2);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(66, 17);
+            this.label6.Size = new System.Drawing.Size(82, 20);
             this.label6.TabIndex = 153;
             this.label6.Text = "Blocks n-n";
             // 
@@ -3681,7 +3708,7 @@
             0,
             0});
             this.numericUpDownBlockHeightToStartListFrom.Name = "numericUpDownBlockHeightToStartListFrom";
-            this.numericUpDownBlockHeightToStartListFrom.Size = new System.Drawing.Size(82, 22);
+            this.numericUpDownBlockHeightToStartListFrom.Size = new System.Drawing.Size(82, 26);
             this.numericUpDownBlockHeightToStartListFrom.TabIndex = 264;
             this.numericUpDownBlockHeightToStartListFrom.TabStop = false;
             this.numericUpDownBlockHeightToStartListFrom.Value = new decimal(new int[] {
@@ -3784,7 +3811,7 @@
             this.lblBlockListProgressNextDiffAdjPercentage.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListProgressNextDiffAdjPercentage.Location = new System.Drawing.Point(107, 416);
             this.lblBlockListProgressNextDiffAdjPercentage.Name = "lblBlockListProgressNextDiffAdjPercentage";
-            this.lblBlockListProgressNextDiffAdjPercentage.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockListProgressNextDiffAdjPercentage.Size = new System.Drawing.Size(56, 15);
             this.lblBlockListProgressNextDiffAdjPercentage.TabIndex = 233;
             this.lblBlockListProgressNextDiffAdjPercentage.Text = "no data";
             // 
@@ -3795,7 +3822,7 @@
             this.lblBlockListHalvingBlockAndRemaining.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListHalvingBlockAndRemaining.Location = new System.Drawing.Point(109, 523);
             this.lblBlockListHalvingBlockAndRemaining.Name = "lblBlockListHalvingBlockAndRemaining";
-            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(49, 13);
+            this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(56, 15);
             this.lblBlockListHalvingBlockAndRemaining.TabIndex = 231;
             this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
             // 
@@ -3830,7 +3857,7 @@
             this.lblBlockListBlockReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListBlockReward.Location = new System.Drawing.Point(0, 485);
             this.lblBlockListBlockReward.Name = "lblBlockListBlockReward";
-            this.lblBlockListBlockReward.Size = new System.Drawing.Size(16, 18);
+            this.lblBlockListBlockReward.Size = new System.Drawing.Size(20, 22);
             this.lblBlockListBlockReward.TabIndex = 224;
             this.lblBlockListBlockReward.Text = "0";
             // 
@@ -3853,7 +3880,7 @@
             this.lblBlockListEstHashRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListEstHashRate.Location = new System.Drawing.Point(0, 449);
             this.lblBlockListEstHashRate.Name = "lblBlockListEstHashRate";
-            this.lblBlockListEstHashRate.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListEstHashRate.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListEstHashRate.TabIndex = 222;
             this.lblBlockListEstHashRate.Text = "no data";
             // 
@@ -3864,7 +3891,7 @@
             this.lblBlockListAvgTimeBetweenBlocks.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListAvgTimeBetweenBlocks.Location = new System.Drawing.Point(0, 341);
             this.lblBlockListAvgTimeBetweenBlocks.Name = "lblBlockListAvgTimeBetweenBlocks";
-            this.lblBlockListAvgTimeBetweenBlocks.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListAvgTimeBetweenBlocks.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListAvgTimeBetweenBlocks.TabIndex = 219;
             this.lblBlockListAvgTimeBetweenBlocks.Text = "no data";
             // 
@@ -3887,7 +3914,7 @@
             this.lblBlockListNextDiffAdjBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListNextDiffAdjBlock.Location = new System.Drawing.Point(0, 305);
             this.lblBlockListNextDiffAdjBlock.Name = "lblBlockListNextDiffAdjBlock";
-            this.lblBlockListNextDiffAdjBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListNextDiffAdjBlock.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListNextDiffAdjBlock.TabIndex = 214;
             this.lblBlockListNextDiffAdjBlock.Text = "no data";
             // 
@@ -3910,7 +3937,7 @@
             this.lblBlockListAttemptsToSolveBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListAttemptsToSolveBlock.Location = new System.Drawing.Point(0, 269);
             this.lblBlockListAttemptsToSolveBlock.Name = "lblBlockListAttemptsToSolveBlock";
-            this.lblBlockListAttemptsToSolveBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListAttemptsToSolveBlock.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListAttemptsToSolveBlock.TabIndex = 212;
             this.lblBlockListAttemptsToSolveBlock.Text = "no data";
             // 
@@ -3933,7 +3960,7 @@
             this.lblBlockListTXInMempool.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListTXInMempool.Location = new System.Drawing.Point(0, 125);
             this.lblBlockListTXInMempool.Name = "lblBlockListTXInMempool";
-            this.lblBlockListTXInMempool.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockListTXInMempool.Size = new System.Drawing.Size(80, 22);
             this.lblBlockListTXInMempool.TabIndex = 203;
             this.lblBlockListTXInMempool.Text = "no data";
             // 
@@ -4010,7 +4037,7 @@
             this.lblBlockListPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 303);
             this.lblBlockListPositionInList.Name = "lblBlockListPositionInList";
-            this.lblBlockListPositionInList.Size = new System.Drawing.Size(91, 17);
+            this.lblBlockListPositionInList.Size = new System.Drawing.Size(114, 20);
             this.lblBlockListPositionInList.TabIndex = 157;
             this.lblBlockListPositionInList.Text = "Blocks n-n of n";
             // 
@@ -4123,7 +4150,7 @@
             this.lblBlockListBlockHeight.ForeColor = System.Drawing.Color.Gray;
             this.lblBlockListBlockHeight.Location = new System.Drawing.Point(5, 2);
             this.lblBlockListBlockHeight.Name = "lblBlockListBlockHeight";
-            this.lblBlockListBlockHeight.Size = new System.Drawing.Size(55, 17);
+            this.lblBlockListBlockHeight.Size = new System.Drawing.Size(67, 20);
             this.lblBlockListBlockHeight.TabIndex = 193;
             this.lblBlockListBlockHeight.Text = "no data";
             // 
@@ -4144,7 +4171,7 @@
             this.lblBlockListBlockSize.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListBlockSize.Location = new System.Drawing.Point(88, 66);
             this.lblBlockListBlockSize.Name = "lblBlockListBlockSize";
-            this.lblBlockListBlockSize.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListBlockSize.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockSize.TabIndex = 136;
             this.lblBlockListBlockSize.Text = "no data";
             // 
@@ -4167,7 +4194,7 @@
             this.lblBlockListBlockWeight.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListBlockWeight.Location = new System.Drawing.Point(129, 84);
             this.lblBlockListBlockWeight.Name = "lblBlockListBlockWeight";
-            this.lblBlockListBlockWeight.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListBlockWeight.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockWeight.TabIndex = 138;
             this.lblBlockListBlockWeight.Text = "no data";
             // 
@@ -4190,7 +4217,7 @@
             this.lblBlockListReward.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListReward.Location = new System.Drawing.Point(390, 66);
             this.lblBlockListReward.Name = "lblBlockListReward";
-            this.lblBlockListReward.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListReward.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListReward.TabIndex = 140;
             this.lblBlockListReward.Text = "no data";
             // 
@@ -4223,7 +4250,7 @@
             this.lblBlockListTransactionCount.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListTransactionCount.Location = new System.Drawing.Point(130, 138);
             this.lblBlockListTransactionCount.Name = "lblBlockListTransactionCount";
-            this.lblBlockListTransactionCount.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListTransactionCount.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTransactionCount.TabIndex = 142;
             this.lblBlockListTransactionCount.Text = "no data";
             // 
@@ -4233,7 +4260,7 @@
             this.lblBlockListVersion.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListVersion.Location = new System.Drawing.Point(71, 156);
             this.lblBlockListVersion.Name = "lblBlockListVersion";
-            this.lblBlockListVersion.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListVersion.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListVersion.TabIndex = 181;
             this.lblBlockListVersion.Text = "no data";
             // 
@@ -4268,7 +4295,7 @@
             this.lblBlockListAverageFee.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListAverageFee.Location = new System.Drawing.Point(374, 102);
             this.lblBlockListAverageFee.Name = "lblBlockListAverageFee";
-            this.lblBlockListAverageFee.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListAverageFee.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListAverageFee.TabIndex = 144;
             this.lblBlockListAverageFee.Text = "no data";
             // 
@@ -4279,7 +4306,7 @@
             this.lblBlockListAverageTransactionSize.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListAverageTransactionSize.Location = new System.Drawing.Point(418, 156);
             this.lblBlockListAverageTransactionSize.Name = "lblBlockListAverageTransactionSize";
-            this.lblBlockListAverageTransactionSize.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListAverageTransactionSize.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListAverageTransactionSize.TabIndex = 179;
             this.lblBlockListAverageTransactionSize.Text = "no data";
             // 
@@ -4314,7 +4341,7 @@
             this.lblBlockListMiner.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListMiner.Location = new System.Drawing.Point(88, 120);
             this.lblBlockListMiner.Name = "lblBlockListMiner";
-            this.lblBlockListMiner.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListMiner.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListMiner.TabIndex = 148;
             this.lblBlockListMiner.Text = "no data";
             // 
@@ -4325,7 +4352,7 @@
             this.lblBlockListTotalOutputs.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListTotalOutputs.Location = new System.Drawing.Point(346, 138);
             this.lblBlockListTotalOutputs.Name = "lblBlockListTotalOutputs";
-            this.lblBlockListTotalOutputs.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListTotalOutputs.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalOutputs.TabIndex = 177;
             this.lblBlockListTotalOutputs.Text = "no data";
             // 
@@ -4360,7 +4387,7 @@
             this.lblBlockListBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(379, 84);
             this.lblBlockListBlockFeeRangeAndMedianFee.Name = "lblBlockListBlockFeeRangeAndMedianFee";
-            this.lblBlockListBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockFeeRangeAndMedianFee.TabIndex = 150;
             this.lblBlockListBlockFeeRangeAndMedianFee.Text = "no data";
             // 
@@ -4371,7 +4398,7 @@
             this.lblBlockListTotalInputs.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListTotalInputs.Location = new System.Drawing.Point(323, 120);
             this.lblBlockListTotalInputs.Name = "lblBlockListTotalInputs";
-            this.lblBlockListTotalInputs.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListTotalInputs.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalInputs.TabIndex = 175;
             this.lblBlockListTotalInputs.Text = "no data";
             // 
@@ -4394,7 +4421,7 @@
             this.lblBlockListBlockTime.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListBlockTime.Location = new System.Drawing.Point(77, 48);
             this.lblBlockListBlockTime.Name = "lblBlockListBlockTime";
-            this.lblBlockListBlockTime.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListBlockTime.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockTime.TabIndex = 152;
             this.lblBlockListBlockTime.Text = "no data";
             // 
@@ -4404,7 +4431,7 @@
             this.lblBlockListBlockHash.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListBlockHash.Location = new System.Drawing.Point(41, 30);
             this.lblBlockListBlockHash.Name = "lblBlockListBlockHash";
-            this.lblBlockListBlockHash.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListBlockHash.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListBlockHash.TabIndex = 171;
             this.lblBlockListBlockHash.Text = "no data";
             // 
@@ -4427,7 +4454,7 @@
             this.lblBlockListTotalFees.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListTotalFees.Location = new System.Drawing.Point(316, 48);
             this.lblBlockListTotalFees.Name = "lblBlockListTotalFees";
-            this.lblBlockListTotalFees.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListTotalFees.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListTotalFees.TabIndex = 166;
             this.lblBlockListTotalFees.Text = "no data";
             // 
@@ -4462,7 +4489,7 @@
             this.lblBlockListNonce.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockListNonce.Location = new System.Drawing.Point(51, 102);
             this.lblBlockListNonce.Name = "lblBlockListNonce";
-            this.lblBlockListNonce.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockListNonce.Size = new System.Drawing.Size(64, 18);
             this.lblBlockListNonce.TabIndex = 168;
             this.lblBlockListNonce.Text = "no data";
             // 
@@ -4699,7 +4726,7 @@
             this.lblMedBaseFeeTokens.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMedBaseFeeTokens.Location = new System.Drawing.Point(576, 224);
             this.lblMedBaseFeeTokens.Name = "lblMedBaseFeeTokens";
-            this.lblMedBaseFeeTokens.Size = new System.Drawing.Size(64, 18);
+            this.lblMedBaseFeeTokens.Size = new System.Drawing.Size(80, 22);
             this.lblMedBaseFeeTokens.TabIndex = 188;
             this.lblMedBaseFeeTokens.Text = "no data";
             // 
@@ -4722,7 +4749,7 @@
             this.lblMedFeeRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMedFeeRate.Location = new System.Drawing.Point(576, 187);
             this.lblMedFeeRate.Name = "lblMedFeeRate";
-            this.lblMedFeeRate.Size = new System.Drawing.Size(64, 18);
+            this.lblMedFeeRate.Size = new System.Drawing.Size(80, 22);
             this.lblMedFeeRate.TabIndex = 186;
             this.lblMedFeeRate.Text = "no data";
             // 
@@ -4745,7 +4772,7 @@
             this.lblMedCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMedCapacity.Location = new System.Drawing.Point(576, 150);
             this.lblMedCapacity.Name = "lblMedCapacity";
-            this.lblMedCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblMedCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblMedCapacity.TabIndex = 184;
             this.lblMedCapacity.Text = "no data";
             // 
@@ -4768,7 +4795,7 @@
             this.lblAverageBaseFeeMtokens.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAverageBaseFeeMtokens.Location = new System.Drawing.Point(576, 113);
             this.lblAverageBaseFeeMtokens.Name = "lblAverageBaseFeeMtokens";
-            this.lblAverageBaseFeeMtokens.Size = new System.Drawing.Size(64, 18);
+            this.lblAverageBaseFeeMtokens.Size = new System.Drawing.Size(80, 22);
             this.lblAverageBaseFeeMtokens.TabIndex = 182;
             this.lblAverageBaseFeeMtokens.Text = "no data";
             // 
@@ -4791,7 +4818,7 @@
             this.lblAverageFeeRate.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAverageFeeRate.Location = new System.Drawing.Point(576, 76);
             this.lblAverageFeeRate.Name = "lblAverageFeeRate";
-            this.lblAverageFeeRate.Size = new System.Drawing.Size(64, 18);
+            this.lblAverageFeeRate.Size = new System.Drawing.Size(80, 22);
             this.lblAverageFeeRate.TabIndex = 180;
             this.lblAverageFeeRate.Text = "no data";
             // 
@@ -4814,7 +4841,7 @@
             this.lblAverageCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAverageCapacity.Location = new System.Drawing.Point(576, 39);
             this.lblAverageCapacity.Name = "lblAverageCapacity";
-            this.lblAverageCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblAverageCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblAverageCapacity.TabIndex = 178;
             this.lblAverageCapacity.Text = "no data";
             // 
@@ -4837,7 +4864,7 @@
             this.lblChannelCount.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblChannelCount.Location = new System.Drawing.Point(388, 39);
             this.lblChannelCount.Name = "lblChannelCount";
-            this.lblChannelCount.Size = new System.Drawing.Size(64, 18);
+            this.lblChannelCount.Size = new System.Drawing.Size(80, 22);
             this.lblChannelCount.TabIndex = 176;
             this.lblChannelCount.Text = "no data";
             // 
@@ -4860,7 +4887,7 @@
             this.lblUnannouncedNodes.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnannouncedNodes.Location = new System.Drawing.Point(188, 289);
             this.lblUnannouncedNodes.Name = "lblUnannouncedNodes";
-            this.lblUnannouncedNodes.Size = new System.Drawing.Size(64, 18);
+            this.lblUnannouncedNodes.Size = new System.Drawing.Size(80, 22);
             this.lblUnannouncedNodes.TabIndex = 174;
             this.lblUnannouncedNodes.Text = "no data";
             // 
@@ -4883,7 +4910,7 @@
             this.lblClearnetTorNodes.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClearnetTorNodes.Location = new System.Drawing.Point(188, 252);
             this.lblClearnetTorNodes.Name = "lblClearnetTorNodes";
-            this.lblClearnetTorNodes.Size = new System.Drawing.Size(64, 18);
+            this.lblClearnetTorNodes.Size = new System.Drawing.Size(80, 22);
             this.lblClearnetTorNodes.TabIndex = 172;
             this.lblClearnetTorNodes.Text = "no data";
             // 
@@ -4906,7 +4933,7 @@
             this.lblClearnetNodes.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClearnetNodes.Location = new System.Drawing.Point(188, 215);
             this.lblClearnetNodes.Name = "lblClearnetNodes";
-            this.lblClearnetNodes.Size = new System.Drawing.Size(64, 18);
+            this.lblClearnetNodes.Size = new System.Drawing.Size(80, 22);
             this.lblClearnetNodes.TabIndex = 170;
             this.lblClearnetNodes.Text = "no data";
             // 
@@ -4929,7 +4956,7 @@
             this.lblNodeCount.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNodeCount.Location = new System.Drawing.Point(3, 178);
             this.lblNodeCount.Name = "lblNodeCount";
-            this.lblNodeCount.Size = new System.Drawing.Size(64, 18);
+            this.lblNodeCount.Size = new System.Drawing.Size(80, 22);
             this.lblNodeCount.TabIndex = 168;
             this.lblNodeCount.Text = "no data";
             // 
@@ -4952,7 +4979,7 @@
             this.lblTorNodes.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTorNodes.Location = new System.Drawing.Point(188, 178);
             this.lblTorNodes.Name = "lblTorNodes";
-            this.lblTorNodes.Size = new System.Drawing.Size(64, 18);
+            this.lblTorNodes.Size = new System.Drawing.Size(80, 22);
             this.lblTorNodes.TabIndex = 166;
             this.lblTorNodes.Text = "no data";
             // 
@@ -4989,7 +5016,7 @@
             this.channelLabel9.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel9.Location = new System.Drawing.Point(576, 511);
             this.channelLabel9.Name = "channelLabel9";
-            this.channelLabel9.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel9.Size = new System.Drawing.Size(80, 22);
             this.channelLabel9.TabIndex = 162;
             this.channelLabel9.Text = "no data";
             // 
@@ -5002,7 +5029,7 @@
             this.channelLabel10.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel10.Location = new System.Drawing.Point(576, 531);
             this.channelLabel10.Name = "channelLabel10";
-            this.channelLabel10.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel10.Size = new System.Drawing.Size(80, 22);
             this.channelLabel10.TabIndex = 161;
             this.channelLabel10.Text = "no data";
             // 
@@ -5016,7 +5043,7 @@
             this.aliasConnLabel10.Location = new System.Drawing.Point(388, 531);
             this.aliasConnLabel10.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel10.Name = "aliasConnLabel10";
-            this.aliasConnLabel10.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel10.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel10.TabIndex = 160;
             this.aliasConnLabel10.Text = "no data";
             // 
@@ -5030,7 +5057,7 @@
             this.aliasConnLabel9.Location = new System.Drawing.Point(388, 511);
             this.aliasConnLabel9.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel9.Name = "aliasConnLabel9";
-            this.aliasConnLabel9.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel9.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel9.TabIndex = 159;
             this.aliasConnLabel9.Text = "no data";
             // 
@@ -5043,7 +5070,7 @@
             this.channelLabel7.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel7.Location = new System.Drawing.Point(576, 471);
             this.channelLabel7.Name = "channelLabel7";
-            this.channelLabel7.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel7.Size = new System.Drawing.Size(80, 22);
             this.channelLabel7.TabIndex = 158;
             this.channelLabel7.Text = "no data";
             // 
@@ -5056,7 +5083,7 @@
             this.channelLabel8.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel8.Location = new System.Drawing.Point(576, 491);
             this.channelLabel8.Name = "channelLabel8";
-            this.channelLabel8.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel8.Size = new System.Drawing.Size(80, 22);
             this.channelLabel8.TabIndex = 157;
             this.channelLabel8.Text = "no data";
             // 
@@ -5070,7 +5097,7 @@
             this.aliasConnLabel8.Location = new System.Drawing.Point(388, 491);
             this.aliasConnLabel8.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel8.Name = "aliasConnLabel8";
-            this.aliasConnLabel8.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel8.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel8.TabIndex = 156;
             this.aliasConnLabel8.Text = "no data";
             // 
@@ -5084,7 +5111,7 @@
             this.aliasConnLabel7.Location = new System.Drawing.Point(388, 471);
             this.aliasConnLabel7.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel7.Name = "aliasConnLabel7";
-            this.aliasConnLabel7.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel7.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel7.TabIndex = 155;
             this.aliasConnLabel7.Text = "no data";
             // 
@@ -5097,7 +5124,7 @@
             this.channelLabel5.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel5.Location = new System.Drawing.Point(576, 431);
             this.channelLabel5.Name = "channelLabel5";
-            this.channelLabel5.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel5.Size = new System.Drawing.Size(80, 22);
             this.channelLabel5.TabIndex = 154;
             this.channelLabel5.Text = "no data";
             // 
@@ -5110,7 +5137,7 @@
             this.channelLabel6.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel6.Location = new System.Drawing.Point(576, 451);
             this.channelLabel6.Name = "channelLabel6";
-            this.channelLabel6.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel6.Size = new System.Drawing.Size(80, 22);
             this.channelLabel6.TabIndex = 153;
             this.channelLabel6.Text = "no data";
             // 
@@ -5124,7 +5151,7 @@
             this.aliasConnLabel6.Location = new System.Drawing.Point(388, 451);
             this.aliasConnLabel6.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel6.Name = "aliasConnLabel6";
-            this.aliasConnLabel6.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel6.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel6.TabIndex = 152;
             this.aliasConnLabel6.Text = "no data";
             // 
@@ -5138,7 +5165,7 @@
             this.aliasConnLabel5.Location = new System.Drawing.Point(388, 431);
             this.aliasConnLabel5.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel5.Name = "aliasConnLabel5";
-            this.aliasConnLabel5.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel5.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel5.TabIndex = 151;
             this.aliasConnLabel5.Text = "no data";
             // 
@@ -5151,7 +5178,7 @@
             this.channelLabel3.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel3.Location = new System.Drawing.Point(576, 391);
             this.channelLabel3.Name = "channelLabel3";
-            this.channelLabel3.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel3.Size = new System.Drawing.Size(80, 22);
             this.channelLabel3.TabIndex = 150;
             this.channelLabel3.Text = "no data";
             // 
@@ -5164,7 +5191,7 @@
             this.channelLabel4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel4.Location = new System.Drawing.Point(576, 411);
             this.channelLabel4.Name = "channelLabel4";
-            this.channelLabel4.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel4.Size = new System.Drawing.Size(80, 22);
             this.channelLabel4.TabIndex = 149;
             this.channelLabel4.Text = "no data";
             // 
@@ -5178,7 +5205,7 @@
             this.aliasConnLabel4.Location = new System.Drawing.Point(388, 411);
             this.aliasConnLabel4.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel4.Name = "aliasConnLabel4";
-            this.aliasConnLabel4.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel4.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel4.TabIndex = 148;
             this.aliasConnLabel4.Text = "no data";
             // 
@@ -5192,7 +5219,7 @@
             this.aliasConnLabel3.Location = new System.Drawing.Point(388, 391);
             this.aliasConnLabel3.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel3.Name = "aliasConnLabel3";
-            this.aliasConnLabel3.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel3.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel3.TabIndex = 147;
             this.aliasConnLabel3.Text = "no data";
             // 
@@ -5205,7 +5232,7 @@
             this.channelLabel1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel1.Location = new System.Drawing.Point(576, 351);
             this.channelLabel1.Name = "channelLabel1";
-            this.channelLabel1.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel1.Size = new System.Drawing.Size(80, 22);
             this.channelLabel1.TabIndex = 146;
             this.channelLabel1.Text = "no data";
             // 
@@ -5218,7 +5245,7 @@
             this.channelLabel2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.channelLabel2.Location = new System.Drawing.Point(576, 371);
             this.channelLabel2.Name = "channelLabel2";
-            this.channelLabel2.Size = new System.Drawing.Size(64, 18);
+            this.channelLabel2.Size = new System.Drawing.Size(80, 22);
             this.channelLabel2.TabIndex = 145;
             this.channelLabel2.Text = "no data";
             // 
@@ -5232,7 +5259,7 @@
             this.aliasConnLabel2.Location = new System.Drawing.Point(388, 371);
             this.aliasConnLabel2.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel2.Name = "aliasConnLabel2";
-            this.aliasConnLabel2.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel2.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel2.TabIndex = 144;
             this.aliasConnLabel2.Text = "no data";
             // 
@@ -5246,7 +5273,7 @@
             this.aliasConnLabel1.Location = new System.Drawing.Point(388, 351);
             this.aliasConnLabel1.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel1.Name = "aliasConnLabel1";
-            this.aliasConnLabel1.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel1.Size = new System.Drawing.Size(80, 15);
             this.aliasConnLabel1.TabIndex = 143;
             this.aliasConnLabel1.Text = "no data";
             // 
@@ -5283,7 +5310,7 @@
             this.capacityLabel9.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel9.Location = new System.Drawing.Point(188, 511);
             this.capacityLabel9.Name = "capacityLabel9";
-            this.capacityLabel9.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel9.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel9.TabIndex = 139;
             this.capacityLabel9.Text = "no data";
             // 
@@ -5296,7 +5323,7 @@
             this.capacityLabel10.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel10.Location = new System.Drawing.Point(188, 531);
             this.capacityLabel10.Name = "capacityLabel10";
-            this.capacityLabel10.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel10.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel10.TabIndex = 138;
             this.capacityLabel10.Text = "no data";
             // 
@@ -5310,7 +5337,7 @@
             this.aliasLabel10.Location = new System.Drawing.Point(3, 531);
             this.aliasLabel10.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel10.Name = "aliasLabel10";
-            this.aliasLabel10.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel10.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel10.TabIndex = 137;
             this.aliasLabel10.Text = "no data";
             // 
@@ -5324,7 +5351,7 @@
             this.aliasLabel9.Location = new System.Drawing.Point(3, 511);
             this.aliasLabel9.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel9.Name = "aliasLabel9";
-            this.aliasLabel9.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel9.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel9.TabIndex = 136;
             this.aliasLabel9.Text = "no data";
             // 
@@ -5337,7 +5364,7 @@
             this.capacityLabel7.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel7.Location = new System.Drawing.Point(188, 471);
             this.capacityLabel7.Name = "capacityLabel7";
-            this.capacityLabel7.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel7.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel7.TabIndex = 135;
             this.capacityLabel7.Text = "no data";
             // 
@@ -5350,7 +5377,7 @@
             this.capacityLabel8.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel8.Location = new System.Drawing.Point(188, 491);
             this.capacityLabel8.Name = "capacityLabel8";
-            this.capacityLabel8.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel8.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel8.TabIndex = 134;
             this.capacityLabel8.Text = "no data";
             // 
@@ -5364,7 +5391,7 @@
             this.aliasLabel8.Location = new System.Drawing.Point(3, 491);
             this.aliasLabel8.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel8.Name = "aliasLabel8";
-            this.aliasLabel8.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel8.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel8.TabIndex = 133;
             this.aliasLabel8.Text = "no data";
             // 
@@ -5378,7 +5405,7 @@
             this.aliasLabel7.Location = new System.Drawing.Point(3, 471);
             this.aliasLabel7.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel7.Name = "aliasLabel7";
-            this.aliasLabel7.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel7.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel7.TabIndex = 132;
             this.aliasLabel7.Text = "no data";
             // 
@@ -5391,7 +5418,7 @@
             this.capacityLabel5.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel5.Location = new System.Drawing.Point(188, 431);
             this.capacityLabel5.Name = "capacityLabel5";
-            this.capacityLabel5.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel5.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel5.TabIndex = 131;
             this.capacityLabel5.Text = "no data";
             // 
@@ -5404,7 +5431,7 @@
             this.capacityLabel6.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel6.Location = new System.Drawing.Point(188, 451);
             this.capacityLabel6.Name = "capacityLabel6";
-            this.capacityLabel6.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel6.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel6.TabIndex = 130;
             this.capacityLabel6.Text = "no data";
             // 
@@ -5418,7 +5445,7 @@
             this.aliasLabel6.Location = new System.Drawing.Point(3, 451);
             this.aliasLabel6.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel6.Name = "aliasLabel6";
-            this.aliasLabel6.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel6.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel6.TabIndex = 129;
             this.aliasLabel6.Text = "no data";
             // 
@@ -5432,7 +5459,7 @@
             this.aliasLabel5.Location = new System.Drawing.Point(3, 431);
             this.aliasLabel5.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel5.Name = "aliasLabel5";
-            this.aliasLabel5.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel5.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel5.TabIndex = 128;
             this.aliasLabel5.Text = "no data";
             // 
@@ -5445,7 +5472,7 @@
             this.capacityLabel3.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel3.Location = new System.Drawing.Point(188, 391);
             this.capacityLabel3.Name = "capacityLabel3";
-            this.capacityLabel3.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel3.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel3.TabIndex = 127;
             this.capacityLabel3.Text = "no data";
             // 
@@ -5458,7 +5485,7 @@
             this.capacityLabel4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel4.Location = new System.Drawing.Point(188, 411);
             this.capacityLabel4.Name = "capacityLabel4";
-            this.capacityLabel4.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel4.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel4.TabIndex = 126;
             this.capacityLabel4.Text = "no data";
             // 
@@ -5472,7 +5499,7 @@
             this.aliasLabel4.Location = new System.Drawing.Point(3, 411);
             this.aliasLabel4.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel4.Name = "aliasLabel4";
-            this.aliasLabel4.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel4.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel4.TabIndex = 125;
             this.aliasLabel4.Text = "no data";
             // 
@@ -5486,7 +5513,7 @@
             this.aliasLabel3.Location = new System.Drawing.Point(3, 391);
             this.aliasLabel3.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel3.Name = "aliasLabel3";
-            this.aliasLabel3.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel3.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel3.TabIndex = 124;
             this.aliasLabel3.Text = "no data";
             // 
@@ -5499,7 +5526,7 @@
             this.capacityLabel1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel1.Location = new System.Drawing.Point(188, 351);
             this.capacityLabel1.Name = "capacityLabel1";
-            this.capacityLabel1.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel1.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel1.TabIndex = 123;
             this.capacityLabel1.Text = "no data";
             // 
@@ -5512,7 +5539,7 @@
             this.capacityLabel2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.capacityLabel2.Location = new System.Drawing.Point(188, 371);
             this.capacityLabel2.Name = "capacityLabel2";
-            this.capacityLabel2.Size = new System.Drawing.Size(64, 18);
+            this.capacityLabel2.Size = new System.Drawing.Size(80, 22);
             this.capacityLabel2.TabIndex = 122;
             this.capacityLabel2.Text = "no data";
             // 
@@ -5526,7 +5553,7 @@
             this.aliasLabel2.Location = new System.Drawing.Point(3, 371);
             this.aliasLabel2.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel2.Name = "aliasLabel2";
-            this.aliasLabel2.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel2.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel2.TabIndex = 121;
             this.aliasLabel2.Text = "no data";
             // 
@@ -5540,7 +5567,7 @@
             this.aliasLabel1.Location = new System.Drawing.Point(3, 351);
             this.aliasLabel1.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel1.Name = "aliasLabel1";
-            this.aliasLabel1.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel1.Size = new System.Drawing.Size(80, 15);
             this.aliasLabel1.TabIndex = 120;
             this.aliasLabel1.Text = "no data";
             // 
@@ -5563,7 +5590,7 @@
             this.lblUnknownCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnknownCapacity.Location = new System.Drawing.Point(188, 113);
             this.lblUnknownCapacity.Name = "lblUnknownCapacity";
-            this.lblUnknownCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblUnknownCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblUnknownCapacity.TabIndex = 117;
             this.lblUnknownCapacity.Text = "no data";
             // 
@@ -5586,7 +5613,7 @@
             this.lblTorCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTorCapacity.Location = new System.Drawing.Point(188, 76);
             this.lblTorCapacity.Name = "lblTorCapacity";
-            this.lblTorCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblTorCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblTorCapacity.TabIndex = 115;
             this.lblTorCapacity.Text = "no data";
             // 
@@ -5609,7 +5636,7 @@
             this.lblClearnetCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClearnetCapacity.Location = new System.Drawing.Point(188, 39);
             this.lblClearnetCapacity.Name = "lblClearnetCapacity";
-            this.lblClearnetCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblClearnetCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblClearnetCapacity.TabIndex = 113;
             this.lblClearnetCapacity.Text = "no data";
             // 
@@ -5632,7 +5659,7 @@
             this.lblTotalCapacity.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalCapacity.Location = new System.Drawing.Point(3, 39);
             this.lblTotalCapacity.Name = "lblTotalCapacity";
-            this.lblTotalCapacity.Size = new System.Drawing.Size(64, 18);
+            this.lblTotalCapacity.Size = new System.Drawing.Size(80, 22);
             this.lblTotalCapacity.TabIndex = 91;
             this.lblTotalCapacity.Text = "no data";
             // 
@@ -5680,7 +5707,7 @@
             this.lblAddressConfirmedSpentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedSpentFiat.Location = new System.Drawing.Point(0, 449);
             this.lblAddressConfirmedSpentFiat.Name = "lblAddressConfirmedSpentFiat";
-            this.lblAddressConfirmedSpentFiat.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedSpentFiat.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedSpentFiat.TabIndex = 216;
             this.lblAddressConfirmedSpentFiat.Text = "(no data)";
             this.lblAddressConfirmedSpentFiat.Visible = false;
@@ -5692,7 +5719,7 @@
             this.lblAddressConfirmedReceivedFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedReceivedFiat.Location = new System.Drawing.Point(0, 370);
             this.lblAddressConfirmedReceivedFiat.Name = "lblAddressConfirmedReceivedFiat";
-            this.lblAddressConfirmedReceivedFiat.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedReceivedFiat.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedReceivedFiat.TabIndex = 215;
             this.lblAddressConfirmedReceivedFiat.Text = "(no data)";
             this.lblAddressConfirmedReceivedFiat.Visible = false;
@@ -5704,7 +5731,7 @@
             this.lblAddressConfirmedUnspentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedUnspentFiat.Location = new System.Drawing.Point(0, 242);
             this.lblAddressConfirmedUnspentFiat.Name = "lblAddressConfirmedUnspentFiat";
-            this.lblAddressConfirmedUnspentFiat.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedUnspentFiat.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedUnspentFiat.TabIndex = 214;
             this.lblAddressConfirmedUnspentFiat.Text = "(no data)";
             this.lblAddressConfirmedUnspentFiat.Visible = false;
@@ -5862,7 +5889,7 @@
             this.textboxSubmittedAddress.Location = new System.Drawing.Point(6, 4);
             this.textboxSubmittedAddress.MaxLength = 80;
             this.textboxSubmittedAddress.Name = "textboxSubmittedAddress";
-            this.textboxSubmittedAddress.Size = new System.Drawing.Size(445, 15);
+            this.textboxSubmittedAddress.Size = new System.Drawing.Size(445, 18);
             this.textboxSubmittedAddress.TabIndex = 2;
             this.textboxSubmittedAddress.TextChanged += new System.EventHandler(this.TboxSubmittedAddress_TextChanged);
             // 
@@ -5873,7 +5900,7 @@
             this.lblInvalidAddressIndicator.ForeColor = System.Drawing.Color.IndianRed;
             this.lblInvalidAddressIndicator.Location = new System.Drawing.Point(564, 3);
             this.lblInvalidAddressIndicator.Name = "lblInvalidAddressIndicator";
-            this.lblInvalidAddressIndicator.Size = new System.Drawing.Size(0, 17);
+            this.lblInvalidAddressIndicator.Size = new System.Drawing.Size(0, 20);
             this.lblInvalidAddressIndicator.TabIndex = 199;
             // 
             // label58
@@ -5965,7 +5992,7 @@
             this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 512);
             this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
-            this.lblAddressTXPositionInList.Size = new System.Drawing.Size(117, 16);
+            this.lblAddressTXPositionInList.Size = new System.Drawing.Size(139, 17);
             this.lblAddressTXPositionInList.TabIndex = 142;
             this.lblAddressTXPositionInList.Text = "Transactions n-n of n";
             this.lblAddressTXPositionInList.Visible = false;
@@ -6051,7 +6078,7 @@
             this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspentOutputs.Location = new System.Drawing.Point(0, 256);
             this.lblAddressConfirmedUnspentOutputs.Name = "lblAddressConfirmedUnspentOutputs";
-            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
             this.lblAddressConfirmedUnspentOutputs.Visible = false;
@@ -6062,7 +6089,7 @@
             this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpentOutputs.Location = new System.Drawing.Point(0, 463);
             this.lblAddressConfirmedSpentOutputs.Name = "lblAddressConfirmedSpentOutputs";
-            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
             this.lblAddressConfirmedSpentOutputs.Visible = false;
@@ -6073,7 +6100,7 @@
             this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceivedOutputs.Location = new System.Drawing.Point(0, 383);
             this.lblAddressConfirmedReceivedOutputs.Name = "lblAddressConfirmedReceivedOutputs";
-            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(70, 14);
+            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(80, 18);
             this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
             this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
             this.lblAddressConfirmedReceivedOutputs.Visible = false;
@@ -6095,7 +6122,7 @@
             this.lblAddressConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspent.Location = new System.Drawing.Point(0, 221);
             this.lblAddressConfirmedUnspent.Name = "lblAddressConfirmedUnspent";
-            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(18, 19);
+            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(21, 23);
             this.lblAddressConfirmedUnspent.TabIndex = 129;
             this.lblAddressConfirmedUnspent.Text = "0";
             this.lblAddressConfirmedUnspent.Visible = false;
@@ -6107,7 +6134,7 @@
             this.lblAddressConfirmedSpent.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpent.Location = new System.Drawing.Point(0, 430);
             this.lblAddressConfirmedSpent.Name = "lblAddressConfirmedSpent";
-            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(18, 19);
+            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(21, 23);
             this.lblAddressConfirmedSpent.TabIndex = 127;
             this.lblAddressConfirmedSpent.Text = "0";
             this.lblAddressConfirmedSpent.Visible = false;
@@ -6119,7 +6146,7 @@
             this.lblAddressConfirmedReceived.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceived.Location = new System.Drawing.Point(0, 351);
             this.lblAddressConfirmedReceived.Name = "lblAddressConfirmedReceived";
-            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(18, 19);
+            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(21, 23);
             this.lblAddressConfirmedReceived.TabIndex = 125;
             this.lblAddressConfirmedReceived.Text = "0";
             this.lblAddressConfirmedReceived.Visible = false;
@@ -6131,7 +6158,7 @@
             this.lblAddressConfirmedTransactionCount.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedTransactionCount.Location = new System.Drawing.Point(0, 300);
             this.lblAddressConfirmedTransactionCount.Name = "lblAddressConfirmedTransactionCount";
-            this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(72, 19);
+            this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(87, 23);
             this.lblAddressConfirmedTransactionCount.TabIndex = 117;
             this.lblAddressConfirmedTransactionCount.Text = "no data";
             this.lblAddressConfirmedTransactionCount.Visible = false;
@@ -6142,7 +6169,7 @@
             this.lblAddressType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressType.Location = new System.Drawing.Point(5, 163);
             this.lblAddressType.Name = "lblAddressType";
-            this.lblAddressType.Size = new System.Drawing.Size(56, 14);
+            this.lblAddressType.Size = new System.Drawing.Size(64, 18);
             this.lblAddressType.TabIndex = 3;
             this.lblAddressType.Text = "no data";
             this.lblAddressType.Visible = false;
@@ -6318,7 +6345,7 @@
             0,
             0});
             this.numericUpDownSubmittedBlockNumber.Name = "numericUpDownSubmittedBlockNumber";
-            this.numericUpDownSubmittedBlockNumber.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDownSubmittedBlockNumber.Size = new System.Drawing.Size(90, 26);
             this.numericUpDownSubmittedBlockNumber.TabIndex = 261;
             this.numericUpDownSubmittedBlockNumber.TabStop = false;
             this.numericUpDownSubmittedBlockNumber.Value = new decimal(new int[] {
@@ -6360,7 +6387,7 @@
             this.lblRewardFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblRewardFiat.Location = new System.Drawing.Point(0, 337);
             this.lblRewardFiat.Name = "lblRewardFiat";
-            this.lblRewardFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblRewardFiat.Size = new System.Drawing.Size(64, 17);
             this.lblRewardFiat.TabIndex = 255;
             this.lblRewardFiat.Text = "no data";
             // 
@@ -6412,7 +6439,7 @@
             this.lblBlockHash.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockHash.Location = new System.Drawing.Point(43, 3);
             this.lblBlockHash.Name = "lblBlockHash";
-            this.lblBlockHash.Size = new System.Drawing.Size(56, 14);
+            this.lblBlockHash.Size = new System.Drawing.Size(64, 18);
             this.lblBlockHash.TabIndex = 8;
             this.lblBlockHash.Text = "no data";
             // 
@@ -6424,7 +6451,7 @@
             this.lblTotalFeesFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblTotalFeesFiat.Location = new System.Drawing.Point(0, 288);
             this.lblTotalFeesFiat.Name = "lblTotalFeesFiat";
-            this.lblTotalFeesFiat.Size = new System.Drawing.Size(49, 13);
+            this.lblTotalFeesFiat.Size = new System.Drawing.Size(64, 17);
             this.lblTotalFeesFiat.TabIndex = 254;
             this.lblTotalFeesFiat.Text = "no data";
             // 
@@ -6478,7 +6505,7 @@
             this.lblBlockTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBlockTXPositionInList.Location = new System.Drawing.Point(248, 512);
             this.lblBlockTXPositionInList.Name = "lblBlockTXPositionInList";
-            this.lblBlockTXPositionInList.Size = new System.Drawing.Size(117, 16);
+            this.lblBlockTXPositionInList.Size = new System.Drawing.Size(139, 17);
             this.lblBlockTXPositionInList.TabIndex = 157;
             this.lblBlockTXPositionInList.Text = "Transactions n-n of n";
             // 
@@ -6638,7 +6665,7 @@
             this.lblNonce.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNonce.Location = new System.Drawing.Point(0, 440);
             this.lblNonce.Name = "lblNonce";
-            this.lblNonce.Size = new System.Drawing.Size(64, 18);
+            this.lblNonce.Size = new System.Drawing.Size(80, 22);
             this.lblNonce.TabIndex = 168;
             this.lblNonce.Text = "no data";
             // 
@@ -6661,7 +6688,7 @@
             this.lblTotalFees.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalFees.Location = new System.Drawing.Point(0, 270);
             this.lblTotalFees.Name = "lblTotalFees";
-            this.lblTotalFees.Size = new System.Drawing.Size(16, 18);
+            this.lblTotalFees.Size = new System.Drawing.Size(20, 22);
             this.lblTotalFees.TabIndex = 166;
             this.lblTotalFees.Text = "0";
             // 
@@ -6672,7 +6699,7 @@
             this.lblBlockTime.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockTime.Location = new System.Drawing.Point(0, 126);
             this.lblBlockTime.Name = "lblBlockTime";
-            this.lblBlockTime.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockTime.Size = new System.Drawing.Size(80, 22);
             this.lblBlockTime.TabIndex = 152;
             this.lblBlockTime.Text = "no data";
             // 
@@ -6695,7 +6722,7 @@
             this.lblBlockFeeRangeAndMedianFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockFeeRangeAndMedianFee.Location = new System.Drawing.Point(0, 368);
             this.lblBlockFeeRangeAndMedianFee.Name = "lblBlockFeeRangeAndMedianFee";
-            this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(80, 22);
             this.lblBlockFeeRangeAndMedianFee.TabIndex = 150;
             this.lblBlockFeeRangeAndMedianFee.Text = "no data";
             // 
@@ -6706,7 +6733,7 @@
             this.lblMiner.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiner.Location = new System.Drawing.Point(0, 476);
             this.lblMiner.Name = "lblMiner";
-            this.lblMiner.Size = new System.Drawing.Size(64, 18);
+            this.lblMiner.Size = new System.Drawing.Size(80, 22);
             this.lblMiner.TabIndex = 148;
             this.lblMiner.Text = "no data";
             // 
@@ -6729,7 +6756,7 @@
             this.lblBlockAverageFee.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockAverageFee.Location = new System.Drawing.Point(0, 404);
             this.lblBlockAverageFee.Name = "lblBlockAverageFee";
-            this.lblBlockAverageFee.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockAverageFee.Size = new System.Drawing.Size(80, 22);
             this.lblBlockAverageFee.TabIndex = 144;
             this.lblBlockAverageFee.Text = "no data";
             // 
@@ -6740,7 +6767,7 @@
             this.lblNumberOfTXInBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNumberOfTXInBlock.Location = new System.Drawing.Point(0, 162);
             this.lblNumberOfTXInBlock.Name = "lblNumberOfTXInBlock";
-            this.lblNumberOfTXInBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblNumberOfTXInBlock.Size = new System.Drawing.Size(80, 22);
             this.lblNumberOfTXInBlock.TabIndex = 142;
             this.lblNumberOfTXInBlock.Text = "no data";
             // 
@@ -6763,7 +6790,7 @@
             this.lblReward.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReward.Location = new System.Drawing.Point(0, 319);
             this.lblReward.Name = "lblReward";
-            this.lblReward.Size = new System.Drawing.Size(16, 18);
+            this.lblReward.Size = new System.Drawing.Size(20, 22);
             this.lblReward.TabIndex = 140;
             this.lblReward.Text = "0";
             // 
@@ -6774,7 +6801,7 @@
             this.lblBlockWeight.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockWeight.Location = new System.Drawing.Point(0, 234);
             this.lblBlockWeight.Name = "lblBlockWeight";
-            this.lblBlockWeight.Size = new System.Drawing.Size(64, 18);
+            this.lblBlockWeight.Size = new System.Drawing.Size(80, 22);
             this.lblBlockWeight.TabIndex = 138;
             this.lblBlockWeight.Text = "no data";
             // 
@@ -6797,7 +6824,7 @@
             this.lblSizeOfBlock.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSizeOfBlock.Location = new System.Drawing.Point(0, 198);
             this.lblSizeOfBlock.Name = "lblSizeOfBlock";
-            this.lblSizeOfBlock.Size = new System.Drawing.Size(64, 18);
+            this.lblSizeOfBlock.Size = new System.Drawing.Size(80, 22);
             this.lblSizeOfBlock.TabIndex = 136;
             this.lblSizeOfBlock.Text = "no data";
             // 
@@ -6870,7 +6897,7 @@
             this.lblMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblMenuHighlightedButtonText.Location = new System.Drawing.Point(34, 17);
             this.lblMenuHighlightedButtonText.Name = "lblMenuHighlightedButtonText";
-            this.lblMenuHighlightedButtonText.Size = new System.Drawing.Size(46, 17);
+            this.lblMenuHighlightedButtonText.Size = new System.Drawing.Size(56, 20);
             this.lblMenuHighlightedButtonText.TabIndex = 162;
             this.lblMenuHighlightedButtonText.Text = "blocks";
             this.lblMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -6883,7 +6910,7 @@
             this.lblHelpOffline.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblHelpOffline.Location = new System.Drawing.Point(20, 305);
             this.lblHelpOffline.Name = "lblHelpOffline";
-            this.lblHelpOffline.Size = new System.Drawing.Size(83, 17);
+            this.lblHelpOffline.Size = new System.Drawing.Size(100, 20);
             this.lblHelpOffline.TabIndex = 257;
             this.lblHelpOffline.Text = "help (offline)";
             this.lblHelpOffline.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -7248,7 +7275,7 @@
             this.headerSelectedNodeStatus.ForeColor = System.Drawing.Color.Silver;
             this.headerSelectedNodeStatus.Location = new System.Drawing.Point(651, 2);
             this.headerSelectedNodeStatus.Name = "headerSelectedNodeStatus";
-            this.headerSelectedNodeStatus.Size = new System.Drawing.Size(126, 13);
+            this.headerSelectedNodeStatus.Size = new System.Drawing.Size(166, 17);
             this.headerSelectedNodeStatus.TabIndex = 241;
             this.headerSelectedNodeStatus.Text = "mempool.space (mainnet)";
             // 
@@ -7260,7 +7287,7 @@
             this.headerSelectedNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
             this.headerSelectedNodeStatusLight.Location = new System.Drawing.Point(638, 4);
             this.headerSelectedNodeStatusLight.Name = "headerSelectedNodeStatusLight";
-            this.headerSelectedNodeStatusLight.Size = new System.Drawing.Size(15, 12);
+            this.headerSelectedNodeStatusLight.Size = new System.Drawing.Size(19, 14);
             this.headerSelectedNodeStatusLight.TabIndex = 240;
             this.headerSelectedNodeStatusLight.Text = "🟢";
             // 
@@ -7317,7 +7344,7 @@
             this.textBoxTransactionID.Location = new System.Drawing.Point(6, 4);
             this.textBoxTransactionID.MaxLength = 80;
             this.textBoxTransactionID.Name = "textBoxTransactionID";
-            this.textBoxTransactionID.Size = new System.Drawing.Size(503, 15);
+            this.textBoxTransactionID.Size = new System.Drawing.Size(503, 18);
             this.textBoxTransactionID.TabIndex = 7;
             this.textBoxTransactionID.TextChanged += new System.EventHandler(this.TextBoxTransactionID_TextChanged);
             this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxTransactionID_KeyPress);
@@ -7567,7 +7594,7 @@
             this.lblInvalidTransaction.ForeColor = System.Drawing.Color.IndianRed;
             this.lblInvalidTransaction.Location = new System.Drawing.Point(606, 6);
             this.lblInvalidTransaction.Name = "lblInvalidTransaction";
-            this.lblInvalidTransaction.Size = new System.Drawing.Size(0, 17);
+            this.lblInvalidTransaction.Size = new System.Drawing.Size(0, 20);
             this.lblInvalidTransaction.TabIndex = 198;
             // 
             // panelTransactionHeadline
@@ -7598,7 +7625,7 @@
             this.lblTransactionConfirmations.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionConfirmations.Location = new System.Drawing.Point(388, 3);
             this.lblTransactionConfirmations.Name = "lblTransactionConfirmations";
-            this.lblTransactionConfirmations.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionConfirmations.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionConfirmations.TabIndex = 171;
             this.lblTransactionConfirmations.Text = "no data";
             // 
@@ -7645,7 +7672,7 @@
             this.lblTransactionVersion.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionVersion.Location = new System.Drawing.Point(628, 3);
             this.lblTransactionVersion.Name = "lblTransactionVersion";
-            this.lblTransactionVersion.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionVersion.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionVersion.TabIndex = 168;
             this.lblTransactionVersion.Text = "no data";
             // 
@@ -7656,7 +7683,7 @@
             this.lblTransactionBlockHeight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionBlockHeight.Location = new System.Drawing.Point(106, 3);
             this.lblTransactionBlockHeight.Name = "lblTransactionBlockHeight";
-            this.lblTransactionBlockHeight.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionBlockHeight.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionBlockHeight.TabIndex = 152;
             this.lblTransactionBlockHeight.Text = "no data";
             // 
@@ -7679,7 +7706,7 @@
             this.lblTransactionBlockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionBlockTime.Location = new System.Drawing.Point(221, 3);
             this.lblTransactionBlockTime.Name = "lblTransactionBlockTime";
-            this.lblTransactionBlockTime.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionBlockTime.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionBlockTime.TabIndex = 142;
             this.lblTransactionBlockTime.Text = "no data";
             // 
@@ -7702,7 +7729,7 @@
             this.lblTransactionLockTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionLockTime.Location = new System.Drawing.Point(526, 3);
             this.lblTransactionLockTime.Name = "lblTransactionLockTime";
-            this.lblTransactionLockTime.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionLockTime.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionLockTime.TabIndex = 140;
             this.lblTransactionLockTime.Text = "no data";
             // 
@@ -7735,7 +7762,7 @@
             this.lblTransactionFeeFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblTransactionFeeFiat.Location = new System.Drawing.Point(320, 323);
             this.lblTransactionFeeFiat.Name = "lblTransactionFeeFiat";
-            this.lblTransactionFeeFiat.Size = new System.Drawing.Size(115, 13);
+            this.lblTransactionFeeFiat.Size = new System.Drawing.Size(152, 17);
             this.lblTransactionFeeFiat.TabIndex = 173;
             this.lblTransactionFeeFiat.Text = "transactionFeeFiat";
             // 
@@ -7747,7 +7774,7 @@
             this.lblTotalOutputValueFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblTotalOutputValueFiat.Location = new System.Drawing.Point(318, 305);
             this.lblTotalOutputValueFiat.Name = "lblTotalOutputValueFiat";
-            this.lblTotalOutputValueFiat.Size = new System.Drawing.Size(127, 13);
+            this.lblTotalOutputValueFiat.Size = new System.Drawing.Size(168, 17);
             this.lblTotalOutputValueFiat.TabIndex = 172;
             this.lblTotalOutputValueFiat.Text = "totalOutputValueFiat";
             // 
@@ -7759,7 +7786,7 @@
             this.lblTotalInputValueFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblTotalInputValueFiat.Location = new System.Drawing.Point(314, 283);
             this.lblTotalInputValueFiat.Name = "lblTotalInputValueFiat";
-            this.lblTotalInputValueFiat.Size = new System.Drawing.Size(121, 13);
+            this.lblTotalInputValueFiat.Size = new System.Drawing.Size(160, 17);
             this.lblTotalInputValueFiat.TabIndex = 171;
             this.lblTotalInputValueFiat.Text = "totalInputValueFiat";
             // 
@@ -7770,7 +7797,7 @@
             this.lblTotalOutputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalOutputValue.Location = new System.Drawing.Point(318, 264);
             this.lblTotalOutputValue.Name = "lblTotalOutputValue";
-            this.lblTotalOutputValue.Size = new System.Drawing.Size(14, 14);
+            this.lblTotalOutputValue.Size = new System.Drawing.Size(16, 18);
             this.lblTotalOutputValue.TabIndex = 170;
             this.lblTotalOutputValue.Text = "0";
             // 
@@ -7781,7 +7808,7 @@
             this.lblTotalInputValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalInputValue.Location = new System.Drawing.Point(314, 242);
             this.lblTotalInputValue.Name = "lblTotalInputValue";
-            this.lblTotalInputValue.Size = new System.Drawing.Size(14, 14);
+            this.lblTotalInputValue.Size = new System.Drawing.Size(16, 18);
             this.lblTotalInputValue.TabIndex = 169;
             this.lblTotalInputValue.Text = "0";
             // 
@@ -7792,7 +7819,7 @@
             this.lblCoinbase.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCoinbase.Location = new System.Drawing.Point(243, 34);
             this.lblCoinbase.Name = "lblCoinbase";
-            this.lblCoinbase.Size = new System.Drawing.Size(84, 14);
+            this.lblCoinbase.Size = new System.Drawing.Size(96, 18);
             this.lblCoinbase.TabIndex = 168;
             this.lblCoinbase.Text = "Is_coinbase";
             // 
@@ -7864,7 +7891,7 @@
             this.lblTransactionFee.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionFee.Location = new System.Drawing.Point(340, 31);
             this.lblTransactionFee.Name = "lblTransactionFee";
-            this.lblTransactionFee.Size = new System.Drawing.Size(14, 14);
+            this.lblTransactionFee.Size = new System.Drawing.Size(16, 18);
             this.lblTransactionFee.TabIndex = 166;
             this.lblTransactionFee.Text = "0";
             // 
@@ -7887,7 +7914,7 @@
             this.lblTransactionInputCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionInputCount.Location = new System.Drawing.Point(251, 15);
             this.lblTransactionInputCount.Name = "lblTransactionInputCount";
-            this.lblTransactionInputCount.Size = new System.Drawing.Size(49, 14);
+            this.lblTransactionInputCount.Size = new System.Drawing.Size(56, 18);
             this.lblTransactionInputCount.TabIndex = 150;
             this.lblTransactionInputCount.Text = "inputs";
             // 
@@ -7898,7 +7925,7 @@
             this.lblTransactionOutputCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTransactionOutputCount.Location = new System.Drawing.Point(418, 16);
             this.lblTransactionOutputCount.Name = "lblTransactionOutputCount";
-            this.lblTransactionOutputCount.Size = new System.Drawing.Size(56, 14);
+            this.lblTransactionOutputCount.Size = new System.Drawing.Size(64, 18);
             this.lblTransactionOutputCount.TabIndex = 144;
             this.lblTransactionOutputCount.Text = "outputs";
             // 
@@ -8109,7 +8136,7 @@
             this.lblCheckEachAddressTypeCount.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCheckEachAddressTypeCount.Location = new System.Drawing.Point(184, 172);
             this.lblCheckEachAddressTypeCount.Name = "lblCheckEachAddressTypeCount";
-            this.lblCheckEachAddressTypeCount.Size = new System.Drawing.Size(13, 13);
+            this.lblCheckEachAddressTypeCount.Size = new System.Drawing.Size(14, 15);
             this.lblCheckEachAddressTypeCount.TabIndex = 232;
             this.lblCheckEachAddressTypeCount.Text = "0";
             this.lblCheckEachAddressTypeCount.Visible = false;
@@ -8121,7 +8148,7 @@
             this.lblCheckAllAddressTypesCount.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCheckAllAddressTypesCount.Location = new System.Drawing.Point(184, 186);
             this.lblCheckAllAddressTypesCount.Name = "lblCheckAllAddressTypesCount";
-            this.lblCheckAllAddressTypesCount.Size = new System.Drawing.Size(13, 13);
+            this.lblCheckAllAddressTypesCount.Size = new System.Drawing.Size(14, 15);
             this.lblCheckAllAddressTypesCount.TabIndex = 233;
             this.lblCheckAllAddressTypesCount.Text = "0";
             this.lblCheckAllAddressTypesCount.Visible = false;
@@ -8160,7 +8187,7 @@
             this.lblXpubConfirmedUnspentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedUnspentFiat.Location = new System.Drawing.Point(-1, 536);
             this.lblXpubConfirmedUnspentFiat.Name = "lblXpubConfirmedUnspentFiat";
-            this.lblXpubConfirmedUnspentFiat.Size = new System.Drawing.Size(13, 13);
+            this.lblXpubConfirmedUnspentFiat.Size = new System.Drawing.Size(16, 17);
             this.lblXpubConfirmedUnspentFiat.TabIndex = 256;
             this.lblXpubConfirmedUnspentFiat.Text = "0";
             this.lblXpubConfirmedUnspentFiat.Visible = false;
@@ -8241,7 +8268,7 @@
             0,
             0});
             this.numberUpDownDerivationPathsToCheck.Name = "numberUpDownDerivationPathsToCheck";
-            this.numberUpDownDerivationPathsToCheck.Size = new System.Drawing.Size(36, 18);
+            this.numberUpDownDerivationPathsToCheck.Size = new System.Drawing.Size(36, 21);
             this.numberUpDownDerivationPathsToCheck.TabIndex = 218;
             this.numberUpDownDerivationPathsToCheck.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numberUpDownDerivationPathsToCheck.Value = new decimal(new int[] {
@@ -8333,7 +8360,7 @@
             0,
             0});
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Name = "numericUpDownMaxNumberOfConsecutiveUnusedAddresses";
-            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Size = new System.Drawing.Size(36, 18);
+            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Size = new System.Drawing.Size(36, 21);
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TabIndex = 241;
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TabStop = false;
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -8427,7 +8454,7 @@
             this.textBoxXpubScreenOwnNodeURL.ForeColor = System.Drawing.Color.Gray;
             this.textBoxXpubScreenOwnNodeURL.Location = new System.Drawing.Point(6, 3);
             this.textBoxXpubScreenOwnNodeURL.Name = "textBoxXpubScreenOwnNodeURL";
-            this.textBoxXpubScreenOwnNodeURL.Size = new System.Drawing.Size(248, 15);
+            this.textBoxXpubScreenOwnNodeURL.Size = new System.Drawing.Size(248, 18);
             this.textBoxXpubScreenOwnNodeURL.TabIndex = 200;
             this.textBoxXpubScreenOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
             this.textBoxXpubScreenOwnNodeURL.TextChanged += new System.EventHandler(this.TextBoxXpubScreenOwnNodeURL_TextChanged);
@@ -8465,7 +8492,7 @@
             this.textBoxSubmittedXpub.Location = new System.Drawing.Point(6, 4);
             this.textBoxSubmittedXpub.MaxLength = 200;
             this.textBoxSubmittedXpub.Name = "textBoxSubmittedXpub";
-            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(570, 15);
+            this.textBoxSubmittedXpub.Size = new System.Drawing.Size(570, 18);
             this.textBoxSubmittedXpub.TabIndex = 7;
             this.textBoxSubmittedXpub.TextChanged += new System.EventHandler(this.TextBoxSubmittedXpub_TextChanged);
             this.textBoxSubmittedXpub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSubmittedXpub_KeyPress);
@@ -8478,7 +8505,7 @@
             this.lblValidXpubIndicator.ForeColor = System.Drawing.Color.OliveDrab;
             this.lblValidXpubIndicator.Location = new System.Drawing.Point(637, 52);
             this.lblValidXpubIndicator.Name = "lblValidXpubIndicator";
-            this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 17);
+            this.lblValidXpubIndicator.Size = new System.Drawing.Size(0, 20);
             this.lblValidXpubIndicator.TabIndex = 218;
             // 
             // lblXpubScreenOwnNodeStatusLight
@@ -8489,7 +8516,7 @@
             this.lblXpubScreenOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
             this.lblXpubScreenOwnNodeStatusLight.Location = new System.Drawing.Point(348, 4);
             this.lblXpubScreenOwnNodeStatusLight.Name = "lblXpubScreenOwnNodeStatusLight";
-            this.lblXpubScreenOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
+            this.lblXpubScreenOwnNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblXpubScreenOwnNodeStatusLight.TabIndex = 219;
             this.lblXpubScreenOwnNodeStatusLight.Text = "🟢";
             // 
@@ -8500,7 +8527,7 @@
             this.lblXpubScreenOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
             this.lblXpubScreenOwnNodeStatus.Location = new System.Drawing.Point(367, 2);
             this.lblXpubScreenOwnNodeStatus.Name = "lblXpubScreenOwnNodeStatus";
-            this.lblXpubScreenOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
+            this.lblXpubScreenOwnNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblXpubScreenOwnNodeStatus.TabIndex = 220;
             this.lblXpubScreenOwnNodeStatus.Text = "invalid / node offline";
             // 
@@ -8547,7 +8574,7 @@
             this.lblXpubConfirmedSpentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedSpentFiat.Location = new System.Drawing.Point(-1, 488);
             this.lblXpubConfirmedSpentFiat.Name = "lblXpubConfirmedSpentFiat";
-            this.lblXpubConfirmedSpentFiat.Size = new System.Drawing.Size(13, 13);
+            this.lblXpubConfirmedSpentFiat.Size = new System.Drawing.Size(16, 17);
             this.lblXpubConfirmedSpentFiat.TabIndex = 255;
             this.lblXpubConfirmedSpentFiat.Text = "0";
             this.lblXpubConfirmedSpentFiat.Visible = false;
@@ -8569,7 +8596,7 @@
             this.lblXpubConfirmedReceivedFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedReceivedFiat.Location = new System.Drawing.Point(-1, 440);
             this.lblXpubConfirmedReceivedFiat.Name = "lblXpubConfirmedReceivedFiat";
-            this.lblXpubConfirmedReceivedFiat.Size = new System.Drawing.Size(13, 13);
+            this.lblXpubConfirmedReceivedFiat.Size = new System.Drawing.Size(16, 17);
             this.lblXpubConfirmedReceivedFiat.TabIndex = 254;
             this.lblXpubConfirmedReceivedFiat.Text = "0";
             this.lblXpubConfirmedReceivedFiat.Visible = false;
@@ -8655,7 +8682,7 @@
             this.lblXpubConfirmedReceived.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubConfirmedReceived.Location = new System.Drawing.Point(-1, 426);
             this.lblXpubConfirmedReceived.Name = "lblXpubConfirmedReceived";
-            this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(14, 14);
+            this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedReceived.TabIndex = 202;
             this.lblXpubConfirmedReceived.Text = "0";
             this.lblXpubConfirmedReceived.Visible = false;
@@ -8680,7 +8707,7 @@
             this.lblP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(39, 345);
             this.lblP2SHUsedAddresses.Name = "lblP2SHUsedAddresses";
-            this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(14, 14);
+            this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblP2SHUsedAddresses.TabIndex = 236;
             this.lblP2SHUsedAddresses.Text = "0";
             this.lblP2SHUsedAddresses.Visible = false;
@@ -8692,7 +8719,7 @@
             this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(-1, 474);
             this.lblXpubConfirmedSpent.Name = "lblXpubConfirmedSpent";
-            this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(14, 14);
+            this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedSpent.TabIndex = 204;
             this.lblXpubConfirmedSpent.Text = "0";
             this.lblXpubConfirmedSpent.Visible = false;
@@ -8755,7 +8782,7 @@
             this.lblXpubConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(-1, 522);
             this.lblXpubConfirmedUnspent.Name = "lblXpubConfirmedUnspent";
-            this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(14, 14);
+            this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(16, 18);
             this.lblXpubConfirmedUnspent.TabIndex = 207;
             this.lblXpubConfirmedUnspent.Text = "0";
             this.lblXpubConfirmedUnspent.Visible = false;
@@ -8780,7 +8807,7 @@
             this.lblSegwitUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(134, 238);
             this.lblSegwitUsedAddresses.Name = "lblSegwitUsedAddresses";
-            this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(14, 14);
+            this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitUsedAddresses.TabIndex = 211;
             this.lblSegwitUsedAddresses.Text = "0";
             this.lblSegwitUsedAddresses.Visible = false;
@@ -8792,7 +8819,7 @@
             this.lblSegwitP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(83, 310);
             this.lblSegwitP2SHUsedAddresses.Name = "lblSegwitP2SHUsedAddresses";
-            this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(14, 14);
+            this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblSegwitP2SHUsedAddresses.TabIndex = 212;
             this.lblSegwitP2SHUsedAddresses.Text = "0";
             this.lblSegwitP2SHUsedAddresses.Visible = false;
@@ -8804,7 +8831,7 @@
             this.lblLegacyUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(81, 273);
             this.lblLegacyUsedAddresses.Name = "lblLegacyUsedAddresses";
-            this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(14, 14);
+            this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(16, 18);
             this.lblLegacyUsedAddresses.TabIndex = 213;
             this.lblLegacyUsedAddresses.Text = "0";
             this.lblLegacyUsedAddresses.Visible = false;
@@ -8852,7 +8879,7 @@
             this.textBoxBookmarkEncryptionKey.ForeColor = System.Drawing.Color.Gray;
             this.textBoxBookmarkEncryptionKey.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkEncryptionKey.Name = "textBoxBookmarkEncryptionKey";
-            this.textBoxBookmarkEncryptionKey.Size = new System.Drawing.Size(252, 15);
+            this.textBoxBookmarkEncryptionKey.Size = new System.Drawing.Size(252, 18);
             this.textBoxBookmarkEncryptionKey.TabIndex = 216;
             this.textBoxBookmarkEncryptionKey.TabStop = false;
             this.textBoxBookmarkEncryptionKey.Text = "optional encryption key";
@@ -8879,7 +8906,7 @@
             this.textBoxBookmarkProposedNote.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkProposedNote.MaxLength = 165;
             this.textBoxBookmarkProposedNote.Name = "textBoxBookmarkProposedNote";
-            this.textBoxBookmarkProposedNote.Size = new System.Drawing.Size(252, 15);
+            this.textBoxBookmarkProposedNote.Size = new System.Drawing.Size(252, 18);
             this.textBoxBookmarkProposedNote.TabIndex = 215;
             this.textBoxBookmarkProposedNote.TabStop = false;
             this.textBoxBookmarkProposedNote.Text = "optional notes";
@@ -8896,7 +8923,7 @@
             this.lblBookmarkSavedSuccess.ForeColor = System.Drawing.Color.OliveDrab;
             this.lblBookmarkSavedSuccess.Location = new System.Drawing.Point(8, 90);
             this.lblBookmarkSavedSuccess.Name = "lblBookmarkSavedSuccess";
-            this.lblBookmarkSavedSuccess.Size = new System.Drawing.Size(61, 17);
+            this.lblBookmarkSavedSuccess.Size = new System.Drawing.Size(76, 20);
             this.lblBookmarkSavedSuccess.TabIndex = 217;
             this.lblBookmarkSavedSuccess.Text = "✔️saved";
             this.lblBookmarkSavedSuccess.Visible = false;
@@ -8937,7 +8964,7 @@
             this.lblBookmarkProposalType.Location = new System.Drawing.Point(35, 0);
             this.lblBookmarkProposalType.Margin = new System.Windows.Forms.Padding(0);
             this.lblBookmarkProposalType.Name = "lblBookmarkProposalType";
-            this.lblBookmarkProposalType.Size = new System.Drawing.Size(35, 17);
+            this.lblBookmarkProposalType.Size = new System.Drawing.Size(42, 20);
             this.lblBookmarkProposalType.TabIndex = 48;
             this.lblBookmarkProposalType.Text = "type";
             // 
@@ -9047,7 +9074,7 @@
             this.label150.Location = new System.Drawing.Point(3, 2);
             this.label150.Margin = new System.Windows.Forms.Padding(0);
             this.label150.Name = "label150";
-            this.label150.Size = new System.Drawing.Size(139, 17);
+            this.label150.Size = new System.Drawing.Size(171, 20);
             this.label150.TabIndex = 153;
             this.label150.Text = "Hashrate (hashes/sec)";
             // 
@@ -9060,7 +9087,7 @@
             this.lblHeaderHashrate.Location = new System.Drawing.Point(2, 85);
             this.lblHeaderHashrate.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderHashrate.Name = "lblHeaderHashrate";
-            this.lblHeaderHashrate.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderHashrate.Size = new System.Drawing.Size(67, 20);
             this.lblHeaderHashrate.TabIndex = 211;
             this.lblHeaderHashrate.Text = "no data";
             // 
@@ -9086,7 +9113,7 @@
             this.label1.Location = new System.Drawing.Point(5, 2);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 17);
+            this.label1.Size = new System.Drawing.Size(179, 20);
             this.label1.TabIndex = 153;
             this.label1.Text = "On-chain fees (sats/vB)";
             // 
@@ -9098,7 +9125,7 @@
             this.label29.ForeColor = System.Drawing.Color.Silver;
             this.label29.Location = new System.Drawing.Point(152, 24);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(37, 17);
+            this.label29.Size = new System.Drawing.Size(45, 20);
             this.label29.TabIndex = 83;
             this.label29.Text = "1day";
             // 
@@ -9110,7 +9137,7 @@
             this.label28.ForeColor = System.Drawing.Color.Silver;
             this.label28.Location = new System.Drawing.Point(102, 24);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(33, 17);
+            this.label28.Size = new System.Drawing.Size(38, 20);
             this.label28.TabIndex = 82;
             this.label28.Text = "60m";
             // 
@@ -9122,7 +9149,7 @@
             this.label25.ForeColor = System.Drawing.Color.Silver;
             this.label25.Location = new System.Drawing.Point(52, 24);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(33, 17);
+            this.label25.Size = new System.Drawing.Size(38, 20);
             this.label25.TabIndex = 81;
             this.label25.Text = "30m";
             // 
@@ -9134,7 +9161,7 @@
             this.label15.ForeColor = System.Drawing.Color.Silver;
             this.label15.Location = new System.Drawing.Point(2, 24);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(33, 17);
+            this.label15.Size = new System.Drawing.Size(38, 20);
             this.label15.TabIndex = 79;
             this.label15.Text = "10m";
             // 
@@ -9146,7 +9173,7 @@
             this.lblHeaderFeesNoPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblHeaderFeesNoPriority.Location = new System.Drawing.Point(160, 41);
             this.lblHeaderFeesNoPriority.Name = "lblHeaderFeesNoPriority";
-            this.lblHeaderFeesNoPriority.Size = new System.Drawing.Size(15, 17);
+            this.lblHeaderFeesNoPriority.Size = new System.Drawing.Size(18, 20);
             this.lblHeaderFeesNoPriority.TabIndex = 78;
             this.lblHeaderFeesNoPriority.Text = "?";
             // 
@@ -9158,7 +9185,7 @@
             this.lblHeaderFeesLowPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblHeaderFeesLowPriority.Location = new System.Drawing.Point(106, 41);
             this.lblHeaderFeesLowPriority.Name = "lblHeaderFeesLowPriority";
-            this.lblHeaderFeesLowPriority.Size = new System.Drawing.Size(15, 17);
+            this.lblHeaderFeesLowPriority.Size = new System.Drawing.Size(18, 20);
             this.lblHeaderFeesLowPriority.TabIndex = 77;
             this.lblHeaderFeesLowPriority.Text = "?";
             // 
@@ -9171,7 +9198,7 @@
             this.lblHeaderfeesHighPriority.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.lblHeaderfeesHighPriority.Location = new System.Drawing.Point(6, 41);
             this.lblHeaderfeesHighPriority.Name = "lblHeaderfeesHighPriority";
-            this.lblHeaderfeesHighPriority.Size = new System.Drawing.Size(15, 17);
+            this.lblHeaderfeesHighPriority.Size = new System.Drawing.Size(18, 20);
             this.lblHeaderfeesHighPriority.TabIndex = 76;
             this.lblHeaderfeesHighPriority.Text = "?";
             // 
@@ -9183,7 +9210,7 @@
             this.lblHeaderFeesMediumPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblHeaderFeesMediumPriority.Location = new System.Drawing.Point(58, 41);
             this.lblHeaderFeesMediumPriority.Name = "lblHeaderFeesMediumPriority";
-            this.lblHeaderFeesMediumPriority.Size = new System.Drawing.Size(15, 17);
+            this.lblHeaderFeesMediumPriority.Size = new System.Drawing.Size(18, 20);
             this.lblHeaderFeesMediumPriority.TabIndex = 75;
             this.lblHeaderFeesMediumPriority.Text = "?";
             // 
@@ -9236,7 +9263,7 @@
             this.textBoxBookmarkKey.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkKey.MaxLength = 165;
             this.textBoxBookmarkKey.Name = "textBoxBookmarkKey";
-            this.textBoxBookmarkKey.Size = new System.Drawing.Size(240, 16);
+            this.textBoxBookmarkKey.Size = new System.Drawing.Size(240, 20);
             this.textBoxBookmarkKey.TabIndex = 217;
             this.textBoxBookmarkKey.Text = "enter key to unlock";
             this.textBoxBookmarkKey.Visible = false;
@@ -9276,7 +9303,7 @@
             this.lblBookmarkStatusMessage.ForeColor = System.Drawing.Color.IndianRed;
             this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(424, 73);
             this.lblBookmarkStatusMessage.Name = "lblBookmarkStatusMessage";
-            this.lblBookmarkStatusMessage.Size = new System.Drawing.Size(118, 17);
+            this.lblBookmarkStatusMessage.Size = new System.Drawing.Size(145, 20);
             this.lblBookmarkStatusMessage.TabIndex = 217;
             this.lblBookmarkStatusMessage.Text = "bookmark deleted";
             this.lblBookmarkStatusMessage.Visible = false;
@@ -9387,7 +9414,7 @@
             this.lblSelectedBookmarkType.Location = new System.Drawing.Point(2, 4);
             this.lblSelectedBookmarkType.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblSelectedBookmarkType.Name = "lblSelectedBookmarkType";
-            this.lblSelectedBookmarkType.Size = new System.Drawing.Size(35, 17);
+            this.lblSelectedBookmarkType.Size = new System.Drawing.Size(42, 20);
             this.lblSelectedBookmarkType.TabIndex = 221;
             this.lblSelectedBookmarkType.Text = "Type";
             // 
@@ -9400,7 +9427,7 @@
             this.lblBookmarkDataInFull.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBookmarkDataInFull.Location = new System.Drawing.Point(42, 5);
             this.lblBookmarkDataInFull.Name = "lblBookmarkDataInFull";
-            this.lblBookmarkDataInFull.Size = new System.Drawing.Size(15, 17);
+            this.lblBookmarkDataInFull.Size = new System.Drawing.Size(17, 20);
             this.lblBookmarkDataInFull.TabIndex = 222;
             this.lblBookmarkDataInFull.Text = "0";
             // 
@@ -9612,7 +9639,7 @@
             this.label284.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label284.Location = new System.Drawing.Point(3, 4);
             this.label284.Name = "label284";
-            this.label284.Size = new System.Drawing.Size(117, 16);
+            this.label284.Size = new System.Drawing.Size(144, 17);
             this.label284.TabIndex = 255;
             this.label284.Text = "delete all bookmarks";
             // 
@@ -9647,7 +9674,7 @@
             this.lblBookmarkTotalCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBookmarkTotalCount.Location = new System.Drawing.Point(3, 5);
             this.lblBookmarkTotalCount.Name = "lblBookmarkTotalCount";
-            this.lblBookmarkTotalCount.Size = new System.Drawing.Size(15, 17);
+            this.lblBookmarkTotalCount.Size = new System.Drawing.Size(17, 20);
             this.lblBookmarkTotalCount.TabIndex = 214;
             this.lblBookmarkTotalCount.Text = "0";
             // 
@@ -9683,7 +9710,7 @@
             this.lblBookmarkBlocksCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkBlocksCount.Location = new System.Drawing.Point(166, 5);
             this.lblBookmarkBlocksCount.Name = "lblBookmarkBlocksCount";
-            this.lblBookmarkBlocksCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkBlocksCount.Size = new System.Drawing.Size(16, 18);
             this.lblBookmarkBlocksCount.TabIndex = 213;
             this.lblBookmarkBlocksCount.Text = "0";
             // 
@@ -9706,7 +9733,7 @@
             this.lblBookmarkTransactionsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkTransactionsCount.Location = new System.Drawing.Point(218, 5);
             this.lblBookmarkTransactionsCount.Name = "lblBookmarkTransactionsCount";
-            this.lblBookmarkTransactionsCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkTransactionsCount.Size = new System.Drawing.Size(16, 18);
             this.lblBookmarkTransactionsCount.TabIndex = 212;
             this.lblBookmarkTransactionsCount.Text = "0";
             // 
@@ -9729,7 +9756,7 @@
             this.lblBookmarkAddressCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkAddressCount.Location = new System.Drawing.Point(93, 5);
             this.lblBookmarkAddressCount.Name = "lblBookmarkAddressCount";
-            this.lblBookmarkAddressCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkAddressCount.Size = new System.Drawing.Size(16, 18);
             this.lblBookmarkAddressCount.TabIndex = 211;
             this.lblBookmarkAddressCount.Text = "0";
             // 
@@ -9740,7 +9767,7 @@
             this.lblBookmarkXpubsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkXpubsCount.Location = new System.Drawing.Point(305, 5);
             this.lblBookmarkXpubsCount.Name = "lblBookmarkXpubsCount";
-            this.lblBookmarkXpubsCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkXpubsCount.Size = new System.Drawing.Size(16, 18);
             this.lblBookmarkXpubsCount.TabIndex = 202;
             this.lblBookmarkXpubsCount.Text = "0";
             // 
@@ -9788,7 +9815,7 @@
             this.lblHeaderMoscowTimeLabel.Location = new System.Drawing.Point(6, 85);
             this.lblHeaderMoscowTimeLabel.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMoscowTimeLabel.Name = "lblHeaderMoscowTimeLabel";
-            this.lblHeaderMoscowTimeLabel.Size = new System.Drawing.Size(56, 17);
+            this.lblHeaderMoscowTimeLabel.Size = new System.Drawing.Size(67, 20);
             this.lblHeaderMoscowTimeLabel.TabIndex = 212;
             this.lblHeaderMoscowTimeLabel.Text = "1$ / sats";
             // 
@@ -9801,7 +9828,7 @@
             this.lblHeaderMarketCap.Location = new System.Drawing.Point(53, 66);
             this.lblHeaderMarketCap.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMarketCap.Name = "lblHeaderMarketCap";
-            this.lblHeaderMarketCap.Size = new System.Drawing.Size(22, 17);
+            this.lblHeaderMarketCap.Size = new System.Drawing.Size(25, 20);
             this.lblHeaderMarketCap.TabIndex = 209;
             this.lblHeaderMarketCap.Text = "$0";
             // 
@@ -9826,7 +9853,7 @@
             this.lblHeaderMoscowTime.Location = new System.Drawing.Point(75, 85);
             this.lblHeaderMoscowTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMoscowTime.Name = "lblHeaderMoscowTime";
-            this.lblHeaderMoscowTime.Size = new System.Drawing.Size(22, 17);
+            this.lblHeaderMoscowTime.Size = new System.Drawing.Size(25, 20);
             this.lblHeaderMoscowTime.TabIndex = 210;
             this.lblHeaderMoscowTime.Text = "$0";
             // 
@@ -9873,7 +9900,7 @@
             this.lblNowViewing.ForeColor = System.Drawing.Color.Silver;
             this.lblNowViewing.Location = new System.Drawing.Point(21, 164);
             this.lblNowViewing.Name = "lblNowViewing";
-            this.lblNowViewing.Size = new System.Drawing.Size(102, 17);
+            this.lblNowViewing.Size = new System.Drawing.Size(125, 19);
             this.lblNowViewing.TabIndex = 217;
             this.lblNowViewing.Text = "- now viewing";
             // 
@@ -9903,7 +9930,7 @@
             this.lblHeaderBlockAge.Location = new System.Drawing.Point(116, 41);
             this.lblHeaderBlockAge.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderBlockAge.Name = "lblHeaderBlockAge";
-            this.lblHeaderBlockAge.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderBlockAge.Size = new System.Drawing.Size(67, 20);
             this.lblHeaderBlockAge.TabIndex = 237;
             this.lblHeaderBlockAge.Text = "no data";
             // 
@@ -9986,7 +10013,7 @@
             this.lblCurrencyMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblCurrencyMenuHighlightedButtonText.Location = new System.Drawing.Point(19, 17);
             this.lblCurrencyMenuHighlightedButtonText.Name = "lblCurrencyMenuHighlightedButtonText";
-            this.lblCurrencyMenuHighlightedButtonText.Size = new System.Drawing.Size(42, 17);
+            this.lblCurrencyMenuHighlightedButtonText.Size = new System.Drawing.Size(50, 20);
             this.lblCurrencyMenuHighlightedButtonText.TabIndex = 165;
             this.lblCurrencyMenuHighlightedButtonText.Text = "USD $";
             this.lblCurrencyMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -10166,7 +10193,7 @@
             this.lblAlwaysOnTop.ForeColor = System.Drawing.Color.IndianRed;
             this.lblAlwaysOnTop.Location = new System.Drawing.Point(8, 30);
             this.lblAlwaysOnTop.Name = "lblAlwaysOnTop";
-            this.lblAlwaysOnTop.Size = new System.Drawing.Size(19, 14);
+            this.lblAlwaysOnTop.Size = new System.Drawing.Size(23, 18);
             this.lblAlwaysOnTop.TabIndex = 227;
             this.lblAlwaysOnTop.Text = "❌";
             this.lblAlwaysOnTop.Click += new System.EventHandler(this.LblAlwaysOnTop_Click);
@@ -10200,7 +10227,7 @@
             this.textBoxSettingsOwnNodeURL.ForeColor = System.Drawing.Color.Gray;
             this.textBoxSettingsOwnNodeURL.Location = new System.Drawing.Point(6, 4);
             this.textBoxSettingsOwnNodeURL.Name = "textBoxSettingsOwnNodeURL";
-            this.textBoxSettingsOwnNodeURL.Size = new System.Drawing.Size(239, 15);
+            this.textBoxSettingsOwnNodeURL.Size = new System.Drawing.Size(239, 18);
             this.textBoxSettingsOwnNodeURL.TabIndex = 202;
             this.textBoxSettingsOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
             this.textBoxSettingsOwnNodeURL.TextChanged += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_TextChanged);
@@ -10241,7 +10268,7 @@
             this.lblSettingsOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsOwnNodeStatusLight.Location = new System.Drawing.Point(140, 3);
             this.lblSettingsOwnNodeStatusLight.Name = "lblSettingsOwnNodeStatusLight";
-            this.lblSettingsOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsOwnNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsOwnNodeStatusLight.TabIndex = 221;
             this.lblSettingsOwnNodeStatusLight.Text = "🟢";
             // 
@@ -10252,7 +10279,7 @@
             this.lblSettingsOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
             this.lblSettingsOwnNodeStatus.Location = new System.Drawing.Point(161, 1);
             this.lblSettingsOwnNodeStatus.Name = "lblSettingsOwnNodeStatus";
-            this.lblSettingsOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
+            this.lblSettingsOwnNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsOwnNodeStatus.TabIndex = 222;
             this.lblSettingsOwnNodeStatus.Text = "invalid / node offline";
             // 
@@ -10476,7 +10503,7 @@
             0,
             0});
             this.numericUpDownDashboardRefresh.Name = "numericUpDownDashboardRefresh";
-            this.numericUpDownDashboardRefresh.Size = new System.Drawing.Size(60, 18);
+            this.numericUpDownDashboardRefresh.Size = new System.Drawing.Size(60, 21);
             this.numericUpDownDashboardRefresh.TabIndex = 47;
             this.numericUpDownDashboardRefresh.TabStop = false;
             this.numericUpDownDashboardRefresh.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -10625,7 +10652,7 @@
             this.lblOfflineMode.ForeColor = System.Drawing.Color.IndianRed;
             this.lblOfflineMode.Location = new System.Drawing.Point(10, 65);
             this.lblOfflineMode.Name = "lblOfflineMode";
-            this.lblOfflineMode.Size = new System.Drawing.Size(19, 14);
+            this.lblOfflineMode.Size = new System.Drawing.Size(23, 18);
             this.lblOfflineMode.TabIndex = 225;
             this.lblOfflineMode.Text = "❌";
             this.lblOfflineMode.Click += new System.EventHandler(this.LblOfflineMode_Click);
@@ -10713,7 +10740,7 @@
             this.lblEnableDirectory.ForeColor = System.Drawing.Color.Green;
             this.lblEnableDirectory.Location = new System.Drawing.Point(10, 67);
             this.lblEnableDirectory.Name = "lblEnableDirectory";
-            this.lblEnableDirectory.Size = new System.Drawing.Size(19, 14);
+            this.lblEnableDirectory.Size = new System.Drawing.Size(23, 18);
             this.lblEnableDirectory.TabIndex = 229;
             this.lblEnableDirectory.Text = "✔️";
             this.lblEnableDirectory.Click += new System.EventHandler(this.LblEnableDirectory_Click);
@@ -10726,7 +10753,7 @@
             this.lblBitcoinExplorerEndpoints.ForeColor = System.Drawing.Color.Green;
             this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(363, 67);
             this.lblBitcoinExplorerEndpoints.Name = "lblBitcoinExplorerEndpoints";
-            this.lblBitcoinExplorerEndpoints.Size = new System.Drawing.Size(19, 14);
+            this.lblBitcoinExplorerEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBitcoinExplorerEndpoints.TabIndex = 42;
             this.lblBitcoinExplorerEndpoints.Text = "✔️";
             this.lblBitcoinExplorerEndpoints.Click += new System.EventHandler(this.LblBitcoinExplorerEndpoints_Click);
@@ -10759,7 +10786,7 @@
             this.lblBlockchainInfoEndpoints.ForeColor = System.Drawing.Color.Green;
             this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(545, 67);
             this.lblBlockchainInfoEndpoints.Name = "lblBlockchainInfoEndpoints";
-            this.lblBlockchainInfoEndpoints.Size = new System.Drawing.Size(19, 14);
+            this.lblBlockchainInfoEndpoints.Size = new System.Drawing.Size(23, 18);
             this.lblBlockchainInfoEndpoints.TabIndex = 44;
             this.lblBlockchainInfoEndpoints.Text = "✔️";
             this.lblBlockchainInfoEndpoints.Click += new System.EventHandler(this.LblBlockchainInfoEndpoints_Click);
@@ -10772,7 +10799,7 @@
             this.lblBlockchairComJSON.ForeColor = System.Drawing.Color.Green;
             this.lblBlockchairComJSON.Location = new System.Drawing.Point(200, 67);
             this.lblBlockchairComJSON.Name = "lblBlockchairComJSON";
-            this.lblBlockchairComJSON.Size = new System.Drawing.Size(19, 14);
+            this.lblBlockchairComJSON.Size = new System.Drawing.Size(23, 18);
             this.lblBlockchairComJSON.TabIndex = 52;
             this.lblBlockchairComJSON.Text = "✔️";
             this.lblBlockchairComJSON.Click += new System.EventHandler(this.LblBlockchairComJSON_Click);
@@ -10814,7 +10841,7 @@
             this.lblSettingsSelectedNodeStatus.ForeColor = System.Drawing.Color.Silver;
             this.lblSettingsSelectedNodeStatus.Location = new System.Drawing.Point(198, 2);
             this.lblSettingsSelectedNodeStatus.Name = "lblSettingsSelectedNodeStatus";
-            this.lblSettingsSelectedNodeStatus.Size = new System.Drawing.Size(130, 17);
+            this.lblSettingsSelectedNodeStatus.Size = new System.Drawing.Size(160, 20);
             this.lblSettingsSelectedNodeStatus.TabIndex = 232;
             this.lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
             // 
@@ -10826,7 +10853,7 @@
             this.lblSettingsSelectedNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsSelectedNodeStatusLight.Location = new System.Drawing.Point(177, 4);
             this.lblSettingsSelectedNodeStatusLight.Name = "lblSettingsSelectedNodeStatusLight";
-            this.lblSettingsSelectedNodeStatusLight.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsSelectedNodeStatusLight.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsSelectedNodeStatusLight.TabIndex = 231;
             this.lblSettingsSelectedNodeStatusLight.Text = "🟢";
             // 
@@ -10862,7 +10889,7 @@
             this.label174.ForeColor = System.Drawing.Color.Silver;
             this.label174.Location = new System.Drawing.Point(31, 63);
             this.label174.Name = "label174";
-            this.label174.Size = new System.Drawing.Size(169, 17);
+            this.label174.Size = new System.Drawing.Size(209, 20);
             this.label174.TabIndex = 237;
             this.label174.Text = "your node (not connected)";
             // 
@@ -10875,7 +10902,7 @@
             this.lblSettingsOwnNodeSelected.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsOwnNodeSelected.Location = new System.Drawing.Point(10, 64);
             this.lblSettingsOwnNodeSelected.Name = "lblSettingsOwnNodeSelected";
-            this.lblSettingsOwnNodeSelected.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsOwnNodeSelected.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsOwnNodeSelected.TabIndex = 238;
             this.lblSettingsOwnNodeSelected.Text = "❌";
             this.lblSettingsOwnNodeSelected.Click += new System.EventHandler(this.LblSettingsNodeCustom_Click);
@@ -10898,7 +10925,7 @@
             this.lblSettingsNodeMainnetSelected.ForeColor = System.Drawing.Color.Green;
             this.lblSettingsNodeMainnetSelected.Location = new System.Drawing.Point(246, 64);
             this.lblSettingsNodeMainnetSelected.Name = "lblSettingsNodeMainnetSelected";
-            this.lblSettingsNodeMainnetSelected.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsNodeMainnetSelected.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsNodeMainnetSelected.TabIndex = 234;
             this.lblSettingsNodeMainnetSelected.Text = "✔️";
             this.lblSettingsNodeMainnetSelected.Click += new System.EventHandler(this.LblSettingsNodeMainnet_Click);
@@ -10921,7 +10948,7 @@
             this.lblSettingsNodeTestnetSelected.ForeColor = System.Drawing.Color.IndianRed;
             this.lblSettingsNodeTestnetSelected.Location = new System.Drawing.Point(510, 64);
             this.lblSettingsNodeTestnetSelected.Name = "lblSettingsNodeTestnetSelected";
-            this.lblSettingsNodeTestnetSelected.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsNodeTestnetSelected.Size = new System.Drawing.Size(23, 18);
             this.lblSettingsNodeTestnetSelected.TabIndex = 236;
             this.lblSettingsNodeTestnetSelected.Text = "❌";
             this.lblSettingsNodeTestnetSelected.Click += new System.EventHandler(this.LblSettingsNodeTestnet_Click);
@@ -11281,7 +11308,7 @@
             0,
             0});
             this.numericUpDownOpacity.Name = "numericUpDownOpacity";
-            this.numericUpDownOpacity.Size = new System.Drawing.Size(51, 18);
+            this.numericUpDownOpacity.Size = new System.Drawing.Size(51, 21);
             this.numericUpDownOpacity.TabIndex = 47;
             this.numericUpDownOpacity.TabStop = false;
             this.numericUpDownOpacity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -12033,7 +12060,7 @@
             this.label184.Location = new System.Drawing.Point(5, 2);
             this.label184.Margin = new System.Windows.Forms.Padding(0);
             this.label184.Name = "label184";
-            this.label184.Size = new System.Drawing.Size(120, 17);
+            this.label184.Size = new System.Drawing.Size(148, 20);
             this.label184.TabIndex = 153;
             this.label184.Text = "Table backgrounds";
             // 
@@ -12172,7 +12199,7 @@
             this.textBox1.Location = new System.Drawing.Point(6, 4);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(87, 15);
+            this.textBox1.Size = new System.Drawing.Size(87, 18);
             this.textBox1.TabIndex = 218;
             this.textBox1.Text = "Textboxes";
             // 
@@ -12198,7 +12225,7 @@
             this.label166.Location = new System.Drawing.Point(5, 2);
             this.label166.Margin = new System.Windows.Forms.Padding(0);
             this.label166.Name = "label166";
-            this.label166.Size = new System.Drawing.Size(116, 17);
+            this.label166.Size = new System.Drawing.Size(141, 20);
             this.label166.TabIndex = 153;
             this.label166.Text = "Controls, lines, etc";
             // 
@@ -13018,7 +13045,7 @@
             this.textBoxThemeName.Location = new System.Drawing.Point(6, 4);
             this.textBoxThemeName.MaxLength = 10;
             this.textBoxThemeName.Name = "textBoxThemeName";
-            this.textBoxThemeName.Size = new System.Drawing.Size(156, 15);
+            this.textBoxThemeName.Size = new System.Drawing.Size(156, 18);
             this.textBoxThemeName.TabIndex = 218;
             this.textBoxThemeName.TextChanged += new System.EventHandler(this.TextBoxThemeName_TextChanged);
             // 
@@ -13345,7 +13372,7 @@
             this.textBoxConvertXAUtoBTC.MaxLength = 16;
             this.textBoxConvertXAUtoBTC.Name = "textBoxConvertXAUtoBTC";
             this.textBoxConvertXAUtoBTC.ShortcutsEnabled = false;
-            this.textBoxConvertXAUtoBTC.Size = new System.Drawing.Size(92, 15);
+            this.textBoxConvertXAUtoBTC.Size = new System.Drawing.Size(92, 18);
             this.textBoxConvertXAUtoBTC.TabIndex = 312;
             this.textBoxConvertXAUtoBTC.TabStop = false;
             this.textBoxConvertXAUtoBTC.Text = "1.00";
@@ -13372,7 +13399,7 @@
             this.textBoxConvertGBPtoBTC.MaxLength = 16;
             this.textBoxConvertGBPtoBTC.Name = "textBoxConvertGBPtoBTC";
             this.textBoxConvertGBPtoBTC.ShortcutsEnabled = false;
-            this.textBoxConvertGBPtoBTC.Size = new System.Drawing.Size(92, 15);
+            this.textBoxConvertGBPtoBTC.Size = new System.Drawing.Size(92, 18);
             this.textBoxConvertGBPtoBTC.TabIndex = 311;
             this.textBoxConvertGBPtoBTC.TabStop = false;
             this.textBoxConvertGBPtoBTC.Text = "1.00";
@@ -13399,7 +13426,7 @@
             this.textBoxConvertEURtoBTC.MaxLength = 16;
             this.textBoxConvertEURtoBTC.Name = "textBoxConvertEURtoBTC";
             this.textBoxConvertEURtoBTC.ShortcutsEnabled = false;
-            this.textBoxConvertEURtoBTC.Size = new System.Drawing.Size(92, 15);
+            this.textBoxConvertEURtoBTC.Size = new System.Drawing.Size(92, 18);
             this.textBoxConvertEURtoBTC.TabIndex = 310;
             this.textBoxConvertEURtoBTC.TabStop = false;
             this.textBoxConvertEURtoBTC.Text = "1.00";
@@ -13426,7 +13453,7 @@
             this.textBoxConvertUSDtoBTC.MaxLength = 16;
             this.textBoxConvertUSDtoBTC.Name = "textBoxConvertUSDtoBTC";
             this.textBoxConvertUSDtoBTC.ShortcutsEnabled = false;
-            this.textBoxConvertUSDtoBTC.Size = new System.Drawing.Size(92, 15);
+            this.textBoxConvertUSDtoBTC.Size = new System.Drawing.Size(92, 18);
             this.textBoxConvertUSDtoBTC.TabIndex = 309;
             this.textBoxConvertUSDtoBTC.TabStop = false;
             this.textBoxConvertUSDtoBTC.Text = "1.00";
@@ -13452,7 +13479,7 @@
             this.textBoxConvertBTCtoFiat.Location = new System.Drawing.Point(6, 4);
             this.textBoxConvertBTCtoFiat.Name = "textBoxConvertBTCtoFiat";
             this.textBoxConvertBTCtoFiat.ShortcutsEnabled = false;
-            this.textBoxConvertBTCtoFiat.Size = new System.Drawing.Size(92, 15);
+            this.textBoxConvertBTCtoFiat.Size = new System.Drawing.Size(92, 18);
             this.textBoxConvertBTCtoFiat.TabIndex = 295;
             this.textBoxConvertBTCtoFiat.TabStop = false;
             this.textBoxConvertBTCtoFiat.Text = "1.00000000";
@@ -13780,7 +13807,7 @@
             this.lblCalculatedXAUFromBTCAmount.Location = new System.Drawing.Point(192, 525);
             this.lblCalculatedXAUFromBTCAmount.Margin = new System.Windows.Forms.Padding(0);
             this.lblCalculatedXAUFromBTCAmount.Name = "lblCalculatedXAUFromBTCAmount";
-            this.lblCalculatedXAUFromBTCAmount.Size = new System.Drawing.Size(74, 17);
+            this.lblCalculatedXAUFromBTCAmount.Size = new System.Drawing.Size(85, 20);
             this.lblCalculatedXAUFromBTCAmount.TabIndex = 313;
             this.lblCalculatedXAUFromBTCAmount.Text = "0.00000000";
             // 
@@ -13805,7 +13832,7 @@
             this.lblCalculatedGBPFromBTCAmount.Location = new System.Drawing.Point(192, 498);
             this.lblCalculatedGBPFromBTCAmount.Margin = new System.Windows.Forms.Padding(0);
             this.lblCalculatedGBPFromBTCAmount.Name = "lblCalculatedGBPFromBTCAmount";
-            this.lblCalculatedGBPFromBTCAmount.Size = new System.Drawing.Size(74, 17);
+            this.lblCalculatedGBPFromBTCAmount.Size = new System.Drawing.Size(85, 20);
             this.lblCalculatedGBPFromBTCAmount.TabIndex = 315;
             this.lblCalculatedGBPFromBTCAmount.Text = "0.00000000";
             // 
@@ -13830,7 +13857,7 @@
             this.lblCalculatedEURFromBTCAmount.Location = new System.Drawing.Point(192, 471);
             this.lblCalculatedEURFromBTCAmount.Margin = new System.Windows.Forms.Padding(0);
             this.lblCalculatedEURFromBTCAmount.Name = "lblCalculatedEURFromBTCAmount";
-            this.lblCalculatedEURFromBTCAmount.Size = new System.Drawing.Size(74, 17);
+            this.lblCalculatedEURFromBTCAmount.Size = new System.Drawing.Size(85, 20);
             this.lblCalculatedEURFromBTCAmount.TabIndex = 317;
             this.lblCalculatedEURFromBTCAmount.Text = "0.00000000";
             // 
@@ -13855,7 +13882,7 @@
             this.lblCalculatedUSDFromBTCAmount.Location = new System.Drawing.Point(192, 444);
             this.lblCalculatedUSDFromBTCAmount.Margin = new System.Windows.Forms.Padding(0);
             this.lblCalculatedUSDFromBTCAmount.Name = "lblCalculatedUSDFromBTCAmount";
-            this.lblCalculatedUSDFromBTCAmount.Size = new System.Drawing.Size(74, 17);
+            this.lblCalculatedUSDFromBTCAmount.Size = new System.Drawing.Size(85, 20);
             this.lblCalculatedUSDFromBTCAmount.TabIndex = 319;
             this.lblCalculatedUSDFromBTCAmount.Text = "0.00000000";
             // 
@@ -13976,7 +14003,7 @@
             this.labelPCXAUcustom.Location = new System.Drawing.Point(523, 384);
             this.labelPCXAUcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAUcustom.Name = "labelPCXAUcustom";
-            this.labelPCXAUcustom.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAUcustom.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAUcustom.TabIndex = 299;
             this.labelPCXAUcustom.Text = "XAU";
             // 
@@ -13989,7 +14016,7 @@
             this.labelPCGBPcustom.Location = new System.Drawing.Point(389, 384);
             this.labelPCGBPcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBPcustom.Name = "labelPCGBPcustom";
-            this.labelPCGBPcustom.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBPcustom.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBPcustom.TabIndex = 298;
             this.labelPCGBPcustom.Text = "GBP";
             // 
@@ -14002,7 +14029,7 @@
             this.labelPCEURcustom.Location = new System.Drawing.Point(255, 384);
             this.labelPCEURcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEURcustom.Name = "labelPCEURcustom";
-            this.labelPCEURcustom.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEURcustom.Size = new System.Drawing.Size(37, 20);
             this.labelPCEURcustom.TabIndex = 297;
             this.labelPCEURcustom.Text = "EUR";
             // 
@@ -14015,7 +14042,7 @@
             this.labelPCUSDcustom.Location = new System.Drawing.Point(121, 384);
             this.labelPCUSDcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSDcustom.Name = "labelPCUSDcustom";
-            this.labelPCUSDcustom.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSDcustom.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSDcustom.TabIndex = 296;
             this.labelPCUSDcustom.Text = "USD";
             // 
@@ -14028,7 +14055,7 @@
             this.labelPCXAU13.Location = new System.Drawing.Point(523, 284);
             this.labelPCXAU13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU13.Name = "labelPCXAU13";
-            this.labelPCXAU13.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU13.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU13.TabIndex = 294;
             this.labelPCXAU13.Text = "XAU";
             // 
@@ -14041,7 +14068,7 @@
             this.labelPCXAU14.Location = new System.Drawing.Point(523, 304);
             this.labelPCXAU14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU14.Name = "labelPCXAU14";
-            this.labelPCXAU14.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU14.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU14.TabIndex = 293;
             this.labelPCXAU14.Text = "XAU";
             // 
@@ -14054,7 +14081,7 @@
             this.labelPCXAU15.Location = new System.Drawing.Point(523, 324);
             this.labelPCXAU15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU15.Name = "labelPCXAU15";
-            this.labelPCXAU15.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU15.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU15.TabIndex = 292;
             this.labelPCXAU15.Text = "XAU";
             // 
@@ -14067,7 +14094,7 @@
             this.labelPCXAU16.Location = new System.Drawing.Point(523, 344);
             this.labelPCXAU16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU16.Name = "labelPCXAU16";
-            this.labelPCXAU16.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU16.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU16.TabIndex = 291;
             this.labelPCXAU16.Text = "XAU";
             // 
@@ -14080,7 +14107,7 @@
             this.labelPCXAU17.Location = new System.Drawing.Point(523, 364);
             this.labelPCXAU17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU17.Name = "labelPCXAU17";
-            this.labelPCXAU17.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU17.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU17.TabIndex = 290;
             this.labelPCXAU17.Text = "XAU";
             // 
@@ -14093,7 +14120,7 @@
             this.labelPCXAU4.Location = new System.Drawing.Point(523, 104);
             this.labelPCXAU4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU4.Name = "labelPCXAU4";
-            this.labelPCXAU4.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU4.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU4.TabIndex = 289;
             this.labelPCXAU4.Text = "XAU";
             // 
@@ -14106,7 +14133,7 @@
             this.labelPCXAU5.Location = new System.Drawing.Point(523, 124);
             this.labelPCXAU5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU5.Name = "labelPCXAU5";
-            this.labelPCXAU5.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU5.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU5.TabIndex = 288;
             this.labelPCXAU5.Text = "XAU";
             // 
@@ -14119,7 +14146,7 @@
             this.labelPCXAU6.Location = new System.Drawing.Point(523, 144);
             this.labelPCXAU6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU6.Name = "labelPCXAU6";
-            this.labelPCXAU6.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU6.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU6.TabIndex = 287;
             this.labelPCXAU6.Text = "XAU";
             // 
@@ -14132,7 +14159,7 @@
             this.labelPCXAU7.Location = new System.Drawing.Point(523, 164);
             this.labelPCXAU7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU7.Name = "labelPCXAU7";
-            this.labelPCXAU7.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU7.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU7.TabIndex = 286;
             this.labelPCXAU7.Text = "XAU";
             // 
@@ -14145,7 +14172,7 @@
             this.labelPCXAU8.Location = new System.Drawing.Point(523, 184);
             this.labelPCXAU8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU8.Name = "labelPCXAU8";
-            this.labelPCXAU8.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU8.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU8.TabIndex = 285;
             this.labelPCXAU8.Text = "XAU";
             // 
@@ -14158,7 +14185,7 @@
             this.labelPCXAU9.Location = new System.Drawing.Point(523, 204);
             this.labelPCXAU9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU9.Name = "labelPCXAU9";
-            this.labelPCXAU9.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU9.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU9.TabIndex = 284;
             this.labelPCXAU9.Text = "XAU";
             // 
@@ -14171,7 +14198,7 @@
             this.labelPCXAU10.Location = new System.Drawing.Point(523, 224);
             this.labelPCXAU10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU10.Name = "labelPCXAU10";
-            this.labelPCXAU10.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU10.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU10.TabIndex = 283;
             this.labelPCXAU10.Text = "XAU";
             // 
@@ -14184,7 +14211,7 @@
             this.labelPCXAU11.Location = new System.Drawing.Point(523, 244);
             this.labelPCXAU11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU11.Name = "labelPCXAU11";
-            this.labelPCXAU11.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU11.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU11.TabIndex = 282;
             this.labelPCXAU11.Text = "XAU";
             // 
@@ -14197,7 +14224,7 @@
             this.labelPCXAU12.Location = new System.Drawing.Point(523, 264);
             this.labelPCXAU12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU12.Name = "labelPCXAU12";
-            this.labelPCXAU12.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU12.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU12.TabIndex = 281;
             this.labelPCXAU12.Text = "XAU";
             // 
@@ -14210,7 +14237,7 @@
             this.labelPCXAU1.Location = new System.Drawing.Point(523, 44);
             this.labelPCXAU1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU1.Name = "labelPCXAU1";
-            this.labelPCXAU1.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU1.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU1.TabIndex = 280;
             this.labelPCXAU1.Text = "XAU";
             // 
@@ -14223,7 +14250,7 @@
             this.labelPCXAU2.Location = new System.Drawing.Point(523, 64);
             this.labelPCXAU2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU2.Name = "labelPCXAU2";
-            this.labelPCXAU2.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU2.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU2.TabIndex = 279;
             this.labelPCXAU2.Text = "XAU";
             // 
@@ -14236,7 +14263,7 @@
             this.labelPCXAU3.Location = new System.Drawing.Point(523, 84);
             this.labelPCXAU3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU3.Name = "labelPCXAU3";
-            this.labelPCXAU3.Size = new System.Drawing.Size(32, 17);
+            this.labelPCXAU3.Size = new System.Drawing.Size(40, 20);
             this.labelPCXAU3.TabIndex = 278;
             this.labelPCXAU3.Text = "XAU";
             // 
@@ -14249,7 +14276,7 @@
             this.labelPCGBP13.Location = new System.Drawing.Point(389, 284);
             this.labelPCGBP13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP13.Name = "labelPCGBP13";
-            this.labelPCGBP13.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP13.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP13.TabIndex = 277;
             this.labelPCGBP13.Text = "GBP";
             // 
@@ -14262,7 +14289,7 @@
             this.labelPCGBP14.Location = new System.Drawing.Point(389, 304);
             this.labelPCGBP14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP14.Name = "labelPCGBP14";
-            this.labelPCGBP14.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP14.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP14.TabIndex = 276;
             this.labelPCGBP14.Text = "GBP";
             // 
@@ -14275,7 +14302,7 @@
             this.labelPCGBP15.Location = new System.Drawing.Point(389, 324);
             this.labelPCGBP15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP15.Name = "labelPCGBP15";
-            this.labelPCGBP15.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP15.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP15.TabIndex = 275;
             this.labelPCGBP15.Text = "GBP";
             // 
@@ -14288,7 +14315,7 @@
             this.labelPCGBP16.Location = new System.Drawing.Point(389, 344);
             this.labelPCGBP16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP16.Name = "labelPCGBP16";
-            this.labelPCGBP16.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP16.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP16.TabIndex = 274;
             this.labelPCGBP16.Text = "GBP";
             // 
@@ -14301,7 +14328,7 @@
             this.labelPCGBP17.Location = new System.Drawing.Point(389, 364);
             this.labelPCGBP17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP17.Name = "labelPCGBP17";
-            this.labelPCGBP17.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP17.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP17.TabIndex = 273;
             this.labelPCGBP17.Text = "GBP";
             // 
@@ -14314,7 +14341,7 @@
             this.labelPCGBP4.Location = new System.Drawing.Point(389, 104);
             this.labelPCGBP4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP4.Name = "labelPCGBP4";
-            this.labelPCGBP4.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP4.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP4.TabIndex = 272;
             this.labelPCGBP4.Text = "GBP";
             // 
@@ -14327,7 +14354,7 @@
             this.labelPCGBP5.Location = new System.Drawing.Point(389, 124);
             this.labelPCGBP5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP5.Name = "labelPCGBP5";
-            this.labelPCGBP5.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP5.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP5.TabIndex = 271;
             this.labelPCGBP5.Text = "GBP";
             // 
@@ -14340,7 +14367,7 @@
             this.labelPCGBP6.Location = new System.Drawing.Point(389, 144);
             this.labelPCGBP6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP6.Name = "labelPCGBP6";
-            this.labelPCGBP6.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP6.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP6.TabIndex = 270;
             this.labelPCGBP6.Text = "GBP";
             // 
@@ -14353,7 +14380,7 @@
             this.labelPCGBP7.Location = new System.Drawing.Point(389, 164);
             this.labelPCGBP7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP7.Name = "labelPCGBP7";
-            this.labelPCGBP7.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP7.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP7.TabIndex = 269;
             this.labelPCGBP7.Text = "GBP";
             // 
@@ -14366,7 +14393,7 @@
             this.labelPCGBP8.Location = new System.Drawing.Point(389, 184);
             this.labelPCGBP8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP8.Name = "labelPCGBP8";
-            this.labelPCGBP8.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP8.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP8.TabIndex = 268;
             this.labelPCGBP8.Text = "GBP";
             // 
@@ -14379,7 +14406,7 @@
             this.labelPCGBP9.Location = new System.Drawing.Point(389, 204);
             this.labelPCGBP9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP9.Name = "labelPCGBP9";
-            this.labelPCGBP9.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP9.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP9.TabIndex = 267;
             this.labelPCGBP9.Text = "GBP";
             // 
@@ -14392,7 +14419,7 @@
             this.labelPCGBP10.Location = new System.Drawing.Point(389, 224);
             this.labelPCGBP10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP10.Name = "labelPCGBP10";
-            this.labelPCGBP10.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP10.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP10.TabIndex = 266;
             this.labelPCGBP10.Text = "GBP";
             // 
@@ -14405,7 +14432,7 @@
             this.labelPCGBP11.Location = new System.Drawing.Point(389, 244);
             this.labelPCGBP11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP11.Name = "labelPCGBP11";
-            this.labelPCGBP11.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP11.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP11.TabIndex = 265;
             this.labelPCGBP11.Text = "GBP";
             // 
@@ -14418,7 +14445,7 @@
             this.labelPCGBP12.Location = new System.Drawing.Point(389, 264);
             this.labelPCGBP12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP12.Name = "labelPCGBP12";
-            this.labelPCGBP12.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP12.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP12.TabIndex = 264;
             this.labelPCGBP12.Text = "GBP";
             // 
@@ -14431,7 +14458,7 @@
             this.labelPCGBP1.Location = new System.Drawing.Point(389, 44);
             this.labelPCGBP1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP1.Name = "labelPCGBP1";
-            this.labelPCGBP1.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP1.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP1.TabIndex = 263;
             this.labelPCGBP1.Text = "GBP";
             // 
@@ -14444,7 +14471,7 @@
             this.labelPCGBP2.Location = new System.Drawing.Point(389, 64);
             this.labelPCGBP2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP2.Name = "labelPCGBP2";
-            this.labelPCGBP2.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP2.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP2.TabIndex = 262;
             this.labelPCGBP2.Text = "GBP";
             // 
@@ -14457,7 +14484,7 @@
             this.labelPCGBP3.Location = new System.Drawing.Point(389, 84);
             this.labelPCGBP3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP3.Name = "labelPCGBP3";
-            this.labelPCGBP3.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP3.Size = new System.Drawing.Size(40, 20);
             this.labelPCGBP3.TabIndex = 261;
             this.labelPCGBP3.Text = "GBP";
             // 
@@ -14470,7 +14497,7 @@
             this.labelPCEUR13.Location = new System.Drawing.Point(255, 284);
             this.labelPCEUR13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR13.Name = "labelPCEUR13";
-            this.labelPCEUR13.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR13.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR13.TabIndex = 260;
             this.labelPCEUR13.Text = "EUR";
             // 
@@ -14483,7 +14510,7 @@
             this.labelPCEUR14.Location = new System.Drawing.Point(255, 304);
             this.labelPCEUR14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR14.Name = "labelPCEUR14";
-            this.labelPCEUR14.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR14.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR14.TabIndex = 259;
             this.labelPCEUR14.Text = "EUR";
             // 
@@ -14496,7 +14523,7 @@
             this.labelPCEUR15.Location = new System.Drawing.Point(255, 324);
             this.labelPCEUR15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR15.Name = "labelPCEUR15";
-            this.labelPCEUR15.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR15.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR15.TabIndex = 258;
             this.labelPCEUR15.Text = "EUR";
             // 
@@ -14509,7 +14536,7 @@
             this.labelPCEUR16.Location = new System.Drawing.Point(255, 344);
             this.labelPCEUR16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR16.Name = "labelPCEUR16";
-            this.labelPCEUR16.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR16.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR16.TabIndex = 257;
             this.labelPCEUR16.Text = "EUR";
             // 
@@ -14522,7 +14549,7 @@
             this.labelPCEUR17.Location = new System.Drawing.Point(255, 364);
             this.labelPCEUR17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR17.Name = "labelPCEUR17";
-            this.labelPCEUR17.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR17.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR17.TabIndex = 256;
             this.labelPCEUR17.Text = "EUR";
             // 
@@ -14535,7 +14562,7 @@
             this.labelPCEUR4.Location = new System.Drawing.Point(255, 104);
             this.labelPCEUR4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR4.Name = "labelPCEUR4";
-            this.labelPCEUR4.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR4.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR4.TabIndex = 255;
             this.labelPCEUR4.Text = "EUR";
             // 
@@ -14548,7 +14575,7 @@
             this.labelPCEUR5.Location = new System.Drawing.Point(255, 124);
             this.labelPCEUR5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR5.Name = "labelPCEUR5";
-            this.labelPCEUR5.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR5.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR5.TabIndex = 254;
             this.labelPCEUR5.Text = "EUR";
             // 
@@ -14561,7 +14588,7 @@
             this.labelPCEUR6.Location = new System.Drawing.Point(255, 144);
             this.labelPCEUR6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR6.Name = "labelPCEUR6";
-            this.labelPCEUR6.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR6.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR6.TabIndex = 253;
             this.labelPCEUR6.Text = "EUR";
             // 
@@ -14574,7 +14601,7 @@
             this.labelPCEUR7.Location = new System.Drawing.Point(255, 164);
             this.labelPCEUR7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR7.Name = "labelPCEUR7";
-            this.labelPCEUR7.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR7.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR7.TabIndex = 252;
             this.labelPCEUR7.Text = "EUR";
             // 
@@ -14587,7 +14614,7 @@
             this.labelPCEUR8.Location = new System.Drawing.Point(255, 184);
             this.labelPCEUR8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR8.Name = "labelPCEUR8";
-            this.labelPCEUR8.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR8.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR8.TabIndex = 251;
             this.labelPCEUR8.Text = "EUR";
             // 
@@ -14600,7 +14627,7 @@
             this.labelPCEUR9.Location = new System.Drawing.Point(255, 204);
             this.labelPCEUR9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR9.Name = "labelPCEUR9";
-            this.labelPCEUR9.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR9.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR9.TabIndex = 250;
             this.labelPCEUR9.Text = "EUR";
             // 
@@ -14613,7 +14640,7 @@
             this.labelPCEUR10.Location = new System.Drawing.Point(255, 224);
             this.labelPCEUR10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR10.Name = "labelPCEUR10";
-            this.labelPCEUR10.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR10.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR10.TabIndex = 249;
             this.labelPCEUR10.Text = "EUR";
             // 
@@ -14626,7 +14653,7 @@
             this.labelPCEUR11.Location = new System.Drawing.Point(255, 244);
             this.labelPCEUR11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR11.Name = "labelPCEUR11";
-            this.labelPCEUR11.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR11.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR11.TabIndex = 248;
             this.labelPCEUR11.Text = "EUR";
             // 
@@ -14639,7 +14666,7 @@
             this.labelPCEUR12.Location = new System.Drawing.Point(255, 264);
             this.labelPCEUR12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR12.Name = "labelPCEUR12";
-            this.labelPCEUR12.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR12.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR12.TabIndex = 247;
             this.labelPCEUR12.Text = "EUR";
             // 
@@ -14652,7 +14679,7 @@
             this.labelPCEUR1.Location = new System.Drawing.Point(255, 44);
             this.labelPCEUR1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR1.Name = "labelPCEUR1";
-            this.labelPCEUR1.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR1.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR1.TabIndex = 246;
             this.labelPCEUR1.Text = "EUR";
             // 
@@ -14665,7 +14692,7 @@
             this.labelPCEUR2.Location = new System.Drawing.Point(255, 64);
             this.labelPCEUR2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR2.Name = "labelPCEUR2";
-            this.labelPCEUR2.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR2.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR2.TabIndex = 245;
             this.labelPCEUR2.Text = "EUR";
             // 
@@ -14678,7 +14705,7 @@
             this.labelPCEUR3.Location = new System.Drawing.Point(255, 84);
             this.labelPCEUR3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR3.Name = "labelPCEUR3";
-            this.labelPCEUR3.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR3.Size = new System.Drawing.Size(37, 20);
             this.labelPCEUR3.TabIndex = 244;
             this.labelPCEUR3.Text = "EUR";
             // 
@@ -14691,7 +14718,7 @@
             this.labelPCUSD13.Location = new System.Drawing.Point(121, 284);
             this.labelPCUSD13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD13.Name = "labelPCUSD13";
-            this.labelPCUSD13.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD13.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD13.TabIndex = 243;
             this.labelPCUSD13.Text = "USD";
             // 
@@ -14704,7 +14731,7 @@
             this.labelPCUSD14.Location = new System.Drawing.Point(121, 304);
             this.labelPCUSD14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD14.Name = "labelPCUSD14";
-            this.labelPCUSD14.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD14.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD14.TabIndex = 242;
             this.labelPCUSD14.Text = "USD";
             // 
@@ -14717,7 +14744,7 @@
             this.labelPCUSD15.Location = new System.Drawing.Point(121, 324);
             this.labelPCUSD15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD15.Name = "labelPCUSD15";
-            this.labelPCUSD15.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD15.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD15.TabIndex = 241;
             this.labelPCUSD15.Text = "USD";
             // 
@@ -14730,7 +14757,7 @@
             this.labelPCUSD16.Location = new System.Drawing.Point(121, 344);
             this.labelPCUSD16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD16.Name = "labelPCUSD16";
-            this.labelPCUSD16.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD16.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD16.TabIndex = 240;
             this.labelPCUSD16.Text = "USD";
             // 
@@ -14743,7 +14770,7 @@
             this.labelPCUSD17.Location = new System.Drawing.Point(121, 364);
             this.labelPCUSD17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD17.Name = "labelPCUSD17";
-            this.labelPCUSD17.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD17.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD17.TabIndex = 239;
             this.labelPCUSD17.Text = "USD";
             // 
@@ -14756,7 +14783,7 @@
             this.labelPCUSD4.Location = new System.Drawing.Point(121, 104);
             this.labelPCUSD4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD4.Name = "labelPCUSD4";
-            this.labelPCUSD4.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD4.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD4.TabIndex = 238;
             this.labelPCUSD4.Text = "USD";
             // 
@@ -14769,7 +14796,7 @@
             this.labelPCUSD5.Location = new System.Drawing.Point(121, 124);
             this.labelPCUSD5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD5.Name = "labelPCUSD5";
-            this.labelPCUSD5.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD5.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD5.TabIndex = 237;
             this.labelPCUSD5.Text = "USD";
             // 
@@ -14782,7 +14809,7 @@
             this.labelPCUSD6.Location = new System.Drawing.Point(121, 144);
             this.labelPCUSD6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD6.Name = "labelPCUSD6";
-            this.labelPCUSD6.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD6.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD6.TabIndex = 236;
             this.labelPCUSD6.Text = "USD";
             // 
@@ -14795,7 +14822,7 @@
             this.labelPCUSD7.Location = new System.Drawing.Point(121, 164);
             this.labelPCUSD7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD7.Name = "labelPCUSD7";
-            this.labelPCUSD7.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD7.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD7.TabIndex = 235;
             this.labelPCUSD7.Text = "USD";
             // 
@@ -14808,7 +14835,7 @@
             this.labelPCUSD8.Location = new System.Drawing.Point(121, 184);
             this.labelPCUSD8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD8.Name = "labelPCUSD8";
-            this.labelPCUSD8.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD8.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD8.TabIndex = 234;
             this.labelPCUSD8.Text = "USD";
             // 
@@ -14821,7 +14848,7 @@
             this.labelPCUSD9.Location = new System.Drawing.Point(121, 204);
             this.labelPCUSD9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD9.Name = "labelPCUSD9";
-            this.labelPCUSD9.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD9.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD9.TabIndex = 233;
             this.labelPCUSD9.Text = "USD";
             // 
@@ -14834,7 +14861,7 @@
             this.labelPCUSD10.Location = new System.Drawing.Point(121, 224);
             this.labelPCUSD10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD10.Name = "labelPCUSD10";
-            this.labelPCUSD10.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD10.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD10.TabIndex = 232;
             this.labelPCUSD10.Text = "USD";
             // 
@@ -14847,7 +14874,7 @@
             this.labelPCUSD11.Location = new System.Drawing.Point(121, 244);
             this.labelPCUSD11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD11.Name = "labelPCUSD11";
-            this.labelPCUSD11.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD11.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD11.TabIndex = 231;
             this.labelPCUSD11.Text = "USD";
             // 
@@ -14860,7 +14887,7 @@
             this.labelPCUSD12.Location = new System.Drawing.Point(121, 264);
             this.labelPCUSD12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD12.Name = "labelPCUSD12";
-            this.labelPCUSD12.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD12.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD12.TabIndex = 230;
             this.labelPCUSD12.Text = "USD";
             // 
@@ -14873,7 +14900,7 @@
             this.labelPCUSD1.Location = new System.Drawing.Point(121, 44);
             this.labelPCUSD1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD1.Name = "labelPCUSD1";
-            this.labelPCUSD1.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD1.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD1.TabIndex = 229;
             this.labelPCUSD1.Text = "USD";
             // 
@@ -14886,7 +14913,7 @@
             this.labelPCUSD2.Location = new System.Drawing.Point(121, 64);
             this.labelPCUSD2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD2.Name = "labelPCUSD2";
-            this.labelPCUSD2.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD2.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD2.TabIndex = 228;
             this.labelPCUSD2.Text = "USD";
             // 
@@ -14899,7 +14926,7 @@
             this.labelPCUSD3.Location = new System.Drawing.Point(121, 84);
             this.labelPCUSD3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD3.Name = "labelPCUSD3";
-            this.labelPCUSD3.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD3.Size = new System.Drawing.Size(38, 20);
             this.labelPCUSD3.TabIndex = 227;
             this.labelPCUSD3.Text = "USD";
             // 
@@ -15166,7 +15193,7 @@
             this.label233.ForeColor = System.Drawing.Color.Gray;
             this.label233.Location = new System.Drawing.Point(49, 14);
             this.label233.Name = "label233";
-            this.label233.Size = new System.Drawing.Size(98, 16);
+            this.label233.Size = new System.Drawing.Size(117, 17);
             this.label233.TabIndex = 251;
             this.label233.Text = "generating chart";
             // 
@@ -15178,7 +15205,7 @@
             this.label232.ForeColor = System.Drawing.Color.Gray;
             this.label232.Location = new System.Drawing.Point(49, 1);
             this.label232.Name = "label232";
-            this.label232.Size = new System.Drawing.Size(93, 16);
+            this.label232.Size = new System.Drawing.Size(111, 17);
             this.label232.TabIndex = 85;
             this.label232.Text = "fetching data &&";
             // 
@@ -15405,7 +15432,7 @@
             this.label226.Location = new System.Drawing.Point(22, 66);
             this.label226.Margin = new System.Windows.Forms.Padding(0);
             this.label226.Name = "label226";
-            this.label226.Size = new System.Drawing.Size(61, 17);
+            this.label226.Size = new System.Drawing.Size(79, 20);
             this.label226.TabIndex = 256;
             this.label226.Text = "Unknown";
             // 
@@ -15418,7 +15445,7 @@
             this.label225.Location = new System.Drawing.Point(22, 44);
             this.label225.Margin = new System.Windows.Forms.Padding(0);
             this.label225.Name = "label225";
-            this.label225.Size = new System.Drawing.Size(136, 17);
+            this.label225.Size = new System.Drawing.Size(168, 20);
             this.label225.TabIndex = 255;
             this.label225.Text = "Clearnet and Darknet";
             // 
@@ -15430,7 +15457,7 @@
             this.label224.ForeColor = System.Drawing.Color.Gold;
             this.label224.Location = new System.Drawing.Point(0, 69);
             this.label224.Name = "label224";
-            this.label224.Size = new System.Drawing.Size(19, 14);
+            this.label224.Size = new System.Drawing.Size(23, 18);
             this.label224.TabIndex = 254;
             this.label224.Text = "🟢";
             // 
@@ -15442,7 +15469,7 @@
             this.label221.ForeColor = System.Drawing.Color.SteelBlue;
             this.label221.Location = new System.Drawing.Point(0, 47);
             this.label221.Name = "label221";
-            this.label221.Size = new System.Drawing.Size(19, 14);
+            this.label221.Size = new System.Drawing.Size(23, 18);
             this.label221.TabIndex = 253;
             this.label221.Text = "🟢";
             // 
@@ -15454,7 +15481,7 @@
             this.label219.ForeColor = System.Drawing.Color.OliveDrab;
             this.label219.Location = new System.Drawing.Point(0, 25);
             this.label219.Name = "label219";
-            this.label219.Size = new System.Drawing.Size(19, 14);
+            this.label219.Size = new System.Drawing.Size(23, 18);
             this.label219.TabIndex = 252;
             this.label219.Text = "🟢";
             // 
@@ -15467,7 +15494,7 @@
             this.label220.Location = new System.Drawing.Point(22, 22);
             this.label220.Margin = new System.Windows.Forms.Padding(0);
             this.label220.Name = "label220";
-            this.label220.Size = new System.Drawing.Size(155, 17);
+            this.label220.Size = new System.Drawing.Size(193, 20);
             this.label220.TabIndex = 251;
             this.label220.Text = "Clearnet only (IPv4, IPv6)";
             // 
@@ -15479,7 +15506,7 @@
             this.label227.ForeColor = System.Drawing.Color.IndianRed;
             this.label227.Location = new System.Drawing.Point(0, 3);
             this.label227.Name = "label227";
-            this.label227.Size = new System.Drawing.Size(19, 14);
+            this.label227.Size = new System.Drawing.Size(23, 18);
             this.label227.TabIndex = 250;
             this.label227.Text = "🟢";
             // 
@@ -15492,7 +15519,7 @@
             this.label236.Location = new System.Drawing.Point(22, 0);
             this.label236.Margin = new System.Windows.Forms.Padding(0);
             this.label236.Name = "label236";
-            this.label236.Size = new System.Drawing.Size(171, 17);
+            this.label236.Size = new System.Drawing.Size(211, 20);
             this.label236.TabIndex = 211;
             this.label236.Text = "Darknet only (Tor, I2P, cjdns)";
             // 
@@ -15763,7 +15790,7 @@
             this.label217.Location = new System.Drawing.Point(5, 2);
             this.label217.Margin = new System.Windows.Forms.Padding(0);
             this.label217.Name = "label217";
-            this.label217.Size = new System.Drawing.Size(83, 17);
+            this.label217.Size = new System.Drawing.Size(102, 20);
             this.label217.TabIndex = 153;
             this.label217.Text = "Chart period";
             // 
@@ -15812,7 +15839,7 @@
             this.label222.ForeColor = System.Drawing.Color.Orange;
             this.label222.Location = new System.Drawing.Point(130, 3);
             this.label222.Name = "label222";
-            this.label222.Size = new System.Drawing.Size(19, 14);
+            this.label222.Size = new System.Drawing.Size(23, 18);
             this.label222.TabIndex = 251;
             this.label222.Text = "🟢";
             // 
@@ -15824,7 +15851,7 @@
             this.label223.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(38)))), ((int)(((byte)(19)))));
             this.label223.Location = new System.Drawing.Point(2, 3);
             this.label223.Name = "label223";
-            this.label223.Size = new System.Drawing.Size(19, 14);
+            this.label223.Size = new System.Drawing.Size(23, 18);
             this.label223.TabIndex = 250;
             this.label223.Text = "🟢";
             // 
@@ -15837,7 +15864,7 @@
             this.label229.Location = new System.Drawing.Point(150, 0);
             this.label229.Margin = new System.Windows.Forms.Padding(0);
             this.label229.Name = "label229";
-            this.label229.Size = new System.Drawing.Size(94, 17);
+            this.label229.Size = new System.Drawing.Size(115, 20);
             this.label229.TabIndex = 212;
             this.label229.Text = "Already mined";
             // 
@@ -15850,7 +15877,7 @@
             this.label230.Location = new System.Drawing.Point(22, 0);
             this.label230.Margin = new System.Windows.Forms.Padding(0);
             this.label230.Name = "label230";
-            this.label230.Size = new System.Drawing.Size(80, 17);
+            this.label230.Size = new System.Drawing.Size(97, 20);
             this.label230.TabIndex = 211;
             this.label230.Text = "To be mined";
             // 
@@ -15884,7 +15911,7 @@
             this.label216.ForeColor = System.Drawing.Color.DarkGray;
             this.label216.Location = new System.Drawing.Point(399, 3);
             this.label216.Name = "label216";
-            this.label216.Size = new System.Drawing.Size(19, 14);
+            this.label216.Size = new System.Drawing.Size(23, 18);
             this.label216.TabIndex = 256;
             this.label216.Text = "🟢";
             // 
@@ -15896,7 +15923,7 @@
             this.label215.ForeColor = System.Drawing.Color.Red;
             this.label215.Location = new System.Drawing.Point(343, 3);
             this.label215.Name = "label215";
-            this.label215.Size = new System.Drawing.Size(19, 14);
+            this.label215.Size = new System.Drawing.Size(23, 18);
             this.label215.TabIndex = 255;
             this.label215.Text = "🟢";
             // 
@@ -15908,7 +15935,7 @@
             this.label214.ForeColor = System.Drawing.Color.Orange;
             this.label214.Location = new System.Drawing.Point(285, 3);
             this.label214.Name = "label214";
-            this.label214.Size = new System.Drawing.Size(19, 14);
+            this.label214.Size = new System.Drawing.Size(23, 18);
             this.label214.TabIndex = 254;
             this.label214.Text = "🟢";
             // 
@@ -15920,7 +15947,7 @@
             this.label213.ForeColor = System.Drawing.Color.Yellow;
             this.label213.Location = new System.Drawing.Point(207, 3);
             this.label213.Name = "label213";
-            this.label213.Size = new System.Drawing.Size(19, 14);
+            this.label213.Size = new System.Drawing.Size(23, 18);
             this.label213.TabIndex = 253;
             this.label213.Text = "🟢";
             // 
@@ -15932,7 +15959,7 @@
             this.label212.ForeColor = System.Drawing.Color.LimeGreen;
             this.label212.Location = new System.Drawing.Point(147, 3);
             this.label212.Name = "label212";
-            this.label212.Size = new System.Drawing.Size(19, 14);
+            this.label212.Size = new System.Drawing.Size(23, 18);
             this.label212.TabIndex = 252;
             this.label212.Text = "🟢";
             // 
@@ -15944,7 +15971,7 @@
             this.label211.ForeColor = System.Drawing.Color.Blue;
             this.label211.Location = new System.Drawing.Point(89, 3);
             this.label211.Name = "label211";
-            this.label211.Size = new System.Drawing.Size(19, 14);
+            this.label211.Size = new System.Drawing.Size(23, 18);
             this.label211.TabIndex = 251;
             this.label211.Text = "🟢";
             // 
@@ -15956,7 +15983,7 @@
             this.label210.ForeColor = System.Drawing.Color.Indigo;
             this.label210.Location = new System.Drawing.Point(0, 3);
             this.label210.Name = "label210";
-            this.label210.Size = new System.Drawing.Size(19, 14);
+            this.label210.Size = new System.Drawing.Size(23, 18);
             this.label210.TabIndex = 250;
             this.label210.Text = "🟢";
             // 
@@ -15969,7 +15996,7 @@
             this.label209.Location = new System.Drawing.Point(363, 0);
             this.label209.Margin = new System.Windows.Forms.Padding(0);
             this.label209.Name = "label209";
-            this.label209.Size = new System.Drawing.Size(34, 17);
+            this.label209.Size = new System.Drawing.Size(39, 20);
             this.label209.TabIndex = 217;
             this.label209.Text = "90th";
             // 
@@ -15982,7 +16009,7 @@
             this.label208.Location = new System.Drawing.Point(419, 0);
             this.label208.Margin = new System.Windows.Forms.Padding(0);
             this.label208.Name = "label208";
-            this.label208.Size = new System.Drawing.Size(65, 17);
+            this.label208.Size = new System.Drawing.Size(77, 20);
             this.label208.TabIndex = 216;
             this.label208.Text = "maximum";
             // 
@@ -15995,7 +16022,7 @@
             this.label207.Location = new System.Drawing.Point(305, 0);
             this.label207.Margin = new System.Windows.Forms.Padding(0);
             this.label207.Name = "label207";
-            this.label207.Size = new System.Drawing.Size(34, 17);
+            this.label207.Size = new System.Drawing.Size(39, 20);
             this.label207.TabIndex = 215;
             this.label207.Text = "75th";
             // 
@@ -16008,7 +16035,7 @@
             this.label206.Location = new System.Drawing.Point(227, 0);
             this.label206.Margin = new System.Windows.Forms.Padding(0);
             this.label206.Name = "label206";
-            this.label206.Size = new System.Drawing.Size(53, 17);
+            this.label206.Size = new System.Drawing.Size(64, 20);
             this.label206.TabIndex = 214;
             this.label206.Text = "median";
             // 
@@ -16021,7 +16048,7 @@
             this.label205.Location = new System.Drawing.Point(167, 0);
             this.label205.Margin = new System.Windows.Forms.Padding(0);
             this.label205.Name = "label205";
-            this.label205.Size = new System.Drawing.Size(34, 17);
+            this.label205.Size = new System.Drawing.Size(39, 20);
             this.label205.TabIndex = 213;
             this.label205.Text = "25th";
             // 
@@ -16034,7 +16061,7 @@
             this.label203.Location = new System.Drawing.Point(109, 0);
             this.label203.Margin = new System.Windows.Forms.Padding(0);
             this.label203.Name = "label203";
-            this.label203.Size = new System.Drawing.Size(34, 17);
+            this.label203.Size = new System.Drawing.Size(39, 20);
             this.label203.TabIndex = 212;
             this.label203.Text = "10th";
             // 
@@ -16047,7 +16074,7 @@
             this.label202.Location = new System.Drawing.Point(22, 0);
             this.label202.Margin = new System.Windows.Forms.Padding(0);
             this.label202.Name = "label202";
-            this.label202.Size = new System.Drawing.Size(61, 17);
+            this.label202.Size = new System.Drawing.Size(72, 20);
             this.label202.TabIndex = 211;
             this.label202.Text = "minimum";
             // 
@@ -16524,7 +16551,7 @@
             this.lblApplyThemeButtonDisabledMask.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblApplyThemeButtonDisabledMask.Location = new System.Drawing.Point(20, 257);
             this.lblApplyThemeButtonDisabledMask.Name = "lblApplyThemeButtonDisabledMask";
-            this.lblApplyThemeButtonDisabledMask.Size = new System.Drawing.Size(83, 17);
+            this.lblApplyThemeButtonDisabledMask.Size = new System.Drawing.Size(101, 20);
             this.lblApplyThemeButtonDisabledMask.TabIndex = 260;
             this.lblApplyThemeButtonDisabledMask.Text = "apply theme";
             this.lblApplyThemeButtonDisabledMask.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -16537,7 +16564,7 @@
             this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(22, 41);
             this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
-            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(52, 17);
+            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(63, 20);
             this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
             this.lblThemeMenuHighlightedButtonText.Text = "genesis";
             this.lblThemeMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -16560,7 +16587,7 @@
             this.label60.Location = new System.Drawing.Point(10, 4);
             this.label60.Margin = new System.Windows.Forms.Padding(0);
             this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(93, 17);
+            this.label60.Size = new System.Drawing.Size(112, 20);
             this.label60.TabIndex = 239;
             this.label60.Text = "preset themes";
             // 
@@ -16659,7 +16686,7 @@
             this.label281.Location = new System.Drawing.Point(8, 4);
             this.label281.Margin = new System.Windows.Forms.Padding(0);
             this.label281.Name = "label281";
-            this.label281.Size = new System.Drawing.Size(99, 17);
+            this.label281.Size = new System.Drawing.Size(119, 20);
             this.label281.TabIndex = 239;
             this.label281.Text = "custom themes";
             // 
@@ -16784,7 +16811,7 @@
             this.lblCurrentVersion.ForeColor = System.Drawing.Color.Gray;
             this.lblCurrentVersion.Location = new System.Drawing.Point(97, 15);
             this.lblCurrentVersion.Name = "lblCurrentVersion";
-            this.lblCurrentVersion.Size = new System.Drawing.Size(31, 13);
+            this.lblCurrentVersion.Size = new System.Drawing.Size(40, 17);
             this.lblCurrentVersion.TabIndex = 85;
             this.lblCurrentVersion.Text = "vn.nn";
             this.lblCurrentVersion.Click += new System.EventHandler(this.BtnMenuSplash_Click);
@@ -17077,7 +17104,7 @@
             this.label286.Location = new System.Drawing.Point(41, 12);
             this.label286.Margin = new System.Windows.Forms.Padding(0);
             this.label286.Name = "label286";
-            this.label286.Size = new System.Drawing.Size(632, 17);
+            this.label286.Size = new System.Drawing.Size(776, 20);
             this.label286.TabIndex = 212;
             this.label286.Text = "The directory is not available because it is either disabled in settings or becau" +
     "se Privacy Mode is enabled.";
@@ -17138,7 +17165,7 @@
             this.textBoxUniversalSearch.ForeColor = System.Drawing.Color.Gray;
             this.textBoxUniversalSearch.Location = new System.Drawing.Point(6, 4);
             this.textBoxUniversalSearch.Name = "textBoxUniversalSearch";
-            this.textBoxUniversalSearch.Size = new System.Drawing.Size(340, 15);
+            this.textBoxUniversalSearch.Size = new System.Drawing.Size(340, 18);
             this.textBoxUniversalSearch.TabIndex = 202;
             this.textBoxUniversalSearch.Text = "block height, address, transaction ID or xpub...";
             this.textBoxUniversalSearch.TextChanged += new System.EventHandler(this.TextBoxUniversalSearch_TextChanged);
@@ -17204,33 +17231,6 @@
             this.btnAnimation.TextColor = System.Drawing.Color.White;
             this.btnAnimation.UseVisualStyleBackColor = false;
             // 
-            // btnShowGlobalSearch
-            // 
-            this.btnShowGlobalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowGlobalSearch.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowGlobalSearch.BorderColor = System.Drawing.Color.Empty;
-            this.btnShowGlobalSearch.BorderRadius = 0;
-            this.btnShowGlobalSearch.BorderSize = 0;
-            this.btnShowGlobalSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowGlobalSearch.FlatAppearance.BorderSize = 0;
-            this.btnShowGlobalSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowGlobalSearch.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowGlobalSearch.ForeColor = System.Drawing.Color.White;
-            this.btnShowGlobalSearch.Location = new System.Drawing.Point(749, 162);
-            this.btnShowGlobalSearch.Name = "btnShowGlobalSearch";
-            this.btnShowGlobalSearch.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.btnShowGlobalSearch.Size = new System.Drawing.Size(24, 24);
-            this.btnShowGlobalSearch.TabIndex = 260;
-            this.btnShowGlobalSearch.TabStop = false;
-            this.btnShowGlobalSearch.Text = "🔎";
-            this.btnShowGlobalSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnShowGlobalSearch.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnShowGlobalSearch, "search for address, block, transaction or Xpub");
-            this.btnShowGlobalSearch.UseVisualStyleBackColor = false;
-            this.btnShowGlobalSearch.Click += new System.EventHandler(this.BtnShowGlobalSearch_Click);
-            this.btnShowGlobalSearch.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnShowGlobalSearch.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
             // panel107
             // 
             this.panel107.Controls.Add(this.panelUniversalSearchContainer);
@@ -17257,7 +17257,7 @@
             // 
             // SATSuma
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.BackgroundImage = global::SATSuma.Properties.Resources.AppBackground2;

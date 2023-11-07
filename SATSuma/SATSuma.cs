@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.07    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.09    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -67,7 +67,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.07";
+        readonly string CurrentVersion = "1.09";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -19847,7 +19847,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart };
+                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20718,7 +20718,7 @@ namespace SATSuma
 
         private void ExpandPanelTimerVert_Tick(object sender, EventArgs e)
         {
-            currentHeightExpandingPanel += 8;
+            currentHeightExpandingPanel += 16;
             if (panelToExpandVert == panelMenu)
             {
                 if (btnUpdateAvailable.Visible == false)
@@ -20773,7 +20773,7 @@ namespace SATSuma
 
         private void ShrinkPanelTimerHoriz_Tick(object sender, EventArgs e)
         {
-            currentWidthShrinkingPanel -= 6;
+            currentWidthShrinkingPanel -= 12;
             if (panelToShrink == panel107)
             {
                 panelMinWidth = 0;
@@ -20806,7 +20806,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(panel107.Location.X + 6, panel107.Location.Y);
+                        panel107.Location = new Point(panel107.Location.X + 12, panel107.Location.Y);
                     });
                 }
                 panelToShrink.Invalidate();
@@ -20815,7 +20815,7 @@ namespace SATSuma
 
         private void ExpandPanelTimerHoriz_Tick(object sender, EventArgs e)
         {
-            currentWidthExpandingPanel += 6;
+            currentWidthExpandingPanel += 12;
             if (panelToExpand == panel107)
             {
                 panelMaxWidth = 394;
@@ -20846,7 +20846,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(panel107.Location.X - 6, panel107.Location.Y);
+                        panel107.Location = new Point(panel107.Location.X - 12, panel107.Location.Y);
                     });
                 }
                 panelToExpand.Invalidate();
@@ -22795,6 +22795,7 @@ namespace SATSuma
             }
         }
 
+        /*
         private void OpenHelpScreen()
         {
             try
@@ -22847,8 +22848,111 @@ namespace SATSuma
                 HandleException(ex, "OpenHelpScreen");
             }
         }
+        */
+        private void OpenHelpScreen()
+        {
+            try
+            {
+                // display semi-transparent overlay form
+                Form overlay = new overlayForm
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = Color.Black, // Set the background color to black for the overlay
+                    Opacity = 0.5, // Set the opacity to 50%
+                };
+                overlay.StartPosition = FormStartPosition.CenterParent;
+                // Calculate the overlay form's location to place it in the center of the parent form
+                overlay.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - overlay.Width / 2;
+                int overlayY = parentCenterY - overlay.Height / 2;
+                overlay.Location = new Point(overlayX, overlayY);
+                overlay.Show(this);
+
+
+                Form frm = new HelpScreen
+                    {
+                        Owner = this, // Set the parent window as the owner of the modal window
+                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        TextColor = label77.ForeColor, // random label color to pass to the help screen
+                        HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
+                        ButtonTextColor = btnExit.ForeColor,
+                        ButtonBackColor = btnExit.BackColor,
+                        ButtonTextColor2 = btnPreviousBlock.ForeColor,
+                        ButtonBackColor2 = btnPreviousBlock.BackColor,
+                        TextBoxBackColor = chartsBackgroundColor,
+                        TextBoxForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor,
+                        WindowBackgroundColor = panel76.BackColor,
+                        ButtonRadius = btnExit.BorderRadius,
+                        ButtonBorderColor = btnExit.BorderColor,
+                        ButtonBorderSize = btnExit.BorderSize,
+                        DataFieldColor = lblHeaderMarketCap.ForeColor
+                    };
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog(this);
+                overlay.Close();
+                CloseMainMenu();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "OpenHelpScreen");
+            }
+        }
         #endregion
         #region show about screen
+        private void BtnMenuSplash_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // display semi-transparent overlay form
+                Form overlay = new overlayForm
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = Color.Black, // Set the background color to black for the overlay
+                    Opacity = 0.5, // Set the opacity to 50%
+                };
+                overlay.StartPosition = FormStartPosition.CenterParent;
+                // Calculate the overlay form's location to place it in the center of the parent form
+                overlay.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - overlay.Width / 2;
+                int overlayY = parentCenterY - overlay.Height / 2;
+                overlay.Location = new Point(overlayX, overlayY);
+                overlay.Show(this);
+                
+                // display about screen on top of the overlay
+                Form frm = new Splash
+                    {
+                        Owner = this, // Set the parent window as the owner of the modal window
+                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        WindowBackgroundColor = panel88.BackColor,
+                        LabelColor = label77.ForeColor,
+                        LinksColor = lblHeaderMarketCap.ForeColor,
+                        ButtonTextColor = btnExit.ForeColor,
+                        ButtonBackColor = btnExit.BackColor,
+                        CurrentVersion = CurrentVersion,
+                        OfflineMode = offlineMode,
+                        ButtonRadius = btnExit.BorderRadius,
+                        ButtonBorderColor = btnExit.BorderColor,
+                        ButtonBorderSize = btnExit.BorderSize
+                    };
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog(this);
+                CloseMainMenu();
+                overlay.Close();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuSplash_Click");
+            }
+        }
+        /*
         private void BtnMenuSplash_Click(object sender, EventArgs e)
         {
             try
@@ -22899,6 +23003,7 @@ namespace SATSuma
                 HandleException(ex, "BtnMenuSplash_Click");
             }
         }
+        */
         #endregion
         #region currency menu & get market data
         private void BtnCurrency_Click(object sender, EventArgs e)

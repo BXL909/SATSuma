@@ -359,6 +359,12 @@
     <Compile Include="helpScreen.Designer.cs">
       <DependentUpon>helpScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="overlayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="overlayForm.Designer.cs">
+      <DependentUpon>overlayForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -386,6 +392,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="helpScreen.resx">
       <DependentUpon>helpScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="overlayForm.resx">
+      <DependentUpon>overlayForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="splash.resx">
       <DependentUpon>splash.cs</DependentUpon>

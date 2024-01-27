@@ -26,6 +26,10 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
+* UI Scaling
+* fix recurring data errors. Ditch any API possible
+* tidy/align screen elements on all screens
+* test a lot!
 */
 
 #region Using
@@ -67,7 +71,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.09";
+        readonly string CurrentVersion = "1.4";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -150,6 +154,8 @@ namespace SATSuma
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         #endregion
         #region settings variables
+        double UIScale = 1; // defaults to 100%
+        double UIScaleToBeSavedToSettings = 1;
         bool offlineMode = false; // disables all comms apart from to full node
         bool testNet = false; // testnet or mainnet
         bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
@@ -373,9 +379,11 @@ namespace SATSuma
             panel96.Paint += Panel_Paint;
             panel106.Paint += Panel_Paint;
             panel107.Paint += Panel_Paint;
+            panelLeftPanel.Paint += Panel_Paint;
             panelOwnNodeAddressTXInfo.Paint += Panel_Paint;
             panelOwnNodeBlockTXInfo.Paint += Panel_Paint;
             panelTransactionMiddle.Paint += Panel_Paint;
+            panelErrorMessage.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             //textbox container panels
@@ -536,7 +544,7 @@ namespace SATSuma
             }
         }
         #endregion
-
+        
         #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
         //=============================================================================================================
         // -------------------------CLOCK TICKS------------------------------------------------------------------------
@@ -578,6 +586,22 @@ namespace SATSuma
                 {
                     lblHeaderBlockAge.Text = formattedTime;
                 });
+
+                if (secondsSinceLastBlock % 2 == 0)
+                {
+                    lblUpdaterLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblUpdaterLight.ForeColor = Color.OliveDrab;
+                    });
+                }
+                else
+                {
+                    lblUpdaterLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblUpdaterLight.ForeColor = Color.Lime;
+                    });
+                }
+
             }
             catch (Exception ex)
             {
@@ -1877,10 +1901,6 @@ namespace SATSuma
                     lblStatusLight.Invoke((MethodInvoker)delegate
                     {
                         lblStatusLight.Text = "🔴";
-                    });
-                    lblRefreshSuccessOrFailMessage.Invoke((MethodInvoker)delegate
-                    {
-                        lblRefreshSuccessOrFailMessage.Text = "One or more fields failed to update";
                     });
                 }
             }
@@ -3863,7 +3883,7 @@ namespace SATSuma
                     BtnViewTransactionFromAddress.Enabled = false;
                     BtnViewBlockFromAddress.Enabled = false;
                     textboxSubmittedAddress.Enabled = false;
-                    btnMenu.Enabled = false;
+                    panelLeftPanel.Enabled = false;
                 }
                 else
                 {
@@ -3876,7 +3896,7 @@ namespace SATSuma
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                     BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
-                    btnMenu.Enabled = true;
+                    panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -4625,7 +4645,7 @@ namespace SATSuma
                     btnNumericUpDownSubmittedBlockNumberDown.Enabled = false;
                     btnNextBlock.Enabled = false;
                     btnPreviousBlock.Enabled = false;
-                    btnMenu.Enabled = false;
+                    panelLeftPanel.Enabled = false;
                     btnLookUpBlock.Enabled = false;
                 }
                 else
@@ -4639,7 +4659,7 @@ namespace SATSuma
                     btnNumericUpDownSubmittedBlockNumberDown.Enabled = btnNumericUpDownSubmittedBlockNumberDownWasEnabled;
                     btnNumericUpDownSubmittedBlockNumberUp.Enabled = btnNumericUpDownSubmittedBlockNumberUpWasEnabled;
                     btnLookUpBlock.Enabled = btnLookUpBlockWasEnabled;
-                    btnMenu.Enabled = true;
+                    panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -5974,7 +5994,7 @@ namespace SATSuma
                     btnTransactionOutputsDown.Enabled = false;
                     btnViewAddressFromTXInput.Enabled = false;
                     btnViewAddressFromTXOutput.Enabled = false;
-                    btnMenu.Enabled = false;
+                    panelLeftPanel.Enabled = false;
                 }
                 else
                 {
@@ -5986,7 +6006,7 @@ namespace SATSuma
                     btnViewAddressFromTXInput.Enabled = btnViewAddressFromTXInputWasEnabled;
                     btnViewAddressFromTXOutput.Enabled = btnViewAddressFromTXOutputWasEnabled;
                     // Set the cursor position to the end of the string
-                    btnMenu.Enabled = true;
+                    panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -6865,7 +6885,7 @@ namespace SATSuma
                         btnNumericUpDownBlockHeightToStartListFromUp.Enabled = false;
                         btnNumericUpDownBlockHeightToStartListFromDown.Enabled = false;
                         btnLookUpBlockList.Enabled = false;
-                        btnMenu.Enabled = false;
+                        panelLeftPanel.Enabled = false;
                     }
                     else
                     {
@@ -6877,7 +6897,7 @@ namespace SATSuma
                         btnNumericUpDownBlockHeightToStartListFromUp.Enabled = btnNumericUpDownBlockHeightToStartListFromUpWasEnabled;
                         btnNumericUpDownBlockHeightToStartListFromDown.Enabled = btnNumericUpDownBlockHeightToStartListFromDownWasEnabled;
                         btnLookUpBlockList.Enabled = btnLookUpBlockListWasEnabled;
-                        btnMenu.Enabled = true;
+                        panelLeftPanel.Enabled = true;
                     }
                 }
             }
@@ -13501,10 +13521,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    lblAlert.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblAlert.Text = "🟢";
-                                    });
+                                    ShowAlertSymbol();
                                     lblErrorMessage.Invoke((MethodInvoker)delegate
                                     {
                                         lblErrorMessage.Text = "you need to connect to a full node before the selected Xpub can be viewed.";
@@ -15238,7 +15255,7 @@ namespace SATSuma
         {
             try
             {
-                lblOfflineMode.Invoke((MethodInvoker)delegate
+                lblSettingsNodeMainnetSelected.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsNodeMainnetSelected.Location = new Point(label174.Location.X + label174.Width + lblSettingsNodeMainnetSelected.Width, lblSettingsNodeMainnetSelected.Location.Y);
                 });
@@ -15468,7 +15485,16 @@ namespace SATSuma
                 lblHelpOffline.Visible = false;
                 btnMenuHelp.Enabled = true;
                 btnHelp.Enabled = true;
-                lblOfflineModeActive.Visible = false;
+                lblOfflineModeLight.Invoke((MethodInvoker)delegate
+                {
+                    lblOfflineModeLight.Text = "🟢";
+                    lblOfflineModeLight.ForeColor = Color.OliveDrab;
+                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 2);
+                });
+                lblOfflineModeActive.Invoke((MethodInvoker)delegate
+                {
+                    lblOfflineModeActive.Text = "Online mode";
+                });
                 lblOfflineMode.Invoke((MethodInvoker)delegate
                 {
                     lblOfflineMode.ForeColor = Color.IndianRed;
@@ -15537,7 +15563,16 @@ namespace SATSuma
                 lblHelpOffline.Visible = true;
                 btnMenuHelp.Enabled = false;
                 btnHelp.Enabled = false;
-                lblOfflineModeActive.Visible = true;
+                lblOfflineModeLight.Invoke((MethodInvoker)delegate
+                {
+                    lblOfflineModeLight.Text = "🟢";
+                    lblOfflineModeLight.ForeColor = Color.IndianRed;
+                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 1);
+                });
+                lblOfflineModeActive.Invoke((MethodInvoker)delegate
+                {
+                    lblOfflineModeActive.Text = "Offline mode";
+                });
                 lblOfflineMode.Invoke((MethodInvoker)delegate
                 {
                     lblOfflineMode.ForeColor = Color.Green;
@@ -15893,7 +15928,10 @@ namespace SATSuma
         #region save settings (to bookmarks file)
         private void SaveSettingsToBookmarksFile()
         {
-            // settings entry in the bookmark file = DM111111nnnnnnnnnxxxxxxxxxx... 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, enable directory, always on top, nnnn = refresh freq, nn = max number of consecutive zero balance addresses on xpub scan, nnn = number of derivation paths to check, xxxxxxxxxx = startup screen.
+            // settings entry in the bookmark file = DM111111nnnnnnnnnxxxxxxxxxx.
+            //
+            //
+            // .. 1st char P(ound), D(ollar), E(uro), G(old) = GBP, USD, EUR, XAU. 2nd char M, T, C = Mainnet, Testnet, Custom, then 6 bools = blockchairComJSON, BitcoinExplorerEndpoints, BlockchainInfoEndpoints, Privacy Mode, enable directory, always on top, nnnn = refresh freq, nn = max number of consecutive zero balance addresses on xpub scan, nnn = number of derivation paths to check, xxxxxxxxxx = startup screen.
             try
             {
                 if (btnUSD.Enabled == false)
@@ -15912,15 +15950,15 @@ namespace SATSuma
                 {
                     currencySelected = "G";
                 }
-                if (lblSettingsNodeMainnetSelected.Text == "✔️")
+                if (testNet == false && RunMempoolSpaceLightningAPI == true)
                 {
                     selectedNetwork = "M";
                 }
-                if (lblSettingsNodeTestnetSelected.Text == "✔️")
+                if (testNet == true && RunMempoolSpaceLightningAPI == true)
                 {
                     selectedNetwork = "T";
                 }
-                if (lblSettingsOwnNodeSelected.Text == "✔️")
+                if (testNet == false && RunMempoolSpaceLightningAPI == false)
                 {
                     selectedNetwork = "C";
                 }
@@ -15932,7 +15970,7 @@ namespace SATSuma
                 {
                     OfflineModeSelected = "0";
                 }
-                if (lblBlockchairComJSON.Text == "✔️")
+                if (RunBlockchairComJSONAPI)
                 {
                     blockchairComJSONSelected = "1";
                 }
@@ -15940,7 +15978,7 @@ namespace SATSuma
                 {
                     blockchairComJSONSelected = "0";
                 }
-                if (lblBitcoinExplorerEndpoints.Text == "✔️")
+                if (RunBitcoinExplorerEndpointAPI)
                 {
                     bitcoinExplorerEnpointsSelected = "1";
                 }
@@ -15948,7 +15986,7 @@ namespace SATSuma
                 {
                     bitcoinExplorerEnpointsSelected = "0";
                 }
-                if (lblBlockchainInfoEndpoints.Text == "✔️")
+                if (RunBlockchainInfoEndpointAPI)
                 {
                     blockchainInfoEndpointsSelected = "1";
                 }
@@ -15956,7 +15994,7 @@ namespace SATSuma
                 {
                     blockchainInfoEndpointsSelected = "0";
                 }
-                if (lblEnableDirectory.Text == "✔️")
+                if (enableDirectory)
                 {
                     directoryEnabled = "1";
                 }
@@ -15991,7 +16029,14 @@ namespace SATSuma
                     WriteBookmarksToJsonFile(bookmarks);
                     settingsAlreadySavedInFile = true;
                     settingsInFile = bookmarkData;
-                    panelSettingsSaved.Visible = true;
+                    labelSettingsSaved.Invoke((MethodInvoker)delegate
+                    {
+                        labelSettingsSaved.Text = "Saving settings";
+                    });
+                    lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblSaveSettingsLight.ForeColor = Color.Lime;
+                    });
                     timerHideSettingsSaved.Start();
                 }
                 else
@@ -16006,7 +16051,14 @@ namespace SATSuma
                     WriteBookmarksToJsonFile(bookmarks);
                     settingsAlreadySavedInFile = true;
                     settingsInFile = bookmarkData;
-                    panelSettingsSaved.Visible = true;
+                    labelSettingsSaved.Invoke((MethodInvoker)delegate
+                    {
+                        labelSettingsSaved.Text = "Saving settings";
+                    });
+                    lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblSaveSettingsLight.ForeColor = Color.Lime;
+                    });
                     timerHideSettingsSaved.Start();
                 }
             }
@@ -16020,7 +16072,14 @@ namespace SATSuma
         {
             try
             {
-                panelSettingsSaved.Visible = false;
+                labelSettingsSaved.Invoke((MethodInvoker)delegate
+                {
+                    labelSettingsSaved.Text = "Settings saved";
+                });
+                lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                {
+                    lblSaveSettingsLight.ForeColor = Color.OliveDrab;
+                });
                 timerHideSettingsSaved.Stop();
             }
             catch (Exception ex)
@@ -16226,7 +16285,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "GBP £";
+                            btnCurrency.Text = "   currency (GBP)";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
@@ -16245,7 +16304,7 @@ namespace SATSuma
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "USD $";
+                            btnCurrency.Text = "   currency (USD)";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
@@ -16264,7 +16323,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "EUR €";
+                            btnCurrency.Text = "   currency (EUR)";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
@@ -16283,7 +16342,38 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = false;
-                            btnCurrency.Text = "XAU 🪙";
+                            btnCurrency.Text = "   currency (XAU)";
+                        }
+                        #endregion
+                        #region restore offline mode settings
+                        if (Convert.ToString(bookmark.Data[5]) == "1")
+                        {
+                            lblOfflineMode.Invoke((MethodInvoker)delegate
+                            {
+                                lblOfflineMode.Enabled = true;
+                                lblOfflineMode.Text = "✔️";
+                                lblOfflineMode.ForeColor = Color.Green;
+                            });
+                            EnableOfflineMode();
+                        }
+                        else
+                        {
+                            offlineMode = false;
+                            lblOfflineMode.Invoke((MethodInvoker)delegate
+                            {
+                                lblOfflineMode.Text = "❌";
+                                lblOfflineMode.ForeColor = Color.IndianRed;
+                            });
+                            DisableOfflineMode();
+                            lblBlockchairComJSON.Enabled = true;
+                            lblBitcoinExplorerEndpoints.Enabled = true;
+                            lblBlockchainInfoEndpoints.Enabled = true;
+                            lblSettingsNodeMainnetSelected.Enabled = true;
+                            lblSettingsNodeTestnetSelected.Enabled = true;
+                            lblEnableDirectory.Enabled = true;
+                            lblHelpOffline.Visible = false;
+                            btnMenuHelp.Enabled = true;
+                            btnHelp.Enabled = true;
                         }
                         #endregion
                         #region restore network
@@ -16358,115 +16448,90 @@ namespace SATSuma
                         }
                         #endregion
                         #region restore API settings
-                        if (Convert.ToString(bookmark.Data[2]) == "1")
+                        if (!offlineMode)
                         {
-                            RunBlockchairComJSONAPI = true;
-                            lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                            if (Convert.ToString(bookmark.Data[2]) == "1")
                             {
-                                lblBlockchairComJSON.Text = "✔️";
-                                lblBlockchairComJSON.ForeColor = Color.Green;
-                            });
-                        }
-                        else
-                        {
-                            RunBlockchairComJSONAPI = false;
-                            lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                                RunBlockchairComJSONAPI = true;
+                                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchairComJSON.Text = "✔️";
+                                    lblBlockchairComJSON.ForeColor = Color.Green;
+                                });
+                            }
+                            else
                             {
-                                lblBlockchairComJSON.Text = "❌";
-                                lblBlockchairComJSON.ForeColor = Color.IndianRed;
-                            });
-                        }
-                        if (Convert.ToString(bookmark.Data[3]) == "1")
-                        {
-                            RunBitcoinExplorerEndpointAPI = true;
-                            RunBitcoinExplorerOrgJSONAPI = true;
-                            lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                                RunBlockchairComJSONAPI = false;
+                                lblBlockchairComJSON.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchairComJSON.Text = "❌";
+                                    lblBlockchairComJSON.ForeColor = Color.IndianRed;
+                                });
+                            }
+                            if (Convert.ToString(bookmark.Data[3]) == "1")
                             {
-                                lblBitcoinExplorerEndpoints.Text = "✔️";
-                                lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
-                            });
-                        }
-                        else
-                        {
-                            RunBitcoinExplorerEndpointAPI = false;
-                            RunBitcoinExplorerOrgJSONAPI = false;
-                            HideAllFiatConversionFields();
-                            lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                                RunBitcoinExplorerEndpointAPI = true;
+                                RunBitcoinExplorerOrgJSONAPI = true;
+                                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerEndpoints.Text = "✔️";
+                                    lblBitcoinExplorerEndpoints.ForeColor = Color.Green;
+                                });
+                            }
+                            else
                             {
-                                lblBitcoinExplorerEndpoints.Text = "❌";
-                                lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
-                            });
-                        }
-                        if (Convert.ToString(bookmark.Data[4]) == "1")
-                        {
-                            RunBlockchainInfoEndpointAPI = true;
-                            lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                                RunBitcoinExplorerEndpointAPI = false;
+                                RunBitcoinExplorerOrgJSONAPI = false;
+                                HideAllFiatConversionFields();
+                                lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerEndpoints.Text = "❌";
+                                    lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
+                                });
+                            }
+                            if (Convert.ToString(bookmark.Data[4]) == "1")
                             {
-                                lblBlockchainInfoEndpoints.Text = "✔️";
-                                lblBlockchainInfoEndpoints.ForeColor = Color.Green;
-                            });
-                        }
-                        else
-                        {
-                            RunBlockchainInfoEndpointAPI = false;
-                            lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                                RunBlockchainInfoEndpointAPI = true;
+                                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchainInfoEndpoints.Text = "✔️";
+                                    lblBlockchainInfoEndpoints.ForeColor = Color.Green;
+                                });
+                            }
+                            else
                             {
-                                lblBlockchainInfoEndpoints.Text = "❌";
-                                lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
-                            });
-                        }
-                        #endregion
-                        #region restore offline mode settings
-                        if (Convert.ToString(bookmark.Data[5]) == "1")
-                        {
-                            lblOfflineMode.Invoke((MethodInvoker)delegate
-                            {
-                                lblOfflineMode.Enabled = true;
-                                lblOfflineMode.Text = "✔️";
-                                lblOfflineMode.ForeColor = Color.Green;
-                            });
-                            EnableOfflineMode();
-                        }
-                        else
-                        {
-                            offlineMode = false;
-                            lblOfflineMode.Invoke((MethodInvoker)delegate
-                            {
-                                lblOfflineMode.Text = "❌";
-                                lblOfflineMode.ForeColor = Color.IndianRed;
-                            });
-
-                            lblBlockchairComJSON.Enabled = true;
-                            lblBitcoinExplorerEndpoints.Enabled = true;
-                            lblBlockchainInfoEndpoints.Enabled = true;
-                            lblSettingsNodeMainnetSelected.Enabled = true;
-                            lblSettingsNodeTestnetSelected.Enabled = true;
-                            lblEnableDirectory.Enabled = true;
-                            lblHelpOffline.Visible = false;
-                            btnMenuHelp.Enabled = true;
-                            btnHelp.Enabled = true;
+                                RunBlockchainInfoEndpointAPI = false;
+                                lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockchainInfoEndpoints.Text = "❌";
+                                    lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
+                                });
+                            }
                         }
                         #endregion
                         #region restore directory settings
-                        if (Convert.ToString(bookmark.Data[6]) == "1")
+                        if (!offlineMode)
                         {
-                            lblEnableDirectory.Invoke((MethodInvoker)delegate
+                            if (Convert.ToString(bookmark.Data[6]) == "1")
                             {
-                                lblEnableDirectory.Text = "✔️";
-                                lblEnableDirectory.ForeColor = Color.Green;
-                            });
-                            enableDirectory = true;
-                            LoadAndStyleDirectoryBrowser();
-                        }
-                        else
-                        {
-                            lblEnableDirectory.Invoke((MethodInvoker)delegate
+                                lblEnableDirectory.Invoke((MethodInvoker)delegate
+                                {
+                                    lblEnableDirectory.Text = "✔️";
+                                    lblEnableDirectory.ForeColor = Color.Green;
+                                });
+                                enableDirectory = true;
+                                LoadAndStyleDirectoryBrowser();
+                            }
+                            else
                             {
-                                lblEnableDirectory.Text = "❌";
-                                lblEnableDirectory.ForeColor = Color.IndianRed;
-                            });
-                            enableDirectory = false;
-                            LoadAndStyleDirectoryBrowser();
+                                lblEnableDirectory.Invoke((MethodInvoker)delegate
+                                {
+                                    lblEnableDirectory.Text = "❌";
+                                    lblEnableDirectory.ForeColor = Color.IndianRed;
+                                });
+                                enableDirectory = false;
+                                LoadAndStyleDirectoryBrowser();
+                            }
                         }
                         #endregion
                         #region restore always on top setting
@@ -16707,7 +16772,6 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 CloseCurrencyMenu();
                 panelThemeMenu.BringToFront();
                 btnThemeMenu.BringToFront();
@@ -16797,9 +16861,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -16846,9 +16914,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -16895,9 +16967,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -16944,9 +17020,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -16993,9 +17073,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -17042,9 +17126,13 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
-                        panelSettingsSaved.Invoke((MethodInvoker)delegate
+                        labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Text = "Saving settings";
+                        });
+                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
                         timerHideSettingsSaved.Start();
                     }
@@ -17178,7 +17266,14 @@ namespace SATSuma
                             RestoreTheme(theme);
                             SaveThemeAsDefault(theme.ThemeName);
                             ReloadScreensWithListviews();
-                            panelSettingsSaved.Visible = true;
+                            labelSettingsSaved.Invoke((MethodInvoker)delegate
+                            {
+                                labelSettingsSaved.Text = "Saving settings";
+                            });
+                            lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                            {
+                                lblSaveSettingsLight.ForeColor = Color.Lime;
+                            });
                             timerHideSettingsSaved.Start();
                         }
                     }
@@ -18677,7 +18772,14 @@ namespace SATSuma
                                         LookupBlockList();
                                         LookupBlock();
                                         SetupBookmarksScreen();
-                                        panelSettingsSaved.Visible = true;
+                                        labelSettingsSaved.Invoke((MethodInvoker)delegate
+                                        {
+                                            labelSettingsSaved.Text = "Saving settings";
+                                        });
+                                        lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblSaveSettingsLight.ForeColor = Color.Lime;
+                                        });
                                         timerHideSettingsSaved.Start();
                                     }
                                 }
@@ -19016,6 +19118,7 @@ namespace SATSuma
 
                     ReloadScreensWithListviews();
                     LoadAndStyleDirectoryBrowser();
+                    formsPlot1.Render();
                 }
                 catch (Exception ex)
                 {
@@ -19034,7 +19137,7 @@ namespace SATSuma
             try
             {
                 // main menu
-                RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch };
+                RJButton[] mainMenuButtonBordersToColor = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch, btnHideErrorMessage };
                 foreach (RJButton button in mainMenuButtonBordersToColor)
                 {
                     button.BorderRadius = radius;
@@ -19584,7 +19687,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 // also use this colour to set the bordercolor of the top row of buttons (menus, exit, etc)
-                RJButton[] mainMenuButtonBordersToColor = { btnMenu, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnThemeMenu, btnCurrency, btnExit, btnHelp, btnAddToBookmarks, btnAnimation, btnShowGlobalSearch };
+                RJButton[] mainMenuButtonBordersToColor = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnAnimation, btnShowGlobalSearch, btnHideErrorMessage };
                 foreach (RJButton button in mainMenuButtonBordersToColor)
                 {
                     button.BorderSize = 1;
@@ -19655,7 +19758,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { headerSelectedNodeStatus, label235, label160, label159, label158, label169, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
+                Control[] listOtherTextToColor = { headerSelectedNodeStatus, label235, label160, label159, label158, labelSettingsSaved, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -19689,7 +19792,6 @@ namespace SATSuma
         {
             try
             {
-                lblRefreshSuccessOrFailMessage.ForeColor = thiscolor;
                 lblElapsedSinceUpdate.ForeColor = thiscolor;
                 lblErrorMessage.ForeColor = thiscolor;
                 label176.ForeColor = thiscolor;
@@ -19705,7 +19807,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU };
+                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = chartsBackgroundColor;
@@ -19718,11 +19820,13 @@ namespace SATSuma
                 comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
                 comboBoxHeaderCustomThemes.ListBackColor = chartsBackgroundColor;
                 btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
+                btnMenuSplash.FlatAppearance.BorderColor = chartsBackgroundColor;
+                btnMenuHelp.FlatAppearance.BorderColor = chartsBackgroundColor;
 
                 btnUniversalSearch.BackColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonsToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnUpdateAvailable, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
+                Control[] listSettingsButtonsToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
                 foreach (Control control in listSettingsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -19788,7 +19892,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnMenu, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemePlanetBTC, btnMenuThemeCitadel, btnMenuThemeWhale, btnUSD, btnEUR, btnGBP, btnXAU };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemePlanetBTC, btnMenuThemeCitadel, btnMenuThemeWhale, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage };
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
                     control.ForeColor = Color.Silver;
@@ -19805,7 +19909,7 @@ namespace SATSuma
                 btnUniversalSearch.ForeColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonTextToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnUpdateAvailable, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
+                Control[] listSettingsButtonTextToColor = { btnSetStartupScreen, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
                 foreach (Control control in listSettingsButtonTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20232,7 +20336,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panelSettingsSaved, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21 };
+                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -20260,10 +20364,6 @@ namespace SATSuma
                 if (sender == btnMenuBitcoinDashboard)
                 {
                     btnMenuBitcoinDashboard.BackColor = panelMenu.BackColor;
-                }
-                if (sender == btnMenu)
-                {
-                    btnMenu.BackColor = panelMenu.BackColor;
                 }
                 if (sender == btnThemeMenu)
                 {
@@ -20324,6 +20424,7 @@ namespace SATSuma
                 if (sender == btnMenuSplash)
                 {
                     btnMenuSplash.BackColor = panelMenu.BackColor;
+                    lblUpdaterLight.BackColor = panelMenu.BackColor;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
@@ -20393,6 +20494,10 @@ namespace SATSuma
                 {
                     btnAddToBookmarks.BackColor = panelMenu.BackColor;
                 }
+                if (sender == btnHideErrorMessage)
+                {
+                    btnHideErrorMessage.BackColor = panelMenu.BackColor;
+                }
             }
             catch (Exception ex)
             {
@@ -20411,13 +20516,6 @@ namespace SATSuma
                 if (sender == btnMenuBitcoinDashboard)
                 {
                     btnMenuBitcoinDashboard.BackColor = chartsBackgroundColor;
-                }
-                if (sender == btnMenu)
-                {
-                    if (panelMenu.Height == 0)
-                    {
-                        btnMenu.BackColor = chartsBackgroundColor;
-                    }
                 }
                 if (sender == btnMenuAddress)
                 {
@@ -20470,6 +20568,7 @@ namespace SATSuma
                 if (sender == btnMenuSplash)
                 {
                     btnMenuSplash.BackColor = chartsBackgroundColor;
+                    lblUpdaterLight.BackColor = chartsBackgroundColor;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
@@ -20552,6 +20651,10 @@ namespace SATSuma
                 if (sender == btnAddToBookmarks)
                 {
                     btnAddToBookmarks.BackColor = chartsBackgroundColor;
+                }
+                if (sender == btnHideErrorMessage)
+                {
+                    btnHideErrorMessage.BackColor = chartsBackgroundColor;
                 }
             }
             catch (Exception ex)
@@ -20719,18 +20822,7 @@ namespace SATSuma
         private void ExpandPanelTimerVert_Tick(object sender, EventArgs e)
         {
             currentHeightExpandingPanel += 16;
-            if (panelToExpandVert == panelMenu)
-            {
-                if (btnUpdateAvailable.Visible == false)
-                {
 
-                    panelMaxHeight = 328;
-                }
-                else
-                {
-                    panelMaxHeight = 352;
-                }
-            }
             if (panelToExpandVert == panelCurrency)
             {
                 panelMaxHeight = 112;
@@ -20789,7 +20881,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(762, panel107.Location.Y);
+                        panel107.Location = new Point(774, panel107.Location.Y);
                     });
                 }
                 panelToShrink.Invalidate();
@@ -20832,7 +20924,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(366, panel107.Location.Y);
+                        panel107.Location = new Point(378, panel107.Location.Y);
                     });
                 }
             }
@@ -21053,14 +21145,6 @@ namespace SATSuma
                     using WebClient client = new WebClient();
                     string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";
                     string LatestVersion = client.DownloadString(VersionURL);
-                    if (LatestVersion != CurrentVersion)
-                    {
-                        btnUpdateAvailable.Visible = true;
-                    }
-                    else
-                    {
-                        btnUpdateAvailable.Visible = false;
-                    }
                 }
             }
             catch (Exception ex)
@@ -21362,20 +21446,10 @@ namespace SATSuma
             try
             {
                 intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
-                if (intDisplaySecondsElapsedSinceUpdate == 1)
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
                 {
-                    lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                    {
-                        lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " second ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
-                    });
-                }
-                else
-                {
-                    lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                    {
-                        lblElapsedSinceUpdate.Text = intDisplaySecondsElapsedSinceUpdate.ToString() + " seconds ago. " + "Refreshing in " + Convert.ToString(intDisplayCountdownToRefresh);
-                    });
-                }
+                    lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
             }
             catch (Exception ex)
             {
@@ -21389,7 +21463,11 @@ namespace SATSuma
             {
                 lblAlert.Invoke((MethodInvoker)delegate
                 {
-                    lblAlert.Text = "🟢";
+                    lblAlert.Visible = true;
+                });
+                lblErrorAlert.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorAlert.Visible = true;
                 });
             }
             catch (Exception ex)
@@ -21412,7 +21490,7 @@ namespace SATSuma
                     //stop the animation
                     pictureBoxLoadingAnimation.Enabled = false;
                     //reset the image to return to the original frame in the animation
-                    if (btnMenu.BackColor == Color.FromArgb(20,20,20))
+                    if (btnExit.BackColor == Color.FromArgb(20,20,20))
                     {
                         pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                     }
@@ -21441,10 +21519,10 @@ namespace SATSuma
                 {
                     ChangeStatusLights();
                 }
-                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                {
-                    lblElapsedSinceUpdate.Location = new Point(lblRefreshSuccessOrFailMessage.Location.X + lblRefreshSuccessOrFailMessage.Width, lblElapsedSinceUpdate.Location.Y);
-                });
+//                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+//                {
+//                    lblElapsedSinceUpdate.Location = new Point(lblRefreshSuccessOrFailMessage.Location.X + lblRefreshSuccessOrFailMessage.Width, lblElapsedSinceUpdate.Location.Y);
+//                });
             }
             catch (Exception ex)
             {
@@ -21486,7 +21564,15 @@ namespace SATSuma
             {
                 lblAlert.Invoke((MethodInvoker)delegate
                 {
-                    lblAlert.Text = ""; // clear any error message
+                    lblAlert.Visible = false;
+                });
+                lblErrorAlert.Invoke((MethodInvoker)delegate
+                {
+                    lblErrorAlert.Visible = false;
+                });
+                panelErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    panelErrorMessage.Visible = false;
                 });
                 lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
@@ -21511,10 +21597,6 @@ namespace SATSuma
                 lblStatusLight.Invoke((MethodInvoker)delegate
                 {
                     lblStatusLight.Text = "🟢"; // circle/light
-                });
-                lblRefreshSuccessOrFailMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblRefreshSuccessOrFailMessage.Text = "Data updated successfully";
                 });
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset the timer
                 intDisplaySecondsElapsedSinceUpdate = 0; // reset the seconds since last refresh
@@ -21982,14 +22064,14 @@ namespace SATSuma
                     }
                 }
                 #endregion
-                headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
-                {
-                    headerSelectedNodeStatus.Location = new Point(panelRefreshStatusBar.Location.X + panelRefreshStatusBar.Width - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
-                });
-                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-                {
-                    headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - headerSelectedNodeStatusLight.Width, headerSelectedNodeStatusLight.Location.Y);
-                });
+//                headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
+//                {
+//                    headerSelectedNodeStatus.Location = new Point(panelRefreshStatusBar.Location.X + panelRefreshStatusBar.Width - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
+//                });
+//                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+//                {
+//                    headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - headerSelectedNodeStatusLight.Width, headerSelectedNodeStatusLight.Location.Y);
+//                });
             }
             catch (Exception ex)
             {
@@ -22125,45 +22207,15 @@ namespace SATSuma
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
         #region main menu
 
-        private void BtnMenu_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                panelMenu.BringToFront();
-                btnMenu.BringToFront();
-                if (panelMenu.Height == 0)
-                {
-                    btnMenu.Invoke((MethodInvoker)delegate
-                    {
-                        btnMenu.BackColor = panelMenu.BackColor;
-                    });
-                    CloseCurrencyMenu();
-                    CloseThemeMenu();
-                    //expand the panel
-                    currentHeightExpandingPanel = panelMenu.Height;
-                    StartExpandingPanelVert(panelMenu);
-                }
-                else
-                {
-                    CloseMainMenu();
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnMenu_Click");
-            }
-        }
-
         private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBitcoinDashboard.Location.X + (btnMenuBitcoinDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBitcoinDashboard.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuBitcoinDashboard.Invoke((MethodInvoker)delegate
@@ -22210,12 +22262,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuLightningDashboard.Location.X + (btnMenuLightningDashboard.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuLightningDashboard.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuLightningDashboard.Invoke((MethodInvoker)delegate
@@ -22262,12 +22313,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "charts";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuCharts.Location.X + (btnMenuCharts.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuCharts.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuCharts.Invoke((MethodInvoker)delegate
@@ -22311,12 +22361,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "address";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuAddress.Location.X + (btnMenuAddress.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuAddress.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuAddress.Invoke((MethodInvoker)delegate
@@ -22364,12 +22413,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "block";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBlock.Location.X + (btnMenuBlock.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlock.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuBlock.Invoke((MethodInvoker)delegate
@@ -22427,12 +22475,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "xpub";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuXpub.Location.X + (btnMenuXpub.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuXpub.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuXpub.Invoke((MethodInvoker)delegate
@@ -22480,12 +22527,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "blocks";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBlockList.Location.X + (btnMenuBlockList.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBlockList.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuBlockList.Invoke((MethodInvoker)delegate
@@ -22541,12 +22587,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "transaction";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuTransaction.Location.X + (btnMenuTransaction.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuTransaction.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuTransaction.Invoke((MethodInvoker)delegate
@@ -22595,12 +22640,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "bookmarks";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuBookmarks.Location.X + (btnMenuBookmarks.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuBookmarks.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuBookmarks.Invoke((MethodInvoker)delegate
@@ -22651,12 +22695,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "directory";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuDirectory.Location.X + (btnMenuDirectory.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuDirectory.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuDirectory.Invoke((MethodInvoker)delegate
@@ -22706,12 +22749,11 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "settings";
-                    lblMenuHighlightedButtonText.Location = new Point((btnMenuSettings.Location.X + (btnMenuSettings.Width / 2)) - lblMenuHighlightedButtonText.Width / 2, btnMenuSettings.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + 3);
                 });
                 ClearMainMenuMarkers();
                 btnMenuSettings.Invoke((MethodInvoker)delegate
@@ -22894,7 +22936,7 @@ namespace SATSuma
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.ShowDialog(this);
                 overlay.Close();
-                CloseMainMenu();
+//                CloseMainMenu();
             }
             catch (Exception ex)
             {
@@ -22944,7 +22986,6 @@ namespace SATSuma
                     };
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.ShowDialog(this);
-                CloseMainMenu();
                 overlay.Close();
             }
             catch (Exception ex)
@@ -23010,7 +23051,6 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 CloseThemeMenu();
                 btnCurrency.BringToFront();
                 //panelCurrency.BringToFront();
@@ -23043,7 +23083,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "USD $";
+                btnCurrency.Text = "   currency (USD)";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23098,7 +23138,7 @@ namespace SATSuma
                 btnEUR.Enabled = false;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "EUR €";
+                btnCurrency.Text = "   currency (EUR)";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23141,7 +23181,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BtnEUR_Click");
+                HandleException(ex, "   BtnEUR_Click");
             }
         }
 
@@ -23153,7 +23193,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = false;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "GBP £";
+                btnCurrency.Text = "   currency (GBP)";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23208,7 +23248,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = false;
-                btnCurrency.Text = "XAU 🪙";
+                btnCurrency.Text = "   currency (XAU)";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23571,7 +23611,6 @@ namespace SATSuma
         {
             try
             {
-                CloseMainMenu();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 ReleaseCapture();
@@ -23609,7 +23648,6 @@ namespace SATSuma
                 {
                     return;
                 }
-                CloseMainMenu();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
             }
@@ -24010,24 +24048,6 @@ namespace SATSuma
         }
         #endregion
         #region close menus
-        private void CloseMainMenu()
-        {
-            try
-            {
-                panelMenu.Invoke((MethodInvoker)delegate
-                {
-                    panelMenu.Height = 0;
-                });
-                btnMenu.Invoke((MethodInvoker)delegate
-                {
-                    btnMenu.BackColor = chartsBackgroundColor;
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "CloseMainMenu");
-            }
-        }
         private void CloseThemeMenu()
         {
             try
@@ -25131,5 +25151,21 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+        private void lblErrorAlert_Click(object sender, EventArgs e)
+        {
+            panelErrorMessage.Invoke((MethodInvoker)delegate
+            {
+                panelErrorMessage.Visible = true;
+            });
+        }
+
+        private void HideErrorMessage_Click(object sender, EventArgs e)
+        {
+            panelErrorMessage.Invoke((MethodInvoker)delegate
+            {
+                panelErrorMessage.Visible = false;
+            });
+        }
     }
 }                

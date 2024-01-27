@@ -60,10 +60,10 @@
     <StartupObject>SATSuma.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D3E1DE6D76A17E326D2F9D446F70FDABFD030A2B</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>73DD0C017611BB2DFA11F494140085E9A015A4BE</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Statamoto_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>SATSuma_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -417,6 +417,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SATSuma_TemporaryKey.pfx" />
     <None Include="Statamoto_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

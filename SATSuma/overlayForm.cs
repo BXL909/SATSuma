@@ -38,8 +38,8 @@ namespace SATSuma
             
 
                 // Set the size of the overlay form to match the parent form, considering the DPI scaling
-                this.Width = (int)(794 * scale);
-                this.Height = (int)(777 * scale);
+                this.Width = (int)(940 * scale);
+                this.Height = (int)(754 * scale);
 
             // Create and set the rounded region
             GraphicsPath path = RoundedRectangle.Create(0, 0, Width, Height, 30);

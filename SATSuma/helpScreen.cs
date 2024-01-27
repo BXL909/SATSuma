@@ -94,7 +94,7 @@ namespace SATSuma
             panel1.VerticalScroll.Visible = false;
             if (((SATSuma)this.Owner).GetPanelMenu().Visible == true && ((SATSuma)this.Owner).GetPanelMenu().Height > 24) // menu is open so main help page has been requested
             {
-                ((SATSuma)this.Owner).GetPanelMenu().Height = 0; // close menu on calling window
+                //((SATSuma)this.Owner).GetPanelMenu().Height = 0; // close menu on calling window
                 lblHelpHeading.Text = "Documentation";
             }
             else

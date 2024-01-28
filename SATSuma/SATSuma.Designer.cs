@@ -652,6 +652,13 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.panel111 = new System.Windows.Forms.Panel();
+            this.label298 = new System.Windows.Forms.Label();
+            this.lblScaleAmount = new System.Windows.Forms.Label();
+            this.btnBiggerScale = new CustomControls.RJControls.RJButton();
+            this.btnSmallerScale = new CustomControls.RJControls.RJButton();
+            this.panel112 = new System.Windows.Forms.Panel();
+            this.label169 = new System.Windows.Forms.Label();
             this.panel106 = new System.Windows.Forms.Panel();
             this.panel108 = new System.Windows.Forms.Panel();
             this.label293 = new System.Windows.Forms.Label();
@@ -1128,6 +1135,7 @@
             this.panelLeftPanel2 = new System.Windows.Forms.Panel();
             this.panelLeftPanel3 = new System.Windows.Forms.Panel();
             this.panelErrorMessage = new System.Windows.Forms.Panel();
+            this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
@@ -1251,6 +1259,8 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
+            this.panel111.SuspendLayout();
+            this.panel112.SuspendLayout();
             this.panel106.SuspendLayout();
             this.panel108.SuspendLayout();
             this.panel76.SuspendLayout();
@@ -1434,12 +1444,14 @@
             // lblErrorMessage
             // 
             this.lblErrorMessage.AutoEllipsis = true;
+            this.lblErrorMessage.AutoSize = true;
             this.lblErrorMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblErrorMessage.ForeColor = System.Drawing.Color.Gray;
+            this.lblErrorMessage.ForeColor = System.Drawing.Color.IndianRed;
             this.lblErrorMessage.Location = new System.Drawing.Point(20, 3);
+            this.lblErrorMessage.MaximumSize = new System.Drawing.Size(521, 21);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(435, 33);
+            this.lblErrorMessage.Size = new System.Drawing.Size(98, 15);
             this.lblErrorMessage.TabIndex = 40;
             this.lblErrorMessage.Text = "Error message";
             // 
@@ -9897,7 +9909,7 @@
             this.panelHeaderBlockHeight.Controls.Add(this.lblHeaderBlockSize);
             this.panelHeaderBlockHeight.Location = new System.Drawing.Point(402, 45);
             this.panelHeaderBlockHeight.Name = "panelHeaderBlockHeight";
-            this.panelHeaderBlockHeight.Size = new System.Drawing.Size(202, 114);
+            this.panelHeaderBlockHeight.Size = new System.Drawing.Size(231, 114);
             this.panelHeaderBlockHeight.TabIndex = 217;
             // 
             // lblHeaderBlockAge
@@ -10104,6 +10116,7 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
+            this.panelSettings.Controls.Add(this.panel111);
             this.panelSettings.Controls.Add(this.panel106);
             this.panelSettings.Controls.Add(this.panel76);
             this.panelSettings.Controls.Add(this.panel21);
@@ -10116,6 +10129,118 @@
             this.panelSettings.Size = new System.Drawing.Size(773, 556);
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
+            // 
+            // panel111
+            // 
+            this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel111.Controls.Add(this.label298);
+            this.panel111.Controls.Add(this.lblScaleAmount);
+            this.panel111.Controls.Add(this.btnBiggerScale);
+            this.panel111.Controls.Add(this.btnSmallerScale);
+            this.panel111.Controls.Add(this.panel112);
+            this.panel111.Location = new System.Drawing.Point(575, 319);
+            this.panel111.Name = "panel111";
+            this.panel111.Size = new System.Drawing.Size(180, 54);
+            this.panel111.TabIndex = 257;
+            // 
+            // label298
+            // 
+            this.label298.AutoSize = true;
+            this.label298.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label298.ForeColor = System.Drawing.Color.Silver;
+            this.label298.Location = new System.Drawing.Point(5, 29);
+            this.label298.Name = "label298";
+            this.label298.Size = new System.Drawing.Size(56, 17);
+            this.label298.TabIndex = 258;
+            this.label298.Text = "UI Scale";
+            // 
+            // lblScaleAmount
+            // 
+            this.lblScaleAmount.AutoSize = true;
+            this.lblScaleAmount.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScaleAmount.ForeColor = System.Drawing.Color.Silver;
+            this.lblScaleAmount.Location = new System.Drawing.Point(110, 29);
+            this.lblScaleAmount.Name = "lblScaleAmount";
+            this.lblScaleAmount.Size = new System.Drawing.Size(38, 17);
+            this.lblScaleAmount.TabIndex = 253;
+            this.lblScaleAmount.Text = "100%";
+            // 
+            // btnBiggerScale
+            // 
+            this.btnBiggerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBiggerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBiggerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnBiggerScale.BorderRadius = 7;
+            this.btnBiggerScale.BorderSize = 0;
+            this.btnBiggerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnBiggerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBiggerScale.FlatAppearance.BorderSize = 0;
+            this.btnBiggerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBiggerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBiggerScale.ForeColor = System.Drawing.Color.White;
+            this.btnBiggerScale.Location = new System.Drawing.Point(146, 26);
+            this.btnBiggerScale.Margin = new System.Windows.Forms.Padding(0);
+            this.btnBiggerScale.Name = "btnBiggerScale";
+            this.btnBiggerScale.Size = new System.Drawing.Size(24, 24);
+            this.btnBiggerScale.TabIndex = 257;
+            this.btnBiggerScale.TabStop = false;
+            this.btnBiggerScale.Text = "➕";
+            this.btnBiggerScale.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBiggerScale.TextColor = System.Drawing.Color.White;
+            this.btnBiggerScale.UseVisualStyleBackColor = false;
+            this.btnBiggerScale.Click += new System.EventHandler(this.btnBiggerScale_Click);
+            // 
+            // btnSmallerScale
+            // 
+            this.btnSmallerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSmallerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSmallerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnSmallerScale.BorderRadius = 7;
+            this.btnSmallerScale.BorderSize = 0;
+            this.btnSmallerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSmallerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnSmallerScale.FlatAppearance.BorderSize = 0;
+            this.btnSmallerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSmallerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSmallerScale.ForeColor = System.Drawing.Color.White;
+            this.btnSmallerScale.Location = new System.Drawing.Point(85, 26);
+            this.btnSmallerScale.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSmallerScale.Name = "btnSmallerScale";
+            this.btnSmallerScale.Size = new System.Drawing.Size(24, 24);
+            this.btnSmallerScale.TabIndex = 256;
+            this.btnSmallerScale.TabStop = false;
+            this.btnSmallerScale.Text = "➖";
+            this.btnSmallerScale.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnSmallerScale.TextColor = System.Drawing.Color.White;
+            this.btnSmallerScale.UseVisualStyleBackColor = false;
+            this.btnSmallerScale.Click += new System.EventHandler(this.btnSmallerScale_Click);
+            // 
+            // panel112
+            // 
+            this.panel112.BackColor = System.Drawing.Color.Transparent;
+            this.panel112.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel112.BackgroundImage")));
+            this.panel112.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel112.Controls.Add(this.label169);
+            this.panel112.Location = new System.Drawing.Point(0, 0);
+            this.panel112.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel112.Name = "panel112";
+            this.panel112.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.panel112.Size = new System.Drawing.Size(180, 23);
+            this.panel112.TabIndex = 252;
+            // 
+            // label169
+            // 
+            this.label169.AutoSize = true;
+            this.label169.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label169.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label169.ForeColor = System.Drawing.Color.Gray;
+            this.label169.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label169.Location = new System.Drawing.Point(5, 2);
+            this.label169.Margin = new System.Windows.Forms.Padding(0);
+            this.label169.Name = "label169";
+            this.label169.Size = new System.Drawing.Size(167, 17);
+            this.label169.TabIndex = 153;
+            this.label169.Text = "UI Scaling (requires restart)";
             // 
             // panel106
             // 
@@ -10424,7 +10549,7 @@
             this.panel85.Controls.Add(this.label198);
             this.panel85.Location = new System.Drawing.Point(0, 319);
             this.panel85.Name = "panel85";
-            this.panel85.Size = new System.Drawing.Size(755, 53);
+            this.panel85.Size = new System.Drawing.Size(567, 53);
             this.panel85.TabIndex = 249;
             // 
             // panel75
@@ -10433,7 +10558,7 @@
             this.panel75.Controls.Add(this.btnDataRefreshPeriodUp);
             this.panel75.Controls.Add(this.numericUpDownDashboardRefresh);
             this.panel75.Controls.Add(this.btnDataRefreshPeriodDown);
-            this.panel75.Location = new System.Drawing.Point(369, 27);
+            this.panel75.Location = new System.Drawing.Point(363, 27);
             this.panel75.Name = "panel75";
             this.panel75.Size = new System.Drawing.Size(102, 22);
             this.panel75.TabIndex = 254;
@@ -10523,7 +10648,7 @@
             // 
             this.label235.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label235.ForeColor = System.Drawing.Color.Gray;
-            this.label235.Location = new System.Drawing.Point(488, 29);
+            this.label235.Location = new System.Drawing.Point(466, 29);
             this.label235.Name = "label235";
             this.label235.Size = new System.Drawing.Size(91, 17);
             this.label235.TabIndex = 248;
@@ -10538,7 +10663,7 @@
             this.panel82.Location = new System.Drawing.Point(0, 0);
             this.panel82.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel82.Name = "panel82";
-            this.panel82.Size = new System.Drawing.Size(755, 23);
+            this.panel82.Size = new System.Drawing.Size(567, 23);
             this.panel82.TabIndex = 247;
             // 
             // label234
@@ -17292,13 +17417,36 @@
             // 
             // panelErrorMessage
             // 
+            this.panelErrorMessage.Controls.Add(this.btnCopyErrorMessage);
             this.panelErrorMessage.Controls.Add(this.btnHideErrorMessage);
             this.panelErrorMessage.Controls.Add(this.lblErrorMessage);
-            this.panelErrorMessage.Location = new System.Drawing.Point(135, 2);
+            this.panelErrorMessage.Location = new System.Drawing.Point(135, 10);
             this.panelErrorMessage.Name = "panelErrorMessage";
-            this.panelErrorMessage.Size = new System.Drawing.Size(509, 39);
+            this.panelErrorMessage.Size = new System.Drawing.Size(623, 24);
             this.panelErrorMessage.TabIndex = 265;
-            this.panelErrorMessage.Visible = false;
+            // 
+            // btnCopyErrorMessage
+            // 
+            this.btnCopyErrorMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCopyErrorMessage.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCopyErrorMessage.BorderColor = System.Drawing.Color.Empty;
+            this.btnCopyErrorMessage.BorderRadius = 0;
+            this.btnCopyErrorMessage.BorderSize = 0;
+            this.btnCopyErrorMessage.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnCopyErrorMessage.FlatAppearance.BorderSize = 0;
+            this.btnCopyErrorMessage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCopyErrorMessage.Font = new System.Drawing.Font("MicroFLF", 5F, System.Drawing.FontStyle.Bold);
+            this.btnCopyErrorMessage.ForeColor = System.Drawing.Color.White;
+            this.btnCopyErrorMessage.Location = new System.Drawing.Point(551, 5);
+            this.btnCopyErrorMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCopyErrorMessage.Name = "btnCopyErrorMessage";
+            this.btnCopyErrorMessage.Size = new System.Drawing.Size(40, 14);
+            this.btnCopyErrorMessage.TabIndex = 42;
+            this.btnCopyErrorMessage.TabStop = false;
+            this.btnCopyErrorMessage.Text = "COPY";
+            this.btnCopyErrorMessage.TextColor = System.Drawing.Color.White;
+            this.btnCopyErrorMessage.UseVisualStyleBackColor = false;
+            this.btnCopyErrorMessage.Click += new System.EventHandler(this.btnCopyErrorMessage_Click);
             // 
             // btnHideErrorMessage
             // 
@@ -17312,13 +17460,13 @@
             this.btnHideErrorMessage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHideErrorMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHideErrorMessage.ForeColor = System.Drawing.Color.White;
-            this.btnHideErrorMessage.Location = new System.Drawing.Point(463, 8);
+            this.btnHideErrorMessage.Location = new System.Drawing.Point(598, 0);
             this.btnHideErrorMessage.Name = "btnHideErrorMessage";
             this.btnHideErrorMessage.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnHideErrorMessage.Size = new System.Drawing.Size(37, 24);
+            this.btnHideErrorMessage.Size = new System.Drawing.Size(24, 24);
             this.btnHideErrorMessage.TabIndex = 41;
             this.btnHideErrorMessage.TabStop = false;
-            this.btnHideErrorMessage.Text = "OK";
+            this.btnHideErrorMessage.Text = "❌";
             this.btnHideErrorMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHideErrorMessage.TextColor = System.Drawing.Color.White;
             this.btnHideErrorMessage.UseVisualStyleBackColor = false;
@@ -17333,6 +17481,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelErrorMessage);
             this.Controls.Add(this.panelLeftPanel3);
             this.Controls.Add(this.panelLeftPanel2);
@@ -17340,7 +17489,6 @@
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
@@ -17530,6 +17678,10 @@
             this.panelCurrency.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
+            this.panel111.ResumeLayout(false);
+            this.panel111.PerformLayout();
+            this.panel112.ResumeLayout(false);
+            this.panel112.PerformLayout();
             this.panel106.ResumeLayout(false);
             this.panel106.PerformLayout();
             this.panel108.ResumeLayout(false);
@@ -17658,6 +17810,7 @@
             this.panelLeftPanel.ResumeLayout(false);
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
+            this.panelErrorMessage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -18764,6 +18917,14 @@
         private System.Windows.Forms.Label lblErrorAlert;
         private System.Windows.Forms.Panel panelErrorMessage;
         private CustomControls.RJControls.RJButton btnHideErrorMessage;
+        private CustomControls.RJControls.RJButton btnCopyErrorMessage;
+        private System.Windows.Forms.Panel panel111;
+        private System.Windows.Forms.Panel panel112;
+        private System.Windows.Forms.Label label169;
+        private System.Windows.Forms.Label lblScaleAmount;
+        private CustomControls.RJControls.RJButton btnBiggerScale;
+        private CustomControls.RJControls.RJButton btnSmallerScale;
+        private System.Windows.Forms.Label label298;
     }
 }
 

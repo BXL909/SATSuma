@@ -200,7 +200,6 @@
             this.btnNumericUpDownBlockHeightToStartListFromDown = new CustomControls.RJControls.RJButton();
             this.numericUpDownBlockHeightToStartListFrom = new System.Windows.Forms.NumericUpDown();
             this.label109 = new System.Windows.Forms.Label();
-            this.panel92 = new System.Windows.Forms.Panel();
             this.panel45 = new System.Windows.Forms.Panel();
             this.label143 = new System.Windows.Forms.Label();
             this.progressBarBlockListHalvingProgress = new ColorProgressBar.ColorProgressBar();
@@ -431,6 +430,7 @@
             this.label145 = new System.Windows.Forms.Label();
             this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.lblMenuArrow = new System.Windows.Forms.Label();
             this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuDirectory = new System.Windows.Forms.Button();
             this.panelMainMenuFiller = new System.Windows.Forms.Panel();
@@ -1102,7 +1102,6 @@
             this.lblCurrentVersion = new System.Windows.Forms.Label();
             this.btnExit = new CustomControls.RJControls.RJButton();
             this.btnCurrency = new CustomControls.RJControls.RJButton();
-            this.btnThemeMenu = new CustomControls.RJControls.RJButton();
             this.btnAddToBookmarks = new CustomControls.RJControls.RJButton();
             this.btnHelp = new CustomControls.RJControls.RJButton();
             this.btnMinimise = new CustomControls.RJControls.RJButton();
@@ -1129,6 +1128,7 @@
             this.ShrinkPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.panelLeftPanel = new System.Windows.Forms.Panel();
             this.lblErrorAlert = new System.Windows.Forms.Label();
+            this.btnThemeMenu = new CustomControls.RJControls.RJButton();
             this.lblUpdaterLight = new System.Windows.Forms.Label();
             this.lblSaveSettingsLight = new System.Windows.Forms.Label();
             this.lblOfflineModeLight = new System.Windows.Forms.Label();
@@ -1420,7 +1420,6 @@
             this.btnMoveWindow.TabIndex = 33;
             this.btnMoveWindow.TabStop = false;
             this.btnMoveWindow.Text = "↔️";
-            this.btnMoveWindow.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMoveWindow.TextColor = System.Drawing.Color.White;
             this.btnMoveWindow.UseVisualStyleBackColor = false;
             this.btnMoveWindow.Click += new System.EventHandler(this.BtnMoveWindow_Click);
@@ -1449,7 +1448,6 @@
             this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblErrorMessage.ForeColor = System.Drawing.Color.IndianRed;
             this.lblErrorMessage.Location = new System.Drawing.Point(20, 3);
-            this.lblErrorMessage.MaximumSize = new System.Drawing.Size(521, 21);
             this.lblErrorMessage.Name = "lblErrorMessage";
             this.lblErrorMessage.Size = new System.Drawing.Size(98, 15);
             this.lblErrorMessage.TabIndex = 40;
@@ -2467,7 +2465,6 @@
             this.btnSaveChart.TabIndex = 275;
             this.btnSaveChart.TabStop = false;
             this.btnSaveChart.Text = "💾";
-            this.btnSaveChart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSaveChart.TextColor = System.Drawing.Color.White;
             this.toolTip1.SetToolTip(this.btnSaveChart, "Save chart image");
             this.btnSaveChart.UseVisualStyleBackColor = false;
@@ -2538,14 +2535,13 @@
             this.btnPreviewAnimations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreviewAnimations.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPreviewAnimations.ForeColor = System.Drawing.Color.White;
-            this.btnPreviewAnimations.Location = new System.Drawing.Point(195, 0);
+            this.btnPreviewAnimations.Location = new System.Drawing.Point(204, 0);
             this.btnPreviewAnimations.Margin = new System.Windows.Forms.Padding(0);
             this.btnPreviewAnimations.Name = "btnPreviewAnimations";
-            this.btnPreviewAnimations.Size = new System.Drawing.Size(29, 20);
+            this.btnPreviewAnimations.Size = new System.Drawing.Size(20, 20);
             this.btnPreviewAnimations.TabIndex = 290;
             this.btnPreviewAnimations.TabStop = false;
             this.btnPreviewAnimations.Text = "▶";
-            this.btnPreviewAnimations.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnPreviewAnimations.TextColor = System.Drawing.Color.White;
             this.toolTip1.SetToolTip(this.btnPreviewAnimations, "preview");
             this.btnPreviewAnimations.UseVisualStyleBackColor = false;
@@ -2570,7 +2566,6 @@
             this.btnShowGlobalSearch.TabIndex = 260;
             this.btnShowGlobalSearch.TabStop = false;
             this.btnShowGlobalSearch.Text = "🔎";
-            this.btnShowGlobalSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnShowGlobalSearch.TextColor = System.Drawing.Color.White;
             this.toolTip1.SetToolTip(this.btnShowGlobalSearch, "search for address, block, transaction or Xpub");
             this.btnShowGlobalSearch.UseVisualStyleBackColor = false;
@@ -3508,7 +3503,6 @@
             this.panelBlockList.Controls.Add(this.lblBlockListTotalFeesInNextBlockFiat);
             this.panelBlockList.Controls.Add(this.lblBlockListBlockRewardFiat);
             this.panelBlockList.Controls.Add(this.panel94);
-            this.panelBlockList.Controls.Add(this.panel92);
             this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeRangeChart2);
             this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeChart2);
             this.panelBlockList.Controls.Add(this.pictureBoxBlockListHashrateChart);
@@ -3610,7 +3604,6 @@
             this.btnLookUpBlockList.TabIndex = 265;
             this.btnLookUpBlockList.TabStop = false;
             this.btnLookUpBlockList.Text = "submit";
-            this.btnLookUpBlockList.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLookUpBlockList.TextColor = System.Drawing.Color.White;
             this.btnLookUpBlockList.UseVisualStyleBackColor = false;
             this.btnLookUpBlockList.Click += new System.EventHandler(this.BtnLookUpBlockList_Click);
@@ -3671,7 +3664,6 @@
             this.btnNumericUpDownBlockHeightToStartListFromUp.TabIndex = 266;
             this.btnNumericUpDownBlockHeightToStartListFromUp.TabStop = false;
             this.btnNumericUpDownBlockHeightToStartListFromUp.Text = "▲";
-            this.btnNumericUpDownBlockHeightToStartListFromUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNumericUpDownBlockHeightToStartListFromUp.TextColor = System.Drawing.Color.White;
             this.btnNumericUpDownBlockHeightToStartListFromUp.UseVisualStyleBackColor = false;
             this.btnNumericUpDownBlockHeightToStartListFromUp.Click += new System.EventHandler(this.BtnNumericUpDownBlockHeightToStartListFromUp_Click);
@@ -3697,7 +3689,6 @@
             this.btnNumericUpDownBlockHeightToStartListFromDown.TabIndex = 265;
             this.btnNumericUpDownBlockHeightToStartListFromDown.TabStop = false;
             this.btnNumericUpDownBlockHeightToStartListFromDown.Text = "▼";
-            this.btnNumericUpDownBlockHeightToStartListFromDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNumericUpDownBlockHeightToStartListFromDown.TextColor = System.Drawing.Color.White;
             this.btnNumericUpDownBlockHeightToStartListFromDown.UseVisualStyleBackColor = false;
             this.btnNumericUpDownBlockHeightToStartListFromDown.Click += new System.EventHandler(this.BtnNumericUpDownBlockHeightToStartListFromDown_Click);
@@ -3710,14 +3701,14 @@
             this.numericUpDownBlockHeightToStartListFrom.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numericUpDownBlockHeightToStartListFrom.Font = new System.Drawing.Font("Consolas", 11.75F);
             this.numericUpDownBlockHeightToStartListFrom.ForeColor = System.Drawing.Color.Silver;
-            this.numericUpDownBlockHeightToStartListFrom.Location = new System.Drawing.Point(6, 0);
+            this.numericUpDownBlockHeightToStartListFrom.Location = new System.Drawing.Point(6, 2);
             this.numericUpDownBlockHeightToStartListFrom.Maximum = new decimal(new int[] {
             673298,
             0,
             0,
             0});
             this.numericUpDownBlockHeightToStartListFrom.Name = "numericUpDownBlockHeightToStartListFrom";
-            this.numericUpDownBlockHeightToStartListFrom.Size = new System.Drawing.Size(82, 22);
+            this.numericUpDownBlockHeightToStartListFrom.Size = new System.Drawing.Size(88, 22);
             this.numericUpDownBlockHeightToStartListFrom.TabIndex = 264;
             this.numericUpDownBlockHeightToStartListFrom.TabStop = false;
             this.numericUpDownBlockHeightToStartListFrom.Value = new decimal(new int[] {
@@ -3736,15 +3727,6 @@
             this.label109.Size = new System.Drawing.Size(130, 17);
             this.label109.TabIndex = 6;
             this.label109.Text = "Start at block height";
-            // 
-            // panel92
-            // 
-            this.panel92.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel92.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel92.Location = new System.Drawing.Point(193, 32);
-            this.panel92.Name = "panel92";
-            this.panel92.Size = new System.Drawing.Size(57, 1);
-            this.panel92.TabIndex = 198;
             // 
             // panel45
             // 
@@ -4044,7 +4026,7 @@
             this.lblBlockListPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockListPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 303);
+            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 294);
             this.lblBlockListPositionInList.Name = "lblBlockListPositionInList";
             this.lblBlockListPositionInList.Size = new System.Drawing.Size(91, 17);
             this.lblBlockListPositionInList.TabIndex = 157;
@@ -4062,7 +4044,7 @@
             this.btnNewer15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewer15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewer15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 299);
+            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 294);
             this.btnNewer15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnNewer15Blocks.Name = "btnNewer15Blocks";
             this.btnNewer15Blocks.Size = new System.Drawing.Size(78, 22);
@@ -4085,7 +4067,7 @@
             this.btnOlder15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOlder15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOlder15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 299);
+            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 294);
             this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(0);
             this.btnOlder15Blocks.Name = "btnOlder15Blocks";
             this.btnOlder15Blocks.Size = new System.Drawing.Size(70, 22);
@@ -5044,29 +5026,29 @@
             // 
             // aliasConnLabel10
             // 
+            this.aliasConnLabel10.AutoEllipsis = true;
             this.aliasConnLabel10.AutoSize = true;
             this.aliasConnLabel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel10.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel10.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel10.Location = new System.Drawing.Point(388, 531);
-            this.aliasConnLabel10.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel10.Name = "aliasConnLabel10";
-            this.aliasConnLabel10.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel10.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel10.TabIndex = 160;
             this.aliasConnLabel10.Text = "no data";
             // 
             // aliasConnLabel9
             // 
+            this.aliasConnLabel9.AutoEllipsis = true;
             this.aliasConnLabel9.AutoSize = true;
             this.aliasConnLabel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel9.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel9.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel9.Location = new System.Drawing.Point(388, 511);
-            this.aliasConnLabel9.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel9.Name = "aliasConnLabel9";
-            this.aliasConnLabel9.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel9.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel9.TabIndex = 159;
             this.aliasConnLabel9.Text = "no data";
             // 
@@ -5098,29 +5080,29 @@
             // 
             // aliasConnLabel8
             // 
+            this.aliasConnLabel8.AutoEllipsis = true;
             this.aliasConnLabel8.AutoSize = true;
             this.aliasConnLabel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel8.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel8.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel8.Location = new System.Drawing.Point(388, 491);
-            this.aliasConnLabel8.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel8.Name = "aliasConnLabel8";
-            this.aliasConnLabel8.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel8.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel8.TabIndex = 156;
             this.aliasConnLabel8.Text = "no data";
             // 
             // aliasConnLabel7
             // 
+            this.aliasConnLabel7.AutoEllipsis = true;
             this.aliasConnLabel7.AutoSize = true;
             this.aliasConnLabel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel7.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel7.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel7.Location = new System.Drawing.Point(388, 471);
-            this.aliasConnLabel7.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel7.Name = "aliasConnLabel7";
-            this.aliasConnLabel7.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel7.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel7.TabIndex = 155;
             this.aliasConnLabel7.Text = "no data";
             // 
@@ -5152,29 +5134,29 @@
             // 
             // aliasConnLabel6
             // 
+            this.aliasConnLabel6.AutoEllipsis = true;
             this.aliasConnLabel6.AutoSize = true;
             this.aliasConnLabel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel6.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel6.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel6.Location = new System.Drawing.Point(388, 451);
-            this.aliasConnLabel6.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel6.Name = "aliasConnLabel6";
-            this.aliasConnLabel6.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel6.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel6.TabIndex = 152;
             this.aliasConnLabel6.Text = "no data";
             // 
             // aliasConnLabel5
             // 
+            this.aliasConnLabel5.AutoEllipsis = true;
             this.aliasConnLabel5.AutoSize = true;
             this.aliasConnLabel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel5.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel5.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel5.Location = new System.Drawing.Point(388, 431);
-            this.aliasConnLabel5.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel5.Name = "aliasConnLabel5";
-            this.aliasConnLabel5.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel5.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel5.TabIndex = 151;
             this.aliasConnLabel5.Text = "no data";
             // 
@@ -5206,29 +5188,29 @@
             // 
             // aliasConnLabel4
             // 
+            this.aliasConnLabel4.AutoEllipsis = true;
             this.aliasConnLabel4.AutoSize = true;
             this.aliasConnLabel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel4.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel4.Location = new System.Drawing.Point(388, 411);
-            this.aliasConnLabel4.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel4.Name = "aliasConnLabel4";
-            this.aliasConnLabel4.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel4.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel4.TabIndex = 148;
             this.aliasConnLabel4.Text = "no data";
             // 
             // aliasConnLabel3
             // 
+            this.aliasConnLabel3.AutoEllipsis = true;
             this.aliasConnLabel3.AutoSize = true;
             this.aliasConnLabel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel3.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel3.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel3.Location = new System.Drawing.Point(388, 391);
-            this.aliasConnLabel3.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel3.Name = "aliasConnLabel3";
-            this.aliasConnLabel3.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel3.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel3.TabIndex = 147;
             this.aliasConnLabel3.Text = "no data";
             // 
@@ -5260,29 +5242,29 @@
             // 
             // aliasConnLabel2
             // 
+            this.aliasConnLabel2.AutoEllipsis = true;
             this.aliasConnLabel2.AutoSize = true;
             this.aliasConnLabel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel2.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel2.Location = new System.Drawing.Point(388, 371);
-            this.aliasConnLabel2.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel2.Name = "aliasConnLabel2";
-            this.aliasConnLabel2.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel2.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel2.TabIndex = 144;
             this.aliasConnLabel2.Text = "no data";
             // 
             // aliasConnLabel1
             // 
+            this.aliasConnLabel1.AutoEllipsis = true;
             this.aliasConnLabel1.AutoSize = true;
             this.aliasConnLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasConnLabel1.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasConnLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasConnLabel1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasConnLabel1.Location = new System.Drawing.Point(388, 351);
-            this.aliasConnLabel1.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasConnLabel1.Name = "aliasConnLabel1";
-            this.aliasConnLabel1.Size = new System.Drawing.Size(64, 15);
+            this.aliasConnLabel1.Size = new System.Drawing.Size(64, 18);
             this.aliasConnLabel1.TabIndex = 143;
             this.aliasConnLabel1.Text = "no data";
             // 
@@ -5338,29 +5320,29 @@
             // 
             // aliasLabel10
             // 
+            this.aliasLabel10.AutoEllipsis = true;
             this.aliasLabel10.AutoSize = true;
             this.aliasLabel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel10.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel10.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel10.Location = new System.Drawing.Point(3, 531);
-            this.aliasLabel10.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel10.Name = "aliasLabel10";
-            this.aliasLabel10.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel10.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel10.TabIndex = 137;
             this.aliasLabel10.Text = "no data";
             // 
             // aliasLabel9
             // 
+            this.aliasLabel9.AutoEllipsis = true;
             this.aliasLabel9.AutoSize = true;
             this.aliasLabel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel9.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel9.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel9.Location = new System.Drawing.Point(3, 511);
-            this.aliasLabel9.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel9.Name = "aliasLabel9";
-            this.aliasLabel9.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel9.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel9.TabIndex = 136;
             this.aliasLabel9.Text = "no data";
             // 
@@ -5392,29 +5374,29 @@
             // 
             // aliasLabel8
             // 
+            this.aliasLabel8.AutoEllipsis = true;
             this.aliasLabel8.AutoSize = true;
             this.aliasLabel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel8.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel8.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel8.Location = new System.Drawing.Point(3, 491);
-            this.aliasLabel8.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel8.Name = "aliasLabel8";
-            this.aliasLabel8.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel8.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel8.TabIndex = 133;
             this.aliasLabel8.Text = "no data";
             // 
             // aliasLabel7
             // 
+            this.aliasLabel7.AutoEllipsis = true;
             this.aliasLabel7.AutoSize = true;
             this.aliasLabel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel7.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel7.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel7.Location = new System.Drawing.Point(3, 471);
-            this.aliasLabel7.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel7.Name = "aliasLabel7";
-            this.aliasLabel7.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel7.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel7.TabIndex = 132;
             this.aliasLabel7.Text = "no data";
             // 
@@ -5446,29 +5428,29 @@
             // 
             // aliasLabel6
             // 
+            this.aliasLabel6.AutoEllipsis = true;
             this.aliasLabel6.AutoSize = true;
             this.aliasLabel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel6.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel6.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel6.Location = new System.Drawing.Point(3, 451);
-            this.aliasLabel6.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel6.Name = "aliasLabel6";
-            this.aliasLabel6.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel6.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel6.TabIndex = 129;
             this.aliasLabel6.Text = "no data";
             // 
             // aliasLabel5
             // 
+            this.aliasLabel5.AutoEllipsis = true;
             this.aliasLabel5.AutoSize = true;
             this.aliasLabel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel5.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel5.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel5.Location = new System.Drawing.Point(3, 431);
-            this.aliasLabel5.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel5.Name = "aliasLabel5";
-            this.aliasLabel5.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel5.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel5.TabIndex = 128;
             this.aliasLabel5.Text = "no data";
             // 
@@ -5500,29 +5482,29 @@
             // 
             // aliasLabel4
             // 
+            this.aliasLabel4.AutoEllipsis = true;
             this.aliasLabel4.AutoSize = true;
             this.aliasLabel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel4.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel4.Location = new System.Drawing.Point(3, 411);
-            this.aliasLabel4.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel4.Name = "aliasLabel4";
-            this.aliasLabel4.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel4.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel4.TabIndex = 125;
             this.aliasLabel4.Text = "no data";
             // 
             // aliasLabel3
             // 
+            this.aliasLabel3.AutoEllipsis = true;
             this.aliasLabel3.AutoSize = true;
             this.aliasLabel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel3.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel3.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel3.Location = new System.Drawing.Point(3, 391);
-            this.aliasLabel3.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel3.Name = "aliasLabel3";
-            this.aliasLabel3.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel3.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel3.TabIndex = 124;
             this.aliasLabel3.Text = "no data";
             // 
@@ -5554,29 +5536,29 @@
             // 
             // aliasLabel2
             // 
+            this.aliasLabel2.AutoEllipsis = true;
             this.aliasLabel2.AutoSize = true;
             this.aliasLabel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel2.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel2.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel2.Location = new System.Drawing.Point(3, 371);
-            this.aliasLabel2.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel2.Name = "aliasLabel2";
-            this.aliasLabel2.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel2.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel2.TabIndex = 121;
             this.aliasLabel2.Text = "no data";
             // 
             // aliasLabel1
             // 
+            this.aliasLabel1.AutoEllipsis = true;
             this.aliasLabel1.AutoSize = true;
             this.aliasLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.aliasLabel1.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aliasLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.aliasLabel1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.aliasLabel1.Location = new System.Drawing.Point(3, 351);
-            this.aliasLabel1.MaximumSize = new System.Drawing.Size(125, 15);
             this.aliasLabel1.Name = "aliasLabel1";
-            this.aliasLabel1.Size = new System.Drawing.Size(64, 15);
+            this.aliasLabel1.Size = new System.Drawing.Size(64, 18);
             this.aliasLabel1.TabIndex = 120;
             this.aliasLabel1.Text = "no data";
             // 
@@ -6308,7 +6290,6 @@
             this.btnNumericUpDownSubmittedBlockNumberUp.TabIndex = 263;
             this.btnNumericUpDownSubmittedBlockNumberUp.TabStop = false;
             this.btnNumericUpDownSubmittedBlockNumberUp.Text = "▲";
-            this.btnNumericUpDownSubmittedBlockNumberUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNumericUpDownSubmittedBlockNumberUp.TextColor = System.Drawing.Color.White;
             this.btnNumericUpDownSubmittedBlockNumberUp.UseVisualStyleBackColor = false;
             this.btnNumericUpDownSubmittedBlockNumberUp.Click += new System.EventHandler(this.NumericUpDownSubmittedBlockNumberUp_Click);
@@ -6334,7 +6315,6 @@
             this.btnNumericUpDownSubmittedBlockNumberDown.TabIndex = 262;
             this.btnNumericUpDownSubmittedBlockNumberDown.TabStop = false;
             this.btnNumericUpDownSubmittedBlockNumberDown.Text = "▼";
-            this.btnNumericUpDownSubmittedBlockNumberDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNumericUpDownSubmittedBlockNumberDown.TextColor = System.Drawing.Color.White;
             this.btnNumericUpDownSubmittedBlockNumberDown.UseVisualStyleBackColor = false;
             this.btnNumericUpDownSubmittedBlockNumberDown.Click += new System.EventHandler(this.NumericUpDownSubmittedBlockNumberDown_Click);
@@ -6383,7 +6363,6 @@
             this.btnLookUpBlock.TabIndex = 264;
             this.btnLookUpBlock.TabStop = false;
             this.btnLookUpBlock.Text = "submit";
-            this.btnLookUpBlock.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLookUpBlock.TextColor = System.Drawing.Color.White;
             this.btnLookUpBlock.UseVisualStyleBackColor = false;
             this.btnLookUpBlock.Click += new System.EventHandler(this.BtnLookUpBlock_Click);
@@ -6875,7 +6854,8 @@
             // 
             // panelMenu
             // 
-            this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.panelMenu.Controls.Add(this.lblMenuArrow);
             this.panelMenu.Controls.Add(this.lblMenuHighlightedButtonText);
             this.panelMenu.Controls.Add(this.btnMenuDirectory);
             this.panelMenu.Controls.Add(this.panelMainMenuFiller);
@@ -6894,13 +6874,26 @@
             this.panelMenu.Size = new System.Drawing.Size(122, 278);
             this.panelMenu.TabIndex = 152;
             // 
+            // lblMenuArrow
+            // 
+            this.lblMenuArrow.BackColor = System.Drawing.Color.Transparent;
+            this.lblMenuArrow.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblMenuArrow.ForeColor = System.Drawing.Color.Orange;
+            this.lblMenuArrow.Location = new System.Drawing.Point(-5, 38);
+            this.lblMenuArrow.Name = "lblMenuArrow";
+            this.lblMenuArrow.Size = new System.Drawing.Size(16, 24);
+            this.lblMenuArrow.TabIndex = 265;
+            this.lblMenuArrow.Text = "▶️";
+            this.lblMenuArrow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // lblMenuHighlightedButtonText
             // 
             this.lblMenuHighlightedButtonText.AutoSize = true;
             this.lblMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
             this.lblMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblMenuHighlightedButtonText.Location = new System.Drawing.Point(14, 17);
+            this.lblMenuHighlightedButtonText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMenuHighlightedButtonText.Location = new System.Drawing.Point(13, 17);
             this.lblMenuHighlightedButtonText.Name = "lblMenuHighlightedButtonText";
             this.lblMenuHighlightedButtonText.Size = new System.Drawing.Size(46, 17);
             this.lblMenuHighlightedButtonText.TabIndex = 162;
@@ -7048,7 +7041,6 @@
             // btnMenuBlockList
             // 
             this.btnMenuBlockList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuBlockList.BackgroundImage = global::SATSuma.Properties.Resources.marker;
             this.btnMenuBlockList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBlockList.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBlockList.Enabled = false;
@@ -7080,6 +7072,7 @@
             this.btnMenuBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuBlock.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuBlock.ForeColor = System.Drawing.Color.White;
+            this.btnMenuBlock.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuBlock.Location = new System.Drawing.Point(0, 38);
             this.btnMenuBlock.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuBlock.Name = "btnMenuBlock";
@@ -7103,6 +7096,7 @@
             this.btnMenuAddress.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuAddress.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuAddress.ForeColor = System.Drawing.Color.White;
+            this.btnMenuAddress.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuAddress.Location = new System.Drawing.Point(0, 62);
             this.btnMenuAddress.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuAddress.Name = "btnMenuAddress";
@@ -7233,7 +7227,6 @@
             this.btnMenuCreateTheme.TabIndex = 160;
             this.btnMenuCreateTheme.TabStop = false;
             this.btnMenuCreateTheme.Text = "create/delete";
-            this.btnMenuCreateTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuCreateTheme.UseVisualStyleBackColor = false;
             this.btnMenuCreateTheme.Click += new System.EventHandler(this.BtnAppearance_Click);
             this.btnMenuCreateTheme.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -8018,7 +8011,6 @@
             this.btnXpubAddressesDown.TabIndex = 212;
             this.btnXpubAddressesDown.TabStop = false;
             this.btnXpubAddressesDown.Text = "▼";
-            this.btnXpubAddressesDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnXpubAddressesDown.UseVisualStyleBackColor = false;
             this.btnXpubAddressesDown.Visible = false;
             this.btnXpubAddressesDown.Click += new System.EventHandler(this.BtnXpubAddressesDown_Click);
@@ -8039,7 +8031,6 @@
             this.btnXpubAddressesUp.TabIndex = 214;
             this.btnXpubAddressesUp.TabStop = false;
             this.btnXpubAddressesUp.Text = "▲";
-            this.btnXpubAddressesUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnXpubAddressesUp.UseVisualStyleBackColor = false;
             this.btnXpubAddressesUp.Visible = false;
             this.btnXpubAddressesUp.Click += new System.EventHandler(this.BtnXpubAddressUp_Click);
@@ -8234,7 +8225,6 @@
             this.btnDerivationPathsUp.TabIndex = 262;
             this.btnDerivationPathsUp.TabStop = false;
             this.btnDerivationPathsUp.Text = "▲";
-            this.btnDerivationPathsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDerivationPathsUp.TextColor = System.Drawing.Color.White;
             this.btnDerivationPathsUp.UseVisualStyleBackColor = false;
             this.btnDerivationPathsUp.Click += new System.EventHandler(this.BtnDerivationPathsUp_Click);
@@ -8247,7 +8237,7 @@
             this.numberUpDownDerivationPathsToCheck.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numberUpDownDerivationPathsToCheck.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numberUpDownDerivationPathsToCheck.ForeColor = System.Drawing.Color.White;
-            this.numberUpDownDerivationPathsToCheck.Location = new System.Drawing.Point(6, 2);
+            this.numberUpDownDerivationPathsToCheck.Location = new System.Drawing.Point(2, 4);
             this.numberUpDownDerivationPathsToCheck.Maximum = new decimal(new int[] {
             99,
             0,
@@ -8289,7 +8279,6 @@
             this.btnDerivationPathsDown.TabIndex = 261;
             this.btnDerivationPathsDown.TabStop = false;
             this.btnDerivationPathsDown.Text = "▼";
-            this.btnDerivationPathsDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDerivationPathsDown.TextColor = System.Drawing.Color.White;
             this.btnDerivationPathsDown.UseVisualStyleBackColor = false;
             this.btnDerivationPathsDown.Click += new System.EventHandler(this.BtnDerivationPathsDown_Click);
@@ -8326,7 +8315,6 @@
             this.btnNonZeroBalancesUp.TabIndex = 260;
             this.btnNonZeroBalancesUp.TabStop = false;
             this.btnNonZeroBalancesUp.Text = "▲";
-            this.btnNonZeroBalancesUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNonZeroBalancesUp.TextColor = System.Drawing.Color.White;
             this.btnNonZeroBalancesUp.UseVisualStyleBackColor = false;
             this.btnNonZeroBalancesUp.Click += new System.EventHandler(this.BtnNonZeroBalancesUp_Click);
@@ -8339,7 +8327,7 @@
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Font = new System.Drawing.Font("Consolas", 9F);
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.ForeColor = System.Drawing.Color.Silver;
-            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Location = new System.Drawing.Point(6, 2);
+            this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Location = new System.Drawing.Point(2, 4);
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Maximum = new decimal(new int[] {
             99,
             0,
@@ -8381,7 +8369,6 @@
             this.btnNonZeroBalancesDown.TabIndex = 259;
             this.btnNonZeroBalancesDown.TabStop = false;
             this.btnNonZeroBalancesDown.Text = "▼";
-            this.btnNonZeroBalancesDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNonZeroBalancesDown.TextColor = System.Drawing.Color.White;
             this.btnNonZeroBalancesDown.UseVisualStyleBackColor = false;
             this.btnNonZeroBalancesDown.Click += new System.EventHandler(this.BtnNonZeroBalancesDown_Click);
@@ -8594,26 +8581,28 @@
             // 
             // label123
             // 
+            this.label123.AutoSize = true;
             this.label123.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label123.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label123.ForeColor = System.Drawing.Color.Silver;
             this.label123.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label123.Location = new System.Drawing.Point(-1, 238);
             this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(139, 16);
+            this.label123.Size = new System.Drawing.Size(135, 16);
             this.label123.TabIndex = 153;
             this.label123.Text = "P2WPKH Bech32 SegWit";
             this.label123.Visible = false;
             // 
             // label111
             // 
+            this.label111.AutoSize = true;
             this.label111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label111.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label111.ForeColor = System.Drawing.Color.Silver;
             this.label111.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label111.Location = new System.Drawing.Point(-1, 273);
             this.label111.Name = "label111";
-            this.label111.Size = new System.Drawing.Size(86, 16);
+            this.label111.Size = new System.Drawing.Size(82, 16);
             this.label111.TabIndex = 167;
             this.label111.Text = "P2PKH legacy";
             this.label111.Visible = false;
@@ -8645,13 +8634,14 @@
             // 
             // label119
             // 
+            this.label119.AutoSize = true;
             this.label119.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label119.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label119.ForeColor = System.Drawing.Color.Silver;
             this.label119.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label119.Location = new System.Drawing.Point(-1, 310);
             this.label119.Name = "label119";
-            this.label119.Size = new System.Drawing.Size(88, 16);
+            this.label119.Size = new System.Drawing.Size(84, 16);
             this.label119.TabIndex = 200;
             this.label119.Text = "P2SH-P2WPKH";
             this.label119.Visible = false;
@@ -8730,13 +8720,14 @@
             // 
             // label135
             // 
+            this.label135.AutoSize = true;
             this.label135.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label135.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label135.ForeColor = System.Drawing.Color.Silver;
             this.label135.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label135.Location = new System.Drawing.Point(-1, 345);
             this.label135.Name = "label135";
-            this.label135.Size = new System.Drawing.Size(38, 16);
+            this.label135.Size = new System.Drawing.Size(34, 16);
             this.label135.TabIndex = 235;
             this.label135.Text = "P2SH";
             this.label135.Visible = false;
@@ -9983,7 +9974,7 @@
             this.panelCurrency.Controls.Add(this.btnUSD);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(8, 379);
+            this.panelCurrency.Location = new System.Drawing.Point(8, 374);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
             this.panelCurrency.TabIndex = 159;
@@ -10026,7 +10017,6 @@
             this.btnXAU.TabIndex = 155;
             this.btnXAU.TabStop = false;
             this.btnXAU.Text = "XAU🪙";
-            this.btnXAU.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnXAU.UseVisualStyleBackColor = false;
             this.btnXAU.Click += new System.EventHandler(this.BtnXAU_Click);
             this.btnXAU.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -10050,7 +10040,6 @@
             this.btnUSD.TabIndex = 154;
             this.btnUSD.TabStop = false;
             this.btnUSD.Text = "USD $";
-            this.btnUSD.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnUSD.UseVisualStyleBackColor = false;
             this.btnUSD.Click += new System.EventHandler(this.BtnUSD_Click);
             this.btnUSD.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -10073,7 +10062,6 @@
             this.btnEUR.TabIndex = 150;
             this.btnEUR.TabStop = false;
             this.btnEUR.Text = "EUR €";
-            this.btnEUR.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnEUR.UseVisualStyleBackColor = false;
             this.btnEUR.Click += new System.EventHandler(this.BtnEUR_Click);
             this.btnEUR.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -10096,7 +10084,6 @@
             this.btnGBP.TabIndex = 92;
             this.btnGBP.TabStop = false;
             this.btnGBP.Text = "GBP £";
-            this.btnGBP.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnGBP.UseVisualStyleBackColor = false;
             this.btnGBP.Click += new System.EventHandler(this.BtnGBP_Click);
             this.btnGBP.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -10185,7 +10172,6 @@
             this.btnBiggerScale.TabIndex = 257;
             this.btnBiggerScale.TabStop = false;
             this.btnBiggerScale.Text = "➕";
-            this.btnBiggerScale.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBiggerScale.TextColor = System.Drawing.Color.White;
             this.btnBiggerScale.UseVisualStyleBackColor = false;
             this.btnBiggerScale.Click += new System.EventHandler(this.btnBiggerScale_Click);
@@ -10210,7 +10196,6 @@
             this.btnSmallerScale.TabIndex = 256;
             this.btnSmallerScale.TabStop = false;
             this.btnSmallerScale.Text = "➖";
-            this.btnSmallerScale.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSmallerScale.TextColor = System.Drawing.Color.White;
             this.btnSmallerScale.UseVisualStyleBackColor = false;
             this.btnSmallerScale.Click += new System.EventHandler(this.btnSmallerScale_Click);
@@ -10283,7 +10268,7 @@
             // 
             this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label171.ForeColor = System.Drawing.Color.Silver;
-            this.label171.Location = new System.Drawing.Point(28, 27);
+            this.label171.Location = new System.Drawing.Point(28, 29);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(147, 17);
             this.label171.TabIndex = 226;
@@ -10295,7 +10280,7 @@
             this.lblAlwaysOnTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblAlwaysOnTop.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblAlwaysOnTop.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblAlwaysOnTop.Location = new System.Drawing.Point(8, 30);
+            this.lblAlwaysOnTop.Location = new System.Drawing.Point(8, 32);
             this.lblAlwaysOnTop.Name = "lblAlwaysOnTop";
             this.lblAlwaysOnTop.Size = new System.Drawing.Size(19, 14);
             this.lblAlwaysOnTop.TabIndex = 227;
@@ -10435,7 +10420,7 @@
             // 
             this.comboBoxStartupScreen.BackColor = System.Drawing.Color.Transparent;
             this.comboBoxStartupScreen.BackgroundImage = global::SATSuma.Properties.Resources.setupscreenDropdown;
-            this.comboBoxStartupScreen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.comboBoxStartupScreen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.comboBoxStartupScreen.BorderColor = System.Drawing.Color.Transparent;
             this.comboBoxStartupScreen.BorderSize = 0;
             this.comboBoxStartupScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -10499,18 +10484,18 @@
             this.btnSetStartupScreen.TabIndex = 255;
             this.btnSetStartupScreen.TabStop = false;
             this.btnSetStartupScreen.Text = "set startup screen";
-            this.btnSetStartupScreen.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSetStartupScreen.TextColor = System.Drawing.Color.White;
             this.btnSetStartupScreen.UseVisualStyleBackColor = false;
             this.btnSetStartupScreen.Click += new System.EventHandler(this.BtnSetStartupScreen_Click);
             // 
             // label199
             // 
+            this.label199.AutoSize = true;
             this.label199.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label199.ForeColor = System.Drawing.Color.Gray;
-            this.label199.Location = new System.Drawing.Point(5, 27);
+            this.label199.Location = new System.Drawing.Point(5, 29);
             this.label199.Name = "label199";
-            this.label199.Size = new System.Drawing.Size(289, 22);
+            this.label199.Size = new System.Drawing.Size(200, 17);
             this.label199.TabIndex = 253;
             this.label199.Text = "Select screen to show at startup";
             // 
@@ -10582,7 +10567,6 @@
             this.btnDataRefreshPeriodUp.TabIndex = 258;
             this.btnDataRefreshPeriodUp.TabStop = false;
             this.btnDataRefreshPeriodUp.Text = "▲";
-            this.btnDataRefreshPeriodUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDataRefreshPeriodUp.TextColor = System.Drawing.Color.White;
             this.btnDataRefreshPeriodUp.UseVisualStyleBackColor = false;
             this.btnDataRefreshPeriodUp.Click += new System.EventHandler(this.BtnDashBoardRefreshUp_Click);
@@ -10637,7 +10621,6 @@
             this.btnDataRefreshPeriodDown.TabIndex = 257;
             this.btnDataRefreshPeriodDown.TabStop = false;
             this.btnDataRefreshPeriodDown.Text = "▼";
-            this.btnDataRefreshPeriodDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDataRefreshPeriodDown.TextColor = System.Drawing.Color.White;
             this.btnDataRefreshPeriodDown.UseVisualStyleBackColor = false;
             this.btnDataRefreshPeriodDown.Click += new System.EventHandler(this.BtnDashboardRefreshDown_Click);
@@ -11507,7 +11490,6 @@
             this.btnRoundCorners.TabIndex = 292;
             this.btnRoundCorners.TabStop = false;
             this.btnRoundCorners.Text = "round";
-            this.btnRoundCorners.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRoundCorners.TextColor = System.Drawing.Color.White;
             this.btnRoundCorners.UseVisualStyleBackColor = false;
             this.btnRoundCorners.Click += new System.EventHandler(this.BtnRoundCorners_Click);
@@ -11532,7 +11514,6 @@
             this.btnPartialCorners.TabIndex = 291;
             this.btnPartialCorners.TabStop = false;
             this.btnPartialCorners.Text = "partial";
-            this.btnPartialCorners.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnPartialCorners.TextColor = System.Drawing.Color.White;
             this.btnPartialCorners.UseVisualStyleBackColor = false;
             this.btnPartialCorners.Click += new System.EventHandler(this.BtnPartialCorners_Click);
@@ -11557,7 +11538,6 @@
             this.btnSquareCorners.TabIndex = 290;
             this.btnSquareCorners.TabStop = false;
             this.btnSquareCorners.Text = "square";
-            this.btnSquareCorners.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSquareCorners.TextColor = System.Drawing.Color.White;
             this.btnSquareCorners.UseVisualStyleBackColor = false;
             this.btnSquareCorners.Click += new System.EventHandler(this.BtnSquareCorners_Click);
@@ -11840,9 +11820,9 @@
             // 
             // pictureBoxCustomImage
             // 
+            this.pictureBoxCustomImage.BackgroundImage = global::SATSuma.Properties.Resources.CustomImage;
             this.pictureBoxCustomImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBoxCustomImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxCustomImage.Image = global::SATSuma.Properties.Resources.CustomImage;
             this.pictureBoxCustomImage.Location = new System.Drawing.Point(378, 99);
             this.pictureBoxCustomImage.Name = "pictureBoxCustomImage";
             this.pictureBoxCustomImage.Size = new System.Drawing.Size(56, 56);
@@ -11875,7 +11855,6 @@
             // 
             // pictureBoxPlanetBTC
             // 
-            this.pictureBoxPlanetBTC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxPlanetBTC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxPlanetBTC.Image = global::SATSuma.Properties.Resources.PlanetBTC;
             this.pictureBoxPlanetBTC.Location = new System.Drawing.Point(255, 97);
@@ -11978,7 +11957,6 @@
             // 
             // pictureBoxSatsuma
             // 
-            this.pictureBoxSatsuma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxSatsuma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxSatsuma.Image = global::SATSuma.Properties.Resources.Satsuma3;
             this.pictureBoxSatsuma.Location = new System.Drawing.Point(255, 31);
@@ -12064,7 +12042,6 @@
             // 
             // pictureBoxBTCDir
             // 
-            this.pictureBoxBTCDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxBTCDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBoxBTCDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxBTCDir.Image = global::SATSuma.Properties.Resources.SatsumaBTCdir1;
@@ -12077,7 +12054,6 @@
             // 
             // pictureBoxCustomColor
             // 
-            this.pictureBoxCustomColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxCustomColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.pictureBoxCustomColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxCustomColor.Image = global::SATSuma.Properties.Resources.spectrum2;
@@ -12373,7 +12349,6 @@
             this.button1.TabIndex = 160;
             this.button1.TabStop = false;
             this.button1.Text = "Buttons";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button1.TextColor = System.Drawing.Color.White;
             this.button1.UseVisualStyleBackColor = false;
             // 
@@ -12767,7 +12742,6 @@
             this.button2.TabIndex = 247;
             this.button2.TabStop = false;
             this.button2.Text = "Button text";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button2.TextColor = System.Drawing.Color.White;
             this.button2.UseVisualStyleBackColor = false;
             // 
@@ -12979,7 +12953,7 @@
             // 
             this.comboBoxCustomizeScreenThemeList.BackColor = System.Drawing.Color.Transparent;
             this.comboBoxCustomizeScreenThemeList.BackgroundImage = global::SATSuma.Properties.Resources.themeselectDropdown;
-            this.comboBoxCustomizeScreenThemeList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.comboBoxCustomizeScreenThemeList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.comboBoxCustomizeScreenThemeList.BorderColor = System.Drawing.Color.Transparent;
             this.comboBoxCustomizeScreenThemeList.BorderSize = 0;
             this.comboBoxCustomizeScreenThemeList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -13027,7 +13001,6 @@
             this.btnDeleteTheme.TabIndex = 287;
             this.btnDeleteTheme.TabStop = false;
             this.btnDeleteTheme.Text = "delete";
-            this.btnDeleteTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDeleteTheme.TextColor = System.Drawing.Color.White;
             this.btnDeleteTheme.UseVisualStyleBackColor = false;
             this.btnDeleteTheme.Click += new System.EventHandler(this.BtnDeleteTheme_Click);
@@ -13101,7 +13074,6 @@
             this.btnLoadTheme.TabIndex = 161;
             this.btnLoadTheme.TabStop = false;
             this.btnLoadTheme.Text = "open";
-            this.btnLoadTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLoadTheme.TextColor = System.Drawing.Color.White;
             this.btnLoadTheme.UseVisualStyleBackColor = false;
             this.btnLoadTheme.Click += new System.EventHandler(this.BtnLoadTheme_Click);
@@ -13236,7 +13208,6 @@
             this.btnSaveTheme.TabIndex = 161;
             this.btnSaveTheme.TabStop = false;
             this.btnSaveTheme.Text = "save";
-            this.btnSaveTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSaveTheme.TextColor = System.Drawing.Color.White;
             this.btnSaveTheme.UseVisualStyleBackColor = false;
             this.btnSaveTheme.Click += new System.EventHandler(this.BtnSaveTheme_Click);
@@ -15066,7 +15037,6 @@
             this.btnPriceConverter.TabIndex = 276;
             this.btnPriceConverter.TabStop = false;
             this.btnPriceConverter.Text = "converter";
-            this.btnPriceConverter.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnPriceConverter.TextColor = System.Drawing.Color.White;
             this.btnPriceConverter.UseVisualStyleBackColor = false;
             this.btnPriceConverter.Click += new System.EventHandler(this.BtnPriceConverter_Click);
@@ -15101,7 +15071,6 @@
             this.btnChartDifficultyLog.TabIndex = 262;
             this.btnChartDifficultyLog.TabStop = false;
             this.btnChartDifficultyLog.Text = "log";
-            this.btnChartDifficultyLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartDifficultyLog.TextColor = System.Drawing.Color.White;
             this.btnChartDifficultyLog.UseVisualStyleBackColor = false;
             this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_Click);
@@ -15126,7 +15095,6 @@
             this.btnChartDifficultyLinear.TabIndex = 261;
             this.btnChartDifficultyLinear.TabStop = false;
             this.btnChartDifficultyLinear.Text = "lin";
-            this.btnChartDifficultyLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartDifficultyLinear.TextColor = System.Drawing.Color.White;
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
             this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
@@ -15161,7 +15129,6 @@
             this.btnHashrateScaleLog.TabIndex = 262;
             this.btnHashrateScaleLog.TabStop = false;
             this.btnHashrateScaleLog.Text = "log";
-            this.btnHashrateScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHashrateScaleLog.TextColor = System.Drawing.Color.White;
             this.btnHashrateScaleLog.UseVisualStyleBackColor = false;
             this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_Click);
@@ -15186,7 +15153,6 @@
             this.btnHashrateScaleLinear.TabIndex = 261;
             this.btnHashrateScaleLinear.TabStop = false;
             this.btnHashrateScaleLinear.Text = "lin";
-            this.btnHashrateScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHashrateScaleLinear.TextColor = System.Drawing.Color.White;
             this.btnHashrateScaleLinear.UseVisualStyleBackColor = false;
             this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnChartHashrate_Click);
@@ -15222,7 +15188,6 @@
             this.btnChartMarketCapScaleLog.TabIndex = 262;
             this.btnChartMarketCapScaleLog.TabStop = false;
             this.btnChartMarketCapScaleLog.Text = "log";
-            this.btnChartMarketCapScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartMarketCapScaleLog.TextColor = System.Drawing.Color.White;
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
             this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_Click);
@@ -15247,7 +15212,6 @@
             this.btnChartMarketCapScaleLinear.TabIndex = 261;
             this.btnChartMarketCapScaleLinear.TabStop = false;
             this.btnChartMarketCapScaleLinear.Text = "lin";
-            this.btnChartMarketCapScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartMarketCapScaleLinear.TextColor = System.Drawing.Color.White;
             this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
             this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
@@ -15272,7 +15236,6 @@
             this.btnChartMarketCap.TabIndex = 274;
             this.btnChartMarketCap.TabStop = false;
             this.btnChartMarketCap.Text = "market cap.";
-            this.btnChartMarketCap.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartMarketCap.TextColor = System.Drawing.Color.White;
             this.btnChartMarketCap.UseVisualStyleBackColor = false;
             this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
@@ -15345,7 +15308,6 @@
             this.btnChartLightningChannels.TabIndex = 272;
             this.btnChartLightningChannels.TabStop = false;
             this.btnChartLightningChannels.Text = "channels";
-            this.btnChartLightningChannels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartLightningChannels.TextColor = System.Drawing.Color.White;
             this.btnChartLightningChannels.UseVisualStyleBackColor = false;
             this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_Click);
@@ -15370,7 +15332,6 @@
             this.btnChartLightningCapacity.TabIndex = 271;
             this.btnChartLightningCapacity.TabStop = false;
             this.btnChartLightningCapacity.Text = "capacity";
-            this.btnChartLightningCapacity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartLightningCapacity.TextColor = System.Drawing.Color.White;
             this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
             this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_Click);
@@ -15445,7 +15406,6 @@
             this.btnChartNodesByCountry.TabIndex = 269;
             this.btnChartNodesByCountry.TabStop = false;
             this.btnChartNodesByCountry.Text = "countries";
-            this.btnChartNodesByCountry.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartNodesByCountry.TextColor = System.Drawing.Color.White;
             this.btnChartNodesByCountry.UseVisualStyleBackColor = false;
             this.btnChartNodesByCountry.Click += new System.EventHandler(this.BtnChartNodesByCountry_Click);
@@ -15480,7 +15440,6 @@
             this.btnPriceChartScaleLog.TabIndex = 262;
             this.btnPriceChartScaleLog.TabStop = false;
             this.btnPriceChartScaleLog.Text = "log";
-            this.btnPriceChartScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnPriceChartScaleLog.TextColor = System.Drawing.Color.White;
             this.btnPriceChartScaleLog.UseVisualStyleBackColor = false;
             this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnChartPriceLog_Click);
@@ -15505,7 +15464,6 @@
             this.btnPriceChartScaleLinear.TabIndex = 261;
             this.btnPriceChartScaleLinear.TabStop = false;
             this.btnPriceChartScaleLinear.Text = "lin";
-            this.btnPriceChartScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
             this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_Click);
@@ -15672,7 +15630,6 @@
             this.btnChartNodesByNetwork.TabIndex = 267;
             this.btnChartNodesByNetwork.TabStop = false;
             this.btnChartNodesByNetwork.Text = "networks";
-            this.btnChartNodesByNetwork.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartNodesByNetwork.TextColor = System.Drawing.Color.White;
             this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
             this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_Click);
@@ -15697,7 +15654,6 @@
             this.btnChartPoolsRanking.TabIndex = 265;
             this.btnChartPoolsRanking.TabStop = false;
             this.btnChartPoolsRanking.Text = "pool rankings";
-            this.btnChartPoolsRanking.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPoolsRanking.TextColor = System.Drawing.Color.White;
             this.btnChartPoolsRanking.UseVisualStyleBackColor = false;
             this.btnChartPoolsRanking.Click += new System.EventHandler(this.BtnChartPoolsRanking_Click);
@@ -15732,7 +15688,6 @@
             this.btnChartUTXOScaleLog.TabIndex = 262;
             this.btnChartUTXOScaleLog.TabStop = false;
             this.btnChartUTXOScaleLog.Text = "log";
-            this.btnChartUTXOScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartUTXOScaleLog.TextColor = System.Drawing.Color.White;
             this.btnChartUTXOScaleLog.UseVisualStyleBackColor = false;
             this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_Click);
@@ -15757,7 +15712,6 @@
             this.btnChartUTXOScaleLinear.TabIndex = 261;
             this.btnChartUTXOScaleLinear.TabStop = false;
             this.btnChartUTXOScaleLinear.Text = "lin";
-            this.btnChartUTXOScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartUTXOScaleLinear.TextColor = System.Drawing.Color.White;
             this.btnChartUTXOScaleLinear.UseVisualStyleBackColor = false;
             this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXO_Click);
@@ -15782,7 +15736,6 @@
             this.btnChartUTXO.TabIndex = 264;
             this.btnChartUTXO.TabStop = false;
             this.btnChartUTXO.Text = "UTXO\'s";
-            this.btnChartUTXO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartUTXO.TextColor = System.Drawing.Color.White;
             this.btnChartUTXO.UseVisualStyleBackColor = false;
             this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_Click);
@@ -15867,7 +15820,6 @@
             this.btnChartUniqueAddresses.TabIndex = 259;
             this.btnChartUniqueAddresses.TabStop = false;
             this.btnChartUniqueAddresses.Text = "addresses";
-            this.btnChartUniqueAddresses.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartUniqueAddresses.TextColor = System.Drawing.Color.White;
             this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
             this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
@@ -15918,7 +15870,6 @@
             this.btnChartBlockSize.TabIndex = 258;
             this.btnChartBlockSize.TabStop = false;
             this.btnChartBlockSize.Text = "block size";
-            this.btnChartBlockSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
             this.btnChartBlockSize.UseVisualStyleBackColor = false;
             this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_Click);
@@ -16202,7 +16153,6 @@
             this.btnChartCirculation.TabIndex = 179;
             this.btnChartCirculation.TabStop = false;
             this.btnChartCirculation.Text = "circulation";
-            this.btnChartCirculation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartCirculation.TextColor = System.Drawing.Color.White;
             this.btnChartCirculation.UseVisualStyleBackColor = false;
             this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_Click);
@@ -16227,7 +16177,6 @@
             this.btnChartFeeRates.TabIndex = 178;
             this.btnChartFeeRates.TabStop = false;
             this.btnChartFeeRates.Text = "fee rates";
-            this.btnChartFeeRates.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartFeeRates.TextColor = System.Drawing.Color.White;
             this.btnChartFeeRates.UseVisualStyleBackColor = false;
             this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_Click);
@@ -16252,7 +16201,6 @@
             this.btnChartPeriodAll.TabIndex = 176;
             this.btnChartPeriodAll.TabStop = false;
             this.btnChartPeriodAll.Text = "all";
-            this.btnChartPeriodAll.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriodAll.TextColor = System.Drawing.Color.White;
             this.btnChartPeriodAll.UseVisualStyleBackColor = false;
             this.btnChartPeriodAll.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16277,7 +16225,6 @@
             this.btnChartPeriod3y.TabIndex = 175;
             this.btnChartPeriod3y.TabStop = false;
             this.btnChartPeriod3y.Text = "3y";
-            this.btnChartPeriod3y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod3y.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod3y.UseVisualStyleBackColor = false;
             this.btnChartPeriod3y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16302,7 +16249,6 @@
             this.btnChartPeriod2y.TabIndex = 174;
             this.btnChartPeriod2y.TabStop = false;
             this.btnChartPeriod2y.Text = "2y";
-            this.btnChartPeriod2y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod2y.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod2y.UseVisualStyleBackColor = false;
             this.btnChartPeriod2y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16327,7 +16273,6 @@
             this.btnChartPeriod1y.TabIndex = 173;
             this.btnChartPeriod1y.TabStop = false;
             this.btnChartPeriod1y.Text = "1y";
-            this.btnChartPeriod1y.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod1y.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod1y.UseVisualStyleBackColor = false;
             this.btnChartPeriod1y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16352,7 +16297,6 @@
             this.btnChartPeriod6m.TabIndex = 172;
             this.btnChartPeriod6m.TabStop = false;
             this.btnChartPeriod6m.Text = "6m";
-            this.btnChartPeriod6m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod6m.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod6m.UseVisualStyleBackColor = false;
             this.btnChartPeriod6m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16377,7 +16321,6 @@
             this.btnChartPeriod3m.TabIndex = 171;
             this.btnChartPeriod3m.TabStop = false;
             this.btnChartPeriod3m.Text = "3m";
-            this.btnChartPeriod3m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod3m.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod3m.UseVisualStyleBackColor = false;
             this.btnChartPeriod3m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16402,7 +16345,6 @@
             this.btnChartPeriod1m.TabIndex = 170;
             this.btnChartPeriod1m.TabStop = false;
             this.btnChartPeriod1m.Text = "1m";
-            this.btnChartPeriod1m.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod1m.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod1m.UseVisualStyleBackColor = false;
             this.btnChartPeriod1m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16427,7 +16369,6 @@
             this.btnChartPeriod1w.TabIndex = 169;
             this.btnChartPeriod1w.TabStop = false;
             this.btnChartPeriod1w.Text = "1w";
-            this.btnChartPeriod1w.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod1w.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod1w.UseVisualStyleBackColor = false;
             this.btnChartPeriod1w.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16452,7 +16393,6 @@
             this.btnChartPeriod3d.TabIndex = 168;
             this.btnChartPeriod3d.TabStop = false;
             this.btnChartPeriod3d.Text = "3d";
-            this.btnChartPeriod3d.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod3d.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod3d.UseVisualStyleBackColor = false;
             this.btnChartPeriod3d.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16477,7 +16417,6 @@
             this.btnChartPeriod24h.TabIndex = 167;
             this.btnChartPeriod24h.TabStop = false;
             this.btnChartPeriod24h.Text = "24h";
-            this.btnChartPeriod24h.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPeriod24h.TextColor = System.Drawing.Color.White;
             this.btnChartPeriod24h.UseVisualStyleBackColor = false;
             this.btnChartPeriod24h.Click += new System.EventHandler(this.BtnChartPeriod_Click);
@@ -16502,7 +16441,6 @@
             this.btnChartBlockFees.TabIndex = 166;
             this.btnChartBlockFees.TabStop = false;
             this.btnChartBlockFees.Text = "block fees";
-            this.btnChartBlockFees.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartBlockFees.TextColor = System.Drawing.Color.White;
             this.btnChartBlockFees.UseVisualStyleBackColor = false;
             this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_Click);
@@ -16527,7 +16465,6 @@
             this.btnChartReward.TabIndex = 165;
             this.btnChartReward.TabStop = false;
             this.btnChartReward.Text = "block reward";
-            this.btnChartReward.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartReward.TextColor = System.Drawing.Color.White;
             this.btnChartReward.UseVisualStyleBackColor = false;
             this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_Click);
@@ -16552,7 +16489,6 @@
             this.btnChartPrice.TabIndex = 164;
             this.btnChartPrice.TabStop = false;
             this.btnChartPrice.Text = "price";
-            this.btnChartPrice.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartPrice.TextColor = System.Drawing.Color.White;
             this.btnChartPrice.UseVisualStyleBackColor = false;
             this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_Click);
@@ -16577,7 +16513,6 @@
             this.btnChartDifficulty.TabIndex = 163;
             this.btnChartDifficulty.TabStop = false;
             this.btnChartDifficulty.Text = "difficulty";
-            this.btnChartDifficulty.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartDifficulty.TextColor = System.Drawing.Color.White;
             this.btnChartDifficulty.UseVisualStyleBackColor = false;
             this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
@@ -16602,7 +16537,6 @@
             this.btnChartHashrate.TabIndex = 162;
             this.btnChartHashrate.TabStop = false;
             this.btnChartHashrate.Text = "hashrate";
-            this.btnChartHashrate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartHashrate.TextColor = System.Drawing.Color.White;
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
@@ -16712,7 +16646,6 @@
             this.btnMenuThemeCitadel.TabIndex = 259;
             this.btnMenuThemeCitadel.TabStop = false;
             this.btnMenuThemeCitadel.Text = "lightning";
-            this.btnMenuThemeCitadel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuThemeCitadel.UseVisualStyleBackColor = false;
             this.btnMenuThemeCitadel.Click += new System.EventHandler(this.BtnMenuThemeCitadel_Click);
             this.btnMenuThemeCitadel.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16735,7 +16668,6 @@
             this.btnMenuThemePlanetBTC.TabIndex = 258;
             this.btnMenuThemePlanetBTC.TabStop = false;
             this.btnMenuThemePlanetBTC.Text = "planet btc";
-            this.btnMenuThemePlanetBTC.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuThemePlanetBTC.UseVisualStyleBackColor = false;
             this.btnMenuThemePlanetBTC.Click += new System.EventHandler(this.BtnMenuThemePlanetBTC_Click);
             this.btnMenuThemePlanetBTC.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16758,7 +16690,6 @@
             this.btnMenuThemeWhale.TabIndex = 257;
             this.btnMenuThemeWhale.TabStop = false;
             this.btnMenuThemeWhale.Text = "whale";
-            this.btnMenuThemeWhale.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuThemeWhale.UseVisualStyleBackColor = false;
             this.btnMenuThemeWhale.Click += new System.EventHandler(this.BtnMenuThemeWhale_Click);
             this.btnMenuThemeWhale.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16812,7 +16743,6 @@
             this.btnMenuApplyCustomTheme.TabIndex = 252;
             this.btnMenuApplyCustomTheme.TabStop = false;
             this.btnMenuApplyCustomTheme.Text = "apply theme";
-            this.btnMenuApplyCustomTheme.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuApplyCustomTheme.UseVisualStyleBackColor = false;
             this.btnMenuApplyCustomTheme.Click += new System.EventHandler(this.BtnMenuApplyCustomTheme_Click);
             this.btnMenuApplyCustomTheme.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16855,7 +16785,6 @@
             this.BtnMenuThemeGenesis.TabIndex = 154;
             this.BtnMenuThemeGenesis.TabStop = false;
             this.BtnMenuThemeGenesis.Text = "genesis";
-            this.BtnMenuThemeGenesis.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.BtnMenuThemeGenesis.UseVisualStyleBackColor = false;
             this.BtnMenuThemeGenesis.Click += new System.EventHandler(this.BtnMenuThemeGenesis_Click);
             this.BtnMenuThemeGenesis.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16878,7 +16807,6 @@
             this.btnMenuThemeBTCdir.TabIndex = 150;
             this.btnMenuThemeBTCdir.TabStop = false;
             this.btnMenuThemeBTCdir.Text = "btcdir";
-            this.btnMenuThemeBTCdir.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuThemeBTCdir.UseVisualStyleBackColor = false;
             this.btnMenuThemeBTCdir.Click += new System.EventHandler(this.BtnMenuThemeBTCdir_Click);
             this.btnMenuThemeBTCdir.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16901,7 +16829,6 @@
             this.btnMenuThemeSatsuma.TabIndex = 92;
             this.btnMenuThemeSatsuma.TabStop = false;
             this.btnMenuThemeSatsuma.Text = "satsuma";
-            this.btnMenuThemeSatsuma.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMenuThemeSatsuma.UseVisualStyleBackColor = false;
             this.btnMenuThemeSatsuma.Click += new System.EventHandler(this.BtnMenuThemeSatsuma_Click);
             this.btnMenuThemeSatsuma.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -16941,7 +16868,6 @@
             this.btnExit.TabIndex = 6;
             this.btnExit.TabStop = false;
             this.btnExit.Text = "❌";
-            this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.TextColor = System.Drawing.Color.White;
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.BtnExit_Click);
@@ -16975,33 +16901,6 @@
             this.btnCurrency.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnCurrency.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // btnThemeMenu
-            // 
-            this.btnThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnThemeMenu.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnThemeMenu.BorderColor = System.Drawing.Color.Empty;
-            this.btnThemeMenu.BorderRadius = 0;
-            this.btnThemeMenu.BorderSize = 0;
-            this.btnThemeMenu.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnThemeMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnThemeMenu.FlatAppearance.BorderSize = 0;
-            this.btnThemeMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThemeMenu.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThemeMenu.ForeColor = System.Drawing.Color.White;
-            this.btnThemeMenu.Location = new System.Drawing.Point(8, 335);
-            this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
-            this.btnThemeMenu.Name = "btnThemeMenu";
-            this.btnThemeMenu.Size = new System.Drawing.Size(122, 24);
-            this.btnThemeMenu.TabIndex = 1;
-            this.btnThemeMenu.TabStop = false;
-            this.btnThemeMenu.Text = "   theme";
-            this.btnThemeMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThemeMenu.TextColor = System.Drawing.Color.White;
-            this.btnThemeMenu.UseVisualStyleBackColor = false;
-            this.btnThemeMenu.Click += new System.EventHandler(this.BtnThemeMenu_Click);
-            this.btnThemeMenu.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnThemeMenu.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
             // btnAddToBookmarks
             // 
             this.btnAddToBookmarks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -17021,7 +16920,6 @@
             this.btnAddToBookmarks.TabIndex = 2;
             this.btnAddToBookmarks.TabStop = false;
             this.btnAddToBookmarks.Text = "🧡";
-            this.btnAddToBookmarks.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnAddToBookmarks.TextColor = System.Drawing.Color.White;
             this.btnAddToBookmarks.UseVisualStyleBackColor = false;
             this.btnAddToBookmarks.Click += new System.EventHandler(this.BtnAddToBookmarks_Click);
@@ -17047,7 +16945,6 @@
             this.btnHelp.TabIndex = 4;
             this.btnHelp.TabStop = false;
             this.btnHelp.Text = "❔";
-            this.btnHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelp.TextColor = System.Drawing.Color.White;
             this.btnHelp.UseVisualStyleBackColor = false;
             this.btnHelp.Click += new System.EventHandler(this.BtnHelp_Click);
@@ -17073,7 +16970,6 @@
             this.btnMinimise.TabIndex = 5;
             this.btnMinimise.TabStop = false;
             this.btnMinimise.Text = "➖";
-            this.btnMinimise.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnMinimise.TextColor = System.Drawing.Color.White;
             this.btnMinimise.UseVisualStyleBackColor = false;
             this.btnMinimise.Click += new System.EventHandler(this.BtnMinimise_Click);
@@ -17365,6 +17261,33 @@
             this.lblErrorAlert.Visible = false;
             this.lblErrorAlert.Click += new System.EventHandler(this.lblErrorAlert_Click);
             // 
+            // btnThemeMenu
+            // 
+            this.btnThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnThemeMenu.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnThemeMenu.BorderColor = System.Drawing.Color.Empty;
+            this.btnThemeMenu.BorderRadius = 0;
+            this.btnThemeMenu.BorderSize = 0;
+            this.btnThemeMenu.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnThemeMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnThemeMenu.FlatAppearance.BorderSize = 0;
+            this.btnThemeMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemeMenu.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThemeMenu.ForeColor = System.Drawing.Color.White;
+            this.btnThemeMenu.Location = new System.Drawing.Point(8, 335);
+            this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
+            this.btnThemeMenu.Name = "btnThemeMenu";
+            this.btnThemeMenu.Size = new System.Drawing.Size(122, 24);
+            this.btnThemeMenu.TabIndex = 1;
+            this.btnThemeMenu.TabStop = false;
+            this.btnThemeMenu.Text = "   theme";
+            this.btnThemeMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThemeMenu.TextColor = System.Drawing.Color.White;
+            this.btnThemeMenu.UseVisualStyleBackColor = false;
+            this.btnThemeMenu.Click += new System.EventHandler(this.BtnThemeMenu_Click);
+            this.btnThemeMenu.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnThemeMenu.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            // 
             // lblUpdaterLight
             // 
             this.lblUpdaterLight.AutoSize = true;
@@ -17467,7 +17390,6 @@
             this.btnHideErrorMessage.TabIndex = 41;
             this.btnHideErrorMessage.TabStop = false;
             this.btnHideErrorMessage.Text = "❌";
-            this.btnHideErrorMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHideErrorMessage.TextColor = System.Drawing.Color.White;
             this.btnHideErrorMessage.UseVisualStyleBackColor = false;
             this.btnHideErrorMessage.Click += new System.EventHandler(this.HideErrorMessage_Click);
@@ -17481,25 +17403,25 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelErrorMessage);
             this.Controls.Add(this.panelLeftPanel3);
             this.Controls.Add(this.panelLeftPanel2);
             this.Controls.Add(this.panelLeftPanel);
-            this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.btnShowGlobalSearch);
             this.Controls.Add(this.panel107);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.btnMoveWindow);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelHeaderBlockHeight);
@@ -17691,6 +17613,7 @@
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
             this.panel21.ResumeLayout(false);
+            this.panel21.PerformLayout();
             this.panelComboBoxStartupScreenContainer.ResumeLayout(false);
             this.panel54.ResumeLayout(false);
             this.panel85.ResumeLayout(false);
@@ -18454,7 +18377,6 @@
         private System.Windows.Forms.Panel panel89;
         private System.Windows.Forms.Panel panel90;
         private System.Windows.Forms.Panel panel91;
-        private System.Windows.Forms.Panel panel92;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panel94;
         private System.Windows.Forms.Panel panel99;
@@ -18652,7 +18574,6 @@
         private CustomControls.RJControls.RJButton btnHelp;
         private CustomControls.RJControls.RJButton btnCurrency;
         private CustomControls.RJControls.RJButton btnAddToBookmarks;
-        private CustomControls.RJControls.RJButton btnThemeMenu;
         private CustomControls.RJControls.RJButton btnNewer15Blocks;
         private CustomControls.RJControls.RJButton btnOlder15Blocks;
         private CustomControls.RJControls.RJButton btnPreviousBlockTransactions;
@@ -18925,6 +18846,8 @@
         private CustomControls.RJControls.RJButton btnBiggerScale;
         private CustomControls.RJControls.RJButton btnSmallerScale;
         private System.Windows.Forms.Label label298;
+        private System.Windows.Forms.Label lblMenuArrow;
+        private CustomControls.RJControls.RJButton btnThemeMenu;
     }
 }
 

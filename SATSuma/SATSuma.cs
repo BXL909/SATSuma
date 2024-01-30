@@ -26,9 +26,14 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* UI Scaling on hardcoded location and size changes
-* fix recurring data errors. Ditch any API possible
+* tidy left panel sub-menus
+* left panel corners too rounded. Need to ingore uiscale
 * tidy/align screen elements on all screens
+* resize theme backgrounds and improve themes
+* activity on node light when accessing data
+* scaling of help, about screens and overlays
+* style all the newly added elements
+* up/down buttons on settings and theme screens should be square
 * test
 */
 
@@ -155,10 +160,10 @@ namespace SATSuma
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         #endregion
         #region settings variables
-        double UIScale = 1; // defaults to 100%
-        double UIScaleToBeSavedToSettings = 1; // (1 = 100%, 2 = 125%, 3 = 150%, 4 = 175%, 5 = 200%)
+        double UIScale = 3; // defaults to 100%
+        double UIScaleToBeSavedToSettings = 3; // (1 = 100%, 2 = 125%, 3 = 150%, 4 = 175%, 5 = 200%)
         bool UIScaleAlreadySavedInFile = false; // is a UIScale saved in the settings file
-        string UIScaleInFile = "1"; // the UIScale saved in the settingss file
+        string UIScaleInFile = "3"; // the UIScale saved in the settingss file
         bool offlineMode = false; // disables all comms apart from to full node
         bool testNet = false; // testnet or mainnet
         bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
@@ -596,9 +601,7 @@ namespace SATSuma
                         }
                     }
                 }
-
                 #endregion
-
 
                 #endregion
 
@@ -893,7 +896,7 @@ namespace SATSuma
                                 });
                                 pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width + 10, pictureBoxHeaderBlockSizeChart.Location.Y);
+                                    pictureBoxHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width + (int)(10 * UIScale), pictureBoxHeaderBlockSizeChart.Location.Y);
                                 });
                                 // difficulty epoch = block height / 2016 rounded up to an integer
                                 lblDifficultyEpoch.Invoke((MethodInvoker)delegate
@@ -931,7 +934,7 @@ namespace SATSuma
                         });
                         pictureBoxHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width + 10, pictureBoxHeaderFeeRatesChart.Location.Y);
+                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width + (int)(10 * UIScale), pictureBoxHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -950,7 +953,7 @@ namespace SATSuma
                         });
                         pictureBoxHeaderHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + 10, pictureBoxHeaderHashrateChart.Location.Y);
+                            pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + (int)(10 * UIScale), pictureBoxHeaderHashrateChart.Location.Y);
                         });
                         lblEstHashrate.Invoke((MethodInvoker)delegate
                         {
@@ -958,7 +961,7 @@ namespace SATSuma
                         });
                         pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + 5, pictureBoxHashrateChart.Location.Y);
+                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + (int)(5 * UIScale), pictureBoxHashrateChart.Location.Y);
                         });
                         lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
                         {
@@ -966,7 +969,7 @@ namespace SATSuma
                         });
                         pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + 5, pictureBoxBlockListHashrateChart.Location.Y);
+                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + (int)(5 * UIScale), pictureBoxBlockListHashrateChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -1007,7 +1010,7 @@ namespace SATSuma
                         });
                         pictureBoxDifficultyChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + 5, pictureBoxDifficultyChart.Location.Y);
+                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + (int)(5 * UIScale), pictureBoxDifficultyChart.Location.Y);
                         });
                         lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
@@ -1015,7 +1018,7 @@ namespace SATSuma
                         });
                         pictureBoxBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
-                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + 5, pictureBoxBlockListDifficultyChart.Location.Y);
+                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + (int)(5 * UIScale), pictureBoxBlockListDifficultyChart.Location.Y);
                         });
                         lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
                         {
@@ -1212,15 +1215,15 @@ namespace SATSuma
                             }
                             pictureBoxLightningNodesChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningNodesChart.Location = new Point(label40.Location.X + label40.Width + 5, pictureBoxLightningNodesChart.Location.Y);
+                                pictureBoxLightningNodesChart.Location = new Point(label40.Location.X + label40.Width + (int)(5 * UIScale), pictureBoxLightningNodesChart.Location.Y);
                             });
                             pictureBoxLightningChannelsChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width + 5, pictureBoxLightningChannelsChart.Location.Y);
+                                pictureBoxLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width + (int)(5 * UIScale), pictureBoxLightningChannelsChart.Location.Y);
                             });
                             pictureBoxLightningCapacityChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width + 5, pictureBoxLightningCapacityChart.Location.Y);
+                                pictureBoxLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width + (int)(5 * UIScale), pictureBoxLightningCapacityChart.Location.Y);
                             });
                             if (RunMempoolSpaceLightningAPI)
                             {
@@ -1399,15 +1402,15 @@ namespace SATSuma
                             }
                             pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + 5, pictureBoxMarketCapChart.Location.Y);
+                                pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + (int)(5 * UIScale), pictureBoxMarketCapChart.Location.Y);
                             });
                             pictureBoxPriceChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + 5, pictureBoxPriceChart.Location.Y);
+                                pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + (int)(5 * UIScale), pictureBoxPriceChart.Location.Y);
                             });
                             pictureBoxConverterChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width + 5, pictureBoxConverterChart.Location.Y);
+                                pictureBoxConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width + (int)(5 * UIScale), pictureBoxConverterChart.Location.Y);
                             });
                             pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
                             {
@@ -1415,11 +1418,11 @@ namespace SATSuma
                             });
                             pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width + 10, pictureBoxHeaderConverterChart.Location.Y);
+                                pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width + (int)(10 * UIScale), pictureBoxHeaderConverterChart.Location.Y);
                             });
                             pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width + 10, pictureBoxHeaderMarketCapChart.Location.Y);
+                                pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width + (int)(10 * UIScale), pictureBoxHeaderMarketCapChart.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -1533,19 +1536,19 @@ namespace SATSuma
                             }
                             pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width + 5, pictureBoxBlockFeesChart.Location.Y);
+                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width + (int)(5 * UIScale), pictureBoxBlockFeesChart.Location.Y);
                             });
                             pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + 5, pictureBoxFeeRangeChart.Location.Y);
+                                pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + (int)(5 * UIScale), pictureBoxFeeRangeChart.Location.Y);
                             });
                             pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + 5, pictureBoxBlockListFeeRangeChart2.Location.Y);
+                                pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + (int)(5 * UIScale), pictureBoxBlockListFeeRangeChart2.Location.Y);
                             });
                             pictureBoxBlockListFeeChart2.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width + 5, pictureBoxBlockListFeeChart2.Location.Y);
+                                pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width + (int)(5 * UIScale), pictureBoxBlockListFeeChart2.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -1801,7 +1804,7 @@ namespace SATSuma
                             }
                             pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + 5, pictureBoxChartCirculation.Location.Y);
+                                pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + (int)(5 * UIScale), pictureBoxChartCirculation.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -1903,11 +1906,11 @@ namespace SATSuma
                         }
                         pictureBoxPoolRankingChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width + 5, pictureBoxPoolRankingChart.Location.Y);
+                            pictureBoxPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width + (int)(5 * UIScale), pictureBoxPoolRankingChart.Location.Y);
                         });
                         pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width + 5, pictureBoxUniqueAddressesChart.Location.Y);
+                            pictureBoxUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width + (int)(5 * UIScale), pictureBoxUniqueAddressesChart.Location.Y);
                         });
                         SetLightsMessagesAndResetTimers();
                     }
@@ -1967,7 +1970,7 @@ namespace SATSuma
                                 });
                                 lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - 8, lblEstimatedHalvingDate.Location.Y);
+                                    lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - (int)(8 * UIScale), lblEstimatedHalvingDate.Location.Y);
                                     if (seconds_left != null)
                                     {
                                         lblHalvingSecondsRemaining.Text = seconds_left;
@@ -2676,7 +2679,7 @@ namespace SATSuma
                 var oneDayFee = "0";
                 if (data["nextBlock"] != null && data["30min"] != null && data["60min"] != null && data["1day"] != null)
                 {
-                    nextBlockFee = (string)data["nextBlock"];
+                    //nextBlockFee = (string)data["nextBlock"];
                     thirtyMinFee = (string)data["30min"];
                     sixtyMinFee = (string)data["60min"];
                     oneDayFee = (string)data["1day"];
@@ -3039,7 +3042,7 @@ namespace SATSuma
                     lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                        lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                        lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                     });
                     lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -3353,14 +3356,14 @@ namespace SATSuma
                         {
                             listViewAddressTransactions.Invoke((MethodInvoker)delegate
                             {
-                                listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                                listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
                             });
                         }
                         else
                         {
                             listViewAddressTransactions.Invoke((MethodInvoker)delegate
                             {
-                                listViewAddressTransactions.Columns.Add(" Transaction ID (confirmed)", 260);
+                                listViewAddressTransactions.Columns.Add(" Transaction ID (confirmed)", (int)(260 * UIScale));
                             });
                         }
                     }
@@ -3368,14 +3371,14 @@ namespace SATSuma
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", 260);
+                            listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", (int)(260 * UIScale));
                         });
                     }
                     if (addressScreenConfUnconfOrAllTx == "all")
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", 260);
+                            listViewAddressTransactions.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
                         });
                     }
                 }
@@ -3385,7 +3388,7 @@ namespace SATSuma
                 {
                     listViewAddressTransactions.Invoke((MethodInvoker)delegate
                     {
-                        listViewAddressTransactions.Columns.Add("Block", 65);
+                        listViewAddressTransactions.Columns.Add("Block", (int)(65 * UIScale));
                     });
                 }
 
@@ -3394,7 +3397,7 @@ namespace SATSuma
                 {
                     listViewAddressTransactions.Invoke((MethodInvoker)delegate
                     {
-                        listViewAddressTransactions.Columns.Add("Amount", 110);
+                        listViewAddressTransactions.Columns.Add("Amount", (int)(110 * UIScale));
                     });
                 }
 
@@ -3403,7 +3406,7 @@ namespace SATSuma
                 {
                     listViewAddressTransactions.Invoke((MethodInvoker)delegate
                     {
-                        listViewAddressTransactions.Columns.Add("Confs", 70);
+                        listViewAddressTransactions.Columns.Add("Confs", (int)(70 * UIScale));
                     });
                 }
 
@@ -3769,12 +3772,12 @@ namespace SATSuma
                             }
                             BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                             {
-                                BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - 8, item.Position.Y + listViewAddressTransactions.Location.Y);
+                                BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
                                 BtnViewTransactionFromAddress.Height = item.Bounds.Height;
                             });
                             BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
                             {
-                                BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - 3, item.Position.Y + listViewAddressTransactions.Location.Y);
+                                BtnViewBlockFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width - BtnViewBlockFromAddress.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
                                 BtnViewBlockFromAddress.Height = item.Bounds.Height;
                             });
                         }
@@ -3861,49 +3864,49 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width < 260) // min width
+                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width < (int)(260 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 260;
+                        e.NewWidth = (int)(260 * UIScale);
                     }
-                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width > 460) // max width
+                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width > (int)(460 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 460;
+                        e.NewWidth = (int)(460 * UIScale);
                     }
 
                     BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                     {
-                        BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - 6, BtnViewTransactionFromAddress.Location.Y);
+                        BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - (int)(6 * UIScale), BtnViewTransactionFromAddress.Location.Y);
                     });
                     BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
                     {
-                        BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + 2, BtnViewBlockFromAddress.Location.Y);
+                        BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + (int)(2 * UIScale), BtnViewBlockFromAddress.Location.Y);
                     });
                 }
 
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 65) // don't allow this one to change
+                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != (int)(65 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 65;
+                        e.NewWidth = (int)(65 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 2)
                 {
-                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 110) // don't allow this one to change
+                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != (int)(110 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 110;
+                        e.NewWidth = (int)(110 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != 70) // don't allow this one to change
+                    if (listViewAddressTransactions.Columns[e.ColumnIndex].Width != (int)(70 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 70;
+                        e.NewWidth = (int)(70 * UIScale);
                     }
                 }
             }
@@ -4240,7 +4243,7 @@ namespace SATSuma
                     });
                     pictureBoxBlockScreenChartBlockSize.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartBlockSize.Location = new Point(lblSizeOfBlock.Location.X + lblSizeOfBlock.Width + 5, pictureBoxBlockScreenChartBlockSize.Location.Y);
+                        pictureBoxBlockScreenChartBlockSize.Location = new Point(lblSizeOfBlock.Location.X + lblSizeOfBlock.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartBlockSize.Location.Y);
                     });
                     string strWeight = Convert.ToString(blocks[0].Weight);
 
@@ -4268,7 +4271,7 @@ namespace SATSuma
                     }
                     pictureBoxBlockFeeChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width + 5, pictureBoxBlockFeeChart.Location.Y);
+                        pictureBoxBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width + (int)(5 * UIScale), pictureBoxBlockFeeChart.Location.Y);
                     });
 
                     string nonceString = blocks[0].Nonce;
@@ -4296,7 +4299,7 @@ namespace SATSuma
 
                     pictureBoxBlockScreenChartReward.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width + 5, pictureBoxBlockScreenChartReward.Location.Y);
+                        pictureBoxBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartReward.Location.Y);
                     });
 
 
@@ -4306,7 +4309,7 @@ namespace SATSuma
                     });
                     pictureBoxBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartFeeRange.Location = new Point(lblBlockFeeRangeAndMedianFee.Location.X + lblBlockFeeRangeAndMedianFee.Width + 5, pictureBoxBlockScreenChartFeeRange.Location.Y);
+                        pictureBoxBlockScreenChartFeeRange.Location = new Point(lblBlockFeeRangeAndMedianFee.Location.X + lblBlockFeeRangeAndMedianFee.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartFeeRange.Location.Y);
                     });
                     lblBlockAverageFee.Invoke((MethodInvoker)delegate
                     {
@@ -4318,7 +4321,7 @@ namespace SATSuma
                     });
                     pictureBoxBlockScreenPoolRankingChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width + 5, pictureBoxBlockScreenPoolRankingChart.Location.Y);
+                        pictureBoxBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width + (int)(5 * UIScale), pictureBoxBlockScreenPoolRankingChart.Location.Y);
                     });
                     lblBlockTime.Invoke((MethodInvoker)delegate
                     {
@@ -4381,7 +4384,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add(" Transaction ID", 250);
+                            listViewBlockTransactions.Columns.Add(" Transaction ID", (int)(250 * UIScale));
                         });
                     }
 
@@ -4390,7 +4393,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add("Fee", 70);
+                            listViewBlockTransactions.Columns.Add("Fee", (int)(70 * UIScale));
                         });
                     }
 
@@ -4399,7 +4402,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add("I/P", 40);
+                            listViewBlockTransactions.Columns.Add("I/P", (int)(40 * UIScale));
                         });
                     }
                     if (listViewBlockTransactions.Columns.Count == 3)
@@ -4407,7 +4410,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add("O/P", 40);
+                            listViewBlockTransactions.Columns.Add("O/P", (int)(40 * UIScale));
                         });
                     }
                     if (listViewBlockTransactions.Columns.Count == 4)
@@ -4415,7 +4418,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add("Amount", 100);
+                            listViewBlockTransactions.Columns.Add("Amount", (int)(100 * UIScale));
                         });
                     }
                     // Add the items to the ListView
@@ -4590,7 +4593,7 @@ namespace SATSuma
                                 }
                                 btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                                 {
-                                    btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - 8, item.Position.Y + listViewBlockTransactions.Location.Y);
+                                    btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
                                     btnViewTransactionFromBlock.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -4620,52 +4623,52 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width < 250) // min width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width < (int)(250 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 250;
+                        e.NewWidth = (int)(250 * UIScale);
                     }
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width > 460) // max width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width > (int)(460 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 460;
+                        e.NewWidth = (int)(460 * UIScale);
                     }
                     btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                     {
-                        btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - 6, btnViewTransactionFromBlock.Location.Y);
+                        btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), btnViewTransactionFromBlock.Location.Y);
                     });
                 }
 
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 70) // fixed width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != (int)(70 * UIScale)) // fixed width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 70;
+                        e.NewWidth = (int)(70 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 2)
                 {
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // fixed width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != (int)(40 * UIScale)) // fixed width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 40;
+                        e.NewWidth = (int)(40 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 40) // fixed width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != (int)(40 * UIScale)) // fixed width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 40;
+                        e.NewWidth = (int)(40 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != 100) // fixed width
+                    if (listViewBlockTransactions.Columns[e.ColumnIndex].Width != (int)(100 * UIScale)) // fixed width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
 
                     }
                 }
@@ -5057,7 +5060,7 @@ namespace SATSuma
                     });
                     label126.Invoke((MethodInvoker)delegate
                     {
-                        label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + 6, lblTransactionBlockHeight.Location.Y);
+                        label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + (int)(6 * UIScale), lblTransactionBlockHeight.Location.Y);
                     });
 
                     long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
@@ -5069,7 +5072,7 @@ namespace SATSuma
                     });
                     label125.Invoke((MethodInvoker)delegate
                     {
-                        label125.Location = new Point(lblTransactionBlockTime.Location.X + lblTransactionBlockTime.Width + 6, lblTransactionBlockTime.Location.Y);
+                        label125.Location = new Point(lblTransactionBlockTime.Location.X + lblTransactionBlockTime.Width + (int)(6 * UIScale), lblTransactionBlockTime.Location.Y);
                     });
                     lblTransactionConfirmations.Invoke((MethodInvoker)delegate
                     {
@@ -5079,7 +5082,7 @@ namespace SATSuma
 
                     label128.Invoke((MethodInvoker)delegate
                     {
-                        label128.Location = new Point(lblTransactionConfirmations.Location.X + lblTransactionConfirmations.Width + 6, lblTransactionConfirmations.Location.Y);
+                        label128.Location = new Point(lblTransactionConfirmations.Location.X + lblTransactionConfirmations.Width + (int)(6 * UIScale), lblTransactionConfirmations.Location.Y);
                     });
                     lblTransactionLockTime.Invoke((MethodInvoker)delegate
                     {
@@ -5088,7 +5091,7 @@ namespace SATSuma
                     });
                     label98.Invoke((MethodInvoker)delegate
                     {
-                        label98.Location = new Point(lblTransactionLockTime.Location.X + lblTransactionLockTime.Width + 6, lblTransactionLockTime.Location.Y);
+                        label98.Location = new Point(lblTransactionLockTime.Location.X + lblTransactionLockTime.Width + (int)(6 * UIScale), lblTransactionLockTime.Location.Y);
                     });
                     lblTransactionVersion.Invoke((MethodInvoker)delegate
                     {
@@ -5154,18 +5157,18 @@ namespace SATSuma
                             totalValueIn += vin.Prevout.Value;
                         }
                     }
-                    string strTotalValueIn = totalValueIn.ToString(); // using ToString() instead of Convert.ToString()
+                    string strTotalValueIn = totalValueIn.ToString();
                     decimal decTotalBitcoinIn = ConvertSatsToBitcoin(strTotalValueIn);
                     lblTotalInputValue.Invoke((MethodInvoker)delegate
                     {
                         lblTotalInputValue.Text = decTotalBitcoinIn.ToString();
-                        lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValue.Width / 2) - 95, (panelTransactionDiagram.Size.Height / 2) + 3);
+                        lblTotalInputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValue.Width / 2) - (int)(95 * UIScale), (panelTransactionDiagram.Size.Height / 2) + (int)(3 * UIScale));
                     });
 
                     lblTotalInputValueFiat.Invoke((MethodInvoker)delegate
                     {
                         lblTotalInputValueFiat.Text = lblHeaderPrice.Text[0] + (decTotalBitcoinIn * OneBTCinSelectedCurrency).ToString("N2");
-                        lblTotalInputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValueFiat.Width / 2) - 95, lblTotalInputValue.Location.Y + 14);
+                        lblTotalInputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValueFiat.Width / 2) - (int)(95 * UIScale), lblTotalInputValue.Location.Y + (int)(14 * UIScale));
                     });
 
                     long totalValueOut = 0;
@@ -5173,31 +5176,31 @@ namespace SATSuma
                     {
                         totalValueOut += vout.Value;
                     }
-                    string strTotalValueOut = totalValueOut.ToString(); // using ToString() instead of Convert.ToString()
+                    string strTotalValueOut = totalValueOut.ToString();
                     decimal decTotalBitcoinOut = ConvertSatsToBitcoin(strTotalValueOut);
                     lblTotalOutputValue.Invoke((MethodInvoker)delegate
                     {
                         lblTotalOutputValue.Text = decTotalBitcoinOut.ToString();
-                        lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 95 - (lblTotalOutputValue.Width / 2), (panelTransactionDiagram.Size.Height / 2) + 3);
+                        lblTotalOutputValue.Location = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(95 * UIScale) - (lblTotalOutputValue.Width / 2), (panelTransactionDiagram.Size.Height / 2) + (int)(3 * UIScale));
                     });
 
                     lblTotalOutputValueFiat.Invoke((MethodInvoker)delegate
                     {
                         lblTotalOutputValueFiat.Text = lblHeaderPrice.Text[0] + (decTotalBitcoinOut * OneBTCinSelectedCurrency).ToString("N2");
-                        lblTotalOutputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 95 - (lblTotalOutputValueFiat.Width / 2), lblTotalOutputValue.Location.Y + 14);
+                        lblTotalOutputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(95 * UIScale) - (lblTotalOutputValueFiat.Width / 2), lblTotalOutputValue.Location.Y + (int)(14 * UIScale));
                     });
 
                     lblTransactionFee.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - 134);
+                        lblTransactionFee.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFee.Width / 2), panelTransactionDiagram.Size.Height / 2 - (int)(134 * UIScale));
                     });
                     lblTransactionFeeFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionFeeFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFeeFiat.Width / 2), lblTransactionFee.Location.Y + 14);
+                        lblTransactionFeeFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionFeeFiat.Width / 2), lblTransactionFee.Location.Y + (int)(14 * UIScale));
                     });
                     label104.Invoke((MethodInvoker)delegate
                     {
-                        label104.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - 149);
+                        label104.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (label104.Width / 2), panelTransactionDiagram.Size.Height / 2 - (int)(149 * UIScale));
                     });
                     panelTransactionMiddle.Invoke((MethodInvoker)delegate
                     {
@@ -5205,11 +5208,11 @@ namespace SATSuma
                     });
                     lblTransactionInputCount.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionInputCount.Width / 2) - 95, (panelTransactionDiagram.Size.Height / 2) - 15);
+                        lblTransactionInputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTransactionInputCount.Width / 2) - (int)(95 * UIScale), (panelTransactionDiagram.Size.Height / 2) - (int)(15 * UIScale));
                     });
                     lblTransactionOutputCount.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + 95 - (lblTransactionOutputCount.Width / 2), (panelTransactionDiagram.Size.Height / 2) - 15);
+                        lblTransactionOutputCount.Location = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(95 * UIScale) - (lblTransactionOutputCount.Width / 2), (panelTransactionDiagram.Size.Height / 2) - (int)(15 * UIScale));
                     });
 
                     if (transaction.Vin[0].Is_coinbase == true)
@@ -5217,7 +5220,7 @@ namespace SATSuma
                         lblCoinbase.Invoke((MethodInvoker)delegate
                         {
                             lblCoinbase.Text = "Coinbase transaction";
-                            lblCoinbase.Location = new Point(10, (panelTransactionDiagram.Size.Height / 2) - 15);
+                            lblCoinbase.Location = new Point((int)(10 * UIScale), (panelTransactionDiagram.Size.Height / 2) - (int)(15 * UIScale));
                         });
                     }
                     else
@@ -5228,13 +5231,13 @@ namespace SATSuma
                         });
                     }
                     // central horizontal
-                    Point startPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
-                    Point endPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                    Point startPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) - (int)(150 * UIScale), panelTransactionDiagram.Size.Height / 2);
+                    Point endPoint1 = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(150 * UIScale), panelTransactionDiagram.Size.Height / 2);
                     linePoints.Add(startPoint1);
                     linePoints.Add(endPoint1);
                     // vertical line up to fees
                     Point startPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - panelTransactionMiddle.Height / 2);
-                    Point endPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - 100);
+                    Point endPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - (int)(100 * UIScale));
                     linePoints.Add(startPoint2);
                     linePoints.Add(endPoint2);
                     // ------------- inputs on diagram
@@ -5269,12 +5272,12 @@ namespace SATSuma
                         {
                             break;
                         }
-                        Point startPoint3 = new Point(10, Convert.ToInt32(YInputsPos));
-                        Point endPoint3 = new Point(100, Convert.ToInt32(YInputsPos));
+                        Point startPoint3 = new Point((int)(10 * UIScale), Convert.ToInt32(YInputsPos));
+                        Point endPoint3 = new Point((int)(100 * UIScale), Convert.ToInt32(YInputsPos));
                         linePoints.Add(startPoint3);
                         linePoints.Add(endPoint3);
-                        Point startPoint4 = new Point(100, Convert.ToInt32(YInputsPos));
-                        Point endPoint4 = new Point((panelTransactionDiagram.Size.Width / 2) - 150, panelTransactionDiagram.Size.Height / 2);
+                        Point startPoint4 = new Point((int)(100 * UIScale), Convert.ToInt32(YInputsPos));
+                        Point endPoint4 = new Point((panelTransactionDiagram.Size.Width / 2) - (int)(150 * UIScale), panelTransactionDiagram.Size.Height / 2);
                         linePoints.Add(startPoint4);
                         linePoints.Add(endPoint4);
                         YInputsPos += YInputsStep;
@@ -5311,12 +5314,12 @@ namespace SATSuma
                         {
                             break;
                         }
-                        Point startPoint5 = new Point(panelTransactionDiagram.Size.Width - 10, Convert.ToInt32(YOutputsPos));
-                        Point endPoint5 = new Point(panelTransactionDiagram.Size.Width - 100, Convert.ToInt32(YOutputsPos));
+                        Point startPoint5 = new Point(panelTransactionDiagram.Size.Width - (int)(10 * UIScale), Convert.ToInt32(YOutputsPos));
+                        Point endPoint5 = new Point(panelTransactionDiagram.Size.Width - (int)(100 * UIScale), Convert.ToInt32(YOutputsPos));
                         linePoints.Add(startPoint5);
                         linePoints.Add(endPoint5);
-                        Point startPoint6 = new Point(panelTransactionDiagram.Size.Width - 100, Convert.ToInt32(YOutputsPos));
-                        Point endPoint6 = new Point((panelTransactionDiagram.Size.Width / 2) + 150, panelTransactionDiagram.Size.Height / 2);
+                        Point startPoint6 = new Point(panelTransactionDiagram.Size.Width - (int)(100 * UIScale), Convert.ToInt32(YOutputsPos));
+                        Point endPoint6 = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(150 * UIScale), panelTransactionDiagram.Size.Height / 2);
                         linePoints.Add(startPoint6);
                         linePoints.Add(endPoint6);
                         YOutputsPos += YOutputsStep;
@@ -5335,7 +5338,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionInputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionInputs.Columns.Add(" Address", 225);
+                            listViewTransactionInputs.Columns.Add(" Address", (int)(225 * UIScale));
                         });
                     }
 
@@ -5344,7 +5347,7 @@ namespace SATSuma
                         listViewTransactionInputs.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewTransactionInputs.Columns.Add("Amount", 120);
+                            listViewTransactionInputs.Columns.Add("Amount", (int)(120 * UIScale));
                         });
                     }
 
@@ -5406,7 +5409,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionOutputs.Columns.Add(" Address", 225);
+                            listViewTransactionOutputs.Columns.Add(" Address", (int)(225 * UIScale));
                         });
                     }
 
@@ -5415,7 +5418,7 @@ namespace SATSuma
                         listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewTransactionOutputs.Columns.Add("Amount", 120);
+                            listViewTransactionOutputs.Columns.Add("Amount", (int)(120 * UIScale));
                         });
                     }
 
@@ -5519,7 +5522,7 @@ namespace SATSuma
                                 btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXInput.Visible = true;
-                                    btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - 8, item.Position.Y + listViewTransactionInputs.Location.Y);
+                                    btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                     btnViewAddressFromTXInput.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -5567,7 +5570,7 @@ namespace SATSuma
                                 btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXOutput.Visible = true;
-                                    btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - 8, item.Position.Y + listViewTransactionOutputs.Location.Y);
+                                    btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                     btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -5601,23 +5604,23 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < 225) // min width
+                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < (int)(225 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 225;
+                        e.NewWidth = (int)(225 * UIScale);
                     }
-                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width > 345) // max width
+                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width > (int)(345 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 345;
+                        e.NewWidth = (int)(345 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < 120) // don't allow this one to change
+                    if (listViewTransactionInputs.Columns[e.ColumnIndex].Width < (int)(120 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 120;
+                        e.NewWidth = (int)(120 * UIScale);
                     }
                 }
             }
@@ -5634,23 +5637,23 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < 225) // min width
+                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < (int)(225 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 225;
+                        e.NewWidth = (int)(225 * UIScale);
                     }
-                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width > 345) // max width
+                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width > (int)(345 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 345;
+                        e.NewWidth = (int)(345 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < 120) // don't allow this one to change
+                    if (listViewTransactionOutputs.Columns[e.ColumnIndex].Width < (int)(120 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 120;
+                        e.NewWidth = (int)(120 * UIScale);
                     }
                 }
             }
@@ -6301,21 +6304,22 @@ namespace SATSuma
                     listViewBlockList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewBlockList, new object[] { true });
 
                     // Check if the column header already exists
+
                     if (listViewBlockList.Columns.Count == 0)
                     {
-                        // If not, add the column header
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockList.Columns.Add(" Date / time", 115);
+                            // If not, add the column header
+                            listViewBlockList.Columns.Add("Height", (int)(65 * UIScale));
                         });
                     }
 
                     if (listViewBlockList.Columns.Count == 1)
                     {
+                        // If not, add the column header
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
-                            // If not, add the column header
-                            listViewBlockList.Columns.Add("Height", 65);
+                            listViewBlockList.Columns.Add(" Date / time", (int)(115 * UIScale));
                         });
                     }
 
@@ -6324,7 +6328,7 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("TX count", 60);
+                            listViewBlockList.Columns.Add("TX count", (int)(60 * UIScale));
                         });
                     }
                     if (listViewBlockList.Columns.Count == 3)
@@ -6332,7 +6336,7 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("Size", 50);
+                            listViewBlockList.Columns.Add("Size", (int)(50 * UIScale));
                         });
                     }
                     if (listViewBlockList.Columns.Count == 4)
@@ -6340,7 +6344,7 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("Fee range", 70);
+                            listViewBlockList.Columns.Add("Fee range", (int)(70 * UIScale));
                         });
                     }
                     if (listViewBlockList.Columns.Count == 5)
@@ -6348,7 +6352,7 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("Med.", 50);
+                            listViewBlockList.Columns.Add("Med.", (int)(50 * UIScale));
                         });
                     }
                     if (listViewBlockList.Columns.Count == 6)
@@ -6356,12 +6360,11 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("Reward (BTC)", 90);
+                            listViewBlockList.Columns.Add("Reward (BTC)", (int)(91 * UIScale));
                         });
                     }
                     // Add the items to the ListView
                     int counter = 0; // used to count rows in list as they're added
-                    panel92.Visible = false;
                     string formattedDateTime;
                     foreach (var block in blocks)
                     {
@@ -6371,12 +6374,10 @@ namespace SATSuma
                             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
                             formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
                         }
-                        ListViewItem item = new ListViewItem(formattedDateTime); // create new row
-                        item.SubItems.Add(block.Height.ToString());
-                        if (block.Height == numericUpDownBlockHeightToStartListFrom.Text)
-                        {
-                            panel92.Visible = true;
-                        }
+                        //ListViewItem item = new ListViewItem(formattedDateTime); // create new row
+                        //item.SubItems.Add(block.Height.ToString());
+                        ListViewItem item = new ListViewItem(block.Height); // create new row
+                        item.SubItems.Add(formattedDateTime.ToString());
                         item.SubItems.Add(block.Tx_count.ToString());
                         decimal sizeInMB = block.Size;
                         sizeInMB /= 1000000;
@@ -6507,7 +6508,7 @@ namespace SATSuma
                     Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
                     panel14.Invoke((MethodInvoker)delegate
                     {
-                        panel14.Top = itemRect.Top + 8;
+                        panel14.Top = itemRect.Top + (int)(8 * UIScale);
                     });
                     panel19.Invoke((MethodInvoker)delegate
                     {
@@ -6529,58 +6530,58 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 115) // min width
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(60 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 115;
+                        e.NewWidth = (int)(60 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(115 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 60;
+                        e.NewWidth = (int)(115 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 2)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 60) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(60 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 60;
+                        e.NewWidth = (int)(60 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(50 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 50;
+                        e.NewWidth = (int)(50 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 75) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(75 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 75;
+                        e.NewWidth = (int)(75 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 5)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 50) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(50 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 50;
+                        e.NewWidth = (int)(50 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 6)
                 {
-                    if (listViewBlockList.Columns[e.ColumnIndex].Width != 90) // don't allow this one to change
+                    if (listViewBlockList.Columns[e.ColumnIndex].Width != (int)(91 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 90;
+                        e.NewWidth = (int)(91 * UIScale);
                     }
                 }
             }
@@ -6662,10 +6663,9 @@ namespace SATSuma
                 CheckNetworkStatus();
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
-                // Get the second subitem in the selected item (index 1)
                 if (selectedItem != null)
                 {
-                    string submittedBlockNumber = selectedItem.SubItems[1].Text;
+                    string submittedBlockNumber = selectedItem.SubItems[0].Text;
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
                     {
                         numericUpDownSubmittedBlockNumber.Text = submittedBlockNumber; // copy block number to block screen
@@ -6702,24 +6702,24 @@ namespace SATSuma
                             anySelected = true;
                             btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                             {
-                                btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width + listViewBlockList.Columns[1].Width - btnViewBlockFromBlockList.Width - 3, item.Position.Y + listViewBlockList.Location.Y);
+                                btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width  - btnViewBlockFromBlockList.Width - (int)(3 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
                                 btnViewBlockFromBlockList.Height = item.Bounds.Height;
                             });
                             // display block hash
                             using (WebClient client = new WebClient())
                             {
-                                string BlockHashURL = NodeURL + "block-height/" + item.SubItems[1].Text;
+                                string BlockHashURL = NodeURL + "block-height/" + item.SubItems[0].Text;
                                 string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
                                 if (!string.IsNullOrEmpty(BlockHash))
                                 {
                                     lblBlockListBlockHash.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockListBlockHash.Text = BlockHash;
-                                        lblBlockListBlockHash.Location = new Point(label90.Location.X + label90.Width, label90.Location.Y + 2);
+                                        lblBlockListBlockHash.Location = new Point(label90.Location.X + label90.Width, label90.Location.Y + (int)(2 * UIScale));
                                     });
                                 }
                             }
-                            string blockNumber = item.SubItems[1].Text;
+                            string blockNumber = item.SubItems[0].Text;
                             ToggleLoadingAnimation("enable"); // start the loading animation
                             DisableEnableBlockListButtons("disable"); // disable buttons during operation
                             var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
@@ -6732,7 +6732,7 @@ namespace SATSuma
                                 lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
-                                    lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, label91.Location.Y + 2);
+                                    lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, label91.Location.Y + (int)(2 * UIScale));
                                 });
                                 long sizeInBytes = blocks[0].Size;
                                 string sizeString = ""; // convert display to bytes/kb/mb accordingly
@@ -6753,7 +6753,7 @@ namespace SATSuma
                                 lblBlockListBlockSize.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListBlockSize.Text = sizeString;
-                                    lblBlockListBlockSize.Location = new Point(label105.Location.X + label105.Width, label105.Location.Y + 2);
+                                    lblBlockListBlockSize.Location = new Point(label105.Location.X + label105.Width, label105.Location.Y + (int)(2 * UIScale));
                                 });
                                 string strWeight = Convert.ToString(blocks[0].Weight);
 
@@ -6764,7 +6764,7 @@ namespace SATSuma
                                     lblBlockListBlockWeight.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockListBlockWeight.Text = strFormattedWeight;
-                                        lblBlockListBlockWeight.Location = new Point(label103.Location.X + label103.Width, label103.Location.Y + 2);
+                                        lblBlockListBlockWeight.Location = new Point(label103.Location.X + label103.Width, label103.Location.Y + (int)(2 * UIScale));
                                     });
                                 }
 
@@ -6773,64 +6773,64 @@ namespace SATSuma
                                     lblBlockListNonce.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
-                                        lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, label24.Location.Y + 2);
+                                        lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, label24.Location.Y + (int)(2 * UIScale));
                                     });
                                 }
                                 lblBlockListMiner.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
-                                    lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, label95.Location.Y + 2);
+                                    lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, label95.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
-                                    lblBlockListTransactionCount.Location = new Point(label99.Location.X + label99.Width, label99.Location.Y + 2);
+                                    lblBlockListTransactionCount.Location = new Point(label99.Location.X + label99.Width, label99.Location.Y + (int)(2 * UIScale));
                                 });
                                 string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
                                 TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                                 lblBlockListTotalFees.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTotalFees.Text = TotalBlockFees;
-                                    lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, label88.Location.Y + 2);
+                                    lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, label88.Location.Y + (int)(2 * UIScale));
                                 });
                                 string Reward = Convert.ToString(blocks[0].Extras.Reward);
                                 lblBlockListReward.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
-                                    lblBlockListReward.Location = new Point(label101.Location.X + label101.Width, label101.Location.Y + 2);
+                                    lblBlockListReward.Location = new Point(label101.Location.X + label101.Width, label101.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
-                                    lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y + 2);
+                                    lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, label93.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListAverageFee.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
-                                    lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, label97.Location.Y + 2);
+                                    lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, label97.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
-                                    lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, label89.Location.Y + 2);
+                                    lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, label89.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
-                                    lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, label94.Location.Y + 2);
+                                    lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, label94.Location.Y + (int)(2 * UIScale));
                                 });
                                 if (double.TryParse(blocks[0].Extras.AvgTxSize, out double avgTxSize))
                                 {
                                     lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockListAverageTransactionSize.Text = avgTxSize.ToString("F2");
-                                        lblBlockListAverageTransactionSize.Location = new Point(label92.Location.X + label92.Width, label92.Location.Y + 2);
+                                        lblBlockListAverageTransactionSize.Location = new Point(label92.Location.X + label92.Width, label92.Location.Y + (int)(2 * UIScale));
                                     });
                                 }
                                 lblBlockListVersion.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListVersion.Text = Convert.ToString(blocks[0].Version);
-                                    lblBlockListVersion.Location = new Point(label96.Location.X + label96.Width, label96.Location.Y + 2);
+                                    lblBlockListVersion.Location = new Point(label96.Location.X + label96.Width, label96.Location.Y + (int)(2 * UIScale));
                                 });
                                 lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                                 {
@@ -6838,23 +6838,23 @@ namespace SATSuma
                                 });
                                 pictureBoxBlockListPoolRanking.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width + 5, lblBlockListMiner.Location.Y);
+                                    pictureBoxBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width + (int)(5 * UIScale), lblBlockListMiner.Location.Y);
                                 });
                                 pictureBoxBlockListFeeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width + 5, lblBlockListTotalFees.Location.Y);
+                                    pictureBoxBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width + (int)(5 * UIScale), lblBlockListTotalFees.Location.Y);
                                 });
                                 pictureBoxBlockListRewardChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width + 5, lblBlockListReward.Location.Y);
+                                    pictureBoxBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width + (int)(5 * UIScale), lblBlockListReward.Location.Y);
                                 });
                                 pictureBoxBlockListFeeRangeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width + 5, lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
+                                    pictureBoxBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width + (int)(5 * UIScale), lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
                                 });
                                 pictureBoxBlockListBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width + 5, lblBlockListBlockSize.Location.Y);
+                                    pictureBoxBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width + (int)(5 * UIScale), lblBlockListBlockSize.Location.Y);
                                 });
                             }
                             else
@@ -7546,7 +7546,7 @@ namespace SATSuma
                             lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsOwnNodeStatus.Text = hostname;
-                                lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                                lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                             });
                             lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7557,7 +7557,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "node offline";
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7588,7 +7588,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostname;
-                            lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7599,7 +7599,7 @@ namespace SATSuma
                         lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                            lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                            lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                         });
                         lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7634,7 +7634,7 @@ namespace SATSuma
                         lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsSelectedNodeStatus.Text = hostname;
-                            lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                            lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                         });
                         lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7653,7 +7653,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostname;
-                            lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7718,7 +7718,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                            lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7747,7 +7747,7 @@ namespace SATSuma
                 lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                    lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                    lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                 });
                 lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
@@ -7862,35 +7862,35 @@ namespace SATSuma
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add(" Address", 130);
+                        listViewXpubAddresses.Columns.Add(" Address", (int)(130 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 1)
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("TX's", 35);
+                        listViewXpubAddresses.Columns.Add("TX's", (int)(35 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 2)
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("Received", 100);
+                        listViewXpubAddresses.Columns.Add("Received", (int)(100 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 3)
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("Spent", 100);
+                        listViewXpubAddresses.Columns.Add("Spent", (int)(100 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 4)
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("Unspent", 100);
+                        listViewXpubAddresses.Columns.Add("Unspent", (int)(100 * UIScale));
                     });
                 }
                 #endregion
@@ -7933,7 +7933,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8182,7 +8182,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8429,7 +8429,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8682,7 +8682,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -9017,68 +9017,68 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 130) // min width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < (int)(130 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 130;
+                        e.NewWidth = (int)(130 * UIScale);
                     }
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 460) // max width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > (int)(460 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 460;
+                        e.NewWidth = (int)(460 * UIScale);
                     }
 
                     btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                     {
-                        btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - 6, btnViewAddressFromXpub.Location.Y);
+                        btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - (int)(6 * UIScale), btnViewAddressFromXpub.Location.Y);
                     });
                 }
 
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width != 35) // don't allow this one to change
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width != (int)(35 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 35;
+                        e.NewWidth = (int)(35 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 2)
                 {
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > (int)(250 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 250;
+                        e.NewWidth = (int)(250 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > (int)(250 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 250;
+                        e.NewWidth = (int)(250 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > 250) // max width
+                    if (listViewXpubAddresses.Columns[e.ColumnIndex].Width > (int)(250 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 250;
+                        e.NewWidth = (int)(250 * UIScale);
                     }
                 }
             }
@@ -9114,7 +9114,7 @@ namespace SATSuma
                             }
                             btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                             {
-                                btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - 8, item.Position.Y + listViewXpubAddresses.Location.Y - 1);
+                                btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - (int)(8 * UIScale), item.Position.Y + listViewXpubAddresses.Location.Y - 1);
                                 btnViewAddressFromXpub.Height = item.Bounds.Height;
                             });
                         }
@@ -12425,7 +12425,7 @@ namespace SATSuma
                         });
                         lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - 4, lblCalculatedUSDFromBTCAmount.Location.Y);
+                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - (int)(4 * UIScale), lblCalculatedUSDFromBTCAmount.Location.Y);
                         });
                         label273.Invoke((MethodInvoker)delegate
                         {
@@ -12457,7 +12457,7 @@ namespace SATSuma
                         });
                         lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - 4, lblCalculatedEURFromBTCAmount.Location.Y);
+                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - (int)(4 * UIScale), lblCalculatedEURFromBTCAmount.Location.Y);
                         });
                         label274.Invoke((MethodInvoker)delegate
                         {
@@ -12489,7 +12489,7 @@ namespace SATSuma
                         });
                         lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - 4, lblCalculatedGBPFromBTCAmount.Location.Y);
+                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - (int)(4 * UIScale), lblCalculatedGBPFromBTCAmount.Location.Y);
                         });
                         label276.Invoke((MethodInvoker)delegate
                         {
@@ -13466,7 +13466,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add(" Date added", 100);
+                        listViewBookmarks.Columns.Add(" Date added", (int)(100 * UIScale));
                     });
                 }
 
@@ -13475,7 +13475,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Type", 95);
+                        listViewBookmarks.Columns.Add("Type", (int)(95 * UIScale));
                     });
                 }
 
@@ -13484,7 +13484,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("", 20);
+                        listViewBookmarks.Columns.Add("", (int)(20 * UIScale));
                     });
                 }
                 if (listViewBookmarks.Columns.Count == 3)
@@ -13492,7 +13492,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Bookmark", 233);
+                        listViewBookmarks.Columns.Add("Bookmark", (int)(233 * UIScale));
                     });
                 }
                 if (listViewBookmarks.Columns.Count == 4)
@@ -13500,7 +13500,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Note", 600);
+                        listViewBookmarks.Columns.Add("Note", (int)(600 * UIScale));
                     });
                 }
                 if (listViewBookmarks.Columns.Count == 5)
@@ -13508,7 +13508,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("HiddenColumn", 600); //used to store the KeyCheck string.
+                        listViewBookmarks.Columns.Add("HiddenColumn", (int)(600 * UIScale)); //used to store the KeyCheck string.
                     });
                 }
                 // Add the items to the ListView
@@ -13629,7 +13629,7 @@ namespace SATSuma
 
                 lblBookmarkStatusMessage.Invoke((MethodInvoker)delegate
                 {
-                    lblBookmarkStatusMessage.Location = new Point(btnDecryptBookmark.Location.X + btnDecryptBookmark.Width + 10, lblBookmarkStatusMessage.Location.Y);
+                    lblBookmarkStatusMessage.Location = new Point(btnDecryptBookmark.Location.X + btnDecryptBookmark.Width + (int)(10 * UIScale), lblBookmarkStatusMessage.Location.Y);
                 });
             }
             catch (Exception ex)
@@ -13954,61 +13954,61 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > 150) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(150 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 150;
+                        e.NewWidth = (int)(150 * UIScale);
                     }
                 }
 
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != 95) // don't allow this one to change
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != (int)(95 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 95;
+                        e.NewWidth = (int)(95 * UIScale);
                     }
                 }
 
 
                 if (e.ColumnIndex == 2)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != 20) // don't allow this one to change
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != (int)(20 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = 20;
+                        e.NewWidth = (int)(20 * UIScale);
                     }
                 }
 
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > 400) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(400 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 400;
+                        e.NewWidth = (int)(400 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < 100) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 100;
+                        e.NewWidth = (int)(100 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > 600) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(600 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = 600;
+                        e.NewWidth = (int)(600 * UIScale);
                     }
                 }
             }
@@ -15192,7 +15192,7 @@ namespace SATSuma
                     lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                        lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                        lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                     });
                     lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -15326,7 +15326,7 @@ namespace SATSuma
                     lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                        lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                        lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                     });
                     lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -15629,7 +15629,7 @@ namespace SATSuma
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.OliveDrab;
-                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 2);
+                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -15764,7 +15764,7 @@ namespace SATSuma
                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                    lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                    lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                 });
                 lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
@@ -16182,6 +16182,10 @@ namespace SATSuma
                                 {
                                     UIScaleToBeSavedToSettings = 5;
                                 }
+                                else
+                                {
+                                    UIScaleToBeSavedToSettings = 3;
+                                }
                             }
                         }
                     }
@@ -16446,7 +16450,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(3 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnGBP.Invoke((MethodInvoker)delegate
@@ -16465,7 +16469,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(3 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnUSD.Invoke((MethodInvoker)delegate
@@ -16484,7 +16488,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(3 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnEUR.Invoke((MethodInvoker)delegate
@@ -16503,7 +16507,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(3 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnXAU.Invoke((MethodInvoker)delegate
@@ -16756,7 +16760,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = "genesis";
-                                        lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(3 * UIScale));
                                     });
                                     ClearThemeMenuMarkers();
                                     BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -16781,7 +16785,7 @@ namespace SATSuma
                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                         {
                                             lblThemeMenuHighlightedButtonText.Text = "btcdir";
-                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
+                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + (int)(3 * UIScale));
                                         });
                                         ClearThemeMenuMarkers();
                                         btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
@@ -16806,7 +16810,7 @@ namespace SATSuma
                                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                             {
                                                 lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
+                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(3 * UIScale));
                                             });
                                             ClearThemeMenuMarkers();
                                             btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -16831,7 +16835,7 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblThemeMenuHighlightedButtonText.Text = "planet btc";
-                                                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + 3);
+                                                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(3 * UIScale));
                                                 });
                                                 ClearThemeMenuMarkers();
                                                 btnMenuThemePlanetBTC.Invoke((MethodInvoker)delegate
@@ -16856,7 +16860,7 @@ namespace SATSuma
                                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                     {
                                                         lblThemeMenuHighlightedButtonText.Text = "whale";
-                                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + 3);
+                                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(3 * UIScale));
                                                     });
                                                     ClearThemeMenuMarkers();
                                                     btnMenuThemeWhale.Invoke((MethodInvoker)delegate
@@ -16881,7 +16885,7 @@ namespace SATSuma
                                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                         {
                                                             lblThemeMenuHighlightedButtonText.Text = "lightning";
-                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + 3);
+                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + (int)(3 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
                                                         btnMenuThemeCitadel.Invoke((MethodInvoker)delegate
@@ -16899,7 +16903,7 @@ namespace SATSuma
                                                         {
                                                             lblThemeMenuHighlightedButtonText.Visible = false;
                                                             lblThemeMenuHighlightedButtonText.Text = theme.ThemeName + "!";
-                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
+                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
                                                         btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -16946,10 +16950,23 @@ namespace SATSuma
                 // check if settings are already saved in the bookmarks file and restore UIScale
                 foreach (var bookmark in bookmarks)
                 {
+                    
+                    
                     if (bookmark.Type == "settings")
                     {
+                        //UIScale didn't exist in earlier versions of SATSuma, so check whether it is set in the settings file or not before applying, or set a default.
+                        string settingsData = Convert.ToString(bookmark.Data);
+                        if (settingsData.Length > 27)
+                        {
+                            UIScaleInFile = Convert.ToString(bookmark.Data[27]);
+                        }
+                        else
+                        {
+                            UIScaleInFile = "3";
+                        }
+
                         UIScaleAlreadySavedInFile = true;
-                        UIScaleInFile = Convert.ToString(bookmark.Data[27]);
+                        
                         break;
                     }
                 }
@@ -17042,7 +17059,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "genesis";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -17095,7 +17112,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "btcdir";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
@@ -17148,7 +17165,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -17201,7 +17218,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "whale";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeWhale.Invoke((MethodInvoker)delegate
@@ -17254,7 +17271,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "planet btc";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemePlanetBTC.Invoke((MethodInvoker)delegate
@@ -17307,7 +17324,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "lightning";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + 3);
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeCitadel.Invoke((MethodInvoker)delegate
@@ -17370,6 +17387,7 @@ namespace SATSuma
         {
             try
             {
+                lblMenuArrow.Visible = false;
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -17391,7 +17409,6 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
-                ClearMainMenuMarkers();
                 btnMenuCreateTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
@@ -17441,7 +17458,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
+                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
                             });
                             ClearThemeMenuMarkers();
                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -18943,7 +18960,7 @@ namespace SATSuma
                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                         {
                                             lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + 3);
+                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
                                         });
                                         ClearThemeMenuMarkers();
                                         btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -19337,7 +19354,7 @@ namespace SATSuma
                 RJButton[] mainMenuButtonBordersToColor = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch, btnHideErrorMessage };
                 foreach (RJButton button in mainMenuButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 // block
@@ -19346,26 +19363,35 @@ namespace SATSuma
                 {
                     button.BorderRadius = radius;
                 }
+                btnNumericUpDownSubmittedBlockNumberUp.BorderRadius = 0;
+                btnNumericUpDownSubmittedBlockNumberDown.BorderRadius = 0;
 
                 // blocks
                 RJButton[] blocksButtonBordersToColor = { btnLookUpBlockList, btnNewer15Blocks, btnOlder15Blocks };
                 foreach (RJButton button in blocksButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
+                btnNumericUpDownBlockHeightToStartListFromUp.BorderRadius = 0;
+                btnNumericUpDownBlockHeightToStartListFromDown.BorderRadius = 0;
+
+                btnNonZeroBalancesUp.BorderRadius = 0;
+                btnNonZeroBalancesDown.BorderRadius = 0;
+                btnDerivationPathsUp.BorderRadius = 0;
+                btnDerivationPathsDown.BorderRadius = 0;
 
                 // address
                 RJButton[] addressButtonBordersToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions };
                 foreach (RJButton button in addressButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 // appearance & settings
                 RJButton[] appearanceButtonBordersToColor = { btnSetStartupScreen, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
                 foreach (RJButton button in appearanceButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 if (radius == 1)
@@ -19397,21 +19423,21 @@ namespace SATSuma
                 RJButton[] chartButtonBordersToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnPriceConverter, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
                 foreach (RJButton button in chartButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 // bookmarks
                 RJButton[] bookmarkButtonBordersToColor = { btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks };
                 foreach (RJButton button in bookmarkButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 // directory
                 RJButton[] directoryButtonBordersToColor = { btnDirectoryScrollDown, btnDirectoryScrollUp };
                 foreach (RJButton button in directoryButtonBordersToColor)
                 {
-                    button.BorderRadius = radius;
+                    button.BorderRadius = (int)(radius * UIScale);
                 }
 
                 // force refresh of panels
@@ -20004,7 +20030,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, lblMenuArrow };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = chartsBackgroundColor;
@@ -20170,7 +20196,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel92 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -21026,15 +21052,15 @@ namespace SATSuma
 
         private void ExpandPanelTimerVert_Tick(object sender, EventArgs e)
         {
-            currentHeightExpandingPanel += 16;
+            currentHeightExpandingPanel += (int)(16 * UIScale);
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = 112;
+                panelMaxHeight = (int)(112 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
-                panelMaxHeight = 280;
+                panelMaxHeight = (int)(280 * UIScale);
             }
             if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
             {
@@ -21070,7 +21096,7 @@ namespace SATSuma
 
         private void ShrinkPanelTimerHoriz_Tick(object sender, EventArgs e)
         {
-            currentWidthShrinkingPanel -= 12;
+            currentWidthShrinkingPanel -= (int)(12 * UIScale);
             if (panelToShrink == panel107)
             {
                 panelMinWidth = 0;
@@ -21091,7 +21117,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(774, panel107.Location.Y);
+                        panel107.Location = new Point((int)(774 * UIScale), panel107.Location.Y);
                     });
                 }
                 panelToShrink.Invalidate();
@@ -21108,7 +21134,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(panel107.Location.X + 12, panel107.Location.Y);
+                        panel107.Location = new Point(panel107.Location.X + (int)(12 * UIScale), panel107.Location.Y);
                     });
                 }
                 panelToShrink.Invalidate();
@@ -21117,15 +21143,15 @@ namespace SATSuma
 
         private void ExpandPanelTimerHoriz_Tick(object sender, EventArgs e)
         {
-            currentWidthExpandingPanel += 12;
+            currentWidthExpandingPanel += (int)(12 * UIScale);
             if (panelToExpand == panel107)
             {
-                panelMaxWidth = 394;
+                panelMaxWidth = (int)(394 * UIScale);
             }
 
             if (panelToExpand == panelErrorMessage)
             {
-                panelMaxWidth = 633;
+                panelMaxWidth = (int)(633 * UIScale);
             }
 
             if (currentWidthExpandingPanel >= panelMaxWidth) // expanding is complete
@@ -21139,7 +21165,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(378, panel107.Location.Y);
+                        panel107.Location = new Point((int)(378 * UIScale), panel107.Location.Y);
                     });
                 }
             }
@@ -21153,7 +21179,7 @@ namespace SATSuma
                 {
                     panel107.Invoke((MethodInvoker)delegate
                     {
-                        panel107.Location = new Point(panel107.Location.X - 12, panel107.Location.Y);
+                        panel107.Location = new Point(panel107.Location.X - (int)(12 * UIScale), panel107.Location.Y);
                     });
                 }
                 panelToExpand.Invalidate();
@@ -21287,66 +21313,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "ClearCurrencyMenuMarkers");
-            }
-        }
-        #endregion
-        #region clear all button markers on main menu
-        private void ClearMainMenuMarkers()
-        {
-            try
-            {
-                btnMenuBlockList.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuBlockList.BackgroundImage = null;
-                });
-                btnMenuBlock.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuBlock.BackgroundImage = null;
-                });
-                btnMenuAddress.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuAddress.BackgroundImage = null;
-                });
-                btnMenuTransaction.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuTransaction.BackgroundImage = null;
-                });
-                btnMenuXpub.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuXpub.BackgroundImage = null;
-                });
-                btnMenuCharts.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuCharts.BackgroundImage = null;
-                });
-                btnMenuBitcoinDashboard.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuBitcoinDashboard.BackgroundImage = null;
-                });
-                btnMenuLightningDashboard.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuLightningDashboard.BackgroundImage = null;
-                });
-                btnMenuBookmarks.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuBookmarks.BackgroundImage = null;
-                });
-                btnMenuDirectory.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuDirectory.BackgroundImage = null;
-                });
-                btnMenuSettings.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuSettings.BackgroundImage = null;
-                });
-                btnMenuCreateTheme.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuCreateTheme.BackgroundImage = null;
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ClearMainMenuMarkers");
             }
         }
         #endregion
@@ -21616,7 +21582,7 @@ namespace SATSuma
 
                 // Create a GraphicsPath object with rounded corners
                 System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-                int cornerRadius = 12;
+                int cornerRadius = (int)(12 * UIScale);
                 if (btnSquareCorners.Enabled == false)
                 {
                     cornerRadius = 1;
@@ -21625,17 +21591,21 @@ namespace SATSuma
                 {
                     if (btnPartialCorners.Enabled == false)
                     {
-                        cornerRadius = 6;
+                        cornerRadius = (int)(6 * UIScale);
                     }
                     else
                     {
                         if (btnRoundCorners.Enabled == false)
                         {
-                            cornerRadius = 12;
+                            cornerRadius = (int)(12 * UIScale);
                         }
                     }
                 }
                 if (panel.Name == "panelLoadingAnimationContainer")
+                {
+                    cornerRadius = (int)(12 * UIScale);
+                }
+                if (panel.Name == "panelLeftPanel")
                 {
                     cornerRadius = 12;
                 }
@@ -22005,7 +21975,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostnameForDisplay;
-                            lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -22046,7 +22016,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostnameForDisplay;
-                            lblSettingsOwnNodeStatus.Location = new Point(755 - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -22123,7 +22093,7 @@ namespace SATSuma
                                                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblSettingsSelectedNodeStatus.Text = "node offline";
-                                                    lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                                    lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                                                 });
                                                 lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                                                 {
@@ -22138,7 +22108,7 @@ namespace SATSuma
                                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                             {
                                                 lblSettingsSelectedNodeStatus.Text = "node offline";
-                                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                                             });
                                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                                             {
@@ -22177,7 +22147,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -22220,7 +22190,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                                lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -22260,7 +22230,7 @@ namespace SATSuma
                         lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                            lblSettingsSelectedNodeStatus.Location = new Point(755 - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                            lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                         });
                         lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -22437,12 +22407,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuBitcoinDashboard.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuBitcoinDashboard.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -22488,12 +22458,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuLightningDashboard.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuLightningDashboard.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -22539,12 +22509,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "charts";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuCharts.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuCharts.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuCharts.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = true;
@@ -22587,12 +22557,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "address";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuAddress.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuAddress.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddress.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuAddress.Enabled = false;
@@ -22639,12 +22609,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "block";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuBlock.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuBlock.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlock.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlock.Enabled = false;
@@ -22701,12 +22671,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "xpub";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuXpub.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuXpub.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuXpub.Location.Y);
                 });
                 btnMenuXpub.Enabled = false;
                 btnMenuBlock.Enabled = true;
@@ -22753,12 +22723,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "blocks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuBlockList.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuBlockList.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlockList.Location.Y);
                 });
                 btnMenuBlockList.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -22813,12 +22783,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "transaction";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuTransaction.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuTransaction.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuTransaction.Location.Y);
                 });
                 btnMenuTransaction.Enabled = false;
                 btnMenuXpub.Enabled = true;
@@ -22866,12 +22836,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "bookmarks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuBookmarks.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuBookmarks.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBookmarks.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -22921,12 +22891,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "directory";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuDirectory.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuDirectory.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDirectory.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -22975,12 +22945,12 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "settings";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + 3);
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + (int)(4 * UIScale));
                 });
-                ClearMainMenuMarkers();
-                btnMenuSettings.Invoke((MethodInvoker)delegate
+                lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    btnMenuSettings.BackgroundImage = Resources.marker;
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuSettings.Location.Y);
                 });
                 btnMenuXpub.Enabled = true;
                 btnMenuBlockList.Enabled = true;
@@ -23310,7 +23280,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + 3);
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(3 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnUSD.Invoke((MethodInvoker)delegate
@@ -23365,7 +23335,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + 3);
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(3 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnEUR.Invoke((MethodInvoker)delegate
@@ -23420,7 +23390,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + 3);
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(3 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnGBP.Invoke((MethodInvoker)delegate
@@ -23475,7 +23445,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + 3);
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(3 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnXAU.Invoke((MethodInvoker)delegate

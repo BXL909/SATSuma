@@ -1137,6 +1137,7 @@
             this.panelErrorMessage = new System.Windows.Forms.Panel();
             this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
+            this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
@@ -3720,13 +3721,14 @@
             // 
             // label109
             // 
+            this.label109.AutoSize = true;
             this.label109.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label109.ForeColor = System.Drawing.Color.Silver;
             this.label109.Location = new System.Drawing.Point(9, 23);
             this.label109.Name = "label109";
-            this.label109.Size = new System.Drawing.Size(130, 17);
+            this.label109.Size = new System.Drawing.Size(149, 17);
             this.label109.TabIndex = 6;
-            this.label109.Text = "Start at block height";
+            this.label109.Text = "Start list at block height";
             // 
             // panel45
             // 
@@ -7215,7 +7217,7 @@
             // btnMenuCreateTheme
             // 
             this.btnMenuCreateTheme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuCreateTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuCreateTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuCreateTheme.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuCreateTheme.FlatAppearance.BorderSize = 0;
             this.btnMenuCreateTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -9974,7 +9976,7 @@
             this.panelCurrency.Controls.Add(this.btnUSD);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(8, 374);
+            this.panelCurrency.Location = new System.Drawing.Point(8, 370);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
             this.panelCurrency.TabIndex = 159;
@@ -10003,7 +10005,7 @@
             // btnXAU
             // 
             this.btnXAU.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnXAU.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnXAU.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnXAU.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnXAU.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnXAU.FlatAppearance.BorderSize = 0;
@@ -10025,7 +10027,7 @@
             // btnUSD
             // 
             this.btnUSD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnUSD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnUSD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnUSD.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnUSD.Enabled = false;
             this.btnUSD.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -10048,7 +10050,7 @@
             // btnEUR
             // 
             this.btnEUR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnEUR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnEUR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnEUR.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnEUR.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnEUR.FlatAppearance.BorderSize = 0;
@@ -10070,7 +10072,7 @@
             // btnGBP
             // 
             this.btnGBP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnGBP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnGBP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGBP.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnGBP.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnGBP.FlatAppearance.BorderSize = 0;
@@ -11375,7 +11377,6 @@
             this.btnOpacityUp.TabIndex = 258;
             this.btnOpacityUp.TabStop = false;
             this.btnOpacityUp.Text = "▲";
-            this.btnOpacityUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnOpacityUp.TextColor = System.Drawing.Color.White;
             this.btnOpacityUp.UseVisualStyleBackColor = false;
             this.btnOpacityUp.Click += new System.EventHandler(this.BtnOpacityUp_Click);
@@ -11425,7 +11426,6 @@
             this.btnOpacityDown.TabIndex = 257;
             this.btnOpacityDown.TabStop = false;
             this.btnOpacityDown.Text = "▼";
-            this.btnOpacityDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnOpacityDown.TextColor = System.Drawing.Color.White;
             this.btnOpacityDown.UseVisualStyleBackColor = false;
             this.btnOpacityDown.Click += new System.EventHandler(this.BtnOpacityDown_Click);
@@ -11820,9 +11820,9 @@
             // 
             // pictureBoxCustomImage
             // 
-            this.pictureBoxCustomImage.BackgroundImage = global::SATSuma.Properties.Resources.CustomImage;
             this.pictureBoxCustomImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBoxCustomImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxCustomImage.Image = global::SATSuma.Properties.Resources.CustomImage;
             this.pictureBoxCustomImage.Location = new System.Drawing.Point(378, 99);
             this.pictureBoxCustomImage.Name = "pictureBoxCustomImage";
             this.pictureBoxCustomImage.Size = new System.Drawing.Size(56, 56);
@@ -16632,7 +16632,7 @@
             // btnMenuThemeCitadel
             // 
             this.btnMenuThemeCitadel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeCitadel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuThemeCitadel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuThemeCitadel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeCitadel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeCitadel.FlatAppearance.BorderSize = 0;
@@ -16654,7 +16654,7 @@
             // btnMenuThemePlanetBTC
             // 
             this.btnMenuThemePlanetBTC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemePlanetBTC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuThemePlanetBTC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuThemePlanetBTC.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemePlanetBTC.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemePlanetBTC.FlatAppearance.BorderSize = 0;
@@ -16676,7 +16676,7 @@
             // btnMenuThemeWhale
             // 
             this.btnMenuThemeWhale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeWhale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuThemeWhale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuThemeWhale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeWhale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeWhale.FlatAppearance.BorderSize = 0;
@@ -16771,7 +16771,7 @@
             // BtnMenuThemeGenesis
             // 
             this.BtnMenuThemeGenesis.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.BtnMenuThemeGenesis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnMenuThemeGenesis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BtnMenuThemeGenesis.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.BtnMenuThemeGenesis.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.BtnMenuThemeGenesis.FlatAppearance.BorderSize = 0;
@@ -16793,7 +16793,7 @@
             // btnMenuThemeBTCdir
             // 
             this.btnMenuThemeBTCdir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeBTCdir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuThemeBTCdir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuThemeBTCdir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeBTCdir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeBTCdir.FlatAppearance.BorderSize = 0;
@@ -16815,7 +16815,7 @@
             // btnMenuThemeSatsuma
             // 
             this.btnMenuThemeSatsuma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeSatsuma.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuThemeSatsuma.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuThemeSatsuma.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuThemeSatsuma.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuThemeSatsuma.FlatAppearance.BorderSize = 0;
@@ -16878,6 +16878,7 @@
             // 
             this.btnCurrency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
             this.btnCurrency.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCurrency.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnCurrency.BorderColor = System.Drawing.Color.Empty;
             this.btnCurrency.BorderRadius = 0;
             this.btnCurrency.BorderSize = 0;
@@ -16893,7 +16894,7 @@
             this.btnCurrency.Size = new System.Drawing.Size(122, 24);
             this.btnCurrency.TabIndex = 1;
             this.btnCurrency.TabStop = false;
-            this.btnCurrency.Text = "   currency $";
+            this.btnCurrency.Text = "   currency $  ▼";
             this.btnCurrency.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCurrency.TextColor = System.Drawing.Color.White;
             this.btnCurrency.UseVisualStyleBackColor = false;
@@ -17265,6 +17266,7 @@
             // 
             this.btnThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
             this.btnThemeMenu.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnThemeMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnThemeMenu.BorderColor = System.Drawing.Color.Empty;
             this.btnThemeMenu.BorderRadius = 0;
             this.btnThemeMenu.BorderSize = 0;
@@ -17280,7 +17282,7 @@
             this.btnThemeMenu.Size = new System.Drawing.Size(122, 24);
             this.btnThemeMenu.TabIndex = 1;
             this.btnThemeMenu.TabStop = false;
-            this.btnThemeMenu.Text = "   theme";
+            this.btnThemeMenu.Text = "   theme  ▼";
             this.btnThemeMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnThemeMenu.TextColor = System.Drawing.Color.White;
             this.btnThemeMenu.UseVisualStyleBackColor = false;
@@ -17394,6 +17396,11 @@
             this.btnHideErrorMessage.UseVisualStyleBackColor = false;
             this.btnHideErrorMessage.Click += new System.EventHandler(this.HideErrorMessage_Click);
             // 
+            // timerNodeStatusLight
+            // 
+            this.timerNodeStatusLight.Interval = 1000;
+            this.timerNodeStatusLight.Tick += new System.EventHandler(this.timerNodeStatusLight_Tick);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -17403,10 +17410,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
@@ -17489,6 +17496,7 @@
             this.panelBlockList.ResumeLayout(false);
             this.panelBlockList.PerformLayout();
             this.panel94.ResumeLayout(false);
+            this.panel94.PerformLayout();
             this.panel13.ResumeLayout(false);
             this.panel13.PerformLayout();
             this.panelBlockHeightToStartFromContainer.ResumeLayout(false);
@@ -18848,6 +18856,7 @@
         private System.Windows.Forms.Label label298;
         private System.Windows.Forms.Label lblMenuArrow;
         private CustomControls.RJControls.RJButton btnThemeMenu;
+        private System.Windows.Forms.Timer timerNodeStatusLight;
     }
 }
 

@@ -38,7 +38,7 @@
             this.ClientSize = new System.Drawing.Size(940, 754);
             this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "overlayForm";
             this.Opacity = 0.5D;
             this.Text = "overlayForm";

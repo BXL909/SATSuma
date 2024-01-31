@@ -94,7 +94,6 @@
             this.btnHelpTextUp.TabIndex = 209;
             this.btnHelpTextUp.TabStop = false;
             this.btnHelpTextUp.Text = "▲";
-            this.btnHelpTextUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelpTextUp.TextColor = System.Drawing.Color.White;
             this.btnHelpTextUp.UseVisualStyleBackColor = false;
             this.btnHelpTextUp.Click += new System.EventHandler(this.BtnHelpTextUp_Click);
@@ -120,7 +119,6 @@
             this.btnHelpTextDown.TabIndex = 207;
             this.btnHelpTextDown.TabStop = false;
             this.btnHelpTextDown.Text = "▼";
-            this.btnHelpTextDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnHelpTextDown.TextColor = System.Drawing.Color.White;
             this.btnHelpTextDown.UseVisualStyleBackColor = false;
             this.btnHelpTextDown.Click += new System.EventHandler(this.BtnHelpTextDown_Click);
@@ -146,7 +144,6 @@
             this.btnExit.Size = new System.Drawing.Size(24, 24);
             this.btnExit.TabIndex = 202;
             this.btnExit.Text = "❌";
-            this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.TextColor = System.Drawing.Color.White;
             this.btnExit.UseVisualStyleBackColor = false;
             // 
@@ -186,7 +183,7 @@
             // 
             this.comboBoxDocumentation.BackColor = System.Drawing.Color.Transparent;
             this.comboBoxDocumentation.BackgroundImage = global::SATSuma.Properties.Resources.helpselectDropdown;
-            this.comboBoxDocumentation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.comboBoxDocumentation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.comboBoxDocumentation.BorderColor = System.Drawing.Color.Transparent;
             this.comboBoxDocumentation.BorderSize = 0;
             this.comboBoxDocumentation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;

@@ -113,7 +113,6 @@
             this.btnExit.TabIndex = 151;
             this.btnExit.TabStop = false;
             this.btnExit.Text = "❌";
-            this.btnExit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnExit.TextColor = System.Drawing.Color.White;
             this.btnExit.UseVisualStyleBackColor = false;
             // 

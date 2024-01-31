@@ -26,14 +26,11 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* tidy left panel sub-menus
-* left panel corners too rounded. Need to ingore uiscale
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* activity on node light when accessing data
-* scaling of help, about screens and overlays
 * style all the newly added elements
-* up/down buttons on settings and theme screens should be square
+* themes not being applied fully sometimes.
+* scale the directory
 * test
 */
 
@@ -2129,6 +2126,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/mining/hashrate/3d");
                 var data = JObject.Parse(response);
                 string currentHashrate = "";
@@ -2156,6 +2154,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/fees/recommended");
                 var data = JObject.Parse(response);
                 if (data["fastestFee"] != null && data["halfHourFee"] != null && data["hourFee"] != null && data["economyFee"] != null && data["minimumFee"] != null)
@@ -2184,6 +2183,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/difficulty-adjustment");
                 var data = JObject.Parse(response);
                 if (data["progressPercent"] != null && data["difficultyChange"] != null && data["estimatedRetargetDate"] != null && data["remainingBlocks"] != null && data["remainingTime"] != null && data["previousRetarget"] != null && data["nextRetargetHeight"] != null && data["timeAvg"] != null && data["timeOffset"] != null)
@@ -2299,6 +2299,7 @@ namespace SATSuma
             {
 
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "mempool");
                 if (testNet)
                 {
@@ -2376,6 +2377,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/liquidity");
                 var data = JArray.Parse(response);
 
@@ -2459,6 +2461,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/connectivity");
                 var data = JArray.Parse(response);
 
@@ -2531,6 +2534,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/lightning/nodes/isp-ranking");
                 var data = JObject.Parse(response);
 
@@ -2621,6 +2625,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
+                LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/lightning/statistics/latest");
                 var data = JObject.Parse(response);
                 if (data["latest"]["channel_count"] != null && data["latest"]["node_count"] != null && data["latest"]["total_capacity"] != null && data["latest"]["tor_nodes"] != null && data["latest"]["clearnet_nodes"] != null && data["latest"]["unannounced_nodes"] != null && data["latest"]["avg_capacity"] != null && data["latest"]["avg_fee_rate"] != null && data["latest"]["avg_base_fee_mtokens"] != null && data["latest"]["med_capacity"] != null && data["latest"]["med_fee_rate"] != null && data["latest"]["med_basee_fee_mtokens"] != null && data["latest"]["clearnet_tor_nodes"] != null)
@@ -3036,6 +3041,7 @@ namespace SATSuma
                 var request = "address/" + addressString;
                 var RequestURL = NodeURL + request;
                 var client = new HttpClient();
+                LightUpNodeLight();
                 var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                 if (!response.IsSuccessStatusCode)
                 {
@@ -3320,7 +3326,7 @@ namespace SATSuma
                     rowsReturnedByAddressTransactionsAPI = 10;
                     panelOwnNodeAddressTXInfo.Visible = true;
                 }
-                
+                LightUpNodeLight();
                 var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId);
                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
                 List<string> txIds = transactions.Select(t => t.Txid).ToList();
@@ -4026,7 +4032,7 @@ namespace SATSuma
                     BtnViewTransactionFromAddress.Enabled = false;
                     BtnViewBlockFromAddress.Enabled = false;
                     textboxSubmittedAddress.Enabled = false;
-                    panelLeftPanel.Enabled = false;
+                    //panelLeftPanel.Enabled = false;
                 }
                 else
                 {
@@ -4039,7 +4045,7 @@ namespace SATSuma
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                     BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
-                    panelLeftPanel.Enabled = true;
+                    //panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -4180,6 +4186,7 @@ namespace SATSuma
                     using (WebClient client = new WebClient())
                     {
                         string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
+                        LightUpNodeLight();
                         string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
                         lblBlockHash.Invoke((MethodInvoker)delegate
                         {
@@ -4211,6 +4218,7 @@ namespace SATSuma
             {
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableBlockButtons("disable"); // disable buttons during operation
+                LightUpNodeLight();
                 var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
                 if (!string.IsNullOrEmpty(blocksJson))
                 {
@@ -4357,6 +4365,7 @@ namespace SATSuma
                 }
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableBlockButtons("disable"); // disable buttons during operation
+                LightUpNodeLight();
                 var BlockTransactionsJson = await _transactionsForBlockService.GetTransactionsForBlockAsync(blockHash, lastSeenBlockTransaction);
                 if (!string.IsNullOrEmpty(BlockTransactionsJson))
                 {
@@ -4788,7 +4797,7 @@ namespace SATSuma
                     btnNumericUpDownSubmittedBlockNumberDown.Enabled = false;
                     btnNextBlock.Enabled = false;
                     btnPreviousBlock.Enabled = false;
-                    panelLeftPanel.Enabled = false;
+                    //panelLeftPanel.Enabled = false;
                     btnLookUpBlock.Enabled = false;
                 }
                 else
@@ -4802,7 +4811,7 @@ namespace SATSuma
                     btnNumericUpDownSubmittedBlockNumberDown.Enabled = btnNumericUpDownSubmittedBlockNumberDownWasEnabled;
                     btnNumericUpDownSubmittedBlockNumberUp.Enabled = btnNumericUpDownSubmittedBlockNumberUpWasEnabled;
                     btnLookUpBlock.Enabled = btnLookUpBlockWasEnabled;
-                    panelLeftPanel.Enabled = true;
+                    //panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -5015,6 +5024,7 @@ namespace SATSuma
             DisableEnableTransactionButtons("disable"); // disable buttons during operation
             string url = NodeURL + "tx/" + transactionId;
             using HttpClient client = new HttpClient();
+            LightUpNodeLight();
             HttpResponseMessage response = await client.GetAsync(url);
             ToggleLoadingAnimation("disable"); // start the loading animation
             DisableEnableTransactionButtons("enable"); // disable buttons during operation
@@ -5046,6 +5056,7 @@ namespace SATSuma
                 btnViewAddressFromTXOutput.Visible = false;
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableTransactionButtons("disable"); // disable buttons during operation
+                LightUpNodeLight();
                 var TransactionJson = await _transactionService.GetTransactionAsync(submittedTransactionID);
                 if (!string.IsNullOrEmpty(TransactionJson))
                 {
@@ -6137,7 +6148,7 @@ namespace SATSuma
                     btnTransactionOutputsDown.Enabled = false;
                     btnViewAddressFromTXInput.Enabled = false;
                     btnViewAddressFromTXOutput.Enabled = false;
-                    panelLeftPanel.Enabled = false;
+                    //panelLeftPanel.Enabled = false;
                 }
                 else
                 {
@@ -6149,7 +6160,7 @@ namespace SATSuma
                     btnViewAddressFromTXInput.Enabled = btnViewAddressFromTXInputWasEnabled;
                     btnViewAddressFromTXOutput.Enabled = btnViewAddressFromTXOutputWasEnabled;
                     // Set the cursor position to the end of the string
-                    panelLeftPanel.Enabled = true;
+                    //panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -6279,6 +6290,7 @@ namespace SATSuma
                 ToggleLoadingAnimation("enable"); // start the loading animation
                 DisableEnableBlockListButtons("disable"); // disable buttons during operation
 
+                LightUpNodeLight();
                 var blocksJson = await _blockService.GetBlockDataAsync(lastSeenBlockNumber);
                 if (!string.IsNullOrEmpty(blocksJson))
                 {
@@ -6435,11 +6447,11 @@ namespace SATSuma
                         }
                         lblBlockListPositionInList.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListPositionInList.Text = "Blocks " + blocklist.First() + " - " + blocklist.Last() + " of " + lblBlockNumber.Text;
+                            lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
                         });
                         label6.Invoke((MethodInvoker)delegate
                         {
-                            label6.Text = "Blocks " + blocklist.First() + " - " + blocklist.Last();
+                            label6.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First();
                         });
                     }
                     else
@@ -6708,6 +6720,7 @@ namespace SATSuma
                             // display block hash
                             using (WebClient client = new WebClient())
                             {
+                                LightUpNodeLight();
                                 string BlockHashURL = NodeURL + "block-height/" + item.SubItems[0].Text;
                                 string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
                                 if (!string.IsNullOrEmpty(BlockHash))
@@ -6722,6 +6735,7 @@ namespace SATSuma
                             string blockNumber = item.SubItems[0].Text;
                             ToggleLoadingAnimation("enable"); // start the loading animation
                             DisableEnableBlockListButtons("disable"); // disable buttons during operation
+                            LightUpNodeLight();
                             var blocksJson = await _blockService.GetBlockDataAsync(blockNumber);
                             if (!string.IsNullOrEmpty(blocksJson))
                             {
@@ -7025,7 +7039,7 @@ namespace SATSuma
                         btnNumericUpDownBlockHeightToStartListFromUp.Enabled = false;
                         btnNumericUpDownBlockHeightToStartListFromDown.Enabled = false;
                         btnLookUpBlockList.Enabled = false;
-                        panelLeftPanel.Enabled = false;
+                        //panelLeftPanel.Enabled = false;
                     }
                     else
                     {
@@ -7037,7 +7051,7 @@ namespace SATSuma
                         btnNumericUpDownBlockHeightToStartListFromUp.Enabled = btnNumericUpDownBlockHeightToStartListFromUpWasEnabled;
                         btnNumericUpDownBlockHeightToStartListFromDown.Enabled = btnNumericUpDownBlockHeightToStartListFromDownWasEnabled;
                         btnLookUpBlockList.Enabled = btnLookUpBlockListWasEnabled;
-                        panelLeftPanel.Enabled = true;
+                        //panelLeftPanel.Enabled = true;
                     }
                 }
             }
@@ -7927,6 +7941,7 @@ namespace SATSuma
                         var request = "address/" + address;
                         var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
                         var client = new HttpClient();
+                        LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
@@ -7959,6 +7974,7 @@ namespace SATSuma
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
                             _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubScreenOwnNodeURL.Text);
+                            LightUpNodeLight();
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
@@ -8176,6 +8192,7 @@ namespace SATSuma
                         var request = "address/" + address;
                         var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
                         var client = new HttpClient();
+                        LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
@@ -8208,6 +8225,7 @@ namespace SATSuma
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
                             _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubScreenOwnNodeURL.Text);
+                            LightUpNodeLight();
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
@@ -8423,6 +8441,7 @@ namespace SATSuma
                         var request = "address/" + address;
                         var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
                         var client = new HttpClient();
+                        LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
@@ -8455,6 +8474,7 @@ namespace SATSuma
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
                             _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubScreenOwnNodeURL.Text);
+                            LightUpNodeLight();
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
@@ -8676,6 +8696,7 @@ namespace SATSuma
                         var request = "address/" + address;
                         var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
                         var client = new HttpClient();
+                        LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
                         if (!response.IsSuccessStatusCode)
                         {
@@ -8708,6 +8729,7 @@ namespace SATSuma
                         while (txProcessedForThisAddress != totalTXForAddress)
                         {
                             _transactionsForXpubAddressService = new TransactionsForXpubAddressService(textBoxXpubScreenOwnNodeURL.Text);
+                            LightUpNodeLight();
                             var transactionsJson = await _transactionsForXpubAddressService.GetTransactionsForXpubAddressAsync(Convert.ToString(address), "chain", lastSeenTxId);
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
@@ -9350,7 +9372,7 @@ namespace SATSuma
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
-
+                LightUpNodeLight();
                 var PoolRankingDataJson = await _poolsRankingDataService.GetPoolsRankingDataAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(PoolRankingDataJson))
                 {
@@ -9508,6 +9530,7 @@ namespace SATSuma
                 HttpClient client = new HttpClient();
 
                 string url = NodeURL + "v1/mining/blocks/fee-rates/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -9614,6 +9637,7 @@ namespace SATSuma
                 HttpClient client = new HttpClient();
 
                 string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -9711,7 +9735,7 @@ namespace SATSuma
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
-
+                LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(HashrateAndDifficultyJson))
@@ -9808,7 +9832,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Hashrate (terrahash per second) - " + chartPeriod + " (log scale)", size: 13, bold: true);
-
+                LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(HashrateAndDifficultyJson))
@@ -9934,6 +9958,7 @@ namespace SATSuma
                 HttpClient client = new HttpClient();
 
                 string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -10029,6 +10054,7 @@ namespace SATSuma
                 HttpClient client = new HttpClient();
 
                 string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -10127,6 +10153,7 @@ namespace SATSuma
                 // Fetch data from the API
                 string url = NodeURL + "v1/lightning/nodes/countries";
                 HttpClient client = new HttpClient();
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -10209,6 +10236,7 @@ namespace SATSuma
 
                 HttpClient client = new HttpClient();
                 string url = NodeURL + "v1/mining/blocks/rewards/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -10295,6 +10323,7 @@ namespace SATSuma
 
                 HttpClient client = new HttpClient();
                 string url = NodeURL + "v1/mining/blocks/fees/" + chartPeriod;
+                LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
@@ -10387,6 +10416,7 @@ namespace SATSuma
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates/hashrates/difficulties
+                LightUpNodeLight();
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(HashrateAndDifficultyJson))
                 {
@@ -10480,7 +10510,7 @@ namespace SATSuma
                 // clear any previous graph
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Difficulty - " + chartPeriod + " (log scale)", size: 13, bold: true);
-
+                LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(HashrateAndDifficultyJson))
@@ -10602,7 +10632,6 @@ namespace SATSuma
                 ClearAllChartData();
                 formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, bold: true);
                 PrepareLinearScaleChart();
-
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(UniqueAddressesDataJson))
@@ -11567,7 +11596,7 @@ namespace SATSuma
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
-
+                LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var BlockSizeAndWeightJson = await _blockSizeAndWeightService.GetBlockSizeAndWeightServiceAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(BlockSizeAndWeightJson))
@@ -16461,7 +16490,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (GBP)";
+                            btnCurrency.Text = "   currency (GBP)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
@@ -16480,7 +16509,7 @@ namespace SATSuma
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (USD)";
+                            btnCurrency.Text = "   currency (USD)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
@@ -16499,7 +16528,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (EUR)";
+                            btnCurrency.Text = "   currency (EUR)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
@@ -16518,7 +16547,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = false;
-                            btnCurrency.Text = "   currency (XAU)";
+                            btnCurrency.Text = "   currency (XAU)  ▼";
                         }
                         #endregion
                         #region restore offline mode settings
@@ -19379,6 +19408,12 @@ namespace SATSuma
                 btnNonZeroBalancesDown.BorderRadius = 0;
                 btnDerivationPathsUp.BorderRadius = 0;
                 btnDerivationPathsDown.BorderRadius = 0;
+                btnOpacityUp.BorderRadius = 0;
+                btnOpacityDown.BorderRadius = 0;
+                btnDataRefreshPeriodUp.BorderRadius = 0;
+                btnDataRefreshPeriodDown.BorderRadius = 0;
+                btnThemeMenu.BorderRadius = 0;
+                btnCurrency.BorderRadius = 0;
 
                 // address
                 RJButton[] addressButtonBordersToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions };
@@ -23088,14 +23123,15 @@ namespace SATSuma
             try
             {
                 // display semi-transparent overlay form
-                Form overlay = new overlayForm
+                Form overlay = new overlayForm(UIScale)
                 {
                     Owner = this, // Set the parent window as the owner of the modal window
                     StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = Color.Black, // Set the background color to black for the overlay
                     Opacity = 0.5, // Set the opacity to 50%
-                };
+                    //UIScaleForOverlay = UIScale
+            };
                 overlay.StartPosition = FormStartPosition.CenterParent;
                 // Calculate the overlay form's location to place it in the center of the parent form
                 overlay.StartPosition = FormStartPosition.Manual;
@@ -23104,10 +23140,11 @@ namespace SATSuma
                 int overlayX = parentCenterX - overlay.Width / 2;
                 int overlayY = parentCenterY - overlay.Height / 2;
                 overlay.Location = new Point(overlayX, overlayY);
+                
                 overlay.Show(this);
 
 
-                Form frm = new HelpScreen
+                Form frm = new HelpScreen(UIScale)
                     {
                         Owner = this, // Set the parent window as the owner of the modal window
                         StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
@@ -23142,7 +23179,7 @@ namespace SATSuma
             try
             {
                 // display semi-transparent overlay form
-                Form overlay = new overlayForm
+                Form overlay = new overlayForm(UIScale)
                 {
                     Owner = this, // Set the parent window as the owner of the modal window
                     StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
@@ -23161,7 +23198,7 @@ namespace SATSuma
                 overlay.Show(this);
                 
                 // display about screen on top of the overlay
-                Form frm = new Splash
+                Form frm = new Splash(UIScale)
                     {
                         Owner = this, // Set the parent window as the owner of the modal window
                         StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
@@ -23275,7 +23312,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (USD)";
+                btnCurrency.Text = "   currency (USD)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23330,7 +23367,7 @@ namespace SATSuma
                 btnEUR.Enabled = false;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (EUR)";
+                btnCurrency.Text = "   currency (EUR)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23385,7 +23422,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = false;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (GBP)";
+                btnCurrency.Text = "   currency (GBP)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -23440,7 +23477,7 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = false;
-                btnCurrency.Text = "   currency (XAU)";
+                btnCurrency.Text = "   currency (XAU)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -25636,6 +25673,24 @@ namespace SATSuma
             {
                 HandleException(ex, "btnBiggerScale_Click");
             }
+        }
+
+        private void LightUpNodeLight()
+        {
+            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+            {
+                headerSelectedNodeStatusLight.ForeColor = Color.Lime;
+            });
+            timerNodeStatusLight.Start();
+        }
+
+        private void timerNodeStatusLight_Tick(object sender, EventArgs e)
+        {
+            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+            {
+                headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
+            });
+            //timerNodeStatusLight.Stop();
         }
     }
 }                

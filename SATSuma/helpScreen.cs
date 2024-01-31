@@ -1,10 +1,12 @@
 ﻿#region using
+using CustomControls.RJControls;
 using ScottPlot.Palettes;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Forms;
 
 #endregion
@@ -43,9 +45,100 @@ namespace SATSuma
         private bool linkClicked = false; // used to supress multiple events (and multiple browser tabs) when opening external link in default browser
         #endregion
         #region initialize
-        public HelpScreen()
+        public HelpScreen(double UIScale)
         {
             InitializeComponent();
+
+            #region UIScale
+            storeOriginalDimensions(this);
+
+            btnScaleApply(this);
+
+            void btnScaleApply(Control parentControl)
+            {
+                this.Width = (int)(474 * UIScale);
+                this.Height = (int)(588 * UIScale);
+
+                try
+                {
+                    // Resize each control within the provided parentControl
+                    foreach (Control control in parentControl.Controls)
+                    {
+                        System.Windows.Size originalSize = ((Tuple<System.Windows.Size, Font>)control.Tag).Item1;
+
+                        // apply a scaled radius to buttons to keep them fully rounded
+                        if (control.GetType() == typeof(RJButton))
+                        {
+                            RJButton rjButton = (RJButton)control;
+                            // Set the borderRadius to a different value for each RJButton
+                            rjButton.BorderRadius = (int)(11 * UIScale);
+                        }
+
+                        control.Width = (int)(originalSize.Width * UIScale);
+                        control.Left = (int)(control.Left * UIScale);
+                        control.Top = (int)(control.Top * UIScale);
+                        control.Height = (int)(originalSize.Height * UIScale);
+
+                        // Resize font size
+                        if (control.Font != null)
+                        {
+                            Font originalControlFont = ((Tuple<System.Windows.Size, Font>)control.Tag).Item2;
+                            float scaledFontSize = (float)(originalControlFont.Size * UIScale);
+                            control.Font = new Font(originalControlFont.FontFamily, scaledFontSize - 1, originalControlFont.Style);
+                        }
+
+                        // Recursively handle controls within panels
+                        if (control.HasChildren)
+                        {
+                            btnScaleApply(control);
+                        }
+                    }
+
+                    // Trigger layout update for child controls
+                    parentControl.PerformLayout();
+                    parentControl.Invalidate();
+                }
+                catch (Exception ex)
+                {
+                    //HandleException(ex, "btnScaleApply");
+                }
+            }
+            #region apply UIScale to all controls
+            #endregion
+
+            #region restore UIScale
+
+
+            void storeOriginalDimensions(Control parentControl)
+            {
+                try
+                {
+                    foreach (Control control in parentControl.Controls)
+                    {
+                        control.Tag = new System.Windows.Size(control.Width, control.Height);
+
+                        // Store the original font size of each control
+                        if (control.Font != null)
+                        {
+                            control.Tag = new Tuple<System.Windows.Size, Font>((System.Windows.Size)control.Tag, control.Font);
+                        }
+
+                        // Recursively handle controls within panels
+                        if (control.HasChildren)
+                        {
+                            storeOriginalDimensions(control);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //        HandleException(ex, "storeOriginalDimensions");
+                }
+            }
+            #endregion
+
+            #endregion
+
             panelComboBoxDocumentationContainer.Paint += Panel_Paint;
             //panel1.Paint += Panel_Paint;
             #region rounded form
@@ -67,6 +160,8 @@ namespace SATSuma
 
         private void HelpScreen_Load(object sender, EventArgs e)
         {
+
+
             lblHelpHeading.ForeColor = HeadingTextColor;
             btnExit.ForeColor = ButtonTextColor;
             btnHelpTextUp.ForeColor = ButtonTextColor;
@@ -487,7 +582,7 @@ namespace SATSuma
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error opening link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Windows.Forms.MessageBox.Show("Error opening link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 // Set the linkClicked flag to true to avoid multiple tabs for a single click
@@ -504,5 +599,8 @@ namespace SATSuma
             linkClicked = false;
             externalLinksTimer.Stop();
         }
+
+
+
     }
 }

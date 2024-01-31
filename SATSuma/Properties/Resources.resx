@@ -136,6 +136,9 @@
   <data name="titleBGLongerOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SatsumaAnimatedWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SatsumaAnimatedWhite.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="numericDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\numericDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -202,7 +205,7 @@
   <data name="Satsuma3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Satsuma3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SatsumaAnimatedWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SatsumaAnimatedWhite.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CustomImage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

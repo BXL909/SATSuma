@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 
@@ -15,6 +16,8 @@ namespace SATSuma
 {
     public partial class overlayForm : Form
     {
+
+
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -27,7 +30,10 @@ namespace SATSuma
            int nHeightEllipse // width of ellipse
          );
         #endregion
-        public overlayForm()
+
+       // public double UIScaleForOverlay { get; set; }
+
+        public overlayForm(double UIScale)
         {
             InitializeComponent();
             // Set the form's appearance
@@ -35,11 +41,11 @@ namespace SATSuma
             this.Padding = new Padding(1);
             // Retrieve the current DPI scale factor
             float scale = this.CreateGraphics().DpiX / 96.0f;
-            
 
-                // Set the size of the overlay form to match the parent form, considering the DPI scaling
-                this.Width = (int)(940 * scale);
-                this.Height = (int)(754 * scale);
+            //UIScaleForOverlay = UIScale;
+
+            this.Width = (int)(940 * scale * UIScale);
+            this.Height = (int)(754 * scale * UIScale);
 
             // Create and set the rounded region
             GraphicsPath path = RoundedRectangle.Create(0, 0, Width, Height, 30);

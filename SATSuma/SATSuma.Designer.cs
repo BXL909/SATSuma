@@ -652,11 +652,12 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
-            this.panel111 = new System.Windows.Forms.Panel();
-            this.label298 = new System.Windows.Forms.Label();
+            this.panelSettingsUIScale = new System.Windows.Forms.Panel();
+            this.panelSettingsUIScaleContainer = new System.Windows.Forms.Panel();
+            this.btnSmallerScale = new CustomControls.RJControls.RJButton();
             this.lblScaleAmount = new System.Windows.Forms.Label();
             this.btnBiggerScale = new CustomControls.RJControls.RJButton();
-            this.btnSmallerScale = new CustomControls.RJControls.RJButton();
+            this.label298 = new System.Windows.Forms.Label();
             this.panel112 = new System.Windows.Forms.Panel();
             this.label169 = new System.Windows.Forms.Label();
             this.panel106 = new System.Windows.Forms.Panel();
@@ -676,7 +677,6 @@
             this.panel21 = new System.Windows.Forms.Panel();
             this.panelComboBoxStartupScreenContainer = new System.Windows.Forms.Panel();
             this.comboBoxStartupScreen = new CustomControls.RJControls.RJComboBox();
-            this.btnSetStartupScreen = new CustomControls.RJControls.RJButton();
             this.label199 = new System.Windows.Forms.Label();
             this.panel54 = new System.Windows.Forms.Panel();
             this.label200 = new System.Windows.Forms.Label();
@@ -1260,7 +1260,8 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
-            this.panel111.SuspendLayout();
+            this.panelSettingsUIScale.SuspendLayout();
+            this.panelSettingsUIScaleContainer.SuspendLayout();
             this.panel112.SuspendLayout();
             this.panel106.SuspendLayout();
             this.panel108.SuspendLayout();
@@ -8223,7 +8224,7 @@
             this.btnDerivationPathsUp.Location = new System.Drawing.Point(24, 2);
             this.btnDerivationPathsUp.Name = "btnDerivationPathsUp";
             this.btnDerivationPathsUp.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnDerivationPathsUp.Size = new System.Drawing.Size(18, 18);
+            this.btnDerivationPathsUp.Size = new System.Drawing.Size(18, 22);
             this.btnDerivationPathsUp.TabIndex = 262;
             this.btnDerivationPathsUp.TabStop = false;
             this.btnDerivationPathsUp.Text = "▲";
@@ -8277,7 +8278,7 @@
             this.btnDerivationPathsDown.Location = new System.Drawing.Point(42, 2);
             this.btnDerivationPathsDown.Name = "btnDerivationPathsDown";
             this.btnDerivationPathsDown.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnDerivationPathsDown.Size = new System.Drawing.Size(18, 18);
+            this.btnDerivationPathsDown.Size = new System.Drawing.Size(18, 22);
             this.btnDerivationPathsDown.TabIndex = 261;
             this.btnDerivationPathsDown.TabStop = false;
             this.btnDerivationPathsDown.Text = "▼";
@@ -8313,7 +8314,7 @@
             this.btnNonZeroBalancesUp.Location = new System.Drawing.Point(25, 2);
             this.btnNonZeroBalancesUp.Name = "btnNonZeroBalancesUp";
             this.btnNonZeroBalancesUp.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnNonZeroBalancesUp.Size = new System.Drawing.Size(18, 18);
+            this.btnNonZeroBalancesUp.Size = new System.Drawing.Size(18, 22);
             this.btnNonZeroBalancesUp.TabIndex = 260;
             this.btnNonZeroBalancesUp.TabStop = false;
             this.btnNonZeroBalancesUp.Text = "▲";
@@ -8367,7 +8368,7 @@
             this.btnNonZeroBalancesDown.Location = new System.Drawing.Point(43, 2);
             this.btnNonZeroBalancesDown.Name = "btnNonZeroBalancesDown";
             this.btnNonZeroBalancesDown.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnNonZeroBalancesDown.Size = new System.Drawing.Size(18, 18);
+            this.btnNonZeroBalancesDown.Size = new System.Drawing.Size(18, 22);
             this.btnNonZeroBalancesDown.TabIndex = 259;
             this.btnNonZeroBalancesDown.TabStop = false;
             this.btnNonZeroBalancesDown.Text = "▼";
@@ -10105,7 +10106,7 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
-            this.panelSettings.Controls.Add(this.panel111);
+            this.panelSettings.Controls.Add(this.panelSettingsUIScale);
             this.panelSettings.Controls.Add(this.panel106);
             this.panelSettings.Controls.Add(this.panel76);
             this.panelSettings.Controls.Add(this.panel21);
@@ -10119,18 +10120,86 @@
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
             // 
-            // panel111
+            // panelSettingsUIScale
             // 
-            this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panel111.Controls.Add(this.label298);
-            this.panel111.Controls.Add(this.lblScaleAmount);
-            this.panel111.Controls.Add(this.btnBiggerScale);
-            this.panel111.Controls.Add(this.btnSmallerScale);
-            this.panel111.Controls.Add(this.panel112);
-            this.panel111.Location = new System.Drawing.Point(575, 319);
-            this.panel111.Name = "panel111";
-            this.panel111.Size = new System.Drawing.Size(180, 54);
-            this.panel111.TabIndex = 257;
+            this.panelSettingsUIScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panelSettingsUIScale.Controls.Add(this.panelSettingsUIScaleContainer);
+            this.panelSettingsUIScale.Controls.Add(this.label298);
+            this.panelSettingsUIScale.Controls.Add(this.panel112);
+            this.panelSettingsUIScale.Location = new System.Drawing.Point(575, 319);
+            this.panelSettingsUIScale.Name = "panelSettingsUIScale";
+            this.panelSettingsUIScale.Size = new System.Drawing.Size(180, 54);
+            this.panelSettingsUIScale.TabIndex = 257;
+            // 
+            // panelSettingsUIScaleContainer
+            // 
+            this.panelSettingsUIScaleContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panelSettingsUIScaleContainer.Controls.Add(this.btnSmallerScale);
+            this.panelSettingsUIScaleContainer.Controls.Add(this.lblScaleAmount);
+            this.panelSettingsUIScaleContainer.Controls.Add(this.btnBiggerScale);
+            this.panelSettingsUIScaleContainer.Location = new System.Drawing.Point(69, 27);
+            this.panelSettingsUIScaleContainer.Name = "panelSettingsUIScaleContainer";
+            this.panelSettingsUIScaleContainer.Size = new System.Drawing.Size(95, 22);
+            this.panelSettingsUIScaleContainer.TabIndex = 259;
+            // 
+            // btnSmallerScale
+            // 
+            this.btnSmallerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSmallerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnSmallerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnSmallerScale.BorderRadius = 0;
+            this.btnSmallerScale.BorderSize = 0;
+            this.btnSmallerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSmallerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnSmallerScale.FlatAppearance.BorderSize = 0;
+            this.btnSmallerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSmallerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSmallerScale.ForeColor = System.Drawing.Color.White;
+            this.btnSmallerScale.Location = new System.Drawing.Point(6, 0);
+            this.btnSmallerScale.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSmallerScale.Name = "btnSmallerScale";
+            this.btnSmallerScale.Size = new System.Drawing.Size(22, 22);
+            this.btnSmallerScale.TabIndex = 256;
+            this.btnSmallerScale.TabStop = false;
+            this.btnSmallerScale.Text = "➖";
+            this.btnSmallerScale.TextColor = System.Drawing.Color.White;
+            this.btnSmallerScale.UseVisualStyleBackColor = false;
+            this.btnSmallerScale.Click += new System.EventHandler(this.BtnSmallerScale_Click);
+            // 
+            // lblScaleAmount
+            // 
+            this.lblScaleAmount.AutoSize = true;
+            this.lblScaleAmount.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScaleAmount.ForeColor = System.Drawing.Color.Silver;
+            this.lblScaleAmount.Location = new System.Drawing.Point(31, 3);
+            this.lblScaleAmount.Name = "lblScaleAmount";
+            this.lblScaleAmount.Size = new System.Drawing.Size(38, 17);
+            this.lblScaleAmount.TabIndex = 253;
+            this.lblScaleAmount.Text = "100%";
+            // 
+            // btnBiggerScale
+            // 
+            this.btnBiggerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBiggerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBiggerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnBiggerScale.BorderRadius = 0;
+            this.btnBiggerScale.BorderSize = 0;
+            this.btnBiggerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnBiggerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBiggerScale.FlatAppearance.BorderSize = 0;
+            this.btnBiggerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBiggerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBiggerScale.ForeColor = System.Drawing.Color.White;
+            this.btnBiggerScale.Location = new System.Drawing.Point(67, 0);
+            this.btnBiggerScale.Margin = new System.Windows.Forms.Padding(0);
+            this.btnBiggerScale.Name = "btnBiggerScale";
+            this.btnBiggerScale.Size = new System.Drawing.Size(22, 22);
+            this.btnBiggerScale.TabIndex = 257;
+            this.btnBiggerScale.TabStop = false;
+            this.btnBiggerScale.Text = "➕";
+            this.btnBiggerScale.TextColor = System.Drawing.Color.White;
+            this.btnBiggerScale.UseVisualStyleBackColor = false;
+            this.btnBiggerScale.Click += new System.EventHandler(this.BtnBiggerScale_Click);
             // 
             // label298
             // 
@@ -10142,65 +10211,6 @@
             this.label298.Size = new System.Drawing.Size(56, 17);
             this.label298.TabIndex = 258;
             this.label298.Text = "UI Scale";
-            // 
-            // lblScaleAmount
-            // 
-            this.lblScaleAmount.AutoSize = true;
-            this.lblScaleAmount.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScaleAmount.ForeColor = System.Drawing.Color.Silver;
-            this.lblScaleAmount.Location = new System.Drawing.Point(110, 29);
-            this.lblScaleAmount.Name = "lblScaleAmount";
-            this.lblScaleAmount.Size = new System.Drawing.Size(38, 17);
-            this.lblScaleAmount.TabIndex = 253;
-            this.lblScaleAmount.Text = "100%";
-            // 
-            // btnBiggerScale
-            // 
-            this.btnBiggerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBiggerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBiggerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnBiggerScale.BorderRadius = 7;
-            this.btnBiggerScale.BorderSize = 0;
-            this.btnBiggerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnBiggerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnBiggerScale.FlatAppearance.BorderSize = 0;
-            this.btnBiggerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBiggerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBiggerScale.ForeColor = System.Drawing.Color.White;
-            this.btnBiggerScale.Location = new System.Drawing.Point(146, 26);
-            this.btnBiggerScale.Margin = new System.Windows.Forms.Padding(0);
-            this.btnBiggerScale.Name = "btnBiggerScale";
-            this.btnBiggerScale.Size = new System.Drawing.Size(24, 24);
-            this.btnBiggerScale.TabIndex = 257;
-            this.btnBiggerScale.TabStop = false;
-            this.btnBiggerScale.Text = "➕";
-            this.btnBiggerScale.TextColor = System.Drawing.Color.White;
-            this.btnBiggerScale.UseVisualStyleBackColor = false;
-            this.btnBiggerScale.Click += new System.EventHandler(this.btnBiggerScale_Click);
-            // 
-            // btnSmallerScale
-            // 
-            this.btnSmallerScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnSmallerScale.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnSmallerScale.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnSmallerScale.BorderRadius = 7;
-            this.btnSmallerScale.BorderSize = 0;
-            this.btnSmallerScale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSmallerScale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnSmallerScale.FlatAppearance.BorderSize = 0;
-            this.btnSmallerScale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSmallerScale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSmallerScale.ForeColor = System.Drawing.Color.White;
-            this.btnSmallerScale.Location = new System.Drawing.Point(85, 26);
-            this.btnSmallerScale.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSmallerScale.Name = "btnSmallerScale";
-            this.btnSmallerScale.Size = new System.Drawing.Size(24, 24);
-            this.btnSmallerScale.TabIndex = 256;
-            this.btnSmallerScale.TabStop = false;
-            this.btnSmallerScale.Text = "➖";
-            this.btnSmallerScale.TextColor = System.Drawing.Color.White;
-            this.btnSmallerScale.UseVisualStyleBackColor = false;
-            this.btnSmallerScale.Click += new System.EventHandler(this.btnSmallerScale_Click);
             // 
             // panel112
             // 
@@ -10401,7 +10411,6 @@
             // 
             this.panel21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.panel21.Controls.Add(this.panelComboBoxStartupScreenContainer);
-            this.panel21.Controls.Add(this.btnSetStartupScreen);
             this.panel21.Controls.Add(this.label199);
             this.panel21.Controls.Add(this.panel54);
             this.panel21.Location = new System.Drawing.Point(0, 389);
@@ -10413,7 +10422,7 @@
             // 
             this.panelComboBoxStartupScreenContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelComboBoxStartupScreenContainer.Controls.Add(this.comboBoxStartupScreen);
-            this.panelComboBoxStartupScreenContainer.Location = new System.Drawing.Point(207, 26);
+            this.panelComboBoxStartupScreenContainer.Location = new System.Drawing.Point(327, 26);
             this.panelComboBoxStartupScreenContainer.Name = "panelComboBoxStartupScreenContainer";
             this.panelComboBoxStartupScreenContainer.Size = new System.Drawing.Size(225, 24);
             this.panelComboBoxStartupScreenContainer.TabIndex = 255;
@@ -10465,30 +10474,7 @@
             this.comboBoxStartupScreen.Size = new System.Drawing.Size(213, 24);
             this.comboBoxStartupScreen.TabIndex = 254;
             this.comboBoxStartupScreen.Texts = "blocks";
-            // 
-            // btnSetStartupScreen
-            // 
-            this.btnSetStartupScreen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnSetStartupScreen.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnSetStartupScreen.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnSetStartupScreen.BorderRadius = 7;
-            this.btnSetStartupScreen.BorderSize = 0;
-            this.btnSetStartupScreen.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSetStartupScreen.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnSetStartupScreen.FlatAppearance.BorderSize = 0;
-            this.btnSetStartupScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetStartupScreen.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSetStartupScreen.ForeColor = System.Drawing.Color.White;
-            this.btnSetStartupScreen.Location = new System.Drawing.Point(437, 26);
-            this.btnSetStartupScreen.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSetStartupScreen.Name = "btnSetStartupScreen";
-            this.btnSetStartupScreen.Size = new System.Drawing.Size(124, 24);
-            this.btnSetStartupScreen.TabIndex = 255;
-            this.btnSetStartupScreen.TabStop = false;
-            this.btnSetStartupScreen.Text = "set startup screen";
-            this.btnSetStartupScreen.TextColor = System.Drawing.Color.White;
-            this.btnSetStartupScreen.UseVisualStyleBackColor = false;
-            this.btnSetStartupScreen.Click += new System.EventHandler(this.BtnSetStartupScreen_Click);
+            this.comboBoxStartupScreen.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxStartupScreen_OnSelectedIndexChanged);
             // 
             // label199
             // 
@@ -10497,9 +10483,9 @@
             this.label199.ForeColor = System.Drawing.Color.Gray;
             this.label199.Location = new System.Drawing.Point(5, 29);
             this.label199.Name = "label199";
-            this.label199.Size = new System.Drawing.Size(200, 17);
+            this.label199.Size = new System.Drawing.Size(290, 17);
             this.label199.TabIndex = 253;
-            this.label199.Text = "Select screen to show at startup";
+            this.label199.Text = "Select screen to show first when SATSuma starts";
             // 
             // panel54
             // 
@@ -17260,7 +17246,7 @@
             this.lblErrorAlert.TabIndex = 264;
             this.lblErrorAlert.Text = "error: click to view";
             this.lblErrorAlert.Visible = false;
-            this.lblErrorAlert.Click += new System.EventHandler(this.lblErrorAlert_Click);
+            this.lblErrorAlert.Click += new System.EventHandler(this.LblErrorAlert_Click);
             // 
             // btnThemeMenu
             // 
@@ -17371,7 +17357,7 @@
             this.btnCopyErrorMessage.Text = "COPY";
             this.btnCopyErrorMessage.TextColor = System.Drawing.Color.White;
             this.btnCopyErrorMessage.UseVisualStyleBackColor = false;
-            this.btnCopyErrorMessage.Click += new System.EventHandler(this.btnCopyErrorMessage_Click);
+            this.btnCopyErrorMessage.Click += new System.EventHandler(this.BtnCopyErrorMessage_Click);
             // 
             // btnHideErrorMessage
             // 
@@ -17399,7 +17385,7 @@
             // timerNodeStatusLight
             // 
             this.timerNodeStatusLight.Interval = 1000;
-            this.timerNodeStatusLight.Tick += new System.EventHandler(this.timerNodeStatusLight_Tick);
+            this.timerNodeStatusLight.Tick += new System.EventHandler(this.TimerNodeStatusLight_Tick);
             // 
             // SATSuma
             // 
@@ -17410,10 +17396,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
@@ -17427,12 +17415,10 @@
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.btnShowGlobalSearch);
             this.Controls.Add(this.panel107);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.btnMoveWindow);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.panelHeaderBlockHeight);
-            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblNowViewing);
             this.Controls.Add(this.panelHeaderPrice);
@@ -17608,8 +17594,10 @@
             this.panelCurrency.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
-            this.panel111.ResumeLayout(false);
-            this.panel111.PerformLayout();
+            this.panelSettingsUIScale.ResumeLayout(false);
+            this.panelSettingsUIScale.PerformLayout();
+            this.panelSettingsUIScaleContainer.ResumeLayout(false);
+            this.panelSettingsUIScaleContainer.PerformLayout();
             this.panel112.ResumeLayout(false);
             this.panel112.PerformLayout();
             this.panel106.ResumeLayout(false);
@@ -18751,7 +18739,6 @@
         private System.Windows.Forms.Panel panel83;
         private System.Windows.Forms.Label label237;
         private CustomControls.RJControls.RJComboBox comboBoxStartupScreen;
-        private CustomControls.RJControls.RJButton btnSetStartupScreen;
         private System.Windows.Forms.Label lblOfflineModeActive;
         private System.Windows.Forms.Panel panelComboBoxStartupScreenContainer;
         private System.Windows.Forms.Panel panelCustomizeThemeListContainer;
@@ -18847,7 +18834,7 @@
         private System.Windows.Forms.Panel panelErrorMessage;
         private CustomControls.RJControls.RJButton btnHideErrorMessage;
         private CustomControls.RJControls.RJButton btnCopyErrorMessage;
-        private System.Windows.Forms.Panel panel111;
+        private System.Windows.Forms.Panel panelSettingsUIScale;
         private System.Windows.Forms.Panel panel112;
         private System.Windows.Forms.Label label169;
         private System.Windows.Forms.Label lblScaleAmount;
@@ -18857,6 +18844,7 @@
         private System.Windows.Forms.Label lblMenuArrow;
         private CustomControls.RJControls.RJButton btnThemeMenu;
         private System.Windows.Forms.Timer timerNodeStatusLight;
+        private System.Windows.Forms.Panel panelSettingsUIScaleContainer;
     }
 }
 

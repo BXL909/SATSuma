@@ -73,6 +73,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ApplyingTheme {
+            get {
+                object obj = ResourceManager.GetObject("ApplyingTheme", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BTCWhale {
             get {
                 object obj = ResourceManager.GetObject("BTCWhale", resourceCulture);
@@ -316,6 +326,16 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap spectrum2 {
             get {
                 object obj = ResourceManager.GetObject("spectrum2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SpinningSatsuma {
+            get {
+                object obj = ResourceManager.GetObject("SpinningSatsuma", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

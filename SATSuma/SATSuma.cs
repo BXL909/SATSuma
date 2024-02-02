@@ -28,8 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* themes not being applied fully sometimes (header area)
-* remove set startup screen button. Save on selection change instead
+* borders around currency and theme menus disappear after first click of either
+* left panel submenu backcolors
 * remove commented code
 * test
 */
@@ -65,9 +65,6 @@ using System.Drawing.Drawing2D;
 using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
-using System.Windows.Controls;
-using Microsoft.Extensions.Primitives;
-
 #endregion
 
 namespace SATSuma
@@ -319,6 +316,7 @@ namespace SATSuma
         #endregion
         #region misc
         decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
+        bool firstTimeLoadingScreen = true; 
         #endregion
         #endregion
 
@@ -336,25 +334,6 @@ namespace SATSuma
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
             #region restore saved UIScale
-            /*
-            try
-            {
-                var settings = ReadSettingsFromJsonFile();
-                foreach (var setting in settings)
-                {
-                    if (setting.Type == "uiscale") // if a UIScale exists in the settings file
-                    {
-                        UIScaleAlreadySavedInFile = true;
-                        UIScaleInFile = setting.Data!;
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "RestoreSavedUIScaleSettings");
-            }
-            */
             RestoreUIScale();
             if (UIScaleAlreadySavedInFile) // set users choice of UIScale
             {
@@ -692,8 +671,6 @@ namespace SATSuma
         #endregion
         
         #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
-        //=============================================================================================================
-        // -------------------------CLOCK TICKS------------------------------------------------------------------------
         private void StartTheClocksTicking()
         {
             try
@@ -747,7 +724,11 @@ namespace SATSuma
                         lblUpdaterLight.ForeColor = Color.Lime;
                     });
                 }
-
+                // reset node activity light
+                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
+                });
             }
             catch (Exception ex)
             {
@@ -769,10 +750,6 @@ namespace SATSuma
                         string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         if (decimal.TryParse(BlockTip, out decimal blockTipValue))
                         {
-                           // lblBlockNumber.Invoke((MethodInvoker)delegate
-                           // {
-                           //     lblBlockNumber.Text = BlockTip;
-                           // });
                             numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
                             numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
                         }
@@ -850,7 +827,6 @@ namespace SATSuma
                                     lblHeaderTransactions.Text = Convert.ToString(blocks[0].Tx_count);
                                 });
 
-
                                 string newBlockHeight = blocks[0].Height;
                                 string oldBlockHeight = lblBlockNumber.Text;
                                 if ((newBlockHeight != oldBlockHeight) || (firstTimeGettingBlockTip == true))
@@ -876,10 +852,6 @@ namespace SATSuma
                                     });
                                     firstTimeGettingBlockTip = false;
                                 }
-                                
-
-
-
 
                                 long sizeInBytes = blocks[0].Size;
                                 string sizeString; // convert display to bytes/kb/mb accordingly
@@ -1312,7 +1284,6 @@ namespace SATSuma
                                         capacityLabel.Text = "disabled";
                                     });
                                 }
-                                //var (aliases, channels) = MempoolSpaceConnectivityRankingJSONRefresh();
                                 for (int i = 0; i < 10; i++)
                                 {
                                     System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
@@ -17003,6 +16974,8 @@ namespace SATSuma
             }
         }
         #endregion
+        #region UI Scaling
+
         #region restore UIScale
         private void RestoreUIScale()
         {
@@ -17013,8 +16986,8 @@ namespace SATSuma
                 // check if settings are already saved in the bookmarks file and restore UIScale
                 foreach (var bookmark in bookmarks)
                 {
-                    
-                    
+
+
                     if (bookmark.Type == "settings")
                     {
                         //UIScale didn't exist in earlier versions of SATSuma, so check whether it is set in the settings file or not before applying, or set a default.
@@ -17029,7 +17002,7 @@ namespace SATSuma
                         }
 
                         UIScaleAlreadySavedInFile = true;
-                        
+
                         break;
                     }
                 }
@@ -17040,6 +17013,257 @@ namespace SATSuma
                 HandleException(ex, "RestoreUIScale");
             }
         }
+        #endregion
+        private void StoreOriginalDimensions(Control parentControl)
+        {
+            try
+            {
+                foreach (Control control in parentControl.Controls)
+                {
+                    control.Tag = new Size(control.Width, control.Height);
+
+                    // Store the original font size of each control
+                    if (control.Font != null)
+                    {
+                        control.Tag = new Tuple<Size, Font>((Size)control.Tag, control.Font);
+                    }
+
+                    // Recursively handle controls within panels
+                    if (control.HasChildren)
+                    {
+                        StoreOriginalDimensions(control);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "storeOriginalDimensions");
+            }
+        }
+
+        private void ScaleAllElements_Click(object sender, EventArgs e)
+        {
+            BtnScaleApply(this);
+        }
+
+        private void BtnScaleApply(Control parentControl)
+        {
+            try
+            {
+                // Resize each control within the provided parentControl
+                foreach (Control control in parentControl.Controls)
+                {
+                    Size originalSize = ((Tuple<Size, Font>)control.Tag).Item1;
+
+                    // apply a scaled radius to buttons to keep them fully rounded
+                    if (control.GetType() == typeof(RJButton))
+                    {
+                        RJButton rjButton = (RJButton)control;
+                        // Set the borderRadius to a different value for each RJButton
+                        rjButton.BorderRadius = (int)(11 * UIScale);
+                    }
+
+                    control.Width = (int)(originalSize.Width * UIScale);
+                    control.Left = (int)(control.Left * UIScale);
+                    control.Top = (int)(control.Top * UIScale);
+                    control.Height = (int)(originalSize.Height * UIScale);
+
+                    // Resize font size
+                    if (control.Font != null)
+                    {
+                        Font originalControlFont = ((Tuple<Size, Font>)control.Tag).Item2;
+                        float scaledFontSize = (float)(originalControlFont.Size * UIScale);
+                        control.Font = new Font(originalControlFont.FontFamily, scaledFontSize - 1, originalControlFont.Style);
+                    }
+
+                    // Recursively handle controls within panels
+                    if (control.HasChildren)
+                    {
+                        BtnScaleApply(control);
+                    }
+                }
+
+                // Trigger layout update for child controls
+                parentControl.PerformLayout();
+                parentControl.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnScaleApply");
+            }
+        }
+
+        private void BtnBiggerScale_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblScaleAmount.Text == "100%")
+                {
+                    lblScaleAmount.Invoke((MethodInvoker)delegate
+                    {
+                        lblScaleAmount.Text = "125%";
+                    });
+                    UIScaleToBeSavedToSettings = 2;
+
+                    // enable the shrink button
+                    btnSmallerScale.Invoke((MethodInvoker)delegate
+                    {
+                        btnSmallerScale.Enabled = true;
+                    });
+                    if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                    {
+                        SaveSettingsToBookmarksFile();
+                    }
+                }
+                else
+                {
+                    if (lblScaleAmount.Text == "125%")
+                    {
+                        lblScaleAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblScaleAmount.Text = "150%";
+                        });
+                        UIScaleToBeSavedToSettings = 3;
+                        if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                        {
+                            SaveSettingsToBookmarksFile();
+                        }
+                    }
+                    else
+                    {
+                        if (lblScaleAmount.Text == "150%")
+                        {
+                            lblScaleAmount.Invoke((MethodInvoker)delegate
+                            {
+                                lblScaleAmount.Text = "175%";
+                            });
+                            UIScaleToBeSavedToSettings = 4;
+                            if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                            {
+                                SaveSettingsToBookmarksFile();
+                            }
+                        }
+                        else
+                        {
+                            if (lblScaleAmount.Text == "175%")
+                            {
+                                lblScaleAmount.Invoke((MethodInvoker)delegate
+                                {
+                                    lblScaleAmount.Text = "200%";
+                                });
+                                UIScaleToBeSavedToSettings = 5;
+
+                                // disable the enlarge button
+                                btnBiggerScale.Invoke((MethodInvoker)delegate
+                                {
+                                    btnBiggerScale.Enabled = false;
+                                });
+
+                                if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                                {
+                                    SaveSettingsToBookmarksFile();
+                                }
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnBiggerScale_Click");
+            }
+        }
+
+        private void BtnSmallerScale_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblScaleAmount.Text == "200%")
+                {
+                    lblScaleAmount.Invoke((MethodInvoker)delegate
+                    {
+                        lblScaleAmount.Text = "175%";
+                    });
+                    UIScaleToBeSavedToSettings = 4;
+
+                    // enable the enlarge button
+                    btnBiggerScale.Invoke((MethodInvoker)delegate
+                    {
+                        btnBiggerScale.Enabled = true;
+                    });
+
+                    if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                    {
+                        SaveSettingsToBookmarksFile();
+                    }
+                }
+                else
+                {
+                    if (lblScaleAmount.Text == "175%")
+                    {
+                        lblScaleAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblScaleAmount.Text = "150%";
+                        });
+                        UIScaleToBeSavedToSettings = 3;
+                        if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                        {
+                            SaveSettingsToBookmarksFile();
+                        }
+                    }
+                    else
+                    {
+                        if (lblScaleAmount.Text == "150%")
+                        {
+                            lblScaleAmount.Invoke((MethodInvoker)delegate
+                            {
+                                lblScaleAmount.Text = "125%";
+                            });
+                            UIScaleToBeSavedToSettings = 2;
+                            if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                            {
+                                SaveSettingsToBookmarksFile();
+                            }
+                        }
+                        else
+                        {
+                            if (lblScaleAmount.Text == "125%")
+                            {
+                                lblScaleAmount.Invoke((MethodInvoker)delegate
+                                {
+                                    lblScaleAmount.Text = "100%";
+                                });
+                                UIScaleToBeSavedToSettings = 1;
+
+                                // disable the shrink button
+                                btnSmallerScale.Invoke((MethodInvoker)delegate
+                                {
+                                    btnSmallerScale.Enabled = false;
+                                });
+
+                                if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
+                                {
+                                    SaveSettingsToBookmarksFile();
+                                }
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnBiggerScale_Click");
+            }
+        }
+
         #endregion
         #endregion
 
@@ -17054,10 +17278,6 @@ namespace SATSuma
                 btnThemeMenu.BringToFront();
                 if (panelThemeMenu.Height == 0)
                 {
-                    btnThemeMenu.Invoke((MethodInvoker)delegate
-                    {
-                        btnThemeMenu.BackColor = panelMenu.BackColor;
-                    });
                     //expand the panel
                     currentHeightExpandingPanel = panelThemeMenu.Height;
                     StartExpandingPanelVert(panelThemeMenu);
@@ -17984,7 +18204,7 @@ namespace SATSuma
                     if (lblBackgroundGenesisSelected.Visible == true)
                     {
                         lblTime.Font = new Font(lblTime.Font.FontFamily, (int)(14 * UIScale), lblTime.Font.Style);
-                        lblTime.Location = new Point((int)(848 * UIScale), (int)(44 * UIScale));
+                        lblTime.Location = new Point((int)(840 * UIScale), (int)(44 * UIScale));
                         lblTime.Visible = true;
                         lblTime.BringToFront();
                     }
@@ -19075,10 +19295,32 @@ namespace SATSuma
         }
         #endregion
         #region restore theme
-        private void RestoreTheme(Theme theme)
+        private async void RestoreTheme(Theme theme)
         {
             try
             {
+                #region display loading screen
+                // display semi-transparent overlay form
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+                
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                #endregion 
+
                 currentlyActiveTheme = theme.ThemeName;
                 if (theme.ThemeName.Contains("(preset)"))
                 {
@@ -19149,7 +19391,7 @@ namespace SATSuma
                             panelPresetThemeMenuTitleBG.BackColor = Color.Gainsboro;
                         });
                     }
-                    
+
                     ColorDataFields(theme.DataFields);
                     labelColor = theme.Labels; // (only used for poolranking chart title)
                     ColorLabels(theme.Labels);
@@ -19392,22 +19634,52 @@ namespace SATSuma
                         if (theme.BackgroundGenesis == true)
                         {
                             lblTime.Font = new Font(lblTime.Font.FontFamily, (int)(14 * UIScale), lblTime.Font.Style);
-                            lblTime.Location = new Point((int)(832 * UIScale), (int)(42 * UIScale));
+                            lblTime.Location = new Point((int)(840 * UIScale), (int)(42 * UIScale));
                             lblTime.Visible = true;
                             lblTime.BringToFront();
                         }
                     }
+
+                    #region hacky way to ensure background image shows through these panels.
+                    panelHeaderPrice.Visible = false;
+                    panelHeaderPrice.Visible = true;
+                    panelHeaderBlockHeight.Visible = false;
+                    panelHeaderBlockHeight.Visible = true;
+                    panelFees.Visible = false;
+                    panelFees.Visible = true;
+                    #endregion
                 }
                 catch (Exception ex)
                 {
                     HandleException(ex, "RestoreTheme");
                 }
+
+                //wait 2 secs to give time for theme to be applied
+                await Wait2Secs();
+                //close the loading screen
+                loadingTheme.Close();
+
+
             }
             catch (Exception ex)
             {
                 HandleException(ex, "RestoreTheme");
             }
         }
+
+        private async Task Wait2Secs()
+        {
+            if (firstTimeLoadingScreen)
+            {
+                firstTimeLoadingScreen = false;
+                await Task.Delay(4000);
+            }
+            else
+            {
+                await Task.Delay(2000);
+            }
+        }
+
         #endregion
         #region apply changes to lists of controls
         private void SetButtonAndPanelRadius(int radius)
@@ -19704,7 +19976,6 @@ namespace SATSuma
                 panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
                 panelLightningNodeNetwork.BackColor = chartsBackgroundColor;
                 panelPriceConvert.BackColor = chartsBackgroundColor;
-                panelMainMenuFiller.BackColor = chartsBackgroundColor;
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
                 Color newGridlineColor = Color.FromArgb(40, 40, 40);
@@ -20104,14 +20375,13 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderButtonsToColor = { btnAnimation, btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts, btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, lblMenuArrow };
+                Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeBTCdir, btnMenuThemeSatsuma, btnMenuThemeWhale, btnMenuThemePlanetBTC, btnMenuThemeCitadel ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.BackColor = chartsBackgroundColor;
                 }
                 lblHelpOffline.BackColor = chartsBackgroundColor;
                 lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
-                lblMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
                 comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
@@ -20633,7 +20903,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelMenu, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
+                Control[] listPanelsToColor = { panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -20660,11 +20930,11 @@ namespace SATSuma
 
                 if (sender == btnMenuBitcoinDashboard)
                 {
-                    btnMenuBitcoinDashboard.BackColor = panelMenu.BackColor;
+                    btnMenuBitcoinDashboard.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnThemeMenu)
                 {
-                    btnThemeMenu.BackColor = panelMenu.BackColor;
+                    btnThemeMenu.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnShowGlobalSearch)
                 {
@@ -20672,7 +20942,7 @@ namespace SATSuma
                 }
                 if (sender == btnMenuAddress)
                 {
-                    btnMenuAddress.BackColor = panelMenu.BackColor;
+                    btnMenuAddress.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuCreateTheme)
                 {
@@ -20680,48 +20950,48 @@ namespace SATSuma
                 }
                 if (sender == btnMenuBlock)
                 {
-                    btnMenuBlock.BackColor = panelMenu.BackColor;
+                    btnMenuBlock.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuBlockList)
                 {
-                    btnMenuBlockList.BackColor = panelMenu.BackColor;
+                    btnMenuBlockList.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuBookmarks)
                 {
-                    btnMenuBookmarks.BackColor = panelMenu.BackColor;
+                    btnMenuBookmarks.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuCharts)
                 {
-                    btnMenuCharts.BackColor = panelMenu.BackColor;
+                    btnMenuCharts.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuDirectory)
                 {
-                    btnMenuDirectory.BackColor = panelMenu.BackColor;
+                    btnMenuDirectory.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuHelp)
                 {
-                    btnMenuHelp.BackColor = panelMenu.BackColor;
+                    btnMenuHelp.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuLightningDashboard)
                 {
-                    btnMenuLightningDashboard.BackColor = panelMenu.BackColor;
+                    btnMenuLightningDashboard.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuSettings)
                 {
-                    btnMenuSettings.BackColor = panelMenu.BackColor;
+                    btnMenuSettings.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuTransaction)
                 {
-                    btnMenuTransaction.BackColor = panelMenu.BackColor;
+                    btnMenuTransaction.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuXpub)
                 {
-                    btnMenuXpub.BackColor = panelMenu.BackColor;
+                    btnMenuXpub.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuSplash)
                 {
-                    btnMenuSplash.BackColor = panelMenu.BackColor;
-                    lblUpdaterLight.BackColor = panelMenu.BackColor;
+                    btnMenuSplash.BackColor = btnDeleteTheme.BackColor;
+                    lblUpdaterLight.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
@@ -20765,7 +21035,7 @@ namespace SATSuma
                 }
                 if (sender == btnCurrency)
                 {
-                    btnCurrency.BackColor = panelMenu.BackColor;
+                    btnCurrency.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnHelp)
                 {
@@ -20816,11 +21086,11 @@ namespace SATSuma
                 }
                 if (sender == btnMenuBitcoinDashboard)
                 {
-                    btnMenuBitcoinDashboard.BackColor = chartsBackgroundColor;
+                    btnMenuBitcoinDashboard.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuAddress)
                 {
-                    btnMenuAddress.BackColor = chartsBackgroundColor;
+                    btnMenuAddress.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuCreateTheme)
                 {
@@ -20828,48 +21098,48 @@ namespace SATSuma
                 }
                 if (sender == btnMenuBlock)
                 {
-                    btnMenuBlock.BackColor = chartsBackgroundColor;
+                    btnMenuBlock.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuBlockList)
                 {
-                    btnMenuBlockList.BackColor = chartsBackgroundColor;
+                    btnMenuBlockList.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuBookmarks)
                 {
-                    btnMenuBookmarks.BackColor = chartsBackgroundColor;
+                    btnMenuBookmarks.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuDirectory)
                 {
-                    btnMenuDirectory.BackColor = chartsBackgroundColor;
+                    btnMenuDirectory.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuCharts)
                 {
-                    btnMenuCharts.BackColor = chartsBackgroundColor;
+                    btnMenuCharts.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuHelp)
                 {
-                    btnMenuHelp.BackColor = chartsBackgroundColor;
+                    btnMenuHelp.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuLightningDashboard)
                 {
-                    btnMenuLightningDashboard.BackColor = chartsBackgroundColor;
+                    btnMenuLightningDashboard.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuSettings)
                 {
-                    btnMenuSettings.BackColor = chartsBackgroundColor;
+                    btnMenuSettings.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuTransaction)
                 {
-                    btnMenuTransaction.BackColor = chartsBackgroundColor;
+                    btnMenuTransaction.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuXpub)
                 {
-                    btnMenuXpub.BackColor = chartsBackgroundColor;
+                    btnMenuXpub.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuSplash)
                 {
-                    btnMenuSplash.BackColor = chartsBackgroundColor;
-                    lblUpdaterLight.BackColor = chartsBackgroundColor;
+                    btnMenuSplash.BackColor = Color.Transparent;
+                    lblUpdaterLight.BackColor = Color.Transparent;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
@@ -20899,7 +21169,7 @@ namespace SATSuma
                 {
                     if (panelThemeMenu.Height == 0)
                     {
-                        btnThemeMenu.BackColor = chartsBackgroundColor;
+                        btnThemeMenu.BackColor = Color.Transparent;
                     }
                 }
                 if (sender == btnShowGlobalSearch)
@@ -20926,7 +21196,7 @@ namespace SATSuma
                 {
                     if (panelCurrency.Height == 0)
                     {
-                        btnCurrency.BackColor = chartsBackgroundColor;
+                        btnCurrency.BackColor = Color.Transparent;
                     }
                 }
                 if (sender == btnHelp)
@@ -21866,6 +22136,57 @@ namespace SATSuma
             }
         }
         #endregion
+        #region error alerts and messages
+        private void LblErrorAlert_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (panelErrorMessage.Width == 0)
+                {
+                    StartExpandingPanelHoriz(panelErrorMessage);
+                    currentWidthExpandingPanel = panelErrorMessage.Width;
+                }
+                else
+                {
+                    StartShrinkingPanel(panelErrorMessage);
+                    currentWidthShrinkingPanel = panelErrorMessage.Width;
+                }
+
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "lblErrorAlert_Click");
+            }
+        }
+
+        private void HideErrorMessage_Click(object sender, EventArgs e)
+        {
+            StartShrinkingPanel(panelErrorMessage);
+            currentWidthShrinkingPanel = panelErrorMessage.Width;
+        }
+
+        private void BtnCopyErrorMessage_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(lblErrorMessage.Text);
+        }
+
+        private void LightUpNodeLight()
+        {
+            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+            {
+                headerSelectedNodeStatusLight.ForeColor = Color.Lime;
+            });
+            timerNodeStatusLight.Start();
+        }
+
+        private void TimerNodeStatusLight_Tick(object sender, EventArgs e)
+        {
+            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+            {
+                headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
+            });
+        }
+        #endregion
         #region create data services
         private void CreateDataServices()
         {
@@ -22468,6 +22789,7 @@ namespace SATSuma
             }
         }
         #endregion
+        
         #endregion
 
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
@@ -23324,10 +23646,6 @@ namespace SATSuma
                 //panelCurrency.BringToFront();
                 if (panelCurrency.Height == 0)
                 {
-                    btnCurrency.Invoke((MethodInvoker)delegate
-                    {
-                        btnCurrency.BackColor = panelMenu.BackColor;
-                    });
                     //expand the panel
                     currentHeightExpandingPanel = panelCurrency.Height;
                     StartExpandingPanelVert(panelCurrency);
@@ -24326,7 +24644,7 @@ namespace SATSuma
                 });
                 btnThemeMenu.Invoke((MethodInvoker)delegate
                 {
-                    btnThemeMenu.BackColor = chartsBackgroundColor;
+                    btnThemeMenu.BackColor = Color.Transparent;
                 });
             }
             catch (Exception ex)
@@ -24345,7 +24663,7 @@ namespace SATSuma
                 });
                 btnCurrency.Invoke((MethodInvoker)delegate
                 {
-                    btnCurrency.BackColor = chartsBackgroundColor;
+                    btnCurrency.BackColor = Color.Transparent;
                 });
             }
             catch (Exception ex)
@@ -25419,311 +25737,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private void LblErrorAlert_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (panelErrorMessage.Width == 0)
-                {
-                    StartExpandingPanelHoriz(panelErrorMessage);
-                    currentWidthExpandingPanel = panelErrorMessage.Width;
-                }
-                else
-                {
-                    StartShrinkingPanel(panelErrorMessage);
-                    currentWidthShrinkingPanel = panelErrorMessage.Width;
-                }
-
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "lblErrorAlert_Click");
-            }
-        }
-
-        private void HideErrorMessage_Click(object sender, EventArgs e)
-        {
-            StartShrinkingPanel(panelErrorMessage);
-            currentWidthShrinkingPanel = panelErrorMessage.Width;
-        }
-
-        private void BtnCopyErrorMessage_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(lblErrorMessage.Text);
-        }
-
-        #region UI Scaling
-        private void StoreOriginalDimensions(Control parentControl)
-        {
-            try
-            {
-                foreach (Control control in parentControl.Controls)
-                {
-                    control.Tag = new Size(control.Width, control.Height);
-
-                    // Store the original font size of each control
-                    if (control.Font != null)
-                    {
-                        control.Tag = new Tuple<Size, Font>((Size)control.Tag, control.Font);
-                    }
-
-                    // Recursively handle controls within panels
-                    if (control.HasChildren)
-                    {
-                        StoreOriginalDimensions(control);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "storeOriginalDimensions");
-            }
-        }
-
-        private void ScaleAllElements_Click(object sender, EventArgs e)
-        {
-            BtnScaleApply(this);
-        }
-
-        private void BtnScaleApply(Control parentControl)
-        {
-            try
-            {
-                // Resize each control within the provided parentControl
-                foreach (Control control in parentControl.Controls)
-                {
-                    Size originalSize = ((Tuple<Size, Font>)control.Tag).Item1;
-
-                    // apply a scaled radius to buttons to keep them fully rounded
-                    if (control.GetType() == typeof(RJButton))
-                    {
-                        RJButton rjButton = (RJButton)control;
-                        // Set the borderRadius to a different value for each RJButton
-                        rjButton.BorderRadius = (int)(11 * UIScale);
-                    }
-
-                    control.Width = (int)(originalSize.Width * UIScale);
-                    control.Left = (int)(control.Left * UIScale);
-                    control.Top = (int)(control.Top * UIScale);
-                    control.Height = (int)(originalSize.Height * UIScale);
-
-                    // Resize font size
-                    if (control.Font != null)
-                    {
-                        Font originalControlFont = ((Tuple<Size, Font>)control.Tag).Item2;
-                        float scaledFontSize = (float)(originalControlFont.Size * UIScale);
-                        control.Font = new Font(originalControlFont.FontFamily, scaledFontSize - 1, originalControlFont.Style);
-                    }
-
-                    // Recursively handle controls within panels
-                    if (control.HasChildren)
-                    {
-                        BtnScaleApply(control);
-                    }
-                }
-
-                // Trigger layout update for child controls
-                parentControl.PerformLayout();
-                parentControl.Invalidate();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "btnScaleApply");
-            }
-        }
-
-        #endregion
-
-        private void BtnBiggerScale_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (lblScaleAmount.Text == "100%")
-                {
-                    lblScaleAmount.Invoke((MethodInvoker)delegate
-                    {
-                        lblScaleAmount.Text = "125%";
-                    });
-                    UIScaleToBeSavedToSettings = 2;
-
-                    // enable the shrink button
-                    btnSmallerScale.Invoke((MethodInvoker)delegate
-                    {
-                        btnSmallerScale.Enabled = true;
-                    });
-                    if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                    {
-                        SaveSettingsToBookmarksFile();
-                    }
-                }
-                else
-                {
-                    if (lblScaleAmount.Text == "125%")
-                    {
-                        lblScaleAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblScaleAmount.Text = "150%";
-                        });
-                        UIScaleToBeSavedToSettings = 3;
-                        if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                        {
-                            SaveSettingsToBookmarksFile();
-                        }
-                    }
-                    else
-                    {
-                        if (lblScaleAmount.Text == "150%")
-                        {
-                            lblScaleAmount.Invoke((MethodInvoker)delegate
-                            {
-                                lblScaleAmount.Text = "175%";
-                            });
-                            UIScaleToBeSavedToSettings = 4;
-                            if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                            {
-                                SaveSettingsToBookmarksFile();
-                            }
-                        }
-                        else
-                        {
-                            if (lblScaleAmount.Text == "175%")
-                            {
-                                lblScaleAmount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblScaleAmount.Text = "200%";
-                                });
-                                UIScaleToBeSavedToSettings = 5;
-
-                                // disable the enlarge button
-                                btnBiggerScale.Invoke((MethodInvoker)delegate
-                                {
-                                    btnBiggerScale.Enabled = false;
-                                });
-
-                                if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                                {
-                                    SaveSettingsToBookmarksFile();
-                                }
-                            }
-                            else
-                            {
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "btnBiggerScale_Click");
-            }
-        }
-
-        private void BtnSmallerScale_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (lblScaleAmount.Text == "200%")
-                {
-                    lblScaleAmount.Invoke((MethodInvoker)delegate
-                    {
-                        lblScaleAmount.Text = "175%";
-                    });
-                    UIScaleToBeSavedToSettings = 4;
-
-                    // enable the enlarge button
-                    btnBiggerScale.Invoke((MethodInvoker)delegate
-                    {
-                        btnBiggerScale.Enabled = true;
-                    });
-
-                    if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                    {
-                        SaveSettingsToBookmarksFile();
-                    }
-                }
-                else
-                {
-                    if (lblScaleAmount.Text == "175%")
-                    {
-                        lblScaleAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblScaleAmount.Text = "150%";
-                        });
-                        UIScaleToBeSavedToSettings = 3;
-                        if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                        {
-                            SaveSettingsToBookmarksFile();
-                        }
-                    }
-                    else
-                    {
-                        if (lblScaleAmount.Text == "150%")
-                        {
-                            lblScaleAmount.Invoke((MethodInvoker)delegate
-                            {
-                                lblScaleAmount.Text = "125%";
-                            });
-                            UIScaleToBeSavedToSettings = 2;
-                            if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                            {
-                                SaveSettingsToBookmarksFile();
-                            }
-                        }
-                        else
-                        {
-                            if (lblScaleAmount.Text == "125%")
-                            {
-                                lblScaleAmount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblScaleAmount.Text = "100%";
-                                });
-                                UIScaleToBeSavedToSettings = 1;
-
-                                // disable the shrink button
-                                btnSmallerScale.Invoke((MethodInvoker)delegate
-                                {
-                                    btnSmallerScale.Enabled = false;
-                                });
-
-                                if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
-                                {
-                                    SaveSettingsToBookmarksFile();
-                                }
-                            }
-                            else
-                            {
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "btnBiggerScale_Click");
-            }
-        }
-
-        private void LightUpNodeLight()
-        {
-            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-            {
-                headerSelectedNodeStatusLight.ForeColor = Color.Lime;
-            });
-            timerNodeStatusLight.Start();
-        }
-
-        private void TimerNodeStatusLight_Tick(object sender, EventArgs e)
-        {
-            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-            {
-                headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
-            });
-            //timerNodeStatusLight.Stop();
-        }
-
-
     }
 }                

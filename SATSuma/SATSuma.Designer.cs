@@ -448,8 +448,6 @@
             this.btnMenuHelp = new System.Windows.Forms.Button();
             this.btnMenuSplash = new System.Windows.Forms.Button();
             this.btnMenuCreateTheme = new System.Windows.Forms.Button();
-            this.panelRefreshStatusBar = new System.Windows.Forms.Panel();
-            this.panel110 = new System.Windows.Forms.Panel();
             this.headerSelectedNodeStatus = new System.Windows.Forms.Label();
             this.headerSelectedNodeStatusLight = new System.Windows.Forms.Label();
             this.lblOfflineModeActive = new System.Windows.Forms.Label();
@@ -1132,8 +1130,6 @@
             this.lblUpdaterLight = new System.Windows.Forms.Label();
             this.lblSaveSettingsLight = new System.Windows.Forms.Label();
             this.lblOfflineModeLight = new System.Windows.Forms.Label();
-            this.panelLeftPanel2 = new System.Windows.Forms.Panel();
-            this.panelLeftPanel3 = new System.Windows.Forms.Panel();
             this.panelErrorMessage = new System.Windows.Forms.Panel();
             this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
@@ -1213,7 +1209,6 @@
             this.panel56.SuspendLayout();
             this.panel105.SuspendLayout();
             this.panelMenu.SuspendLayout();
-            this.panelRefreshStatusBar.SuspendLayout();
             this.panelTransaction.SuspendLayout();
             this.panelTransactionIDContainer.SuspendLayout();
             this.panel27.SuspendLayout();
@@ -6857,7 +6852,7 @@
             // 
             // panelMenu
             // 
-            this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.panelMenu.BackColor = System.Drawing.Color.Transparent;
             this.panelMenu.Controls.Add(this.lblMenuArrow);
             this.panelMenu.Controls.Add(this.lblMenuHighlightedButtonText);
             this.panelMenu.Controls.Add(this.btnMenuDirectory);
@@ -6905,7 +6900,7 @@
             // 
             // btnMenuDirectory
             // 
-            this.btnMenuDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuDirectory.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuDirectory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuDirectory.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuDirectory.FlatAppearance.BorderSize = 0;
@@ -6926,15 +6921,16 @@
             // 
             // panelMainMenuFiller
             // 
-            this.panelMainMenuFiller.BackColor = System.Drawing.Color.Black;
+            this.panelMainMenuFiller.BackColor = System.Drawing.Color.Transparent;
             this.panelMainMenuFiller.Location = new System.Drawing.Point(0, 0);
             this.panelMainMenuFiller.Name = "panelMainMenuFiller";
             this.panelMainMenuFiller.Size = new System.Drawing.Size(122, 14);
             this.panelMainMenuFiller.TabIndex = 254;
+            this.panelMainMenuFiller.Visible = false;
             // 
             // btnMenuCharts
             // 
-            this.btnMenuCharts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuCharts.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuCharts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuCharts.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuCharts.FlatAppearance.BorderSize = 0;
@@ -6955,7 +6951,7 @@
             // 
             // btnMenuSettings
             // 
-            this.btnMenuSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuSettings.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuSettings.FlatAppearance.BorderSize = 0;
@@ -6976,7 +6972,7 @@
             // 
             // btnMenuBookmarks
             // 
-            this.btnMenuBookmarks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBookmarks.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuBookmarks.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBookmarks.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuBookmarks.FlatAppearance.BorderSize = 0;
@@ -6997,7 +6993,7 @@
             // 
             // btnMenuXpub
             // 
-            this.btnMenuXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuXpub.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuXpub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuXpub.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuXpub.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -7020,7 +7016,7 @@
             // 
             // btnMenuTransaction
             // 
-            this.btnMenuTransaction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuTransaction.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuTransaction.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuTransaction.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuTransaction.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -7043,7 +7039,7 @@
             // 
             // btnMenuBlockList
             // 
-            this.btnMenuBlockList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBlockList.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuBlockList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBlockList.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBlockList.Enabled = false;
@@ -7067,8 +7063,8 @@
             // 
             // btnMenuBlock
             // 
-            this.btnMenuBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuBlock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuBlock.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenuBlock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuBlock.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuBlock.FlatAppearance.BorderSize = 0;
@@ -7091,7 +7087,7 @@
             // 
             // btnMenuAddress
             // 
-            this.btnMenuAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuAddress.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuAddress.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuAddress.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuAddress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -7115,7 +7111,7 @@
             // 
             // btnMenuBitcoinDashboard
             // 
-            this.btnMenuBitcoinDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuBitcoinDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuBitcoinDashboard.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuBitcoinDashboard.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -7138,7 +7134,7 @@
             // 
             // btnMenuLightningDashboard
             // 
-            this.btnMenuLightningDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuLightningDashboard.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuLightningDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuLightningDashboard.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuLightningDashboard.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -7175,7 +7171,7 @@
             // 
             // btnMenuHelp
             // 
-            this.btnMenuHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuHelp.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuHelp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnMenuHelp.FlatAppearance.BorderSize = 0;
@@ -7196,7 +7192,7 @@
             // 
             // btnMenuSplash
             // 
-            this.btnMenuSplash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuSplash.BackColor = System.Drawing.Color.Transparent;
             this.btnMenuSplash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMenuSplash.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnMenuSplash.FlatAppearance.BorderSize = 0;
@@ -7235,33 +7231,13 @@
             this.btnMenuCreateTheme.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuCreateTheme.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // panelRefreshStatusBar
-            // 
-            this.panelRefreshStatusBar.BackColor = System.Drawing.Color.Transparent;
-            this.panelRefreshStatusBar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panelRefreshStatusBar.Controls.Add(this.panel110);
-            this.panelRefreshStatusBar.Controls.Add(this.headerSelectedNodeStatus);
-            this.panelRefreshStatusBar.Controls.Add(this.headerSelectedNodeStatusLight);
-            this.panelRefreshStatusBar.Location = new System.Drawing.Point(0, 727);
-            this.panelRefreshStatusBar.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panelRefreshStatusBar.Name = "panelRefreshStatusBar";
-            this.panelRefreshStatusBar.Size = new System.Drawing.Size(145, 23);
-            this.panelRefreshStatusBar.TabIndex = 197;
-            // 
-            // panel110
-            // 
-            this.panel110.Location = new System.Drawing.Point(-18, -779);
-            this.panel110.Name = "panel110";
-            this.panel110.Size = new System.Drawing.Size(21, 13);
-            this.panel110.TabIndex = 264;
-            // 
             // headerSelectedNodeStatus
             // 
             this.headerSelectedNodeStatus.AutoEllipsis = true;
             this.headerSelectedNodeStatus.BackColor = System.Drawing.Color.Transparent;
             this.headerSelectedNodeStatus.Font = new System.Drawing.Font("Century Gothic", 6.75F);
             this.headerSelectedNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.headerSelectedNodeStatus.Location = new System.Drawing.Point(18, 2);
+            this.headerSelectedNodeStatus.Location = new System.Drawing.Point(18, 729);
             this.headerSelectedNodeStatus.Name = "headerSelectedNodeStatus";
             this.headerSelectedNodeStatus.Size = new System.Drawing.Size(126, 13);
             this.headerSelectedNodeStatus.TabIndex = 241;
@@ -7273,7 +7249,7 @@
             this.headerSelectedNodeStatusLight.BackColor = System.Drawing.Color.Transparent;
             this.headerSelectedNodeStatusLight.Font = new System.Drawing.Font("Consolas", 7F);
             this.headerSelectedNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.headerSelectedNodeStatusLight.Location = new System.Drawing.Point(5, 4);
+            this.headerSelectedNodeStatusLight.Location = new System.Drawing.Point(5, 731);
             this.headerSelectedNodeStatusLight.Name = "headerSelectedNodeStatusLight";
             this.headerSelectedNodeStatusLight.Size = new System.Drawing.Size(15, 12);
             this.headerSelectedNodeStatusLight.TabIndex = 240;
@@ -9977,7 +9953,7 @@
             this.panelCurrency.Controls.Add(this.btnUSD);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(8, 370);
+            this.panelCurrency.Location = new System.Drawing.Point(8, 371);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
             this.panelCurrency.TabIndex = 159;
@@ -16862,8 +16838,8 @@
             // 
             // btnCurrency
             // 
-            this.btnCurrency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnCurrency.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCurrency.BackColor = System.Drawing.Color.Transparent;
+            this.btnCurrency.BackgroundColor = System.Drawing.Color.Transparent;
             this.btnCurrency.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnCurrency.BorderColor = System.Drawing.Color.Empty;
             this.btnCurrency.BorderRadius = 0;
@@ -17208,7 +17184,10 @@
             // 
             // panelLeftPanel
             // 
+            this.panelLeftPanel.BackColor = System.Drawing.Color.Transparent;
             this.panelLeftPanel.Controls.Add(this.lblErrorAlert);
+            this.panelLeftPanel.Controls.Add(this.headerSelectedNodeStatusLight);
+            this.panelLeftPanel.Controls.Add(this.headerSelectedNodeStatus);
             this.panelLeftPanel.Controls.Add(this.btnThemeMenu);
             this.panelLeftPanel.Controls.Add(this.panelThemeMenu);
             this.panelLeftPanel.Controls.Add(this.btnCurrency);
@@ -17228,7 +17207,6 @@
             this.panelLeftPanel.Controls.Add(this.btnAnimation);
             this.panelLeftPanel.Controls.Add(this.btnMenuSplash);
             this.panelLeftPanel.Controls.Add(this.panelMenu);
-            this.panelLeftPanel.Controls.Add(this.panelRefreshStatusBar);
             this.panelLeftPanel.Controls.Add(this.lblOfflineModeActive);
             this.panelLeftPanel.Location = new System.Drawing.Point(2, 2);
             this.panelLeftPanel.Name = "panelLeftPanel";
@@ -17250,8 +17228,8 @@
             // 
             // btnThemeMenu
             // 
-            this.btnThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnThemeMenu.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnThemeMenu.BackColor = System.Drawing.Color.Transparent;
+            this.btnThemeMenu.BackgroundColor = System.Drawing.Color.Transparent;
             this.btnThemeMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnThemeMenu.BorderColor = System.Drawing.Color.Empty;
             this.btnThemeMenu.BorderRadius = 0;
@@ -17311,20 +17289,6 @@
             this.lblOfflineModeLight.Size = new System.Drawing.Size(15, 12);
             this.lblOfflineModeLight.TabIndex = 260;
             this.lblOfflineModeLight.Text = "🟢";
-            // 
-            // panelLeftPanel2
-            // 
-            this.panelLeftPanel2.Location = new System.Drawing.Point(129, 2);
-            this.panelLeftPanel2.Name = "panelLeftPanel2";
-            this.panelLeftPanel2.Size = new System.Drawing.Size(21, 23);
-            this.panelLeftPanel2.TabIndex = 263;
-            // 
-            // panelLeftPanel3
-            // 
-            this.panelLeftPanel3.Location = new System.Drawing.Point(129, 741);
-            this.panelLeftPanel3.Name = "panelLeftPanel3";
-            this.panelLeftPanel3.Size = new System.Drawing.Size(21, 10);
-            this.panelLeftPanel3.TabIndex = 264;
             // 
             // panelErrorMessage
             // 
@@ -17396,18 +17360,16 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelErrorMessage);
-            this.Controls.Add(this.panelLeftPanel3);
-            this.Controls.Add(this.panelLeftPanel2);
             this.Controls.Add(this.panelLeftPanel);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
@@ -17524,8 +17486,6 @@
             this.panel105.ResumeLayout(false);
             this.panelMenu.ResumeLayout(false);
             this.panelMenu.PerformLayout();
-            this.panelRefreshStatusBar.ResumeLayout(false);
-            this.panelRefreshStatusBar.PerformLayout();
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
             this.panelTransactionIDContainer.ResumeLayout(false);
@@ -17985,7 +17945,6 @@
         private System.Windows.Forms.Panel panel17;
         private System.Windows.Forms.Panel panel19;
         private System.Windows.Forms.Panel panel20;
-        private System.Windows.Forms.Panel panelRefreshStatusBar;
         private System.Windows.Forms.Label label122;
         private System.Windows.Forms.Label label120;
         private System.Windows.Forms.Label lblBlockListBlockReward;
@@ -18680,7 +18639,6 @@
         private CustomControls.RJControls.RJComboBox comboBoxCustomizeScreenThemeList;
         private System.Windows.Forms.Panel panelCustomThemeMenuTitleBG;
         private System.Windows.Forms.Label label281;
-        private System.Windows.Forms.Panel panelMainMenuFiller;
         private System.Windows.Forms.Panel panelCurrencyMenuFiller;
         private System.Windows.Forms.Panel panelThemeMenuFiller;
         private CustomControls.RJControls.RJButton btnDeleteAllBookmarks;
@@ -18824,9 +18782,6 @@
         private System.Windows.Forms.Timer ShrinkPanelTimerHoriz;
         private System.Windows.Forms.Label lblHeaderBlockAge;
         private System.Windows.Forms.Panel panelLeftPanel;
-        private System.Windows.Forms.Panel panelLeftPanel2;
-        private System.Windows.Forms.Panel panel110;
-        private System.Windows.Forms.Panel panelLeftPanel3;
         private System.Windows.Forms.Label lblSaveSettingsLight;
         private System.Windows.Forms.Label lblOfflineModeLight;
         private System.Windows.Forms.Label lblUpdaterLight;
@@ -18845,6 +18800,7 @@
         private CustomControls.RJControls.RJButton btnThemeMenu;
         private System.Windows.Forms.Timer timerNodeStatusLight;
         private System.Windows.Forms.Panel panelSettingsUIScaleContainer;
+        private System.Windows.Forms.Panel panelMainMenuFiller;
     }
 }
 

@@ -359,6 +359,12 @@
     <Compile Include="helpScreen.Designer.cs">
       <DependentUpon>helpScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadingTheme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadingTheme.Designer.cs">
+      <DependentUpon>LoadingTheme.cs</DependentUpon>
+    </Compile>
     <Compile Include="overlayForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -392,6 +398,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="helpScreen.resx">
       <DependentUpon>helpScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadingTheme.resx">
+      <DependentUpon>LoadingTheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="overlayForm.resx">
       <DependentUpon>overlayForm.cs</DependentUpon>
@@ -437,6 +446,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\ApplyingTheme.png" />
     <None Include="Resources\CustomImage.png" />
     <None Include="Resources\SatsumaAnimatedWhite.gif" />
     <None Include="Resources\SatsumaAnimated.gif" />

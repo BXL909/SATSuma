@@ -28,8 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* borders around currency and theme menus disappear after first click of either
-* left panel submenu backcolors
+* set mouseover colors of top buttons (exit, etc) to match panel color
 * remove commented code
 * test
 */
@@ -19723,6 +19722,7 @@ namespace SATSuma
                 btnSmallerScale.BorderRadius = 0;
                 btnThemeMenu.BorderRadius = 0;
                 btnCurrency.BorderRadius = 0;
+                btnCopyErrorMessage.BorderRadius = 0;
 
                 // address
                 RJButton[] addressButtonBordersToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions };
@@ -20925,7 +20925,7 @@ namespace SATSuma
             {
                 if (sender == btnMenuApplyCustomTheme)
                 {
-                    btnMenuApplyCustomTheme.BackColor = panel32.BackColor;
+                    btnMenuApplyCustomTheme.BackColor = btnDeleteTheme.BackColor;
                 }
 
                 if (sender == btnMenuBitcoinDashboard)
@@ -20946,7 +20946,7 @@ namespace SATSuma
                 }
                 if (sender == btnMenuCreateTheme)
                 {
-                    btnMenuCreateTheme.BackColor = panelMenu.BackColor;
+                    btnMenuCreateTheme.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuBlock)
                 {
@@ -20995,43 +20995,43 @@ namespace SATSuma
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
-                    btnMenuThemeBTCdir.BackColor = panelMenu.BackColor;
+                    btnMenuThemeBTCdir.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == BtnMenuThemeGenesis)
                 {
-                    BtnMenuThemeGenesis.BackColor = panelMenu.BackColor;
+                    BtnMenuThemeGenesis.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemeSatsuma)
                 {
-                    btnMenuThemeSatsuma.BackColor = panelMenu.BackColor;
+                    btnMenuThemeSatsuma.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemeWhale)
                 {
-                    btnMenuThemeWhale.BackColor = panelMenu.BackColor;
+                    btnMenuThemeWhale.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemePlanetBTC)
                 {
-                    btnMenuThemePlanetBTC.BackColor = panelMenu.BackColor;
+                    btnMenuThemePlanetBTC.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemeCitadel)
                 {
-                    btnMenuThemeCitadel.BackColor = panelMenu.BackColor;
+                    btnMenuThemeCitadel.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnUSD)
                 {
-                    btnUSD.BackColor = panelMenu.BackColor;
+                    btnUSD.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnEUR)
                 {
-                    btnEUR.BackColor = panelMenu.BackColor;
+                    btnEUR.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnGBP)
                 {
-                    btnGBP.BackColor = panelMenu.BackColor;
+                    btnGBP.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnXAU)
                 {
-                    btnXAU.BackColor = panelMenu.BackColor;
+                    btnXAU.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnCurrency)
                 {
@@ -21068,6 +21068,10 @@ namespace SATSuma
                 if (sender == btnCopyErrorMessage)
                 {
                     btnCopyErrorMessage.BackColor = panelMenu.BackColor;
+                }
+                if (sender == comboBoxHeaderCustomThemes)
+                {
+                    comboBoxHeaderCustomThemes.BackColor = btnDeleteTheme.BackColor;
                 }
             }
             catch (Exception ex)
@@ -21140,6 +21144,10 @@ namespace SATSuma
                 {
                     btnMenuSplash.BackColor = Color.Transparent;
                     lblUpdaterLight.BackColor = Color.Transparent;
+                }
+                if (sender == comboBoxHeaderCustomThemes)
+                {
+                    comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {

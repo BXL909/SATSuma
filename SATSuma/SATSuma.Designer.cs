@@ -1440,13 +1440,12 @@
             // lblErrorMessage
             // 
             this.lblErrorMessage.AutoEllipsis = true;
-            this.lblErrorMessage.AutoSize = true;
             this.lblErrorMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblErrorMessage.ForeColor = System.Drawing.Color.IndianRed;
             this.lblErrorMessage.Location = new System.Drawing.Point(20, 3);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(98, 15);
+            this.lblErrorMessage.Size = new System.Drawing.Size(520, 15);
             this.lblErrorMessage.TabIndex = 40;
             this.lblErrorMessage.Text = "Error message";
             // 
@@ -16712,7 +16711,8 @@
             // 
             // comboBoxHeaderCustomThemes
             // 
-            this.comboBoxHeaderCustomThemes.BackColor = System.Drawing.Color.Gray;
+            this.comboBoxHeaderCustomThemes.BackColor = System.Drawing.Color.Transparent;
+            this.comboBoxHeaderCustomThemes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.comboBoxHeaderCustomThemes.BorderColor = System.Drawing.Color.DimGray;
             this.comboBoxHeaderCustomThemes.BorderSize = 0;
             this.comboBoxHeaderCustomThemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -16729,6 +16729,8 @@
             this.comboBoxHeaderCustomThemes.TabIndex = 251;
             this.comboBoxHeaderCustomThemes.Texts = "select theme ▼";
             this.comboBoxHeaderCustomThemes.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxHeaderCustomThemes_OnSelectedIndexChanged);
+            this.comboBoxHeaderCustomThemes.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.comboBoxHeaderCustomThemes.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // BtnMenuThemeGenesis
             // 
@@ -17689,7 +17691,6 @@
             this.panelLeftPanel.ResumeLayout(false);
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
-            this.panelErrorMessage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

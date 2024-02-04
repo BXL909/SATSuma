@@ -39,10 +39,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(940, 754);
             this.ControlBox = false;
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "loadingTheme";
             this.Opacity = 0.5D;
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "overlayForm";
             this.ResumeLayout(false);
 

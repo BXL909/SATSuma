@@ -41,6 +41,8 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "overlayForm";
             this.Opacity = 0.5D;
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "overlayForm";
             this.ResumeLayout(false);
 

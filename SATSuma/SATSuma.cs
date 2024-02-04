@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* set mouseover colors of top buttons (exit, etc) to match panel color
+* missing data on lightning dash
 * remove commented code
 * test
 */
@@ -2192,31 +2192,36 @@ namespace SATSuma
             return ("error", "error", "error", "error", "error", "error", "error", "error", "error");
         }
 
-        private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
+        //private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
+        private (string priceUSD, string priceGBP, string priceEUR) BitcoinExplorerOrgGetPrice()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
                 var data = JObject.Parse(response);
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
                 {
                     string priceUSD = Convert.ToString(data["usd"]);
                     string priceGBP = Convert.ToString(data["gbp"]);
                     string priceEUR = Convert.ToString(data["eur"]);
                     string priceXAU = Convert.ToString(data["xau"]);
-                    return (priceUSD, priceGBP, priceEUR, priceXAU);
+                    //return (priceUSD, priceGBP, priceEUR, priceXAU);
+                    return (priceUSD, priceGBP, priceEUR);
                 }
                 else
                 {
-                    return ("error", "error", "error", "error");
+                    //return ("error", "error", "error", "error");
+                    return ("error", "error", "error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetPrice");
             }
-            return ("error", "error", "error", "error");
+            //return ("error", "error", "error", "error");
+            return ("error", "error", "error");
         }
 
         private (string mCapUSD, string mCapGBP, string mCapEUR, string mCapXAU) BitcoinExplorerOrgGetMarketCap()
@@ -2246,31 +2251,36 @@ namespace SATSuma
             return ("error", "error", "error", "error");
         }
 
-        private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
+        private (string satsUSD, string satsGBP, string satsEUR) BitcoinExplorerOrgGetMoscowTime()
+        //private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price/sats");
                 var data = JObject.Parse(response);
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
                 {
                     string satsUSD = Convert.ToString(data["usd"]);
                     string satsGBP = Convert.ToString(data["gbp"]);
                     string satsEUR = Convert.ToString(data["eur"]);
                     string satsXAU = Convert.ToString(data["xau"]);
-                    return (satsUSD, satsGBP, satsEUR, satsXAU);
+                    return (satsUSD, satsGBP, satsEUR);
+                    //return (satsUSD, satsGBP, satsEUR, satsXAU);
                 }
                 else
                 {
-                    return ("error", "error", "error", "error");
+                    return ("error", "error", "error");
+                    //return ("error", "error", "error", "error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetMoscowTime");
             }
-            return ("error", "error", "error", "error");
+            return ("error", "error", "error");
+            //return ("error", "error", "error", "error");
         }
 
         private (string txCount, string vSize, string totalFees) GetMempool()
@@ -2405,37 +2415,6 @@ namespace SATSuma
             return (new List<string>(), new List<string>());
         }
 
-        /*
-        private (List<string> aliases, List<string> capacities) MempoolSpaceLiquidityRankingJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/liquidity");
-                var data = JArray.Parse(response);
-
-                List<string> aliases = new List<string>();
-                List<string> capacities = new List<string>();
-                for (int i = 0; i < 10; i++)
-                {
-                    aliases.Add((string)data[i]["alias"]);
-                    string capacity = (string)data[i]["capacity"];
-                    capacity = ConvertSatsToBitcoin(capacity).ToString();
-                    double dblCapacity = Convert.ToDouble(capacity);
-                    dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
-                    capacity = Convert.ToString(dblCapacity);
-                    capacities.Add(capacity);
-                }
-                return (aliases, capacities);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "MempoolSpaceLiquidityRankingJSONRefresh");
-            }
-            return (new List<string>(), new List<string>());
-        }
-        */
-
         private (List<string> aliases, List<string> channels) MempoolSpaceConnectivityRankingJSONRefresh()
         {
             try
@@ -2482,32 +2461,6 @@ namespace SATSuma
 
             return (new List<string>(), new List<string>());
         }
-
-        /*
-        private (List<string> aliases, List<string> channels) MempoolSpaceConnectivityRankingJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/connectivity");
-                var data = JArray.Parse(response);
-
-                List<string> aliases = new List<string>();
-                List<string> channels = new List<string>();
-                for (int i = 0; i < 10; i++)
-                {
-                    aliases.Add((string)data[i]["alias"]);
-                    channels.Add((string)data[i]["channels"]);
-                }
-                return (aliases, channels);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "MempoolSpaceConnectivityRankingJSONRefresh");
-            }
-            return (new List<string>(), new List<string>());
-        }
-        */
 
         private (string clearnetCapacity, string torCapacity, string unknownCapacity) MempoolSpaceCapacityBreakdownJSONRefresh()
         {
@@ -2566,39 +2519,6 @@ namespace SATSuma
 
             return ("0", "0", "0");
         }
-
-        /*
-        private (string clearnetCapacity, string torCapacity, string unknownCapacity) MempoolSpaceCapacityBreakdownJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/isp-ranking");
-                var data = JObject.Parse(response);
-                string clearnetCapacityString = Convert.ToString(data["clearnetCapacity"]);
-                string clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
-                double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
-                dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
-                clearnetCapacity = Convert.ToString(dblClearnetCapacity);
-                string torCapacityString = Convert.ToString(data["torCapacity"]);
-                string torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
-                double dblTorCapacity = Convert.ToDouble(torCapacity);
-                dblTorCapacity = Math.Round(dblTorCapacity, 2);
-                torCapacity = Convert.ToString(dblTorCapacity);
-                string unknownCapacityString = Convert.ToString(data["unknownCapacity"]);
-                string unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
-                double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
-                dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
-                unknownCapacity = Convert.ToString(dblUnknownCapacity);
-                return (clearnetCapacity, torCapacity, unknownCapacity);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "MempoolSpaceCapacityBreakdownJSONRefresh");
-            }
-            return ("0", "0", "0");
-        }
-        */
 
         private (string channelCount, string nodeCount, string totalCapacity, string torNodes, string clearnetNodes, string unannouncedNodes, string avgCapacity, string avgFeeRate, string avgBaseeFeeMtokens, string medCapacity, string medFeeRate, string medBaseeFeeMtokens, string clearnetTorNodes) MempoolSpaceLightningJSONRefresh()
         {
@@ -10838,7 +10758,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10851,12 +10772,14 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
+                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
+                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in PriceList)
@@ -10962,7 +10885,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10975,12 +10899,14 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
+                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
+                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in PriceList)
@@ -11114,7 +11040,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -11127,12 +11054,14 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
+                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
+                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in MarketCapList)
@@ -11239,7 +11168,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -11252,12 +11182,14 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
+                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
+                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in MarketCapList)
@@ -11783,7 +11715,8 @@ namespace SATSuma
             {
                 if (!offlineMode && !testNet)
                 {
-                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
 
                     #region USD list
                     if (string.IsNullOrEmpty(priceUSD) || !double.TryParse(priceUSD, out _))
@@ -12008,6 +11941,7 @@ namespace SATSuma
                     });
                     #endregion
                     #region XAU list
+                    /*
                     if (string.IsNullOrEmpty(priceXAU) || !double.TryParse(priceXAU, out _))
                     {
                         priceXAU = "0";
@@ -12080,6 +12014,7 @@ namespace SATSuma
                     {
                         labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
                     });
+                    */
                     #endregion
                     #region calculate fields derived from user input
                     SetCalculatedFiatAmounts();
@@ -12378,10 +12313,10 @@ namespace SATSuma
                 {
                     labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
                 });
-                labelPCXAUcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
-                });
+                //labelPCXAUcustom.Invoke((MethodInvoker)delegate
+                //{
+                //    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
+                //});
             }
             catch (WebException ex)
             {
@@ -16119,10 +16054,12 @@ namespace SATSuma
                 {
                     currencySelected = "E";
                 }
+                /*
                 if (btnXAU.Enabled == false)
                 {
                     currencySelected = "G";
                 }
+                */
                 if (testNet == false && RunMempoolSpaceLightningAPI == true)
                 {
                     selectedNetwork = "M";
@@ -16493,7 +16430,7 @@ namespace SATSuma
                             btnGBP.Enabled = false;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
-                            btnXAU.Enabled = true;
+                            //btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (GBP)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
@@ -16512,7 +16449,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
-                            btnXAU.Enabled = true;
+                            //btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (USD)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
@@ -16531,7 +16468,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
-                            btnXAU.Enabled = true;
+                            //btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (EUR)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
@@ -16550,7 +16487,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
-                            btnXAU.Enabled = false;
+                            //btnXAU.Enabled = false;
                             btnCurrency.Text = "   currency (XAU)  ▼";
                         }
                         #endregion
@@ -16793,7 +16730,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = "genesis";
-                                        lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(3 * UIScale));
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(5 * UIScale));
                                     });
                                     ClearThemeMenuMarkers();
                                     BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -16817,8 +16754,8 @@ namespace SATSuma
                                         btnMenuThemeWhale.Enabled = true;
                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                         {
-                                            lblThemeMenuHighlightedButtonText.Text = "btcdir";
-                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + (int)(3 * UIScale));
+                                            lblThemeMenuHighlightedButtonText.Text = "franklin";
+                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + (int)(5 * UIScale));
                                         });
                                         ClearThemeMenuMarkers();
                                         btnMenuThemeBTCdir.Invoke((MethodInvoker)delegate
@@ -16843,7 +16780,7 @@ namespace SATSuma
                                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                             {
                                                 lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(3 * UIScale));
+                                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(5 * UIScale));
                                             });
                                             ClearThemeMenuMarkers();
                                             btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -16868,7 +16805,7 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblThemeMenuHighlightedButtonText.Text = "planet btc";
-                                                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(3 * UIScale));
+                                                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(5 * UIScale));
                                                 });
                                                 ClearThemeMenuMarkers();
                                                 btnMenuThemePlanetBTC.Invoke((MethodInvoker)delegate
@@ -16893,7 +16830,7 @@ namespace SATSuma
                                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                     {
                                                         lblThemeMenuHighlightedButtonText.Text = "whale";
-                                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(3 * UIScale));
+                                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(5 * UIScale));
                                                     });
                                                     ClearThemeMenuMarkers();
                                                     btnMenuThemeWhale.Invoke((MethodInvoker)delegate
@@ -16918,7 +16855,7 @@ namespace SATSuma
                                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                         {
                                                             lblThemeMenuHighlightedButtonText.Text = "lightning";
-                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + (int)(3 * UIScale));
+                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + (int)(5 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
                                                         btnMenuThemeCitadel.Invoke((MethodInvoker)delegate
@@ -16936,7 +16873,7 @@ namespace SATSuma
                                                         {
                                                             lblThemeMenuHighlightedButtonText.Visible = false;
                                                             lblThemeMenuHighlightedButtonText.Text = theme.ThemeName + "!";
-                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
+                                                            lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
                                                         btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -17393,7 +17330,7 @@ namespace SATSuma
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
-                    lblThemeMenuHighlightedButtonText.Text = "btcdir";
+                    lblThemeMenuHighlightedButtonText.Text = "franklin";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeBTCdir.Location.X + (btnMenuThemeBTCdir.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeBTCdir.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
@@ -20936,10 +20873,6 @@ namespace SATSuma
                 {
                     btnThemeMenu.BackColor = btnDeleteTheme.BackColor;
                 }
-                if (sender == btnShowGlobalSearch)
-                {
-                    btnShowGlobalSearch.BackColor = panelMenu.BackColor;
-                }
                 if (sender == btnMenuAddress)
                 {
                     btnMenuAddress.BackColor = btnDeleteTheme.BackColor;
@@ -21039,35 +20972,35 @@ namespace SATSuma
                 }
                 if (sender == btnHelp)
                 {
-                    btnHelp.BackColor = panelMenu.BackColor;
+                    btnHelp.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMinimise)
                 {
-                    btnMinimise.BackColor = panelMenu.BackColor;
+                    btnMinimise.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnShowGlobalSearch)
                 {
-                    btnShowGlobalSearch.BackColor = panelMenu.BackColor;
+                    btnShowGlobalSearch.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMoveWindow)
                 {
-                    btnMoveWindow.BackColor = panelMenu.BackColor;
+                    btnMoveWindow.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnExit)
                 {
-                    btnExit.BackColor = panelMenu.BackColor;
+                    btnExit.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnAddToBookmarks)
                 {
-                    btnAddToBookmarks.BackColor = panelMenu.BackColor;
+                    btnAddToBookmarks.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnHideErrorMessage)
                 {
-                    btnHideErrorMessage.BackColor = panelMenu.BackColor;
+                    btnHideErrorMessage.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnCopyErrorMessage)
                 {
-                    btnCopyErrorMessage.BackColor = panelMenu.BackColor;
+                    btnCopyErrorMessage.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == comboBoxHeaderCustomThemes)
                 {
@@ -21408,7 +21341,7 @@ namespace SATSuma
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = (int)(112 * UIScale);
+                panelMaxHeight = (int)(88 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
@@ -22659,14 +22592,6 @@ namespace SATSuma
                     }
                 }
                 #endregion
-//                headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
-//                {
-//                    headerSelectedNodeStatus.Location = new Point(panelRefreshStatusBar.Location.X + panelRefreshStatusBar.Width - headerSelectedNodeStatus.Width, headerSelectedNodeStatus.Location.Y);
-//                });
-//                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-//                {
-//                    headerSelectedNodeStatusLight.Location = new Point(headerSelectedNodeStatus.Location.X - headerSelectedNodeStatusLight.Width, headerSelectedNodeStatusLight.Location.Y);
-//                });
             }
             catch (Exception ex)
             {
@@ -23433,60 +23358,6 @@ namespace SATSuma
             }
         }
 
-        /*
-        private void OpenHelpScreen()
-        {
-            try
-            {
-                // take a screenshot of the form and darken it:
-                Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
-                using (Graphics G = Graphics.FromImage(bmp))
-                {
-                    G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                    G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
-                    double percent = 0.60;
-                    Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
-                    using Brush brsh = new SolidBrush(darken);
-                    G.FillRectangle(brsh, this.ClientRectangle);
-                }
-                // put the darkened screenshot into a Panel and bring it to the front:
-                using (Panel p = new Panel())
-                {
-                    p.Location = new Point(0, 0);
-                    p.Size = this.ClientRectangle.Size;
-                    p.BackgroundImage = bmp;
-                    this.Controls.Add(p);
-                    p.BringToFront();
-
-                    Form frm = new HelpScreen
-                    {
-                        Owner = this, // Set the parent window as the owner of the modal window
-                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                        TextColor = label77.ForeColor, // random label color to pass to the help screen
-                        HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
-                        ButtonTextColor = btnExit.ForeColor,
-                        ButtonBackColor = btnExit.BackColor,
-                        ButtonTextColor2 = btnPreviousBlock.ForeColor,
-                        ButtonBackColor2 = btnPreviousBlock.BackColor,
-                        TextBoxBackColor = chartsBackgroundColor,
-                        TextBoxForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor,
-                        WindowBackgroundColor = panel76.BackColor,
-                        ButtonRadius = btnExit.BorderRadius,
-                        ButtonBorderColor = btnExit.BorderColor,
-                        ButtonBorderSize = btnExit.BorderSize,
-                        DataFieldColor = lblHeaderMarketCap.ForeColor
-                    };
-                    frm.StartPosition = FormStartPosition.CenterParent;
-                    frm.ShowDialog(this);
-                } // panel will be disposed and the form will "lighten" again...
-                CloseMainMenu();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "OpenHelpScreen");
-            }
-        }
-        */
         private void OpenHelpScreen()
         {
             try
@@ -23591,58 +23462,7 @@ namespace SATSuma
                 HandleException(ex, "BtnMenuSplash_Click");
             }
         }
-        /*
-        private void BtnMenuSplash_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // take a screenshot of the form and darken it:
-                Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
-                using (Graphics G = Graphics.FromImage(bmp))
-                {
-                    G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                    G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
-                    double percent = 0.60;
-                    Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
-                    using Brush brsh = new SolidBrush(darken);
-                    G.FillRectangle(brsh, this.ClientRectangle);
-                }
-                // put the darkened screenshot into a Panel and bring it to the front:
-                using (Panel p = new Panel())
-                {
-                    p.Location = new Point(0, 0);
-                    p.Size = this.ClientRectangle.Size;
-                    p.BackgroundImage = bmp;
-                    this.Controls.Add(p);
-                    p.BringToFront();
 
-                    // display about screen:
-                    Form frm = new Splash
-                    {
-                        Owner = this, // Set the parent window as the owner of the modal window
-                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                        WindowBackgroundColor = panel88.BackColor,
-                        LabelColor = label77.ForeColor,
-                        LinksColor = lblHeaderMarketCap.ForeColor,
-                        ButtonTextColor = btnExit.ForeColor,
-                        ButtonBackColor = btnExit.BackColor,
-                        CurrentVersion = CurrentVersion,
-                        OfflineMode = offlineMode,
-                        ButtonRadius = btnExit.BorderRadius,
-                        ButtonBorderColor = btnExit.BorderColor,
-                        ButtonBorderSize = btnExit.BorderSize
-                    };
-                    frm.StartPosition = FormStartPosition.CenterParent;
-                    frm.ShowDialog(this);
-                } // panel will be disposed and the form will "lighten" again...
-                CloseMainMenu();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BtnMenuSplash_Click");
-            }
-        }
-        */
         #endregion
         #region currency menu & get market data
         private void BtnCurrency_Click(object sender, EventArgs e)
@@ -23651,7 +23471,6 @@ namespace SATSuma
             {
                 CloseThemeMenu();
                 btnCurrency.BringToFront();
-                //panelCurrency.BringToFront();
                 if (panelCurrency.Height == 0)
                 {
                     //expand the panel
@@ -23676,13 +23495,13 @@ namespace SATSuma
                 btnUSD.Enabled = false;
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
-                btnXAU.Enabled = true;
+                //btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (USD)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(3 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(5 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnUSD.Invoke((MethodInvoker)delegate
@@ -23731,13 +23550,13 @@ namespace SATSuma
                 btnUSD.Enabled = true;
                 btnEUR.Enabled = false;
                 btnGBP.Enabled = true;
-                btnXAU.Enabled = true;
+                //btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (EUR)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(3 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(5 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnEUR.Invoke((MethodInvoker)delegate
@@ -23786,13 +23605,13 @@ namespace SATSuma
                 btnUSD.Enabled = true;
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = false;
-                btnXAU.Enabled = true;
+                //btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (GBP)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(3 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(5 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnGBP.Invoke((MethodInvoker)delegate
@@ -23847,7 +23666,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(3 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(5 * UIScale));
                 });
                 ClearCurrencyMenuMarkers();
                 btnXAU.Invoke((MethodInvoker)delegate
@@ -23888,6 +23707,7 @@ namespace SATSuma
                 HandleException(ex, "BtnXAU_Click");
             }
         }
+
 
         private void RefreshFiatValuesEverywhere()
         {
@@ -24027,15 +23847,17 @@ namespace SATSuma
             {
                 if (!offlineMode && !testNet && RunBitcoinExplorerEndpointAPI)
                 {
-                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                     var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
-                    var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+                    //var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+                    var (satsUSD, satsGBP, satsEUR) = BitcoinExplorerOrgGetMoscowTime();
                     if (testNet)
                     {
                         priceUSD = "0 (TestNet)";
                         priceGBP = "0 (TestNet)";
                         priceEUR = "0 (TestNet)";
-                        priceXAU = "0 (TestNet)";
+                        //priceXAU = "0 (TestNet)";
                         mCapUSD = "0 (TestNet)";
                         mCapGBP = "0 (TestNet)";
                         mCapEUR = "0 (TestNet)";
@@ -24043,7 +23865,7 @@ namespace SATSuma
                         satsUSD = "0 (TestNet)";
                         satsGBP = "0 (TestNet)";
                         satsEUR = "0 (TestNet)";
-                        satsXAU = "0 (TestNet)";
+                        //satsXAU = "0 (TestNet)";
                     }
                     string price = "";
                     string mCap = "";
@@ -24119,6 +23941,7 @@ namespace SATSuma
                     }
                     if (!btnXAU.Enabled)
                     {
+                        /*
                         OneBTCinSelectedCurrency = Convert.ToDecimal(priceXAU);
                         price = "🪙" + priceXAU;
                         mCap = "🪙" + Convert.ToDecimal(mCapXAU).ToString("F2");
@@ -24139,6 +23962,7 @@ namespace SATSuma
                         {
                             lblMarketCapLabel.Text = "Market cap (XAU)";
                         });
+                        */
                     }
 
                     lblHeaderMoscowTime.Invoke((MethodInvoker)delegate

@@ -16722,7 +16722,7 @@
             // btnMenuApplyCustomTheme
             // 
             this.btnMenuApplyCustomTheme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuApplyCustomTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuApplyCustomTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMenuApplyCustomTheme.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnMenuApplyCustomTheme.Enabled = false;
             this.btnMenuApplyCustomTheme.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
@@ -17398,12 +17398,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);

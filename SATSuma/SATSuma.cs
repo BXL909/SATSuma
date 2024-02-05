@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* missing data on lightning dash
+* selected custom theme marker wrong in submenu
 * remove commented code
 * test
 */
@@ -505,7 +505,6 @@ namespace SATSuma
             panel22.Paint += Panel_Paint;
             panel34.Paint += Panel_Paint;
             panel37.Paint += Panel_Paint;
-            panel97.Paint += Panel_Paint;
             panel108.Paint += Panel_Paint;
             panel109.Paint += Panel_Paint;
             panelLoadingAnimationContainer.Paint += Panel_Paint;
@@ -2528,7 +2527,7 @@ namespace SATSuma
                 LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "v1/lightning/statistics/latest");
                 var data = JObject.Parse(response);
-                if (data["latest"]["channel_count"] != null && data["latest"]["node_count"] != null && data["latest"]["total_capacity"] != null && data["latest"]["tor_nodes"] != null && data["latest"]["clearnet_nodes"] != null && data["latest"]["unannounced_nodes"] != null && data["latest"]["avg_capacity"] != null && data["latest"]["avg_fee_rate"] != null && data["latest"]["avg_base_fee_mtokens"] != null && data["latest"]["med_capacity"] != null && data["latest"]["med_fee_rate"] != null && data["latest"]["med_basee_fee_mtokens"] != null && data["latest"]["clearnet_tor_nodes"] != null)
+                if (data["latest"]["channel_count"] != null && data["latest"]["node_count"] != null && data["latest"]["total_capacity"] != null && data["latest"]["tor_nodes"] != null && data["latest"]["clearnet_nodes"] != null && data["latest"]["unannounced_nodes"] != null && data["latest"]["avg_capacity"] != null && data["latest"]["avg_fee_rate"] != null && data["latest"]["avg_base_fee_mtokens"] != null && data["latest"]["med_capacity"] != null && data["latest"]["med_fee_rate"] != null && data["latest"]["med_base_fee_mtokens"] != null && data["latest"]["clearnet_tor_nodes"] != null)
                 {
                     var channelCount = (string)data["latest"]["channel_count"];
                     var nodeCount = (string)data["latest"]["node_count"];
@@ -2552,7 +2551,7 @@ namespace SATSuma
                     var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
                     var medCapacity = (string)data["latest"]["med_capacity"];
                     var medFeeRate = (string)data["latest"]["med_fee_rate"];
-                    var medBaseeFeeMtokens = (string)data["latest"]["med_basee_fee_mtokens"];
+                    var medBaseeFeeMtokens = (string)data["latest"]["med_base_fee_mtokens"];
                     medBaseeFeeMtokens ??= "0";
                     var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
                     return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
@@ -16854,7 +16853,7 @@ namespace SATSuma
                                                         btnMenuThemeWhale.Enabled = true;
                                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                         {
-                                                            lblThemeMenuHighlightedButtonText.Text = "lightning";
+                                                            lblThemeMenuHighlightedButtonText.Text = "symbol";
                                                             lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeCitadel.Location.X + (btnMenuThemeCitadel.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeCitadel.Location.Y + (int)(5 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
@@ -17436,7 +17435,7 @@ namespace SATSuma
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
-                    lblThemeMenuHighlightedButtonText.Text = "whale";
+                    lblThemeMenuHighlightedButtonText.Text = "jellyfish";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
@@ -20395,21 +20394,40 @@ namespace SATSuma
         {
             try
             {
-                //header
                 Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeBTCdir, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemePlanetBTC, btnMenuThemeCitadel, btnMenuThemeWhale, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-                foreach (Control control in listHeaderButtonTextToColor)
+                if (lblChartsDarkBackground.Text == "✔️")
                 {
-                    control.ForeColor = Color.Silver;
-                }
-                comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
-                comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
-                btnMenuApplyCustomTheme.ForeColor = Color.Silver;
-                lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                lblHelpOffline.ForeColor = Color.DimGray;
-                lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+                    //header
 
+                    foreach (Control control in listHeaderButtonTextToColor)
+                    {
+                        control.ForeColor = Color.Silver;
+                    }
+                    comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
+                    comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
+                    btnMenuApplyCustomTheme.ForeColor = Color.Silver;
+                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblHelpOffline.ForeColor = Color.DimGray;
+                    lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+                }
+                else
+                {
+                    //header
+                    foreach (Control control in listHeaderButtonTextToColor)
+                    {
+                        control.ForeColor = Color.DimGray;
+                    }
+                    comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
+                    comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
+                    btnMenuApplyCustomTheme.ForeColor = Color.DimGray;
+                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblHelpOffline.ForeColor = Color.Silver;
+                    lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
+                }
                 btnUniversalSearch.ForeColor = thiscolor;
 
                 //settings & appearance
@@ -21702,7 +21720,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region rounded border around rounded form
-                if (BtnMenuThemeGenesis.Enabled == false || btnMenuThemeBTCdir.Enabled == false)
+                if (BtnMenuThemeGenesis.Enabled == false || btnMenuThemeBTCdir.Enabled == false || btnMenuThemeSatsuma.Enabled == false)
                 {
                     // Paint the border with a 1-pixel width
                     using var pen = new Pen(Color.DimGray, 1);

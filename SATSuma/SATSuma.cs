@@ -28,7 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * tidy/align screen elements on all screens
 * resize theme backgrounds and improve themes
-* selected custom theme marker wrong in submenu
+* make more title backgrounds
+* restore title backgrounds
 * remove commented code
 * test
 */
@@ -64,6 +65,7 @@ using System.Drawing.Drawing2D;
 using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
+using ScottPlot.Drawing.Colormaps;
 #endregion
 
 namespace SATSuma
@@ -315,7 +317,7 @@ namespace SATSuma
         #endregion
         #region misc
         decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
-        bool firstTimeLoadingScreen = true; 
+        bool firstTimeLoadingScreen = true;
         #endregion
         #endregion
 
@@ -457,6 +459,7 @@ namespace SATSuma
             panelAppearanceTextbox1Container.Paint += Panel_Paint;
             panelComboBoxStartupScreenContainer.Paint += Panel_Paint;
             panelCustomizeThemeListContainer.Paint += Panel_Paint;
+            panelHeadingBackgroundSelect.Paint += Panel_Paint;
             panelSelectBlockNumberContainer.Paint += Panel_Paint;
             panelUniversalSearchContainer.Paint += Panel_Paint;
             panel75.Paint += Panel_Paint;
@@ -620,6 +623,8 @@ namespace SATSuma
                 CheckForUpdates();
                 PopulateThemeComboboxes();
                 LoadAndStyleDirectoryBrowser();
+
+                
                 #region navigate to the saved startup screen
 
                 Dictionary<string, Action> buttonClickEvents = new Dictionary<string, Action>
@@ -2191,36 +2196,36 @@ namespace SATSuma
             return ("error", "error", "error", "error", "error", "error", "error", "error", "error");
         }
 
-        //private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
-        private (string priceUSD, string priceGBP, string priceEUR) BitcoinExplorerOrgGetPrice()
+        private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
+        //private (string priceUSD, string priceGBP, string priceEUR) BitcoinExplorerOrgGetPrice()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
                 var data = JObject.Parse(response);
-                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
+                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
                 {
                     string priceUSD = Convert.ToString(data["usd"]);
                     string priceGBP = Convert.ToString(data["gbp"]);
                     string priceEUR = Convert.ToString(data["eur"]);
                     string priceXAU = Convert.ToString(data["xau"]);
-                    //return (priceUSD, priceGBP, priceEUR, priceXAU);
-                    return (priceUSD, priceGBP, priceEUR);
+                    return (priceUSD, priceGBP, priceEUR, priceXAU);
+                    //return (priceUSD, priceGBP, priceEUR);
                 }
                 else
                 {
-                    //return ("error", "error", "error", "error");
-                    return ("error", "error", "error");
+                    return ("error", "error", "error", "error");
+                    //return ("error", "error", "error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetPrice");
             }
-            //return ("error", "error", "error", "error");
-            return ("error", "error", "error");
+            return ("error", "error", "error", "error");
+            //return ("error", "error", "error");
         }
 
         private (string mCapUSD, string mCapGBP, string mCapEUR, string mCapXAU) BitcoinExplorerOrgGetMarketCap()
@@ -2250,36 +2255,36 @@ namespace SATSuma
             return ("error", "error", "error", "error");
         }
 
-        private (string satsUSD, string satsGBP, string satsEUR) BitcoinExplorerOrgGetMoscowTime()
-        //private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
+        //private (string satsUSD, string satsGBP, string satsEUR) BitcoinExplorerOrgGetMoscowTime()
+        private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price/sats");
                 var data = JObject.Parse(response);
-                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
+                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
+                //if (data["usd"] != null && data["gbp"] != null && data["eur"] != null)
                 {
                     string satsUSD = Convert.ToString(data["usd"]);
                     string satsGBP = Convert.ToString(data["gbp"]);
                     string satsEUR = Convert.ToString(data["eur"]);
                     string satsXAU = Convert.ToString(data["xau"]);
-                    return (satsUSD, satsGBP, satsEUR);
-                    //return (satsUSD, satsGBP, satsEUR, satsXAU);
+                    //return (satsUSD, satsGBP, satsEUR);
+                    return (satsUSD, satsGBP, satsEUR, satsXAU);
                 }
                 else
                 {
-                    return ("error", "error", "error");
-                    //return ("error", "error", "error", "error");
+                    //return ("error", "error", "error");
+                    return ("error", "error", "error", "error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetMoscowTime");
             }
-            return ("error", "error", "error");
-            //return ("error", "error", "error", "error");
+            //return ("error", "error", "error");
+            return ("error", "error", "error", "error");
         }
 
         private (string txCount, string vSize, string totalFees) GetMempool()
@@ -10757,8 +10762,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10771,14 +10776,12 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
-                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
-                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in PriceList)
@@ -10884,8 +10887,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10898,14 +10901,12 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
-                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
-                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in PriceList)
@@ -11039,8 +11040,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -11053,14 +11054,12 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
-                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
-                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in MarketCapList)
@@ -11167,8 +11166,8 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -11181,14 +11180,12 @@ namespace SATSuma
                             formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
-                        /*
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
                             formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
-                        */
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
                         foreach (var item in MarketCapList)
@@ -11714,8 +11711,8 @@ namespace SATSuma
             {
                 if (!offlineMode && !testNet)
                 {
-                    //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                    var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
 
                     #region USD list
                     if (string.IsNullOrEmpty(priceUSD) || !double.TryParse(priceUSD, out _))
@@ -11940,7 +11937,6 @@ namespace SATSuma
                     });
                     #endregion
                     #region XAU list
-                    /*
                     if (string.IsNullOrEmpty(priceXAU) || !double.TryParse(priceXAU, out _))
                     {
                         priceXAU = "0";
@@ -12013,7 +12009,6 @@ namespace SATSuma
                     {
                         labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
                     });
-                    */
                     #endregion
                     #region calculate fields derived from user input
                     SetCalculatedFiatAmounts();
@@ -12059,7 +12054,7 @@ namespace SATSuma
         {
             textBoxConvertXAUtoBTC.Invoke((MethodInvoker)delegate
             {
-                //       textBoxConvertXAUtoBTC.Text = "";
+                       textBoxConvertXAUtoBTC.Text = "";
             });
         }
 
@@ -12312,10 +12307,10 @@ namespace SATSuma
                 {
                     labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
                 });
-                //labelPCXAUcustom.Invoke((MethodInvoker)delegate
-                //{
-                //    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
-                //});
+                labelPCXAUcustom.Invoke((MethodInvoker)delegate
+                {
+                    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
+                });
             }
             catch (WebException ex)
             {
@@ -16053,12 +16048,10 @@ namespace SATSuma
                 {
                     currencySelected = "E";
                 }
-                /*
                 if (btnXAU.Enabled == false)
                 {
                     currencySelected = "G";
                 }
-                */
                 if (testNet == false && RunMempoolSpaceLightningAPI == true)
                 {
                     selectedNetwork = "M";
@@ -16429,7 +16422,7 @@ namespace SATSuma
                             btnGBP.Enabled = false;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
-                            //btnXAU.Enabled = true;
+                            btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (GBP)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
@@ -16448,7 +16441,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
-                            //btnXAU.Enabled = true;
+                            btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (USD)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
@@ -16467,7 +16460,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
-                            //btnXAU.Enabled = true;
+                            btnXAU.Enabled = true;
                             btnCurrency.Text = "   currency (EUR)  ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
@@ -16486,7 +16479,7 @@ namespace SATSuma
                             btnGBP.Enabled = true;
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
-                            //btnXAU.Enabled = false;
+                            btnXAU.Enabled = false;
                             btnCurrency.Text = "   currency (XAU)  ▼";
                         }
                         #endregion
@@ -18796,6 +18789,7 @@ namespace SATSuma
         {
             try
             {
+                comboBoxTitlesBackgroundImage.Enabled = false;
                 if (lblTitleBackgroundNone.Text != "✔️")
                 {
                     HeadingBackgroundsToNone();
@@ -18811,9 +18805,24 @@ namespace SATSuma
         {
             try
             {
-                if (lblTitleBackgroundDefault.Text != "✔️")
+                lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
                 {
-                    HeadingBackgroundsToDefault();
+                    lblTitlesBackgroundImage.ForeColor = Color.Green;
+                    lblTitlesBackgroundImage.Text = "✔️";
+                });
+                lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                    lblTitleBackgroundNone.Text = "❌";
+                });
+                lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                {
+                    lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                    lblTitleBackgroundCustom.Text = "❌";
+                });
+                if (lblTitlesBackgroundImage.Text == "✔️")
+                {
+                    comboBoxTitlesBackgroundImage.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -18826,6 +18835,7 @@ namespace SATSuma
         {
             try
             {
+                comboBoxTitlesBackgroundImage.Enabled = false;
                 ColorDialog colorDlgForTitleBackgrounds = new ColorDialog
                 {
                     AllowFullOpen = true,
@@ -18847,10 +18857,10 @@ namespace SATSuma
                     {
                         lblTitleBackgroundNone.Text = "❌";
                     });
-                    lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                    lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                    lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                    lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
                     {
-                        lblTitleBackgroundDefault.Text = "❌";
+                        lblTitlesBackgroundImage.Text = "❌";
                     });
 
                     SetCustomTitleBackgroundColor();
@@ -18868,6 +18878,7 @@ namespace SATSuma
             {
                 if (lblTitleBackgroundCustom.Text != "✔️")
                 {
+                    comboBoxTitlesBackgroundImage.Enabled = false;
                     lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
                     {
                         lblTitleBackgroundCustom.Text = "✔️";
@@ -18878,10 +18889,10 @@ namespace SATSuma
                         lblTitleBackgroundNone.Text = "❌";
                         lblTitleBackgroundNone.ForeColor = Color.IndianRed;
                     });
-                    lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                    lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
                     {
-                        lblTitleBackgroundDefault.Text = "❌";
-                        lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
+                        lblTitlesBackgroundImage.Text = "❌";
+                        lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
                     });
                     SetCustomTitleBackgroundColor();
                 }
@@ -18981,7 +18992,7 @@ namespace SATSuma
 
                 bool showtime = lblTime.Visible;
                 bool headingbgdefault = false;
-                if (lblTitleBackgroundDefault.Text == "✔️")
+                if (lblTitlesBackgroundImage.Text == "✔️")
                 {
                     headingbgdefault = true;
                 }
@@ -19103,7 +19114,10 @@ namespace SATSuma
 
                 decimal opacity = numericUpDownOpacity.Value;
 
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma, BackgroundBTCWhale = backgroundBTCWhale, BackgroundCitadel = backgroundCitadel, BackgroundPlanetBTC = backgroundPlanetBTC, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity };
+                int titlesBackgroundImage = comboBoxTitlesBackgroundImage.SelectedIndex;
+                
+
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundbtcdir, BackgroundSatsuma = backgroundSatsuma, BackgroundBTCWhale = backgroundBTCWhale, BackgroundCitadel = backgroundCitadel, BackgroundPlanetBTC = backgroundPlanetBTC, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -19331,6 +19345,8 @@ namespace SATSuma
                         });
                     }
 
+                    comboBoxTitlesBackgroundImage.SelectedIndex = (theme.TitlesBackgroundImage);
+
                     ColorDataFields(theme.DataFields);
                     labelColor = theme.Labels; // (only used for poolranking chart title)
                     ColorLabels(theme.Labels);
@@ -19356,14 +19372,17 @@ namespace SATSuma
 
                     if (theme.HeadingBGDefault == true)
                     {
-                        HeadingBackgroundsToDefault();
+                        comboBoxTitlesBackgroundImage.Enabled = true;
+                        HeadingBackgroundsToImage();
                     }
                     if (theme.HeadingBGNone == true)
                     {
+                        comboBoxTitlesBackgroundImage.Enabled = false;
                         HeadingBackgroundsToNone();
                     }
                     if (theme.HeadingBGCustom == true)
                     {
+                        comboBoxTitlesBackgroundImage.Enabled = false;
                         lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
                         {
                             lblTitleBackgroundCustom.ForeColor = Color.Green;
@@ -19374,10 +19393,10 @@ namespace SATSuma
                             lblTitleBackgroundNone.ForeColor = Color.IndianRed;
                             lblTitleBackgroundNone.Text = "❌";
                         });
-                        lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
                         {
-                            lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                            lblTitleBackgroundDefault.Text = "❌";
+                            lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                            lblTitlesBackgroundImage.Text = "❌";
                         });
                         titleBackgroundColor = theme.HeadingBackgrounds;
                         HeadingBackgroundsToCustomColor();
@@ -19803,6 +19822,7 @@ namespace SATSuma
                 panelAppearanceTextbox1Container.Invalidate();
                 panelComboBoxStartupScreenContainer.Invalidate();
                 panelCustomizeThemeListContainer.Invalidate();
+                panelHeadingBackgroundSelect.Invalidate();
                 panelSelectBlockNumberContainer.Invalidate();
                 panelUniversalSearchContainer.Invalidate();
                 panel75.Invalidate();
@@ -20037,7 +20057,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label185, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20274,8 +20294,13 @@ namespace SATSuma
                 }
                 comboBoxCustomizeScreenThemeList.ForeColor = thiscolor;
                 comboBoxCustomizeScreenThemeList.ListTextColor = thiscolor;
+                comboBoxCustomizeScreenThemeList.ListBackColor = chartsBackgroundColor;
                 comboBoxStartupScreen.ForeColor = thiscolor;
                 comboBoxStartupScreen.ListTextColor = thiscolor;
+                comboBoxStartupScreen.ListBackColor = chartsBackgroundColor;
+                comboBoxTitlesBackgroundImage.ForeColor = thiscolor;
+                comboBoxTitlesBackgroundImage.ListTextColor = thiscolor;
+                comboBoxTitlesBackgroundImage.ListBackColor = chartsBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -20516,7 +20541,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitleBackgroundDefault, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundWhaleSelected, lblBackgroundCitadelSelected, lblBackgroundPlanetBTCSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblThemeDeleted, lblThemeSaved, lblThemeNameInUse, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundBTCdirSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundWhaleSelected, lblBackgroundCitadelSelected, lblBackgroundPlanetBTCSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblThemeDeleted, lblThemeSaved, lblThemeNameInUse, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -20584,94 +20609,106 @@ namespace SATSuma
             }
         }
 
-        private void HeadingBackgroundsToDefault()
+        private void HeadingBackgroundsToImage()
         {
             try
             {
-                lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                // Declare ImageFile variable
+                Image ImageFile = Properties.Resources.titleBGLongerOrange;
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 0)
                 {
-                    lblTitleBackgroundDefault.ForeColor = Color.Green;
-                    lblTitleBackgroundDefault.Text = "✔️";
-                });
-                lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                    ImageFile = Properties.Resources.titleBGLongerOrange;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 1)
                 {
-                    lblTitleBackgroundNone.ForeColor = Color.IndianRed;
-                    lblTitleBackgroundNone.Text = "❌";
-                });
-                lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                    ImageFile = Properties.Resources.OrangePaler;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 2)
                 {
-                    lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
-                    lblTitleBackgroundCustom.Text = "❌";
-                });
+                    ImageFile = Properties.Resources.OrangeFade; // it's kind of brown really!
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 3)
+                {
+                    ImageFile = Properties.Resources.BlueFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 4)
+                {
+                    ImageFile = Properties.Resources.GreenFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 5)
+                {
+                    ImageFile = Properties.Resources.PurpleFade;
+                }
+
                 //header
                 Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //settings & appearance
                 Control[] listSettingsHeadingsToColor = { panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9, panel109 };
                 foreach (Control control in listBitcoinDashboardHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
                 foreach (Control control in listLightningDashboardHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //address
                 Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
                 foreach (Control control in listAddressHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //transaction
                 Control[] listTransactionHeadingsToColor = { panel27, panel28 };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //xpub
                 Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
                 foreach (Control control in listXpubHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
                 //charts
                 Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
-                    control.BackgroundImage = Properties.Resources.titleBGLongerOrange;
+                    control.BackgroundImage = ImageFile;
                 }
             }
             catch (Exception ex)
@@ -20689,10 +20726,10 @@ namespace SATSuma
                     lblTitleBackgroundNone.ForeColor = Color.Green;
                     lblTitleBackgroundNone.Text = "✔️";
                 });
-                lblTitleBackgroundDefault.Invoke((MethodInvoker)delegate
+                lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
                 {
-                    lblTitleBackgroundDefault.ForeColor = Color.IndianRed;
-                    lblTitleBackgroundDefault.Text = "❌";
+                    lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                    lblTitlesBackgroundImage.Text = "❌";
                 });
                 lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
                 {
@@ -21363,7 +21400,7 @@ namespace SATSuma
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = (int)(88 * UIScale);
+                panelMaxHeight = (int)(112 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
@@ -23517,7 +23554,7 @@ namespace SATSuma
                 btnUSD.Enabled = false;
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
-                //btnXAU.Enabled = true;
+                btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (USD)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -23572,7 +23609,7 @@ namespace SATSuma
                 btnUSD.Enabled = true;
                 btnEUR.Enabled = false;
                 btnGBP.Enabled = true;
-                //btnXAU.Enabled = true;
+                btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (EUR)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -23627,7 +23664,7 @@ namespace SATSuma
                 btnUSD.Enabled = true;
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = false;
-                //btnXAU.Enabled = true;
+                btnXAU.Enabled = true;
                 btnCurrency.Text = "   currency (GBP)  ▼";
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -23869,17 +23906,17 @@ namespace SATSuma
             {
                 if (!offlineMode && !testNet && RunBitcoinExplorerEndpointAPI)
                 {
-                    //var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                    var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                    //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                     var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
-                    //var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
-                    var (satsUSD, satsGBP, satsEUR) = BitcoinExplorerOrgGetMoscowTime();
+                    var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
+                    //var (satsUSD, satsGBP, satsEUR) = BitcoinExplorerOrgGetMoscowTime();
                     if (testNet)
                     {
                         priceUSD = "0 (TestNet)";
                         priceGBP = "0 (TestNet)";
                         priceEUR = "0 (TestNet)";
-                        //priceXAU = "0 (TestNet)";
+                        priceXAU = "0 (TestNet)";
                         mCapUSD = "0 (TestNet)";
                         mCapGBP = "0 (TestNet)";
                         mCapEUR = "0 (TestNet)";
@@ -23887,7 +23924,7 @@ namespace SATSuma
                         satsUSD = "0 (TestNet)";
                         satsGBP = "0 (TestNet)";
                         satsEUR = "0 (TestNet)";
-                        //satsXAU = "0 (TestNet)";
+                        satsXAU = "0 (TestNet)";
                     }
                     string price = "";
                     string mCap = "";
@@ -23963,7 +24000,6 @@ namespace SATSuma
                     }
                     if (!btnXAU.Enabled)
                     {
-                        /*
                         OneBTCinSelectedCurrency = Convert.ToDecimal(priceXAU);
                         price = "🪙" + priceXAU;
                         mCap = "🪙" + Convert.ToDecimal(mCapXAU).ToString("F2");
@@ -23984,7 +24020,6 @@ namespace SATSuma
                         {
                             lblMarketCapLabel.Text = "Market cap (XAU)";
                         });
-                        */
                     }
 
                     lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
@@ -24580,6 +24615,7 @@ namespace SATSuma
             public int BorderRadius { get; set; }
             public Color FiatConversionText { get; set; }
             public decimal Opacity { get; set; }
+            public int TitlesBackgroundImage { get; set; }
         }
         #endregion
         #region address transactions
@@ -25591,5 +25627,14 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+        private void comboBoxSelectHeadingBackground_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lblTitlesBackgroundImage.Text == "✔️")
+            {
+                HeadingBackgroundsToImage();
+            }
+
+        }
     }
 }                

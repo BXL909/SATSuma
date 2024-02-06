@@ -83,6 +83,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BlueFade {
+            get {
+                object obj = ResourceManager.GetObject("BlueFade", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BTCWhale {
             get {
                 object obj = ResourceManager.GetObject("BTCWhale", resourceCulture);
@@ -163,6 +173,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GreenFade {
+            get {
+                object obj = ResourceManager.GetObject("GreenFade", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap helpselectDropdown {
             get {
                 object obj = ResourceManager.GetObject("helpselectDropdown", resourceCulture);
@@ -233,9 +253,29 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap OrangeFade {
+            get {
+                object obj = ResourceManager.GetObject("OrangeFade", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OrangeInfinity {
             get {
                 object obj = ResourceManager.GetObject("OrangeInfinity", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OrangePaler {
+            get {
+                object obj = ResourceManager.GetObject("OrangePaler", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -256,6 +296,16 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap PnVlfRPD_400x400 {
             get {
                 object obj = ResourceManager.GetObject("PnVlfRPD_400x400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PurpleFade {
+            get {
+                object obj = ResourceManager.GetObject("PurpleFade", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

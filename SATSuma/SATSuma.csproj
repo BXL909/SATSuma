@@ -446,6 +446,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\PurpleFade.png" />
+    <None Include="Resources\GreenFade.png" />
+    <None Include="Resources\OrangePaler.png" />
+    <None Include="Resources\BlueFade.png" />
+    <None Include="Resources\OrangeFade.png" />
     <None Include="Resources\ApplyingTheme.png" />
     <None Include="Resources\CustomImage.png" />
     <None Include="Resources\SatsumaAnimatedWhite.gif" />

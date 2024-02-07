@@ -1126,9 +1126,9 @@
             this.ExpandPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.ShrinkPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.panelLeftPanel = new System.Windows.Forms.Panel();
+            this.lblUpdaterLight = new System.Windows.Forms.Label();
             this.lblErrorAlert = new System.Windows.Forms.Label();
             this.btnThemeMenu = new CustomControls.RJControls.RJButton();
-            this.lblUpdaterLight = new System.Windows.Forms.Label();
             this.lblSaveSettingsLight = new System.Windows.Forms.Label();
             this.lblOfflineModeLight = new System.Windows.Forms.Label();
             this.panelErrorMessage = new System.Windows.Forms.Panel();
@@ -2522,24 +2522,26 @@
             // 
             // btnPreviewAnimations
             // 
-            this.btnPreviewAnimations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPreviewAnimations.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPreviewAnimations.BackColor = System.Drawing.Color.Transparent;
+            this.btnPreviewAnimations.BackgroundColor = System.Drawing.Color.Transparent;
             this.btnPreviewAnimations.BorderColor = System.Drawing.Color.PaleVioletRed;
             this.btnPreviewAnimations.BorderRadius = 12;
             this.btnPreviewAnimations.BorderSize = 0;
             this.btnPreviewAnimations.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnPreviewAnimations.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.btnPreviewAnimations.FlatAppearance.BorderSize = 0;
+            this.btnPreviewAnimations.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnPreviewAnimations.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnPreviewAnimations.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreviewAnimations.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPreviewAnimations.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.btnPreviewAnimations.ForeColor = System.Drawing.Color.White;
-            this.btnPreviewAnimations.Location = new System.Drawing.Point(196, 0);
+            this.btnPreviewAnimations.Location = new System.Drawing.Point(192, 0);
             this.btnPreviewAnimations.Margin = new System.Windows.Forms.Padding(0);
             this.btnPreviewAnimations.Name = "btnPreviewAnimations";
-            this.btnPreviewAnimations.Size = new System.Drawing.Size(20, 20);
+            this.btnPreviewAnimations.Size = new System.Drawing.Size(39, 24);
             this.btnPreviewAnimations.TabIndex = 290;
             this.btnPreviewAnimations.TabStop = false;
-            this.btnPreviewAnimations.Text = "▶";
+            this.btnPreviewAnimations.Text = "▶️";
             this.btnPreviewAnimations.TextColor = System.Drawing.Color.White;
             this.toolTip1.SetToolTip(this.btnPreviewAnimations, "preview");
             this.btnPreviewAnimations.UseVisualStyleBackColor = false;
@@ -11887,14 +11889,13 @@
             // 
             // label287
             // 
-            this.label287.AutoSize = true;
             this.label287.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label287.ForeColor = System.Drawing.Color.Silver;
             this.label287.Location = new System.Drawing.Point(65, 97);
             this.label287.Name = "label287";
-            this.label287.Size = new System.Drawing.Size(53, 17);
+            this.label287.Size = new System.Drawing.Size(58, 41);
             this.label287.TabIndex = 296;
-            this.label287.Text = "Jellyfish";
+            this.label287.Text = "Honey badger";
             // 
             // label242
             // 
@@ -12734,7 +12735,7 @@
             this.panelHeadingBackgroundSelect.Controls.Add(this.comboBoxTitlesBackgroundImage);
             this.panelHeadingBackgroundSelect.Location = new System.Drawing.Point(34, 31);
             this.panelHeadingBackgroundSelect.Name = "panelHeadingBackgroundSelect";
-            this.panelHeadingBackgroundSelect.Size = new System.Drawing.Size(97, 24);
+            this.panelHeadingBackgroundSelect.Size = new System.Drawing.Size(105, 24);
             this.panelHeadingBackgroundSelect.TabIndex = 303;
             // 
             // comboBoxTitlesBackgroundImage
@@ -12755,14 +12756,22 @@
             "brown fade",
             "blue fade",
             "green fade",
-            "purple fade"});
+            "purple fade",
+            "red fade",
+            "yellow fade",
+            "black fade",
+            "white fade",
+            "glass",
+            "polygons",
+            "marbled",
+            "smudged"});
             this.comboBoxTitlesBackgroundImage.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxTitlesBackgroundImage.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBoxTitlesBackgroundImage.Location = new System.Drawing.Point(2, -1);
             this.comboBoxTitlesBackgroundImage.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxTitlesBackgroundImage.MinimumSize = new System.Drawing.Size(85, 24);
             this.comboBoxTitlesBackgroundImage.Name = "comboBoxTitlesBackgroundImage";
-            this.comboBoxTitlesBackgroundImage.Size = new System.Drawing.Size(85, 24);
+            this.comboBoxTitlesBackgroundImage.Size = new System.Drawing.Size(93, 24);
             this.comboBoxTitlesBackgroundImage.TabIndex = 253;
             this.comboBoxTitlesBackgroundImage.Texts = "select";
             this.comboBoxTitlesBackgroundImage.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSelectHeadingBackground_OnSelectedIndexChanged);
@@ -12783,7 +12792,7 @@
             // 
             this.label187.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label187.ForeColor = System.Drawing.Color.Silver;
-            this.label187.Location = new System.Drawing.Point(159, 34);
+            this.label187.Location = new System.Drawing.Point(170, 34);
             this.label187.Name = "label187";
             this.label187.Size = new System.Drawing.Size(40, 17);
             this.label187.TabIndex = 271;
@@ -12794,7 +12803,7 @@
             this.lblTitleBackgroundNone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitleBackgroundNone.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblTitleBackgroundNone.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblTitleBackgroundNone.Location = new System.Drawing.Point(140, 34);
+            this.lblTitleBackgroundNone.Location = new System.Drawing.Point(150, 34);
             this.lblTitleBackgroundNone.Name = "lblTitleBackgroundNone";
             this.lblTitleBackgroundNone.Size = new System.Drawing.Size(19, 14);
             this.lblTitleBackgroundNone.TabIndex = 272;
@@ -12806,7 +12815,7 @@
             this.lblTitleBackgroundCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitleBackgroundCustom.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblTitleBackgroundCustom.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblTitleBackgroundCustom.Location = new System.Drawing.Point(208, 34);
+            this.lblTitleBackgroundCustom.Location = new System.Drawing.Point(218, 34);
             this.lblTitleBackgroundCustom.Name = "lblTitleBackgroundCustom";
             this.lblTitleBackgroundCustom.Size = new System.Drawing.Size(19, 14);
             this.lblTitleBackgroundCustom.TabIndex = 274;
@@ -12830,7 +12839,7 @@
             this.btnColorTitleBackgrounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnColorTitleBackgrounds.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTitleBackgrounds.ForeColor = System.Drawing.Color.White;
-            this.btnColorTitleBackgrounds.Location = new System.Drawing.Point(230, 32);
+            this.btnColorTitleBackgrounds.Location = new System.Drawing.Point(240, 32);
             this.btnColorTitleBackgrounds.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTitleBackgrounds.Name = "btnColorTitleBackgrounds";
             this.btnColorTitleBackgrounds.Size = new System.Drawing.Size(18, 18);
@@ -16690,7 +16699,7 @@
             this.btnMenuThemeWhale.Size = new System.Drawing.Size(118, 24);
             this.btnMenuThemeWhale.TabIndex = 257;
             this.btnMenuThemeWhale.TabStop = false;
-            this.btnMenuThemeWhale.Text = "jellyfish";
+            this.btnMenuThemeWhale.Text = "honey badger";
             this.btnMenuThemeWhale.UseVisualStyleBackColor = false;
             this.btnMenuThemeWhale.Click += new System.EventHandler(this.BtnMenuThemeWhale_Click);
             this.btnMenuThemeWhale.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -17226,16 +17235,16 @@
             // panelLeftPanel
             // 
             this.panelLeftPanel.BackColor = System.Drawing.Color.Transparent;
+            this.panelLeftPanel.Controls.Add(this.btnCurrency);
+            this.panelLeftPanel.Controls.Add(this.panelCurrency);
+            this.panelLeftPanel.Controls.Add(this.lblUpdaterLight);
             this.panelLeftPanel.Controls.Add(this.lblErrorAlert);
             this.panelLeftPanel.Controls.Add(this.headerSelectedNodeStatusLight);
             this.panelLeftPanel.Controls.Add(this.headerSelectedNodeStatus);
             this.panelLeftPanel.Controls.Add(this.btnThemeMenu);
             this.panelLeftPanel.Controls.Add(this.panelThemeMenu);
-            this.panelLeftPanel.Controls.Add(this.btnCurrency);
             this.panelLeftPanel.Controls.Add(this.lblAlert);
-            this.panelLeftPanel.Controls.Add(this.panelCurrency);
             this.panelLeftPanel.Controls.Add(this.lblHelpOffline);
-            this.panelLeftPanel.Controls.Add(this.lblUpdaterLight);
             this.panelLeftPanel.Controls.Add(this.labelSettingsSaved);
             this.panelLeftPanel.Controls.Add(this.lblSaveSettingsLight);
             this.panelLeftPanel.Controls.Add(this.lblOfflineModeLight);
@@ -17253,6 +17262,18 @@
             this.panelLeftPanel.Name = "panelLeftPanel";
             this.panelLeftPanel.Size = new System.Drawing.Size(148, 749);
             this.panelLeftPanel.TabIndex = 262;
+            // 
+            // lblUpdaterLight
+            // 
+            this.lblUpdaterLight.AutoSize = true;
+            this.lblUpdaterLight.BackColor = System.Drawing.Color.Transparent;
+            this.lblUpdaterLight.Font = new System.Drawing.Font("Consolas", 7F);
+            this.lblUpdaterLight.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblUpdaterLight.Location = new System.Drawing.Point(7, 439);
+            this.lblUpdaterLight.Name = "lblUpdaterLight";
+            this.lblUpdaterLight.Size = new System.Drawing.Size(15, 12);
+            this.lblUpdaterLight.TabIndex = 263;
+            this.lblUpdaterLight.Text = "🟢";
             // 
             // lblErrorAlert
             // 
@@ -17294,18 +17315,6 @@
             this.btnThemeMenu.Click += new System.EventHandler(this.BtnThemeMenu_Click);
             this.btnThemeMenu.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnThemeMenu.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
-            // lblUpdaterLight
-            // 
-            this.lblUpdaterLight.AutoSize = true;
-            this.lblUpdaterLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblUpdaterLight.Font = new System.Drawing.Font("Consolas", 7F);
-            this.lblUpdaterLight.ForeColor = System.Drawing.Color.OliveDrab;
-            this.lblUpdaterLight.Location = new System.Drawing.Point(7, 439);
-            this.lblUpdaterLight.Name = "lblUpdaterLight";
-            this.lblUpdaterLight.Size = new System.Drawing.Size(15, 12);
-            this.lblUpdaterLight.TabIndex = 263;
-            this.lblUpdaterLight.Text = "🟢";
             // 
             // lblSaveSettingsLight
             // 
@@ -17405,8 +17414,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelAddToBookmarks);

@@ -446,6 +446,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\squares.png" />
+    <None Include="Resources\marbled.png" />
+    <None Include="Resources\Polygons.png" />
+    <None Include="Resources\transpTitle.png" />
+    <None Include="Resources\WhiteFade.png" />
+    <None Include="Resources\BlackFade.png" />
+    <None Include="Resources\YellowFade.png" />
+    <None Include="Resources\RedFade.png" />
     <None Include="Resources\PurpleFade.png" />
     <None Include="Resources\GreenFade.png" />
     <None Include="Resources\OrangePaler.png" />

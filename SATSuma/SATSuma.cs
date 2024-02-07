@@ -26,10 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* tidy/align screen elements on all screens
-* resize theme backgrounds and improve themes
-* make more title backgrounds
-* restore title backgrounds
+* replace planet theme
 * remove commented code
 * test
 */
@@ -72,7 +69,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "1.4";
+        readonly string CurrentVersion = "2.0";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -16821,7 +16818,7 @@ namespace SATSuma
                                                     btnMenuThemeWhale.Enabled = false;
                                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                     {
-                                                        lblThemeMenuHighlightedButtonText.Text = "whale";
+                                                        lblThemeMenuHighlightedButtonText.Text = "honey badger";
                                                         lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(5 * UIScale));
                                                     });
                                                     ClearThemeMenuMarkers();
@@ -17432,7 +17429,7 @@ namespace SATSuma
                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
-                    lblThemeMenuHighlightedButtonText.Text = "jellyfish";
+                    lblThemeMenuHighlightedButtonText.Text = "honey badger";
                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeWhale.Location.X + (btnMenuThemeWhale.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeWhale.Location.Y + (int)(3 * UIScale));
                 });
                 ClearThemeMenuMarkers();
@@ -19372,11 +19369,41 @@ namespace SATSuma
 
                     if (theme.HeadingBGDefault == true)
                     {
+                        lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundCustom.Text = "❌";
+                        });
+                        lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundNone.Text = "❌";
+                        });
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitlesBackgroundImage.ForeColor = Color.Green;
+                            lblTitlesBackgroundImage.Text = "✔️";
+                        });
                         comboBoxTitlesBackgroundImage.Enabled = true;
                         HeadingBackgroundsToImage();
                     }
                     if (theme.HeadingBGNone == true)
                     {
+                        lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundCustom.Text = "❌";
+                        });
+                        lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundNone.ForeColor = Color.Green;
+                            lblTitleBackgroundNone.Text = "✔️";
+                        });
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                            lblTitlesBackgroundImage.Text = "❌";
+                        });
                         comboBoxTitlesBackgroundImage.Enabled = false;
                         HeadingBackgroundsToNone();
                     }
@@ -20287,7 +20314,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { headerSelectedNodeStatus, lblElapsedSinceUpdate, lblOfflineModeActive, labelSettingsSaved, lblErrorAlert, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
+                Control[] listOtherTextToColor = { numericUpDownOpacity, headerSelectedNodeStatus, lblElapsedSinceUpdate, lblOfflineModeActive, labelSettingsSaved, lblErrorAlert, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20358,11 +20385,12 @@ namespace SATSuma
                 btnUniversalSearch.BackColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonsToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
+                Control[] listSettingsButtonsToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
                 }
+                btnPreviewAnimations.ForeColor = thiscolor;
                 //address
                 Control[] listAddressButtonsToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
                 foreach (Control control in listAddressButtonsToColor)
@@ -20401,7 +20429,7 @@ namespace SATSuma
                     control.BackColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart };
+                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
                 foreach (Control control in listChartsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -20460,7 +20488,7 @@ namespace SATSuma
                 btnUniversalSearch.ForeColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonTextToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnPreviewAnimations };
+                Control[] listSettingsButtonTextToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20502,7 +20530,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart };
+                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20639,7 +20667,38 @@ namespace SATSuma
                 {
                     ImageFile = Properties.Resources.PurpleFade;
                 }
-
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 6)
+                {
+                    ImageFile = Properties.Resources.RedFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 7)
+                {
+                    ImageFile = Properties.Resources.YellowFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 8)
+                {
+                    ImageFile = Properties.Resources.BlackFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 9)
+                {
+                    ImageFile = Properties.Resources.WhiteFade;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 10)
+                {
+                    ImageFile = Properties.Resources.transpTitle;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 11)
+                {
+                    ImageFile = Properties.Resources.Polygons;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 12)
+                {
+                    ImageFile = Properties.Resources.marbled;
+                }
+                if (comboBoxTitlesBackgroundImage.SelectedIndex == 13)
+                {
+                    ImageFile = Properties.Resources.squares;
+                }
                 //header
                 Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)

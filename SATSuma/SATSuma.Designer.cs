@@ -5917,7 +5917,7 @@
             this.btnShowAllTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowAllTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowAllTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowAllTX.Location = new System.Drawing.Point(251, 531);
+            this.btnShowAllTX.Location = new System.Drawing.Point(251, 518);
             this.btnShowAllTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowAllTX.Name = "btnShowAllTX";
             this.btnShowAllTX.Size = new System.Drawing.Size(88, 22);
@@ -5941,7 +5941,7 @@
             this.btnShowConfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowConfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowConfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowConfirmedTX.Location = new System.Drawing.Point(346, 531);
+            this.btnShowConfirmedTX.Location = new System.Drawing.Point(346, 518);
             this.btnShowConfirmedTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowConfirmedTX.Name = "btnShowConfirmedTX";
             this.btnShowConfirmedTX.Size = new System.Drawing.Size(88, 22);
@@ -5964,7 +5964,7 @@
             this.btnShowUnconfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowUnconfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowUnconfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(441, 531);
+            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(441, 518);
             this.btnShowUnconfirmedTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowUnconfirmedTX.Name = "btnShowUnconfirmedTX";
             this.btnShowUnconfirmedTX.Size = new System.Drawing.Size(88, 22);
@@ -5982,7 +5982,7 @@
             this.lblAddressTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressTXPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 512);
+            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 492);
             this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
             this.lblAddressTXPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblAddressTXPositionInList.TabIndex = 142;
@@ -6001,7 +6001,7 @@
             this.btnFirstAddressTransaction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFirstAddressTransaction.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFirstAddressTransaction.ForeColor = System.Drawing.Color.White;
-            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(614, 531);
+            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(614, 518);
             this.btnFirstAddressTransaction.Margin = new System.Windows.Forms.Padding(1);
             this.btnFirstAddressTransaction.Name = "btnFirstAddressTransaction";
             this.btnFirstAddressTransaction.Size = new System.Drawing.Size(68, 22);
@@ -6024,7 +6024,7 @@
             this.btnNextAddressTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextAddressTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextAddressTransactions.Location = new System.Drawing.Point(689, 531);
+            this.btnNextAddressTransactions.Location = new System.Drawing.Point(689, 518);
             this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
             this.btnNextAddressTransactions.Size = new System.Drawing.Size(60, 22);
@@ -6052,7 +6052,7 @@
             this.listViewAddressTransactions.OwnerDraw = true;
             this.listViewAddressTransactions.Scrollable = false;
             this.listViewAddressTransactions.ShowGroups = false;
-            this.listViewAddressTransactions.Size = new System.Drawing.Size(499, 476);
+            this.listViewAddressTransactions.Size = new System.Drawing.Size(499, 452);
             this.listViewAddressTransactions.SmallImageList = this.imageListUpDownArrows;
             this.listViewAddressTransactions.TabIndex = 139;
             this.listViewAddressTransactions.TabStop = false;
@@ -6511,7 +6511,7 @@
             this.btnPreviousBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreviousBlockTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPreviousBlockTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnPreviousBlockTransactions.Location = new System.Drawing.Point(495, 533);
+            this.btnPreviousBlockTransactions.Location = new System.Drawing.Point(495, 518);
             this.btnPreviousBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnPreviousBlockTransactions.Name = "btnPreviousBlockTransactions";
             this.btnPreviousBlockTransactions.Size = new System.Drawing.Size(123, 22);
@@ -6546,7 +6546,7 @@
             this.btnNextBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextBlockTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextBlockTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextBlockTransactions.Location = new System.Drawing.Point(625, 533);
+            this.btnNextBlockTransactions.Location = new System.Drawing.Point(625, 518);
             this.btnNextBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnNextBlockTransactions.Name = "btnNextBlockTransactions";
             this.btnNextBlockTransactions.Size = new System.Drawing.Size(123, 22);
@@ -7274,8 +7274,6 @@
             // 
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
             this.panelTransaction.Controls.Add(this.panelTransactionIDContainer);
-            this.panelTransaction.Controls.Add(this.panel27);
-            this.panelTransaction.Controls.Add(this.panel28);
             this.panelTransaction.Controls.Add(this.panel25);
             this.panelTransaction.Controls.Add(this.panel24);
             this.panelTransaction.Controls.Add(this.panelTransactionOutputs);
@@ -7285,6 +7283,8 @@
             this.panelTransaction.Controls.Add(this.panelTransactionDiagram);
             this.panelTransaction.Controls.Add(this.label136);
             this.panelTransaction.Controls.Add(this.panel102);
+            this.panelTransaction.Controls.Add(this.panel28);
+            this.panelTransaction.Controls.Add(this.panel27);
             this.panelTransaction.Location = new System.Drawing.Point(162, 187);
             this.panelTransaction.Name = "panelTransaction";
             this.panelTransaction.Size = new System.Drawing.Size(773, 556);
@@ -7321,7 +7321,7 @@
             this.panel27.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel27.BackgroundImage")));
             this.panel27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel27.Controls.Add(this.label102);
-            this.panel27.Location = new System.Drawing.Point(7, 420);
+            this.panel27.Location = new System.Drawing.Point(7, 412);
             this.panel27.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel27.Name = "panel27";
             this.panel27.Size = new System.Drawing.Size(370, 23);
@@ -7346,7 +7346,7 @@
             this.panel28.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel28.BackgroundImage")));
             this.panel28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel28.Controls.Add(this.label107);
-            this.panel28.Location = new System.Drawing.Point(388, 420);
+            this.panel28.Location = new System.Drawing.Point(388, 412);
             this.panel28.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel28.Name = "panel28";
             this.panel28.Size = new System.Drawing.Size(370, 23);
@@ -7370,7 +7370,7 @@
             this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel25.Controls.Add(this.btnTransactionOutputsUp);
             this.panel25.Controls.Add(this.btnTransactionOutputsDown);
-            this.panel25.Location = new System.Drawing.Point(734, 451);
+            this.panel25.Location = new System.Drawing.Point(734, 433);
             this.panel25.Name = "panel25";
             this.panel25.Size = new System.Drawing.Size(21, 105);
             this.panel25.TabIndex = 215;
@@ -7423,7 +7423,7 @@
             this.panel24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel24.Controls.Add(this.btnTransactionInputsUp);
             this.panel24.Controls.Add(this.btnTransactionInputDown);
-            this.panel24.Location = new System.Drawing.Point(356, 451);
+            this.panel24.Location = new System.Drawing.Point(356, 433);
             this.panel24.Name = "panel24";
             this.panel24.Size = new System.Drawing.Size(26, 105);
             this.panel24.TabIndex = 213;
@@ -7476,7 +7476,7 @@
             this.panelTransactionOutputs.AutoScroll = true;
             this.panelTransactionOutputs.Controls.Add(this.btnViewAddressFromTXOutput);
             this.panelTransactionOutputs.Controls.Add(this.listViewTransactionOutputs);
-            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 451);
+            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 433);
             this.panelTransactionOutputs.Name = "panelTransactionOutputs";
             this.panelTransactionOutputs.Size = new System.Drawing.Size(363, 104);
             this.panelTransactionOutputs.TabIndex = 214;
@@ -7517,7 +7517,7 @@
             this.panelTransactionInputs.AutoScroll = true;
             this.panelTransactionInputs.Controls.Add(this.btnViewAddressFromTXInput);
             this.panelTransactionInputs.Controls.Add(this.listViewTransactionInputs);
-            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 451);
+            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 433);
             this.panelTransactionInputs.Name = "panelTransactionInputs";
             this.panelTransactionInputs.Size = new System.Drawing.Size(363, 104);
             this.panelTransactionInputs.TabIndex = 212;
@@ -7907,7 +7907,7 @@
             // 
             // panel102
             // 
-            this.panel102.Location = new System.Drawing.Point(9, 450);
+            this.panel102.Location = new System.Drawing.Point(9, 432);
             this.panel102.Name = "panel102";
             this.panel102.Size = new System.Drawing.Size(745, 110);
             this.panel102.TabIndex = 216;
@@ -8149,7 +8149,7 @@
             this.lblXpubConfirmedUnspentFiat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedUnspentFiat.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubConfirmedUnspentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblXpubConfirmedUnspentFiat.Location = new System.Drawing.Point(-1, 536);
+            this.lblXpubConfirmedUnspentFiat.Location = new System.Drawing.Point(-1, 532);
             this.lblXpubConfirmedUnspentFiat.Name = "lblXpubConfirmedUnspentFiat";
             this.lblXpubConfirmedUnspentFiat.Size = new System.Drawing.Size(13, 13);
             this.lblXpubConfirmedUnspentFiat.TabIndex = 256;
@@ -8532,7 +8532,7 @@
             this.lblXpubConfirmedSpentFiat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedSpentFiat.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubConfirmedSpentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblXpubConfirmedSpentFiat.Location = new System.Drawing.Point(-1, 488);
+            this.lblXpubConfirmedSpentFiat.Location = new System.Drawing.Point(-1, 486);
             this.lblXpubConfirmedSpentFiat.Name = "lblXpubConfirmedSpentFiat";
             this.lblXpubConfirmedSpentFiat.Size = new System.Drawing.Size(13, 13);
             this.lblXpubConfirmedSpentFiat.TabIndex = 255;
@@ -8680,7 +8680,7 @@
             this.lblXpubConfirmedSpent.AutoSize = true;
             this.lblXpubConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedSpent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(-1, 474);
+            this.lblXpubConfirmedSpent.Location = new System.Drawing.Point(-1, 472);
             this.lblXpubConfirmedSpent.Name = "lblXpubConfirmedSpent";
             this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(14, 14);
             this.lblXpubConfirmedSpent.TabIndex = 204;
@@ -8693,7 +8693,7 @@
             this.label129.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label129.ForeColor = System.Drawing.Color.Silver;
             this.label129.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label129.Location = new System.Drawing.Point(-1, 458);
+            this.label129.Location = new System.Drawing.Point(-1, 456);
             this.label129.Name = "label129";
             this.label129.Size = new System.Drawing.Size(100, 16);
             this.label129.TabIndex = 205;
@@ -8744,7 +8744,7 @@
             this.lblXpubConfirmedUnspent.AutoSize = true;
             this.lblXpubConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubConfirmedUnspent.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(-1, 522);
+            this.lblXpubConfirmedUnspent.Location = new System.Drawing.Point(-1, 518);
             this.lblXpubConfirmedUnspent.Name = "lblXpubConfirmedUnspent";
             this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(14, 14);
             this.lblXpubConfirmedUnspent.TabIndex = 207;
@@ -8757,7 +8757,7 @@
             this.label121.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label121.ForeColor = System.Drawing.Color.Silver;
             this.label121.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label121.Location = new System.Drawing.Point(-1, 506);
+            this.label121.Location = new System.Drawing.Point(-1, 502);
             this.label121.Name = "label121";
             this.label121.Size = new System.Drawing.Size(172, 16);
             this.label121.TabIndex = 208;
@@ -11799,9 +11799,9 @@
             this.label204.ForeColor = System.Drawing.Color.Silver;
             this.label204.Location = new System.Drawing.Point(311, 97);
             this.label204.Name = "label204";
-            this.label204.Size = new System.Drawing.Size(53, 17);
+            this.label204.Size = new System.Drawing.Size(57, 39);
             this.label204.TabIndex = 303;
-            this.label204.Text = "21 sats";
+            this.label204.Text = "Stack sats";
             // 
             // lblBackgroundPlanetBTCSelected
             // 
@@ -16678,7 +16678,7 @@
             this.btnMenuThemePlanetBTC.Size = new System.Drawing.Size(118, 24);
             this.btnMenuThemePlanetBTC.TabIndex = 258;
             this.btnMenuThemePlanetBTC.TabStop = false;
-            this.btnMenuThemePlanetBTC.Text = "21 sats";
+            this.btnMenuThemePlanetBTC.Text = "stack sats";
             this.btnMenuThemePlanetBTC.UseVisualStyleBackColor = false;
             this.btnMenuThemePlanetBTC.Click += new System.EventHandler(this.BtnMenuThemePlanetBTC_Click);
             this.btnMenuThemePlanetBTC.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
@@ -17415,20 +17415,20 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelErrorMessage);
             this.Controls.Add(this.panelLeftPanel);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelFees);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.btnShowGlobalSearch);

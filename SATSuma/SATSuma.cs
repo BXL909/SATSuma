@@ -28,8 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * replace planet theme
 * remove commented code
-* chart loading animnation can be restored incorrectly
 * ticking titles custom image doesn't immediately apply image (doesn't trigger item selection changed)
+* make color pickers pop up in a better position
 * test
 */
 
@@ -7000,6 +7000,10 @@ namespace SATSuma
             try
             {
                 xpubValid = false;
+                progressBarCheckAllAddressTypes.Visible = false;
+                progressBarCheckEachAddressType.Visible = false;
+                lblCheckAllAddressTypesCount.Visible = false;
+                lblCheckEachAddressTypeCount.Visible = false;
                 panelXpubContainer.Visible = false;
                 panel26.Visible = false;
                 lblXpubStatus.Visible = false;
@@ -16795,7 +16799,7 @@ namespace SATSuma
                                                 btnMenuThemeWhale.Enabled = true;
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
-                                                    lblThemeMenuHighlightedButtonText.Text = "21 sats";
+                                                    lblThemeMenuHighlightedButtonText.Text = "stack sats";
                                                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(5 * UIScale));
                                                 });
                                                 ClearThemeMenuMarkers();
@@ -19576,12 +19580,12 @@ namespace SATSuma
                         });
                         lblInfinity2.Invoke((MethodInvoker)delegate
                         {
-                            lblInfinity2.ForeColor = Color.Green;
+                            lblInfinity2.ForeColor = Color.IndianRed;
                             lblInfinity2.Text = "❌";
                         });
                         lblInfinity3.Invoke((MethodInvoker)delegate
                         {
-                            lblInfinity3.ForeColor = Color.IndianRed;
+                            lblInfinity3.ForeColor = Color.Green;
                             lblInfinity3.Text = "✔️";
                         });
                         //pictureBoxLoadingAnimation.Image = Properties.Resources.infinityspectrum;

@@ -11801,7 +11801,7 @@
             this.label204.Name = "label204";
             this.label204.Size = new System.Drawing.Size(53, 17);
             this.label204.TabIndex = 303;
-            this.label204.Text = "Planet";
+            this.label204.Text = "21 sats";
             // 
             // lblBackgroundPlanetBTCSelected
             // 
@@ -11818,8 +11818,9 @@
             // 
             // pictureBoxPlanetBTC
             // 
+            this.pictureBoxPlanetBTC.BackgroundImage = global::SATSuma.Properties.Resources.PlanetBTC;
+            this.pictureBoxPlanetBTC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxPlanetBTC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxPlanetBTC.Image = global::SATSuma.Properties.Resources.PlanetBTC;
             this.pictureBoxPlanetBTC.Location = new System.Drawing.Point(255, 97);
             this.pictureBoxPlanetBTC.Name = "pictureBoxPlanetBTC";
             this.pictureBoxPlanetBTC.Size = new System.Drawing.Size(56, 56);
@@ -16677,7 +16678,7 @@
             this.btnMenuThemePlanetBTC.Size = new System.Drawing.Size(118, 24);
             this.btnMenuThemePlanetBTC.TabIndex = 258;
             this.btnMenuThemePlanetBTC.TabStop = false;
-            this.btnMenuThemePlanetBTC.Text = "planet btc";
+            this.btnMenuThemePlanetBTC.Text = "21 sats";
             this.btnMenuThemePlanetBTC.UseVisualStyleBackColor = false;
             this.btnMenuThemePlanetBTC.Click += new System.EventHandler(this.BtnMenuThemePlanetBTC_Click);
             this.btnMenuThemePlanetBTC.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);

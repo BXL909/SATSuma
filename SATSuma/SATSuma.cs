@@ -28,6 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * replace planet theme
 * remove commented code
+* chart loading animnation can be restored incorrectly
+* ticking titles custom image doesn't immediately apply image (doesn't trigger item selection changed)
 * test
 */
 
@@ -16793,7 +16795,7 @@ namespace SATSuma
                                                 btnMenuThemeWhale.Enabled = true;
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
-                                                    lblThemeMenuHighlightedButtonText.Text = "planet btc";
+                                                    lblThemeMenuHighlightedButtonText.Text = "21 sats";
                                                     lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemePlanetBTC.Location.X + (btnMenuThemePlanetBTC.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemePlanetBTC.Location.Y + (int)(5 * UIScale));
                                                 });
                                                 ClearThemeMenuMarkers();

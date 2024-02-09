@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v1.09    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.0    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -26,10 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* replace planet theme
 * remove commented code
-* ticking titles custom image doesn't immediately apply image (doesn't trigger item selection changed)
-* make color pickers pop up in a better position
 * test
 */
 
@@ -716,14 +713,14 @@ namespace SATSuma
                 {
                     lblUpdaterLight.Invoke((MethodInvoker)delegate
                     {
-                        lblUpdaterLight.ForeColor = Color.OliveDrab;
+                        lblUpdaterLight.ForeColor = Color.FromArgb(128, 64, 0);
                     });
                 }
                 else
                 {
                     lblUpdaterLight.Invoke((MethodInvoker)delegate
                     {
-                        lblUpdaterLight.ForeColor = Color.Lime;
+                        lblUpdaterLight.ForeColor = Color.FromArgb(255, 153, 0);
                     });
                 }
                 // reset node activity light
@@ -18827,6 +18824,7 @@ namespace SATSuma
                 {
                     comboBoxTitlesBackgroundImage.Enabled = true;
                 }
+                HeadingBackgroundsToImage();
             }
             catch (Exception ex)
             {
@@ -21048,7 +21046,6 @@ namespace SATSuma
                 if (sender == btnMenuSplash)
                 {
                     btnMenuSplash.BackColor = btnDeleteTheme.BackColor;
-                    lblUpdaterLight.BackColor = btnDeleteTheme.BackColor;
                 }
                 if (sender == btnMenuThemeBTCdir)
                 {
@@ -21200,7 +21197,6 @@ namespace SATSuma
                 if (sender == btnMenuSplash)
                 {
                     btnMenuSplash.BackColor = Color.Transparent;
-                    lblUpdaterLight.BackColor = Color.Transparent;
                 }
                 if (sender == comboBoxHeaderCustomThemes)
                 {
@@ -21735,6 +21731,14 @@ namespace SATSuma
                     using WebClient client = new WebClient();
                     string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";
                     string LatestVersion = client.DownloadString(VersionURL);
+                    if (LatestVersion != CurrentVersion)
+                    {
+                        lblUpdaterLight.Visible = true;
+                    }
+                    else
+                    {
+                        lblUpdaterLight.Visible = false;
+                    }
                 }
             }
             catch (Exception ex)

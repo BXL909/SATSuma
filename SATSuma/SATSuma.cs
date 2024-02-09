@@ -14336,15 +14336,36 @@ namespace SATSuma
                 var document = webBrowserDirectory.Document;
                 if (document != null)
                 {
-                    // set font
+                    var navElements = document.GetElementsByTagName("nav");
+                    var categoryWidth = (int)(160 * UIScale);
+                    // set width of category column
+                    foreach (HtmlElement navElement in navElements)
+                    {
+                        if (navElement.GetAttribute("className") == "floating-menu")
+                        {
+                            navElement.Style = $"width: {categoryWidth}px;";
+                        }
+                    }
+
+
                     var spanElements2 = document.GetElementsByTagName("div");
+                    var linksPadding = (int)(170 * UIScale);
                     foreach (HtmlElement spanElement in spanElements2)
                     {
+                        // set font
                         if (spanElement.GetAttribute("className") == "site-content")
                         {
                             spanElement.Style = "font-family: Century Gothic;";
                         }
+
+                        // set width of links column
+                        if (spanElement.GetAttribute("className") == "linklist")
+                        {
+                            spanElement.Style = $"padding-left: {linksPadding}px;";
+                        }
+
                     }
+
 
                     // Modify background color
                     var backgroundColor = panel88.BackColor;
@@ -14369,17 +14390,19 @@ namespace SATSuma
                     var spanColor = btnTransactionOutputsUp.ForeColor;
                     var spanColorString = ColorTranslator.ToHtml(spanColor);
                     var spanElements = document.GetElementsByTagName("span");
+                    var adjustedFontSize = 11 * UIScale;
                     foreach (HtmlElement spanElement in spanElements)
                     {
                         if (spanElement.GetAttribute("className") == "linklistcatclass")
                         {
-                            spanElement.Style = "color: {spanColorString}; font-weight: bold; font-size: 11pt;";
+                            spanElement.Style = $"color: {spanColorString}; font-weight: bold; font-size: {adjustedFontSize}pt;";
                         }
                     }
 
                     var titleDivBGColor = btnTransactionOutputsUp.BackColor;
                     var titleDivBGColorString = ColorTranslator.ToHtml(titleDivBGColor);
                     var titleDivBGColorElements = document.GetElementsByTagName("div");
+                    var adjustedFontSize2 = 10 * UIScale;
                     foreach (HtmlElement titleDivBGColorElement in titleDivBGColorElements)
                     {
                         if (titleDivBGColorElement.GetAttribute("className") == "linklistcatname")
@@ -14391,7 +14414,7 @@ namespace SATSuma
                             var backgroundColor2 = panel16.BackColor;
                             var lighterBackgroundColor = MakeColorLighter(backgroundColor2, 10);
                             var lighterBackgroundColorString = ColorTranslator.ToHtml(lighterBackgroundColor);
-                            titleDivBGColorElement.Style = $"border: 1px solid {titleDivBGColorString}; background-color: {lighterBackgroundColorString}; font-size: 10pt;";
+                            titleDivBGColorElement.Style = $"border: 1px solid {titleDivBGColorString}; background-color: {lighterBackgroundColorString}; font-size: {adjustedFontSize}pt;";
                         }
                     }
 
@@ -14399,11 +14422,12 @@ namespace SATSuma
                     var textColor = label77.ForeColor;
                     var textColorString = ColorTranslator.ToHtml(textColor);
                     var textElements = document.GetElementsByTagName("span");
+                    var adjustedFontSize3 = 0.76 * UIScale;
                     foreach (HtmlElement textElement in textElements)
                     {
                         if (textElement.GetAttribute("className") == "linklistdesc")
                         {
-                            textElement.Style = $"color: {textColorString}; font-size: 0.76em";
+                            textElement.Style = $"color: {textColorString}; font-size: {adjustedFontSize3}em";
                         }
                     }
 

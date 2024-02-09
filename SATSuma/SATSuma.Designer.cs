@@ -16997,7 +16997,7 @@
             this.panelDirectory.Controls.Add(this.panel16);
             this.panelDirectory.Location = new System.Drawing.Point(162, 187);
             this.panelDirectory.Name = "panelDirectory";
-            this.panelDirectory.Size = new System.Drawing.Size(760, 536);
+            this.panelDirectory.Size = new System.Drawing.Size(760, 550);
             this.panelDirectory.TabIndex = 244;
             this.panelDirectory.Visible = false;
             // 
@@ -17009,7 +17009,7 @@
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(0, 0);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(760, 536);
+            this.panel16.Size = new System.Drawing.Size(760, 550);
             this.panel16.TabIndex = 2;
             // 
             // panel18
@@ -17018,7 +17018,7 @@
             this.panel18.Controls.Add(this.btnDirectoryScrollDown);
             this.panel18.Location = new System.Drawing.Point(726, 0);
             this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(36, 533);
+            this.panel18.Size = new System.Drawing.Size(36, 550);
             this.panel18.TabIndex = 213;
             // 
             // btnDirectoryScrollUp
@@ -17040,7 +17040,6 @@
             this.btnDirectoryScrollUp.TabIndex = 7;
             this.btnDirectoryScrollUp.TabStop = false;
             this.btnDirectoryScrollUp.Text = "▲";
-            this.btnDirectoryScrollUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDirectoryScrollUp.TextColor = System.Drawing.Color.White;
             this.btnDirectoryScrollUp.UseVisualStyleBackColor = false;
             this.btnDirectoryScrollUp.Click += new System.EventHandler(this.BtnDirectoryScrollUp_Click);
@@ -17059,14 +17058,13 @@
             this.btnDirectoryScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDirectoryScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDirectoryScrollDown.ForeColor = System.Drawing.Color.White;
-            this.btnDirectoryScrollDown.Location = new System.Drawing.Point(3, 502);
+            this.btnDirectoryScrollDown.Location = new System.Drawing.Point(3, 522);
             this.btnDirectoryScrollDown.Name = "btnDirectoryScrollDown";
             this.btnDirectoryScrollDown.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.btnDirectoryScrollDown.Size = new System.Drawing.Size(24, 24);
             this.btnDirectoryScrollDown.TabIndex = 6;
             this.btnDirectoryScrollDown.TabStop = false;
             this.btnDirectoryScrollDown.Text = "▼";
-            this.btnDirectoryScrollDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDirectoryScrollDown.TextColor = System.Drawing.Color.White;
             this.btnDirectoryScrollDown.UseVisualStyleBackColor = false;
             this.btnDirectoryScrollDown.Click += new System.EventHandler(this.BtnDirectoryScrollDown_Click);
@@ -17079,7 +17077,7 @@
             this.webBrowserDirectory.Location = new System.Drawing.Point(17, 0);
             this.webBrowserDirectory.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserDirectory.Name = "webBrowserDirectory";
-            this.webBrowserDirectory.Size = new System.Drawing.Size(726, 533);
+            this.webBrowserDirectory.Size = new System.Drawing.Size(726, 550);
             this.webBrowserDirectory.TabIndex = 1;
             this.webBrowserDirectory.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowserDirectory_DocumentCompleted);
             // 

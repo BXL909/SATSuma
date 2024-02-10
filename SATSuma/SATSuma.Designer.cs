@@ -768,24 +768,24 @@
             this.lblBackgroundCustomImageSelected = new System.Windows.Forms.Label();
             this.pictureBoxCustomImage = new System.Windows.Forms.PictureBox();
             this.label204 = new System.Windows.Forms.Label();
-            this.lblBackgroundPlanetBTCSelected = new System.Windows.Forms.Label();
-            this.pictureBoxPlanetBTC = new System.Windows.Forms.PictureBox();
-            this.lblBackgroundCitadelSelected = new System.Windows.Forms.Label();
-            this.pictureBoxCitadel = new System.Windows.Forms.PictureBox();
+            this.lblBackgroundStackSatsSelected = new System.Windows.Forms.Label();
+            this.pictureBoxStackSats = new System.Windows.Forms.PictureBox();
+            this.lblBackgroundSymbolSelected = new System.Windows.Forms.Label();
+            this.pictureBoxSymbol = new System.Windows.Forms.PictureBox();
             this.label290 = new System.Windows.Forms.Label();
-            this.lblBackgroundWhaleSelected = new System.Windows.Forms.Label();
-            this.pictureBoxWhale = new System.Windows.Forms.PictureBox();
+            this.lblBackgroundHoneyBadgerSelected = new System.Windows.Forms.Label();
+            this.pictureBoxHoneyBadger = new System.Windows.Forms.PictureBox();
             this.label287 = new System.Windows.Forms.Label();
             this.label242 = new System.Windows.Forms.Label();
             this.lblBackgroundSatsumaSelected = new System.Windows.Forms.Label();
             this.pictureBoxSatsuma = new System.Windows.Forms.PictureBox();
-            this.lblBackgroundBTCdirSelected = new System.Windows.Forms.Label();
+            this.lblBackgroundFranklinSelected = new System.Windows.Forms.Label();
             this.lblBackgroundCustomColorSelected = new System.Windows.Forms.Label();
             this.lblBackgroundGenesisSelected = new System.Windows.Forms.Label();
             this.panel63 = new System.Windows.Forms.Panel();
             this.label182 = new System.Windows.Forms.Label();
             this.pictureBoxGenesis = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBTCDir = new System.Windows.Forms.PictureBox();
+            this.pictureBoxFranklin = new System.Windows.Forms.PictureBox();
             this.pictureBoxCustomColor = new System.Windows.Forms.PictureBox();
             this.label177 = new System.Windows.Forms.Label();
             this.label179 = new System.Windows.Forms.Label();
@@ -1087,16 +1087,16 @@
             this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.panelPresetThemeMenuTitleBG = new System.Windows.Forms.Panel();
             this.label60 = new System.Windows.Forms.Label();
-            this.btnMenuThemeCitadel = new System.Windows.Forms.Button();
-            this.btnMenuThemePlanetBTC = new System.Windows.Forms.Button();
-            this.btnMenuThemeWhale = new System.Windows.Forms.Button();
+            this.btnMenuThemeSymbol = new System.Windows.Forms.Button();
+            this.btnMenuThemeStackSats = new System.Windows.Forms.Button();
+            this.btnMenuThemeHoneyBadger = new System.Windows.Forms.Button();
             this.panelThemeMenuFiller = new System.Windows.Forms.Panel();
             this.panelCustomThemeMenuTitleBG = new System.Windows.Forms.Panel();
             this.label281 = new System.Windows.Forms.Label();
             this.btnMenuApplyCustomTheme = new System.Windows.Forms.Button();
             this.comboBoxHeaderCustomThemes = new CustomControls.RJControls.RJComboBox();
             this.BtnMenuThemeGenesis = new System.Windows.Forms.Button();
-            this.btnMenuThemeBTCdir = new System.Windows.Forms.Button();
+            this.btnMenuThemeFranklin = new System.Windows.Forms.Button();
             this.btnMenuThemeSatsuma = new System.Windows.Forms.Button();
             this.lblCurrentVersion = new System.Windows.Forms.Label();
             this.btnExit = new CustomControls.RJControls.RJButton();
@@ -1295,13 +1295,13 @@
             this.panel104.SuspendLayout();
             this.panel91.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCustomImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlanetBTC)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCitadel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhale)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStackSats)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSymbol)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHoneyBadger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).BeginInit();
             this.panel63.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFranklin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCustomColor)).BeginInit();
             this.panel90.SuspendLayout();
             this.panel65.SuspendLayout();
@@ -11741,23 +11741,23 @@
             this.panel91.Controls.Add(this.lblBackgroundCustomImageSelected);
             this.panel91.Controls.Add(this.pictureBoxCustomImage);
             this.panel91.Controls.Add(this.label204);
-            this.panel91.Controls.Add(this.lblBackgroundPlanetBTCSelected);
-            this.panel91.Controls.Add(this.pictureBoxPlanetBTC);
-            this.panel91.Controls.Add(this.lblBackgroundCitadelSelected);
-            this.panel91.Controls.Add(this.pictureBoxCitadel);
+            this.panel91.Controls.Add(this.lblBackgroundStackSatsSelected);
+            this.panel91.Controls.Add(this.pictureBoxStackSats);
+            this.panel91.Controls.Add(this.lblBackgroundSymbolSelected);
+            this.panel91.Controls.Add(this.pictureBoxSymbol);
             this.panel91.Controls.Add(this.label290);
-            this.panel91.Controls.Add(this.lblBackgroundWhaleSelected);
-            this.panel91.Controls.Add(this.pictureBoxWhale);
+            this.panel91.Controls.Add(this.lblBackgroundHoneyBadgerSelected);
+            this.panel91.Controls.Add(this.pictureBoxHoneyBadger);
             this.panel91.Controls.Add(this.label287);
             this.panel91.Controls.Add(this.label242);
             this.panel91.Controls.Add(this.lblBackgroundSatsumaSelected);
             this.panel91.Controls.Add(this.pictureBoxSatsuma);
-            this.panel91.Controls.Add(this.lblBackgroundBTCdirSelected);
+            this.panel91.Controls.Add(this.lblBackgroundFranklinSelected);
             this.panel91.Controls.Add(this.lblBackgroundCustomColorSelected);
             this.panel91.Controls.Add(this.lblBackgroundGenesisSelected);
             this.panel91.Controls.Add(this.panel63);
             this.panel91.Controls.Add(this.pictureBoxGenesis);
-            this.panel91.Controls.Add(this.pictureBoxBTCDir);
+            this.panel91.Controls.Add(this.pictureBoxFranklin);
             this.panel91.Controls.Add(this.pictureBoxCustomColor);
             this.panel91.Controls.Add(this.label177);
             this.panel91.Controls.Add(this.label179);
@@ -11803,55 +11803,55 @@
             this.label204.TabIndex = 303;
             this.label204.Text = "Stack sats";
             // 
-            // lblBackgroundPlanetBTCSelected
+            // lblBackgroundStackSatsSelected
             // 
-            this.lblBackgroundPlanetBTCSelected.BackColor = System.Drawing.Color.Transparent;
-            this.lblBackgroundPlanetBTCSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblBackgroundPlanetBTCSelected.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBackgroundPlanetBTCSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundPlanetBTCSelected.Location = new System.Drawing.Point(258, 100);
-            this.lblBackgroundPlanetBTCSelected.Name = "lblBackgroundPlanetBTCSelected";
-            this.lblBackgroundPlanetBTCSelected.Size = new System.Drawing.Size(21, 16);
-            this.lblBackgroundPlanetBTCSelected.TabIndex = 302;
-            this.lblBackgroundPlanetBTCSelected.Text = "✔️";
-            this.lblBackgroundPlanetBTCSelected.Visible = false;
+            this.lblBackgroundStackSatsSelected.BackColor = System.Drawing.Color.Transparent;
+            this.lblBackgroundStackSatsSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBackgroundStackSatsSelected.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBackgroundStackSatsSelected.ForeColor = System.Drawing.Color.Green;
+            this.lblBackgroundStackSatsSelected.Location = new System.Drawing.Point(258, 100);
+            this.lblBackgroundStackSatsSelected.Name = "lblBackgroundStackSatsSelected";
+            this.lblBackgroundStackSatsSelected.Size = new System.Drawing.Size(21, 16);
+            this.lblBackgroundStackSatsSelected.TabIndex = 302;
+            this.lblBackgroundStackSatsSelected.Text = "✔️";
+            this.lblBackgroundStackSatsSelected.Visible = false;
             // 
-            // pictureBoxPlanetBTC
+            // pictureBoxStackSats
             // 
-            this.pictureBoxPlanetBTC.BackgroundImage = global::SATSuma.Properties.Resources.PlanetBTC;
-            this.pictureBoxPlanetBTC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxPlanetBTC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxPlanetBTC.Location = new System.Drawing.Point(255, 97);
-            this.pictureBoxPlanetBTC.Name = "pictureBoxPlanetBTC";
-            this.pictureBoxPlanetBTC.Size = new System.Drawing.Size(56, 56);
-            this.pictureBoxPlanetBTC.TabIndex = 301;
-            this.pictureBoxPlanetBTC.TabStop = false;
-            this.pictureBoxPlanetBTC.Click += new System.EventHandler(this.PictureBoxPlanetBTC_Click);
+            this.pictureBoxStackSats.BackgroundImage = global::SATSuma.Properties.Resources.PlanetBTC;
+            this.pictureBoxStackSats.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxStackSats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxStackSats.Location = new System.Drawing.Point(255, 97);
+            this.pictureBoxStackSats.Name = "pictureBoxStackSats";
+            this.pictureBoxStackSats.Size = new System.Drawing.Size(56, 56);
+            this.pictureBoxStackSats.TabIndex = 301;
+            this.pictureBoxStackSats.TabStop = false;
+            this.pictureBoxStackSats.Click += new System.EventHandler(this.PictureBoxStackSats_Click);
             // 
-            // lblBackgroundCitadelSelected
+            // lblBackgroundSymbolSelected
             // 
-            this.lblBackgroundCitadelSelected.BackColor = System.Drawing.Color.Transparent;
-            this.lblBackgroundCitadelSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblBackgroundCitadelSelected.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBackgroundCitadelSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundCitadelSelected.Location = new System.Drawing.Point(135, 100);
-            this.lblBackgroundCitadelSelected.Name = "lblBackgroundCitadelSelected";
-            this.lblBackgroundCitadelSelected.Size = new System.Drawing.Size(21, 16);
-            this.lblBackgroundCitadelSelected.TabIndex = 300;
-            this.lblBackgroundCitadelSelected.Text = "✔️";
-            this.lblBackgroundCitadelSelected.Visible = false;
+            this.lblBackgroundSymbolSelected.BackColor = System.Drawing.Color.Transparent;
+            this.lblBackgroundSymbolSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBackgroundSymbolSelected.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBackgroundSymbolSelected.ForeColor = System.Drawing.Color.Green;
+            this.lblBackgroundSymbolSelected.Location = new System.Drawing.Point(135, 100);
+            this.lblBackgroundSymbolSelected.Name = "lblBackgroundSymbolSelected";
+            this.lblBackgroundSymbolSelected.Size = new System.Drawing.Size(21, 16);
+            this.lblBackgroundSymbolSelected.TabIndex = 300;
+            this.lblBackgroundSymbolSelected.Text = "✔️";
+            this.lblBackgroundSymbolSelected.Visible = false;
             // 
-            // pictureBoxCitadel
+            // pictureBoxSymbol
             // 
-            this.pictureBoxCitadel.BackgroundImage = global::SATSuma.Properties.Resources.Citadel;
-            this.pictureBoxCitadel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxCitadel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxCitadel.Location = new System.Drawing.Point(132, 97);
-            this.pictureBoxCitadel.Name = "pictureBoxCitadel";
-            this.pictureBoxCitadel.Size = new System.Drawing.Size(56, 56);
-            this.pictureBoxCitadel.TabIndex = 298;
-            this.pictureBoxCitadel.TabStop = false;
-            this.pictureBoxCitadel.Click += new System.EventHandler(this.PictureBoxCitadel_Click);
+            this.pictureBoxSymbol.BackgroundImage = global::SATSuma.Properties.Resources.Citadel;
+            this.pictureBoxSymbol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxSymbol.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxSymbol.Location = new System.Drawing.Point(132, 97);
+            this.pictureBoxSymbol.Name = "pictureBoxSymbol";
+            this.pictureBoxSymbol.Size = new System.Drawing.Size(56, 56);
+            this.pictureBoxSymbol.TabIndex = 298;
+            this.pictureBoxSymbol.TabStop = false;
+            this.pictureBoxSymbol.Click += new System.EventHandler(this.PictureBoxSymbol_Click);
             // 
             // label290
             // 
@@ -11863,30 +11863,30 @@
             this.label290.TabIndex = 299;
             this.label290.Text = "Symbol";
             // 
-            // lblBackgroundWhaleSelected
+            // lblBackgroundHoneyBadgerSelected
             // 
-            this.lblBackgroundWhaleSelected.BackColor = System.Drawing.Color.Transparent;
-            this.lblBackgroundWhaleSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblBackgroundWhaleSelected.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBackgroundWhaleSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundWhaleSelected.Location = new System.Drawing.Point(12, 100);
-            this.lblBackgroundWhaleSelected.Name = "lblBackgroundWhaleSelected";
-            this.lblBackgroundWhaleSelected.Size = new System.Drawing.Size(21, 16);
-            this.lblBackgroundWhaleSelected.TabIndex = 297;
-            this.lblBackgroundWhaleSelected.Text = "✔️";
-            this.lblBackgroundWhaleSelected.Visible = false;
+            this.lblBackgroundHoneyBadgerSelected.BackColor = System.Drawing.Color.Transparent;
+            this.lblBackgroundHoneyBadgerSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBackgroundHoneyBadgerSelected.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBackgroundHoneyBadgerSelected.ForeColor = System.Drawing.Color.Green;
+            this.lblBackgroundHoneyBadgerSelected.Location = new System.Drawing.Point(12, 100);
+            this.lblBackgroundHoneyBadgerSelected.Name = "lblBackgroundHoneyBadgerSelected";
+            this.lblBackgroundHoneyBadgerSelected.Size = new System.Drawing.Size(21, 16);
+            this.lblBackgroundHoneyBadgerSelected.TabIndex = 297;
+            this.lblBackgroundHoneyBadgerSelected.Text = "✔️";
+            this.lblBackgroundHoneyBadgerSelected.Visible = false;
             // 
-            // pictureBoxWhale
+            // pictureBoxHoneyBadger
             // 
-            this.pictureBoxWhale.BackgroundImage = global::SATSuma.Properties.Resources.BTCWhale;
-            this.pictureBoxWhale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxWhale.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxWhale.Location = new System.Drawing.Point(9, 97);
-            this.pictureBoxWhale.Name = "pictureBoxWhale";
-            this.pictureBoxWhale.Size = new System.Drawing.Size(56, 56);
-            this.pictureBoxWhale.TabIndex = 295;
-            this.pictureBoxWhale.TabStop = false;
-            this.pictureBoxWhale.Click += new System.EventHandler(this.PictureBoxWhale_Click);
+            this.pictureBoxHoneyBadger.BackgroundImage = global::SATSuma.Properties.Resources.BTCWhale;
+            this.pictureBoxHoneyBadger.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxHoneyBadger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxHoneyBadger.Location = new System.Drawing.Point(9, 97);
+            this.pictureBoxHoneyBadger.Name = "pictureBoxHoneyBadger";
+            this.pictureBoxHoneyBadger.Size = new System.Drawing.Size(56, 56);
+            this.pictureBoxHoneyBadger.TabIndex = 295;
+            this.pictureBoxHoneyBadger.TabStop = false;
+            this.pictureBoxHoneyBadger.Click += new System.EventHandler(this.PictureBoxHoneyBadger_Click);
             // 
             // label287
             // 
@@ -11933,18 +11933,18 @@
             this.pictureBoxSatsuma.TabStop = false;
             this.pictureBoxSatsuma.Click += new System.EventHandler(this.PictureBoxSatsuma_Click);
             // 
-            // lblBackgroundBTCdirSelected
+            // lblBackgroundFranklinSelected
             // 
-            this.lblBackgroundBTCdirSelected.BackColor = System.Drawing.Color.Transparent;
-            this.lblBackgroundBTCdirSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblBackgroundBTCdirSelected.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblBackgroundBTCdirSelected.ForeColor = System.Drawing.Color.Green;
-            this.lblBackgroundBTCdirSelected.Location = new System.Drawing.Point(135, 34);
-            this.lblBackgroundBTCdirSelected.Name = "lblBackgroundBTCdirSelected";
-            this.lblBackgroundBTCdirSelected.Size = new System.Drawing.Size(21, 16);
-            this.lblBackgroundBTCdirSelected.TabIndex = 291;
-            this.lblBackgroundBTCdirSelected.Text = "✔️";
-            this.lblBackgroundBTCdirSelected.Visible = false;
+            this.lblBackgroundFranklinSelected.BackColor = System.Drawing.Color.Transparent;
+            this.lblBackgroundFranklinSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBackgroundFranklinSelected.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblBackgroundFranklinSelected.ForeColor = System.Drawing.Color.Green;
+            this.lblBackgroundFranklinSelected.Location = new System.Drawing.Point(135, 34);
+            this.lblBackgroundFranklinSelected.Name = "lblBackgroundFranklinSelected";
+            this.lblBackgroundFranklinSelected.Size = new System.Drawing.Size(21, 16);
+            this.lblBackgroundFranklinSelected.TabIndex = 291;
+            this.lblBackgroundFranklinSelected.Text = "✔️";
+            this.lblBackgroundFranklinSelected.Visible = false;
             // 
             // lblBackgroundCustomColorSelected
             // 
@@ -12008,17 +12008,17 @@
             this.pictureBoxGenesis.TabStop = false;
             this.pictureBoxGenesis.Click += new System.EventHandler(this.PictureBoxGenesis_Click);
             // 
-            // pictureBoxBTCDir
+            // pictureBoxFranklin
             // 
-            this.pictureBoxBTCDir.BackgroundImage = global::SATSuma.Properties.Resources.SatsumaBTCdir1;
-            this.pictureBoxBTCDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBTCDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxBTCDir.Location = new System.Drawing.Point(132, 31);
-            this.pictureBoxBTCDir.Name = "pictureBoxBTCDir";
-            this.pictureBoxBTCDir.Size = new System.Drawing.Size(56, 56);
-            this.pictureBoxBTCDir.TabIndex = 264;
-            this.pictureBoxBTCDir.TabStop = false;
-            this.pictureBoxBTCDir.Click += new System.EventHandler(this.PictureBoxBTCDir_Click);
+            this.pictureBoxFranklin.BackgroundImage = global::SATSuma.Properties.Resources.SatsumaBTCdir1;
+            this.pictureBoxFranklin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxFranklin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxFranklin.Location = new System.Drawing.Point(132, 31);
+            this.pictureBoxFranklin.Name = "pictureBoxFranklin";
+            this.pictureBoxFranklin.Size = new System.Drawing.Size(56, 56);
+            this.pictureBoxFranklin.TabIndex = 264;
+            this.pictureBoxFranklin.TabStop = false;
+            this.pictureBoxFranklin.Click += new System.EventHandler(this.PictureBoxFranklin_Click);
             // 
             // pictureBoxCustomColor
             // 
@@ -13459,7 +13459,7 @@
             this.textBoxConvertXAUtoBTC.TabStop = false;
             this.textBoxConvertXAUtoBTC.Text = "1.00";
             this.textBoxConvertXAUtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
-            this.textBoxConvertXAUtoBTC.Enter += new System.EventHandler(this.TextBoxConvertXAUtoBTC_Enter);
+            this.textBoxConvertXAUtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertXAUtoBTC.Leave += new System.EventHandler(this.TextBoxConvertXAUtoBTC_Leave);
             // 
             // panelConvertGBPToBTCContainer
@@ -13486,7 +13486,7 @@
             this.textBoxConvertGBPtoBTC.TabStop = false;
             this.textBoxConvertGBPtoBTC.Text = "1.00";
             this.textBoxConvertGBPtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
-            this.textBoxConvertGBPtoBTC.Enter += new System.EventHandler(this.TextBoxConvertGBPtoBTC_Enter);
+            this.textBoxConvertGBPtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertGBPtoBTC.Leave += new System.EventHandler(this.TextBoxConvertGBPtoBTC_Leave);
             // 
             // panelConvertEURToBTCContainer
@@ -13513,7 +13513,7 @@
             this.textBoxConvertEURtoBTC.TabStop = false;
             this.textBoxConvertEURtoBTC.Text = "1.00";
             this.textBoxConvertEURtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
-            this.textBoxConvertEURtoBTC.Enter += new System.EventHandler(this.TextBoxConvertEURtoBTC_Enter);
+            this.textBoxConvertEURtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertEURtoBTC.Leave += new System.EventHandler(this.TextBoxConvertEURtoBTC_Leave);
             // 
             // panelConvertUSDToBTCContainer
@@ -13540,7 +13540,7 @@
             this.textBoxConvertUSDtoBTC.TabStop = false;
             this.textBoxConvertUSDtoBTC.Text = "1.00";
             this.textBoxConvertUSDtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
-            this.textBoxConvertUSDtoBTC.Enter += new System.EventHandler(this.TextBoxConvertUSDtoBTC_Enter);
+            this.textBoxConvertUSDtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertUSDtoBTC.Leave += new System.EventHandler(this.TextBoxConvertUSDtoBTC_Leave);
             // 
             // panelConvertBTCToFiatContainer
@@ -13566,7 +13566,6 @@
             this.textBoxConvertBTCtoFiat.TabStop = false;
             this.textBoxConvertBTCtoFiat.Text = "1.00000000";
             this.textBoxConvertBTCtoFiat.TextChanged += new System.EventHandler(this.TextBoxConvertBTCtoFiat_TextChanged);
-            this.textBoxConvertBTCtoFiat.Enter += new System.EventHandler(this.TextBoxConvertBTCtoFiat_Enter);
             this.textBoxConvertBTCtoFiat.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxConvertBTCtoFiat_KeyPress);
             this.textBoxConvertBTCtoFiat.Leave += new System.EventHandler(this.TextBoxConvertBTCtoFiat_Leave);
             // 
@@ -16576,16 +16575,16 @@
             this.panelThemeMenu.Controls.Add(this.lblApplyThemeButtonDisabledMask);
             this.panelThemeMenu.Controls.Add(this.lblThemeMenuHighlightedButtonText);
             this.panelThemeMenu.Controls.Add(this.panelPresetThemeMenuTitleBG);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeCitadel);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemePlanetBTC);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeWhale);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeSymbol);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeStackSats);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeHoneyBadger);
             this.panelThemeMenu.Controls.Add(this.panelThemeMenuFiller);
             this.panelThemeMenu.Controls.Add(this.panelCustomThemeMenuTitleBG);
             this.panelThemeMenu.Controls.Add(this.btnMenuApplyCustomTheme);
             this.panelThemeMenu.Controls.Add(this.btnMenuCreateTheme);
             this.panelThemeMenu.Controls.Add(this.comboBoxHeaderCustomThemes);
             this.panelThemeMenu.Controls.Add(this.BtnMenuThemeGenesis);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeBTCdir);
+            this.panelThemeMenu.Controls.Add(this.btnMenuThemeFranklin);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
             this.panelThemeMenu.Location = new System.Drawing.Point(8, 347);
             this.panelThemeMenu.Name = "panelThemeMenu";
@@ -16640,71 +16639,71 @@
             this.label60.TabIndex = 239;
             this.label60.Text = "preset themes";
             // 
-            // btnMenuThemeCitadel
+            // btnMenuThemeSymbol
             // 
-            this.btnMenuThemeCitadel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeCitadel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMenuThemeCitadel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnMenuThemeCitadel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuThemeCitadel.FlatAppearance.BorderSize = 0;
-            this.btnMenuThemeCitadel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuThemeCitadel.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuThemeCitadel.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeCitadel.Location = new System.Drawing.Point(2, 158);
-            this.btnMenuThemeCitadel.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMenuThemeCitadel.Name = "btnMenuThemeCitadel";
-            this.btnMenuThemeCitadel.Size = new System.Drawing.Size(118, 24);
-            this.btnMenuThemeCitadel.TabIndex = 259;
-            this.btnMenuThemeCitadel.TabStop = false;
-            this.btnMenuThemeCitadel.Text = "symbol";
-            this.btnMenuThemeCitadel.UseVisualStyleBackColor = false;
-            this.btnMenuThemeCitadel.Click += new System.EventHandler(this.BtnMenuThemeCitadel_Click);
-            this.btnMenuThemeCitadel.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnMenuThemeCitadel.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuThemeSymbol.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeSymbol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMenuThemeSymbol.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeSymbol.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeSymbol.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeSymbol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeSymbol.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeSymbol.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeSymbol.Location = new System.Drawing.Point(2, 158);
+            this.btnMenuThemeSymbol.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeSymbol.Name = "btnMenuThemeSymbol";
+            this.btnMenuThemeSymbol.Size = new System.Drawing.Size(118, 24);
+            this.btnMenuThemeSymbol.TabIndex = 259;
+            this.btnMenuThemeSymbol.TabStop = false;
+            this.btnMenuThemeSymbol.Text = "symbol";
+            this.btnMenuThemeSymbol.UseVisualStyleBackColor = false;
+            this.btnMenuThemeSymbol.Click += new System.EventHandler(this.BtnMenuThemeSymbol_Click);
+            this.btnMenuThemeSymbol.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuThemeSymbol.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // btnMenuThemePlanetBTC
+            // btnMenuThemeStackSats
             // 
-            this.btnMenuThemePlanetBTC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemePlanetBTC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMenuThemePlanetBTC.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnMenuThemePlanetBTC.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuThemePlanetBTC.FlatAppearance.BorderSize = 0;
-            this.btnMenuThemePlanetBTC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuThemePlanetBTC.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuThemePlanetBTC.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemePlanetBTC.Location = new System.Drawing.Point(2, 134);
-            this.btnMenuThemePlanetBTC.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMenuThemePlanetBTC.Name = "btnMenuThemePlanetBTC";
-            this.btnMenuThemePlanetBTC.Size = new System.Drawing.Size(118, 24);
-            this.btnMenuThemePlanetBTC.TabIndex = 258;
-            this.btnMenuThemePlanetBTC.TabStop = false;
-            this.btnMenuThemePlanetBTC.Text = "stack sats";
-            this.btnMenuThemePlanetBTC.UseVisualStyleBackColor = false;
-            this.btnMenuThemePlanetBTC.Click += new System.EventHandler(this.BtnMenuThemePlanetBTC_Click);
-            this.btnMenuThemePlanetBTC.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnMenuThemePlanetBTC.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuThemeStackSats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeStackSats.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMenuThemeStackSats.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeStackSats.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeStackSats.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeStackSats.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeStackSats.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeStackSats.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeStackSats.Location = new System.Drawing.Point(2, 134);
+            this.btnMenuThemeStackSats.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeStackSats.Name = "btnMenuThemeStackSats";
+            this.btnMenuThemeStackSats.Size = new System.Drawing.Size(118, 24);
+            this.btnMenuThemeStackSats.TabIndex = 258;
+            this.btnMenuThemeStackSats.TabStop = false;
+            this.btnMenuThemeStackSats.Text = "stack sats";
+            this.btnMenuThemeStackSats.UseVisualStyleBackColor = false;
+            this.btnMenuThemeStackSats.Click += new System.EventHandler(this.BtnMenuThemeStackSats_Click);
+            this.btnMenuThemeStackSats.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuThemeStackSats.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // btnMenuThemeWhale
+            // btnMenuThemeHoneyBadger
             // 
-            this.btnMenuThemeWhale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeWhale.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMenuThemeWhale.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnMenuThemeWhale.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuThemeWhale.FlatAppearance.BorderSize = 0;
-            this.btnMenuThemeWhale.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuThemeWhale.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuThemeWhale.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeWhale.Location = new System.Drawing.Point(2, 110);
-            this.btnMenuThemeWhale.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMenuThemeWhale.Name = "btnMenuThemeWhale";
-            this.btnMenuThemeWhale.Size = new System.Drawing.Size(118, 24);
-            this.btnMenuThemeWhale.TabIndex = 257;
-            this.btnMenuThemeWhale.TabStop = false;
-            this.btnMenuThemeWhale.Text = "honey badger";
-            this.btnMenuThemeWhale.UseVisualStyleBackColor = false;
-            this.btnMenuThemeWhale.Click += new System.EventHandler(this.BtnMenuThemeWhale_Click);
-            this.btnMenuThemeWhale.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnMenuThemeWhale.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuThemeHoneyBadger.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeHoneyBadger.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMenuThemeHoneyBadger.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeHoneyBadger.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeHoneyBadger.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeHoneyBadger.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeHoneyBadger.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeHoneyBadger.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeHoneyBadger.Location = new System.Drawing.Point(2, 110);
+            this.btnMenuThemeHoneyBadger.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeHoneyBadger.Name = "btnMenuThemeHoneyBadger";
+            this.btnMenuThemeHoneyBadger.Size = new System.Drawing.Size(118, 24);
+            this.btnMenuThemeHoneyBadger.TabIndex = 257;
+            this.btnMenuThemeHoneyBadger.TabStop = false;
+            this.btnMenuThemeHoneyBadger.Text = "honey badger";
+            this.btnMenuThemeHoneyBadger.UseVisualStyleBackColor = false;
+            this.btnMenuThemeHoneyBadger.Click += new System.EventHandler(this.BtnMenuThemeHoneyBadger_Click);
+            this.btnMenuThemeHoneyBadger.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuThemeHoneyBadger.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // panelThemeMenuFiller
             // 
@@ -16804,27 +16803,27 @@
             this.BtnMenuThemeGenesis.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.BtnMenuThemeGenesis.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // btnMenuThemeBTCdir
+            // btnMenuThemeFranklin
             // 
-            this.btnMenuThemeBTCdir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnMenuThemeBTCdir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMenuThemeBTCdir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnMenuThemeBTCdir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnMenuThemeBTCdir.FlatAppearance.BorderSize = 0;
-            this.btnMenuThemeBTCdir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuThemeBTCdir.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuThemeBTCdir.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeBTCdir.Location = new System.Drawing.Point(2, 62);
-            this.btnMenuThemeBTCdir.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMenuThemeBTCdir.Name = "btnMenuThemeBTCdir";
-            this.btnMenuThemeBTCdir.Size = new System.Drawing.Size(118, 24);
-            this.btnMenuThemeBTCdir.TabIndex = 150;
-            this.btnMenuThemeBTCdir.TabStop = false;
-            this.btnMenuThemeBTCdir.Text = "franklin";
-            this.btnMenuThemeBTCdir.UseVisualStyleBackColor = false;
-            this.btnMenuThemeBTCdir.Click += new System.EventHandler(this.BtnMenuThemeBTCdir_Click);
-            this.btnMenuThemeBTCdir.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.btnMenuThemeBTCdir.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuThemeFranklin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuThemeFranklin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMenuThemeFranklin.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnMenuThemeFranklin.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuThemeFranklin.FlatAppearance.BorderSize = 0;
+            this.btnMenuThemeFranklin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuThemeFranklin.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuThemeFranklin.ForeColor = System.Drawing.Color.White;
+            this.btnMenuThemeFranklin.Location = new System.Drawing.Point(2, 62);
+            this.btnMenuThemeFranklin.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMenuThemeFranklin.Name = "btnMenuThemeFranklin";
+            this.btnMenuThemeFranklin.Size = new System.Drawing.Size(118, 24);
+            this.btnMenuThemeFranklin.TabIndex = 150;
+            this.btnMenuThemeFranklin.TabStop = false;
+            this.btnMenuThemeFranklin.Text = "franklin";
+            this.btnMenuThemeFranklin.UseVisualStyleBackColor = false;
+            this.btnMenuThemeFranklin.Click += new System.EventHandler(this.BtnMenuThemeFranklin_Click);
+            this.btnMenuThemeFranklin.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuThemeFranklin.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // btnMenuThemeSatsuma
             // 
@@ -17033,7 +17032,7 @@
             this.btnDirectoryScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDirectoryScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDirectoryScrollUp.ForeColor = System.Drawing.Color.White;
-            this.btnDirectoryScrollUp.Location = new System.Drawing.Point(3, 6);
+            this.btnDirectoryScrollUp.Location = new System.Drawing.Point(3, 2);
             this.btnDirectoryScrollUp.Name = "btnDirectoryScrollUp";
             this.btnDirectoryScrollUp.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.btnDirectoryScrollUp.Size = new System.Drawing.Size(24, 24);
@@ -17267,12 +17266,11 @@
             this.lblUpdaterLight.AutoSize = true;
             this.lblUpdaterLight.BackColor = System.Drawing.Color.Transparent;
             this.lblUpdaterLight.Font = new System.Drawing.Font("Consolas", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUpdaterLight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblUpdaterLight.ForeColor = System.Drawing.Color.Transparent;
             this.lblUpdaterLight.Location = new System.Drawing.Point(21, 455);
             this.lblUpdaterLight.Name = "lblUpdaterLight";
-            this.lblUpdaterLight.Size = new System.Drawing.Size(50, 10);
+            this.lblUpdaterLight.Size = new System.Drawing.Size(0, 10);
             this.lblUpdaterLight.TabIndex = 263;
-            this.lblUpdaterLight.Text = "‾‾‾‾‾‾‾‾‾";
             // 
             // lblErrorAlert
             // 
@@ -17413,15 +17411,15 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelDirectory);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
@@ -17658,13 +17656,13 @@
             this.panel91.ResumeLayout(false);
             this.panel91.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCustomImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlanetBTC)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCitadel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhale)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStackSats)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSymbol)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHoneyBadger)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsuma)).EndInit();
             this.panel63.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGenesis)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBTCDir)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFranklin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCustomColor)).EndInit();
             this.panel90.ResumeLayout(false);
             this.panel65.ResumeLayout(false);
@@ -18222,7 +18220,7 @@
         private System.Windows.Forms.Label label179;
         private System.Windows.Forms.Label label177;
         private System.Windows.Forms.PictureBox pictureBoxCustomColor;
-        private System.Windows.Forms.PictureBox pictureBoxBTCDir;
+        private System.Windows.Forms.PictureBox pictureBoxFranklin;
         private System.Windows.Forms.PictureBox pictureBoxGenesis;
         private System.Windows.Forms.Panel panel63;
         private System.Windows.Forms.Label label182;
@@ -18248,7 +18246,7 @@
         private System.Windows.Forms.Panel panel69;
         private System.Windows.Forms.Label label192;
         private System.Windows.Forms.Label label194;
-        private System.Windows.Forms.Label lblBackgroundBTCdirSelected;
+        private System.Windows.Forms.Label lblBackgroundFranklinSelected;
         private System.Windows.Forms.Label lblBackgroundCustomColorSelected;
         private System.Windows.Forms.Label lblBackgroundCustomImageSelected;
         private System.Windows.Forms.Label lblBackgroundGenesisSelected;
@@ -18418,7 +18416,7 @@
         private System.Windows.Forms.Label label248;
         private System.Windows.Forms.Panel panelThemeMenu;
         private System.Windows.Forms.Button BtnMenuThemeGenesis;
-        private System.Windows.Forms.Button btnMenuThemeBTCdir;
+        private System.Windows.Forms.Button btnMenuThemeFranklin;
         private System.Windows.Forms.Button btnMenuThemeSatsuma;
         private System.Windows.Forms.Panel panelHashrateScaleButtons;
         private System.Windows.Forms.Panel panelChartDifficultyScaleButtons;
@@ -18753,18 +18751,18 @@
         private System.Windows.Forms.Panel panel75;
         private System.Windows.Forms.Panel panel93;
         private System.Windows.Forms.Panel panel95;
-        private System.Windows.Forms.Label lblBackgroundWhaleSelected;
-        private System.Windows.Forms.PictureBox pictureBoxWhale;
+        private System.Windows.Forms.Label lblBackgroundHoneyBadgerSelected;
+        private System.Windows.Forms.PictureBox pictureBoxHoneyBadger;
         private System.Windows.Forms.Label label287;
-        private System.Windows.Forms.Label lblBackgroundCitadelSelected;
-        private System.Windows.Forms.PictureBox pictureBoxCitadel;
+        private System.Windows.Forms.Label lblBackgroundSymbolSelected;
+        private System.Windows.Forms.PictureBox pictureBoxSymbol;
         private System.Windows.Forms.Label label290;
         private System.Windows.Forms.Label label204;
-        private System.Windows.Forms.Label lblBackgroundPlanetBTCSelected;
-        private System.Windows.Forms.PictureBox pictureBoxPlanetBTC;
-        private System.Windows.Forms.Button btnMenuThemeCitadel;
-        private System.Windows.Forms.Button btnMenuThemePlanetBTC;
-        private System.Windows.Forms.Button btnMenuThemeWhale;
+        private System.Windows.Forms.Label lblBackgroundStackSatsSelected;
+        private System.Windows.Forms.PictureBox pictureBoxStackSats;
+        private System.Windows.Forms.Button btnMenuThemeSymbol;
+        private System.Windows.Forms.Button btnMenuThemeStackSats;
+        private System.Windows.Forms.Button btnMenuThemeHoneyBadger;
         private System.Windows.Forms.Label lblThemeImage;
         private System.Windows.Forms.Label lblThemeNameInUse;
         private System.Windows.Forms.Timer timerHideThemeNameInUse;

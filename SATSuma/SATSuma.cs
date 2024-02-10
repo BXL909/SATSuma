@@ -26,7 +26,6 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* update theme references in code and theme file to new theme names instead of planetbtc, citadel, whale, btcdir
 * use chart loading popup between other screen changes?
 * test
 */
@@ -16449,7 +16448,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    if (theme.ThemeName == "BTCdir (preset)")
+                                    if (theme.ThemeName == "Franklin (preset)")
                                     {
                                         BtnMenuThemeGenesis.Enabled = true;
                                         btnMenuThemeFranklin.Enabled = false;
@@ -16499,7 +16498,7 @@ namespace SATSuma
                                         }
                                         else
                                         {
-                                            if (theme.ThemeName == "PlanetBTC (preset)")
+                                            if (theme.ThemeName == "StackSats (preset)")
                                             {
                                                 BtnMenuThemeGenesis.Enabled = true;
                                                 btnMenuThemeFranklin.Enabled = true;
@@ -16524,7 +16523,7 @@ namespace SATSuma
                                             }
                                             else
                                             {
-                                                if (theme.ThemeName == "Whale (preset)")
+                                                if (theme.ThemeName == "HoneyBadger (preset)")
                                                 {
                                                     BtnMenuThemeGenesis.Enabled = true;
                                                     btnMenuThemeFranklin.Enabled = true;
@@ -16549,7 +16548,7 @@ namespace SATSuma
                                                 }
                                                 else
                                                 {
-                                                    if (theme.ThemeName == "Citadel (preset)")
+                                                    if (theme.ThemeName == "Symbol (preset)")
                                                     {
                                                         BtnMenuThemeGenesis.Enabled = true;
                                                         btnMenuThemeFranklin.Enabled = true;
@@ -17044,7 +17043,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "BTCdir (preset)")
+                    if (theme.ThemeName == "Franklin (preset)")
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17150,7 +17149,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Whale (preset)")
+                    if (theme.ThemeName == "HoneyBadger (preset)")
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17203,7 +17202,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "PlanetBTC (preset)")
+                    if (theme.ThemeName == "StackSats (preset)")
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17256,7 +17255,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Citadel (preset)")
+                    if (theme.ThemeName == "Symbol (preset)")
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -18254,7 +18253,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.AppBackground2;
+                    this.BackgroundImage = Properties.Resources.Genesis;
                 });
                 lblBackgroundGenesisSelected.Visible = true;
                 lblBackgroundFranklinSelected.Visible = false;
@@ -18282,7 +18281,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
+                    this.BackgroundImage = Properties.Resources.Franklin;
                 });
                 lblTime.Visible = false;
                 lblBackgroundGenesisSelected.Visible = false;
@@ -18310,7 +18309,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.Satsuma3;
+                    this.BackgroundImage = Properties.Resources.Satsuma;
                 });
                 lblTime.Visible = false;
                 lblBackgroundGenesisSelected.Visible = false;
@@ -18338,7 +18337,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.BTCWhale;
+                    this.BackgroundImage = Properties.Resources.HoneyBadger;
                 });
                 lblTime.Visible = false;
                 lblBackgroundGenesisSelected.Visible = false;
@@ -18366,7 +18365,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.Citadel;
+                    this.BackgroundImage = Properties.Resources.Symbol;
                 });
                 lblTime.Visible = false;
                 lblBackgroundGenesisSelected.Visible = false;
@@ -18394,7 +18393,7 @@ namespace SATSuma
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    this.BackgroundImage = Properties.Resources.PlanetBTC;
+                    this.BackgroundImage = Properties.Resources.StackSats;
                 });
                 lblTime.Visible = false;
                 lblBackgroundGenesisSelected.Visible = false;
@@ -18765,19 +18764,19 @@ namespace SATSuma
                 string windowimage = "";
                 if (lblBackgroundGenesisSelected.Visible)
                 {
-                    windowimage = "AppBackground2.png";
+                    windowimage = "Genesis.png";
                 }
                 else
                 {
                     if (lblBackgroundFranklinSelected.Visible)
                     {
-                        windowimage = "SatsumaBTCdir.png";
+                        windowimage = "Franklin.png";
                     }
                     else
                     {
                         if (lblBackgroundSatsumaSelected.Visible)
                         {
-                            windowimage = "Satsuma3.png";
+                            windowimage = "Satsuma.png";
                         }
                         else
                         {
@@ -18831,7 +18830,7 @@ namespace SATSuma
                 int titlesBackgroundImage = comboBoxTitlesBackgroundImage.SelectedIndex;
                 
 
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundBTCdir = backgroundFranklin, BackgroundSatsuma = backgroundSatsuma, BackgroundBTCWhale = backgroundHoneyBadger, BackgroundCitadel = backgroundSymbol, BackgroundPlanetBTC = backgroundStackSats, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage };
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundFranklin = backgroundFranklin, BackgroundSatsuma = backgroundSatsuma, BackgroundHoneyBadger = backgroundHoneyBadger, BackgroundSymbol = backgroundSymbol, BackgroundStackSats = backgroundStackSats, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -19145,7 +19144,7 @@ namespace SATSuma
                         titleBackgroundColor = theme.HeadingBackgrounds;
                         HeadingBackgroundsToCustomColor();
                     }
-                    if (theme.BackgroundBTCdir == true)
+                    if (theme.BackgroundFranklin == true)
                     {
                         lblBackgroundFranklinSelected.Visible = true;
                         lblBackgroundSatsumaSelected.Visible = false;
@@ -19155,7 +19154,7 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.SatsumaBTCdir1;
+                        this.BackgroundImage = Properties.Resources.Franklin;
                     }
                     if (theme.BackgroundGenesis == true)
                     {
@@ -19167,7 +19166,7 @@ namespace SATSuma
                         lblBackgroundGenesisSelected.Visible = true;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.AppBackground2;
+                        this.BackgroundImage = Properties.Resources.Genesis;
                     }
                     if (theme.BackgroundSatsuma == true)
                     {
@@ -19179,9 +19178,9 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.Satsuma3;
+                        this.BackgroundImage = Properties.Resources.Satsuma;
                     }
-                    if (theme.BackgroundBTCWhale == true)
+                    if (theme.BackgroundHoneyBadger == true)
                     {
                         lblBackgroundSatsumaSelected.Visible = false;
                         lblBackgroundFranklinSelected.Visible = false;
@@ -19191,9 +19190,9 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = true;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.BTCWhale;
+                        this.BackgroundImage = Properties.Resources.HoneyBadger;
                     }
-                    if (theme.BackgroundCitadel == true)
+                    if (theme.BackgroundSymbol == true)
                     {
                         lblBackgroundSatsumaSelected.Visible = false;
                         lblBackgroundFranklinSelected.Visible = false;
@@ -19203,9 +19202,9 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.Citadel;
+                        this.BackgroundImage = Properties.Resources.Symbol;
                     }
-                    if (theme.BackgroundPlanetBTC == true)
+                    if (theme.BackgroundStackSats == true)
                     {
                         lblBackgroundSatsumaSelected.Visible = false;
                         lblBackgroundFranklinSelected.Visible = false;
@@ -19215,7 +19214,7 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
-                        this.BackgroundImage = Properties.Resources.PlanetBTC;
+                        this.BackgroundImage = Properties.Resources.StackSats;
                     }
                     if (theme.BackgroundCustomColor == true)
                     {
@@ -24110,11 +24109,11 @@ namespace SATSuma
             public Color WindowBackground { get; set; }
             public string WindowImage { get; set; }
             public bool BackgroundGenesis { get; set; }
-            public bool BackgroundBTCdir { get; set; }
+            public bool BackgroundFranklin { get; set; }
             public bool BackgroundSatsuma { get; set; }
-            public bool BackgroundBTCWhale { get; set; }
-            public bool BackgroundCitadel { get; set; }
-            public bool BackgroundPlanetBTC { get; set; }
+            public bool BackgroundHoneyBadger { get; set; }
+            public bool BackgroundSymbol { get; set; }
+            public bool BackgroundStackSats { get; set; }
             public bool BackgroundCustomColor { get; set; }
             public bool BackgroundCustomImage { get; set; }
             public Color Panels { get; set; }

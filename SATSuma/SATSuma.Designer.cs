@@ -11818,7 +11818,7 @@
             // 
             // pictureBoxStackSats
             // 
-            this.pictureBoxStackSats.BackgroundImage = global::SATSuma.Properties.Resources.PlanetBTC;
+            this.pictureBoxStackSats.BackgroundImage = global::SATSuma.Properties.Resources.StackSats;
             this.pictureBoxStackSats.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxStackSats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxStackSats.Location = new System.Drawing.Point(255, 97);
@@ -11843,7 +11843,7 @@
             // 
             // pictureBoxSymbol
             // 
-            this.pictureBoxSymbol.BackgroundImage = global::SATSuma.Properties.Resources.Citadel;
+            this.pictureBoxSymbol.BackgroundImage = global::SATSuma.Properties.Resources.Symbol;
             this.pictureBoxSymbol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxSymbol.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxSymbol.Location = new System.Drawing.Point(132, 97);
@@ -11878,7 +11878,7 @@
             // 
             // pictureBoxHoneyBadger
             // 
-            this.pictureBoxHoneyBadger.BackgroundImage = global::SATSuma.Properties.Resources.BTCWhale;
+            this.pictureBoxHoneyBadger.BackgroundImage = global::SATSuma.Properties.Resources.HoneyBadger;
             this.pictureBoxHoneyBadger.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxHoneyBadger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxHoneyBadger.Location = new System.Drawing.Point(9, 97);
@@ -11923,7 +11923,7 @@
             // 
             // pictureBoxSatsuma
             // 
-            this.pictureBoxSatsuma.BackgroundImage = global::SATSuma.Properties.Resources.Satsuma3;
+            this.pictureBoxSatsuma.BackgroundImage = global::SATSuma.Properties.Resources.Satsuma;
             this.pictureBoxSatsuma.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxSatsuma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxSatsuma.Location = new System.Drawing.Point(255, 31);
@@ -11998,7 +11998,7 @@
             // 
             // pictureBoxGenesis
             // 
-            this.pictureBoxGenesis.BackgroundImage = global::SATSuma.Properties.Resources.AppBackground2;
+            this.pictureBoxGenesis.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.pictureBoxGenesis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxGenesis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxGenesis.Location = new System.Drawing.Point(9, 31);
@@ -12010,7 +12010,7 @@
             // 
             // pictureBoxFranklin
             // 
-            this.pictureBoxFranklin.BackgroundImage = global::SATSuma.Properties.Resources.SatsumaBTCdir1;
+            this.pictureBoxFranklin.BackgroundImage = global::SATSuma.Properties.Resources.Franklin;
             this.pictureBoxFranklin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxFranklin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxFranklin.Location = new System.Drawing.Point(132, 31);
@@ -17407,7 +17407,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.BackgroundImage = global::SATSuma.Properties.Resources.AppBackground2;
+            this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);

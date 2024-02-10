@@ -63,16 +63,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AppBackground2 {
-            get {
-                object obj = ResourceManager.GetObject("AppBackground2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap ApplyingTheme {
             get {
                 object obj = ResourceManager.GetObject("ApplyingTheme", resourceCulture);
@@ -103,26 +93,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BTCWhale {
-            get {
-                object obj = ResourceManager.GetObject("BTCWhale", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Citadel {
-            get {
-                object obj = ResourceManager.GetObject("Citadel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap CustomImage {
             get {
                 object obj = ResourceManager.GetObject("CustomImage", resourceCulture);
@@ -146,6 +116,26 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap dropdown {
             get {
                 object obj = ResourceManager.GetObject("dropdown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Franklin {
+            get {
+                object obj = ResourceManager.GetObject("Franklin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Genesis {
+            get {
+                object obj = ResourceManager.GetObject("Genesis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -196,6 +186,16 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap helpselectDropdown {
             get {
                 object obj = ResourceManager.GetObject("helpselectDropdown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HoneyBadger {
+            get {
+                object obj = ResourceManager.GetObject("HoneyBadger", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,16 +303,6 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanetBTC {
-            get {
-                object obj = ResourceManager.GetObject("PlanetBTC", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap PnVlfRPD_400x400 {
             get {
                 object obj = ResourceManager.GetObject("PnVlfRPD_400x400", resourceCulture);
@@ -353,9 +343,9 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Satsuma3 {
+        internal static System.Drawing.Bitmap Satsuma {
             get {
-                object obj = ResourceManager.GetObject("Satsuma3", resourceCulture);
+                object obj = ResourceManager.GetObject("Satsuma", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -376,16 +366,6 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap SatsumaAnimatedWhite {
             get {
                 object obj = ResourceManager.GetObject("SatsumaAnimatedWhite", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SatsumaBTCdir {
-            get {
-                object obj = ResourceManager.GetObject("SatsumaBTCdir", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -436,6 +416,26 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap squares {
             get {
                 object obj = ResourceManager.GetObject("squares", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap StackSats {
+            get {
+                object obj = ResourceManager.GetObject("StackSats", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Symbol {
+            get {
+                object obj = ResourceManager.GetObject("Symbol", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

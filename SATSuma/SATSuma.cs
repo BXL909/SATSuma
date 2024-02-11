@@ -26,7 +26,9 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* use chart loading popup between other screen changes?
+* test in 2x UIscale and make sure everything lines up
+* add loading screen when jumping from one screen to another (if not already done)
+* replace chart icon with ascii 📈
 * test
 */
 
@@ -13218,7 +13220,7 @@ namespace SATSuma
             {
                 if (!panelAddToBookmarks.Visible)
                 {
-                    panelFees.Visible = false;
+                    //panelFees.Visible = false;
                     panelAddToBookmarks.Visible = true;
                     lblBookmarkSavedSuccess.Visible = false;
                     btnCommitToBookmarks.Enabled = true;
@@ -13228,7 +13230,7 @@ namespace SATSuma
                 else
                 {
                     panelAddToBookmarks.Visible = false;
-                    panelFees.Visible = true;
+                    //panelFees.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -13319,7 +13321,7 @@ namespace SATSuma
             try
             {
                 panelAddToBookmarks.Visible = false;
-                panelFees.Visible = true;
+                //panelFees.Visible = true;
             }
             catch (Exception ex)
             {
@@ -13601,7 +13603,7 @@ namespace SATSuma
             try
             {
                 panelAddToBookmarks.Visible = false;
-                panelFees.Visible = true;
+                //panelFees.Visible = true;
                 hideAddToBookmarksTimer.Stop();
             }
             catch (Exception ex)
@@ -15467,7 +15469,7 @@ namespace SATSuma
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.OliveDrab;
-                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
+                    //lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -15545,7 +15547,7 @@ namespace SATSuma
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.IndianRed;
-                    lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 1);
+                    //lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 1);
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -16124,7 +16126,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(3 * UIScale));
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnGBP.Location.X + (btnGBP.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnGBP.Location.Y + (int)(5 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnGBP.Invoke((MethodInvoker)delegate
@@ -16143,7 +16145,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(3 * UIScale));
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnUSD.Location.X + (btnUSD.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnUSD.Location.Y + (int)(5 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnUSD.Invoke((MethodInvoker)delegate
@@ -16162,7 +16164,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(3 * UIScale));
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnEUR.Location.X + (btnEUR.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnEUR.Location.Y + (int)(5 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnEUR.Invoke((MethodInvoker)delegate
@@ -16181,7 +16183,7 @@ namespace SATSuma
                             lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(3 * UIScale));
+                                lblCurrencyMenuHighlightedButtonText.Location = new Point((btnXAU.Location.X + (btnXAU.Width / 2)) - lblCurrencyMenuHighlightedButtonText.Width / 2, btnXAU.Location.Y + (int)(5 * UIScale));
                             });
                             ClearCurrencyMenuMarkers();
                             btnXAU.Invoke((MethodInvoker)delegate
@@ -16979,7 +16981,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "genesis";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((BtnMenuThemeGenesis.Location.X + (BtnMenuThemeGenesis.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, BtnMenuThemeGenesis.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -17032,7 +17034,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "franklin";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeFranklin.Location.X + (btnMenuThemeFranklin.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeFranklin.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeFranklin.Location.X + (btnMenuThemeFranklin.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeFranklin.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeFranklin.Invoke((MethodInvoker)delegate
@@ -17085,7 +17087,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSatsuma.Location.X + (btnMenuThemeSatsuma.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSatsuma.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -17138,7 +17140,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "honey badger";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeHoneyBadger.Location.X + (btnMenuThemeHoneyBadger.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeHoneyBadger.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeHoneyBadger.Location.X + (btnMenuThemeHoneyBadger.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeHoneyBadger.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeHoneyBadger.Invoke((MethodInvoker)delegate
@@ -17191,7 +17193,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "stack sats";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeStackSats.Location.X + (btnMenuThemeStackSats.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeStackSats.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeStackSats.Location.X + (btnMenuThemeStackSats.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeStackSats.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeStackSats.Invoke((MethodInvoker)delegate
@@ -17244,7 +17246,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "symbol";
-                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSymbol.Location.X + (btnMenuThemeSymbol.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSymbol.Location.Y + (int)(3 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuThemeSymbol.Location.X + (btnMenuThemeSymbol.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuThemeSymbol.Location.Y + (int)(5 * UIScale));
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeSymbol.Invoke((MethodInvoker)delegate
@@ -17303,7 +17305,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnAppearance_Click(object sender, EventArgs e)
+        private async void BtnAppearance_Click(object sender, EventArgs e)
         {
             try
             {
@@ -17329,6 +17331,25 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 btnMenuCreateTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
@@ -17346,6 +17367,12 @@ namespace SATSuma
                 panelBookmarks.Visible = false;
                 panelSettings.Visible = false;
                 panelAppearance.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(700);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -17378,7 +17405,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
+                                lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                             });
                             ClearThemeMenuMarkers();
                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -18909,7 +18936,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale));
+                                        lblThemeMenuHighlightedButtonText.Location = new Point((btnMenuApplyCustomTheme.Location.X + (btnMenuApplyCustomTheme.Width / 2)) - lblThemeMenuHighlightedButtonText.Width / 2, btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                                     });
                                     ClearThemeMenuMarkers();
                                     btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -19338,14 +19365,6 @@ namespace SATSuma
                         }
                     }
 
-                    #region hacky way to ensure background image shows through these panels.
-                    panelHeaderPrice.Visible = false;
-                    panelHeaderPrice.Visible = true;
-                    panelHeaderBlockHeight.Visible = false;
-                    panelHeaderBlockHeight.Visible = true;
-                    panelFees.Visible = false;
-                    panelFees.Visible = true;
-                    #endregion
                 }
                 catch (Exception ex)
                 {
@@ -19370,7 +19389,7 @@ namespace SATSuma
             if (firstTimeLoadingScreen)
             {
                 firstTimeLoadingScreen = false;
-                await Task.Delay(6000);
+                await Task.Delay(8000);
             }
             else
             {
@@ -22312,7 +22331,7 @@ namespace SATSuma
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
         #region main menu
 
-        private void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
+        private async void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22343,6 +22362,25 @@ namespace SATSuma
                 }
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBookmarks.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -22355,6 +22393,12 @@ namespace SATSuma
                 panelAppearance.Visible = false;
                 panelXpub.Visible = false;
                 panelBitcoinDashboard.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
             }
             catch (Exception ex)
@@ -22363,7 +22407,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuLightningDashboard_Click(object sender, EventArgs e)
+        private async void BtnMenuLightningDashboard_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22394,6 +22438,25 @@ namespace SATSuma
                 }
                 btnMenuLightningDashboard.Enabled = false;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelCharts.Visible = false;
@@ -22406,6 +22469,12 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
             }
             catch (Exception ex)
@@ -22414,7 +22483,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuCharts_Click(object sender, EventArgs e)
+        private async void BtnMenuCharts_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22442,6 +22511,25 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuCharts.Enabled = false;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(500);
+                #endregion
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelBlockList.Visible = false;
@@ -22454,7 +22542,14 @@ namespace SATSuma
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelCharts.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(2000);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
+
             }
             catch (Exception ex)
             {
@@ -22462,7 +22557,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuAddress_Click(object sender, EventArgs e)
+        private async void BtnMenuAddress_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22493,6 +22588,25 @@ namespace SATSuma
                 }
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBitcoinDashboard.Visible = false;
                 panelBlockList.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -22505,6 +22619,12 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelAddress.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -22514,10 +22634,11 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuBlock_Click(object sender, EventArgs e)
+        private async void BtnMenuBlock_Click(object sender, EventArgs e)
         {
             try
             {
+                
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -22544,7 +22665,28 @@ namespace SATSuma
                     btnMenuCharts.Enabled = true;
                 }
                 btnMenuSettings.Enabled = true;
+                
                 SuspendLayout();
+
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -22556,7 +22698,6 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
-                panelBlock.Visible = true;
                 ResumeLayout();
                 CheckNetworkStatus();
 
@@ -22568,7 +22709,14 @@ namespace SATSuma
                     });
                     LookupBlock(); // fetch all the block data automatically for the initial view. 
                 }
+                panelBlock.Visible = true;
 
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
             }
             catch (Exception ex)
             {
@@ -22576,7 +22724,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuXpub_Click(object sender, EventArgs e)
+        private async void BtnMenuXpub_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22607,6 +22755,25 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -22619,6 +22786,12 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
                 panelXpub.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -22628,7 +22801,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuBlockList_Click(object sender, EventArgs e)
+        private async void BtnMenuBlockList_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22659,6 +22832,25 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
                 panelLightningDashboard.Visible = false;
@@ -22680,6 +22872,12 @@ namespace SATSuma
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
                 }
                 panelBlockList.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
             }
             catch (Exception ex)
@@ -22688,7 +22886,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuTransaction_Click(object sender, EventArgs e)
+        private async void BtnMenuTransaction_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22719,6 +22917,25 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBitcoinDashboard.Visible = false;
                 panelLightningDashboard.Visible = false;
                 panelCharts.Visible = false;
@@ -22732,6 +22949,12 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
                 panelTransaction.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -22741,7 +22964,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuBookmarks_Click(object sender, EventArgs e)
+        private async void BtnMenuBookmarks_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22773,6 +22996,25 @@ namespace SATSuma
                 btnMenuSettings.Enabled = true;
                 btnMenuBookmarks.Enabled = false;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -22788,6 +23030,12 @@ namespace SATSuma
                 CheckNetworkStatus();
                 SetupBookmarksScreen();
                 panelBookmarks.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(700);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
             }
             catch (Exception ex)
@@ -22796,7 +23044,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuDirectory_Click(object sender, EventArgs e)
+        private async void BtnMenuDirectory_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22828,6 +23076,25 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = true;
                 btnMenuDirectory.Enabled = false;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -22841,6 +23108,12 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelBookmarks.Visible = false;
                 panelDirectory.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(700);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -22850,7 +23123,7 @@ namespace SATSuma
             }
         }
 
-        private void BtnMenuSettings_Click(object sender, EventArgs e)
+        private async void BtnMenuSettings_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22882,6 +23155,25 @@ namespace SATSuma
                 btnMenuCreateTheme.Enabled = true;
                 btnMenuSettings.Enabled = false;
                 SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
+                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                };
+                // Set the location of the loadingScreen form
+                loadingScreen.Location = panelScreenLocation;
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
                 panelBlockList.Visible = false;
                 panelBitcoinDashboard.Visible = false;
                 panelBookmarks.Visible = false;
@@ -22895,6 +23187,12 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelBookmarks.Visible = false;
                 panelSettings.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(400);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
                 ResumeLayout();
                 CheckNetworkStatus();
             }
@@ -25134,5 +25432,11 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+        private async Task BriefPause(int pauselength)
+        {
+            await Task.Delay(pauselength);
+        }
+
     }
 }                

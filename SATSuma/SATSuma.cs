@@ -26,9 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* test in 2x UIscale and make sure everything lines up
 * add loading screen when jumping from one screen to another (if not already done)
-* replace chart icon with ascii 📈
+* continue scaling chart elements, starting from price linear/log (code order, not button order)
 * test
 */
 
@@ -152,7 +151,7 @@ namespace SATSuma
         private bool ObtainedHalvingSecondsRemainingYet = false; // used to check whether we know halvening seconds before we start trying to subtract from them
         #endregion
         #region settings variables
-        double UIScale = 3; // defaults to 150%
+        readonly double UIScale = 3; // defaults to 150%
         double UIScaleToBeSavedToSettings = 3; // (1 = 100%, 2 = 125%, 3 = 150%, 4 = 175%, 5 = 200%)
         bool UIScaleAlreadySavedInFile = false; // is a UIScale saved in the settings file
         string UIScaleInFile = "3"; // the UIScale saved in the settingss file
@@ -834,9 +833,9 @@ namespace SATSuma
                                 {
                                     lblHeaderBlockSize.Text = sizeString;
                                 });
-                                pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
+                                lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width + (int)(10 * UIScale), pictureBoxHeaderBlockSizeChart.Location.Y);
+                                    lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
                                 });
                                 // difficulty epoch = block height / 2016 rounded up to an integer
                                 lblDifficultyEpoch.Invoke((MethodInvoker)delegate
@@ -872,9 +871,9 @@ namespace SATSuma
                         {
                             lblHeaderFeesNoPriority.Text = economyFee;
                         });
-                        pictureBoxHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
+                        lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width + (int)(10 * UIScale), pictureBoxHeaderFeeRatesChart.Location.Y);
+                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width, lblHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -891,25 +890,25 @@ namespace SATSuma
                         {
                             lblHeaderHashrate.Text = currentHashrate;
                         });
-                        pictureBoxHeaderHashrateChart.Invoke((MethodInvoker)delegate
+                        lblHeaderHashRateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHeaderHashrateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width + (int)(10 * UIScale), pictureBoxHeaderHashrateChart.Location.Y);
+                            lblHeaderHashRateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width, lblHeaderHashRateChart.Location.Y);
                         });
                         lblEstHashrate.Invoke((MethodInvoker)delegate
                         {
                             lblEstHashrate.Text = currentHashrate;
                         });
-                        pictureBoxHashrateChart.Invoke((MethodInvoker)delegate
+                        lblHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width + (int)(5 * UIScale), pictureBoxHashrateChart.Location.Y);
+                            lblHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width, lblHashrateChart.Location.Y);
                         });
                         lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListEstHashRate.Text = currentHashrate;
                         });
-                        pictureBoxBlockListHashrateChart.Invoke((MethodInvoker)delegate
+                        lblBlockListHashrateChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width + (int)(5 * UIScale), pictureBoxBlockListHashrateChart.Location.Y);
+                            lblBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width, lblBlockListHashrateChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -948,17 +947,17 @@ namespace SATSuma
                         {
                             lblDifficultyAdjEst.Text = difficultyChange + "%";
                         });
-                        pictureBoxDifficultyChart.Invoke((MethodInvoker)delegate
+                        lblDifficultyChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width + (int)(5 * UIScale), pictureBoxDifficultyChart.Location.Y);
+                            lblDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width, lblDifficultyChart.Location.Y);
                         });
                         lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
                             lblBlockListNextDifficultyAdjustment.Text = difficultyChange + "%";
                         });
-                        pictureBoxBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
+                        lblBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
-                            pictureBoxBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width + (int)(5 * UIScale), pictureBoxBlockListDifficultyChart.Location.Y);
+                            lblBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width, lblBlockListDifficultyChart.Location.Y);
                         });
                         lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
                         {
@@ -1153,17 +1152,17 @@ namespace SATSuma
                                     lblClearnetTorNodes.Text = "Disabled";
                                 });
                             }
-                            pictureBoxLightningNodesChart.Invoke((MethodInvoker)delegate
+                            lblLightningNodesChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningNodesChart.Location = new Point(label40.Location.X + label40.Width + (int)(5 * UIScale), pictureBoxLightningNodesChart.Location.Y);
+                                lblLightningNodesChart.Location = new Point(label40.Location.X + label40.Width, lblLightningNodesChart.Location.Y);
                             });
-                            pictureBoxLightningChannelsChart.Invoke((MethodInvoker)delegate
+                            lblLightningChannelsChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width + (int)(5 * UIScale), pictureBoxLightningChannelsChart.Location.Y);
+                                lblLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width, lblLightningChannelsChart.Location.Y);
                             });
-                            pictureBoxLightningCapacityChart.Invoke((MethodInvoker)delegate
+                            lblLightningCapacityChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width + (int)(5 * UIScale), pictureBoxLightningCapacityChart.Location.Y);
+                                lblLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width, lblLightningCapacityChart.Location.Y);
                             });
                             if (RunMempoolSpaceLightningAPI)
                             {
@@ -1339,29 +1338,29 @@ namespace SATSuma
                                     lblHeaderMarketCap.Text = "0 (TestNet)";
                                 });
                             }
-                            pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
+                            lblMarketCapChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width + (int)(5 * UIScale), pictureBoxMarketCapChart.Location.Y);
+                                lblMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width, lblMarketCapChart.Location.Y);
                             });
-                            pictureBoxPriceChart.Invoke((MethodInvoker)delegate
+                            lblPriceChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width + (int)(5 * UIScale), pictureBoxPriceChart.Location.Y);
+                                lblPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width, lblPriceChart.Location.Y);
                             });
-                            pictureBoxConverterChart.Invoke((MethodInvoker)delegate
+                            lblConverterChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width + (int)(5 * UIScale), pictureBoxConverterChart.Location.Y);
+                                lblConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width, lblConverterChart.Location.Y);
                             });
-                            pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            lblHeaderPriceChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                                lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
                             });
-                            pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                            lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width + (int)(10 * UIScale), pictureBoxHeaderConverterChart.Location.Y);
+                                lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
                             });
-                            pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                            lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width + (int)(10 * UIScale), pictureBoxHeaderMarketCapChart.Location.Y);
+                                lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -1473,22 +1472,42 @@ namespace SATSuma
                                     lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
                                 });
                             }
-                            pictureBoxBlockFeesChart.Invoke((MethodInvoker)delegate
+                            if (!testNet && lblNextBlockTotalFeesFiat.Text != "no data" && lblNextBlockTotalFeesFiat.Visible)
                             {
-                                pictureBoxBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width + (int)(5 * UIScale), pictureBoxBlockFeesChart.Location.Y);
-                            });
-                            pictureBoxFeeRangeChart.Invoke((MethodInvoker)delegate
+                                lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
+                                });
+                            }
+                            else
                             {
-                                pictureBoxFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width + (int)(5 * UIScale), pictureBoxFeeRangeChart.Location.Y);
-                            });
-                            pictureBoxBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
+                                lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
+                                });
+                            }
+                            lblFeeRangeChart.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width + (int)(5 * UIScale), pictureBoxBlockListFeeRangeChart2.Location.Y);
+                                lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
                             });
-                            pictureBoxBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                            lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width + (int)(5 * UIScale), pictureBoxBlockListFeeChart2.Location.Y);
+                                lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
                             });
+                            if (!testNet && lblBlockListTotalFeesInNextBlockFiat.Text != "no data" && lblBlockListTotalFeesInNextBlockFiat.Visible)
+                            {
+                                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width, lblBlockListFeeChart2.Location.Y);
+                                });
+                            }
+                            else
+                            {
+                                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListFeeChart2.Location.Y);
+                                });
+                            }
                             SetLightsMessagesAndResetTimers();
                         }
                         catch (Exception ex)
@@ -1741,9 +1760,9 @@ namespace SATSuma
                                     progressBarPercentIssued.Value = 0;
                                 });
                             }
-                            pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
+                            lblChartCirculation.Invoke((MethodInvoker)delegate
                             {
-                                pictureBoxChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width + (int)(5 * UIScale), pictureBoxChartCirculation.Location.Y);
+                                lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
                             });
                             SetLightsMessagesAndResetTimers();
                         }
@@ -1843,13 +1862,13 @@ namespace SATSuma
                                 lblBlockchainSize.Text = "unavailable on TestNet";
                             });
                         }
-                        pictureBoxPoolRankingChart.Invoke((MethodInvoker)delegate
+                        lblPoolRankingChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width + (int)(5 * UIScale), pictureBoxPoolRankingChart.Location.Y);
+                            lblPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width, lblPoolRankingChart.Location.Y);
                         });
-                        pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
+                        lblUniqueAddressesChart.Invoke((MethodInvoker)delegate
                         {
-                            pictureBoxUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width + (int)(5 * UIScale), pictureBoxUniqueAddressesChart.Location.Y);
+                            lblUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width, lblUniqueAddressesChart.Location.Y);
                         });
                         SetLightsMessagesAndResetTimers();
                     }
@@ -4100,9 +4119,9 @@ namespace SATSuma
                     {
                         lblSizeOfBlock.Text = sizeString;
                     });
-                    pictureBoxBlockScreenChartBlockSize.Invoke((MethodInvoker)delegate
+                    lblBlockScreenChartBlockSize.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartBlockSize.Location = new Point(lblSizeOfBlock.Location.X + lblSizeOfBlock.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartBlockSize.Location.Y);
+                        lblBlockScreenChartBlockSize.Location = new Point(lblSizeOfBlock.Location.X + lblSizeOfBlock.Width, lblBlockScreenChartBlockSize.Location.Y);
                     });
                     string strWeight = Convert.ToString(blocks[0].Weight);
 
@@ -4128,9 +4147,9 @@ namespace SATSuma
                             lblTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (totalBlockFeesDec * OneBTCinSelectedCurrency).ToString("N2");
                         });
                     }
-                    pictureBoxBlockFeeChart.Invoke((MethodInvoker)delegate
+                    lblBlockFeeChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width + (int)(5 * UIScale), pictureBoxBlockFeeChart.Location.Y);
+                        lblBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width, lblBlockFeeChart.Location.Y);
                     });
 
                     string nonceString = blocks[0].Nonce;
@@ -4156,9 +4175,9 @@ namespace SATSuma
                         });
                     }
 
-                    pictureBoxBlockScreenChartReward.Invoke((MethodInvoker)delegate
+                    lblBlockScreenChartReward.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartReward.Location.Y);
+                        lblBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width, lblBlockScreenChartReward.Location.Y);
                     });
 
 
@@ -4166,9 +4185,9 @@ namespace SATSuma
                     {
                         lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
                     });
-                    pictureBoxBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
+                    lblBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenChartFeeRange.Location = new Point(lblBlockFeeRangeAndMedianFee.Location.X + lblBlockFeeRangeAndMedianFee.Width + (int)(5 * UIScale), pictureBoxBlockScreenChartFeeRange.Location.Y);
+                        lblBlockScreenChartFeeRange.Location = new Point(lblBlockFeeRangeAndMedianFee.Location.X + lblBlockFeeRangeAndMedianFee.Width, lblBlockScreenChartFeeRange.Location.Y);
                     });
                     lblBlockAverageFee.Invoke((MethodInvoker)delegate
                     {
@@ -4178,9 +4197,9 @@ namespace SATSuma
                     {
                         lblMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
                     });
-                    pictureBoxBlockScreenPoolRankingChart.Invoke((MethodInvoker)delegate
+                    lblBlockScreenPoolRankingChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width + (int)(5 * UIScale), pictureBoxBlockScreenPoolRankingChart.Location.Y);
+                        lblBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width, lblBlockScreenPoolRankingChart.Location.Y);
                     });
                     lblBlockTime.Invoke((MethodInvoker)delegate
                     {
@@ -6694,25 +6713,25 @@ namespace SATSuma
                                 {
                                     lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].Height);
                                 });
-                                pictureBoxBlockListPoolRanking.Invoke((MethodInvoker)delegate
+                                lblBlockListPoolRanking.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width + (int)(5 * UIScale), lblBlockListMiner.Location.Y);
+                                    lblBlockListPoolRanking.Location = new Point(lblBlockListMiner.Location.X + lblBlockListMiner.Width, lblBlockListPoolRanking.Location.Y);
                                 });
-                                pictureBoxBlockListFeeChart.Invoke((MethodInvoker)delegate
+                                lblBlockListFeeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width + (int)(5 * UIScale), lblBlockListTotalFees.Location.Y);
+                                    lblBlockListFeeChart.Location = new Point(lblBlockListTotalFees.Location.X + lblBlockListTotalFees.Width, lblBlockListFeeChart.Location.Y);
                                 });
-                                pictureBoxBlockListRewardChart.Invoke((MethodInvoker)delegate
+                                lblBlockListRewardChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width + (int)(5 * UIScale), lblBlockListReward.Location.Y);
+                                    lblBlockListRewardChart.Location = new Point(lblBlockListReward.Location.X + lblBlockListReward.Width, lblBlockListRewardChart.Location.Y);
                                 });
-                                pictureBoxBlockListFeeRangeChart.Invoke((MethodInvoker)delegate
+                                lblBlockListFeeRangeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width + (int)(5 * UIScale), lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
+                                    lblBlockListFeeRangeChart.Location = new Point(lblBlockListBlockFeeRangeAndMedianFee.Location.X + lblBlockListBlockFeeRangeAndMedianFee.Width, lblBlockListFeeRangeChart.Location.Y);
                                 });
-                                pictureBoxBlockListBlockSizeChart.Invoke((MethodInvoker)delegate
+                                lblBlockListBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
-                                    pictureBoxBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width + (int)(5 * UIScale), lblBlockListBlockSize.Location.Y);
+                                    lblBlockListBlockSizeChart.Location = new Point(lblBlockListBlockSize.Location.X + lblBlockListBlockSize.Width, lblBlockListBlockSizeChart.Location.Y);
                                 });
                             }
                             else
@@ -9212,7 +9231,7 @@ namespace SATSuma
                 int desiredSpacing = 98; // spacing added to title to force left-align in
                 string spacing = new string('\u00A0', desiredSpacing);
                 string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
-                formsPlot2.Plot.Title(title, size: 13, color: labelColor, bold: true);
+                formsPlot2.Plot.Title(title, size: (int)(13 * UIScale), color: labelColor, bold: false);
 
                 ToggleLoadingAnimation("enable");
                 DisableEnableChartButtons("disable");
@@ -9307,14 +9326,14 @@ namespace SATSuma
                     pie.DonutSize = .3;
                     pie.DonutLabel = Convert.ToString(totalBlockCount - 1 + "\r\nblocks mined\r\n" + "period: " + chartPeriod);
                     pie.CenterFont.Color = Color.Orange;
-                    pie.CenterFont.Size = 13;
+                    pie.CenterFont.Size = (int)(13 * UIScale);
                     pie.CenterFont.Bold = false;
                     pie.SliceFillColors = colorSpectrum;
                     pie.ShowPercentages = true;
                     pie.ShowValues = false;
                     pie.ShowLabels = true;
                     pie.Size = .7;
-                    pie.SliceFont.Size = 11;
+                    pie.SliceFont.Size = (int)(11 * UIScale);
                     pie.SliceFont.Bold = false;
                     pie.SliceLabels = labelsAndValuesArray;
                     pie.SliceLabelColors = colorSpectrum;
@@ -9364,7 +9383,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9413,9 +9432,10 @@ namespace SATSuma
                     formsPlot1.Plot.AddFill(xValues, yValues7, 0, color: Color.Indigo);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("sats per v/byte", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("sats per v/byte", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // Set the tick and gridline settings
@@ -9470,7 +9490,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -9504,19 +9524,16 @@ namespace SATSuma
                     formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yBoundary);
                     formsPlot1.Plot.YAxis.SetBoundary(0, yBoundary);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-                    //formsPlot1.Plot.AddFill(xValues, yValues1, 0, Color.IndianRed);
                     formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.IndianRed);
                     formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.OliveDrab);
                     formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.SteelBlue);
                     formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Gold);
-                    //formsPlot1.Plot.AddFill(xValues, yValues2, 0, Color.DarkOrange);
-                    //formsPlot1.Plot.AddFill(xValues, yValues3, 0, Color.DarkSalmon);
-                    //formsPlot1.Plot.AddFill(xValues, yValues4, 0, Color.DarkGoldenrod);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // Set the tick and gridline settings
@@ -9573,7 +9590,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -9604,9 +9621,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("EH/s", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("EH/s", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -9616,7 +9634,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -9675,7 +9693,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Hashrate (terrahash per second) - " + chartPeriod + " (log scale)", size: 13, bold: true);
+                formsPlot1.Plot.Title("Hashrate (terrahash per second) - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
@@ -9731,9 +9749,10 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("TH/s", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("TH/s", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -9744,7 +9763,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     // refresh the graph
@@ -9792,7 +9811,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9823,9 +9842,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValuesCapacity, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -9835,7 +9855,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -9888,7 +9908,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9919,9 +9939,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValuesChannels, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -9931,7 +9952,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -9978,7 +9999,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: 13, bold: true);
+                formsPlot3.Plot.Title("Lightning nodes per country (excluding Darknet)", size: (int)(13 * UIScale), bold: false);
 
                 // switch to linear scaling in case it was log before
                 formsPlot3.Plot.YAxis.MinorLogScale(false);
@@ -10022,6 +10043,8 @@ namespace SATSuma
                     double[] yPositions = Enumerable.Range(0, counts.Length).Select(y => (double)y).ToArray();
 
                     // Set the Y-axis tick positions and labels
+                    formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot3.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot3.Plot.YTicks(yPositions, countryNames);
                     formsPlot3.Plot.YLabel("");
                     formsPlot3.Plot.XLabel("");
@@ -10029,11 +10052,6 @@ namespace SATSuma
                     formsPlot3.Plot.XAxis.SetBoundary(0, counts.Max());
                     formsPlot3.Plot.YAxis.SetBoundary(-3, 45);
                     formsPlot3.Plot.Layout(left: 100);
-
-                    formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Ticks(true);
-                    formsPlot1.Plot.XAxis.MajorGrid(true);
-                    formsPlot1.Plot.YAxis.MajorGrid(true);
 
                     // refresh the graph
                     formsPlot3.Refresh();
@@ -10075,7 +10093,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -10100,9 +10118,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("BTC", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("BTC", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10112,7 +10131,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -10162,7 +10181,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -10186,9 +10205,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("BTC", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("BTC", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10198,7 +10218,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -10256,7 +10276,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates/hashrates/difficulties
@@ -10283,9 +10303,9 @@ namespace SATSuma
                     scatter.StepDisplay = true;
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("trillion", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("trillion", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10295,7 +10315,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -10353,7 +10373,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Difficulty - " + chartPeriod + " (log scale)", size: 13, bold: true);
+                formsPlot1.Plot.Title("Difficulty - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
@@ -10409,9 +10429,10 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("trillion", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("trillion", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10422,7 +10443,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     // refresh the graph
@@ -10474,7 +10495,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -10496,9 +10517,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Unique addresses", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Unique addresses", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10508,7 +10530,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -10566,7 +10588,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: 13, bold: true);
+                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -10617,9 +10639,10 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Unique addresses", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Unique addresses", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10630,7 +10653,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -12848,51 +12871,15 @@ namespace SATSuma
                 btnChartPrice.Enabled = false;
                 btnChartUniqueAddresses.Enabled = false;
                 btnChartUTXO.Enabled = false;
-                pictureBoxChartCirculation.Enabled = false;
-                pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxChartCirculation.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxHeaderPriceChart.Enabled = false;
-                pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderPriceChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxPriceChart.Enabled = false;
-                pictureBoxPriceChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxPriceChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxConverterChart.Enabled = false;
-                pictureBoxConverterChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxConverterChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxMarketCapChart.Enabled = false;
-                pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxMarketCapChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxUniqueAddressesChart.Enabled = false;
-                pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxHeaderConverterChart.Enabled = false;
-                pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderConverterChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxHeaderBlockSizeChart.Enabled = false;
-                pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderBlockSizeChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
-                pictureBoxHeaderMarketCapChart.Enabled = false;
-                pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderMarketCapChart.BackgroundImage = Properties.Resources.graphIcondisabled;
-                });
+                lblChartCirculation.Enabled = false;
+                lblHeaderPriceChart.Enabled = false;
+                lblPriceChart.Enabled = false;
+                lblConverterChart.Enabled = false;
+                lblMarketCapChart.Enabled = false;
+                lblUniqueAddressesChart.Enabled = false;
+                lblHeaderConverterChart.Enabled = false;
+                lblHeaderBlockSizeChart.Enabled = false;
+                lblHeaderMarketCapChart.Enabled = false;
             }
             catch (Exception ex)
             {
@@ -12911,51 +12898,15 @@ namespace SATSuma
                 btnChartPrice.Enabled = true;
                 btnChartUniqueAddresses.Enabled = true;
                 btnChartUTXO.Enabled = true;
-                pictureBoxChartCirculation.Enabled = true;
-                pictureBoxChartCirculation.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxChartCirculation.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxConverterChart.Enabled = true;
-                pictureBoxConverterChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxConverterChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxHeaderPriceChart.Enabled = true;
-                pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderPriceChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxPriceChart.Enabled = true;
-                pictureBoxPriceChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxPriceChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxMarketCapChart.Enabled = true;
-                pictureBoxMarketCapChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxMarketCapChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxUniqueAddressesChart.Enabled = true;
-                pictureBoxUniqueAddressesChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxUniqueAddressesChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxHeaderConverterChart.Enabled = true;
-                pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderConverterChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxHeaderBlockSizeChart.Enabled = true;
-                pictureBoxHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderBlockSizeChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
-                pictureBoxHeaderMarketCapChart.Enabled = true;
-                pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
-                {
-                    pictureBoxHeaderMarketCapChart.BackgroundImage = Properties.Resources.graphIcon;
-                });
+                lblChartCirculation.Enabled = true;
+                lblConverterChart.Enabled = true;
+                lblHeaderPriceChart.Enabled = true;
+                lblPriceChart.Enabled = true;
+                lblMarketCapChart.Enabled = true;
+                lblUniqueAddressesChart.Enabled = true;
+                lblHeaderConverterChart.Enabled = true;
+                lblHeaderBlockSizeChart.Enabled = true;
+                lblHeaderMarketCapChart.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -15750,13 +15701,13 @@ namespace SATSuma
         {
             try
             {
-                Control[] DisableThisStuffForTestnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxChartCirculation, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxHeaderPriceChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxMarketCapChart, pictureBoxPoolRankingChart, pictureBoxPriceChart, pictureBoxUniqueAddressesChart };
+                Control[] DisableThisStuffForTestnet = { lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderHashRateChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, 
+                    lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPriceChart, lblMarketCapChart, lblChartCirculation, lblUniqueAddressesChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart
+            };
                 foreach (Control control in DisableThisStuffForTestnet)
                 {
                     control.Enabled = false;
-                    control.BackgroundImage = Properties.Resources.graphIcondisabled;
                 }
-                btnMenuCharts.Enabled = false;
                 HideAllFiatConversionFields();
             }
             catch (Exception ex)
@@ -15774,11 +15725,12 @@ namespace SATSuma
                 {
                     EnableChartsThatDontUseMempoolSpace();
                 }
-                Control[] EnableThisStuffForMainnet = { pictureBoxBlockFeeChart, pictureBoxBlockFeesChart, pictureBoxBlockListBlockSizeChart, pictureBoxBlockListDifficultyChart, pictureBoxBlockListFeeChart, pictureBoxBlockListFeeChart2, pictureBoxBlockListFeeRangeChart, pictureBoxBlockListFeeRangeChart2, pictureBoxBlockListHashrateChart, pictureBoxBlockListPoolRanking, pictureBoxBlockListRewardChart, pictureBoxBlockScreenChartBlockSize, pictureBoxBlockScreenChartFeeRange, pictureBoxBlockScreenChartReward, pictureBoxBlockScreenPoolRankingChart, pictureBoxDifficultyChart, pictureBoxFeeRangeChart, pictureBoxHashrateChart, pictureBoxHeaderFeeRatesChart, pictureBoxHeaderHashrateChart, pictureBoxLightningCapacityChart, pictureBoxLightningChannelsChart, pictureBoxLightningNodesChart, pictureBoxPoolRankingChart };
+                Control[] EnableThisStuffForMainnet = { lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
+                    lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart
+            };
                 foreach (Control control in EnableThisStuffForMainnet)
                 {
                     control.Enabled = true;
-                    control.BackgroundImage = Properties.Resources.graphIcon;
                 }
                 ShowAllFiatConversionFields();
             }
@@ -17334,8 +17286,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -17344,9 +17296,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -18498,6 +18449,8 @@ namespace SATSuma
                         this.BackgroundImage = null;
                     });
                     lblTime.Visible = false;
+                    lblBackgroundStackSatsSelected.Visible = false;
+                    lblBackgroundSymbolSelected.Visible = false;
                     lblBackgroundGenesisSelected.Visible = false;
                     lblBackgroundFranklinSelected.Visible = false;
                     lblBackgroundSatsumaSelected.Visible = false;
@@ -18516,7 +18469,7 @@ namespace SATSuma
         }
         #endregion
         #region title backgrounds
-        private void comboBoxSelectHeadingBackground_OnSelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxSelectHeadingBackground_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (lblTitlesBackgroundImage.Text == "✔️")
             {
@@ -19810,7 +19763,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing, lblHeaderBlockAge };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -19822,13 +19775,13 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardLabelsToColor = { label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85 };
+                Control[] listBitcoinDashboardLabelsToColor = { lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
                 }
                 //lightningdashboard
-                Control[] listLightningDashboardLabelsToColor = { label38, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
+                Control[] listLightningDashboardLabelsToColor = { lblLightningChannelsChart, lblLightningNodesChart, lblLightningCapacityChart, label38, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
                 foreach (Control control in listLightningDashboardLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -19840,7 +19793,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //block
-                Control[] listBlockLabelsToColor = { label64, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71 };
+                Control[] listBlockLabelsToColor = { label64, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart };
                 foreach (Control control in listBlockLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -19852,7 +19805,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //blocklist
-                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92 };
+                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListPoolRanking, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2 };
                 foreach (Control control in listBlockListLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -22325,7 +22278,13 @@ namespace SATSuma
             }
         }
         #endregion
-        
+        #region force a pause
+        private async Task BriefPause(int pauselength)
+        {
+            await Task.Delay(pauselength);
+        }
+        #endregion
+
         #endregion
 
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
@@ -22365,8 +22324,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22375,9 +22334,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22441,8 +22399,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22451,9 +22409,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22514,8 +22471,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22524,9 +22481,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(500);
                 #endregion
@@ -22591,8 +22547,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22601,9 +22557,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22671,8 +22626,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22681,9 +22636,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22758,8 +22712,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22768,9 +22722,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22835,8 +22788,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22845,9 +22798,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22920,8 +22872,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -22930,9 +22882,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -22999,8 +22950,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -23009,9 +22960,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -23079,8 +23029,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -23089,9 +23039,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -23158,8 +23107,8 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y = panelScreenLocation.Y - (int)(161 * UIScale);
-                panelScreenLocation.X = panelScreenLocation.X - (int)(13 * UIScale);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
@@ -23168,9 +23117,8 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None, // Remove borders
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
                 };
-                // Set the location of the loadingScreen form
-                loadingScreen.Location = panelScreenLocation;
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
@@ -23839,10 +23787,11 @@ namespace SATSuma
                     {
                         lblHeaderPrice.Text = price;
                     });
-                    pictureBoxHeaderPriceChart.Invoke((MethodInvoker)delegate
+                    lblHeaderPriceChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, pictureBoxHeaderPriceChart.Location.Y);
+                        lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
                     });
+
                     lblMarketCapUSD.Invoke((MethodInvoker)delegate
                     {
                         lblMarketCapUSD.Text = mCap;
@@ -23851,9 +23800,9 @@ namespace SATSuma
                     {
                         lblHeaderMarketCap.Text = mCap;
                     });
-                    pictureBoxHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                    lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, pictureBoxHeaderMarketCapChart.Location.Y);
+                        lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
                     });
                     lblMoscowTime.Invoke((MethodInvoker)delegate
                     {
@@ -23863,9 +23812,9 @@ namespace SATSuma
                     {
                         lblHeaderMoscowTime.Text = satsPerUnit;
                     });
-                    pictureBoxHeaderConverterChart.Invoke((MethodInvoker)delegate
+                    lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, pictureBoxHeaderConverterChart.Location.Y);
+                        lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
                     });
                 }
             }
@@ -25432,11 +25381,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private async Task BriefPause(int pauselength)
-        {
-            await Task.Delay(pauselength);
-        }
-
     }
 }                

@@ -59,49 +59,42 @@ namespace SATSuma
                 this.Width = (int)(474 * UIScale);
                 this.Height = (int)(588 * UIScale);
 
-                try
+                // Resize each control within the provided parentControl
+                foreach (Control control in parentControl.Controls)
                 {
-                    // Resize each control within the provided parentControl
-                    foreach (Control control in parentControl.Controls)
+                    System.Windows.Size originalSize = ((Tuple<System.Windows.Size, Font>)control.Tag).Item1;
+
+                    // apply a scaled radius to buttons to keep them fully rounded
+                    if (control.GetType() == typeof(RJButton))
                     {
-                        System.Windows.Size originalSize = ((Tuple<System.Windows.Size, Font>)control.Tag).Item1;
-
-                        // apply a scaled radius to buttons to keep them fully rounded
-                        if (control.GetType() == typeof(RJButton))
-                        {
-                            RJButton rjButton = (RJButton)control;
-                            // Set the borderRadius to a different value for each RJButton
-                            rjButton.BorderRadius = (int)(11 * UIScale);
-                        }
-
-                        control.Width = (int)(originalSize.Width * UIScale);
-                        control.Left = (int)(control.Left * UIScale);
-                        control.Top = (int)(control.Top * UIScale);
-                        control.Height = (int)(originalSize.Height * UIScale);
-
-                        // Resize font size
-                        if (control.Font != null)
-                        {
-                            Font originalControlFont = ((Tuple<System.Windows.Size, Font>)control.Tag).Item2;
-                            float scaledFontSize = (float)(originalControlFont.Size * UIScale);
-                            control.Font = new Font(originalControlFont.FontFamily, scaledFontSize - 1, originalControlFont.Style);
-                        }
-
-                        // Recursively handle controls within panels
-                        if (control.HasChildren)
-                        {
-                            btnScaleApply(control);
-                        }
+                        RJButton rjButton = (RJButton)control;
+                        // Set the borderRadius to a different value for each RJButton
+                        rjButton.BorderRadius = (int)(11 * UIScale);
                     }
 
-                    // Trigger layout update for child controls
-                    parentControl.PerformLayout();
-                    parentControl.Invalidate();
+                    control.Width = (int)(originalSize.Width * UIScale);
+                    control.Left = (int)(control.Left * UIScale);
+                    control.Top = (int)(control.Top * UIScale);
+                    control.Height = (int)(originalSize.Height * UIScale);
+
+                    // Resize font size
+                    if (control.Font != null)
+                    {
+                        Font originalControlFont = ((Tuple<System.Windows.Size, Font>)control.Tag).Item2;
+                        float scaledFontSize = (float)(originalControlFont.Size * UIScale);
+                        control.Font = new Font(originalControlFont.FontFamily, scaledFontSize - 1, originalControlFont.Style);
+                    }
+
+                    // Recursively handle controls within panels
+                    if (control.HasChildren)
+                    {
+                        btnScaleApply(control);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    //HandleException(ex, "btnScaleApply");
-                }
+
+                // Trigger layout update for child controls
+                parentControl.PerformLayout();
+                parentControl.Invalidate();
             }
             #region apply UIScale to all controls
             #endregion
@@ -111,28 +104,21 @@ namespace SATSuma
 
             void storeOriginalDimensions(Control parentControl)
             {
-                try
+                foreach (Control control in parentControl.Controls)
                 {
-                    foreach (Control control in parentControl.Controls)
+                    control.Tag = new System.Windows.Size(control.Width, control.Height);
+
+                    // Store the original font size of each control
+                    if (control.Font != null)
                     {
-                        control.Tag = new System.Windows.Size(control.Width, control.Height);
-
-                        // Store the original font size of each control
-                        if (control.Font != null)
-                        {
-                            control.Tag = new Tuple<System.Windows.Size, Font>((System.Windows.Size)control.Tag, control.Font);
-                        }
-
-                        // Recursively handle controls within panels
-                        if (control.HasChildren)
-                        {
-                            storeOriginalDimensions(control);
-                        }
+                        control.Tag = new Tuple<System.Windows.Size, Font>((System.Windows.Size)control.Tag, control.Font);
                     }
-                }
-                catch (Exception ex)
-                {
-                    //        HandleException(ex, "storeOriginalDimensions");
+
+                    // Recursively handle controls within panels
+                    if (control.HasChildren)
+                    {
+                        storeOriginalDimensions(control);
+                    }
                 }
             }
             #endregion

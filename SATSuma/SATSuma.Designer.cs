@@ -74,41 +74,8 @@
             this.btnViewTransactionFromBlock = new System.Windows.Forms.Button();
             this.btnViewBlockFromBlockList = new System.Windows.Forms.Button();
             this.btnViewAddressFromXpub = new System.Windows.Forms.Button();
-            this.pictureBoxHashrateChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxDifficultyChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderHashrateChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListDifficultyChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListHashrateChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderPriceChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxPriceChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderFeeRatesChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockScreenChartFeeRange = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockScreenChartReward = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockScreenChartBlockSize = new System.Windows.Forms.PictureBox();
-            this.pictureBoxChartCirculation = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListBlockSizeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListPoolRanking = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListFeeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListRewardChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListFeeRangeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockFeeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockScreenPoolRankingChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListFeeChart2 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockListFeeRangeChart2 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxPoolRankingChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxMarketCapChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxUniqueAddressesChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxFeeRangeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBlockFeesChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxLightningCapacityChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxLightningNodesChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxLightningChannelsChart = new System.Windows.Forms.PictureBox();
             this.btnViewAddressFromTXInput = new System.Windows.Forms.Button();
             this.btnViewAddressFromTXOutput = new System.Windows.Forms.Button();
-            this.pictureBoxHeaderBlockSizeChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderConverterChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxHeaderMarketCapChart = new System.Windows.Forms.PictureBox();
-            this.pictureBoxConverterChart = new System.Windows.Forms.PictureBox();
             this.btnSaveChart = new CustomControls.RJControls.RJButton();
             this.lblNextBlockTotalFeesFiat = new System.Windows.Forms.Label();
             this.lblBlockRewardFiat = new System.Windows.Forms.Label();
@@ -116,6 +83,39 @@
             this.lbl24HourBTCSentFiat = new System.Windows.Forms.Label();
             this.btnPreviewAnimations = new CustomControls.RJControls.RJButton();
             this.btnShowGlobalSearch = new CustomControls.RJControls.RJButton();
+            this.lblHeaderPriceChart = new System.Windows.Forms.Label();
+            this.lblHeaderMarketCapChart = new System.Windows.Forms.Label();
+            this.lblHeaderConverterChart = new System.Windows.Forms.Label();
+            this.lblHeaderBlockSizeChart = new System.Windows.Forms.Label();
+            this.lblHeaderHashRateChart = new System.Windows.Forms.Label();
+            this.lblHeaderFeeRatesChart = new System.Windows.Forms.Label();
+            this.lblBlockListFeeRangeChart2 = new System.Windows.Forms.Label();
+            this.lblBlockListFeeChart2 = new System.Windows.Forms.Label();
+            this.lblBlockListDifficultyChart = new System.Windows.Forms.Label();
+            this.lblBlockListHashrateChart = new System.Windows.Forms.Label();
+            this.lblBlockListBlockSizeChart = new System.Windows.Forms.Label();
+            this.lblBlockListPoolRanking = new System.Windows.Forms.Label();
+            this.lblBlockListFeeChart = new System.Windows.Forms.Label();
+            this.lblBlockListRewardChart = new System.Windows.Forms.Label();
+            this.lblBlockListFeeRangeChart = new System.Windows.Forms.Label();
+            this.lblBlockScreenChartBlockSize = new System.Windows.Forms.Label();
+            this.lblBlockFeeChart = new System.Windows.Forms.Label();
+            this.lblBlockScreenChartReward = new System.Windows.Forms.Label();
+            this.lblBlockScreenChartFeeRange = new System.Windows.Forms.Label();
+            this.lblBlockScreenPoolRankingChart = new System.Windows.Forms.Label();
+            this.lblPriceChart = new System.Windows.Forms.Label();
+            this.lblConverterChart = new System.Windows.Forms.Label();
+            this.lblMarketCapChart = new System.Windows.Forms.Label();
+            this.lblChartCirculation = new System.Windows.Forms.Label();
+            this.lblUniqueAddressesChart = new System.Windows.Forms.Label();
+            this.lblPoolRankingChart = new System.Windows.Forms.Label();
+            this.lblBlockFeesChart = new System.Windows.Forms.Label();
+            this.lblFeeRangeChart = new System.Windows.Forms.Label();
+            this.lblHashrateChart = new System.Windows.Forms.Label();
+            this.lblDifficultyChart = new System.Windows.Forms.Label();
+            this.lblLightningCapacityChart = new System.Windows.Forms.Label();
+            this.lblLightningNodesChart = new System.Windows.Forms.Label();
+            this.lblLightningChannelsChart = new System.Windows.Forms.Label();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -1132,39 +1132,6 @@
             this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderPriceChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPriceChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderFeeRatesChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartFeeRange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartReward)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartBlockSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartCirculation)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListBlockSizeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListPoolRanking)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListRewardChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenPoolRankingChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPoolRankingChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMarketCapChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUniqueAddressesChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFeeRangeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeesChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConverterChart)).BeginInit();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1937,411 +1904,6 @@
             this.btnViewAddressFromXpub.Visible = false;
             this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
             // 
-            // pictureBoxHashrateChart
-            // 
-            this.pictureBoxHashrateChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxHashrateChart.BackgroundImage")));
-            this.pictureBoxHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHashrateChart.Location = new System.Drawing.Point(619, 119);
-            this.pictureBoxHashrateChart.Name = "pictureBoxHashrateChart";
-            this.pictureBoxHashrateChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHashrateChart.TabIndex = 231;
-            this.pictureBoxHashrateChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHashrateChart, "view chart");
-            this.pictureBoxHashrateChart.Click += new System.EventHandler(this.PictureBoxHashrateChart_Click);
-            // 
-            // pictureBoxDifficultyChart
-            // 
-            this.pictureBoxDifficultyChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxDifficultyChart.BackgroundImage")));
-            this.pictureBoxDifficultyChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxDifficultyChart.Location = new System.Drawing.Point(623, 196);
-            this.pictureBoxDifficultyChart.Name = "pictureBoxDifficultyChart";
-            this.pictureBoxDifficultyChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxDifficultyChart.TabIndex = 232;
-            this.pictureBoxDifficultyChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxDifficultyChart, "view chart");
-            this.pictureBoxDifficultyChart.Click += new System.EventHandler(this.PictureBoxDifficultyChart_Click);
-            // 
-            // pictureBoxHeaderHashrateChart
-            // 
-            this.pictureBoxHeaderHashrateChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderHashrateChart.Location = new System.Drawing.Point(712, 132);
-            this.pictureBoxHeaderHashrateChart.Name = "pictureBoxHeaderHashrateChart";
-            this.pictureBoxHeaderHashrateChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderHashrateChart.TabIndex = 233;
-            this.pictureBoxHeaderHashrateChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderHashrateChart, "view chart");
-            this.pictureBoxHeaderHashrateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
-            // 
-            // pictureBoxBlockListDifficultyChart
-            // 
-            this.pictureBoxBlockListDifficultyChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListDifficultyChart.BackgroundImage")));
-            this.pictureBoxBlockListDifficultyChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListDifficultyChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListDifficultyChart.Location = new System.Drawing.Point(84, 379);
-            this.pictureBoxBlockListDifficultyChart.Name = "pictureBoxBlockListDifficultyChart";
-            this.pictureBoxBlockListDifficultyChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListDifficultyChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListDifficultyChart.TabIndex = 234;
-            this.pictureBoxBlockListDifficultyChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListDifficultyChart, "view chart");
-            this.pictureBoxBlockListDifficultyChart.Click += new System.EventHandler(this.PictureBoxBlockListDifficultyChart_Click);
-            // 
-            // pictureBoxBlockListHashrateChart
-            // 
-            this.pictureBoxBlockListHashrateChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListHashrateChart.BackgroundImage")));
-            this.pictureBoxBlockListHashrateChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListHashrateChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListHashrateChart.Location = new System.Drawing.Point(84, 451);
-            this.pictureBoxBlockListHashrateChart.Name = "pictureBoxBlockListHashrateChart";
-            this.pictureBoxBlockListHashrateChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListHashrateChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListHashrateChart.TabIndex = 237;
-            this.pictureBoxBlockListHashrateChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListHashrateChart, "view chart");
-            this.pictureBoxBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
-            // 
-            // pictureBoxHeaderPriceChart
-            // 
-            this.pictureBoxHeaderPriceChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderPriceChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderPriceChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderPriceChart.Location = new System.Drawing.Point(272, 77);
-            this.pictureBoxHeaderPriceChart.Name = "pictureBoxHeaderPriceChart";
-            this.pictureBoxHeaderPriceChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderPriceChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderPriceChart.TabIndex = 234;
-            this.pictureBoxHeaderPriceChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderPriceChart, "view chart");
-            this.pictureBoxHeaderPriceChart.Click += new System.EventHandler(this.PictureBoxHeaderPriceChart_Click);
-            // 
-            // pictureBoxPriceChart
-            // 
-            this.pictureBoxPriceChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxPriceChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxPriceChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxPriceChart.Location = new System.Drawing.Point(88, 43);
-            this.pictureBoxPriceChart.Name = "pictureBoxPriceChart";
-            this.pictureBoxPriceChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxPriceChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxPriceChart.TabIndex = 235;
-            this.pictureBoxPriceChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxPriceChart, "view chart");
-            this.pictureBoxPriceChart.Click += new System.EventHandler(this.PictureBoxPriceChart_Click);
-            // 
-            // pictureBoxHeaderFeeRatesChart
-            // 
-            this.pictureBoxHeaderFeeRatesChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderFeeRatesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderFeeRatesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderFeeRatesChart.Location = new System.Drawing.Point(853, 88);
-            this.pictureBoxHeaderFeeRatesChart.Name = "pictureBoxHeaderFeeRatesChart";
-            this.pictureBoxHeaderFeeRatesChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderFeeRatesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderFeeRatesChart.TabIndex = 235;
-            this.pictureBoxHeaderFeeRatesChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderFeeRatesChart, "view chart");
-            this.pictureBoxHeaderFeeRatesChart.Click += new System.EventHandler(this.PictureBoxHeaderFeeRatesChart_Click);
-            // 
-            // pictureBoxBlockScreenChartFeeRange
-            // 
-            this.pictureBoxBlockScreenChartFeeRange.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartFeeRange.BackgroundImage")));
-            this.pictureBoxBlockScreenChartFeeRange.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockScreenChartFeeRange.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartFeeRange.Location = new System.Drawing.Point(137, 371);
-            this.pictureBoxBlockScreenChartFeeRange.Name = "pictureBoxBlockScreenChartFeeRange";
-            this.pictureBoxBlockScreenChartFeeRange.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockScreenChartFeeRange.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockScreenChartFeeRange.TabIndex = 236;
-            this.pictureBoxBlockScreenChartFeeRange.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockScreenChartFeeRange, "view chart");
-            this.pictureBoxBlockScreenChartFeeRange.Click += new System.EventHandler(this.PictureBoxBlockScreenChartFeeRange_Click);
-            // 
-            // pictureBoxBlockScreenChartReward
-            // 
-            this.pictureBoxBlockScreenChartReward.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartReward.BackgroundImage")));
-            this.pictureBoxBlockScreenChartReward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockScreenChartReward.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartReward.Location = new System.Drawing.Point(137, 322);
-            this.pictureBoxBlockScreenChartReward.Name = "pictureBoxBlockScreenChartReward";
-            this.pictureBoxBlockScreenChartReward.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockScreenChartReward.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockScreenChartReward.TabIndex = 237;
-            this.pictureBoxBlockScreenChartReward.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockScreenChartReward, "view chart");
-            this.pictureBoxBlockScreenChartReward.Click += new System.EventHandler(this.PictureBoxBlockScreenChartReward_Click);
-            // 
-            // pictureBoxBlockScreenChartBlockSize
-            // 
-            this.pictureBoxBlockScreenChartBlockSize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenChartBlockSize.BackgroundImage")));
-            this.pictureBoxBlockScreenChartBlockSize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockScreenChartBlockSize.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenChartBlockSize.Location = new System.Drawing.Point(146, 201);
-            this.pictureBoxBlockScreenChartBlockSize.Name = "pictureBoxBlockScreenChartBlockSize";
-            this.pictureBoxBlockScreenChartBlockSize.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockScreenChartBlockSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockScreenChartBlockSize.TabIndex = 238;
-            this.pictureBoxBlockScreenChartBlockSize.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockScreenChartBlockSize, "view chart");
-            this.pictureBoxBlockScreenChartBlockSize.Click += new System.EventHandler(this.PictureBoxBlockScreenChartBlockSize_Click);
-            // 
-            // pictureBoxChartCirculation
-            // 
-            this.pictureBoxChartCirculation.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxChartCirculation.BackgroundImage")));
-            this.pictureBoxChartCirculation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxChartCirculation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxChartCirculation.Location = new System.Drawing.Point(174, 192);
-            this.pictureBoxChartCirculation.Name = "pictureBoxChartCirculation";
-            this.pictureBoxChartCirculation.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxChartCirculation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxChartCirculation.TabIndex = 238;
-            this.pictureBoxChartCirculation.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxChartCirculation, "view chart");
-            this.pictureBoxChartCirculation.Click += new System.EventHandler(this.PictureBoxChartCirculation_Click);
-            // 
-            // pictureBoxBlockListBlockSizeChart
-            // 
-            this.pictureBoxBlockListBlockSizeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListBlockSizeChart.BackgroundImage")));
-            this.pictureBoxBlockListBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListBlockSizeChart.Location = new System.Drawing.Point(135, 63);
-            this.pictureBoxBlockListBlockSizeChart.Name = "pictureBoxBlockListBlockSizeChart";
-            this.pictureBoxBlockListBlockSizeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListBlockSizeChart.TabIndex = 238;
-            this.pictureBoxBlockListBlockSizeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListBlockSizeChart, "view chart");
-            this.pictureBoxBlockListBlockSizeChart.Click += new System.EventHandler(this.PictureBoxBlockListBlockSizeChart_Click);
-            // 
-            // pictureBoxBlockListPoolRanking
-            // 
-            this.pictureBoxBlockListPoolRanking.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListPoolRanking.BackgroundImage")));
-            this.pictureBoxBlockListPoolRanking.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListPoolRanking.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListPoolRanking.Location = new System.Drawing.Point(167, 118);
-            this.pictureBoxBlockListPoolRanking.Name = "pictureBoxBlockListPoolRanking";
-            this.pictureBoxBlockListPoolRanking.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListPoolRanking.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListPoolRanking.TabIndex = 238;
-            this.pictureBoxBlockListPoolRanking.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListPoolRanking, "view chart");
-            this.pictureBoxBlockListPoolRanking.Click += new System.EventHandler(this.PictureBoxBlockListPoolRanking_Click);
-            // 
-            // pictureBoxBlockListFeeChart
-            // 
-            this.pictureBoxBlockListFeeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeChart.BackgroundImage")));
-            this.pictureBoxBlockListFeeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeChart.Location = new System.Drawing.Point(390, 45);
-            this.pictureBoxBlockListFeeChart.Name = "pictureBoxBlockListFeeChart";
-            this.pictureBoxBlockListFeeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListFeeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListFeeChart.TabIndex = 239;
-            this.pictureBoxBlockListFeeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart, "view chart");
-            this.pictureBoxBlockListFeeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart_Click);
-            // 
-            // pictureBoxBlockListRewardChart
-            // 
-            this.pictureBoxBlockListRewardChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListRewardChart.BackgroundImage")));
-            this.pictureBoxBlockListRewardChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListRewardChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListRewardChart.Location = new System.Drawing.Point(462, 63);
-            this.pictureBoxBlockListRewardChart.Name = "pictureBoxBlockListRewardChart";
-            this.pictureBoxBlockListRewardChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListRewardChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListRewardChart.TabIndex = 240;
-            this.pictureBoxBlockListRewardChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListRewardChart, "view chart");
-            this.pictureBoxBlockListRewardChart.Click += new System.EventHandler(this.PictureBoxBlockListRewardChart_Click);
-            // 
-            // pictureBoxBlockListFeeRangeChart
-            // 
-            this.pictureBoxBlockListFeeRangeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeRangeChart.BackgroundImage")));
-            this.pictureBoxBlockListFeeRangeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeRangeChart.Location = new System.Drawing.Point(455, 82);
-            this.pictureBoxBlockListFeeRangeChart.Name = "pictureBoxBlockListFeeRangeChart";
-            this.pictureBoxBlockListFeeRangeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListFeeRangeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListFeeRangeChart.TabIndex = 241;
-            this.pictureBoxBlockListFeeRangeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart, "view chart");
-            this.pictureBoxBlockListFeeRangeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart_Click);
-            // 
-            // pictureBoxBlockFeeChart
-            // 
-            this.pictureBoxBlockFeeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockFeeChart.BackgroundImage")));
-            this.pictureBoxBlockFeeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockFeeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockFeeChart.Location = new System.Drawing.Point(146, 273);
-            this.pictureBoxBlockFeeChart.Name = "pictureBoxBlockFeeChart";
-            this.pictureBoxBlockFeeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockFeeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockFeeChart.TabIndex = 239;
-            this.pictureBoxBlockFeeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockFeeChart, "view chart");
-            this.pictureBoxBlockFeeChart.Click += new System.EventHandler(this.PictureBoxBlockFeeChart_Click);
-            // 
-            // pictureBoxBlockScreenPoolRankingChart
-            // 
-            this.pictureBoxBlockScreenPoolRankingChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockScreenPoolRankingChart.BackgroundImage")));
-            this.pictureBoxBlockScreenPoolRankingChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockScreenPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockScreenPoolRankingChart.Location = new System.Drawing.Point(137, 479);
-            this.pictureBoxBlockScreenPoolRankingChart.Name = "pictureBoxBlockScreenPoolRankingChart";
-            this.pictureBoxBlockScreenPoolRankingChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockScreenPoolRankingChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockScreenPoolRankingChart.TabIndex = 240;
-            this.pictureBoxBlockScreenPoolRankingChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockScreenPoolRankingChart, "view chart");
-            this.pictureBoxBlockScreenPoolRankingChart.Click += new System.EventHandler(this.PictureBoxBlockScreenPoolRankingChart_Click);
-            // 
-            // pictureBoxBlockListFeeChart2
-            // 
-            this.pictureBoxBlockListFeeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeChart2.BackgroundImage")));
-            this.pictureBoxBlockListFeeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListFeeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeChart2.Location = new System.Drawing.Point(120, 235);
-            this.pictureBoxBlockListFeeChart2.Name = "pictureBoxBlockListFeeChart2";
-            this.pictureBoxBlockListFeeChart2.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListFeeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListFeeChart2.TabIndex = 238;
-            this.pictureBoxBlockListFeeChart2.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeChart2, "view chart");
-            this.pictureBoxBlockListFeeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart2_Click);
-            // 
-            // pictureBoxBlockListFeeRangeChart2
-            // 
-            this.pictureBoxBlockListFeeRangeChart2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockListFeeRangeChart2.BackgroundImage")));
-            this.pictureBoxBlockListFeeRangeChart2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockListFeeRangeChart2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockListFeeRangeChart2.Location = new System.Drawing.Point(100, 199);
-            this.pictureBoxBlockListFeeRangeChart2.Name = "pictureBoxBlockListFeeRangeChart2";
-            this.pictureBoxBlockListFeeRangeChart2.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockListFeeRangeChart2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockListFeeRangeChart2.TabIndex = 242;
-            this.pictureBoxBlockListFeeRangeChart2.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockListFeeRangeChart2, "view chart");
-            this.pictureBoxBlockListFeeRangeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart2_Click);
-            // 
-            // pictureBoxPoolRankingChart
-            // 
-            this.pictureBoxPoolRankingChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxPoolRankingChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxPoolRankingChart.Location = new System.Drawing.Point(44, 423);
-            this.pictureBoxPoolRankingChart.Name = "pictureBoxPoolRankingChart";
-            this.pictureBoxPoolRankingChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxPoolRankingChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxPoolRankingChart.TabIndex = 239;
-            this.pictureBoxPoolRankingChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxPoolRankingChart, "view chart");
-            this.pictureBoxPoolRankingChart.Click += new System.EventHandler(this.PictureBoxPoolRankingChart_Click);
-            // 
-            // pictureBoxMarketCapChart
-            // 
-            this.pictureBoxMarketCapChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxMarketCapChart.BackgroundImage")));
-            this.pictureBoxMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxMarketCapChart.Location = new System.Drawing.Point(152, 119);
-            this.pictureBoxMarketCapChart.Name = "pictureBoxMarketCapChart";
-            this.pictureBoxMarketCapChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxMarketCapChart.TabIndex = 240;
-            this.pictureBoxMarketCapChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxMarketCapChart, "view chart");
-            this.pictureBoxMarketCapChart.Click += new System.EventHandler(this.PictureBoxMarketCapChart_Click);
-            // 
-            // pictureBoxUniqueAddressesChart
-            // 
-            this.pictureBoxUniqueAddressesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxUniqueAddressesChart.BackgroundImage")));
-            this.pictureBoxUniqueAddressesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxUniqueAddressesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxUniqueAddressesChart.Location = new System.Drawing.Point(160, 308);
-            this.pictureBoxUniqueAddressesChart.Name = "pictureBoxUniqueAddressesChart";
-            this.pictureBoxUniqueAddressesChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxUniqueAddressesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxUniqueAddressesChart.TabIndex = 241;
-            this.pictureBoxUniqueAddressesChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxUniqueAddressesChart, "view chart");
-            this.pictureBoxUniqueAddressesChart.Click += new System.EventHandler(this.PictureBoxUniqueAddressesChart_Click);
-            // 
-            // pictureBoxFeeRangeChart
-            // 
-            this.pictureBoxFeeRangeChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxFeeRangeChart.BackgroundImage")));
-            this.pictureBoxFeeRangeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxFeeRangeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxFeeRangeChart.Location = new System.Drawing.Point(395, 158);
-            this.pictureBoxFeeRangeChart.Name = "pictureBoxFeeRangeChart";
-            this.pictureBoxFeeRangeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxFeeRangeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxFeeRangeChart.TabIndex = 242;
-            this.pictureBoxFeeRangeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxFeeRangeChart, "view chart");
-            this.pictureBoxFeeRangeChart.Click += new System.EventHandler(this.PictureBoxFeeRangeChart_Click);
-            // 
-            // pictureBoxBlockFeesChart
-            // 
-            this.pictureBoxBlockFeesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxBlockFeesChart.BackgroundImage")));
-            this.pictureBoxBlockFeesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxBlockFeesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxBlockFeesChart.Location = new System.Drawing.Point(433, 119);
-            this.pictureBoxBlockFeesChart.Name = "pictureBoxBlockFeesChart";
-            this.pictureBoxBlockFeesChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxBlockFeesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxBlockFeesChart.TabIndex = 243;
-            this.pictureBoxBlockFeesChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxBlockFeesChart, "view chart");
-            this.pictureBoxBlockFeesChart.Click += new System.EventHandler(this.PictureBoxBlockFeesChart_Click);
-            // 
-            // pictureBoxLightningCapacityChart
-            // 
-            this.pictureBoxLightningCapacityChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningCapacityChart.BackgroundImage")));
-            this.pictureBoxLightningCapacityChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxLightningCapacityChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningCapacityChart.Location = new System.Drawing.Point(157, 26);
-            this.pictureBoxLightningCapacityChart.Name = "pictureBoxLightningCapacityChart";
-            this.pictureBoxLightningCapacityChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxLightningCapacityChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxLightningCapacityChart.TabIndex = 235;
-            this.pictureBoxLightningCapacityChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxLightningCapacityChart, "view chart");
-            this.pictureBoxLightningCapacityChart.Click += new System.EventHandler(this.PictureBoxLightningCapacityChart_Click);
-            // 
-            // pictureBoxLightningNodesChart
-            // 
-            this.pictureBoxLightningNodesChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningNodesChart.BackgroundImage")));
-            this.pictureBoxLightningNodesChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxLightningNodesChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningNodesChart.Location = new System.Drawing.Point(104, 157);
-            this.pictureBoxLightningNodesChart.Name = "pictureBoxLightningNodesChart";
-            this.pictureBoxLightningNodesChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxLightningNodesChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxLightningNodesChart.TabIndex = 236;
-            this.pictureBoxLightningNodesChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxLightningNodesChart, "view chart");
-            this.pictureBoxLightningNodesChart.Click += new System.EventHandler(this.PictureBoxLightningNodesChart_Click);
-            // 
-            // pictureBoxLightningChannelsChart
-            // 
-            this.pictureBoxLightningChannelsChart.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxLightningChannelsChart.BackgroundImage")));
-            this.pictureBoxLightningChannelsChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxLightningChannelsChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxLightningChannelsChart.Location = new System.Drawing.Point(127, 323);
-            this.pictureBoxLightningChannelsChart.Name = "pictureBoxLightningChannelsChart";
-            this.pictureBoxLightningChannelsChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxLightningChannelsChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxLightningChannelsChart.TabIndex = 237;
-            this.pictureBoxLightningChannelsChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxLightningChannelsChart, "view chart");
-            this.pictureBoxLightningChannelsChart.Click += new System.EventHandler(this.PictureBoxLightningChannelsChart_Click);
-            // 
             // btnViewAddressFromTXInput
             // 
             this.btnViewAddressFromTXInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -2379,62 +1941,6 @@
             this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXOutput.Visible = false;
             this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
-            // 
-            // pictureBoxHeaderBlockSizeChart
-            // 
-            this.pictureBoxHeaderBlockSizeChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderBlockSizeChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderBlockSizeChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderBlockSizeChart.Location = new System.Drawing.Point(539, 132);
-            this.pictureBoxHeaderBlockSizeChart.Name = "pictureBoxHeaderBlockSizeChart";
-            this.pictureBoxHeaderBlockSizeChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderBlockSizeChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderBlockSizeChart.TabIndex = 236;
-            this.pictureBoxHeaderBlockSizeChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderBlockSizeChart, "view chart");
-            this.pictureBoxHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
-            // 
-            // pictureBoxHeaderConverterChart
-            // 
-            this.pictureBoxHeaderConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderConverterChart.Location = new System.Drawing.Point(270, 132);
-            this.pictureBoxHeaderConverterChart.Name = "pictureBoxHeaderConverterChart";
-            this.pictureBoxHeaderConverterChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderConverterChart.TabIndex = 237;
-            this.pictureBoxHeaderConverterChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderConverterChart, "view chart");
-            this.pictureBoxHeaderConverterChart.Click += new System.EventHandler(this.PictureBoxHeaderConverterChart_Click);
-            // 
-            // pictureBoxHeaderMarketCapChart
-            // 
-            this.pictureBoxHeaderMarketCapChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxHeaderMarketCapChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxHeaderMarketCapChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxHeaderMarketCapChart.Location = new System.Drawing.Point(276, 113);
-            this.pictureBoxHeaderMarketCapChart.Name = "pictureBoxHeaderMarketCapChart";
-            this.pictureBoxHeaderMarketCapChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxHeaderMarketCapChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxHeaderMarketCapChart.TabIndex = 238;
-            this.pictureBoxHeaderMarketCapChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxHeaderMarketCapChart, "view chart");
-            this.pictureBoxHeaderMarketCapChart.Click += new System.EventHandler(this.PictureBoxHeaderMarketCapChart_Click);
-            // 
-            // pictureBoxConverterChart
-            // 
-            this.pictureBoxConverterChart.BackgroundImage = global::SATSuma.Properties.Resources.graphIcon;
-            this.pictureBoxConverterChart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxConverterChart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxConverterChart.Location = new System.Drawing.Point(86, 81);
-            this.pictureBoxConverterChart.Name = "pictureBoxConverterChart";
-            this.pictureBoxConverterChart.Size = new System.Drawing.Size(16, 12);
-            this.pictureBoxConverterChart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxConverterChart.TabIndex = 239;
-            this.pictureBoxConverterChart.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBoxConverterChart, "view chart");
-            this.pictureBoxConverterChart.Click += new System.EventHandler(this.PictureBoxConverterChart_Click);
             // 
             // btnSaveChart
             // 
@@ -2567,6 +2073,501 @@
             this.btnShowGlobalSearch.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnShowGlobalSearch.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
+            // lblHeaderPriceChart
+            // 
+            this.lblHeaderPriceChart.AutoSize = true;
+            this.lblHeaderPriceChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderPriceChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderPriceChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderPriceChart.Location = new System.Drawing.Point(257, 73);
+            this.lblHeaderPriceChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderPriceChart.Name = "lblHeaderPriceChart";
+            this.lblHeaderPriceChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderPriceChart.TabIndex = 266;
+            this.lblHeaderPriceChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderPriceChart, "view price chart");
+            this.lblHeaderPriceChart.Click += new System.EventHandler(this.PictureBoxHeaderPriceChart_Click);
+            // 
+            // lblHeaderMarketCapChart
+            // 
+            this.lblHeaderMarketCapChart.AutoSize = true;
+            this.lblHeaderMarketCapChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderMarketCapChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderMarketCapChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderMarketCapChart.Location = new System.Drawing.Point(239, 108);
+            this.lblHeaderMarketCapChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderMarketCapChart.Name = "lblHeaderMarketCapChart";
+            this.lblHeaderMarketCapChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderMarketCapChart.TabIndex = 267;
+            this.lblHeaderMarketCapChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderMarketCapChart, "view market cap. chart");
+            this.lblHeaderMarketCapChart.Click += new System.EventHandler(this.PictureBoxHeaderMarketCapChart_Click);
+            // 
+            // lblHeaderConverterChart
+            // 
+            this.lblHeaderConverterChart.AutoSize = true;
+            this.lblHeaderConverterChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderConverterChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderConverterChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderConverterChart.Location = new System.Drawing.Point(268, 127);
+            this.lblHeaderConverterChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderConverterChart.Name = "lblHeaderConverterChart";
+            this.lblHeaderConverterChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderConverterChart.TabIndex = 268;
+            this.lblHeaderConverterChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderConverterChart, "converter tool/chart");
+            this.lblHeaderConverterChart.Click += new System.EventHandler(this.PictureBoxHeaderConverterChart_Click);
+            // 
+            // lblHeaderBlockSizeChart
+            // 
+            this.lblHeaderBlockSizeChart.AutoSize = true;
+            this.lblHeaderBlockSizeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderBlockSizeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderBlockSizeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderBlockSizeChart.Location = new System.Drawing.Point(534, 127);
+            this.lblHeaderBlockSizeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderBlockSizeChart.Name = "lblHeaderBlockSizeChart";
+            this.lblHeaderBlockSizeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderBlockSizeChart.TabIndex = 269;
+            this.lblHeaderBlockSizeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderBlockSizeChart, "view block size chart");
+            this.lblHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
+            // 
+            // lblHeaderHashRateChart
+            // 
+            this.lblHeaderHashRateChart.AutoSize = true;
+            this.lblHeaderHashRateChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderHashRateChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderHashRateChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderHashRateChart.Location = new System.Drawing.Point(712, 127);
+            this.lblHeaderHashRateChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderHashRateChart.Name = "lblHeaderHashRateChart";
+            this.lblHeaderHashRateChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderHashRateChart.TabIndex = 270;
+            this.lblHeaderHashRateChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderHashRateChart, "view hashrate chart");
+            this.lblHeaderHashRateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
+            // 
+            // lblHeaderFeeRatesChart
+            // 
+            this.lblHeaderFeeRatesChart.AutoSize = true;
+            this.lblHeaderFeeRatesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderFeeRatesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderFeeRatesChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderFeeRatesChart.Location = new System.Drawing.Point(853, 83);
+            this.lblHeaderFeeRatesChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderFeeRatesChart.Name = "lblHeaderFeeRatesChart";
+            this.lblHeaderFeeRatesChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderFeeRatesChart.TabIndex = 271;
+            this.lblHeaderFeeRatesChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHeaderFeeRatesChart, "view fee rates chart");
+            this.lblHeaderFeeRatesChart.Click += new System.EventHandler(this.PictureBoxHeaderFeeRatesChart_Click);
+            // 
+            // lblBlockListFeeRangeChart2
+            // 
+            this.lblBlockListFeeRangeChart2.AutoSize = true;
+            this.lblBlockListFeeRangeChart2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListFeeRangeChart2.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListFeeRangeChart2.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListFeeRangeChart2.Location = new System.Drawing.Point(67, 196);
+            this.lblBlockListFeeRangeChart2.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListFeeRangeChart2.Name = "lblBlockListFeeRangeChart2";
+            this.lblBlockListFeeRangeChart2.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListFeeRangeChart2.TabIndex = 272;
+            this.lblBlockListFeeRangeChart2.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListFeeRangeChart2, "view fee range chart");
+            this.lblBlockListFeeRangeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart2_Click);
+            // 
+            // lblBlockListFeeChart2
+            // 
+            this.lblBlockListFeeChart2.AutoSize = true;
+            this.lblBlockListFeeChart2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListFeeChart2.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListFeeChart2.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListFeeChart2.Location = new System.Drawing.Point(118, 232);
+            this.lblBlockListFeeChart2.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListFeeChart2.Name = "lblBlockListFeeChart2";
+            this.lblBlockListFeeChart2.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListFeeChart2.TabIndex = 273;
+            this.lblBlockListFeeChart2.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListFeeChart2, "view fees chart");
+            this.lblBlockListFeeChart2.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart2_Click);
+            // 
+            // lblBlockListDifficultyChart
+            // 
+            this.lblBlockListDifficultyChart.AutoSize = true;
+            this.lblBlockListDifficultyChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListDifficultyChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListDifficultyChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListDifficultyChart.Location = new System.Drawing.Point(84, 376);
+            this.lblBlockListDifficultyChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListDifficultyChart.Name = "lblBlockListDifficultyChart";
+            this.lblBlockListDifficultyChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListDifficultyChart.TabIndex = 274;
+            this.lblBlockListDifficultyChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListDifficultyChart, "view difficulty chart");
+            this.lblBlockListDifficultyChart.Click += new System.EventHandler(this.PictureBoxBlockListDifficultyChart_Click);
+            // 
+            // lblBlockListHashrateChart
+            // 
+            this.lblBlockListHashrateChart.AutoSize = true;
+            this.lblBlockListHashrateChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListHashrateChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListHashrateChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListHashrateChart.Location = new System.Drawing.Point(84, 448);
+            this.lblBlockListHashrateChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListHashrateChart.Name = "lblBlockListHashrateChart";
+            this.lblBlockListHashrateChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListHashrateChart.TabIndex = 275;
+            this.lblBlockListHashrateChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListHashrateChart, "view hashrate chart");
+            this.lblBlockListHashrateChart.Click += new System.EventHandler(this.PictureBoxBlockListHashrateChart_Click);
+            // 
+            // lblBlockListBlockSizeChart
+            // 
+            this.lblBlockListBlockSizeChart.AutoSize = true;
+            this.lblBlockListBlockSizeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListBlockSizeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListBlockSizeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListBlockSizeChart.Location = new System.Drawing.Point(148, 63);
+            this.lblBlockListBlockSizeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListBlockSizeChart.Name = "lblBlockListBlockSizeChart";
+            this.lblBlockListBlockSizeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListBlockSizeChart.TabIndex = 276;
+            this.lblBlockListBlockSizeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListBlockSizeChart, "view block size chart");
+            this.lblBlockListBlockSizeChart.Click += new System.EventHandler(this.PictureBoxBlockListBlockSizeChart_Click);
+            // 
+            // lblBlockListPoolRanking
+            // 
+            this.lblBlockListPoolRanking.AutoSize = true;
+            this.lblBlockListPoolRanking.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListPoolRanking.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListPoolRanking.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListPoolRanking.Location = new System.Drawing.Point(144, 117);
+            this.lblBlockListPoolRanking.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListPoolRanking.Name = "lblBlockListPoolRanking";
+            this.lblBlockListPoolRanking.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListPoolRanking.TabIndex = 277;
+            this.lblBlockListPoolRanking.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListPoolRanking, "view pool ranking chart");
+            this.lblBlockListPoolRanking.Click += new System.EventHandler(this.PictureBoxBlockListPoolRanking_Click);
+            // 
+            // lblBlockListFeeChart
+            // 
+            this.lblBlockListFeeChart.AutoSize = true;
+            this.lblBlockListFeeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListFeeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListFeeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListFeeChart.Location = new System.Drawing.Point(376, 45);
+            this.lblBlockListFeeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListFeeChart.Name = "lblBlockListFeeChart";
+            this.lblBlockListFeeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListFeeChart.TabIndex = 278;
+            this.lblBlockListFeeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListFeeChart, "view fees chart");
+            this.lblBlockListFeeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeChart_Click);
+            // 
+            // lblBlockListRewardChart
+            // 
+            this.lblBlockListRewardChart.AutoSize = true;
+            this.lblBlockListRewardChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListRewardChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListRewardChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListRewardChart.Location = new System.Drawing.Point(449, 63);
+            this.lblBlockListRewardChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListRewardChart.Name = "lblBlockListRewardChart";
+            this.lblBlockListRewardChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListRewardChart.TabIndex = 279;
+            this.lblBlockListRewardChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListRewardChart, "view block reward chart");
+            this.lblBlockListRewardChart.Click += new System.EventHandler(this.PictureBoxBlockListRewardChart_Click);
+            // 
+            // lblBlockListFeeRangeChart
+            // 
+            this.lblBlockListFeeRangeChart.AutoSize = true;
+            this.lblBlockListFeeRangeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockListFeeRangeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockListFeeRangeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockListFeeRangeChart.Location = new System.Drawing.Point(436, 81);
+            this.lblBlockListFeeRangeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockListFeeRangeChart.Name = "lblBlockListFeeRangeChart";
+            this.lblBlockListFeeRangeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockListFeeRangeChart.TabIndex = 280;
+            this.lblBlockListFeeRangeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockListFeeRangeChart, "view fee range chart");
+            this.lblBlockListFeeRangeChart.Click += new System.EventHandler(this.PictureBoxBlockListFeeRangeChart_Click);
+            // 
+            // lblBlockScreenChartBlockSize
+            // 
+            this.lblBlockScreenChartBlockSize.AutoSize = true;
+            this.lblBlockScreenChartBlockSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockScreenChartBlockSize.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockScreenChartBlockSize.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockScreenChartBlockSize.Location = new System.Drawing.Point(70, 197);
+            this.lblBlockScreenChartBlockSize.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockScreenChartBlockSize.Name = "lblBlockScreenChartBlockSize";
+            this.lblBlockScreenChartBlockSize.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockScreenChartBlockSize.TabIndex = 272;
+            this.lblBlockScreenChartBlockSize.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockScreenChartBlockSize, "view block size chart");
+            this.lblBlockScreenChartBlockSize.Click += new System.EventHandler(this.PictureBoxBlockScreenChartBlockSize_Click);
+            // 
+            // lblBlockFeeChart
+            // 
+            this.lblBlockFeeChart.AutoSize = true;
+            this.lblBlockFeeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockFeeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockFeeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockFeeChart.Location = new System.Drawing.Point(25, 269);
+            this.lblBlockFeeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockFeeChart.Name = "lblBlockFeeChart";
+            this.lblBlockFeeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockFeeChart.TabIndex = 273;
+            this.lblBlockFeeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockFeeChart, "view fee chart");
+            this.lblBlockFeeChart.Click += new System.EventHandler(this.PictureBoxBlockFeeChart_Click);
+            // 
+            // lblBlockScreenChartReward
+            // 
+            this.lblBlockScreenChartReward.AutoSize = true;
+            this.lblBlockScreenChartReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockScreenChartReward.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockScreenChartReward.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockScreenChartReward.Location = new System.Drawing.Point(29, 318);
+            this.lblBlockScreenChartReward.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockScreenChartReward.Name = "lblBlockScreenChartReward";
+            this.lblBlockScreenChartReward.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockScreenChartReward.TabIndex = 274;
+            this.lblBlockScreenChartReward.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockScreenChartReward, "view reward chart");
+            this.lblBlockScreenChartReward.Click += new System.EventHandler(this.PictureBoxBlockScreenChartReward_Click);
+            // 
+            // lblBlockScreenChartFeeRange
+            // 
+            this.lblBlockScreenChartFeeRange.AutoSize = true;
+            this.lblBlockScreenChartFeeRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockScreenChartFeeRange.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockScreenChartFeeRange.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockScreenChartFeeRange.Location = new System.Drawing.Point(69, 367);
+            this.lblBlockScreenChartFeeRange.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockScreenChartFeeRange.Name = "lblBlockScreenChartFeeRange";
+            this.lblBlockScreenChartFeeRange.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockScreenChartFeeRange.TabIndex = 275;
+            this.lblBlockScreenChartFeeRange.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockScreenChartFeeRange, "view fee range chart");
+            this.lblBlockScreenChartFeeRange.Click += new System.EventHandler(this.PictureBoxBlockScreenChartFeeRange_Click);
+            // 
+            // lblBlockScreenPoolRankingChart
+            // 
+            this.lblBlockScreenPoolRankingChart.AutoSize = true;
+            this.lblBlockScreenPoolRankingChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockScreenPoolRankingChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockScreenPoolRankingChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockScreenPoolRankingChart.Location = new System.Drawing.Point(76, 475);
+            this.lblBlockScreenPoolRankingChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockScreenPoolRankingChart.Name = "lblBlockScreenPoolRankingChart";
+            this.lblBlockScreenPoolRankingChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockScreenPoolRankingChart.TabIndex = 276;
+            this.lblBlockScreenPoolRankingChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockScreenPoolRankingChart, "view pool ranking chart");
+            this.lblBlockScreenPoolRankingChart.Click += new System.EventHandler(this.PictureBoxBlockScreenPoolRankingChart_Click);
+            // 
+            // lblPriceChart
+            // 
+            this.lblPriceChart.AutoSize = true;
+            this.lblPriceChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPriceChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblPriceChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblPriceChart.Location = new System.Drawing.Point(78, 39);
+            this.lblPriceChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPriceChart.Name = "lblPriceChart";
+            this.lblPriceChart.Size = new System.Drawing.Size(28, 19);
+            this.lblPriceChart.TabIndex = 272;
+            this.lblPriceChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblPriceChart, "view price chart");
+            this.lblPriceChart.Click += new System.EventHandler(this.PictureBoxPriceChart_Click);
+            // 
+            // lblConverterChart
+            // 
+            this.lblConverterChart.AutoSize = true;
+            this.lblConverterChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblConverterChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblConverterChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblConverterChart.Location = new System.Drawing.Point(76, 77);
+            this.lblConverterChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblConverterChart.Name = "lblConverterChart";
+            this.lblConverterChart.Size = new System.Drawing.Size(28, 19);
+            this.lblConverterChart.TabIndex = 273;
+            this.lblConverterChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblConverterChart, "converter tool/chart");
+            this.lblConverterChart.Click += new System.EventHandler(this.PictureBoxConverterChart_Click);
+            // 
+            // lblMarketCapChart
+            // 
+            this.lblMarketCapChart.AutoSize = true;
+            this.lblMarketCapChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblMarketCapChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblMarketCapChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblMarketCapChart.Location = new System.Drawing.Point(82, 115);
+            this.lblMarketCapChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMarketCapChart.Name = "lblMarketCapChart";
+            this.lblMarketCapChart.Size = new System.Drawing.Size(28, 19);
+            this.lblMarketCapChart.TabIndex = 274;
+            this.lblMarketCapChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblMarketCapChart, "view market cap. chart");
+            this.lblMarketCapChart.Click += new System.EventHandler(this.PictureBoxMarketCapChart_Click);
+            // 
+            // lblChartCirculation
+            // 
+            this.lblChartCirculation.AutoSize = true;
+            this.lblChartCirculation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblChartCirculation.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblChartCirculation.ForeColor = System.Drawing.Color.Silver;
+            this.lblChartCirculation.Location = new System.Drawing.Point(76, 191);
+            this.lblChartCirculation.Margin = new System.Windows.Forms.Padding(0);
+            this.lblChartCirculation.Name = "lblChartCirculation";
+            this.lblChartCirculation.Size = new System.Drawing.Size(28, 19);
+            this.lblChartCirculation.TabIndex = 275;
+            this.lblChartCirculation.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblChartCirculation, "view circulation chart");
+            this.lblChartCirculation.Click += new System.EventHandler(this.PictureBoxChartCirculation_Click);
+            // 
+            // lblUniqueAddressesChart
+            // 
+            this.lblUniqueAddressesChart.AutoSize = true;
+            this.lblUniqueAddressesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblUniqueAddressesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblUniqueAddressesChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblUniqueAddressesChart.Location = new System.Drawing.Point(78, 305);
+            this.lblUniqueAddressesChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblUniqueAddressesChart.Name = "lblUniqueAddressesChart";
+            this.lblUniqueAddressesChart.Size = new System.Drawing.Size(28, 19);
+            this.lblUniqueAddressesChart.TabIndex = 276;
+            this.lblUniqueAddressesChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblUniqueAddressesChart, "view addresses chart");
+            this.lblUniqueAddressesChart.Click += new System.EventHandler(this.PictureBoxUniqueAddressesChart_Click);
+            // 
+            // lblPoolRankingChart
+            // 
+            this.lblPoolRankingChart.AutoSize = true;
+            this.lblPoolRankingChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPoolRankingChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblPoolRankingChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblPoolRankingChart.Location = new System.Drawing.Point(79, 419);
+            this.lblPoolRankingChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPoolRankingChart.Name = "lblPoolRankingChart";
+            this.lblPoolRankingChart.Size = new System.Drawing.Size(28, 19);
+            this.lblPoolRankingChart.TabIndex = 277;
+            this.lblPoolRankingChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblPoolRankingChart, "view pool ranking chart");
+            this.lblPoolRankingChart.Click += new System.EventHandler(this.PictureBoxPoolRankingChart_Click);
+            // 
+            // lblBlockFeesChart
+            // 
+            this.lblBlockFeesChart.AutoSize = true;
+            this.lblBlockFeesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockFeesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBlockFeesChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblBlockFeesChart.Location = new System.Drawing.Point(390, 115);
+            this.lblBlockFeesChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBlockFeesChart.Name = "lblBlockFeesChart";
+            this.lblBlockFeesChart.Size = new System.Drawing.Size(28, 19);
+            this.lblBlockFeesChart.TabIndex = 278;
+            this.lblBlockFeesChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblBlockFeesChart, "view fees chart");
+            this.lblBlockFeesChart.Click += new System.EventHandler(this.PictureBoxBlockFeesChart_Click);
+            // 
+            // lblFeeRangeChart
+            // 
+            this.lblFeeRangeChart.AutoSize = true;
+            this.lblFeeRangeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblFeeRangeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblFeeRangeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblFeeRangeChart.Location = new System.Drawing.Point(339, 153);
+            this.lblFeeRangeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFeeRangeChart.Name = "lblFeeRangeChart";
+            this.lblFeeRangeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblFeeRangeChart.TabIndex = 279;
+            this.lblFeeRangeChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblFeeRangeChart, "view fee range chart");
+            this.lblFeeRangeChart.Click += new System.EventHandler(this.PictureBoxFeeRangeChart_Click);
+            // 
+            // lblHashrateChart
+            // 
+            this.lblHashrateChart.AutoSize = true;
+            this.lblHashrateChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHashrateChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHashrateChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHashrateChart.Location = new System.Drawing.Point(603, 115);
+            this.lblHashrateChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHashrateChart.Name = "lblHashrateChart";
+            this.lblHashrateChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHashrateChart.TabIndex = 280;
+            this.lblHashrateChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblHashrateChart, "view hashrate chart");
+            this.lblHashrateChart.Click += new System.EventHandler(this.PictureBoxHashrateChart_Click);
+            // 
+            // lblDifficultyChart
+            // 
+            this.lblDifficultyChart.AutoSize = true;
+            this.lblDifficultyChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDifficultyChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblDifficultyChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblDifficultyChart.Location = new System.Drawing.Point(596, 191);
+            this.lblDifficultyChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDifficultyChart.Name = "lblDifficultyChart";
+            this.lblDifficultyChart.Size = new System.Drawing.Size(28, 19);
+            this.lblDifficultyChart.TabIndex = 281;
+            this.lblDifficultyChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblDifficultyChart, "view difficulty chart");
+            this.lblDifficultyChart.Click += new System.EventHandler(this.PictureBoxDifficultyChart_Click);
+            // 
+            // lblLightningCapacityChart
+            // 
+            this.lblLightningCapacityChart.AutoSize = true;
+            this.lblLightningCapacityChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLightningCapacityChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblLightningCapacityChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblLightningCapacityChart.Location = new System.Drawing.Point(133, 23);
+            this.lblLightningCapacityChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblLightningCapacityChart.Name = "lblLightningCapacityChart";
+            this.lblLightningCapacityChart.Size = new System.Drawing.Size(28, 19);
+            this.lblLightningCapacityChart.TabIndex = 272;
+            this.lblLightningCapacityChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblLightningCapacityChart, "view lightning capacity chart");
+            this.lblLightningCapacityChart.Click += new System.EventHandler(this.PictureBoxLightningCapacityChart_Click);
+            // 
+            // lblLightningNodesChart
+            // 
+            this.lblLightningNodesChart.AutoSize = true;
+            this.lblLightningNodesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLightningNodesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblLightningNodesChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblLightningNodesChart.Location = new System.Drawing.Point(93, 154);
+            this.lblLightningNodesChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblLightningNodesChart.Name = "lblLightningNodesChart";
+            this.lblLightningNodesChart.Size = new System.Drawing.Size(28, 19);
+            this.lblLightningNodesChart.TabIndex = 273;
+            this.lblLightningNodesChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblLightningNodesChart, "view lightning nodes chart");
+            this.lblLightningNodesChart.Click += new System.EventHandler(this.PictureBoxLightningNodesChart_Click);
+            // 
+            // lblLightningChannelsChart
+            // 
+            this.lblLightningChannelsChart.AutoSize = true;
+            this.lblLightningChannelsChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLightningChannelsChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblLightningChannelsChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblLightningChannelsChart.Location = new System.Drawing.Point(113, 320);
+            this.lblLightningChannelsChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblLightningChannelsChart.Name = "lblLightningChannelsChart";
+            this.lblLightningChannelsChart.Size = new System.Drawing.Size(28, 19);
+            this.lblLightningChannelsChart.TabIndex = 274;
+            this.lblLightningChannelsChart.Text = "📊";
+            this.toolTip1.SetToolTip(this.lblLightningChannelsChart, "view lightning channels chart");
+            this.lblLightningChannelsChart.Click += new System.EventHandler(this.PictureBoxLightningChannelsChart_Click);
+            // 
             // label134
             // 
             this.label134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -2655,6 +2656,16 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.lblDifficultyChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblHashrateChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblFeeRangeChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblBlockFeesChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblPoolRankingChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblUniqueAddressesChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblChartCirculation);
+            this.panelBitcoinDashboard.Controls.Add(this.lblMarketCapChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblConverterChart);
+            this.panelBitcoinDashboard.Controls.Add(this.lblPriceChart);
             this.panelBitcoinDashboard.Controls.Add(this.panel109);
             this.panelBitcoinDashboard.Controls.Add(this.lblNetworkAge);
             this.panelBitcoinDashboard.Controls.Add(this.label297);
@@ -2671,16 +2682,6 @@
             this.panelBitcoinDashboard.Controls.Add(this.lblBlockRewardAfterHalvingFiat);
             this.panelBitcoinDashboard.Controls.Add(this.lblBlockRewardFiat);
             this.panelBitcoinDashboard.Controls.Add(this.lblNextBlockTotalFeesFiat);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxConverterChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxBlockFeesChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxFeeRangeChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxUniqueAddressesChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxMarketCapChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxPoolRankingChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxChartCirculation);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxPriceChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxDifficultyChart);
-            this.panelBitcoinDashboard.Controls.Add(this.pictureBoxHashrateChart);
             this.panelBitcoinDashboard.Controls.Add(this.progressBarPercentIssued);
             this.panelBitcoinDashboard.Controls.Add(this.progressBarNextDiffAdj);
             this.panelBitcoinDashboard.Controls.Add(this.label23);
@@ -3494,13 +3495,13 @@
             // panelBlockList
             // 
             this.panelBlockList.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlockList.Controls.Add(this.lblBlockListHashrateChart);
+            this.panelBlockList.Controls.Add(this.lblBlockListDifficultyChart);
+            this.panelBlockList.Controls.Add(this.lblBlockListFeeChart2);
+            this.panelBlockList.Controls.Add(this.lblBlockListFeeRangeChart2);
             this.panelBlockList.Controls.Add(this.lblBlockListTotalFeesInNextBlockFiat);
             this.panelBlockList.Controls.Add(this.lblBlockListBlockRewardFiat);
             this.panelBlockList.Controls.Add(this.panel94);
-            this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeRangeChart2);
-            this.panelBlockList.Controls.Add(this.pictureBoxBlockListFeeChart2);
-            this.panelBlockList.Controls.Add(this.pictureBoxBlockListHashrateChart);
-            this.panelBlockList.Controls.Add(this.pictureBoxBlockListDifficultyChart);
             this.panelBlockList.Controls.Add(this.panel45);
             this.panelBlockList.Controls.Add(this.progressBarBlockListHalvingProgress);
             this.panelBlockList.Controls.Add(this.progressBarBlockListNextDiffAdj);
@@ -4076,12 +4077,12 @@
             // panel20
             // 
             this.panel20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel20.Controls.Add(this.lblBlockListFeeRangeChart);
+            this.panel20.Controls.Add(this.lblBlockListRewardChart);
+            this.panel20.Controls.Add(this.lblBlockListFeeChart);
+            this.panel20.Controls.Add(this.lblBlockListPoolRanking);
+            this.panel20.Controls.Add(this.lblBlockListBlockSizeChart);
             this.panel20.Controls.Add(this.panel15);
-            this.panel20.Controls.Add(this.pictureBoxBlockListFeeRangeChart);
-            this.panel20.Controls.Add(this.pictureBoxBlockListRewardChart);
-            this.panel20.Controls.Add(this.pictureBoxBlockListFeeChart);
-            this.panel20.Controls.Add(this.pictureBoxBlockListPoolRanking);
-            this.panel20.Controls.Add(this.pictureBoxBlockListBlockSizeChart);
             this.panel20.Controls.Add(this.label90);
             this.panel20.Controls.Add(this.lblBlockListBlockSize);
             this.panel20.Controls.Add(this.label105);
@@ -4491,6 +4492,9 @@
             // panelLightningDashboard
             // 
             this.panelLightningDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelLightningDashboard.Controls.Add(this.lblLightningChannelsChart);
+            this.panelLightningDashboard.Controls.Add(this.lblLightningNodesChart);
+            this.panelLightningDashboard.Controls.Add(this.lblLightningCapacityChart);
             this.panelLightningDashboard.Controls.Add(this.panel2);
             this.panelLightningDashboard.Controls.Add(this.label52);
             this.panelLightningDashboard.Controls.Add(this.label51);
@@ -4514,9 +4518,6 @@
             this.panelLightningDashboard.Controls.Add(this.capacityLabel2);
             this.panelLightningDashboard.Controls.Add(this.aliasLabel2);
             this.panelLightningDashboard.Controls.Add(this.aliasLabel1);
-            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningChannelsChart);
-            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningNodesChart);
-            this.panelLightningDashboard.Controls.Add(this.pictureBoxLightningCapacityChart);
             this.panelLightningDashboard.Controls.Add(this.panel5);
             this.panelLightningDashboard.Controls.Add(this.panel4);
             this.panelLightningDashboard.Controls.Add(this.panel3);
@@ -6176,6 +6177,11 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.lblBlockScreenPoolRankingChart);
+            this.panelBlock.Controls.Add(this.lblBlockScreenChartFeeRange);
+            this.panelBlock.Controls.Add(this.lblBlockScreenChartReward);
+            this.panelBlock.Controls.Add(this.lblBlockFeeChart);
+            this.panelBlock.Controls.Add(this.lblBlockScreenChartBlockSize);
             this.panelBlock.Controls.Add(this.panel53);
             this.panelBlock.Controls.Add(this.lblRewardFiat);
             this.panelBlock.Controls.Add(this.panelOwnNodeBlockTXInfo);
@@ -6205,13 +6211,8 @@
             this.panelBlock.Controls.Add(this.lblBlockWeight);
             this.panelBlock.Controls.Add(this.label68);
             this.panelBlock.Controls.Add(this.lblSizeOfBlock);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartBlockSize);
             this.panelBlock.Controls.Add(this.label69);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartReward);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenChartFeeRange);
             this.panelBlock.Controls.Add(this.label145);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockFeeChart);
-            this.panelBlock.Controls.Add(this.pictureBoxBlockScreenPoolRankingChart);
             this.panelBlock.Location = new System.Drawing.Point(162, 187);
             this.panelBlock.Name = "panelBlock";
             this.panelBlock.Size = new System.Drawing.Size(773, 556);
@@ -8355,7 +8356,7 @@
             // 
             this.label50.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label50.ForeColor = System.Drawing.Color.Silver;
-            this.label50.Location = new System.Drawing.Point(672, 28);
+            this.label50.Location = new System.Drawing.Point(672, 29);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(42, 17);
             this.label50.TabIndex = 254;
@@ -8365,7 +8366,7 @@
             // 
             this.label239.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label239.ForeColor = System.Drawing.Color.Silver;
-            this.label239.Location = new System.Drawing.Point(340, 28);
+            this.label239.Location = new System.Drawing.Point(340, 29);
             this.label239.Name = "label239";
             this.label239.Size = new System.Drawing.Size(42, 17);
             this.label239.TabIndex = 242;
@@ -8375,7 +8376,7 @@
             // 
             this.label238.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label238.ForeColor = System.Drawing.Color.Silver;
-            this.label238.Location = new System.Drawing.Point(8, 28);
+            this.label238.Location = new System.Drawing.Point(8, 29);
             this.label238.Name = "label238";
             this.label238.Size = new System.Drawing.Size(267, 17);
             this.label238.TabIndex = 250;
@@ -8385,7 +8386,7 @@
             // 
             this.label114.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label114.ForeColor = System.Drawing.Color.Silver;
-            this.label114.Location = new System.Drawing.Point(8, 2);
+            this.label114.Location = new System.Drawing.Point(8, 3);
             this.label114.Name = "label114";
             this.label114.Size = new System.Drawing.Size(68, 17);
             this.label114.TabIndex = 168;
@@ -8421,7 +8422,7 @@
             // 
             this.label146.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label146.ForeColor = System.Drawing.Color.Silver;
-            this.label146.Location = new System.Drawing.Point(8, 54);
+            this.label146.Location = new System.Drawing.Point(8, 55);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(38, 17);
             this.label146.TabIndex = 6;
@@ -8468,7 +8469,7 @@
             this.lblXpubScreenOwnNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubScreenOwnNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubScreenOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblXpubScreenOwnNodeStatusLight.Location = new System.Drawing.Point(348, 4);
+            this.lblXpubScreenOwnNodeStatusLight.Location = new System.Drawing.Point(348, 5);
             this.lblXpubScreenOwnNodeStatusLight.Name = "lblXpubScreenOwnNodeStatusLight";
             this.lblXpubScreenOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
             this.lblXpubScreenOwnNodeStatusLight.TabIndex = 219;
@@ -8479,7 +8480,7 @@
             this.lblXpubScreenOwnNodeStatus.AutoSize = true;
             this.lblXpubScreenOwnNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubScreenOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblXpubScreenOwnNodeStatus.Location = new System.Drawing.Point(367, 2);
+            this.lblXpubScreenOwnNodeStatus.Location = new System.Drawing.Point(367, 3);
             this.lblXpubScreenOwnNodeStatus.Name = "lblXpubScreenOwnNodeStatus";
             this.lblXpubScreenOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
             this.lblXpubScreenOwnNodeStatus.TabIndex = 220;
@@ -8489,7 +8490,7 @@
             // 
             this.label139.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label139.ForeColor = System.Drawing.Color.Silver;
-            this.label139.Location = new System.Drawing.Point(415, 28);
+            this.label139.Location = new System.Drawing.Point(415, 29);
             this.label139.Name = "label139";
             this.label139.Size = new System.Drawing.Size(191, 17);
             this.label139.TabIndex = 237;
@@ -8662,7 +8663,7 @@
             this.lblP2SHUsedAddresses.AutoSize = true;
             this.lblP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(39, 341);
+            this.lblP2SHUsedAddresses.Location = new System.Drawing.Point(33, 340);
             this.lblP2SHUsedAddresses.Name = "lblP2SHUsedAddresses";
             this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(14, 14);
             this.lblP2SHUsedAddresses.TabIndex = 236;
@@ -8763,7 +8764,7 @@
             this.lblSegwitUsedAddresses.AutoSize = true;
             this.lblSegwitUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(134, 234);
+            this.lblSegwitUsedAddresses.Location = new System.Drawing.Point(134, 233);
             this.lblSegwitUsedAddresses.Name = "lblSegwitUsedAddresses";
             this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(14, 14);
             this.lblSegwitUsedAddresses.TabIndex = 211;
@@ -8775,7 +8776,7 @@
             this.lblSegwitP2SHUsedAddresses.AutoSize = true;
             this.lblSegwitP2SHUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblSegwitP2SHUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(83, 306);
+            this.lblSegwitP2SHUsedAddresses.Location = new System.Drawing.Point(83, 305);
             this.lblSegwitP2SHUsedAddresses.Name = "lblSegwitP2SHUsedAddresses";
             this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(14, 14);
             this.lblSegwitP2SHUsedAddresses.TabIndex = 212;
@@ -8787,7 +8788,7 @@
             this.lblLegacyUsedAddresses.AutoSize = true;
             this.lblLegacyUsedAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblLegacyUsedAddresses.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(81, 269);
+            this.lblLegacyUsedAddresses.Location = new System.Drawing.Point(81, 268);
             this.lblLegacyUsedAddresses.Name = "lblLegacyUsedAddresses";
             this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(14, 14);
             this.lblLegacyUsedAddresses.TabIndex = 213;
@@ -10121,7 +10122,7 @@
             this.label298.AutoSize = true;
             this.label298.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label298.ForeColor = System.Drawing.Color.Silver;
-            this.label298.Location = new System.Drawing.Point(5, 29);
+            this.label298.Location = new System.Drawing.Point(5, 30);
             this.label298.Name = "label298";
             this.label298.Size = new System.Drawing.Size(56, 17);
             this.label298.TabIndex = 258;
@@ -10195,7 +10196,7 @@
             // 
             this.label171.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label171.ForeColor = System.Drawing.Color.Silver;
-            this.label171.Location = new System.Drawing.Point(28, 29);
+            this.label171.Location = new System.Drawing.Point(28, 30);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(147, 17);
             this.label171.TabIndex = 226;
@@ -10293,7 +10294,7 @@
             this.lblSettingsOwnNodeStatus.AutoSize = true;
             this.lblSettingsOwnNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsOwnNodeStatus.Location = new System.Drawing.Point(161, 1);
+            this.lblSettingsOwnNodeStatus.Location = new System.Drawing.Point(161, 2);
             this.lblSettingsOwnNodeStatus.Name = "lblSettingsOwnNodeStatus";
             this.lblSettingsOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
             this.lblSettingsOwnNodeStatus.TabIndex = 222;
@@ -10396,7 +10397,7 @@
             this.label199.AutoSize = true;
             this.label199.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label199.ForeColor = System.Drawing.Color.Gray;
-            this.label199.Location = new System.Drawing.Point(5, 29);
+            this.label199.Location = new System.Drawing.Point(5, 30);
             this.label199.Name = "label199";
             this.label199.Size = new System.Drawing.Size(290, 17);
             this.label199.TabIndex = 253;
@@ -12713,7 +12714,7 @@
             this.comboBoxTitlesBackgroundImage.Size = new System.Drawing.Size(93, 24);
             this.comboBoxTitlesBackgroundImage.TabIndex = 253;
             this.comboBoxTitlesBackgroundImage.Texts = "select";
-            this.comboBoxTitlesBackgroundImage.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSelectHeadingBackground_OnSelectedIndexChanged);
+            this.comboBoxTitlesBackgroundImage.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxSelectHeadingBackground_OnSelectedIndexChanged);
             // 
             // lblTitlesBackgroundImage
             // 
@@ -14994,7 +14995,7 @@
             this.panelChartDifficultyScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartDifficultyScaleButtons.Controls.Add(this.btnChartDifficultyLog);
             this.panelChartDifficultyScaleButtons.Controls.Add(this.btnChartDifficultyLinear);
-            this.panelChartDifficultyScaleButtons.Location = new System.Drawing.Point(660, 436);
+            this.panelChartDifficultyScaleButtons.Location = new System.Drawing.Point(660, 430);
             this.panelChartDifficultyScaleButtons.Name = "panelChartDifficultyScaleButtons";
             this.panelChartDifficultyScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartDifficultyScaleButtons.TabIndex = 263;
@@ -15052,7 +15053,7 @@
             this.panelHashrateScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelHashrateScaleButtons.Controls.Add(this.btnHashrateScaleLog);
             this.panelHashrateScaleButtons.Controls.Add(this.btnHashrateScaleLinear);
-            this.panelHashrateScaleButtons.Location = new System.Drawing.Point(660, 436);
+            this.panelHashrateScaleButtons.Location = new System.Drawing.Point(660, 430);
             this.panelHashrateScaleButtons.Name = "panelHashrateScaleButtons";
             this.panelHashrateScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelHashrateScaleButtons.TabIndex = 264;
@@ -15110,7 +15111,7 @@
             this.panelChartMarketCapScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLog);
             this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLinear);
-            this.panelChartMarketCapScaleButtons.Location = new System.Drawing.Point(660, 436);
+            this.panelChartMarketCapScaleButtons.Location = new System.Drawing.Point(660, 430);
             this.panelChartMarketCapScaleButtons.Name = "panelChartMarketCapScaleButtons";
             this.panelChartMarketCapScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartMarketCapScaleButtons.TabIndex = 264;
@@ -15363,7 +15364,7 @@
             this.panelPriceScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLog);
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLinear);
-            this.panelPriceScaleButtons.Location = new System.Drawing.Point(660, 436);
+            this.panelPriceScaleButtons.Location = new System.Drawing.Point(660, 430);
             this.panelPriceScaleButtons.Name = "panelPriceScaleButtons";
             this.panelPriceScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelPriceScaleButtons.TabIndex = 263;
@@ -15611,7 +15612,7 @@
             this.panelChartUTXOScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartUTXOScaleButtons.Controls.Add(this.btnChartUTXOScaleLog);
             this.panelChartUTXOScaleButtons.Controls.Add(this.btnChartUTXOScaleLinear);
-            this.panelChartUTXOScaleButtons.Location = new System.Drawing.Point(660, 436);
+            this.panelChartUTXOScaleButtons.Location = new System.Drawing.Point(660, 430);
             this.panelChartUTXOScaleButtons.Name = "panelChartUTXOScaleButtons";
             this.panelChartUTXOScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartUTXOScaleButtons.TabIndex = 264;
@@ -17349,50 +17350,50 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.lblHeaderFeeRatesChart);
+            this.Controls.Add(this.lblHeaderHashRateChart);
+            this.Controls.Add(this.lblHeaderBlockSizeChart);
+            this.Controls.Add(this.lblHeaderConverterChart);
+            this.Controls.Add(this.lblHeaderMarketCapChart);
+            this.Controls.Add(this.lblHeaderPriceChart);
             this.Controls.Add(this.panel57);
-            this.Controls.Add(this.pictureBoxHeaderFeeRatesChart);
             this.Controls.Add(this.lblHeaderBlockAge);
-            this.Controls.Add(this.pictureBoxHeaderHashrateChart);
-            this.Controls.Add(this.pictureBoxHeaderBlockSizeChart);
             this.Controls.Add(this.lblHeaderHashrate);
-            this.Controls.Add(this.pictureBoxHeaderMarketCapChart);
             this.Controls.Add(this.panel40);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.lblHeaderTransactions);
             this.Controls.Add(this.label28);
-            this.Controls.Add(this.pictureBoxHeaderConverterChart);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.label148);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.lblHeaderFeesNoPriority);
             this.Controls.Add(this.label149);
             this.Controls.Add(this.lblHeaderFeesLowPriority);
-            this.Controls.Add(this.pictureBoxHeaderPriceChart);
             this.Controls.Add(this.lblHeaderfeesHighPriority);
             this.Controls.Add(this.panel39);
             this.Controls.Add(this.lblHeaderFeesMediumPriority);
             this.Controls.Add(this.lblBlockNumber);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.lblHeaderBlockSize);
             this.Controls.Add(this.lblHeaderMoscowTimeLabel);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.lblHeaderMarketCap);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.label77);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.lblHeaderMoscowTime);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panel38);
             this.Controls.Add(this.lblHeaderPrice);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelErrorMessage);
             this.Controls.Add(this.panelLeftPanel);
             this.Controls.Add(this.btnShowGlobalSearch);
@@ -17414,39 +17415,6 @@
             this.Text = "SATSuma";
             this.Load += new System.EventHandler(this.SATSuma_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SATSuma_Paint);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHashrateChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDifficultyChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderHashrateChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListDifficultyChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListHashrateChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderPriceChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPriceChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderFeeRatesChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartFeeRange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartReward)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenChartBlockSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChartCirculation)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListBlockSizeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListPoolRanking)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListRewardChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockScreenPoolRankingChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeChart2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockListFeeRangeChart2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPoolRankingChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMarketCapChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUniqueAddressesChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFeeRangeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBlockFeesChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningCapacityChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningNodesChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightningChannelsChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderBlockSizeChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderConverterChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeaderMarketCapChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConverterChart)).EndInit();
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
             this.panel109.ResumeLayout(false);
@@ -18231,13 +18199,6 @@
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.Panel panelCharts;
         private System.Windows.Forms.Button btnMenuCharts;
-        private System.Windows.Forms.PictureBox pictureBoxHashrateChart;
-        private System.Windows.Forms.PictureBox pictureBoxDifficultyChart;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderHashrateChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListHashrateChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListDifficultyChart;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderPriceChart;
-        private System.Windows.Forms.PictureBox pictureBoxPriceChart;
         private System.Windows.Forms.Panel panelFeeRatesKey;
         private System.Windows.Forms.Label label209;
         private System.Windows.Forms.Label label208;
@@ -18258,11 +18219,6 @@
         private System.Windows.Forms.Label label223;
         private System.Windows.Forms.Label label229;
         private System.Windows.Forms.Label label230;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderFeeRatesChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockScreenChartBlockSize;
-        private System.Windows.Forms.PictureBox pictureBoxBlockScreenChartReward;
-        private System.Windows.Forms.PictureBox pictureBoxBlockScreenChartFeeRange;
-        private System.Windows.Forms.PictureBox pictureBoxChartCirculation;
         private System.Windows.Forms.Panel panel78;
         private System.Windows.Forms.Label label217;
         private System.Windows.Forms.Panel panelUniqueAddressesScaleButtons;
@@ -18285,28 +18241,11 @@
         private System.Windows.Forms.Label label228;
         private System.Windows.Forms.Panel panel81;
         private System.Windows.Forms.Label label231;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListBlockSizeChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListPoolRanking;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListRewardChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeRangeChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockFeeChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockScreenPoolRankingChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeChart2;
-        private System.Windows.Forms.PictureBox pictureBoxBlockListFeeRangeChart2;
         private System.Windows.Forms.Panel panelChartLoading;
         private System.Windows.Forms.PictureBox pictureBoxChartLoadingAnimation;
         private System.Windows.Forms.Label label232;
         private System.Windows.Forms.Label label233;
         private System.Windows.Forms.Panel panelChartMarketCapScaleButtons;
-        private System.Windows.Forms.PictureBox pictureBoxPoolRankingChart;
-        private System.Windows.Forms.PictureBox pictureBoxMarketCapChart;
-        private System.Windows.Forms.PictureBox pictureBoxUniqueAddressesChart;
-        private System.Windows.Forms.PictureBox pictureBoxFeeRangeChart;
-        private System.Windows.Forms.PictureBox pictureBoxBlockFeesChart;
-        private System.Windows.Forms.PictureBox pictureBoxLightningCapacityChart;
-        private System.Windows.Forms.PictureBox pictureBoxLightningNodesChart;
-        private System.Windows.Forms.PictureBox pictureBoxLightningChannelsChart;
         private System.Windows.Forms.Panel panel84;
         private System.Windows.Forms.Panel panel85;
         private System.Windows.Forms.Panel panel87;
@@ -18502,10 +18441,6 @@
         private System.Windows.Forms.Label lblMenuHighlightedButtonText;
         private System.Windows.Forms.Label lblCurrencyMenuHighlightedButtonText;
         private System.Windows.Forms.Label lblThemeMenuHighlightedButtonText;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderBlockSizeChart;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderConverterChart;
-        private System.Windows.Forms.PictureBox pictureBoxHeaderMarketCapChart;
-        private System.Windows.Forms.PictureBox pictureBoxConverterChart;
         private System.Windows.Forms.Label lblCurrentVersion;
         private CustomControls.RJControls.RJButton btnExit;
         private CustomControls.RJControls.RJButton btnMinimise;
@@ -18810,6 +18745,39 @@
         private System.Windows.Forms.Label aliasLabel1;
         private System.Windows.Forms.Panel panelHeadingBackgroundSelect;
         private CustomControls.RJControls.RJComboBox comboBoxTitlesBackgroundImage;
+        private System.Windows.Forms.Label lblHeaderPriceChart;
+        private System.Windows.Forms.Label lblHeaderMarketCapChart;
+        private System.Windows.Forms.Label lblHeaderConverterChart;
+        private System.Windows.Forms.Label lblHeaderBlockSizeChart;
+        private System.Windows.Forms.Label lblHeaderHashRateChart;
+        private System.Windows.Forms.Label lblHeaderFeeRatesChart;
+        private System.Windows.Forms.Label lblBlockListFeeRangeChart2;
+        private System.Windows.Forms.Label lblBlockListFeeChart2;
+        private System.Windows.Forms.Label lblBlockListDifficultyChart;
+        private System.Windows.Forms.Label lblBlockListHashrateChart;
+        private System.Windows.Forms.Label lblBlockListBlockSizeChart;
+        private System.Windows.Forms.Label lblBlockListPoolRanking;
+        private System.Windows.Forms.Label lblBlockListFeeChart;
+        private System.Windows.Forms.Label lblBlockListRewardChart;
+        private System.Windows.Forms.Label lblBlockListFeeRangeChart;
+        private System.Windows.Forms.Label lblBlockScreenChartBlockSize;
+        private System.Windows.Forms.Label lblBlockFeeChart;
+        private System.Windows.Forms.Label lblBlockScreenChartReward;
+        private System.Windows.Forms.Label lblBlockScreenChartFeeRange;
+        private System.Windows.Forms.Label lblBlockScreenPoolRankingChart;
+        private System.Windows.Forms.Label lblPriceChart;
+        private System.Windows.Forms.Label lblConverterChart;
+        private System.Windows.Forms.Label lblMarketCapChart;
+        private System.Windows.Forms.Label lblChartCirculation;
+        private System.Windows.Forms.Label lblUniqueAddressesChart;
+        private System.Windows.Forms.Label lblPoolRankingChart;
+        private System.Windows.Forms.Label lblBlockFeesChart;
+        private System.Windows.Forms.Label lblFeeRangeChart;
+        private System.Windows.Forms.Label lblHashrateChart;
+        private System.Windows.Forms.Label lblDifficultyChart;
+        private System.Windows.Forms.Label lblLightningCapacityChart;
+        private System.Windows.Forms.Label lblLightningNodesChart;
+        private System.Windows.Forms.Label lblLightningChannelsChart;
     }
 }
 

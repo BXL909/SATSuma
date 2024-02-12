@@ -26,8 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* add loading screen when jumping from one screen to another (if not already done)
-* continue scaling chart elements, starting from price linear/log (code order, not button order)
+* loading screen durations
 * test
 */
 
@@ -10707,8 +10706,8 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 12, bold: false);
+                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -10766,7 +10765,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -10777,7 +10777,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -10834,8 +10834,8 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Price (USD)", size: 12, bold: false);
+                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(HistoricPriceDataJson))
@@ -10919,7 +10919,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -10931,7 +10932,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     // refresh the graph
@@ -10985,8 +10986,8 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 12, bold: false);
+                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -11044,6 +11045,8 @@ namespace SATSuma
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
                     formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -11054,7 +11057,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -11113,8 +11116,8 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: 13, bold: true);
-                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: 12, bold: false);
+                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of market cap data
                 var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
                 if (!string.IsNullOrEmpty(MarketCapDataJson))
@@ -11198,7 +11201,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -11210,7 +11214,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     // refresh the graph
@@ -11263,7 +11267,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -11286,9 +11290,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("valid UTXO count", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -11298,7 +11303,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -11356,7 +11361,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: 13, bold: true);
+                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
@@ -11407,9 +11412,10 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("valid UTXO count", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("valid UTXO count", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -11420,7 +11426,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     // refresh the graph
@@ -11462,7 +11468,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block size - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Block size - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -11494,9 +11500,10 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Block size (MB)", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Block size (MB)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -11506,7 +11513,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
@@ -11561,7 +11568,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: 13, bold: true);
+                formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates and amounts of btc in circulation
@@ -11593,9 +11600,10 @@ namespace SATSuma
                     formsPlot1.Plot.AddFill(xValues, yValues, 0, color: Color.Orange);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: 12, bold: false);
+                    formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -11605,7 +11613,7 @@ namespace SATSuma
                     // Add a red circle we can move around later as a highlighted point indicator
                     HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
                     HighlightedPoint.Color = Color.Red;
-                    HighlightedPoint.MarkerSize = 10;
+                    HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
                     panelCirculationKey.Visible = true;

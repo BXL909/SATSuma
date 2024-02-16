@@ -168,6 +168,7 @@ namespace SATSuma
             comboBoxDocumentation.ForeColor = TextBoxForeColor;
             comboBoxDocumentation.ListBackColor = TextBoxBackColor;
             comboBoxDocumentation.ListTextColor = TextBoxForeColor;
+            panel5.BackColor = WindowBackgroundColor;
             //panel1.BackColor = MakeColorLighter(WindowBackgroundColor, 5);
             panel1.BackColor = WindowBackgroundColor;
             this.BackColor = WindowBackgroundColor;
@@ -496,6 +497,17 @@ namespace SATSuma
                 }
             }
 
+            // add padding to left & bottom of all content
+            var divElements = document.GetElementsByTagName("div");
+            foreach (HtmlElement divElement in divElements)
+            {
+                if (divElement.GetAttribute("className") == "content-area")
+                {
+                    divElement.Style = "padding-left: 10px; padding-bottom: 40px;";
+                    
+                }
+            }
+
             // Change the color of all tables
             var tableColor = MakeColorLighter(WindowBackgroundColor, 10);
             var tableColorString = ColorTranslator.ToHtml(tableColor);
@@ -585,8 +597,5 @@ namespace SATSuma
             linkClicked = false;
             externalLinksTimer.Stop();
         }
-
-
-
     }
 }

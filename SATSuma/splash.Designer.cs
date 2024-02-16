@@ -122,12 +122,12 @@
             this.linkLabelSupportProject.AutoSize = true;
             this.linkLabelSupportProject.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelSupportProject.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelSupportProject.Location = new System.Drawing.Point(215, 176);
+            this.linkLabelSupportProject.Location = new System.Drawing.Point(235, 176);
             this.linkLabelSupportProject.Name = "linkLabelSupportProject";
-            this.linkLabelSupportProject.Size = new System.Drawing.Size(140, 14);
+            this.linkLabelSupportProject.Size = new System.Drawing.Size(98, 14);
             this.linkLabelSupportProject.TabIndex = 152;
             this.linkLabelSupportProject.TabStop = true;
-            this.linkLabelSupportProject.Text = "support the project";
+            this.linkLabelSupportProject.Text = "tips / donate";
             this.linkLabelSupportProject.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelSupportProject.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSupportProject_LinkClicked);
             // 
@@ -142,7 +142,7 @@
             this.linkLabelSourceCode.Size = new System.Drawing.Size(84, 14);
             this.linkLabelSourceCode.TabIndex = 153;
             this.linkLabelSourceCode.TabStop = true;
-            this.linkLabelSourceCode.Text = "source code";
+            this.linkLabelSourceCode.Text = "view source";
             this.linkLabelSourceCode.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelSourceCode.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSourceCode_LinkClicked);
             // 

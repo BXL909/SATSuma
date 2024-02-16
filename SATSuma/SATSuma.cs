@@ -26,7 +26,9 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* loading screen durations
+* check loading screen durations
+* combobox lists appear too far below combobox
+* need drpodown symbol to persist on custom theme list
 * test
 */
 
@@ -1493,7 +1495,7 @@ namespace SATSuma
                             {
                                 lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
                             });
-                            if (!testNet && lblBlockListTotalFeesInNextBlockFiat.Text != "no data" && lblBlockListTotalFeesInNextBlockFiat.Visible)
+                            if (!testNet  && lblBlockListTotalFeesInNextBlockFiat.Visible)
                             {
                                 lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
                                 {
@@ -16910,13 +16912,14 @@ namespace SATSuma
                     {
                         lblApplyThemeButtonDisabledMask.Visible = false;
                     });
-                    if (lblThemeMenuHighlightedButtonText.Location.Y == btnMenuApplyCustomTheme.Location.Y + (int)(3 * UIScale))
+                    if (lblThemeMenuHighlightedButtonText.Visible)
                     {
                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                         {
-                            lblThemeMenuHighlightedButtonText.Text = "";
+                            lblThemeMenuHighlightedButtonText.Visible = false;
                         });
                     }
+
                 }
                 firstTimeCustomThemeIndexChanged = false;
             }
@@ -18073,6 +18076,8 @@ namespace SATSuma
                     });
                 }
                 CustomiseCharts(lblHeaderPrice.ForeColor);
+
+                ColorMenuAndHeaderButtons();
             }
 
             catch (Exception ex)
@@ -18130,11 +18135,94 @@ namespace SATSuma
                     });
                 }
                 CustomiseCharts(lblHeaderPrice.ForeColor);
+                ColorMenuAndHeaderButtons();
+
             }
             catch (Exception ex)
             {
                 HandleException(ex, "lblChartsDarkBackground_Click");
             }
+        }
+
+        private async void ColorMenuAndHeaderButtons()
+        {
+            #region display loading screen
+            // display semi-transparent overlay form
+            Form loadingTheme = new loadingTheme(UIScale)
+            {
+                Owner = this, // Set the parent window as the owner of the modal window
+                StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                FormBorderStyle = FormBorderStyle.None, // Remove borders
+                BackColor = panel84.BackColor, // Set the background color to match panel colours
+                Opacity = 1, // Set the opacity to 50%
+            };
+            loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+            // Calculate the overlay form's location to place it in the center of the parent form
+            loadingTheme.StartPosition = FormStartPosition.Manual;
+            int parentCenterX = this.Location.X + this.Width / 2;
+            int parentCenterY = this.Location.Y + this.Height / 2;
+            int overlayX = parentCenterX - loadingTheme.Width / 2;
+            int overlayY = parentCenterY - loadingTheme.Height / 2;
+            loadingTheme.Location = new Point(overlayX, overlayY);
+            loadingTheme.Show(this);
+            #endregion
+
+
+            Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+            foreach (Control control in listHeaderButtonsToColor)
+            {
+                control.BackColor = chartsBackgroundColor;
+            }
+            lblHelpOffline.BackColor = chartsBackgroundColor;
+            lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
+            lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
+            lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
+            comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
+            comboBoxHeaderCustomThemes.ListBackColor = chartsBackgroundColor;
+            btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
+            btnMenuSplash.FlatAppearance.BorderColor = chartsBackgroundColor;
+            btnMenuHelp.FlatAppearance.BorderColor = chartsBackgroundColor;
+
+            Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+            if (lblChartsDarkBackground.Text == "✔️")
+            {
+                //header
+
+                foreach (Control control in listHeaderButtonTextToColor)
+                {
+                    control.ForeColor = Color.Silver;
+                }
+                comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
+                comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
+                btnMenuApplyCustomTheme.ForeColor = Color.Silver;
+                lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                lblHelpOffline.ForeColor = Color.DimGray;
+                lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+            }
+            else
+            {
+                //header
+                foreach (Control control in listHeaderButtonTextToColor)
+                {
+                    control.ForeColor = Color.DimGray;
+                }
+                comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
+                comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
+                btnMenuApplyCustomTheme.ForeColor = Color.DimGray;
+                lblCurrencyMenuHighlightedButtonText.ForeColor = Color.Silver;
+                lblMenuHighlightedButtonText.ForeColor = Color.Silver;
+                lblHelpOffline.ForeColor = Color.Silver;
+                lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
+                lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
+            }
+
+            //wait 2 secs 
+            await Wait2Secs();
+            //close the loading screen
+            loadingTheme.Close();
         }
         #endregion
         #region select opacity
@@ -18237,10 +18325,32 @@ namespace SATSuma
         }
         #endregion
         #region background picture/colour
-        private void PictureBoxGenesis_Click(object sender, EventArgs e)
+        private async void PictureBoxGenesis_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Genesis;
@@ -18258,6 +18368,11 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
             }
             catch (Exception ex)
             {
@@ -18265,10 +18380,32 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxFranklin_Click(object sender, EventArgs e)
+        private async void PictureBoxFranklin_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Franklin;
@@ -18286,6 +18423,11 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
             }
             catch (Exception ex)
             {
@@ -18293,10 +18435,32 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxSatsuma_Click(object sender, EventArgs e)
+        private async void PictureBoxSatsuma_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Satsuma;
@@ -18314,6 +18478,11 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
             }
             catch (Exception ex)
             {
@@ -18321,10 +18490,32 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxHoneyBadger_Click(object sender, EventArgs e)
+        private async void PictureBoxHoneyBadger_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.HoneyBadger;
@@ -18342,6 +18533,11 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
             }
             catch (Exception ex)
             {
@@ -18349,10 +18545,32 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxSymbol_Click(object sender, EventArgs e)
+        private async void PictureBoxSymbol_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Symbol;
@@ -18370,6 +18588,12 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
+
             }
             catch (Exception ex)
             {
@@ -18377,10 +18601,32 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxStackSats_Click(object sender, EventArgs e)
+        private async void PictureBoxStackSats_Click(object sender, EventArgs e)
         {
             try
             {
+                #region display loading screen
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                await BriefPause(100);
+                #endregion
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.StackSats;
@@ -18398,6 +18644,12 @@ namespace SATSuma
                 {
                     lblThemeImage.Text = "no custom image selected";
                 });
+                pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                //wait a sec 
+                await BriefPause(500);
+                //close the loading screen
+                loadingTheme.Close();
+
             }
             catch (Exception ex)
             {
@@ -18405,7 +18657,7 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxCustomImage_Click(object sender, EventArgs e)
+        private async void PictureBoxCustomImage_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18416,6 +18668,28 @@ namespace SATSuma
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
+                    #region display loading screen
+                    Form loadingTheme = new loadingTheme(UIScale)
+                    {
+                        Owner = this, // Set the parent window as the owner of the modal window
+                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        FormBorderStyle = FormBorderStyle.None, // Remove borders
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 50%
+                    };
+                    loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                    // Calculate the overlay form's location to place it in the center of the parent form
+                    loadingTheme.StartPosition = FormStartPosition.Manual;
+                    int parentCenterX = this.Location.X + this.Width / 2;
+                    int parentCenterY = this.Location.Y + this.Height / 2;
+                    int overlayX = parentCenterX - loadingTheme.Width / 2;
+                    int overlayY = parentCenterY - loadingTheme.Height / 2;
+                    loadingTheme.Location = new Point(overlayX, overlayY);
+                    loadingTheme.Show(this);
+                    await BriefPause(100);
+                    #endregion
+
                     string selectedFilePath = openFileDialog1.FileName;
                     lblThemeImage.Text = selectedFilePath;
                     this.BackgroundImage = System.Drawing.Image.FromFile(selectedFilePath);
@@ -18429,6 +18703,11 @@ namespace SATSuma
                     lblBackgroundCustomColorSelected.Visible = false;
                     lblBackgroundCustomImageSelected.Visible = true;
                     lblTime.Visible = false;
+
+                    //wait a sec 
+                    await BriefPause(500);
+                    //close the loading screen
+                    loadingTheme.Close();
                 }
             }
             catch (Exception ex)
@@ -18437,7 +18716,7 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxCustomColor_Click(object sender, EventArgs e)
+        private async void PictureBoxCustomColor_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18451,6 +18730,28 @@ namespace SATSuma
 
                 if (colorDlgForFormBackground.ShowDialog() == DialogResult.OK)
                 {
+                    #region display loading screen
+                    Form loadingTheme = new loadingTheme(UIScale)
+                    {
+                        Owner = this, // Set the parent window as the owner of the modal window
+                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        FormBorderStyle = FormBorderStyle.None, // Remove borders
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 50%
+                    };
+                    loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                    // Calculate the overlay form's location to place it in the center of the parent form
+                    loadingTheme.StartPosition = FormStartPosition.Manual;
+                    int parentCenterX = this.Location.X + this.Width / 2;
+                    int parentCenterY = this.Location.Y + this.Height / 2;
+                    int overlayX = parentCenterX - loadingTheme.Width / 2;
+                    int overlayY = parentCenterY - loadingTheme.Height / 2;
+                    loadingTheme.Location = new Point(overlayX, overlayY);
+                    loadingTheme.Show(this);
+                    await BriefPause(100);
+                    #endregion
+
                     this.Invoke((MethodInvoker)delegate
                     {
                         this.BackColor = colorDlgForFormBackground.Color;
@@ -18472,6 +18773,11 @@ namespace SATSuma
                     {
                         lblThemeImage.Text = "no custom image selected";
                     });
+                    pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    //wait a sec 
+                    await BriefPause(500);
+                    //close the loading screen
+                    loadingTheme.Close();
                 }
             }
             catch (Exception ex)
@@ -19147,6 +19453,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.Franklin;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundGenesis == true)
                     {
@@ -19159,6 +19467,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.Genesis;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundSatsuma == true)
                     {
@@ -19171,6 +19481,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.Satsuma;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundHoneyBadger == true)
                     {
@@ -19183,6 +19495,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.HoneyBadger;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundSymbol == true)
                     {
@@ -19195,6 +19509,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.Symbol;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundStackSats == true)
                     {
@@ -19207,6 +19523,8 @@ namespace SATSuma
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.StackSats;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundCustomColor == true)
                     {
@@ -19220,6 +19538,8 @@ namespace SATSuma
                         lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = null;
                         this.BackColor = theme.WindowBackground;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundCustomImage == true)
                     {
@@ -19231,6 +19551,7 @@ namespace SATSuma
                         lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = true;
+                        lblThemeImage.Text = theme.WindowImage;
                         this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
                     }
                     if (theme.OrangeInfinity == 1)
@@ -19291,7 +19612,7 @@ namespace SATSuma
                         pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                     }
 
-                    if (lblBackgroundCustomImageSelected.Visible == true && theme.WindowImage.Length > 0)
+                    if (theme.BackgroundCustomImage == true && theme.WindowImage.Length > 0)
                     {
                         lblThemeImage.Text = theme.WindowImage;
                         pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(theme.WindowImage);
@@ -20264,7 +20585,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblThemeDeleted, lblThemeSaved, lblThemeNameInUse, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -20817,7 +21138,7 @@ namespace SATSuma
                     lblThemeDeleted.Text = "unable to delete active theme   ";
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
-                        lblThemeDeleted.Location = new Point(lblThemeSaved.Location.X + lblThemeSaved.Width - lblThemeDeleted.Width, 0);
+                        lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
                     hideThemeDeletedTimer.Start();
@@ -20841,7 +21162,7 @@ namespace SATSuma
                     lblThemeDeleted.Text = "theme deleted   ";
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
-                        lblThemeDeleted.Location = new Point(lblThemeSaved.Location.X + lblThemeSaved.Width - lblThemeDeleted.Width, 0);
+                        lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
                     hideThemeDeletedTimer.Start();
@@ -20851,7 +21172,7 @@ namespace SATSuma
                     lblThemeDeleted.Text = "no theme selected   ";
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
-                        lblThemeDeleted.Location = new Point(lblThemeSaved.Location.X + lblThemeSaved.Width - lblThemeDeleted.Width, 0);
+                        lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
                     hideThemeDeletedTimer.Start();
@@ -21016,7 +21337,7 @@ namespace SATSuma
 
             if (panelToExpand == panelErrorMessage)
             {
-                panelMaxWidth = (int)(608 * UIScale);
+                panelMaxWidth = (int)(620 * UIScale);
             }
 
             if (currentWidthExpandingPanel >= panelMaxWidth) // expanding is complete
@@ -21299,6 +21620,10 @@ namespace SATSuma
                     if (panelAddress.Visible && lblAddressType.Text != "Invalid address format" && lblAddressType.Text != "no data")
                     {
                         btnAddToBookmarks.Enabled = true;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🖤";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Address";
@@ -21307,6 +21632,10 @@ namespace SATSuma
                     if (panelAddress.Visible && (lblAddressType.Text == "Invalid address format" || lblAddressType.Text == "no data"))
                     {
                         btnAddToBookmarks.Enabled = false;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🤍";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Address";
@@ -21315,6 +21644,10 @@ namespace SATSuma
                     if (panelBlock.Visible && lblBlockHash.Text != "")
                     {
                         btnAddToBookmarks.Enabled = true;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🖤";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Block";
@@ -21323,6 +21656,10 @@ namespace SATSuma
                     if (panelBlock.Visible && lblBlockHash.Text == "")
                     {
                         btnAddToBookmarks.Enabled = false;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🤍";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Block";
@@ -21331,6 +21668,10 @@ namespace SATSuma
                     if (panelTransaction.Visible && lblInvalidTransaction.Text == "✔️ valid transaction ID")
                     {
                         btnAddToBookmarks.Enabled = true;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🖤";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Transaction";
@@ -21339,6 +21680,10 @@ namespace SATSuma
                     if (panelTransaction.Visible && lblInvalidTransaction.Text != "✔️ valid transaction ID")
                     {
                         btnAddToBookmarks.Enabled = false;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🤍";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Transaction";
@@ -21347,6 +21692,10 @@ namespace SATSuma
                     if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
                     {
                         btnAddToBookmarks.Enabled = false;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🤍";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Xpub";
@@ -21355,6 +21704,10 @@ namespace SATSuma
                     if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
                     {
                         btnAddToBookmarks.Enabled = true;
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Text = "🖤";
+                        });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Xpub";
@@ -21420,6 +21773,10 @@ namespace SATSuma
                         });
                     }
                     btnAddToBookmarks.Enabled = false;
+                    btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                    {
+                        btnAddToBookmarks.Text = "🤍";
+                    });
                 }
                 #endregion
             }
@@ -23243,6 +23600,8 @@ namespace SATSuma
                 frm.StartPosition = FormStartPosition.CenterParent;
                 frm.ShowDialog(this);
                 overlay.Close();
+                this.Focus();
+                this.BringToFront();
             }
             catch (Exception ex)
             {
@@ -23291,8 +23650,12 @@ namespace SATSuma
                         ButtonBorderSize = btnExit.BorderSize
                     };
                     frm.StartPosition = FormStartPosition.CenterParent;
+//                    frm.FormClosed += ModalForm_FormClosed;
                     frm.ShowDialog(this);
+                    
                 overlay.Close();
+                this.Focus();
+                this.BringToFront();
             }
             catch (Exception ex)
             {
@@ -23301,6 +23664,7 @@ namespace SATSuma
         }
 
         #endregion
+
         #region currency menu & get market data
         private void BtnCurrency_Click(object sender, EventArgs e)
         {
@@ -23970,21 +24334,14 @@ namespace SATSuma
                     });
                     isTextBoxUniversalSearchWatermarkTextDisplayed = false;
                 }
+                if (e.KeyChar == (char)Keys.Return)
+                {
+                    BtnUniversalSearch_Click(sender, e);
+                }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "textBoxUniversalSearch_KeyPress");
-            }
-        }
-
-        private void TextBoxUniversalSearch_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "textBoxUniversalSearch_KeyUp");
             }
         }
 
@@ -25403,7 +25760,6 @@ namespace SATSuma
         #endregion
 
         #endregion
-
 
     }
 }                

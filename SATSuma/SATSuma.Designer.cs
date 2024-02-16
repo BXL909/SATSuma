@@ -4145,7 +4145,7 @@
             // 
             this.label90.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label90.ForeColor = System.Drawing.Color.Silver;
-            this.label90.Location = new System.Drawing.Point(3, 28);
+            this.label90.Location = new System.Drawing.Point(3, 29);
             this.label90.Name = "label90";
             this.label90.Size = new System.Drawing.Size(36, 17);
             this.label90.TabIndex = 172;
@@ -4168,7 +4168,7 @@
             this.label105.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label105.ForeColor = System.Drawing.Color.Silver;
             this.label105.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label105.Location = new System.Drawing.Point(4, 64);
+            this.label105.Location = new System.Drawing.Point(4, 65);
             this.label105.Name = "label105";
             this.label105.Size = new System.Drawing.Size(64, 17);
             this.label105.TabIndex = 137;
@@ -4191,7 +4191,7 @@
             this.label103.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label103.ForeColor = System.Drawing.Color.Silver;
             this.label103.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label103.Location = new System.Drawing.Point(4, 82);
+            this.label103.Location = new System.Drawing.Point(4, 83);
             this.label103.Name = "label103";
             this.label103.Size = new System.Drawing.Size(128, 17);
             this.label103.TabIndex = 139;
@@ -4214,7 +4214,7 @@
             this.label101.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label101.ForeColor = System.Drawing.Color.Silver;
             this.label101.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label101.Location = new System.Drawing.Point(249, 64);
+            this.label101.Location = new System.Drawing.Point(249, 65);
             this.label101.Name = "label101";
             this.label101.Size = new System.Drawing.Size(146, 17);
             this.label101.TabIndex = 141;
@@ -4224,7 +4224,7 @@
             // 
             this.label96.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label96.ForeColor = System.Drawing.Color.Silver;
-            this.label96.Location = new System.Drawing.Point(3, 154);
+            this.label96.Location = new System.Drawing.Point(3, 155);
             this.label96.Name = "label96";
             this.label96.Size = new System.Drawing.Size(52, 17);
             this.label96.TabIndex = 182;
@@ -4257,7 +4257,7 @@
             this.label99.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label99.ForeColor = System.Drawing.Color.Silver;
             this.label99.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label99.Location = new System.Drawing.Point(3, 136);
+            this.label99.Location = new System.Drawing.Point(3, 137);
             this.label99.Name = "label99";
             this.label99.Size = new System.Drawing.Size(114, 17);
             this.label99.TabIndex = 143;
@@ -4269,7 +4269,7 @@
             this.label92.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label92.ForeColor = System.Drawing.Color.Silver;
             this.label92.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label92.Location = new System.Drawing.Point(249, 154);
+            this.label92.Location = new System.Drawing.Point(249, 155);
             this.label92.Name = "label92";
             this.label92.Size = new System.Drawing.Size(144, 17);
             this.label92.TabIndex = 180;
@@ -4303,7 +4303,7 @@
             this.label97.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label97.ForeColor = System.Drawing.Color.Silver;
             this.label97.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label97.Location = new System.Drawing.Point(249, 100);
+            this.label97.Location = new System.Drawing.Point(249, 101);
             this.label97.Name = "label97";
             this.label97.Size = new System.Drawing.Size(119, 17);
             this.label97.TabIndex = 145;
@@ -4315,7 +4315,7 @@
             this.label94.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label94.ForeColor = System.Drawing.Color.Silver;
             this.label94.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label94.Location = new System.Drawing.Point(249, 136);
+            this.label94.Location = new System.Drawing.Point(249, 137);
             this.label94.Name = "label94";
             this.label94.Size = new System.Drawing.Size(85, 17);
             this.label94.TabIndex = 178;
@@ -4349,7 +4349,7 @@
             this.label95.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label95.ForeColor = System.Drawing.Color.Silver;
             this.label95.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label95.Location = new System.Drawing.Point(4, 118);
+            this.label95.Location = new System.Drawing.Point(4, 119);
             this.label95.Name = "label95";
             this.label95.Size = new System.Drawing.Size(78, 17);
             this.label95.TabIndex = 149;
@@ -4361,7 +4361,7 @@
             this.label89.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label89.ForeColor = System.Drawing.Color.Silver;
             this.label89.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label89.Location = new System.Drawing.Point(249, 118);
+            this.label89.Location = new System.Drawing.Point(249, 119);
             this.label89.Name = "label89";
             this.label89.Size = new System.Drawing.Size(75, 17);
             this.label89.TabIndex = 176;
@@ -4395,7 +4395,7 @@
             this.label93.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label93.ForeColor = System.Drawing.Color.Silver;
             this.label93.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label93.Location = new System.Drawing.Point(249, 82);
+            this.label93.Location = new System.Drawing.Point(249, 83);
             this.label93.Name = "label93";
             this.label93.Size = new System.Drawing.Size(129, 17);
             this.label93.TabIndex = 151;
@@ -4428,7 +4428,7 @@
             this.label91.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label91.ForeColor = System.Drawing.Color.Silver;
             this.label91.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label91.Location = new System.Drawing.Point(4, 46);
+            this.label91.Location = new System.Drawing.Point(4, 47);
             this.label91.Name = "label91";
             this.label91.Size = new System.Drawing.Size(70, 17);
             this.label91.TabIndex = 153;
@@ -4451,7 +4451,7 @@
             this.label24.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label24.ForeColor = System.Drawing.Color.Silver;
             this.label24.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label24.Location = new System.Drawing.Point(4, 100);
+            this.label24.Location = new System.Drawing.Point(4, 101);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(48, 17);
             this.label24.TabIndex = 169;
@@ -4463,7 +4463,7 @@
             this.label88.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label88.ForeColor = System.Drawing.Color.Silver;
             this.label88.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label88.Location = new System.Drawing.Point(249, 46);
+            this.label88.Location = new System.Drawing.Point(249, 47);
             this.label88.Name = "label88";
             this.label88.Size = new System.Drawing.Size(65, 17);
             this.label88.TabIndex = 167;
@@ -11732,9 +11732,9 @@
             // 
             // pictureBoxCustomImage
             // 
-            this.pictureBoxCustomImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBoxCustomImage.BackgroundImage = global::SATSuma.Properties.Resources.CustomImage;
+            this.pictureBoxCustomImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxCustomImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxCustomImage.Image = global::SATSuma.Properties.Resources.CustomImage;
             this.pictureBoxCustomImage.Location = new System.Drawing.Point(378, 99);
             this.pictureBoxCustomImage.Name = "pictureBoxCustomImage";
             this.pictureBoxCustomImage.Size = new System.Drawing.Size(56, 56);
@@ -12989,13 +12989,14 @@
             // 
             // lblThemeDeleted
             // 
-            this.lblThemeDeleted.BackColor = System.Drawing.Color.Black;
+            this.lblThemeDeleted.AutoSize = true;
+            this.lblThemeDeleted.BackColor = System.Drawing.Color.Transparent;
             this.lblThemeDeleted.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThemeDeleted.ForeColor = System.Drawing.Color.IndianRed;
             this.lblThemeDeleted.Location = new System.Drawing.Point(399, 0);
             this.lblThemeDeleted.Name = "lblThemeDeleted";
             this.lblThemeDeleted.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.lblThemeDeleted.Size = new System.Drawing.Size(107, 23);
+            this.lblThemeDeleted.Size = new System.Drawing.Size(107, 19);
             this.lblThemeDeleted.TabIndex = 288;
             this.lblThemeDeleted.Text = "theme deleted   ";
             this.lblThemeDeleted.Visible = false;
@@ -13037,6 +13038,8 @@
             // panel70
             // 
             this.panel70.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel70.Controls.Add(this.lblThemeSaved);
+            this.panel70.Controls.Add(this.lblThemeNameInUse);
             this.panel70.Controls.Add(this.lblThemeImage);
             this.panel70.Controls.Add(this.panelThemeNameContainer);
             this.panel70.Controls.Add(this.panel69);
@@ -13086,9 +13089,7 @@
             this.panel69.BackColor = System.Drawing.Color.Transparent;
             this.panel69.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel69.BackgroundImage")));
             this.panel69.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel69.Controls.Add(this.lblThemeNameInUse);
             this.panel69.Controls.Add(this.label192);
-            this.panel69.Controls.Add(this.lblThemeSaved);
             this.panel69.Location = new System.Drawing.Point(0, 0);
             this.panel69.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel69.Name = "panel69";
@@ -13099,7 +13100,7 @@
             // 
             this.lblThemeNameInUse.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThemeNameInUse.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblThemeNameInUse.Location = new System.Drawing.Point(351, 0);
+            this.lblThemeNameInUse.Location = new System.Drawing.Point(311, 32);
             this.lblThemeNameInUse.Name = "lblThemeNameInUse";
             this.lblThemeNameInUse.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.lblThemeNameInUse.Size = new System.Drawing.Size(154, 23);
@@ -13122,10 +13123,10 @@
             // 
             // lblThemeSaved
             // 
-            this.lblThemeSaved.BackColor = System.Drawing.Color.Black;
+            this.lblThemeSaved.BackColor = System.Drawing.Color.Transparent;
             this.lblThemeSaved.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThemeSaved.ForeColor = System.Drawing.Color.OliveDrab;
-            this.lblThemeSaved.Location = new System.Drawing.Point(413, 0);
+            this.lblThemeSaved.Location = new System.Drawing.Point(311, 32);
             this.lblThemeSaved.Name = "lblThemeSaved";
             this.lblThemeSaved.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.lblThemeSaved.Size = new System.Drawing.Size(96, 23);
@@ -16719,6 +16720,7 @@
             // comboBoxHeaderCustomThemes
             // 
             this.comboBoxHeaderCustomThemes.BackColor = System.Drawing.Color.Transparent;
+            this.comboBoxHeaderCustomThemes.BackgroundImage = global::SATSuma.Properties.Resources.helpselectDropdown;
             this.comboBoxHeaderCustomThemes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.comboBoxHeaderCustomThemes.BorderColor = System.Drawing.Color.DimGray;
             this.comboBoxHeaderCustomThemes.BorderSize = 0;
@@ -16897,7 +16899,7 @@
             this.btnAddToBookmarks.Size = new System.Drawing.Size(24, 24);
             this.btnAddToBookmarks.TabIndex = 2;
             this.btnAddToBookmarks.TabStop = false;
-            this.btnAddToBookmarks.Text = "🧡";
+            this.btnAddToBookmarks.Text = "🤍";
             this.btnAddToBookmarks.TextColor = System.Drawing.Color.White;
             this.btnAddToBookmarks.UseVisualStyleBackColor = false;
             this.btnAddToBookmarks.Click += new System.EventHandler(this.BtnAddToBookmarks_Click);
@@ -17099,6 +17101,7 @@
             // 
             // textBoxUniversalSearch
             // 
+            this.textBoxUniversalSearch.AcceptsReturn = true;
             this.textBoxUniversalSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBoxUniversalSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxUniversalSearch.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -17111,7 +17114,6 @@
             this.textBoxUniversalSearch.TextChanged += new System.EventHandler(this.TextBoxUniversalSearch_TextChanged);
             this.textBoxUniversalSearch.Enter += new System.EventHandler(this.TextBoxUniversalSearch_Enter);
             this.textBoxUniversalSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxUniversalSearch_KeyPress);
-            this.textBoxUniversalSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxUniversalSearch_KeyUp);
             this.textBoxUniversalSearch.Leave += new System.EventHandler(this.TextBoxUniversalSearch_Leave);
             // 
             // btnUniversalSearch
@@ -17375,15 +17377,15 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
             this.Controls.Add(this.lblHeaderHashRateChart);
             this.Controls.Add(this.lblHeaderBlockSizeChart);
@@ -17637,6 +17639,7 @@
             this.panel71.ResumeLayout(false);
             this.panelCustomizeThemeListContainer.ResumeLayout(false);
             this.panel72.ResumeLayout(false);
+            this.panel72.PerformLayout();
             this.panel70.ResumeLayout(false);
             this.panelThemeNameContainer.ResumeLayout(false);
             this.panelThemeNameContainer.PerformLayout();

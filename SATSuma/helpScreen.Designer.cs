@@ -72,7 +72,7 @@
             this.panel2.Location = new System.Drawing.Point(428, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(33, 525);
+            this.panel2.Size = new System.Drawing.Size(33, 527);
             this.panel2.TabIndex = 208;
             // 
             // btnHelpTextUp
@@ -150,11 +150,11 @@
             // webBrowserDocumentation
             // 
             this.webBrowserDocumentation.IsWebBrowserContextMenuEnabled = false;
-            this.webBrowserDocumentation.Location = new System.Drawing.Point(-2, -30);
+            this.webBrowserDocumentation.Location = new System.Drawing.Point(-2, 0);
             this.webBrowserDocumentation.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserDocumentation.Name = "webBrowserDocumentation";
             this.webBrowserDocumentation.ScriptErrorsSuppressed = true;
-            this.webBrowserDocumentation.Size = new System.Drawing.Size(455, 555);
+            this.webBrowserDocumentation.Size = new System.Drawing.Size(455, 548);
             this.webBrowserDocumentation.TabIndex = 209;
             this.webBrowserDocumentation.Url = new System.Uri("https://satsuma.btcdir.org/help-introduction/", System.UriKind.Absolute);
             this.webBrowserDocumentation.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.WebBrowserDocumentation_DocumentCompleted);
@@ -222,6 +222,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel1.Controls.Add(this.panel5);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.webBrowserDocumentation);
             this.panel1.Location = new System.Drawing.Point(0, 3);
@@ -256,7 +257,7 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            this.panel5.Location = new System.Drawing.Point(10, 555);
+            this.panel5.Location = new System.Drawing.Point(0, 528);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(428, 20);
             this.panel5.TabIndex = 258;
@@ -269,7 +270,6 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(474, 588);
-            this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.pictureBoxSatsumaLogo);

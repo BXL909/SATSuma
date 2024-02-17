@@ -850,13 +850,13 @@
             this.label196 = new System.Windows.Forms.Label();
             this.btnLoadTheme = new CustomControls.RJControls.RJButton();
             this.panel70 = new System.Windows.Forms.Panel();
+            this.lblThemeSaved = new System.Windows.Forms.Label();
+            this.lblThemeNameInUse = new System.Windows.Forms.Label();
             this.lblThemeImage = new System.Windows.Forms.Label();
             this.panelThemeNameContainer = new System.Windows.Forms.Panel();
             this.textBoxThemeName = new System.Windows.Forms.TextBox();
             this.panel69 = new System.Windows.Forms.Panel();
-            this.lblThemeNameInUse = new System.Windows.Forms.Label();
             this.label192 = new System.Windows.Forms.Label();
-            this.lblThemeSaved = new System.Windows.Forms.Label();
             this.label193 = new System.Windows.Forms.Label();
             this.btnSaveTheme = new CustomControls.RJControls.RJButton();
             this.label194 = new System.Windows.Forms.Label();
@@ -1132,6 +1132,7 @@
             this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
+            this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1404,11 +1405,11 @@
             // 
             this.lblErrorMessage.AutoEllipsis = true;
             this.lblErrorMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblErrorMessage.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblErrorMessage.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblErrorMessage.Location = new System.Drawing.Point(20, 3);
+            this.lblErrorMessage.Location = new System.Drawing.Point(6, 4);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(520, 15);
+            this.lblErrorMessage.Size = new System.Drawing.Size(510, 15);
             this.lblErrorMessage.TabIndex = 40;
             this.lblErrorMessage.Text = "Error message";
             // 
@@ -7337,7 +7338,6 @@
             this.btnTransactionOutputsUp.TabIndex = 210;
             this.btnTransactionOutputsUp.TabStop = false;
             this.btnTransactionOutputsUp.Text = "▲";
-            this.btnTransactionOutputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionOutputsUp.UseVisualStyleBackColor = false;
             this.btnTransactionOutputsUp.Visible = false;
             this.btnTransactionOutputsUp.Click += new System.EventHandler(this.BtnTransactionOutputsUp_Click);
@@ -7358,7 +7358,6 @@
             this.btnTransactionOutputsDown.TabIndex = 211;
             this.btnTransactionOutputsDown.TabStop = false;
             this.btnTransactionOutputsDown.Text = "▼";
-            this.btnTransactionOutputsDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionOutputsDown.UseVisualStyleBackColor = false;
             this.btnTransactionOutputsDown.Visible = false;
             this.btnTransactionOutputsDown.Click += new System.EventHandler(this.BtnTransactionOutputsDown_Click);
@@ -7390,7 +7389,6 @@
             this.btnTransactionInputsUp.TabIndex = 210;
             this.btnTransactionInputsUp.TabStop = false;
             this.btnTransactionInputsUp.Text = "▲";
-            this.btnTransactionInputsUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionInputsUp.UseVisualStyleBackColor = false;
             this.btnTransactionInputsUp.Visible = false;
             this.btnTransactionInputsUp.Click += new System.EventHandler(this.BtnTransactionInputsUp_Click);
@@ -7411,7 +7409,6 @@
             this.btnTransactionInputDown.TabIndex = 211;
             this.btnTransactionInputDown.TabStop = false;
             this.btnTransactionInputDown.Text = "▼";
-            this.btnTransactionInputDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnTransactionInputDown.UseVisualStyleBackColor = false;
             this.btnTransactionInputDown.Visible = false;
             this.btnTransactionInputDown.Click += new System.EventHandler(this.BtnTransactionInputsDown_Click);
@@ -8816,7 +8813,7 @@
             this.panelAddToBookmarks.Controls.Add(this.panel31);
             this.panelAddToBookmarks.Controls.Add(this.btnCancelAddToBookmarks);
             this.panelAddToBookmarks.Controls.Add(this.btnCommitToBookmarks);
-            this.panelAddToBookmarks.Location = new System.Drawing.Point(642, 45);
+            this.panelAddToBookmarks.Location = new System.Drawing.Point(638, 39);
             this.panelAddToBookmarks.Name = "panelAddToBookmarks";
             this.panelAddToBookmarks.Size = new System.Drawing.Size(261, 114);
             this.panelAddToBookmarks.TabIndex = 201;
@@ -8827,7 +8824,7 @@
             // 
             this.panelEncryptionKeyContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelEncryptionKeyContainer.Controls.Add(this.textBoxBookmarkEncryptionKey);
-            this.panelEncryptionKeyContainer.Location = new System.Drawing.Point(9, 61);
+            this.panelEncryptionKeyContainer.Location = new System.Drawing.Point(5, 61);
             this.panelEncryptionKeyContainer.Name = "panelEncryptionKeyContainer";
             this.panelEncryptionKeyContainer.Size = new System.Drawing.Size(252, 22);
             this.panelEncryptionKeyContainer.TabIndex = 253;
@@ -8853,7 +8850,7 @@
             // 
             this.panelOptionalNotesContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelOptionalNotesContainer.Controls.Add(this.textBoxBookmarkProposedNote);
-            this.panelOptionalNotesContainer.Location = new System.Drawing.Point(9, 30);
+            this.panelOptionalNotesContainer.Location = new System.Drawing.Point(5, 31);
             this.panelOptionalNotesContainer.Name = "panelOptionalNotesContainer";
             this.panelOptionalNotesContainer.Size = new System.Drawing.Size(252, 22);
             this.panelOptionalNotesContainer.TabIndex = 252;
@@ -8896,7 +8893,7 @@
             this.panel31.Controls.Add(this.label131);
             this.panel31.Controls.Add(this.lblBookmarkProposalType);
             this.panel31.Controls.Add(this.lblBookmarkProposalData);
-            this.panel31.Location = new System.Drawing.Point(0, 0);
+            this.panel31.Location = new System.Drawing.Point(0, 6);
             this.panel31.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel31.Name = "panel31";
             this.panel31.Size = new System.Drawing.Size(252, 23);
@@ -8955,7 +8952,7 @@
             this.btnCancelAddToBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelAddToBookmarks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelAddToBookmarks.ForeColor = System.Drawing.Color.White;
-            this.btnCancelAddToBookmarks.Location = new System.Drawing.Point(172, 90);
+            this.btnCancelAddToBookmarks.Location = new System.Drawing.Point(170, 89);
             this.btnCancelAddToBookmarks.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancelAddToBookmarks.Name = "btnCancelAddToBookmarks";
             this.btnCancelAddToBookmarks.Size = new System.Drawing.Size(88, 22);
@@ -8978,7 +8975,7 @@
             this.btnCommitToBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCommitToBookmarks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCommitToBookmarks.ForeColor = System.Drawing.Color.White;
-            this.btnCommitToBookmarks.Location = new System.Drawing.Point(79, 90);
+            this.btnCommitToBookmarks.Location = new System.Drawing.Point(77, 89);
             this.btnCommitToBookmarks.Margin = new System.Windows.Forms.Padding(1);
             this.btnCommitToBookmarks.Name = "btnCommitToBookmarks";
             this.btnCommitToBookmarks.Size = new System.Drawing.Size(88, 22);
@@ -12993,12 +12990,13 @@
             this.lblThemeDeleted.BackColor = System.Drawing.Color.Transparent;
             this.lblThemeDeleted.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThemeDeleted.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblThemeDeleted.Location = new System.Drawing.Point(399, 0);
+            this.lblThemeDeleted.Location = new System.Drawing.Point(399, 1);
             this.lblThemeDeleted.Name = "lblThemeDeleted";
             this.lblThemeDeleted.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.lblThemeDeleted.Size = new System.Drawing.Size(107, 19);
             this.lblThemeDeleted.TabIndex = 288;
             this.lblThemeDeleted.Text = "theme deleted   ";
+            this.lblThemeDeleted.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblThemeDeleted.Visible = false;
             // 
             // label196
@@ -13051,6 +13049,31 @@
             this.panel70.Size = new System.Drawing.Size(505, 97);
             this.panel70.TabIndex = 292;
             // 
+            // lblThemeSaved
+            // 
+            this.lblThemeSaved.BackColor = System.Drawing.Color.Transparent;
+            this.lblThemeSaved.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThemeSaved.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblThemeSaved.Location = new System.Drawing.Point(311, 34);
+            this.lblThemeSaved.Name = "lblThemeSaved";
+            this.lblThemeSaved.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.lblThemeSaved.Size = new System.Drawing.Size(96, 23);
+            this.lblThemeSaved.TabIndex = 289;
+            this.lblThemeSaved.Text = "theme saved   ";
+            this.lblThemeSaved.Visible = false;
+            // 
+            // lblThemeNameInUse
+            // 
+            this.lblThemeNameInUse.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThemeNameInUse.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblThemeNameInUse.Location = new System.Drawing.Point(311, 34);
+            this.lblThemeNameInUse.Name = "lblThemeNameInUse";
+            this.lblThemeNameInUse.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.lblThemeNameInUse.Size = new System.Drawing.Size(154, 23);
+            this.lblThemeNameInUse.TabIndex = 288;
+            this.lblThemeNameInUse.Text = "⚠️ name already in use   ";
+            this.lblThemeNameInUse.Visible = false;
+            // 
             // lblThemeImage
             // 
             this.lblThemeImage.AutoEllipsis = true;
@@ -13083,6 +13106,7 @@
             this.textBoxThemeName.Size = new System.Drawing.Size(167, 15);
             this.textBoxThemeName.TabIndex = 218;
             this.textBoxThemeName.TextChanged += new System.EventHandler(this.TextBoxThemeName_TextChanged);
+            this.textBoxThemeName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxThemeName_KeyPress);
             // 
             // panel69
             // 
@@ -13096,18 +13120,6 @@
             this.panel69.Size = new System.Drawing.Size(505, 23);
             this.panel69.TabIndex = 215;
             // 
-            // lblThemeNameInUse
-            // 
-            this.lblThemeNameInUse.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThemeNameInUse.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblThemeNameInUse.Location = new System.Drawing.Point(311, 32);
-            this.lblThemeNameInUse.Name = "lblThemeNameInUse";
-            this.lblThemeNameInUse.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.lblThemeNameInUse.Size = new System.Drawing.Size(154, 23);
-            this.lblThemeNameInUse.TabIndex = 288;
-            this.lblThemeNameInUse.Text = "⚠️ name already in use   ";
-            this.lblThemeNameInUse.Visible = false;
-            // 
             // label192
             // 
             this.label192.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -13120,19 +13132,6 @@
             this.label192.Size = new System.Drawing.Size(220, 17);
             this.label192.TabIndex = 153;
             this.label192.Text = "Save as new custom theme";
-            // 
-            // lblThemeSaved
-            // 
-            this.lblThemeSaved.BackColor = System.Drawing.Color.Transparent;
-            this.lblThemeSaved.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThemeSaved.ForeColor = System.Drawing.Color.OliveDrab;
-            this.lblThemeSaved.Location = new System.Drawing.Point(311, 32);
-            this.lblThemeSaved.Name = "lblThemeSaved";
-            this.lblThemeSaved.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.lblThemeSaved.Size = new System.Drawing.Size(96, 23);
-            this.lblThemeSaved.TabIndex = 289;
-            this.lblThemeSaved.Text = "theme saved   ";
-            this.lblThemeSaved.Visible = false;
             // 
             // label193
             // 
@@ -16736,7 +16735,7 @@
             this.comboBoxHeaderCustomThemes.Name = "comboBoxHeaderCustomThemes";
             this.comboBoxHeaderCustomThemes.Size = new System.Drawing.Size(118, 24);
             this.comboBoxHeaderCustomThemes.TabIndex = 251;
-            this.comboBoxHeaderCustomThemes.Texts = "select theme ▼";
+            this.comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
             this.comboBoxHeaderCustomThemes.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxHeaderCustomThemes_OnSelectedIndexChanged);
             this.comboBoxHeaderCustomThemes.MouseEnter += new System.EventHandler(this.ComboBoxHeaderCustomThemes_MouseEnter);
             this.comboBoxHeaderCustomThemes.MouseLeave += new System.EventHandler(this.ComboBoxHeaderCustomThemes_MouseLeave);
@@ -17308,9 +17307,9 @@
             this.panelErrorMessage.Controls.Add(this.btnCopyErrorMessage);
             this.panelErrorMessage.Controls.Add(this.btnHideErrorMessage);
             this.panelErrorMessage.Controls.Add(this.lblErrorMessage);
-            this.panelErrorMessage.Location = new System.Drawing.Point(150, 10);
+            this.panelErrorMessage.Location = new System.Drawing.Point(160, 10);
             this.panelErrorMessage.Name = "panelErrorMessage";
-            this.panelErrorMessage.Size = new System.Drawing.Size(608, 24);
+            this.panelErrorMessage.Size = new System.Drawing.Size(598, 24);
             this.panelErrorMessage.TabIndex = 265;
             // 
             // btnCopyErrorMessage
@@ -17325,7 +17324,7 @@
             this.btnCopyErrorMessage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopyErrorMessage.Font = new System.Drawing.Font("MicroFLF", 5F, System.Drawing.FontStyle.Bold);
             this.btnCopyErrorMessage.ForeColor = System.Drawing.Color.White;
-            this.btnCopyErrorMessage.Location = new System.Drawing.Point(536, 5);
+            this.btnCopyErrorMessage.Location = new System.Drawing.Point(528, 5);
             this.btnCopyErrorMessage.Margin = new System.Windows.Forms.Padding(0);
             this.btnCopyErrorMessage.Name = "btnCopyErrorMessage";
             this.btnCopyErrorMessage.Size = new System.Drawing.Size(40, 14);
@@ -17350,7 +17349,7 @@
             this.btnHideErrorMessage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHideErrorMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHideErrorMessage.ForeColor = System.Drawing.Color.White;
-            this.btnHideErrorMessage.Location = new System.Drawing.Point(583, 0);
+            this.btnHideErrorMessage.Location = new System.Drawing.Point(574, 0);
             this.btnHideErrorMessage.Name = "btnHideErrorMessage";
             this.btnHideErrorMessage.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.btnHideErrorMessage.Size = new System.Drawing.Size(24, 24);
@@ -17368,6 +17367,15 @@
             this.timerNodeStatusLight.Interval = 1000;
             this.timerNodeStatusLight.Tick += new System.EventHandler(this.TimerNodeStatusLight_Tick);
             // 
+            // panelAddToBookmarksBorder
+            // 
+            this.panelAddToBookmarksBorder.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddToBookmarksBorder.Location = new System.Drawing.Point(637, 38);
+            this.panelAddToBookmarksBorder.Name = "panelAddToBookmarksBorder";
+            this.panelAddToBookmarksBorder.Size = new System.Drawing.Size(263, 116);
+            this.panelAddToBookmarksBorder.TabIndex = 272;
+            this.panelAddToBookmarksBorder.Visible = false;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -17377,8 +17385,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
@@ -17411,14 +17421,12 @@
             this.Controls.Add(this.lblBlockNumber);
             this.Controls.Add(this.lblHeaderBlockSize);
             this.Controls.Add(this.lblHeaderMoscowTimeLabel);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.lblHeaderMarketCap);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.label77);
             this.Controls.Add(this.lblHeaderMoscowTime);
             this.Controls.Add(this.panel38);
             this.Controls.Add(this.lblHeaderPrice);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddToBookmarks);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.panelErrorMessage);
@@ -17432,6 +17440,7 @@
             this.Controls.Add(this.btnHelp);
             this.Controls.Add(this.btnMinimise);
             this.Controls.Add(this.btnExit);
+            this.Controls.Add(this.panelAddToBookmarksBorder);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
@@ -18806,6 +18815,7 @@
         private System.Windows.Forms.Label lblLightningCapacityChart;
         private System.Windows.Forms.Label lblLightningNodesChart;
         private System.Windows.Forms.Label lblLightningChannelsChart;
+        private System.Windows.Forms.Panel panelAddToBookmarksBorder;
     }
 }
 

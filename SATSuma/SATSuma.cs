@@ -26,9 +26,6 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* check loading screen durations
-* combobox lists appear too far below combobox
-* need drpodown symbol to persist on custom theme list
 * test
 */
 
@@ -410,6 +407,8 @@ namespace SATSuma
             panel96.Paint += Panel_Paint;
             panel106.Paint += Panel_Paint;
             panel107.Paint += Panel_Paint;
+            panelAddToBookmarks.Paint += Panel_Paint;
+            panelAddToBookmarksBorder.Paint += Panel_Paint;
             panelLeftPanel.Paint += Panel_Paint;
             panelOwnNodeAddressTXInfo.Paint += Panel_Paint;
             panelOwnNodeBlockTXInfo.Paint += Panel_Paint;
@@ -2748,7 +2747,8 @@ namespace SATSuma
                     QRCodeGenerator qrGenerator = new QRCodeGenerator();
                     QRCodeData qrCodeData = qrGenerator.CreateQrCode(addressString, QRCodeGenerator.ECCLevel.Q);
                     QRCode qrCode = new QRCode(qrCodeData);
-                    var qrCodeImage = qrCode.GetGraphic(20, Color.Gray, Color.Black, false);
+                    //var qrCodeImage = qrCode.GetGraphic(20, Color.Gray, Color.Black, false);
+                    var qrCodeImage = qrCode.GetGraphic(20, label77.ForeColor, Color.Black, false);
                     qrCodeImage.MakeTransparent(Color.Black);
                     AddressQRCodePicturebox.Invoke((MethodInvoker)delegate
                     {
@@ -4906,8 +4906,40 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                // display semi-transparent overlay form
+                Form loadingTheme = new loadingTheme(UIScale)
+                {
+                    Owner = this, // Set the parent window as the owner of the modal window
+                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 50%
+                };
+                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                // Calculate the overlay form's location to place it in the center of the parent form
+                loadingTheme.StartPosition = FormStartPosition.Manual;
+                int parentCenterX = this.Location.X + this.Width / 2;
+                int parentCenterY = this.Location.Y + this.Height / 2;
+                int overlayX = parentCenterX - loadingTheme.Width / 2;
+                int overlayY = parentCenterY - loadingTheme.Height / 2;
+                loadingTheme.Location = new Point(overlayX, overlayY);
+                loadingTheme.Show(this);
+                #endregion
+
+
+
                 string submittedTransactionID = textBoxTransactionID.Text;
                 await GetTransaction(submittedTransactionID);
+
+
+
+                //wait 2 secs 
+                await Wait2Secs();
+                //close the loading screen
+                loadingTheme.Close();
+                this.BringToFront();
             }
             catch (Exception ex)
             {
@@ -13187,6 +13219,7 @@ namespace SATSuma
                 {
                     //panelFees.Visible = false;
                     panelAddToBookmarks.Visible = true;
+                    panelAddToBookmarksBorder.Visible = true;
                     lblBookmarkSavedSuccess.Visible = false;
                     btnCommitToBookmarks.Enabled = true;
                     btnCancelAddToBookmarks.Enabled = true;
@@ -13195,6 +13228,7 @@ namespace SATSuma
                 else
                 {
                     panelAddToBookmarks.Visible = false;
+                    panelAddToBookmarksBorder.Visible = false;
                     //panelFees.Visible = true;
                 }
             }
@@ -13286,6 +13320,7 @@ namespace SATSuma
             try
             {
                 panelAddToBookmarks.Visible = false;
+                panelAddToBookmarksBorder.Visible = false;
                 //panelFees.Visible = true;
             }
             catch (Exception ex)
@@ -13568,6 +13603,7 @@ namespace SATSuma
             try
             {
                 panelAddToBookmarks.Visible = false;
+                panelAddToBookmarksBorder.Visible = false;
                 //panelFees.Visible = true;
                 hideAddToBookmarksTimer.Stop();
             }
@@ -16545,7 +16581,7 @@ namespace SATSuma
                                                         {
                                                             lblThemeMenuHighlightedButtonText.Visible = false;
                                                             lblThemeMenuHighlightedButtonText.Text = theme.ThemeName + "!";
-                                                            lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(11 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                                            lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                                                         });
                                                         ClearThemeMenuMarkers();
                                                         btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -16921,6 +16957,7 @@ namespace SATSuma
                     }
 
                 }
+                
                 firstTimeCustomThemeIndexChanged = false;
             }
             catch (Exception ex)
@@ -17257,7 +17294,7 @@ namespace SATSuma
                 });
                 comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxHeaderCustomThemes.Texts = "  select theme ▼";
+                    comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
                 });
                 comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                 {
@@ -17352,7 +17389,7 @@ namespace SATSuma
         {
             try
             {
-                if (comboBoxHeaderCustomThemes.Texts != "  select theme ▼")
+                if (comboBoxHeaderCustomThemes.Texts != "   select theme ▼")
                 {
 
                     CloseThemeMenu();
@@ -17371,7 +17408,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(11 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                             });
                             ClearThemeMenuMarkers();
                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -17384,7 +17421,7 @@ namespace SATSuma
                             });
                             comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                             {
-                                comboBoxHeaderCustomThemes.Texts = "  select theme ▼";
+                                comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
                             });
                             comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                             {
@@ -17985,6 +18022,10 @@ namespace SATSuma
         {
             try
             {
+                panelErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    panelErrorMessage.Width = 0;
+                });
                 btnSquareCorners.Enabled = false;
                 btnPartialCorners.Enabled = true;
                 btnRoundCorners.Enabled = true;
@@ -18000,6 +18041,10 @@ namespace SATSuma
         {
             try
             {
+                panelErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    panelErrorMessage.Width = 0;
+                });
                 btnSquareCorners.Enabled = true;
                 btnPartialCorners.Enabled = false;
                 btnRoundCorners.Enabled = true;
@@ -18015,6 +18060,10 @@ namespace SATSuma
         {
             try
             {
+                panelErrorMessage.Invoke((MethodInvoker)delegate
+                {
+                    panelErrorMessage.Width = 0;
+                });
                 btnSquareCorners.Enabled = true;
                 btnPartialCorners.Enabled = true;
                 btnRoundCorners.Enabled = false;
@@ -18350,7 +18399,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = true;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Genesis;
@@ -18405,7 +18454,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = false;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Franklin;
@@ -18460,7 +18509,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = false;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Satsuma;
@@ -18515,7 +18564,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = false;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.HoneyBadger;
@@ -18570,7 +18619,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = false;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.Symbol;
@@ -18626,7 +18675,7 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 await BriefPause(100);
                 #endregion
-
+                lblShowClock.Enabled = false;
                 this.Invoke((MethodInvoker)delegate
                 {
                     this.BackgroundImage = Properties.Resources.StackSats;
@@ -18689,7 +18738,7 @@ namespace SATSuma
                     loadingTheme.Show(this);
                     await BriefPause(100);
                     #endregion
-
+                    lblShowClock.Enabled = false;
                     string selectedFilePath = openFileDialog1.FileName;
                     lblThemeImage.Text = selectedFilePath;
                     this.BackgroundImage = System.Drawing.Image.FromFile(selectedFilePath);
@@ -18751,7 +18800,7 @@ namespace SATSuma
                     loadingTheme.Show(this);
                     await BriefPause(100);
                     #endregion
-
+                    lblShowClock.Enabled = false;
                     this.Invoke((MethodInvoker)delegate
                     {
                         this.BackColor = colorDlgForFormBackground.Color;
@@ -19185,7 +19234,7 @@ namespace SATSuma
             System.IO.File.WriteAllText(filePath, json);
         }
         #endregion
-        #region select previously saved theme from list (doesn't apply to list embedded in top menu)
+        #region select previously saved theme from list (doesn't apply to list embedded in main menu)
         private void BtnLoadTheme_Click(object sender, EventArgs e)
         {
             try
@@ -19207,7 +19256,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(11 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                                     });
                                     ClearThemeMenuMarkers();
                                     btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -19220,7 +19269,7 @@ namespace SATSuma
                                     });
                                     comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                                     {
-                                        comboBoxHeaderCustomThemes.Texts = "  select theme ▼";
+                                        comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
                                     });
                                     comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                                     {
@@ -19286,6 +19335,14 @@ namespace SATSuma
                 #endregion 
 
                 currentlyActiveTheme = theme.ThemeName;
+                if (theme.BackgroundGenesis)
+                {
+                    lblShowClock.Enabled = true;
+                }
+                else
+                {
+                    lblShowClock.Enabled = false;
+                }
                 if (theme.ThemeName.Contains("(preset)"))
                 {
                     btnMenuApplyCustomTheme.Text = "apply theme";
@@ -19843,9 +19900,12 @@ namespace SATSuma
                 panel96.Invalidate();
                 panel106.Invalidate();
                 panel107.Invalidate();
+                panelAddToBookmarks.Invalidate();
+                panelAddToBookmarksBorder.Invalidate();
                 panelOwnNodeAddressTXInfo.Invalidate();
                 panelOwnNodeBlockTXInfo.Invalidate();
                 panelTransactionMiddle.Invalidate();
+                panelErrorMessage.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -20330,7 +20390,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { numericUpDownOpacity, headerSelectedNodeStatus, lblElapsedSinceUpdate, lblOfflineModeActive, labelSettingsSaved, lblErrorAlert, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
+                Control[] listOtherTextToColor = { numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20369,8 +20429,14 @@ namespace SATSuma
         {
             try
             {
+
+                labelSettingsSaved.ForeColor = thiscolor;
+                lblErrorAlert.ForeColor = thiscolor;
                 lblErrorMessage.ForeColor = thiscolor;
                 label176.ForeColor = thiscolor;
+                lblOfflineModeActive.ForeColor = thiscolor;
+                lblElapsedSinceUpdate.ForeColor = thiscolor;
+                headerSelectedNodeStatus.ForeColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -20456,6 +20522,8 @@ namespace SATSuma
                 {
                     control.BackColor = thiscolor;
                 }
+                //add to bookmarks panel (uses button colour)
+                panelAddToBookmarksBorder.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -20716,7 +20784,7 @@ namespace SATSuma
                     ImageFile = Properties.Resources.squares;
                 }
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -20813,7 +20881,7 @@ namespace SATSuma
                 });
 
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -20894,7 +20962,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel31, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -20974,7 +21042,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
+                Control[] listPanelsToColor = { panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -21081,6 +21149,13 @@ namespace SATSuma
 
         #endregion
         #region save theme as default
+        private void textBoxThemeName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                BtnSaveTheme_Click(sender, e);
+            }
+        }
         private void SaveThemeAsDefault(string themename)
         {
             try
@@ -21271,6 +21346,8 @@ namespace SATSuma
         private void StartExpandingPanelHoriz(Panel panel)
         {
             panelToExpand = panel;
+            panelToExpand.Width = 0;
+            currentWidthExpandingPanel = 0;
             ExpandPanelTimerHoriz.Start();
         }
 
@@ -21337,12 +21414,12 @@ namespace SATSuma
 
             if (panelToExpand == panelErrorMessage)
             {
-                panelMaxWidth = (int)(620 * UIScale);
+                panelMaxWidth = (int)(604 * UIScale);
             }
 
             if (currentWidthExpandingPanel >= panelMaxWidth) // expanding is complete
             {
-                ExpandPanelTimerHoriz.Stop();
+                
                 panelToExpand.Invoke((MethodInvoker)delegate
                 {
                     panelToExpand.Width = panelMaxWidth;
@@ -21354,6 +21431,7 @@ namespace SATSuma
                         panel107.Location = new Point((int)(378 * UIScale), panel107.Location.Y);
                     });
                 }
+                ExpandPanelTimerHoriz.Stop();
             }
             else // expand further
             {
@@ -21426,7 +21504,7 @@ namespace SATSuma
                 comboBoxCustomizeScreenThemeList.DataSource = themeNames; // show all the themes in the combobox on customize screen
                 comboBoxCustomizeScreenThemeList.Texts = "select theme";
                 comboBoxHeaderCustomThemes.DataSource = themeNames;
-                comboBoxHeaderCustomThemes.Texts = "  select theme ▼";
+                comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
             }
             catch (Exception ex)
             {
@@ -21975,10 +22053,8 @@ namespace SATSuma
                 {
                     lblErrorAlert.Visible = false;
                 });
-                panelErrorMessage.Invoke((MethodInvoker)delegate
-                {
-                    panelErrorMessage.Width = 0;
-                });
+                currentWidthShrinkingPanel = panelErrorMessage.Width;
+                StartShrinkingPanel(panelErrorMessage);
                 lblErrorMessage.Invoke((MethodInvoker)delegate
                 {
                     lblErrorMessage.Text = ""; // clear any error message
@@ -22019,13 +22095,15 @@ namespace SATSuma
             {
                 if (panelErrorMessage.Width == 0)
                 {
+                    currentWidthExpandingPanel = 0;
                     StartExpandingPanelHoriz(panelErrorMessage);
-                    currentWidthExpandingPanel = panelErrorMessage.Width;
+                    
                 }
                 else
                 {
-                    StartShrinkingPanel(panelErrorMessage);
                     currentWidthShrinkingPanel = panelErrorMessage.Width;
+                    StartShrinkingPanel(panelErrorMessage);
+                    
                 }
 
             }
@@ -22160,15 +22238,15 @@ namespace SATSuma
             string errorMessage;
             if (ex is WebException)
             {
-                errorMessage = $"Web exception in {methodName}: {ex.Message}";
+                errorMessage = $"Web exception - {methodName}: {ex.Message}";
             }
             else if (ex is HttpRequestException)
             {
-                errorMessage = $"HTTP Request error in {methodName}: {ex.Message}";
+                errorMessage = $"HTTP Request error - {methodName}: {ex.Message}";
             }
             else if (ex is JsonException)
             {
-                errorMessage = $"JSON parsing error in {methodName}: {ex.Message}";
+                errorMessage = $"JSON parsing error in - {methodName}: {ex.Message}";
             }
             else
             {
@@ -23281,7 +23359,7 @@ namespace SATSuma
                 panelTransaction.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
-                await BriefPause(400);
+                await BriefPause(1500);
                 //close the loading screen
                 loadingScreen.Close();
                 #endregion

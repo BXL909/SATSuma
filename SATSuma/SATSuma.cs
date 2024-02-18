@@ -4940,6 +4940,7 @@ namespace SATSuma
                 //close the loading screen
                 loadingTheme.Close();
                 this.BringToFront();
+                this.Focus();
             }
             catch (Exception ex)
             {
@@ -4968,11 +4969,11 @@ namespace SATSuma
                     lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
-                        lblTransactionBlockHeight.Location = new Point(label113.Location.X + label113.Width, label113.Location.Y);
+                        lblTransactionBlockHeight.Location = new Point(label113.Location.X + label113.Width, lblTransactionBlockHeight.Location.Y);
                     });
                     label126.Invoke((MethodInvoker)delegate
                     {
-                        label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + (int)(6 * UIScale), lblTransactionBlockHeight.Location.Y);
+                        label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + (int)(6 * UIScale), label126.Location.Y);
                     });
 
                     long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
@@ -4980,35 +4981,35 @@ namespace SATSuma
                     lblTransactionBlockTime.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionBlockTime.Text = dateTime.ToString("yyyyMMdd-HH:mm");
-                        lblTransactionBlockTime.Location = new Point(label126.Location.X + label126.Width, label126.Location.Y);
+                        lblTransactionBlockTime.Location = new Point(label126.Location.X + label126.Width, lblTransactionBlockTime.Location.Y);
                     });
                     label125.Invoke((MethodInvoker)delegate
                     {
-                        label125.Location = new Point(lblTransactionBlockTime.Location.X + lblTransactionBlockTime.Width + (int)(6 * UIScale), lblTransactionBlockTime.Location.Y);
+                        label125.Location = new Point(lblTransactionBlockTime.Location.X + lblTransactionBlockTime.Width + (int)(6 * UIScale), label125.Location.Y);
                     });
                     lblTransactionConfirmations.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionConfirmations.Text = Convert.ToString(Convert.ToInt32(lblBlockNumber.Text) - Convert.ToInt32(lblTransactionBlockHeight.Text));
-                        lblTransactionConfirmations.Location = new Point(label125.Location.X + label125.Width, label125.Location.Y);
+                        lblTransactionConfirmations.Location = new Point(label125.Location.X + label125.Width, lblTransactionConfirmations.Location.Y);
                     });
 
                     label128.Invoke((MethodInvoker)delegate
                     {
-                        label128.Location = new Point(lblTransactionConfirmations.Location.X + lblTransactionConfirmations.Width + (int)(6 * UIScale), lblTransactionConfirmations.Location.Y);
+                        label128.Location = new Point(lblTransactionConfirmations.Location.X + lblTransactionConfirmations.Width + (int)(6 * UIScale), label128.Location.Y);
                     });
                     lblTransactionLockTime.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionLockTime.Text = Convert.ToString(transaction.Locktime);
-                        lblTransactionLockTime.Location = new Point(label128.Location.X + label128.Width, label128.Location.Y);
+                        lblTransactionLockTime.Location = new Point(label128.Location.X + label128.Width, lblTransactionLockTime.Location.Y);
                     });
                     label98.Invoke((MethodInvoker)delegate
                     {
-                        label98.Location = new Point(lblTransactionLockTime.Location.X + lblTransactionLockTime.Width + (int)(6 * UIScale), lblTransactionLockTime.Location.Y);
+                        label98.Location = new Point(lblTransactionLockTime.Location.X + lblTransactionLockTime.Width + (int)(6 * UIScale), label98.Location.Y);
                     });
                     lblTransactionVersion.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionVersion.Text = Convert.ToString(transaction.Version);
-                        lblTransactionVersion.Location = new Point(label98.Location.X + label98.Width, label98.Location.Y);
+                        lblTransactionVersion.Location = new Point(label98.Location.X + label98.Width, lblTransactionVersion.Location.Y);
                     });
 
                     lblTransactionSize.Invoke((MethodInvoker)delegate
@@ -19736,7 +19737,7 @@ namespace SATSuma
             }
             else
             {
-                await Task.Delay(2000);
+                await Task.Delay(2500);
             }
         }
 
@@ -20156,7 +20157,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblNowViewing, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20198,7 +20199,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //blocklist
-                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListPoolRanking, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2 };
+                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListPoolRanking, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
                 foreach (Control control in listBlockListLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20255,7 +20256,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150, lblCurrentVersion };
+                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150, lblCurrentVersion, lblNowViewing };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21149,7 +21150,7 @@ namespace SATSuma
 
         #endregion
         #region save theme as default
-        private void textBoxThemeName_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxThemeName_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {

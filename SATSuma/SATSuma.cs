@@ -26,9 +26,6 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* edit heading background pngs and add new ones
-* add 'restore to defaults' to settings page
-* scale link name on directory pages. Everything else scales correctly
 */
 
 #region Using
@@ -409,6 +406,7 @@ namespace SATSuma
             panel96.Paint += Panel_Paint;
             panel106.Paint += Panel_Paint;
             panel107.Paint += Panel_Paint;
+            panel92.Paint += Panel_Paint;
             panelAddToBookmarks.Paint += Panel_Paint;
             panelAddToBookmarksBorder.Paint += Panel_Paint;
             panelLeftPanel.Paint += Panel_Paint;
@@ -474,20 +472,13 @@ namespace SATSuma
             panel43.Paint += Panel_Paint;
             panel44.Paint += Panel_Paint;
             panel45.Paint += Panel_Paint;
-            panel54.Paint += Panel_Paint;
             panel57.Paint += Panel_Paint;
             panel78.Paint += Panel_Paint;
             panel79.Paint += Panel_Paint;
             panel80.Paint += Panel_Paint;
             panel81.Paint += Panel_Paint;
-            panel82.Paint += Panel_Paint;
-            panel83.Paint += Panel_Paint;
             panel94.Paint += Panel_Paint;
             panel105.Paint += Panel_Paint;
-            panel22.Paint += Panel_Paint;
-            panel34.Paint += Panel_Paint;
-            panel37.Paint += Panel_Paint;
-            panel108.Paint += Panel_Paint;
             panel109.Paint += Panel_Paint;
             panelLoadingAnimationContainer.Paint += Panel_Paint;
             #endregion
@@ -14687,11 +14678,12 @@ namespace SATSuma
                     // Modify links color
                     var linkColor = lblHeaderMarketCap.ForeColor;
                     var linkColorString = ColorTranslator.ToHtml(linkColor);
-                    document.InvokeScript("execScript", new object[] { $"var links = document.getElementsByTagName('a');" +
-                                                    $"for (var i = 0; i < links.length; i++) {{" +
-                                                        $"links[i].style.color = '{linkColorString}';" +
-                                                    $"}}" });
 
+                    var AdjfontSize = 0.76 * UIScale;
+                    document.InvokeScript("execScript", new object[] { $"var links = document.getElementsByTagName('a');" +
+                                $"for (var i = 0; i < links.length; i++) {{" +
+                                    $"links[i].style.color = '{linkColorString}';" +
+                                $"}}" });
                     // Make all div elements transparent
                     document.InvokeScript("execScript", new object[] { $"var divs = document.getElementsByTagName('div');" +
                                                 $"for (var i = 0; i < divs.length; i++) {{" +
@@ -15241,7 +15233,7 @@ namespace SATSuma
             {
                 lblSettingsNodeMainnetSelected.Invoke((MethodInvoker)delegate
                 {
-                    lblSettingsNodeMainnetSelected.Location = new Point(label174.Location.X + label174.Width + lblSettingsNodeMainnetSelected.Width, lblSettingsNodeMainnetSelected.Location.Y);
+                    lblSettingsNodeMainnetSelected.Location = new Point(label174.Location.X + label174.Width + (int)(20 * UIScale), lblSettingsNodeMainnetSelected.Location.Y);
                 });
                 label157.Invoke((MethodInvoker)delegate
                 {
@@ -15249,7 +15241,7 @@ namespace SATSuma
                 });
                 lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                 {
-                    lblSettingsNodeTestnetSelected.Location = new Point(label157.Location.X + label157.Width + lblSettingsNodeTestnetSelected.Width, lblSettingsNodeTestnetSelected.Location.Y);
+                    lblSettingsNodeTestnetSelected.Location = new Point(label157.Location.X + label157.Width + (int)(20 * UIScale), lblSettingsNodeTestnetSelected.Location.Y);
                 });
                 label172.Invoke((MethodInvoker)delegate
                 {
@@ -16908,6 +16900,68 @@ namespace SATSuma
         }
 
         #endregion
+
+        private void LblConfirmReset_Click(object sender, EventArgs e)
+        {
+            if (lblConfirmReset.Text == "❌")
+            {
+                lblConfirmReset.Invoke((MethodInvoker)delegate
+                {
+                    lblConfirmReset.ForeColor = Color.Green;
+                    lblConfirmReset.Text = "✔️";
+                });
+                label302.Invoke((MethodInvoker)delegate
+                {
+                    label302.Text = "Yes, reset anyway. Press to confirm 👉";
+                });
+                btnResetAll.Enabled = true;
+            }
+            else
+            {
+                lblConfirmReset.Invoke((MethodInvoker)delegate
+                {
+                    lblConfirmReset.ForeColor = Color.IndianRed;
+                    lblConfirmReset.Text = "❌";
+                });
+                label302.Invoke((MethodInvoker)delegate
+                {
+                    label302.Text = "Yes, reset anyway";
+                });
+                btnResetAll.Enabled = false;
+            }
+        }
+
+        private void BtnResetAll_Click(object sender, EventArgs e)
+        {
+            // files to be checked
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string bookmarkFilePath = Path.Combine(appDataFolder, "SATSuma", "SATSuma_bookmarks.json");
+            string themeFilePath = Path.Combine(appDataFolder, "SATSuma", "SATSuma_themes.json");
+            // files to be restored if necessary
+            string backupFolder = Path.Combine(Application.StartupPath, "Restore");
+            string backupBookmarkFilePath = Path.Combine(backupFolder, "SATSuma_bookmarks.json");
+            string backupThemeFilePath = Path.Combine(backupFolder, "SATSuma_themes.json");
+            // restore files
+            if (File.Exists(bookmarkFilePath))
+            {
+                File.Delete(bookmarkFilePath);
+            }
+
+            if (File.Exists(themeFilePath))
+            {
+                File.Delete(themeFilePath);
+            }
+
+            // Ensure the directory exists before copying the file
+            Directory.CreateDirectory(Path.GetDirectoryName(bookmarkFilePath));
+            Directory.CreateDirectory(Path.GetDirectoryName(themeFilePath));
+
+            File.Copy(backupBookmarkFilePath, bookmarkFilePath, true);
+            File.Copy(backupThemeFilePath, themeFilePath, true);
+
+            BtnExit_Click(sender, e);
+        }
+
         #endregion
 
         #region ⚡CREATE THEME SCREEN⚡
@@ -19795,7 +19849,7 @@ namespace SATSuma
                 }
 
                 // appearance & settings
-                RJButton[] appearanceButtonBordersToColor = { button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
+                RJButton[] appearanceButtonBordersToColor = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
                 foreach (RJButton button in appearanceButtonBordersToColor)
                 {
                     button.BorderRadius = (int)(radius * UIScale);
@@ -19878,6 +19932,7 @@ namespace SATSuma
             try
             {
                 #region rounded panels
+                panel92.Invalidate();
                 panel32.Invalidate();
                 panel74.Invalidate();
                 panel76.Invalidate();
@@ -20164,7 +20219,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20263,7 +20318,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { label200, label293, label295, label283, label248, label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244, label169 };
+                Control[] listSettingsHeadingsToColor = { label300, label200, label293, label295, label283, label248, label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244, label169 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20392,7 +20447,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
+                Control[] listOtherTextToColor = { label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20469,7 +20524,7 @@ namespace SATSuma
                 btnUniversalSearch.BackColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonsToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
+                Control[] listSettingsButtonsToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -20574,7 +20629,7 @@ namespace SATSuma
                 btnUniversalSearch.ForeColor = thiscolor;
 
                 //settings & appearance
-                Control[] listSettingsButtonTextToColor = { button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
+                Control[] listSettingsButtonTextToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20655,7 +20710,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -20793,7 +20848,7 @@ namespace SATSuma
                     control.BackgroundImage = ImageFile;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
+                Control[] listSettingsHeadingsToColor = { panel110, panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -20890,7 +20945,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
+                Control[] listSettingsHeadingsToColor = { panel110, panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -20971,7 +21026,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //settings & appearance
-                Control[] listSettingsHeadingsToColor = { panel97, panel54, panel108, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
+                Control[] listSettingsHeadingsToColor = { panel110, panel97, panel54, panel108, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -21044,7 +21099,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -25861,10 +25916,13 @@ namespace SATSuma
 
 
 
-        #endregion
 
         #endregion
 
         #endregion
+
+        #endregion
+
+
     }
 }                

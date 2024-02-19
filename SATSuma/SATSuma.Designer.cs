@@ -647,6 +647,13 @@
             this.btnGBP = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.panel92 = new System.Windows.Forms.Panel();
+            this.btnResetAll = new CustomControls.RJControls.RJButton();
+            this.label302 = new System.Windows.Forms.Label();
+            this.lblConfirmReset = new System.Windows.Forms.Label();
+            this.label185 = new System.Windows.Forms.Label();
+            this.panel110 = new System.Windows.Forms.Panel();
+            this.label300 = new System.Windows.Forms.Label();
             this.panelSettingsUIScale = new System.Windows.Forms.Panel();
             this.panelSettingsUIScaleContainer = new System.Windows.Forms.Panel();
             this.btnSmallerScale = new CustomControls.RJControls.RJButton();
@@ -1218,6 +1225,8 @@
             this.panelCurrency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelSettings.SuspendLayout();
+            this.panel92.SuspendLayout();
+            this.panel110.SuspendLayout();
             this.panelSettingsUIScale.SuspendLayout();
             this.panelSettingsUIScaleContainer.SuspendLayout();
             this.panel112.SuspendLayout();
@@ -10059,6 +10068,7 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.Transparent;
+            this.panelSettings.Controls.Add(this.panel92);
             this.panelSettings.Controls.Add(this.panelSettingsUIScale);
             this.panelSettings.Controls.Add(this.panel106);
             this.panelSettings.Controls.Add(this.panel76);
@@ -10072,6 +10082,103 @@
             this.panelSettings.Size = new System.Drawing.Size(773, 556);
             this.panelSettings.TabIndex = 237;
             this.panelSettings.Visible = false;
+            // 
+            // panel92
+            // 
+            this.panel92.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel92.Controls.Add(this.btnResetAll);
+            this.panel92.Controls.Add(this.label302);
+            this.panel92.Controls.Add(this.lblConfirmReset);
+            this.panel92.Controls.Add(this.label185);
+            this.panel92.Controls.Add(this.panel110);
+            this.panel92.Location = new System.Drawing.Point(352, 462);
+            this.panel92.Name = "panel92";
+            this.panel92.Size = new System.Drawing.Size(403, 85);
+            this.panel92.TabIndex = 250;
+            // 
+            // btnResetAll
+            // 
+            this.btnResetAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnResetAll.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnResetAll.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnResetAll.BorderRadius = 7;
+            this.btnResetAll.BorderSize = 0;
+            this.btnResetAll.Enabled = false;
+            this.btnResetAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnResetAll.FlatAppearance.BorderSize = 0;
+            this.btnResetAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnResetAll.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetAll.ForeColor = System.Drawing.Color.White;
+            this.btnResetAll.Location = new System.Drawing.Point(297, 59);
+            this.btnResetAll.Margin = new System.Windows.Forms.Padding(1);
+            this.btnResetAll.Name = "btnResetAll";
+            this.btnResetAll.Size = new System.Drawing.Size(88, 22);
+            this.btnResetAll.TabIndex = 258;
+            this.btnResetAll.Text = "reset all";
+            this.btnResetAll.TextColor = System.Drawing.Color.White;
+            this.btnResetAll.UseVisualStyleBackColor = false;
+            this.btnResetAll.Click += new System.EventHandler(this.BtnResetAll_Click);
+            // 
+            // label302
+            // 
+            this.label302.AutoSize = true;
+            this.label302.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label302.ForeColor = System.Drawing.Color.Silver;
+            this.label302.Location = new System.Drawing.Point(29, 64);
+            this.label302.Name = "label302";
+            this.label302.Size = new System.Drawing.Size(112, 17);
+            this.label302.TabIndex = 250;
+            this.label302.Text = "Yes, reset anyway";
+            // 
+            // lblConfirmReset
+            // 
+            this.lblConfirmReset.AutoSize = true;
+            this.lblConfirmReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblConfirmReset.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblConfirmReset.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblConfirmReset.Location = new System.Drawing.Point(8, 65);
+            this.lblConfirmReset.Name = "lblConfirmReset";
+            this.lblConfirmReset.Size = new System.Drawing.Size(19, 14);
+            this.lblConfirmReset.TabIndex = 251;
+            this.lblConfirmReset.Text = "❌";
+            this.lblConfirmReset.Click += new System.EventHandler(this.LblConfirmReset_Click);
+            // 
+            // label185
+            // 
+            this.label185.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label185.ForeColor = System.Drawing.Color.Gray;
+            this.label185.Location = new System.Drawing.Point(5, 27);
+            this.label185.Name = "label185";
+            this.label185.Size = new System.Drawing.Size(391, 35);
+            this.label185.TabIndex = 249;
+            this.label185.Text = "Reset all settings, themes and bookmarks to defaults, losing all custom data. SAT" +
+    "Suma will close and need to be restarted";
+            // 
+            // panel110
+            // 
+            this.panel110.BackColor = System.Drawing.Color.Transparent;
+            this.panel110.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel110.BackgroundImage")));
+            this.panel110.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel110.Controls.Add(this.label300);
+            this.panel110.Location = new System.Drawing.Point(0, 0);
+            this.panel110.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel110.Name = "panel110";
+            this.panel110.Size = new System.Drawing.Size(403, 23);
+            this.panel110.TabIndex = 248;
+            // 
+            // label300
+            // 
+            this.label300.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label300.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label300.ForeColor = System.Drawing.Color.Gray;
+            this.label300.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label300.Location = new System.Drawing.Point(5, 2);
+            this.label300.Margin = new System.Windows.Forms.Padding(0);
+            this.label300.Name = "label300";
+            this.label300.Size = new System.Drawing.Size(85, 17);
+            this.label300.TabIndex = 153;
+            this.label300.Text = "Reset all";
+            this.label300.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panelSettingsUIScale
             // 
@@ -10628,7 +10735,7 @@
             this.panel84.Controls.Add(this.lblOfflineMode);
             this.panel84.Location = new System.Drawing.Point(0, 462);
             this.panel84.Name = "panel84";
-            this.panel84.Size = new System.Drawing.Size(755, 85);
+            this.panel84.Size = new System.Drawing.Size(343, 85);
             this.panel84.TabIndex = 248;
             // 
             // label167
@@ -10637,11 +10744,10 @@
             this.label167.ForeColor = System.Drawing.Color.Gray;
             this.label167.Location = new System.Drawing.Point(5, 27);
             this.label167.Name = "label167";
-            this.label167.Size = new System.Drawing.Size(727, 35);
+            this.label167.Size = new System.Drawing.Size(341, 35);
             this.label167.TabIndex = 249;
             this.label167.Text = "Disable all internet access by SATSuma. All functions that can\'t be fulfilled by " +
-    "your own node will be disabled (e.g market data, software update check, director" +
-    "y screen).";
+    "your own node will be disabled";
             // 
             // panel83
             // 
@@ -10652,7 +10758,7 @@
             this.panel83.Location = new System.Drawing.Point(0, 0);
             this.panel83.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel83.Name = "panel83";
-            this.panel83.Size = new System.Drawing.Size(755, 23);
+            this.panel83.Size = new System.Drawing.Size(343, 23);
             this.panel83.TabIndex = 248;
             // 
             // label237
@@ -10918,7 +11024,7 @@
             this.label158.TabIndex = 239;
             this.label158.Text = "Select which node to connect to for on-chain queries. Note that for privacy and s" +
     "ecurity, the Xpub screen will not be functional unless you are connected to your" +
-    " own node.";
+    " own node";
             // 
             // label174
             // 
@@ -10947,6 +11053,7 @@
             // 
             // label157
             // 
+            this.label157.AutoSize = true;
             this.label157.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label157.ForeColor = System.Drawing.Color.Silver;
             this.label157.Location = new System.Drawing.Point(265, 63);
@@ -10970,6 +11077,7 @@
             // 
             // label172
             // 
+            this.label172.AutoSize = true;
             this.label172.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label172.ForeColor = System.Drawing.Color.Silver;
             this.label172.Location = new System.Drawing.Point(529, 63);
@@ -17442,14 +17550,14 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
@@ -17625,6 +17733,9 @@
             this.panelCurrency.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelSettings.ResumeLayout(false);
+            this.panel92.ResumeLayout(false);
+            this.panel92.PerformLayout();
+            this.panel110.ResumeLayout(false);
             this.panelSettingsUIScale.ResumeLayout(false);
             this.panelSettingsUIScale.PerformLayout();
             this.panelSettingsUIScaleContainer.ResumeLayout(false);
@@ -18873,6 +18984,13 @@
         private System.Windows.Forms.Label lblLightningNodesChart;
         private System.Windows.Forms.Label lblLightningChannelsChart;
         private System.Windows.Forms.Panel panelAddToBookmarksBorder;
+        private System.Windows.Forms.Panel panel92;
+        private System.Windows.Forms.Label label185;
+        private System.Windows.Forms.Panel panel110;
+        private System.Windows.Forms.Label label300;
+        private System.Windows.Forms.Label label302;
+        private System.Windows.Forms.Label lblConfirmReset;
+        private CustomControls.RJControls.RJButton btnResetAll;
     }
 }
 

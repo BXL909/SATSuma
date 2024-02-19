@@ -137,12 +137,12 @@
             this.linkLabelSourceCode.AutoSize = true;
             this.linkLabelSourceCode.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelSourceCode.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelSourceCode.Location = new System.Drawing.Point(242, 157);
+            this.linkLabelSourceCode.Location = new System.Drawing.Point(228, 157);
             this.linkLabelSourceCode.Name = "linkLabelSourceCode";
-            this.linkLabelSourceCode.Size = new System.Drawing.Size(84, 14);
+            this.linkLabelSourceCode.Size = new System.Drawing.Size(112, 14);
             this.linkLabelSourceCode.TabIndex = 153;
             this.linkLabelSourceCode.TabStop = true;
-            this.linkLabelSourceCode.Text = "view source";
+            this.linkLabelSourceCode.Text = "source (GitHub)";
             this.linkLabelSourceCode.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelSourceCode.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSourceCode_LinkClicked);
             // 

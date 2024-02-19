@@ -26,7 +26,9 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* test
+* edit heading background pngs and add new ones
+* add 'restore to defaults' to settings page
+* scale link name on directory pages. Everything else scales correctly
 */
 
 #region Using
@@ -4910,11 +4912,11 @@ namespace SATSuma
                 // display semi-transparent overlay form
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -17344,9 +17346,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -18200,11 +18202,11 @@ namespace SATSuma
             // display semi-transparent overlay form
             Form loadingTheme = new loadingTheme(UIScale)
             {
-                Owner = this, // Set the parent window as the owner of the modal window
-                StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                FormBorderStyle = FormBorderStyle.None, // Remove borders
+                Owner = this, 
+                StartPosition = FormStartPosition.CenterParent, 
+                FormBorderStyle = FormBorderStyle.None, 
                 BackColor = panel84.BackColor, // Set the background color to match panel colours
-                Opacity = 1, // Set the opacity to 50%
+                Opacity = 1, 
             };
             loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18382,11 +18384,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18437,11 +18439,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18492,11 +18494,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18547,11 +18549,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18602,11 +18604,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18658,11 +18660,11 @@ namespace SATSuma
                 #region display loading screen
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18721,11 +18723,11 @@ namespace SATSuma
                     #region display loading screen
                     Form loadingTheme = new loadingTheme(UIScale)
                     {
-                        Owner = this, // Set the parent window as the owner of the modal window
-                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                        FormBorderStyle = FormBorderStyle.None, // Remove borders
+                        Owner = this, 
+                        StartPosition = FormStartPosition.CenterParent, 
+                        FormBorderStyle = FormBorderStyle.None, 
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 50%
+                        Opacity = 1, 
                     };
                     loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -18783,11 +18785,11 @@ namespace SATSuma
                     #region display loading screen
                     Form loadingTheme = new loadingTheme(UIScale)
                     {
-                        Owner = this, // Set the parent window as the owner of the modal window
-                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                        FormBorderStyle = FormBorderStyle.None, // Remove borders
+                        Owner = this, 
+                        StartPosition = FormStartPosition.CenterParent, 
+                        FormBorderStyle = FormBorderStyle.None, 
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 50%
+                        Opacity = 1, 
                     };
                     loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
@@ -19314,14 +19316,13 @@ namespace SATSuma
             try
             {
                 #region display loading screen
-                // display semi-transparent overlay form
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 50%
+                    Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
                 
@@ -22756,7 +22757,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -22787,9 +22788,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -22831,7 +22832,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -22862,9 +22863,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -22906,7 +22907,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "charts";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -22934,9 +22935,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -22979,7 +22980,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "address";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23010,9 +23011,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23056,7 +23057,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "block";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23089,9 +23090,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23144,7 +23145,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "xpub";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23175,9 +23176,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23220,7 +23221,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "blocks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23251,9 +23252,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23304,7 +23305,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "transaction";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23335,9 +23336,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23381,7 +23382,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "bookmarks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23413,9 +23414,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23460,7 +23461,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "directory";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23492,9 +23493,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23538,7 +23539,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "settings";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + (int)(4 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + (int)(5 * UIScale));
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23570,9 +23571,9 @@ namespace SATSuma
 
                 Form loadingScreen = new loadingScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
+                    Owner = this, 
                     StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
+                    FormBorderStyle = FormBorderStyle.None, 
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1, // Set the opacity to 100%
                     Location = panelScreenLocation // Set the location of the loadingScreen form
@@ -23641,11 +23642,11 @@ namespace SATSuma
                 // display semi-transparent overlay form
                 Form overlay = new overlayForm(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
-                    BackColor = Color.Black, // Set the background color to black for the overlay
-                    Opacity = 0.5, // Set the opacity to 50%
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
+                    BackColor = Color.Black, 
+                    Opacity = 0.5, 
             };
                 overlay.StartPosition = FormStartPosition.CenterParent;
                 // Calculate the overlay form's location to place it in the center of the parent form
@@ -23660,8 +23661,8 @@ namespace SATSuma
 
                 Form frm = new HelpScreen(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
                     TextColor = label77.ForeColor, // random label color to pass to the help screen
                     HeadingTextColor = label26.ForeColor, // random heading color to pass to the help screen
                     ButtonTextColor = btnExit.ForeColor,
@@ -23696,11 +23697,11 @@ namespace SATSuma
                 // display semi-transparent overlay form
                 Form overlay = new overlayForm(UIScale)
                 {
-                    Owner = this, // Set the parent window as the owner of the modal window
-                    StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
-                    FormBorderStyle = FormBorderStyle.None, // Remove borders
-                    BackColor = Color.Black, // Set the background color to black for the overlay
-                    Opacity = 0.5, // Set the opacity to 50%
+                    Owner = this, 
+                    StartPosition = FormStartPosition.CenterParent, 
+                    FormBorderStyle = FormBorderStyle.None, 
+                    BackColor = Color.Black, 
+                    Opacity = 0.5, 
                 };
                 overlay.StartPosition = FormStartPosition.CenterParent;
                 // Calculate the overlay form's location to place it in the center of the parent form
@@ -23715,8 +23716,8 @@ namespace SATSuma
                 // display about screen on top of the overlay
                 Form frm = new Splash(UIScale)
                     {
-                        Owner = this, // Set the parent window as the owner of the modal window
-                        StartPosition = FormStartPosition.CenterParent, // Set the start position to center of parent
+                        Owner = this, 
+                        StartPosition = FormStartPosition.CenterParent, 
                         WindowBackgroundColor = panel88.BackColor,
                         LabelColor = label77.ForeColor,
                         LinksColor = lblHeaderMarketCap.ForeColor,
@@ -24290,9 +24291,35 @@ namespace SATSuma
         }
         #endregion
         #region minimise/exit window
-        private void BtnExit_Click(object sender, EventArgs e) // exit
+        private async void BtnExit_Click(object sender, EventArgs e) // exit
         {
+            #region display loading screen
+            Form loadingTheme = new loadingTheme(UIScale)
+            {
+                Owner = this, 
+                StartPosition = FormStartPosition.CenterParent, 
+                FormBorderStyle = FormBorderStyle.None, 
+                BackColor = panel84.BackColor, // Set the background color to match panel colours
+                Opacity = 1,
+                BackgroundImage = Resources.Closing
+            };
+            loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+            // Calculate the overlay form's location to place it in the center of the parent form
+            loadingTheme.StartPosition = FormStartPosition.Manual;
+            int parentCenterX = this.Location.X + this.Width / 2;
+            int parentCenterY = this.Location.Y + this.Height / 2;
+            int overlayX = parentCenterX - loadingTheme.Width / 2;
+            int overlayY = parentCenterY - loadingTheme.Height / 2;
+            loadingTheme.Location = new Point(overlayX, overlayY);
+            loadingTheme.Show(this);
+            #endregion
+
+            // the closing screen exists only to hide the messy removal of all screen elements when closing the form
+            await BriefPause(1000);
+                        
             this.Close();
+            loadingTheme.Close();
         }
 
         private void BtnMinimise_Click(object sender, EventArgs e) // minimise the form
@@ -25839,6 +25866,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
     }
 }                

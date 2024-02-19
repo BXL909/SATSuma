@@ -455,6 +455,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\Closing.png" />
     <None Include="Resources\squares.png" />
     <None Include="Resources\marbled.png" />
     <None Include="Resources\Polygons.png" />

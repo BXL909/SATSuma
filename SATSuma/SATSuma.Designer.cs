@@ -7864,7 +7864,7 @@
             // 
             this.label136.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label136.ForeColor = System.Drawing.Color.Silver;
-            this.label136.Location = new System.Drawing.Point(-3, 5);
+            this.label136.Location = new System.Drawing.Point(0, 6);
             this.label136.Name = "label136";
             this.label136.Size = new System.Drawing.Size(91, 17);
             this.label136.TabIndex = 6;
@@ -17442,9 +17442,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
@@ -17453,7 +17454,6 @@
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
             this.Controls.Add(this.lblHeaderHashRateChart);
             this.Controls.Add(this.lblHeaderBlockSizeChart);

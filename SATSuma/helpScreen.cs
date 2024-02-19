@@ -41,6 +41,7 @@ namespace SATSuma
         public int ButtonBorderSize { get; set; }
         public Color ButtonBorderColor { get; set; }
         public Color DataFieldColor { get; set; }
+        
 
         private bool linkClicked = false; // used to supress multiple events (and multiple browser tabs) when opening external link in default browser
         #endregion
@@ -174,12 +175,6 @@ namespace SATSuma
             this.BackColor = WindowBackgroundColor;
 
             panel1.VerticalScroll.Visible = false;
-            if (((SATSuma)this.Owner).GetPanelMenu().Visible == true && ((SATSuma)this.Owner).GetPanelMenu().Height > 24) // menu is open so main help page has been requested
-            {
-                //((SATSuma)this.Owner).GetPanelMenu().Height = 0; // close menu on calling window
-                lblHelpHeading.Text = "Documentation";
-            }
-            else
             if (((SATSuma)this.Owner).GetPanelBlock().Visible == true)
             {
                 lblHelpHeading.Text = "Block";

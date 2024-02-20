@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 #endregion
-
+ 
 namespace SATSuma
 {
     public partial class Splash : Form

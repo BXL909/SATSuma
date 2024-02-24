@@ -9083,9 +9083,9 @@
             this.label1.Location = new System.Drawing.Point(5, 4);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 17);
+            this.label1.Size = new System.Drawing.Size(151, 17);
             this.label1.TabIndex = 153;
-            this.label1.Text = "On-chain fees (sats/vB)";
+            this.label1.Text = "Fees by priority (sats/vB)";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label29
@@ -9096,9 +9096,9 @@
             this.label29.ForeColor = System.Drawing.Color.Silver;
             this.label29.Location = new System.Drawing.Point(795, 69);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(37, 17);
+            this.label29.Size = new System.Drawing.Size(40, 17);
             this.label29.TabIndex = 83;
-            this.label29.Text = "1day";
+            this.label29.Text = "None";
             // 
             // label28
             // 
@@ -9108,9 +9108,9 @@
             this.label28.ForeColor = System.Drawing.Color.Silver;
             this.label28.Location = new System.Drawing.Point(745, 69);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(33, 17);
+            this.label28.Size = new System.Drawing.Size(32, 17);
             this.label28.TabIndex = 82;
-            this.label28.Text = "60m";
+            this.label28.Text = "Low";
             // 
             // label25
             // 
@@ -9120,9 +9120,9 @@
             this.label25.ForeColor = System.Drawing.Color.Silver;
             this.label25.Location = new System.Drawing.Point(695, 69);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(33, 17);
+            this.label25.Size = new System.Drawing.Size(35, 17);
             this.label25.TabIndex = 81;
-            this.label25.Text = "30m";
+            this.label25.Text = "Med";
             // 
             // label15
             // 
@@ -9132,9 +9132,9 @@
             this.label15.ForeColor = System.Drawing.Color.Silver;
             this.label15.Location = new System.Drawing.Point(645, 69);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(33, 17);
+            this.label15.Size = new System.Drawing.Size(34, 17);
             this.label15.TabIndex = 79;
-            this.label15.Text = "10m";
+            this.label15.Text = "High";
             // 
             // lblHeaderFeesNoPriority
             // 
@@ -17550,13 +17550,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBookmarks);

@@ -1404,6 +1404,9 @@ namespace SATSuma
                                     {
                                         lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
                                     });
+
+
+
                                     lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
                                     {
                                         lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2");
@@ -1487,7 +1490,8 @@ namespace SATSuma
                             {
                                 lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
                             });
-                            if (!testNet  && lblBlockListTotalFeesInNextBlockFiat.Visible)
+
+                            if (!testNet)
                             {
                                 lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
                                 {

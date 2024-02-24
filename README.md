@@ -1,6 +1,6 @@
 # SATSuma 🍊
 
-![](https://satsuma.btcdir.org/wp-content/uploads/2023/07/TwitterGraphic-1.jpg)
+![](https://satsuma.btcdir.org/wp-content/uploads/2024/02/TwitterCard-2.jpg)
 
 ### Version history 🍊
 

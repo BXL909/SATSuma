@@ -394,6 +394,9 @@
     <Compile Include="RJComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="RJDatePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="splash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -462,6 +465,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\calendarWhite.png" />
+    <None Include="Resources\calendarDark.png" />
     <None Include="Resources\Closing.png" />
     <None Include="Resources\squares.png" />
     <None Include="Resources\marbled.png" />

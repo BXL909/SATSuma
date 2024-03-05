@@ -431,6 +431,7 @@
             this.lblSatsumaTitle = new System.Windows.Forms.Label();
             this.panelMenu = new System.Windows.Forms.Panel();
             this.lblMenuArrow = new System.Windows.Forms.Label();
+            this.btnMenuDCACalculator = new System.Windows.Forms.Button();
             this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuDirectory = new System.Windows.Forms.Button();
             this.panelMainMenuFiller = new System.Windows.Forms.Panel();
@@ -1140,6 +1141,26 @@
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
+            this.panelDCACalculator = new System.Windows.Forms.Panel();
+            this.btnCalculateDCA = new CustomControls.RJControls.RJButton();
+            this.panel115 = new System.Windows.Forms.Panel();
+            this.rjDatePickerDCAEndDate = new CustomControls.RJControls.RJDatePicker();
+            this.panel114 = new System.Windows.Forms.Panel();
+            this.rjDatePickerDCAStartDate = new CustomControls.RJControls.RJDatePicker();
+            this.panel113 = new System.Windows.Forms.Panel();
+            this.comboBoxDCAFrequency = new CustomControls.RJControls.RJComboBox();
+            this.panel111 = new System.Windows.Forms.Panel();
+            this.textBoxDCAAmountInput = new System.Windows.Forms.TextBox();
+            this.label307 = new System.Windows.Forms.Label();
+            this.label306 = new System.Windows.Forms.Label();
+            this.label305 = new System.Windows.Forms.Label();
+            this.label304 = new System.Windows.Forms.Label();
+            this.labelDCADefinition = new System.Windows.Forms.Label();
+            this.panelDCAChartLoadingPanel = new System.Windows.Forms.Panel();
+            this.label415 = new System.Windows.Forms.Label();
+            this.label416 = new System.Windows.Forms.Label();
+            this.pictureBoxDCAChartLoadingAnimation = new System.Windows.Forms.PictureBox();
+            this.formsPlotDCA = new ScottPlot.FormsPlot();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1331,6 +1352,13 @@
             this.panel107.SuspendLayout();
             this.panelLeftPanel.SuspendLayout();
             this.panelErrorMessage.SuspendLayout();
+            this.panelDCACalculator.SuspendLayout();
+            this.panel115.SuspendLayout();
+            this.panel114.SuspendLayout();
+            this.panel113.SuspendLayout();
+            this.panel111.SuspendLayout();
+            this.panelDCAChartLoadingPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -6883,6 +6911,7 @@
             // 
             this.panelMenu.BackColor = System.Drawing.Color.Transparent;
             this.panelMenu.Controls.Add(this.lblMenuArrow);
+            this.panelMenu.Controls.Add(this.btnMenuDCACalculator);
             this.panelMenu.Controls.Add(this.lblMenuHighlightedButtonText);
             this.panelMenu.Controls.Add(this.btnMenuDirectory);
             this.panelMenu.Controls.Add(this.panelMainMenuFiller);
@@ -6898,7 +6927,7 @@
             this.panelMenu.Controls.Add(this.btnMenuLightningDashboard);
             this.panelMenu.Location = new System.Drawing.Point(8, 33);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(122, 278);
+            this.panelMenu.Size = new System.Drawing.Size(122, 312);
             this.panelMenu.TabIndex = 152;
             // 
             // lblMenuArrow
@@ -6912,6 +6941,27 @@
             this.lblMenuArrow.TabIndex = 265;
             this.lblMenuArrow.Text = "▶️";
             this.lblMenuArrow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnMenuDCACalculator
+            // 
+            this.btnMenuDCACalculator.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenuDCACalculator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuDCACalculator.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuDCACalculator.FlatAppearance.BorderSize = 0;
+            this.btnMenuDCACalculator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuDCACalculator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuDCACalculator.ForeColor = System.Drawing.Color.White;
+            this.btnMenuDCACalculator.Location = new System.Drawing.Point(0, 278);
+            this.btnMenuDCACalculator.Name = "btnMenuDCACalculator";
+            this.btnMenuDCACalculator.Size = new System.Drawing.Size(122, 24);
+            this.btnMenuDCACalculator.TabIndex = 266;
+            this.btnMenuDCACalculator.TabStop = false;
+            this.btnMenuDCACalculator.Text = "   dca calculator";
+            this.btnMenuDCACalculator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuDCACalculator.UseVisualStyleBackColor = false;
+            this.btnMenuDCACalculator.Click += new System.EventHandler(this.btnMenuDCACalculator_Click);
+            this.btnMenuDCACalculator.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuDCACalculator.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // lblMenuHighlightedButtonText
             // 
@@ -17541,6 +17591,280 @@
             this.panelAddToBookmarksBorder.TabIndex = 272;
             this.panelAddToBookmarksBorder.Visible = false;
             // 
+            // panelDCACalculator
+            // 
+            this.panelDCACalculator.BackColor = System.Drawing.Color.Transparent;
+            this.panelDCACalculator.Controls.Add(this.btnCalculateDCA);
+            this.panelDCACalculator.Controls.Add(this.panel115);
+            this.panelDCACalculator.Controls.Add(this.panel114);
+            this.panelDCACalculator.Controls.Add(this.panel113);
+            this.panelDCACalculator.Controls.Add(this.panel111);
+            this.panelDCACalculator.Controls.Add(this.label307);
+            this.panelDCACalculator.Controls.Add(this.label306);
+            this.panelDCACalculator.Controls.Add(this.label305);
+            this.panelDCACalculator.Controls.Add(this.label304);
+            this.panelDCACalculator.Controls.Add(this.labelDCADefinition);
+            this.panelDCACalculator.Controls.Add(this.panelDCAChartLoadingPanel);
+            this.panelDCACalculator.Controls.Add(this.formsPlotDCA);
+            this.panelDCACalculator.Location = new System.Drawing.Point(162, 187);
+            this.panelDCACalculator.Name = "panelDCACalculator";
+            this.panelDCACalculator.Size = new System.Drawing.Size(773, 556);
+            this.panelDCACalculator.TabIndex = 277;
+            this.panelDCACalculator.Visible = false;
+            // 
+            // btnCalculateDCA
+            // 
+            this.btnCalculateDCA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCalculateDCA.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnCalculateDCA.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnCalculateDCA.BorderRadius = 7;
+            this.btnCalculateDCA.BorderSize = 0;
+            this.btnCalculateDCA.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnCalculateDCA.FlatAppearance.BorderSize = 0;
+            this.btnCalculateDCA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalculateDCA.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCalculateDCA.ForeColor = System.Drawing.Color.White;
+            this.btnCalculateDCA.Location = new System.Drawing.Point(0, 241);
+            this.btnCalculateDCA.Margin = new System.Windows.Forms.Padding(1);
+            this.btnCalculateDCA.Name = "btnCalculateDCA";
+            this.btnCalculateDCA.Size = new System.Drawing.Size(88, 22);
+            this.btnCalculateDCA.TabIndex = 254;
+            this.btnCalculateDCA.TabStop = false;
+            this.btnCalculateDCA.Text = "calculate";
+            this.btnCalculateDCA.TextColor = System.Drawing.Color.White;
+            this.btnCalculateDCA.UseVisualStyleBackColor = false;
+            this.btnCalculateDCA.Click += new System.EventHandler(this.btnCalculateDCA_Click);
+            // 
+            // panel115
+            // 
+            this.panel115.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel115.Controls.Add(this.rjDatePickerDCAEndDate);
+            this.panel115.Location = new System.Drawing.Point(0, 205);
+            this.panel115.Name = "panel115";
+            this.panel115.Size = new System.Drawing.Size(110, 22);
+            this.panel115.TabIndex = 312;
+            // 
+            // rjDatePickerDCAEndDate
+            // 
+            this.rjDatePickerDCAEndDate.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjDatePickerDCAEndDate.BorderSize = 0;
+            this.rjDatePickerDCAEndDate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjDatePickerDCAEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.rjDatePickerDCAEndDate.Location = new System.Drawing.Point(6, 2);
+            this.rjDatePickerDCAEndDate.MinDate = new System.DateTime(2010, 8, 18, 0, 0, 0, 0);
+            this.rjDatePickerDCAEndDate.MinimumSize = new System.Drawing.Size(4, 22);
+            this.rjDatePickerDCAEndDate.Name = "rjDatePickerDCAEndDate";
+            this.rjDatePickerDCAEndDate.Size = new System.Drawing.Size(98, 22);
+            this.rjDatePickerDCAEndDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rjDatePickerDCAEndDate.TabIndex = 286;
+            this.rjDatePickerDCAEndDate.TextColor = System.Drawing.Color.White;
+            this.rjDatePickerDCAEndDate.ValueChanged += new System.EventHandler(this.rjDatePickerDCAEndDate_ValueChanged);
+            // 
+            // panel114
+            // 
+            this.panel114.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel114.Controls.Add(this.rjDatePickerDCAStartDate);
+            this.panel114.Location = new System.Drawing.Point(0, 162);
+            this.panel114.Name = "panel114";
+            this.panel114.Size = new System.Drawing.Size(110, 22);
+            this.panel114.TabIndex = 311;
+            // 
+            // rjDatePickerDCAStartDate
+            // 
+            this.rjDatePickerDCAStartDate.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjDatePickerDCAStartDate.BorderSize = 0;
+            this.rjDatePickerDCAStartDate.CalendarMonthBackground = System.Drawing.SystemColors.HotTrack;
+            this.rjDatePickerDCAStartDate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjDatePickerDCAStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.rjDatePickerDCAStartDate.Location = new System.Drawing.Point(6, 2);
+            this.rjDatePickerDCAStartDate.MinDate = new System.DateTime(2010, 8, 18, 0, 0, 0, 0);
+            this.rjDatePickerDCAStartDate.MinimumSize = new System.Drawing.Size(4, 22);
+            this.rjDatePickerDCAStartDate.Name = "rjDatePickerDCAStartDate";
+            this.rjDatePickerDCAStartDate.Size = new System.Drawing.Size(98, 22);
+            this.rjDatePickerDCAStartDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rjDatePickerDCAStartDate.TabIndex = 287;
+            this.rjDatePickerDCAStartDate.TextColor = System.Drawing.Color.White;
+            this.rjDatePickerDCAStartDate.ValueChanged += new System.EventHandler(this.rjDatePickerDCAStartDate_ValueChanged);
+            // 
+            // panel113
+            // 
+            this.panel113.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel113.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel113.Controls.Add(this.comboBoxDCAFrequency);
+            this.panel113.Location = new System.Drawing.Point(0, 119);
+            this.panel113.Name = "panel113";
+            this.panel113.Size = new System.Drawing.Size(110, 22);
+            this.panel113.TabIndex = 283;
+            // 
+            // comboBoxDCAFrequency
+            // 
+            this.comboBoxDCAFrequency.BackColor = System.Drawing.Color.Transparent;
+            this.comboBoxDCAFrequency.BackgroundImage = global::SATSuma.Properties.Resources.helpselectDropdown;
+            this.comboBoxDCAFrequency.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.comboBoxDCAFrequency.BorderColor = System.Drawing.Color.Transparent;
+            this.comboBoxDCAFrequency.BorderSize = 0;
+            this.comboBoxDCAFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDCAFrequency.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxDCAFrequency.ForeColor = System.Drawing.Color.DimGray;
+            this.comboBoxDCAFrequency.IconColor = System.Drawing.Color.White;
+            this.comboBoxDCAFrequency.Items.AddRange(new object[] {
+            "daily",
+            "weekly",
+            "monthly"});
+            this.comboBoxDCAFrequency.ListBackColor = System.Drawing.Color.Black;
+            this.comboBoxDCAFrequency.ListTextColor = System.Drawing.Color.DimGray;
+            this.comboBoxDCAFrequency.Location = new System.Drawing.Point(6, 0);
+            this.comboBoxDCAFrequency.Margin = new System.Windows.Forms.Padding(0);
+            this.comboBoxDCAFrequency.MinimumSize = new System.Drawing.Size(88, 20);
+            this.comboBoxDCAFrequency.Name = "comboBoxDCAFrequency";
+            this.comboBoxDCAFrequency.Size = new System.Drawing.Size(98, 20);
+            this.comboBoxDCAFrequency.TabIndex = 254;
+            this.comboBoxDCAFrequency.Texts = "daily";
+            // 
+            // panel111
+            // 
+            this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel111.Controls.Add(this.textBoxDCAAmountInput);
+            this.panel111.Location = new System.Drawing.Point(0, 76);
+            this.panel111.Name = "panel111";
+            this.panel111.Size = new System.Drawing.Size(110, 22);
+            this.panel111.TabIndex = 282;
+            // 
+            // textBoxDCAAmountInput
+            // 
+            this.textBoxDCAAmountInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxDCAAmountInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxDCAAmountInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDCAAmountInput.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxDCAAmountInput.Location = new System.Drawing.Point(6, 4);
+            this.textBoxDCAAmountInput.MaxLength = 16;
+            this.textBoxDCAAmountInput.Name = "textBoxDCAAmountInput";
+            this.textBoxDCAAmountInput.ShortcutsEnabled = false;
+            this.textBoxDCAAmountInput.Size = new System.Drawing.Size(98, 15);
+            this.textBoxDCAAmountInput.TabIndex = 310;
+            this.textBoxDCAAmountInput.TabStop = false;
+            this.textBoxDCAAmountInput.Text = "10.00";
+            this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
+            this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.textBoxDCAAmountInput_Leave);
+            // 
+            // label307
+            // 
+            this.label307.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label307.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label307.ForeColor = System.Drawing.Color.Silver;
+            this.label307.Location = new System.Drawing.Point(0, 188);
+            this.label307.Margin = new System.Windows.Forms.Padding(0);
+            this.label307.Name = "label307";
+            this.label307.Size = new System.Drawing.Size(81, 17);
+            this.label307.TabIndex = 281;
+            this.label307.Text = "End date";
+            // 
+            // label306
+            // 
+            this.label306.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label306.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label306.ForeColor = System.Drawing.Color.Silver;
+            this.label306.Location = new System.Drawing.Point(0, 145);
+            this.label306.Margin = new System.Windows.Forms.Padding(0);
+            this.label306.Name = "label306";
+            this.label306.Size = new System.Drawing.Size(81, 17);
+            this.label306.TabIndex = 280;
+            this.label306.Text = "Start date";
+            // 
+            // label305
+            // 
+            this.label305.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label305.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label305.ForeColor = System.Drawing.Color.Silver;
+            this.label305.Location = new System.Drawing.Point(0, 102);
+            this.label305.Margin = new System.Windows.Forms.Padding(0);
+            this.label305.Name = "label305";
+            this.label305.Size = new System.Drawing.Size(81, 17);
+            this.label305.TabIndex = 279;
+            this.label305.Text = "Frequency";
+            // 
+            // label304
+            // 
+            this.label304.AutoSize = true;
+            this.label304.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label304.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label304.ForeColor = System.Drawing.Color.Silver;
+            this.label304.Location = new System.Drawing.Point(0, 59);
+            this.label304.Margin = new System.Windows.Forms.Padding(0);
+            this.label304.Name = "label304";
+            this.label304.Size = new System.Drawing.Size(84, 17);
+            this.label304.TabIndex = 278;
+            this.label304.Text = "DCA amount";
+            // 
+            // labelDCADefinition
+            // 
+            this.labelDCADefinition.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelDCADefinition.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.labelDCADefinition.ForeColor = System.Drawing.Color.Silver;
+            this.labelDCADefinition.Location = new System.Drawing.Point(0, 0);
+            this.labelDCADefinition.Margin = new System.Windows.Forms.Padding(0);
+            this.labelDCADefinition.Name = "labelDCADefinition";
+            this.labelDCADefinition.Size = new System.Drawing.Size(748, 49);
+            this.labelDCADefinition.TabIndex = 278;
+            this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
+            // 
+            // panelDCAChartLoadingPanel
+            // 
+            this.panelDCAChartLoadingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelDCAChartLoadingPanel.Controls.Add(this.label415);
+            this.panelDCAChartLoadingPanel.Controls.Add(this.label416);
+            this.panelDCAChartLoadingPanel.Controls.Add(this.pictureBoxDCAChartLoadingAnimation);
+            this.panelDCAChartLoadingPanel.Location = new System.Drawing.Point(380, 248);
+            this.panelDCAChartLoadingPanel.Name = "panelDCAChartLoadingPanel";
+            this.panelDCAChartLoadingPanel.Size = new System.Drawing.Size(154, 35);
+            this.panelDCAChartLoadingPanel.TabIndex = 273;
+            this.panelDCAChartLoadingPanel.Visible = false;
+            // 
+            // label415
+            // 
+            this.label415.AutoSize = true;
+            this.label415.BackColor = System.Drawing.Color.Transparent;
+            this.label415.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label415.ForeColor = System.Drawing.Color.Gray;
+            this.label415.Location = new System.Drawing.Point(49, 14);
+            this.label415.Name = "label415";
+            this.label415.Size = new System.Drawing.Size(98, 16);
+            this.label415.TabIndex = 251;
+            this.label415.Text = "generating chart";
+            // 
+            // label416
+            // 
+            this.label416.AutoSize = true;
+            this.label416.BackColor = System.Drawing.Color.Transparent;
+            this.label416.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label416.ForeColor = System.Drawing.Color.Gray;
+            this.label416.Location = new System.Drawing.Point(49, 1);
+            this.label416.Name = "label416";
+            this.label416.Size = new System.Drawing.Size(93, 16);
+            this.label416.TabIndex = 85;
+            this.label416.Text = "fetching data &&";
+            // 
+            // pictureBoxDCAChartLoadingAnimation
+            // 
+            this.pictureBoxDCAChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxDCAChartLoadingAnimation.Enabled = false;
+            this.pictureBoxDCAChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDCAChartLoadingAnimation.Image")));
+            this.pictureBoxDCAChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
+            this.pictureBoxDCAChartLoadingAnimation.Name = "pictureBoxDCAChartLoadingAnimation";
+            this.pictureBoxDCAChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
+            this.pictureBoxDCAChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxDCAChartLoadingAnimation.TabIndex = 250;
+            this.pictureBoxDCAChartLoadingAnimation.TabStop = false;
+            // 
+            // formsPlotDCA
+            // 
+            this.formsPlotDCA.Location = new System.Drawing.Point(115, 54);
+            this.formsPlotDCA.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.formsPlotDCA.Name = "formsPlotDCA";
+            this.formsPlotDCA.Size = new System.Drawing.Size(655, 500);
+            this.formsPlotDCA.TabIndex = 270;
+            this.formsPlotDCA.Visible = false;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -17550,11 +17874,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
@@ -17874,6 +18199,16 @@
             this.panelLeftPanel.ResumeLayout(false);
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
+            this.panelDCACalculator.ResumeLayout(false);
+            this.panelDCACalculator.PerformLayout();
+            this.panel115.ResumeLayout(false);
+            this.panel114.ResumeLayout(false);
+            this.panel113.ResumeLayout(false);
+            this.panel111.ResumeLayout(false);
+            this.panel111.PerformLayout();
+            this.panelDCAChartLoadingPanel.ResumeLayout(false);
+            this.panelDCAChartLoadingPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -18991,6 +19326,27 @@
         private System.Windows.Forms.Label label302;
         private System.Windows.Forms.Label lblConfirmReset;
         private CustomControls.RJControls.RJButton btnResetAll;
+        private System.Windows.Forms.Button btnMenuDCACalculator;
+        private System.Windows.Forms.Panel panelDCACalculator;
+        private System.Windows.Forms.Panel panelDCAChartLoadingPanel;
+        private System.Windows.Forms.Label label415;
+        private System.Windows.Forms.Label label416;
+        private System.Windows.Forms.PictureBox pictureBoxDCAChartLoadingAnimation;
+        private ScottPlot.FormsPlot formsPlotDCA;
+        private System.Windows.Forms.Label labelDCADefinition;
+        private System.Windows.Forms.Label label304;
+        private System.Windows.Forms.Label label307;
+        private System.Windows.Forms.Label label306;
+        private System.Windows.Forms.Label label305;
+        private System.Windows.Forms.Panel panel113;
+        private CustomControls.RJControls.RJComboBox comboBoxDCAFrequency;
+        private System.Windows.Forms.Panel panel111;
+        private System.Windows.Forms.TextBox textBoxDCAAmountInput;
+        private CustomControls.RJControls.RJDatePicker rjDatePickerDCAEndDate;
+        private CustomControls.RJControls.RJDatePicker rjDatePickerDCAStartDate;
+        private System.Windows.Forms.Panel panel114;
+        private System.Windows.Forms.Panel panel115;
+        private CustomControls.RJControls.RJButton btnCalculateDCA;
     }
 }
 

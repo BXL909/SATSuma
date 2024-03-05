@@ -26,6 +26,10 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
+* hide 'todays date' option on date pickers
+* estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
+* set state of stuff (e.g bookmark button) based on DCA screen status
+* add DCA to default startup screen options
 */
 
 #region Using
@@ -59,6 +63,7 @@ using System.Drawing.Drawing2D;
 using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
+using ScottPlot.Renderable;
 #endregion
 
 namespace SATSuma
@@ -443,6 +448,10 @@ namespace SATSuma
             panel95.Paint += Panel_Paint;
             panel93.Paint += Panel_Paint;
             panel98.Paint += Panel_Paint;
+            panel111.Paint += Panel_Paint;
+            panel113.Paint += Panel_Paint;
+            panel114.Paint += Panel_Paint;
+            panel115.Paint += Panel_Paint;
             #endregion
             #region panels (heading containers)
             panel1.Paint += Panel_Paint;
@@ -568,6 +577,12 @@ namespace SATSuma
                 {
                     BtnChartFeeRates_Click(sender, e);
                 }
+                // prepopulate the DCA calculator
+                rjDatePickerDCAStartDate.MaxDate = DateTime.Today.AddDays(-1);
+                rjDatePickerDCAEndDate.MaxDate = DateTime.Today.AddDays(-1);
+                rjDatePickerDCAStartDate.Value = new DateTime(2017, 3, 4); 
+                rjDatePickerDCAEndDate.Value = new DateTime(2023, 3, 4);
+                PopulateDCACalculator();
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
                 CheckForUpdates();
                 PopulateThemeComboboxes();
@@ -18294,7 +18309,7 @@ namespace SATSuma
             btnMenuSplash.FlatAppearance.BorderColor = chartsBackgroundColor;
             btnMenuHelp.FlatAppearance.BorderColor = chartsBackgroundColor;
 
-            Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+            Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
             if (lblChartsDarkBackground.Text == "✔️")
             {
                 //header
@@ -19905,6 +19920,8 @@ namespace SATSuma
                     button.BorderRadius = (int)(radius * UIScale);
                 }
 
+                //dca calculator
+                btnCalculateDCA.BorderRadius = (int)(radius * UIScale);
                 // force refresh of panels
                 PanelsRepaint();
             }
@@ -19994,6 +20011,11 @@ namespace SATSuma
                 panel75.Invalidate();
                 panel95.Invalidate();
                 panel93.Invalidate();
+                panel98.Invalidate();
+                panel111.Invalidate();
+                panel113.Invalidate();
+                panel114.Invalidate();
+                panel115.Invalidate();
                 #endregion
                 #region panels (heading containers)
                 panel1.Invalidate();
@@ -20059,7 +20081,6 @@ namespace SATSuma
                 formsPlot1.Plot.Palette = ScottPlot.Palette.Amber;
                 formsPlot1.Plot.YAxis.AxisLabel.IsVisible = false;
 
-
                 formsPlot2.Plot.Margins(x: .1, y: .1);
                 formsPlot2.Plot.Style(ScottPlot.Style.Black);
                 formsPlot2.RightClicked -= formsPlot2.DefaultRightClickEvent; // disable default right-click event
@@ -20076,6 +20097,13 @@ namespace SATSuma
                 formsPlot3.Plot.Palette = ScottPlot.Palette.Amber;
                 formsPlot3.Plot.YAxis.AxisLabel.IsVisible = false;
 
+                formsPlotDCA.Plot.Margins(x: .1, y: .1);
+                formsPlotDCA.Plot.Style(ScottPlot.Style.Black);
+                formsPlotDCA.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
+                formsPlotDCA.Configuration.DoubleClickBenchmark = false;
+                formsPlotDCA.Plot.Palette = ScottPlot.Palette.Amber;
+                formsPlotDCA.Plot.YAxis.AxisLabel.IsVisible = false;
+
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: chartsBackgroundColor,
@@ -20087,6 +20115,11 @@ namespace SATSuma
                     titleLabel: thisColor,
                     axisLabel: label148.ForeColor); // using any random label to get the color from
                 formsPlot3.Plot.Style(
+                    figureBackground: Color.Transparent,
+                    dataBackground: chartsBackgroundColor,
+                    titleLabel: thisColor,
+                    axisLabel: label148.ForeColor); // using any random label to get the color from
+                formsPlotDCA.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: chartsBackgroundColor,
                     titleLabel: thisColor,
@@ -20114,6 +20147,7 @@ namespace SATSuma
                 formsPlot1.Refresh();
                 formsPlot2.Refresh();
                 formsPlot3.Refresh();
+                formsPlotDCA.Refresh();
             }
             catch (Exception ex)
             {
@@ -20288,6 +20322,12 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
+                //dca calculator
+                Control[] listDCALabelsToColor = { label304, label305, label306, label307 };
+                foreach (Control control in listDCALabelsToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
             }
             catch (Exception ex)
             {
@@ -20451,7 +20491,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch };
+                Control[] listOtherTextToColor = { label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, labelDCADefinition };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20465,6 +20505,8 @@ namespace SATSuma
                 comboBoxTitlesBackgroundImage.ForeColor = thiscolor;
                 comboBoxTitlesBackgroundImage.ListTextColor = thiscolor;
                 comboBoxTitlesBackgroundImage.ListBackColor = chartsBackgroundColor;
+                rjDatePickerDCAStartDate.TextColor = thiscolor;
+                rjDatePickerDCAEndDate.TextColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -20583,6 +20625,8 @@ namespace SATSuma
                 {
                     control.BackColor = thiscolor;
                 }
+                //dca calculator
+                btnCalculateDCA.BackColor = thiscolor;
                 //add to bookmarks panel (uses button colour)
                 panelAddToBookmarksBorder.BackColor = thiscolor;
             }
@@ -20596,7 +20640,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator ,btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 if (lblChartsDarkBackground.Text == "✔️")
                 {
                     //header
@@ -20686,6 +20730,8 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
+                //dca calculator
+                btnCalculateDCA.ForeColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -20714,11 +20760,13 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
                 }
+                rjDatePickerDCAStartDate.SkinColor = thiscolor;
+                rjDatePickerDCAEndDate.SkinColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21128,7 +21176,7 @@ namespace SATSuma
                     btnMenuApplyCustomTheme, btnMenuBitcoinDashboard, btnThemeMenu, btnMenuAddress,
                     btnMenuCreateTheme, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts,
                     btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings,
-                    btnMenuTransaction, btnMenuXpub, btnMenuSplash, btnMenuThemeFranklin,
+                    btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuThemeFranklin,
                     BtnMenuThemeGenesis, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger,
                     btnMenuThemeStackSats, btnMenuThemeSymbol, btnUSD, btnEUR, btnGBP,
                     btnXAU, btnCurrency, btnHelp, btnMinimise, btnShowGlobalSearch,
@@ -21166,7 +21214,7 @@ namespace SATSuma
 
                 Button[] buttonstoMakeTransparent =
                 {
-                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuXpub, btnMenuSplash
+                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash
                 };
                 if (buttonstoMakeTransparent.Contains((Button)sender))
                 {
@@ -21909,6 +21957,13 @@ namespace SATSuma
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "Charts";
+                        });
+                    }
+                    if (panelDCACalculator.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "DCA calculator";
                         });
                     }
                     btnAddToBookmarks.Enabled = false;
@@ -22836,6 +22891,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
@@ -22868,6 +22924,7 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelXpub.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelBitcoinDashboard.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -22911,6 +22968,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuLightningDashboard.Enabled = false;
                 SuspendLayout();
@@ -22943,6 +23001,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelLightningDashboard.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -22984,6 +23043,7 @@ namespace SATSuma
                 btnMenuBlock.Enabled = true;
                 btnMenuSettings.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
+                btnMenuDCACalculator.Enabled = true;
                 btnMenuCharts.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -23015,6 +23075,7 @@ namespace SATSuma
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
                 panelLightningDashboard.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelCharts.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23059,6 +23120,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuSettings.Enabled = true;
                 SuspendLayout();
@@ -23091,6 +23153,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
                 panelAppearance.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelAddress.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23136,6 +23199,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuSettings.Enabled = true;
                 
@@ -23170,6 +23234,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
+                panelDCACalculator.Visible = false;
                 ResumeLayout();
                 CheckNetworkStatus();
 
@@ -23221,6 +23286,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuBlockList.Enabled = true;
                 btnMenuBitcoinDashboard.Enabled = true;
@@ -23256,6 +23322,7 @@ namespace SATSuma
                 panelTransaction.Visible = false;
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelXpub.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23298,6 +23365,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuLightningDashboard.Enabled = true;
                 btnMenuBookmarks.Enabled = true;
@@ -23332,6 +23400,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelAppearance.Visible = false;
                 panelSettings.Visible = false;
+                panelDCACalculator.Visible = false;
                 CheckNetworkStatus();
                 if (numericUpDownBlockHeightToStartListFrom.Text == "673298")
                 {
@@ -23382,6 +23451,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuBookmarks.Enabled = true;
                 btnMenuLightningDashboard.Enabled = true;
@@ -23417,6 +23487,7 @@ namespace SATSuma
                 panelBlockList.Visible = false;
                 panelXpub.Visible = false;
                 panelSettings.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelTransaction.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23460,6 +23531,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuCreateTheme.Enabled = true;
                 btnMenuSettings.Enabled = true;
@@ -23495,6 +23567,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
+                panelDCACalculator.Visible = false;
                 CheckNetworkStatus();
                 SetupBookmarksScreen();
                 panelBookmarks.Visible = true;
@@ -23538,6 +23611,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuCreateTheme.Enabled = true;
                 btnMenuSettings.Enabled = true;
@@ -23574,6 +23648,7 @@ namespace SATSuma
                 panelBlock.Visible = false;
                 panelSettings.Visible = false;
                 panelBookmarks.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelDirectory.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23617,6 +23692,7 @@ namespace SATSuma
                 if (!testNet)
                 {
                     btnMenuCharts.Enabled = true;
+                    btnMenuDCACalculator.Enabled = true;
                 }
                 btnMenuBookmarks.Enabled = true;
                 btnMenuCreateTheme.Enabled = true;
@@ -23652,6 +23728,7 @@ namespace SATSuma
                 panelXpub.Visible = false;
                 panelBlock.Visible = false;
                 panelBookmarks.Visible = false;
+                panelDCACalculator.Visible = false;
                 panelSettings.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -25921,12 +25998,387 @@ namespace SATSuma
 
 
 
-        #endregion
 
         #endregion
 
         #endregion
 
+        #endregion
 
+        private async void btnMenuDCACalculator_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lblMenuHighlightedButtonText.Visible = true;
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Text = "dca calculator";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDCACalculator.Location.Y + (int)(5 * UIScale));
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
+                });
+                btnMenuXpub.Enabled = true;
+                btnMenuAddress.Enabled = true;
+                btnMenuTransaction.Enabled = true;
+                btnMenuBitcoinDashboard.Enabled = true;
+                btnMenuBookmarks.Enabled = true;
+                btnMenuBlockList.Enabled = true;
+                btnMenuCreateTheme.Enabled = true;
+                btnMenuDirectory.Enabled = true;
+                btnMenuBlock.Enabled = true;
+                btnMenuSettings.Enabled = true;
+                btnMenuLightningDashboard.Enabled = true;
+                btnMenuCharts.Enabled = true;
+                btnMenuDCACalculator.Enabled = false;
+                SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None,
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
+                };
+                loadingScreen.Show(this);
+                await BriefPause(500);
+                #endregion
+                panelBitcoinDashboard.Visible = false;
+                panelBookmarks.Visible = false;
+                panelBlockList.Visible = false;
+                panelAddress.Visible = false;
+                panelBlock.Visible = false;
+                panelDirectory.Visible = false;
+                panelTransaction.Visible = false;
+                panelXpub.Visible = false;
+                panelSettings.Visible = false;
+                panelAppearance.Visible = false;
+                panelLightningDashboard.Visible = false;
+                panelCharts.Visible = false;
+                panelDCACalculator.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(2000);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
+                ResumeLayout();
+
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuDCACalculator_Click");
+            }
+        }
+
+        private async void PopulateDCACalculator()
+        {
+            try
+            {
+                ShowDCAChartLoadingPanel();
+                formsPlotDCA.Visible = true;
+                chartType = "price";
+
+                ToggleLoadingAnimation("enable");
+
+                // clear any previous graph
+                ClearAllDCAChartData();
+                formsPlotDCA.Plot.Title("", size: (int)(13 * UIScale), bold: false);
+                formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
+                PrepareLinearScaleDCAChart();
+
+                // get a series of historic price data
+                var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
+                var HistoricPriceDataJsonForDCA = HistoricPriceDataJson;
+                if (!string.IsNullOrEmpty(HistoricPriceDataJson))
+                {
+                    JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
+
+                    List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+
+                    // convert data to GBP, EUR, XAU if needed
+                    decimal selectedCurrency = 0;
+                    decimal exchangeRate = 1;
+                    if (btnUSD.Enabled) // user has selected a currency other than USD
+                    {
+                        // get 
+                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        if (!btnGBP.Enabled) //GBP is selected
+                        {
+                            selectedCurrency = Convert.ToDecimal(priceGBP);
+                            //formsPlotDCA.Plot.Title("GBP/BTC DCA illustration", size: 13, bold: true);
+                            formsPlotDCA.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
+                        }
+                        if (!btnEUR.Enabled) //EUR is selected
+                        {
+                            selectedCurrency = Convert.ToDecimal(priceEUR);
+                            //formsPlotDCA.Plot.Title("EUR market price across major bitcoin exchanges with DCA illustration", size: 13, bold: true);
+                            formsPlotDCA.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
+                        }
+                        if (!btnXAU.Enabled) //XAU is selected
+                        {
+                            selectedCurrency = Convert.ToDecimal(priceXAU);
+                            //formsPlotDCA.Plot.Title("Average XAU market price across major bitcoin exchanges with DCA illustration", size: 13, bold: true);
+                            formsPlotDCA.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
+                        }
+                        exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
+
+                        foreach (var item in PriceList)
+                        {
+                            item.Y *= exchangeRate;
+                        }
+                    }
+                    // set the number of points on the graph
+                    int pointCount = PriceList.Count;
+
+                    //create the arrays for the price scatter graph
+                    double[] yPriceChartPrices = PriceList.Select(h => (double)(h.Y)).ToArray(); // create array of doubles of the prices
+                    List<DateTime> dateList = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList(); // create a new list of the dates, this time in DateTime format
+                    double[] xPriceChartDates = dateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
+
+                    #region set up variables used for DCA calculation
+                    double DCAAmount = Convert.ToDouble(textBoxDCAAmountInput.Text);
+                    double DCAFrequencyDays = 1;
+                    Dictionary<int, double> screenMap = new Dictionary<int, double>
+                    {
+                        { 0, 1 },
+                        { 1, 7 },
+                        { 2, 30 }
+                    };
+                    if (screenMap.ContainsKey(comboBoxDCAFrequency.SelectedIndex))
+                    {
+                        DCAFrequencyDays = screenMap[comboBoxDCAFrequency.SelectedIndex];
+                    }
+                    DateTime DCAStartDate = rjDatePickerDCAStartDate.Value;
+                    DateTime DCAEndDate = rjDatePickerDCAEndDate.Value;
+                    #endregion
+
+                    #region create list of dates that DCA purchases occurred
+                    List<DateTime> DCADateList = new List<DateTime>();
+
+                    // Add the start date
+                    DCADateList.Add(DCAStartDate);
+
+                    // Add the dates in between
+                    DateTime nextDCADate = DCAStartDate;
+                    while (nextDCADate < DCAEndDate)
+                    {
+                        nextDCADate = nextDCADate.AddDays(DCAFrequencyDays);
+                        DCADateList.Add(nextDCADate);
+                    }
+
+                    if (!DCADateList.Contains(DCAEndDate))
+                    {
+                        DCADateList.Add(DCAEndDate);
+                    }
+                    #endregion
+
+                    #region create arrays for the DCA graph
+                    double[] xDCAChartDates = DCADateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
+                    #endregion
+
+                    #region create list of prices for the corresponding dca dates
+                    List<double> DCABitcoinAmountList = new List<double>();
+                    List<double> DCABitcoinAmountRunningTotalList = new List<double>();
+                    double bitcoinBoughtRunningTotal = 0;
+                    double lastAmountBought = 0;
+
+                    foreach (double xDCADate in xDCAChartDates)
+                    {
+                        // Cast both values to integers to compare only the whole number part
+                        int xDCADateWhole = (int)xDCADate;
+
+                        // Find the index of xDCAValue in xValues
+                        int index = Array.FindIndex(xPriceChartDates, x => (int)x == xDCADateWhole);
+
+                        
+
+                        if (index != -1)
+                        {
+                            // Corresponding price found
+                            DCABitcoinAmountList.Add(DCAAmount / yPriceChartPrices[index]);
+                            lastAmountBought = DCAAmount / yPriceChartPrices[index]; // store this value in case we don't have a price available to calculate with for the next date
+                        }
+                        else
+                        {
+                            // Date not found in the original data
+                            DCABitcoinAmountList.Add(lastAmountBought);
+                        }
+                        bitcoinBoughtRunningTotal = bitcoinBoughtRunningTotal + lastAmountBought;
+                        DCABitcoinAmountRunningTotalList.Add(bitcoinBoughtRunningTotal);
+                    }
+                    #endregion
+
+                    double[] yDCAChartBitcoinAmounts = DCABitcoinAmountList.ToArray();
+                    double[] yDCAChartBitcoinRunningTotal = DCABitcoinAmountRunningTotalList.ToArray();
+
+                    // set axis limits
+                    formsPlotDCA.Plot.SetAxisLimits(xMin: xPriceChartDates.Min(), xMax: xPriceChartDates.Max()); // date
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.05, yAxisIndex: 0); // price
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.05, yAxisIndex: 1);  // bitcoin acquired
+
+
+                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "price");
+
+                    // plot another set of data to show amount bought per purchase using the additional axis
+                    var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
+                    BTCscatter.YAxisIndex = 1;
+                    formsPlotDCA.Plot.YAxis2.Label("Bitcoin acquired");
+                    formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
+
+                    // plot another set of data to show running total bought using the additional axis
+                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.Purple, lineWidth: 1, markerSize: 1, label: "BTC purchased over time");
+                    BTCRunningTotalscatter.YAxisIndex = 1;
+
+                    formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
+                    formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlotDCA.Plot.XAxis.Ticks(true);
+                    formsPlotDCA.Plot.XAxis.Label("");
+
+
+                    var legend = formsPlotDCA.Plot.Legend();
+                    legend.Location = Alignment.UpperLeft;
+                    legend.FillColor = chartsBackgroundColor;
+                    legend.FontColor = label77.ForeColor;
+                    legend.OutlineColor = chartsBackgroundColor;
+
+                    // prevent navigating beyond the data
+                    formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.05);
+                    formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
+                    formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.05);
+
+                    formsPlotDCA.Plot.XAxis.Ticks(true);
+                    formsPlotDCA.Plot.YAxis.Ticks(true);
+                    formsPlotDCA.Plot.YAxis2.Ticks(true);
+                    formsPlotDCA.Plot.XAxis.MajorGrid(true);
+                    formsPlotDCA.Plot.YAxis.MajorGrid(true);
+
+
+                    // refresh the graph
+                    formsPlotDCA.Refresh();
+                    formsPlotDCA.Visible = true;
+                    //panelPriceScaleButtons.Visible = true;
+                    ToggleLoadingAnimation("disable");
+                    HideDCAChartLoadingPanel();
+                }
+                else
+                {
+                    ToggleLoadingAnimation("disable");
+                    HideDCAChartLoadingPanel();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Generating DCA chart");
+            }
+        }
+
+        #region show/hide DCA chart loading panel
+        private void ShowDCAChartLoadingPanel()
+        {
+            try
+            {
+                pictureBoxDCAChartLoadingAnimation.Enabled = true;
+                panelDCAChartLoadingPanel.Visible = true;
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "ShowDCAChartLoadingPanel");
+            }
+        }
+
+        private void HideDCAChartLoadingPanel()
+        {
+            try
+            {
+                pictureBoxDCAChartLoadingAnimation.Enabled = false;
+                panelDCAChartLoadingPanel.Visible = false;
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "HideDCAChartLoadingPanel");
+            }
+        }
+        #endregion
+
+        private void ClearAllDCAChartData()
+        {
+            try
+            {
+                formsPlotDCA.Plot.Clear();
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "ClearAllDCAChartData");
+            }
+        }
+
+        private void PrepareLinearScaleDCAChart()
+        {
+            try
+            {
+                // switch to linear scaling in case it was log before
+                formsPlotDCA.Plot.YAxis.MinorLogScale(false);
+                formsPlotDCA.Plot.YAxis.MajorGrid(false);
+                formsPlotDCA.Plot.YAxis.MinorGrid(false);
+
+                // Define a new tick label formatter for the linear scale
+                static string linearTickLabels(double y) => y.ToString("N0");
+                formsPlotDCA.Plot.YAxis.TickLabelFormat(linearTickLabels);
+
+                // Revert back to automatic data area
+                formsPlotDCA.Plot.ResetLayout();
+                formsPlotDCA.Plot.AxisAuto();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "switching to linear scale chart");
+            }
+        }
+
+        private void rjDatePickerDCAStartDate_ValueChanged(object sender, EventArgs e)
+        {
+            rjDatePickerDCAEndDate.MinDate = rjDatePickerDCAStartDate.Value;
+        }
+
+        private void rjDatePickerDCAEndDate_ValueChanged(object sender, EventArgs e)
+        {
+            rjDatePickerDCAStartDate.MaxDate = rjDatePickerDCAEndDate.Value;
+        }
+
+        private void textBoxDCAAmountInput_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxDCAAmountInput.Text == "")
+                {
+                    textBoxDCAAmountInput.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxDCAAmountInput.Text = "1.00";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "textBoxDCAAmountInput_Leave");
+            }
+        }
+
+        private void btnCalculateDCA_Click(object sender, EventArgs e)
+        {
+            PopulateDCACalculator();
+        }
     }
 }                

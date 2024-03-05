@@ -148,14 +148,11 @@
   <data name="numericDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\numericDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="StackSats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StackSats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="setupscreenDropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\setupscreenDropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OrangeFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OrangeFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CustomImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Polygons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Polygons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,8 +199,8 @@
   <data name="ApplyingTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ApplyingTheme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\dropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OrangeFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrangeFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Untitled-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Untitled-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,6 +217,9 @@
   <data name="Symbol" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Symbol.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="dropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BlackFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BlackFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -229,17 +229,23 @@
   <data name="HoneyBadger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HoneyBadger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="OrangePaler" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OrangePaler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SatsumaBTCdir1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Franklin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StackSats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StackSats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CustomImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="squares" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\squares.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="calendarDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\calendarDark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="infinityspectrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\infinityspectrum.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -247,13 +253,13 @@
   <data name="YellowFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YellowFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Closing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Closing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Satsuma" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Satsuma.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Closing" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Closing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="calendarWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\calendarWhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

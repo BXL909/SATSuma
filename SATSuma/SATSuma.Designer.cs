@@ -1024,15 +1024,6 @@
             this.panelPriceScaleButtons = new System.Windows.Forms.Panel();
             this.btnPriceChartScaleLog = new CustomControls.RJControls.RJButton();
             this.btnPriceChartScaleLinear = new CustomControls.RJControls.RJButton();
-            this.panelLightningNodeNetwork = new System.Windows.Forms.Panel();
-            this.label226 = new System.Windows.Forms.Label();
-            this.label225 = new System.Windows.Forms.Label();
-            this.label224 = new System.Windows.Forms.Label();
-            this.label221 = new System.Windows.Forms.Label();
-            this.label219 = new System.Windows.Forms.Label();
-            this.label220 = new System.Windows.Forms.Label();
-            this.label227 = new System.Windows.Forms.Label();
-            this.label236 = new System.Windows.Forms.Label();
             this.panel79 = new System.Windows.Forms.Panel();
             this.label218 = new System.Windows.Forms.Label();
             this.btnChartNodesByNetwork = new CustomControls.RJControls.RJButton();
@@ -1048,26 +1039,6 @@
             this.panel78 = new System.Windows.Forms.Panel();
             this.label217 = new System.Windows.Forms.Label();
             this.btnChartBlockSize = new CustomControls.RJControls.RJButton();
-            this.panelCirculationKey = new System.Windows.Forms.Panel();
-            this.label222 = new System.Windows.Forms.Label();
-            this.label223 = new System.Windows.Forms.Label();
-            this.label229 = new System.Windows.Forms.Label();
-            this.label230 = new System.Windows.Forms.Label();
-            this.panelFeeRatesKey = new System.Windows.Forms.Panel();
-            this.label216 = new System.Windows.Forms.Label();
-            this.label215 = new System.Windows.Forms.Label();
-            this.label214 = new System.Windows.Forms.Label();
-            this.label213 = new System.Windows.Forms.Label();
-            this.label212 = new System.Windows.Forms.Label();
-            this.label211 = new System.Windows.Forms.Label();
-            this.label210 = new System.Windows.Forms.Label();
-            this.label209 = new System.Windows.Forms.Label();
-            this.label208 = new System.Windows.Forms.Label();
-            this.label207 = new System.Windows.Forms.Label();
-            this.label206 = new System.Windows.Forms.Label();
-            this.label205 = new System.Windows.Forms.Label();
-            this.label203 = new System.Windows.Forms.Label();
-            this.label202 = new System.Windows.Forms.Label();
             this.btnChartCirculation = new CustomControls.RJControls.RJButton();
             this.btnChartFeeRates = new CustomControls.RJControls.RJButton();
             this.btnChartPeriodAll = new CustomControls.RJControls.RJButton();
@@ -1334,13 +1305,10 @@
             this.panel81.SuspendLayout();
             this.panel80.SuspendLayout();
             this.panelPriceScaleButtons.SuspendLayout();
-            this.panelLightningNodeNetwork.SuspendLayout();
             this.panel79.SuspendLayout();
             this.panelChartUTXOScaleButtons.SuspendLayout();
             this.panelUniqueAddressesScaleButtons.SuspendLayout();
             this.panel78.SuspendLayout();
-            this.panelCirculationKey.SuspendLayout();
-            this.panelFeeRatesKey.SuspendLayout();
             this.panelThemeMenu.SuspendLayout();
             this.panelPresetThemeMenuTitleBG.SuspendLayout();
             this.panelCustomThemeMenuTitleBG.SuspendLayout();
@@ -6959,7 +6927,7 @@
             this.btnMenuDCACalculator.Text = "   dca calculator";
             this.btnMenuDCACalculator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuDCACalculator.UseVisualStyleBackColor = false;
-            this.btnMenuDCACalculator.Click += new System.EventHandler(this.btnMenuDCACalculator_Click);
+            this.btnMenuDCACalculator.Click += new System.EventHandler(this.BtnMenuDCACalculator_Click);
             this.btnMenuDCACalculator.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuDCACalculator.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -10578,7 +10546,8 @@
             "chart - ⚡channels",
             "chart - price",
             "chart - market cap.",
-            "chart - fiat/gold/btc converter"});
+            "chart - fiat/gold/btc converter",
+            "dca calculator"});
             this.comboBoxStartupScreen.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxStartupScreen.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBoxStartupScreen.Location = new System.Drawing.Point(6, 0);
@@ -13419,7 +13388,6 @@
             this.panelCharts.Controls.Add(this.panel80);
             this.panelCharts.Controls.Add(this.btnChartNodesByCountry);
             this.panelCharts.Controls.Add(this.panelPriceScaleButtons);
-            this.panelCharts.Controls.Add(this.panelLightningNodeNetwork);
             this.panelCharts.Controls.Add(this.panel79);
             this.panelCharts.Controls.Add(this.btnChartNodesByNetwork);
             this.panelCharts.Controls.Add(this.btnChartPoolsRanking);
@@ -13429,8 +13397,6 @@
             this.panelCharts.Controls.Add(this.btnChartUniqueAddresses);
             this.panelCharts.Controls.Add(this.panel78);
             this.panelCharts.Controls.Add(this.btnChartBlockSize);
-            this.panelCharts.Controls.Add(this.panelCirculationKey);
-            this.panelCharts.Controls.Add(this.panelFeeRatesKey);
             this.panelCharts.Controls.Add(this.btnChartCirculation);
             this.panelCharts.Controls.Add(this.btnChartFeeRates);
             this.panelCharts.Controls.Add(this.btnChartPeriodAll);
@@ -15217,7 +15183,7 @@
             this.panelChartDifficultyScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartDifficultyScaleButtons.Controls.Add(this.btnChartDifficultyLog);
             this.panelChartDifficultyScaleButtons.Controls.Add(this.btnChartDifficultyLinear);
-            this.panelChartDifficultyScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelChartDifficultyScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelChartDifficultyScaleButtons.Name = "panelChartDifficultyScaleButtons";
             this.panelChartDifficultyScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartDifficultyScaleButtons.TabIndex = 263;
@@ -15275,7 +15241,7 @@
             this.panelHashrateScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelHashrateScaleButtons.Controls.Add(this.btnHashrateScaleLog);
             this.panelHashrateScaleButtons.Controls.Add(this.btnHashrateScaleLinear);
-            this.panelHashrateScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelHashrateScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelHashrateScaleButtons.Name = "panelHashrateScaleButtons";
             this.panelHashrateScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelHashrateScaleButtons.TabIndex = 264;
@@ -15333,7 +15299,7 @@
             this.panelChartMarketCapScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLog);
             this.panelChartMarketCapScaleButtons.Controls.Add(this.btnChartMarketCapScaleLinear);
-            this.panelChartMarketCapScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelChartMarketCapScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelChartMarketCapScaleButtons.Name = "panelChartMarketCapScaleButtons";
             this.panelChartMarketCapScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartMarketCapScaleButtons.TabIndex = 264;
@@ -15588,7 +15554,7 @@
             this.panelPriceScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLog);
             this.panelPriceScaleButtons.Controls.Add(this.btnPriceChartScaleLinear);
-            this.panelPriceScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelPriceScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelPriceScaleButtons.Name = "panelPriceScaleButtons";
             this.panelPriceScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelPriceScaleButtons.TabIndex = 263;
@@ -15640,123 +15606,6 @@
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
             this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_Click);
-            // 
-            // panelLightningNodeNetwork
-            // 
-            this.panelLightningNodeNetwork.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
-            this.panelLightningNodeNetwork.Controls.Add(this.label226);
-            this.panelLightningNodeNetwork.Controls.Add(this.label225);
-            this.panelLightningNodeNetwork.Controls.Add(this.label224);
-            this.panelLightningNodeNetwork.Controls.Add(this.label221);
-            this.panelLightningNodeNetwork.Controls.Add(this.label219);
-            this.panelLightningNodeNetwork.Controls.Add(this.label220);
-            this.panelLightningNodeNetwork.Controls.Add(this.label227);
-            this.panelLightningNodeNetwork.Controls.Add(this.label236);
-            this.panelLightningNodeNetwork.Location = new System.Drawing.Point(185, 32);
-            this.panelLightningNodeNetwork.Name = "panelLightningNodeNetwork";
-            this.panelLightningNodeNetwork.Size = new System.Drawing.Size(190, 89);
-            this.panelLightningNodeNetwork.TabIndex = 268;
-            this.panelLightningNodeNetwork.Visible = false;
-            // 
-            // label226
-            // 
-            this.label226.AutoSize = true;
-            this.label226.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label226.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label226.ForeColor = System.Drawing.Color.Silver;
-            this.label226.Location = new System.Drawing.Point(22, 68);
-            this.label226.Margin = new System.Windows.Forms.Padding(0);
-            this.label226.Name = "label226";
-            this.label226.Size = new System.Drawing.Size(61, 17);
-            this.label226.TabIndex = 256;
-            this.label226.Text = "Unknown";
-            // 
-            // label225
-            // 
-            this.label225.AutoSize = true;
-            this.label225.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label225.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label225.ForeColor = System.Drawing.Color.Silver;
-            this.label225.Location = new System.Drawing.Point(22, 46);
-            this.label225.Margin = new System.Windows.Forms.Padding(0);
-            this.label225.Name = "label225";
-            this.label225.Size = new System.Drawing.Size(136, 17);
-            this.label225.TabIndex = 255;
-            this.label225.Text = "Clearnet and Darknet";
-            // 
-            // label224
-            // 
-            this.label224.AutoSize = true;
-            this.label224.BackColor = System.Drawing.Color.Transparent;
-            this.label224.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label224.ForeColor = System.Drawing.Color.Gold;
-            this.label224.Location = new System.Drawing.Point(0, 69);
-            this.label224.Name = "label224";
-            this.label224.Size = new System.Drawing.Size(19, 14);
-            this.label224.TabIndex = 254;
-            this.label224.Text = "🟢";
-            // 
-            // label221
-            // 
-            this.label221.AutoSize = true;
-            this.label221.BackColor = System.Drawing.Color.Transparent;
-            this.label221.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label221.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label221.Location = new System.Drawing.Point(0, 47);
-            this.label221.Name = "label221";
-            this.label221.Size = new System.Drawing.Size(19, 14);
-            this.label221.TabIndex = 253;
-            this.label221.Text = "🟢";
-            // 
-            // label219
-            // 
-            this.label219.AutoSize = true;
-            this.label219.BackColor = System.Drawing.Color.Transparent;
-            this.label219.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label219.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label219.Location = new System.Drawing.Point(0, 25);
-            this.label219.Name = "label219";
-            this.label219.Size = new System.Drawing.Size(19, 14);
-            this.label219.TabIndex = 252;
-            this.label219.Text = "🟢";
-            // 
-            // label220
-            // 
-            this.label220.AutoSize = true;
-            this.label220.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label220.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label220.ForeColor = System.Drawing.Color.Silver;
-            this.label220.Location = new System.Drawing.Point(22, 24);
-            this.label220.Margin = new System.Windows.Forms.Padding(0);
-            this.label220.Name = "label220";
-            this.label220.Size = new System.Drawing.Size(155, 17);
-            this.label220.TabIndex = 251;
-            this.label220.Text = "Clearnet only (IPv4, IPv6)";
-            // 
-            // label227
-            // 
-            this.label227.AutoSize = true;
-            this.label227.BackColor = System.Drawing.Color.Transparent;
-            this.label227.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label227.ForeColor = System.Drawing.Color.IndianRed;
-            this.label227.Location = new System.Drawing.Point(0, 3);
-            this.label227.Name = "label227";
-            this.label227.Size = new System.Drawing.Size(19, 14);
-            this.label227.TabIndex = 250;
-            this.label227.Text = "🟢";
-            // 
-            // label236
-            // 
-            this.label236.AutoSize = true;
-            this.label236.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label236.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label236.ForeColor = System.Drawing.Color.Silver;
-            this.label236.Location = new System.Drawing.Point(22, 2);
-            this.label236.Margin = new System.Windows.Forms.Padding(0);
-            this.label236.Name = "label236";
-            this.label236.Size = new System.Drawing.Size(171, 17);
-            this.label236.TabIndex = 211;
-            this.label236.Text = "Darknet only (Tor, I2P, cjdns)";
             // 
             // panel79
             // 
@@ -15837,7 +15686,7 @@
             this.panelChartUTXOScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelChartUTXOScaleButtons.Controls.Add(this.btnChartUTXOScaleLog);
             this.panelChartUTXOScaleButtons.Controls.Add(this.btnChartUTXOScaleLinear);
-            this.panelChartUTXOScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelChartUTXOScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelChartUTXOScaleButtons.Name = "panelChartUTXOScaleButtons";
             this.panelChartUTXOScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelChartUTXOScaleButtons.TabIndex = 264;
@@ -15919,7 +15768,7 @@
             this.panelUniqueAddressesScaleButtons.BackColor = System.Drawing.Color.Transparent;
             this.panelUniqueAddressesScaleButtons.Controls.Add(this.btnChartAddressScaleLog);
             this.panelUniqueAddressesScaleButtons.Controls.Add(this.btnChartAddressScaleLinear);
-            this.panelUniqueAddressesScaleButtons.Location = new System.Drawing.Point(660, 430);
+            this.panelUniqueAddressesScaleButtons.Location = new System.Drawing.Point(659, 428);
             this.panelUniqueAddressesScaleButtons.Name = "panelUniqueAddressesScaleButtons";
             this.panelUniqueAddressesScaleButtons.Size = new System.Drawing.Size(95, 24);
             this.panelUniqueAddressesScaleButtons.TabIndex = 258;
@@ -16048,265 +15897,6 @@
             this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
             this.btnChartBlockSize.UseVisualStyleBackColor = false;
             this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_Click);
-            // 
-            // panelCirculationKey
-            // 
-            this.panelCirculationKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
-            this.panelCirculationKey.Controls.Add(this.label222);
-            this.panelCirculationKey.Controls.Add(this.label223);
-            this.panelCirculationKey.Controls.Add(this.label229);
-            this.panelCirculationKey.Controls.Add(this.label230);
-            this.panelCirculationKey.Location = new System.Drawing.Point(494, 27);
-            this.panelCirculationKey.Name = "panelCirculationKey";
-            this.panelCirculationKey.Size = new System.Drawing.Size(252, 25);
-            this.panelCirculationKey.TabIndex = 257;
-            // 
-            // label222
-            // 
-            this.label222.AutoSize = true;
-            this.label222.BackColor = System.Drawing.Color.Transparent;
-            this.label222.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label222.ForeColor = System.Drawing.Color.Orange;
-            this.label222.Location = new System.Drawing.Point(130, 3);
-            this.label222.Name = "label222";
-            this.label222.Size = new System.Drawing.Size(19, 14);
-            this.label222.TabIndex = 251;
-            this.label222.Text = "🟢";
-            // 
-            // label223
-            // 
-            this.label223.AutoSize = true;
-            this.label223.BackColor = System.Drawing.Color.Transparent;
-            this.label223.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label223.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(38)))), ((int)(((byte)(19)))));
-            this.label223.Location = new System.Drawing.Point(2, 3);
-            this.label223.Name = "label223";
-            this.label223.Size = new System.Drawing.Size(19, 14);
-            this.label223.TabIndex = 250;
-            this.label223.Text = "🟢";
-            // 
-            // label229
-            // 
-            this.label229.AutoSize = true;
-            this.label229.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label229.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label229.ForeColor = System.Drawing.Color.Silver;
-            this.label229.Location = new System.Drawing.Point(150, 2);
-            this.label229.Margin = new System.Windows.Forms.Padding(0);
-            this.label229.Name = "label229";
-            this.label229.Size = new System.Drawing.Size(94, 17);
-            this.label229.TabIndex = 212;
-            this.label229.Text = "Already mined";
-            // 
-            // label230
-            // 
-            this.label230.AutoSize = true;
-            this.label230.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label230.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label230.ForeColor = System.Drawing.Color.Silver;
-            this.label230.Location = new System.Drawing.Point(22, 2);
-            this.label230.Margin = new System.Windows.Forms.Padding(0);
-            this.label230.Name = "label230";
-            this.label230.Size = new System.Drawing.Size(80, 17);
-            this.label230.TabIndex = 211;
-            this.label230.Text = "To be mined";
-            // 
-            // panelFeeRatesKey
-            // 
-            this.panelFeeRatesKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(21)))), ((int)(((byte)(21)))));
-            this.panelFeeRatesKey.Controls.Add(this.label216);
-            this.panelFeeRatesKey.Controls.Add(this.label215);
-            this.panelFeeRatesKey.Controls.Add(this.label214);
-            this.panelFeeRatesKey.Controls.Add(this.label213);
-            this.panelFeeRatesKey.Controls.Add(this.label212);
-            this.panelFeeRatesKey.Controls.Add(this.label211);
-            this.panelFeeRatesKey.Controls.Add(this.label210);
-            this.panelFeeRatesKey.Controls.Add(this.label209);
-            this.panelFeeRatesKey.Controls.Add(this.label208);
-            this.panelFeeRatesKey.Controls.Add(this.label207);
-            this.panelFeeRatesKey.Controls.Add(this.label206);
-            this.panelFeeRatesKey.Controls.Add(this.label205);
-            this.panelFeeRatesKey.Controls.Add(this.label203);
-            this.panelFeeRatesKey.Controls.Add(this.label202);
-            this.panelFeeRatesKey.Location = new System.Drawing.Point(180, 27);
-            this.panelFeeRatesKey.Name = "panelFeeRatesKey";
-            this.panelFeeRatesKey.Size = new System.Drawing.Size(539, 20);
-            this.panelFeeRatesKey.TabIndex = 181;
-            // 
-            // label216
-            // 
-            this.label216.AutoSize = true;
-            this.label216.BackColor = System.Drawing.Color.Transparent;
-            this.label216.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label216.ForeColor = System.Drawing.Color.DarkGray;
-            this.label216.Location = new System.Drawing.Point(399, 3);
-            this.label216.Name = "label216";
-            this.label216.Size = new System.Drawing.Size(19, 14);
-            this.label216.TabIndex = 256;
-            this.label216.Text = "🟢";
-            // 
-            // label215
-            // 
-            this.label215.AutoSize = true;
-            this.label215.BackColor = System.Drawing.Color.Transparent;
-            this.label215.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label215.ForeColor = System.Drawing.Color.Red;
-            this.label215.Location = new System.Drawing.Point(343, 3);
-            this.label215.Name = "label215";
-            this.label215.Size = new System.Drawing.Size(19, 14);
-            this.label215.TabIndex = 255;
-            this.label215.Text = "🟢";
-            // 
-            // label214
-            // 
-            this.label214.AutoSize = true;
-            this.label214.BackColor = System.Drawing.Color.Transparent;
-            this.label214.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label214.ForeColor = System.Drawing.Color.Orange;
-            this.label214.Location = new System.Drawing.Point(285, 3);
-            this.label214.Name = "label214";
-            this.label214.Size = new System.Drawing.Size(19, 14);
-            this.label214.TabIndex = 254;
-            this.label214.Text = "🟢";
-            // 
-            // label213
-            // 
-            this.label213.AutoSize = true;
-            this.label213.BackColor = System.Drawing.Color.Transparent;
-            this.label213.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label213.ForeColor = System.Drawing.Color.Yellow;
-            this.label213.Location = new System.Drawing.Point(207, 3);
-            this.label213.Name = "label213";
-            this.label213.Size = new System.Drawing.Size(19, 14);
-            this.label213.TabIndex = 253;
-            this.label213.Text = "🟢";
-            // 
-            // label212
-            // 
-            this.label212.AutoSize = true;
-            this.label212.BackColor = System.Drawing.Color.Transparent;
-            this.label212.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label212.ForeColor = System.Drawing.Color.LimeGreen;
-            this.label212.Location = new System.Drawing.Point(147, 3);
-            this.label212.Name = "label212";
-            this.label212.Size = new System.Drawing.Size(19, 14);
-            this.label212.TabIndex = 252;
-            this.label212.Text = "🟢";
-            // 
-            // label211
-            // 
-            this.label211.AutoSize = true;
-            this.label211.BackColor = System.Drawing.Color.Transparent;
-            this.label211.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label211.ForeColor = System.Drawing.Color.Blue;
-            this.label211.Location = new System.Drawing.Point(89, 3);
-            this.label211.Name = "label211";
-            this.label211.Size = new System.Drawing.Size(19, 14);
-            this.label211.TabIndex = 251;
-            this.label211.Text = "🟢";
-            // 
-            // label210
-            // 
-            this.label210.AutoSize = true;
-            this.label210.BackColor = System.Drawing.Color.Transparent;
-            this.label210.Font = new System.Drawing.Font("Consolas", 9F);
-            this.label210.ForeColor = System.Drawing.Color.Indigo;
-            this.label210.Location = new System.Drawing.Point(0, 3);
-            this.label210.Name = "label210";
-            this.label210.Size = new System.Drawing.Size(19, 14);
-            this.label210.TabIndex = 250;
-            this.label210.Text = "🟢";
-            // 
-            // label209
-            // 
-            this.label209.AutoSize = true;
-            this.label209.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label209.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label209.ForeColor = System.Drawing.Color.Silver;
-            this.label209.Location = new System.Drawing.Point(363, 2);
-            this.label209.Margin = new System.Windows.Forms.Padding(0);
-            this.label209.Name = "label209";
-            this.label209.Size = new System.Drawing.Size(34, 17);
-            this.label209.TabIndex = 217;
-            this.label209.Text = "90th";
-            // 
-            // label208
-            // 
-            this.label208.AutoSize = true;
-            this.label208.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label208.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label208.ForeColor = System.Drawing.Color.Silver;
-            this.label208.Location = new System.Drawing.Point(419, 2);
-            this.label208.Margin = new System.Windows.Forms.Padding(0);
-            this.label208.Name = "label208";
-            this.label208.Size = new System.Drawing.Size(65, 17);
-            this.label208.TabIndex = 216;
-            this.label208.Text = "maximum";
-            // 
-            // label207
-            // 
-            this.label207.AutoSize = true;
-            this.label207.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label207.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label207.ForeColor = System.Drawing.Color.Silver;
-            this.label207.Location = new System.Drawing.Point(305, 2);
-            this.label207.Margin = new System.Windows.Forms.Padding(0);
-            this.label207.Name = "label207";
-            this.label207.Size = new System.Drawing.Size(34, 17);
-            this.label207.TabIndex = 215;
-            this.label207.Text = "75th";
-            // 
-            // label206
-            // 
-            this.label206.AutoSize = true;
-            this.label206.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label206.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label206.ForeColor = System.Drawing.Color.Silver;
-            this.label206.Location = new System.Drawing.Point(227, 2);
-            this.label206.Margin = new System.Windows.Forms.Padding(0);
-            this.label206.Name = "label206";
-            this.label206.Size = new System.Drawing.Size(53, 17);
-            this.label206.TabIndex = 214;
-            this.label206.Text = "median";
-            // 
-            // label205
-            // 
-            this.label205.AutoSize = true;
-            this.label205.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label205.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label205.ForeColor = System.Drawing.Color.Silver;
-            this.label205.Location = new System.Drawing.Point(167, 2);
-            this.label205.Margin = new System.Windows.Forms.Padding(0);
-            this.label205.Name = "label205";
-            this.label205.Size = new System.Drawing.Size(34, 17);
-            this.label205.TabIndex = 213;
-            this.label205.Text = "25th";
-            // 
-            // label203
-            // 
-            this.label203.AutoSize = true;
-            this.label203.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label203.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label203.ForeColor = System.Drawing.Color.Silver;
-            this.label203.Location = new System.Drawing.Point(109, 2);
-            this.label203.Margin = new System.Windows.Forms.Padding(0);
-            this.label203.Name = "label203";
-            this.label203.Size = new System.Drawing.Size(34, 17);
-            this.label203.TabIndex = 212;
-            this.label203.Text = "10th";
-            // 
-            // label202
-            // 
-            this.label202.AutoSize = true;
-            this.label202.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label202.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label202.ForeColor = System.Drawing.Color.Silver;
-            this.label202.Location = new System.Drawing.Point(22, 2);
-            this.label202.Margin = new System.Windows.Forms.Padding(0);
-            this.label202.Name = "label202";
-            this.label202.Size = new System.Drawing.Size(61, 17);
-            this.label202.TabIndex = 211;
-            this.label202.Text = "minimum";
             // 
             // btnChartCirculation
             // 
@@ -17633,7 +17223,7 @@
             this.btnCalculateDCA.Text = "calculate";
             this.btnCalculateDCA.TextColor = System.Drawing.Color.White;
             this.btnCalculateDCA.UseVisualStyleBackColor = false;
-            this.btnCalculateDCA.Click += new System.EventHandler(this.btnCalculateDCA_Click);
+            this.btnCalculateDCA.Click += new System.EventHandler(this.BtnCalculateDCA_Click);
             // 
             // panel115
             // 
@@ -17658,7 +17248,7 @@
             this.rjDatePickerDCAEndDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAEndDate.TabIndex = 286;
             this.rjDatePickerDCAEndDate.TextColor = System.Drawing.Color.White;
-            this.rjDatePickerDCAEndDate.ValueChanged += new System.EventHandler(this.rjDatePickerDCAEndDate_ValueChanged);
+            this.rjDatePickerDCAEndDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAEndDate_ValueChanged);
             // 
             // panel114
             // 
@@ -17684,7 +17274,7 @@
             this.rjDatePickerDCAStartDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAStartDate.TabIndex = 287;
             this.rjDatePickerDCAStartDate.TextColor = System.Drawing.Color.White;
-            this.rjDatePickerDCAStartDate.ValueChanged += new System.EventHandler(this.rjDatePickerDCAStartDate_ValueChanged);
+            this.rjDatePickerDCAStartDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAStartDate_ValueChanged);
             // 
             // panel113
             // 
@@ -17745,7 +17335,7 @@
             this.textBoxDCAAmountInput.TabStop = false;
             this.textBoxDCAAmountInput.Text = "10.00";
             this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
-            this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.textBoxDCAAmountInput_Leave);
+            this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
             // 
             // label307
             // 
@@ -17874,9 +17464,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
@@ -18171,17 +17761,11 @@
             this.panel81.ResumeLayout(false);
             this.panel80.ResumeLayout(false);
             this.panelPriceScaleButtons.ResumeLayout(false);
-            this.panelLightningNodeNetwork.ResumeLayout(false);
-            this.panelLightningNodeNetwork.PerformLayout();
             this.panel79.ResumeLayout(false);
             this.panelChartUTXOScaleButtons.ResumeLayout(false);
             this.panelUniqueAddressesScaleButtons.ResumeLayout(false);
             this.panel78.ResumeLayout(false);
             this.panel78.PerformLayout();
-            this.panelCirculationKey.ResumeLayout(false);
-            this.panelCirculationKey.PerformLayout();
-            this.panelFeeRatesKey.ResumeLayout(false);
-            this.panelFeeRatesKey.PerformLayout();
             this.panelThemeMenu.ResumeLayout(false);
             this.panelThemeMenu.PerformLayout();
             this.panelPresetThemeMenuTitleBG.ResumeLayout(false);
@@ -18739,26 +18323,6 @@
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.Panel panelCharts;
         private System.Windows.Forms.Button btnMenuCharts;
-        private System.Windows.Forms.Panel panelFeeRatesKey;
-        private System.Windows.Forms.Label label209;
-        private System.Windows.Forms.Label label208;
-        private System.Windows.Forms.Label label207;
-        private System.Windows.Forms.Label label206;
-        private System.Windows.Forms.Label label205;
-        private System.Windows.Forms.Label label203;
-        private System.Windows.Forms.Label label202;
-        private System.Windows.Forms.Label label210;
-        private System.Windows.Forms.Label label212;
-        private System.Windows.Forms.Label label211;
-        private System.Windows.Forms.Label label215;
-        private System.Windows.Forms.Label label214;
-        private System.Windows.Forms.Label label213;
-        private System.Windows.Forms.Label label216;
-        private System.Windows.Forms.Panel panelCirculationKey;
-        private System.Windows.Forms.Label label222;
-        private System.Windows.Forms.Label label223;
-        private System.Windows.Forms.Label label229;
-        private System.Windows.Forms.Label label230;
         private System.Windows.Forms.Panel panel78;
         private System.Windows.Forms.Label label217;
         private System.Windows.Forms.Panel panelUniqueAddressesScaleButtons;
@@ -18767,15 +18331,6 @@
         private ScottPlot.FormsPlot formsPlot2;
         private System.Windows.Forms.Panel panel79;
         private System.Windows.Forms.Label label218;
-        private System.Windows.Forms.Panel panelLightningNodeNetwork;
-        private System.Windows.Forms.Label label219;
-        private System.Windows.Forms.Label label220;
-        private System.Windows.Forms.Label label227;
-        private System.Windows.Forms.Label label236;
-        private System.Windows.Forms.Label label226;
-        private System.Windows.Forms.Label label225;
-        private System.Windows.Forms.Label label224;
-        private System.Windows.Forms.Label label221;
         private ScottPlot.FormsPlot formsPlot3;
         private System.Windows.Forms.Panel panel80;
         private System.Windows.Forms.Label label228;

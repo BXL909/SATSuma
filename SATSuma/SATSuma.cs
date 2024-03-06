@@ -28,8 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * hide 'todays date' option on date pickers
 * estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
-* set state of stuff (e.g bookmark button) based on DCA screen status
-* add DCA to default startup screen options
+* bit more space under lightning countries chart
 */
 
 #region Using
@@ -617,6 +616,7 @@ namespace SATSuma
                     { "chart - price", () => { BtnMenuCharts_Click(sender, e); BtnChartPrice_Click(sender, e); } },
                     { "chart - market cap.", () => { BtnMenuCharts_Click(sender, e); BtnChartMarketCap_Click(sender, e); } },
                     { "chart - fiat/gold/btc converter", () => { BtnMenuCharts_Click(sender, e); BtnPriceConverter_Click(sender, e); } },
+                    { "dca calculator", () => BtnMenuDCACalculator_Click(sender, e) },
                 };
                 if (buttonClickEvents.TryGetValue(comboBoxStartupScreen.Texts, out Action buttonClickEvent))
                 {
@@ -9394,6 +9394,7 @@ namespace SATSuma
 
                     formsPlot2.Plot.YAxis.Label("");
                     formsPlot2.Plot.XAxis.Label("");
+
                     // refresh the graph
                     formsPlot2.Refresh();
                     formsPlot2.Visible = true;
@@ -9476,6 +9477,14 @@ namespace SATSuma
                     formsPlot1.Plot.AddFill(xValues, yValues5, 0, color: Color.LimeGreen);
                     formsPlot1.Plot.AddFill(xValues, yValues6, 0, color: Color.Blue);
                     formsPlot1.Plot.AddFill(xValues, yValues7, 0, color: Color.Indigo);
+                    // create 'pretend' (empty) scatters purely so we can generate a legend/key
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "minimum", color: Color.Indigo); 
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "10th", color: Color.Blue);
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "25th", color: Color.LimeGreen);
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "median", color: Color.Yellow);
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "75th", color: Color.Orange);
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "90th", color: Color.Red); 
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "maximum", color: Color.DarkGray);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
                     formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
@@ -9483,6 +9492,13 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("sats per v/byte", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
+
+                    var legend = formsPlot1.Plot.Legend();
+                    legend.Location = Alignment.UpperLeft;
+                    legend.FillColor = chartsBackgroundColor;
+                    legend.FontColor = label77.ForeColor;
+                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.ShadowColor = chartsBackgroundColor;
 
                     // Set the tick and gridline settings
                     formsPlot1.Plot.XAxis.Ticks(true);
@@ -9493,8 +9509,7 @@ namespace SATSuma
                     // refresh the graph
                     formsPlot1.Refresh();
                     formsPlot1.Visible = true;
-                    panelFeeRatesKey.Visible = true;
-
+                    
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
@@ -9570,10 +9585,10 @@ namespace SATSuma
                     formsPlot1.Plot.SetAxisLimits(xValues.Min(), xValues.Max(), 0, yBoundary);
                     formsPlot1.Plot.YAxis.SetBoundary(0, yBoundary);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-                    formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.IndianRed);
-                    formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.OliveDrab);
-                    formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.SteelBlue);
-                    formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Gold);
+                    formsPlot1.Plot.AddScatter(xValues, yValues1, lineWidth: 1, markerSize: 1, color: Color.IndianRed, label: "Darknet only (Tor, I2P, cjdns)");
+                    formsPlot1.Plot.AddScatter(xValues, yValues2, lineWidth: 1, markerSize: 1, color: Color.OliveDrab, label: "Clearnet only (IPv4, IPv6)");
+                    formsPlot1.Plot.AddScatter(xValues, yValues3, lineWidth: 1, markerSize: 1, color: Color.SteelBlue, label: "Clearnet and Darknet");
+                    formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Gold, label: "Unknown");
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
                     formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
@@ -9582,17 +9597,22 @@ namespace SATSuma
                     formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
+                    var legend = formsPlot1.Plot.Legend();
+                    legend.Location = Alignment.UpperLeft;
+                    legend.FillColor = chartsBackgroundColor;
+                    legend.FontColor = label77.ForeColor;
+                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.ShadowColor = chartsBackgroundColor;
+
                     // Set the tick and gridline settings
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.MajorGrid(true);
                     formsPlot1.Plot.YAxis.MajorGrid(true);
 
-                    formsPlot1.Plot.Legend();
                     // refresh the graph
                     formsPlot1.Refresh();
                     formsPlot1.Visible = true;
-                    panelLightningNodeNetwork.Visible = true;
                     //panelFeeRatesKey.Visible = true;
 
                     ToggleLoadingAnimation("disable");
@@ -9674,7 +9694,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -9895,7 +9915,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValuesCapacity.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValuesCapacity.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -9992,7 +10012,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValuesChannels.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValuesChannels.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10094,10 +10114,10 @@ namespace SATSuma
                     formsPlot3.Plot.YTicks(yPositions, countryNames);
                     formsPlot3.Plot.YLabel("");
                     formsPlot3.Plot.XLabel("");
-                    formsPlot3.Plot.SetAxisLimits(0, counts.Max());
-                    formsPlot3.Plot.XAxis.SetBoundary(0, counts.Max());
-                    formsPlot3.Plot.YAxis.SetBoundary(-3, 45);
-                    formsPlot3.Plot.Layout(left: 100);
+                    formsPlot3.Plot.SetAxisLimits(xMin: 0, xMax: counts.Max() * 1.05, yMin: 0, yMax: countryNames.Count());
+                    formsPlot3.Plot.XAxis.SetBoundary(0, counts.Max() * 1.05);
+                    formsPlot3.Plot.YAxis.SetBoundary(0, countryNames.Count());
+                    formsPlot3.Plot.Layout(left: 100, bottom:50);
 
                     // refresh the graph
                     formsPlot3.Refresh();
@@ -10171,7 +10191,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10258,7 +10278,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10355,7 +10375,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10570,7 +10590,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10818,7 +10838,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11098,7 +11118,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11344,7 +11364,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11554,7 +11574,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
-                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
+                    formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11645,6 +11665,9 @@ namespace SATSuma
 
                     formsPlot1.Plot.AddFill(xValues, yConstant, 0, color: Color.FromArgb(30, Color.Orange));
                     formsPlot1.Plot.AddFill(xValues, yValues, 0, color: Color.Orange);
+                    // create 'pretend' (empty) scatters purely so we can generate a legend/key
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "to be mined", color: Color.FromArgb(30, Color.Orange));
+                    formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "already mined", color: Color.Orange);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
                     formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
@@ -11663,7 +11686,13 @@ namespace SATSuma
                     HighlightedPoint.MarkerSize = (int)(10 * UIScale);
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
-                    panelCirculationKey.Visible = true;
+
+                    var legend = formsPlot1.Plot.Legend();
+                    legend.Location = Alignment.UpperRight;
+                    legend.FillColor = chartsBackgroundColor;
+                    legend.FontColor = label77.ForeColor;
+                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.ShadowColor = chartsBackgroundColor;
 
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Ticks(true);
@@ -12529,9 +12558,6 @@ namespace SATSuma
                 panelChartUTXOScaleButtons.Visible = false;
                 panelUniqueAddressesScaleButtons.Visible = false;
                 panelPriceScaleButtons.Visible = false;
-                panelLightningNodeNetwork.Visible = false;
-                panelCirculationKey.Visible = false;
-                panelFeeRatesKey.Visible = false;
                 panelChartMarketCapScaleButtons.Visible = false;
                 panelChartDifficultyScaleButtons.Visible = false;
                 panelPriceConverter.Visible = false;
@@ -15835,7 +15861,8 @@ namespace SATSuma
                 { 22, "chtchannls" },
                 { 23, "chtprice--" },
                 { 24, "chtmrktcap" },
-                { 25, "chtcnvertr" }
+                { 25, "chtcnvertr" },
+                { 26, "dcacalcrtr" }
             };
 
             if (screenMap.ContainsKey(comboBoxStartupScreen.SelectedIndex))
@@ -16087,7 +16114,9 @@ namespace SATSuma
                         { "chtchannls", "chart - ⚡channels" },
                         { "chtprice--", "chart - price" },
                         { "chtmrktcap", "chart - market cap." },
-                        { "chtcnvertr", "chart - fiat/gold/btc converter" }
+                        { "chtcnvertr", "chart - fiat/gold/btc converter" },
+                        { "dcacalcrtr", "dca calculator" }
+                        
                     };
 
                     if (bookmark.Type == "settings")
@@ -20125,15 +20154,12 @@ namespace SATSuma
                     titleLabel: thisColor,
                     axisLabel: label148.ForeColor); // using any random label to get the color from
 
-                panelFeeRatesKey.BackColor = chartsBackgroundColor;
-                panelCirculationKey.BackColor = chartsBackgroundColor;
                 panelPriceScaleButtons.BackColor = chartsBackgroundColor;
                 panelChartMarketCapScaleButtons.BackColor = chartsBackgroundColor;
                 panelChartUTXOScaleButtons.BackColor = chartsBackgroundColor;
                 panelChartDifficultyScaleButtons.BackColor = chartsBackgroundColor;
                 panelHashrateScaleButtons.BackColor = chartsBackgroundColor;
                 panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
-                panelLightningNodeNetwork.BackColor = chartsBackgroundColor;
                 panelPriceConvert.BackColor = chartsBackgroundColor;
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
@@ -20311,7 +20337,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsLabelsToColor = { label236, label220, label225, label226, label229, label230, label233, label232, label202, label203, label205, label206, label207, label208, label209, label236, label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
+                Control[] listChartsLabelsToColor = { label233, label232, label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
                 foreach (Control control in listChartsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -26005,7 +26031,7 @@ namespace SATSuma
 
         #endregion
 
-        private async void btnMenuDCACalculator_Click(object sender, EventArgs e)
+        private async void BtnMenuDCACalculator_Click(object sender, EventArgs e)
         {
             try
             {
@@ -26086,7 +26112,7 @@ namespace SATSuma
             {
                 ShowDCAChartLoadingPanel();
                 formsPlotDCA.Visible = true;
-                chartType = "price";
+                
 
                 ToggleLoadingAnimation("enable");
 
@@ -26164,10 +26190,11 @@ namespace SATSuma
                     #endregion
 
                     #region create list of dates that DCA purchases occurred
-                    List<DateTime> DCADateList = new List<DateTime>();
-
-                    // Add the start date
-                    DCADateList.Add(DCAStartDate);
+                    List<DateTime> DCADateList = new List<DateTime>
+                    {
+                        // Add the start date
+                        DCAStartDate
+                    };
 
                     // Add the dates in between
                     DateTime nextDCADate = DCAStartDate;
@@ -26214,7 +26241,7 @@ namespace SATSuma
                             // Date not found in the original data
                             DCABitcoinAmountList.Add(lastAmountBought);
                         }
-                        bitcoinBoughtRunningTotal = bitcoinBoughtRunningTotal + lastAmountBought;
+                        bitcoinBoughtRunningTotal += lastAmountBought;
                         DCABitcoinAmountRunningTotalList.Add(bitcoinBoughtRunningTotal);
                     }
                     #endregion
@@ -26253,6 +26280,7 @@ namespace SATSuma
                     legend.FillColor = chartsBackgroundColor;
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
+                    legend.ShadowColor = chartsBackgroundColor;
 
                     // prevent navigating beyond the data
                     formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.05);
@@ -26348,17 +26376,17 @@ namespace SATSuma
             }
         }
 
-        private void rjDatePickerDCAStartDate_ValueChanged(object sender, EventArgs e)
+        private void RjDatePickerDCAStartDate_ValueChanged(object sender, EventArgs e)
         {
             rjDatePickerDCAEndDate.MinDate = rjDatePickerDCAStartDate.Value;
         }
 
-        private void rjDatePickerDCAEndDate_ValueChanged(object sender, EventArgs e)
+        private void RjDatePickerDCAEndDate_ValueChanged(object sender, EventArgs e)
         {
             rjDatePickerDCAStartDate.MaxDate = rjDatePickerDCAEndDate.Value;
         }
 
-        private void textBoxDCAAmountInput_Leave(object sender, EventArgs e)
+        private void TextBoxDCAAmountInput_Leave(object sender, EventArgs e)
         {
             try
             {
@@ -26376,7 +26404,7 @@ namespace SATSuma
             }
         }
 
-        private void btnCalculateDCA_Click(object sender, EventArgs e)
+        private void BtnCalculateDCA_Click(object sender, EventArgs e)
         {
             PopulateDCACalculator();
         }

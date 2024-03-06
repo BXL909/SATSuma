@@ -28,7 +28,6 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * hide 'todays date' option on date pickers
 * estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
-* bit more space under lightning countries chart
 */
 
 #region Using
@@ -10100,7 +10099,6 @@ namespace SATSuma
                     double nodesOfOtherCountries = totalNodes - nodesInTop40;
                     countryNames = countryNames.Concat(new[] { "Other" }).ToArray();
                     counts = counts.Concat(new[] { nodesOfOtherCountries }).ToArray();
-
                     // Create the ScottPlot bar chart
                     var bar = formsPlot3.Plot.AddBar(counts);
                     bar.Orientation = ScottPlot.Orientation.Horizontal;
@@ -10114,10 +10112,12 @@ namespace SATSuma
                     formsPlot3.Plot.YTicks(yPositions, countryNames);
                     formsPlot3.Plot.YLabel("");
                     formsPlot3.Plot.XLabel("");
-                    formsPlot3.Plot.SetAxisLimits(xMin: 0, xMax: counts.Max() * 1.05, yMin: 0, yMax: countryNames.Count());
+                    formsPlot3.Plot.SetAxisLimits(xMin: 0, xMax: counts.Max() * 1.05, yMin: -1, yMax: countryNames.Length + 1);
                     formsPlot3.Plot.XAxis.SetBoundary(0, counts.Max() * 1.05);
-                    formsPlot3.Plot.YAxis.SetBoundary(0, countryNames.Count());
+                    formsPlot3.Plot.YAxis.SetBoundary(-1, countryNames.Length +1);
                     formsPlot3.Plot.Layout(left: 100, bottom:50);
+
+                    formsPlot3.Plot.Layout(left: 100, bottom: 50);
 
                     // refresh the graph
                     formsPlot3.Refresh();

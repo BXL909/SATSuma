@@ -1113,6 +1113,8 @@
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
+            this.panelDCAMessages = new System.Windows.Forms.Panel();
+            this.lblDCAMessage = new System.Windows.Forms.Label();
             this.btnCalculateDCA = new CustomControls.RJControls.RJButton();
             this.panel115 = new System.Windows.Forms.Panel();
             this.rjDatePickerDCAEndDate = new CustomControls.RJControls.RJDatePicker();
@@ -1321,6 +1323,7 @@
             this.panelLeftPanel.SuspendLayout();
             this.panelErrorMessage.SuspendLayout();
             this.panelDCACalculator.SuspendLayout();
+            this.panelDCAMessages.SuspendLayout();
             this.panel115.SuspendLayout();
             this.panel114.SuspendLayout();
             this.panel113.SuspendLayout();
@@ -17184,6 +17187,7 @@
             // panelDCACalculator
             // 
             this.panelDCACalculator.BackColor = System.Drawing.Color.Transparent;
+            this.panelDCACalculator.Controls.Add(this.panelDCAMessages);
             this.panelDCACalculator.Controls.Add(this.btnCalculateDCA);
             this.panelDCACalculator.Controls.Add(this.panel115);
             this.panelDCACalculator.Controls.Add(this.panel114);
@@ -17201,6 +17205,27 @@
             this.panelDCACalculator.Size = new System.Drawing.Size(773, 556);
             this.panelDCACalculator.TabIndex = 277;
             this.panelDCACalculator.Visible = false;
+            // 
+            // panelDCAMessages
+            // 
+            this.panelDCAMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCAMessages.Controls.Add(this.lblDCAMessage);
+            this.panelDCAMessages.Location = new System.Drawing.Point(0, 292);
+            this.panelDCAMessages.Name = "panelDCAMessages";
+            this.panelDCAMessages.Size = new System.Drawing.Size(113, 220);
+            this.panelDCAMessages.TabIndex = 313;
+            // 
+            // lblDCAMessage
+            // 
+            this.lblDCAMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAMessage.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblDCAMessage.ForeColor = System.Drawing.Color.Silver;
+            this.lblDCAMessage.Location = new System.Drawing.Point(0, 4);
+            this.lblDCAMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAMessage.Name = "lblDCAMessage";
+            this.lblDCAMessage.Size = new System.Drawing.Size(113, 211);
+            this.lblDCAMessage.TabIndex = 314;
+            this.lblDCAMessage.Text = "DCA summary";
             // 
             // btnCalculateDCA
             // 
@@ -17334,6 +17359,7 @@
             this.textBoxDCAAmountInput.TabIndex = 310;
             this.textBoxDCAAmountInput.TabStop = false;
             this.textBoxDCAAmountInput.Text = "10.00";
+            this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.textBoxDCAAmountInput_TextChanged);
             this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
             // 
@@ -17464,8 +17490,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
@@ -17785,6 +17811,7 @@
             this.panelErrorMessage.ResumeLayout(false);
             this.panelDCACalculator.ResumeLayout(false);
             this.panelDCACalculator.PerformLayout();
+            this.panelDCAMessages.ResumeLayout(false);
             this.panel115.ResumeLayout(false);
             this.panel114.ResumeLayout(false);
             this.panel113.ResumeLayout(false);
@@ -18902,6 +18929,8 @@
         private System.Windows.Forms.Panel panel114;
         private System.Windows.Forms.Panel panel115;
         private CustomControls.RJControls.RJButton btnCalculateDCA;
+        private System.Windows.Forms.Panel panelDCAMessages;
+        private System.Windows.Forms.Label lblDCAMessage;
     }
 }
 

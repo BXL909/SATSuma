@@ -26,8 +26,9 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* hide 'todays date' option on date pickers
 * estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
+* validate date input on dca (can't be same, can't start today)
+* replace dca summary text with individual labels. Check DCA calcs are correct
 */
 
 #region Using
@@ -450,6 +451,7 @@ namespace SATSuma
             panel113.Paint += Panel_Paint;
             panel114.Paint += Panel_Paint;
             panel115.Paint += Panel_Paint;
+            panelDCAMessages.Paint += Panel_Paint;
             #endregion
             #region panels (heading containers)
             panel1.Paint += Panel_Paint;
@@ -576,10 +578,10 @@ namespace SATSuma
                     BtnChartFeeRates_Click(sender, e);
                 }
                 // prepopulate the DCA calculator
-                rjDatePickerDCAStartDate.MaxDate = DateTime.Today.AddDays(-1);
-                rjDatePickerDCAEndDate.MaxDate = DateTime.Today.AddDays(-1);
-                rjDatePickerDCAStartDate.Value = new DateTime(2017, 3, 4); 
-                rjDatePickerDCAEndDate.Value = new DateTime(2023, 3, 4);
+                rjDatePickerDCAStartDate.MaxDate = DateTime.Today;
+                rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
+                rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
+                rjDatePickerDCAEndDate.Value = DateTime.Today;
                 PopulateDCACalculator();
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
                 CheckForUpdates();
@@ -20045,6 +20047,7 @@ namespace SATSuma
                 panel113.Invalidate();
                 panel114.Invalidate();
                 panel115.Invalidate();
+                panelDCAMessages.Invalidate();
                 #endregion
                 #region panels (heading containers)
                 panel1.Invalidate();
@@ -20349,7 +20352,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //dca calculator
-                Control[] listDCALabelsToColor = { label304, label305, label306, label307 };
+                Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage };
                 foreach (Control control in listDCALabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21177,7 +21180,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -26106,13 +26109,15 @@ namespace SATSuma
             }
         }
 
+        double DCAFrequencyDays = 1;
+
         private async void PopulateDCACalculator()
         {
             try
             {
                 ShowDCAChartLoadingPanel();
+
                 formsPlotDCA.Visible = true;
-                
 
                 ToggleLoadingAnimation("enable");
 
@@ -26174,7 +26179,7 @@ namespace SATSuma
 
                     #region set up variables used for DCA calculation
                     double DCAAmount = Convert.ToDouble(textBoxDCAAmountInput.Text);
-                    double DCAFrequencyDays = 1;
+                    
                     Dictionary<int, double> screenMap = new Dictionary<int, double>
                     {
                         { 0, 1 },
@@ -26297,7 +26302,48 @@ namespace SATSuma
                     // refresh the graph
                     formsPlotDCA.Refresh();
                     formsPlotDCA.Visible = true;
-                    //panelPriceScaleButtons.Visible = true;
+
+                    string currencyName = "D";
+                    string currencySymbol = "$";
+                    if (currencySelected == "D")
+                    {
+                        currencyName = "USD";
+                        currencySymbol = "$";
+                    }
+                    else
+                    {
+                        if (currencySelected == "P")
+                        {
+                            currencyName = "GBP";
+                            currencySymbol = "£";
+                        }
+                        else
+                        {
+                            if (currencySelected == "E")
+                            {
+                                currencyName = "EUR";
+                                currencySymbol = "€";
+                            }
+                            else
+                            {
+                                if (currencySelected == "G")
+                                {
+                                    currencyName = "XAU";
+                                    currencySymbol = "\U0001fa99";
+                                }
+                            }
+                        }
+                    }
+
+                    double xDCAChartDatesCount = xDCAChartDates.Count();
+                    double percentageChange = (bitcoinBoughtRunningTotal * Convert.ToDouble(OneBTCinSelectedCurrency)) / (xDCAChartDatesCount * DCAAmount) * 100;
+
+                    lblDCAMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCAMessage.Text = "purchases - \n  " + xDCAChartDates.Count() + "\n\n" + currencyName + " spent - \n  " + currencySymbol + (xDCAChartDates.Count() * DCAAmount) + "\n\nBTC purchased - \n  " + bitcoinBoughtRunningTotal.ToString("0.00000000") + "\n\nvalue today - \n  " + currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2") + "\n\nPercentage change - \n  " + percentageChange;
+                    });
+                    panelDCAMessages.Visible = true;
+                    
                     ToggleLoadingAnimation("disable");
                     HideDCAChartLoadingPanel();
                 }
@@ -26379,11 +26425,13 @@ namespace SATSuma
         private void RjDatePickerDCAStartDate_ValueChanged(object sender, EventArgs e)
         {
             rjDatePickerDCAEndDate.MinDate = rjDatePickerDCAStartDate.Value;
+            ValidateDCAInputs();
         }
 
         private void RjDatePickerDCAEndDate_ValueChanged(object sender, EventArgs e)
         {
             rjDatePickerDCAStartDate.MaxDate = rjDatePickerDCAEndDate.Value;
+            ValidateDCAInputs();
         }
 
         private void TextBoxDCAAmountInput_Leave(object sender, EventArgs e)
@@ -26407,6 +26455,67 @@ namespace SATSuma
         private void BtnCalculateDCA_Click(object sender, EventArgs e)
         {
             PopulateDCACalculator();
+        }
+
+        private void ValidateDCAInputs()
+        {
+            lblDCAMessage.Text = "";
+            double amountDCA = Convert.ToDouble(textBoxDCAAmountInput.Text);
+            if (amountDCA <= 0)
+            {
+                btnCalculateDCA.Enabled = false;
+                panelDCAMessages.Visible = true;
+                lblDCAMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblDCAMessage.Text = "You need to provide an amount that you wish to DCA in to bitcoin on a regular basis";
+                });
+                return;
+            }
+
+            DateTime endDate = rjDatePickerDCAEndDate.Value;
+            DateTime startDate = rjDatePickerDCAStartDate.Value;
+
+            TimeSpan dateDifference = endDate - startDate;
+
+            int DCACalcMinimumPeriod = 0;
+            if (DCAFrequencyDays == 1)
+            {
+                DCACalcMinimumPeriod = 14;
+            }
+            else
+            {
+                if (DCAFrequencyDays == 7)
+                {
+                    DCACalcMinimumPeriod = 30;
+                }
+                else
+                {
+                    if (DCAFrequencyDays == 30)
+                    {
+                        DCACalcMinimumPeriod = 120;
+                    }
+                }
+            }
+
+            if (dateDifference.Days < DCACalcMinimumPeriod)
+            {
+                btnCalculateDCA.Enabled = false;
+                panelDCAMessages.Visible = true;
+                lblDCAMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblDCAMessage.Text = "There should be at least " + DCACalcMinimumPeriod + " days between the start date and the end date for the selected DCA frequency";
+                });
+                return;
+            }
+
+            btnCalculateDCA.Enabled = true;
+            panelDCAMessages.Visible = false;
+            lblDCAMessage.Text = "";
+        }
+
+        private void textBoxDCAAmountInput_TextChanged(object sender, EventArgs e)
+        {
+            ValidateDCAInputs();
         }
     }
 }                

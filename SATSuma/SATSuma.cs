@@ -1,6 +1,6 @@
 ﻿/*  
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.01    
+⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.1    
 ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
 * validate date input on dca (can't be same, can't start today)
-* replace dca summary text with individual labels. Check DCA calcs are correct
+* help page for DCA screen
 */
 
 #region Using
@@ -69,7 +69,7 @@ namespace SATSuma
 {
     public partial class SATSuma : Form
     {
-        readonly string CurrentVersion = "2.01";
+        readonly string CurrentVersion = "2.1";
 
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -420,6 +420,9 @@ namespace SATSuma
             panelErrorMessage.Paint += Panel_Paint;
             panelSettingsUIScale.Paint += Panel_Paint;
             panelSettingsUIScaleContainer.Paint += Panel_Paint;
+            panelDCAMessages.Paint += Panel_Paint;
+            panelDCASummary.Paint += Panel_Paint;
+            panel117.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             panelThemeNameContainer.Paint += Panel_Paint;
@@ -451,7 +454,6 @@ namespace SATSuma
             panel113.Paint += Panel_Paint;
             panel114.Paint += Panel_Paint;
             panel115.Paint += Panel_Paint;
-            panelDCAMessages.Paint += Panel_Paint;
             #endregion
             #region panels (heading containers)
             panel1.Paint += Panel_Paint;
@@ -582,7 +584,10 @@ namespace SATSuma
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
-                PopulateDCACalculator();
+                if (lblBlockchainInfoEndpoints.Text == "✔️")
+                {
+                    PopulateDCACalculator();
+                }
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
                 CheckForUpdates();
                 PopulateThemeComboboxes();
@@ -15425,6 +15430,7 @@ namespace SATSuma
                     });
                     RunBlockchainInfoEndpointAPI = false;
                     blockchainInfoEndpointsSelected = "0";
+                    btnMenuDCACalculator.Enabled = false;
                     DisableChartsThatDontUseMempoolSpace();
                 }
                 else
@@ -15436,6 +15442,7 @@ namespace SATSuma
                     });
                     RunBlockchainInfoEndpointAPI = true;
                     blockchainInfoEndpointsSelected = "1";
+                    btnMenuDCACalculator.Enabled = true;
                     EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
@@ -20015,6 +20022,9 @@ namespace SATSuma
                 panelOwnNodeBlockTXInfo.Invalidate();
                 panelTransactionMiddle.Invalidate();
                 panelErrorMessage.Invalidate();
+                panelDCAMessages.Invalidate();
+                panelDCASummary.Invalidate();
+                panel117.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -20047,7 +20057,6 @@ namespace SATSuma
                 panel113.Invalidate();
                 panel114.Invalidate();
                 panel115.Invalidate();
-                panelDCAMessages.Invalidate();
                 #endregion
                 #region panels (heading containers)
                 panel1.Invalidate();
@@ -20268,6 +20277,12 @@ namespace SATSuma
                 {
                     control.ForeColor = thisColor;
                 }
+                //dca calculator
+                Control[] listDCADataFieldsToColor = { lblDCAAmountSpent, lblDCABTCPurchased, lblDCABTCPurchases, lblDCACurrentValue, lblDCAPercentageChange };
+                foreach (Control control in listDCADataFieldsToColor)
+                {
+                    control.ForeColor = thisColor;
+                }
             }
             catch (Exception ex)
             {
@@ -20352,7 +20367,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //dca calculator
-                Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage };
+                Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage, label202, label203, label205, label206, label207, labelDCADefinition };
                 foreach (Control control in listDCALabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20457,6 +20472,9 @@ namespace SATSuma
                     button.BorderSize = 1;
                     button.BorderColor = thiscolor;
                 }
+                //dca
+                label208.ForeColor = thiscolor;
+                label209.ForeColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -20520,7 +20538,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, labelDCADefinition };
+                Control[] listOtherTextToColor = { label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -20991,6 +21009,11 @@ namespace SATSuma
                     control.BackColor = Color.Transparent;
                     control.BackgroundImage = ImageFile;
                 }
+                //dca
+                panel116.BackColor = Color.Transparent;
+                panel116.BackgroundImage = ImageFile;
+                panel118.BackColor = Color.Transparent;
+                panel118.BackgroundImage = ImageFile;
             }
             catch (Exception ex)
             {
@@ -21088,6 +21111,11 @@ namespace SATSuma
                     control.BackColor = Color.Transparent;
                     control.BackgroundImage = null;
                 }
+                //dca
+                panel116.BackColor = Color.Transparent;
+                panel116.BackgroundImage = null;
+                panel118.BackColor = Color.Transparent;
+                panel118.BackgroundImage = null;
             }
             catch (Exception ex)
             {
@@ -21169,6 +21197,11 @@ namespace SATSuma
                     control.BackgroundImage = null;
                     control.BackColor = titleBackgroundColor;
                 }
+                //dca
+                panel116.BackgroundImage = null;
+                panel116.BackColor = titleBackgroundColor;
+                panel118.BackgroundImage = null;
+                panel118.BackColor = titleBackgroundColor;
             }
             catch (Exception ex)
             {
@@ -21180,7 +21213,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panel117 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -24264,6 +24297,12 @@ namespace SATSuma
                         });
                     }
                     #endregion
+                    #region recalculate dca screen
+                    if (lblBlockchainInfoEndpoints.Text == "✔️")
+                    {
+                        PopulateDCACalculator();
+                    }
+                    #endregion
                 }
             }
             catch (Exception ex)
@@ -26260,12 +26299,12 @@ namespace SATSuma
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.05, yAxisIndex: 1);  // bitcoin acquired
 
 
-                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "price");
+                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "Market price of 1 BTC");
 
                     // plot another set of data to show amount bought per purchase using the additional axis
-                    var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
-                    BTCscatter.YAxisIndex = 1;
-                    formsPlotDCA.Plot.YAxis2.Label("Bitcoin acquired");
+                    //var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
+                    //BTCscatter.YAxisIndex = 1;
+                    formsPlotDCA.Plot.YAxis2.Label("Accumulated bitcoin (BTC)");
                     formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
                     // plot another set of data to show running total bought using the additional axis
@@ -26338,11 +26377,31 @@ namespace SATSuma
                     double xDCAChartDatesCount = xDCAChartDates.Count();
                     double percentageChange = (bitcoinBoughtRunningTotal * Convert.ToDouble(OneBTCinSelectedCurrency)) / (xDCAChartDatesCount * DCAAmount) * 100;
 
-                    lblDCAMessage.Invoke((MethodInvoker)delegate
+                    lblDCABTCPurchases.Invoke((MethodInvoker)delegate
                     {
-                        lblDCAMessage.Text = "purchases - \n  " + xDCAChartDates.Count() + "\n\n" + currencyName + " spent - \n  " + currencySymbol + (xDCAChartDates.Count() * DCAAmount) + "\n\nBTC purchased - \n  " + bitcoinBoughtRunningTotal.ToString("0.00000000") + "\n\nvalue today - \n  " + currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2") + "\n\nPercentage change - \n  " + percentageChange;
+                        lblDCABTCPurchases.Text = Convert.ToString(xDCAChartDates.Count());
                     });
-                    panelDCAMessages.Visible = true;
+                    label206.Invoke((MethodInvoker)delegate
+                    {
+                        label206.Text = currencyName + " spent";
+                    });
+                    lblDCAAmountSpent.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCAAmountSpent.Text = currencySymbol + Convert.ToString(xDCAChartDates.Count() * DCAAmount);
+                    });
+                    lblDCABTCPurchased.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCABTCPurchased.Text = bitcoinBoughtRunningTotal.ToString("0.00000000");
+                    });
+                    lblDCACurrentValue.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCACurrentValue.Text = currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2");
+                    });
+                    lblDCAPercentageChange.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCAPercentageChange.Text = percentageChange.ToString("0.00");
+                    });
+                    panelDCASummary.Visible = true;
                     
                     ToggleLoadingAnimation("disable");
                     HideDCAChartLoadingPanel();
@@ -26454,16 +26513,34 @@ namespace SATSuma
 
         private void BtnCalculateDCA_Click(object sender, EventArgs e)
         {
-            PopulateDCACalculator();
+            if (lblBlockchainInfoEndpoints.Text == "✔️")
+            {
+                PopulateDCACalculator();
+            }
         }
 
         private void ValidateDCAInputs()
         {
-            lblDCAMessage.Text = "";
-            double amountDCA = Convert.ToDouble(textBoxDCAAmountInput.Text);
-            if (amountDCA <= 0)
+            try
+            {
+                lblDCAMessage.Text = "";
+                double amountDCA = Convert.ToDouble(textBoxDCAAmountInput.Text);
+                if (amountDCA <= 0)
+                {
+                    btnCalculateDCA.Enabled = false;
+                    panelDCASummary.Visible = false;
+                    panelDCAMessages.Visible = true;
+                    lblDCAMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblDCAMessage.Text = "You need to provide an amount that you wish to DCA in to bitcoin on a regular basis";
+                    });
+                    return;
+                }
+            }
+            catch
             {
                 btnCalculateDCA.Enabled = false;
+                panelDCASummary.Visible = false;
                 panelDCAMessages.Visible = true;
                 lblDCAMessage.Invoke((MethodInvoker)delegate
                 {
@@ -26471,7 +26548,6 @@ namespace SATSuma
                 });
                 return;
             }
-
             DateTime endDate = rjDatePickerDCAEndDate.Value;
             DateTime startDate = rjDatePickerDCAStartDate.Value;
 
@@ -26510,6 +26586,7 @@ namespace SATSuma
 
             btnCalculateDCA.Enabled = true;
             panelDCAMessages.Visible = false;
+            panelDCASummary.Visible = false;
             lblDCAMessage.Text = "";
         }
 

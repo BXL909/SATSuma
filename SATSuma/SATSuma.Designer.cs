@@ -1113,21 +1113,37 @@
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
-            this.panelDCAMessages = new System.Windows.Forms.Panel();
-            this.lblDCAMessage = new System.Windows.Forms.Label();
-            this.btnCalculateDCA = new CustomControls.RJControls.RJButton();
-            this.panel115 = new System.Windows.Forms.Panel();
-            this.rjDatePickerDCAEndDate = new CustomControls.RJControls.RJDatePicker();
-            this.panel114 = new System.Windows.Forms.Panel();
-            this.rjDatePickerDCAStartDate = new CustomControls.RJControls.RJDatePicker();
-            this.panel113 = new System.Windows.Forms.Panel();
-            this.comboBoxDCAFrequency = new CustomControls.RJControls.RJComboBox();
+            this.panel117 = new System.Windows.Forms.Panel();
+            this.panel118 = new System.Windows.Forms.Panel();
+            this.label209 = new System.Windows.Forms.Label();
             this.panel111 = new System.Windows.Forms.Panel();
             this.textBoxDCAAmountInput = new System.Windows.Forms.TextBox();
-            this.label307 = new System.Windows.Forms.Label();
-            this.label306 = new System.Windows.Forms.Label();
-            this.label305 = new System.Windows.Forms.Label();
             this.label304 = new System.Windows.Forms.Label();
+            this.btnCalculateDCA = new CustomControls.RJControls.RJButton();
+            this.label305 = new System.Windows.Forms.Label();
+            this.panel115 = new System.Windows.Forms.Panel();
+            this.rjDatePickerDCAEndDate = new CustomControls.RJControls.RJDatePicker();
+            this.label306 = new System.Windows.Forms.Label();
+            this.panel114 = new System.Windows.Forms.Panel();
+            this.rjDatePickerDCAStartDate = new CustomControls.RJControls.RJDatePicker();
+            this.label307 = new System.Windows.Forms.Label();
+            this.panel113 = new System.Windows.Forms.Panel();
+            this.comboBoxDCAFrequency = new CustomControls.RJControls.RJComboBox();
+            this.panelDCASummary = new System.Windows.Forms.Panel();
+            this.panel116 = new System.Windows.Forms.Panel();
+            this.label208 = new System.Windows.Forms.Label();
+            this.lblDCAPercentageChange = new System.Windows.Forms.Label();
+            this.lblDCACurrentValue = new System.Windows.Forms.Label();
+            this.lblDCABTCPurchased = new System.Windows.Forms.Label();
+            this.lblDCAAmountSpent = new System.Windows.Forms.Label();
+            this.lblDCABTCPurchases = new System.Windows.Forms.Label();
+            this.label207 = new System.Windows.Forms.Label();
+            this.label206 = new System.Windows.Forms.Label();
+            this.label205 = new System.Windows.Forms.Label();
+            this.label203 = new System.Windows.Forms.Label();
+            this.label202 = new System.Windows.Forms.Label();
+            this.panelDCAMessages = new System.Windows.Forms.Panel();
+            this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
             this.panelDCAChartLoadingPanel = new System.Windows.Forms.Panel();
             this.label415 = new System.Windows.Forms.Label();
@@ -1323,11 +1339,15 @@
             this.panelLeftPanel.SuspendLayout();
             this.panelErrorMessage.SuspendLayout();
             this.panelDCACalculator.SuspendLayout();
-            this.panelDCAMessages.SuspendLayout();
+            this.panel117.SuspendLayout();
+            this.panel118.SuspendLayout();
+            this.panel111.SuspendLayout();
             this.panel115.SuspendLayout();
             this.panel114.SuspendLayout();
             this.panel113.SuspendLayout();
-            this.panel111.SuspendLayout();
+            this.panelDCASummary.SuspendLayout();
+            this.panel116.SuspendLayout();
+            this.panelDCAMessages.SuspendLayout();
             this.panelDCAChartLoadingPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.SuspendLayout();
@@ -6898,7 +6918,7 @@
             this.panelMenu.Controls.Add(this.btnMenuLightningDashboard);
             this.panelMenu.Location = new System.Drawing.Point(8, 33);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(122, 312);
+            this.panelMenu.Size = new System.Drawing.Size(122, 332);
             this.panelMenu.TabIndex = 152;
             // 
             // lblMenuArrow
@@ -6922,7 +6942,7 @@
             this.btnMenuDCACalculator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDCACalculator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuDCACalculator.ForeColor = System.Drawing.Color.White;
-            this.btnMenuDCACalculator.Location = new System.Drawing.Point(0, 278);
+            this.btnMenuDCACalculator.Location = new System.Drawing.Point(0, 230);
             this.btnMenuDCACalculator.Name = "btnMenuDCACalculator";
             this.btnMenuDCACalculator.Size = new System.Drawing.Size(122, 24);
             this.btnMenuDCACalculator.TabIndex = 266;
@@ -6957,7 +6977,7 @@
             this.btnMenuDirectory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDirectory.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuDirectory.ForeColor = System.Drawing.Color.White;
-            this.btnMenuDirectory.Location = new System.Drawing.Point(0, 230);
+            this.btnMenuDirectory.Location = new System.Drawing.Point(0, 254);
             this.btnMenuDirectory.Name = "btnMenuDirectory";
             this.btnMenuDirectory.Size = new System.Drawing.Size(122, 24);
             this.btnMenuDirectory.TabIndex = 255;
@@ -7008,7 +7028,7 @@
             this.btnMenuSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSettings.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSettings.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSettings.Location = new System.Drawing.Point(0, 254);
+            this.btnMenuSettings.Location = new System.Drawing.Point(0, 302);
             this.btnMenuSettings.Name = "btnMenuSettings";
             this.btnMenuSettings.Size = new System.Drawing.Size(122, 24);
             this.btnMenuSettings.TabIndex = 159;
@@ -7211,7 +7231,7 @@
             this.lblHelpOffline.BackColor = System.Drawing.Color.Transparent;
             this.lblHelpOffline.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHelpOffline.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblHelpOffline.Location = new System.Drawing.Point(22, 411);
+            this.lblHelpOffline.Location = new System.Drawing.Point(22, 435);
             this.lblHelpOffline.Name = "lblHelpOffline";
             this.lblHelpOffline.Size = new System.Drawing.Size(83, 17);
             this.lblHelpOffline.TabIndex = 257;
@@ -7228,7 +7248,7 @@
             this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuHelp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
-            this.btnMenuHelp.Location = new System.Drawing.Point(8, 407);
+            this.btnMenuHelp.Location = new System.Drawing.Point(8, 431);
             this.btnMenuHelp.Name = "btnMenuHelp";
             this.btnMenuHelp.Size = new System.Drawing.Size(122, 24);
             this.btnMenuHelp.TabIndex = 158;
@@ -7249,7 +7269,7 @@
             this.btnMenuSplash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSplash.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSplash.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSplash.Location = new System.Drawing.Point(8, 431);
+            this.btnMenuSplash.Location = new System.Drawing.Point(8, 455);
             this.btnMenuSplash.Name = "btnMenuSplash";
             this.btnMenuSplash.Size = new System.Drawing.Size(122, 24);
             this.btnMenuSplash.TabIndex = 151;
@@ -9951,7 +9971,7 @@
             this.panelCurrency.Controls.Add(this.btnUSD);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(8, 371);
+            this.panelCurrency.Location = new System.Drawing.Point(8, 395);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
             this.panelCurrency.TabIndex = 159;
@@ -16344,7 +16364,7 @@
             this.panelThemeMenu.Controls.Add(this.BtnMenuThemeGenesis);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeFranklin);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
-            this.panelThemeMenu.Location = new System.Drawing.Point(8, 347);
+            this.panelThemeMenu.Location = new System.Drawing.Point(8, 371);
             this.panelThemeMenu.Name = "panelThemeMenu";
             this.panelThemeMenu.Size = new System.Drawing.Size(122, 0);
             this.panelThemeMenu.TabIndex = 160;
@@ -16674,7 +16694,7 @@
             this.btnCurrency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCurrency.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCurrency.ForeColor = System.Drawing.Color.White;
-            this.btnCurrency.Location = new System.Drawing.Point(8, 359);
+            this.btnCurrency.Location = new System.Drawing.Point(8, 383);
             this.btnCurrency.Margin = new System.Windows.Forms.Padding(0);
             this.btnCurrency.Name = "btnCurrency";
             this.btnCurrency.Size = new System.Drawing.Size(122, 24);
@@ -17072,7 +17092,7 @@
             this.btnThemeMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThemeMenu.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThemeMenu.ForeColor = System.Drawing.Color.White;
-            this.btnThemeMenu.Location = new System.Drawing.Point(8, 335);
+            this.btnThemeMenu.Location = new System.Drawing.Point(8, 359);
             this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnThemeMenu.Name = "btnThemeMenu";
             this.btnThemeMenu.Size = new System.Drawing.Size(122, 24);
@@ -17187,16 +17207,9 @@
             // panelDCACalculator
             // 
             this.panelDCACalculator.BackColor = System.Drawing.Color.Transparent;
+            this.panelDCACalculator.Controls.Add(this.panel117);
+            this.panelDCACalculator.Controls.Add(this.panelDCASummary);
             this.panelDCACalculator.Controls.Add(this.panelDCAMessages);
-            this.panelDCACalculator.Controls.Add(this.btnCalculateDCA);
-            this.panelDCACalculator.Controls.Add(this.panel115);
-            this.panelDCACalculator.Controls.Add(this.panel114);
-            this.panelDCACalculator.Controls.Add(this.panel113);
-            this.panelDCACalculator.Controls.Add(this.panel111);
-            this.panelDCACalculator.Controls.Add(this.label307);
-            this.panelDCACalculator.Controls.Add(this.label306);
-            this.panelDCACalculator.Controls.Add(this.label305);
-            this.panelDCACalculator.Controls.Add(this.label304);
             this.panelDCACalculator.Controls.Add(this.labelDCADefinition);
             this.panelDCACalculator.Controls.Add(this.panelDCAChartLoadingPanel);
             this.panelDCACalculator.Controls.Add(this.formsPlotDCA);
@@ -17206,26 +17219,89 @@
             this.panelDCACalculator.TabIndex = 277;
             this.panelDCACalculator.Visible = false;
             // 
-            // panelDCAMessages
+            // panel117
             // 
-            this.panelDCAMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panelDCAMessages.Controls.Add(this.lblDCAMessage);
-            this.panelDCAMessages.Location = new System.Drawing.Point(0, 292);
-            this.panelDCAMessages.Name = "panelDCAMessages";
-            this.panelDCAMessages.Size = new System.Drawing.Size(113, 220);
-            this.panelDCAMessages.TabIndex = 313;
+            this.panel117.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel117.Controls.Add(this.panel118);
+            this.panel117.Controls.Add(this.panel111);
+            this.panel117.Controls.Add(this.label304);
+            this.panel117.Controls.Add(this.btnCalculateDCA);
+            this.panel117.Controls.Add(this.label305);
+            this.panel117.Controls.Add(this.panel115);
+            this.panel117.Controls.Add(this.label306);
+            this.panel117.Controls.Add(this.panel114);
+            this.panel117.Controls.Add(this.label307);
+            this.panel117.Controls.Add(this.panel113);
+            this.panel117.Location = new System.Drawing.Point(0, 60);
+            this.panel117.Name = "panel117";
+            this.panel117.Size = new System.Drawing.Size(113, 234);
+            this.panel117.TabIndex = 316;
             // 
-            // lblDCAMessage
+            // panel118
             // 
-            this.lblDCAMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCAMessage.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.lblDCAMessage.ForeColor = System.Drawing.Color.Silver;
-            this.lblDCAMessage.Location = new System.Drawing.Point(0, 4);
-            this.lblDCAMessage.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCAMessage.Name = "lblDCAMessage";
-            this.lblDCAMessage.Size = new System.Drawing.Size(113, 211);
-            this.lblDCAMessage.TabIndex = 314;
-            this.lblDCAMessage.Text = "DCA summary";
+            this.panel118.BackColor = System.Drawing.Color.Transparent;
+            this.panel118.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel118.BackgroundImage")));
+            this.panel118.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel118.Controls.Add(this.label209);
+            this.panel118.Location = new System.Drawing.Point(0, 0);
+            this.panel118.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel118.Name = "panel118";
+            this.panel118.Size = new System.Drawing.Size(113, 23);
+            this.panel118.TabIndex = 289;
+            // 
+            // label209
+            // 
+            this.label209.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label209.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label209.ForeColor = System.Drawing.Color.Gray;
+            this.label209.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label209.Location = new System.Drawing.Point(5, 2);
+            this.label209.Margin = new System.Windows.Forms.Padding(0);
+            this.label209.Name = "label209";
+            this.label209.Size = new System.Drawing.Size(110, 17);
+            this.label209.TabIndex = 153;
+            this.label209.Text = "DCA strategy";
+            this.label209.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel111
+            // 
+            this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel111.Controls.Add(this.textBoxDCAAmountInput);
+            this.panel111.Location = new System.Drawing.Point(1, 45);
+            this.panel111.Name = "panel111";
+            this.panel111.Size = new System.Drawing.Size(110, 22);
+            this.panel111.TabIndex = 282;
+            // 
+            // textBoxDCAAmountInput
+            // 
+            this.textBoxDCAAmountInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxDCAAmountInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxDCAAmountInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDCAAmountInput.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxDCAAmountInput.Location = new System.Drawing.Point(6, 4);
+            this.textBoxDCAAmountInput.MaxLength = 16;
+            this.textBoxDCAAmountInput.Name = "textBoxDCAAmountInput";
+            this.textBoxDCAAmountInput.ShortcutsEnabled = false;
+            this.textBoxDCAAmountInput.Size = new System.Drawing.Size(98, 15);
+            this.textBoxDCAAmountInput.TabIndex = 310;
+            this.textBoxDCAAmountInput.TabStop = false;
+            this.textBoxDCAAmountInput.Text = "10.00";
+            this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.textBoxDCAAmountInput_TextChanged);
+            this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
+            this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
+            // 
+            // label304
+            // 
+            this.label304.AutoSize = true;
+            this.label304.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label304.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label304.ForeColor = System.Drawing.Color.Silver;
+            this.label304.Location = new System.Drawing.Point(0, 28);
+            this.label304.Margin = new System.Windows.Forms.Padding(0);
+            this.label304.Name = "label304";
+            this.label304.Size = new System.Drawing.Size(84, 17);
+            this.label304.TabIndex = 278;
+            this.label304.Text = "DCA amount";
             // 
             // btnCalculateDCA
             // 
@@ -17239,7 +17315,7 @@
             this.btnCalculateDCA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalculateDCA.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCalculateDCA.ForeColor = System.Drawing.Color.White;
-            this.btnCalculateDCA.Location = new System.Drawing.Point(0, 241);
+            this.btnCalculateDCA.Location = new System.Drawing.Point(3, 204);
             this.btnCalculateDCA.Margin = new System.Windows.Forms.Padding(1);
             this.btnCalculateDCA.Name = "btnCalculateDCA";
             this.btnCalculateDCA.Size = new System.Drawing.Size(88, 22);
@@ -17250,11 +17326,23 @@
             this.btnCalculateDCA.UseVisualStyleBackColor = false;
             this.btnCalculateDCA.Click += new System.EventHandler(this.BtnCalculateDCA_Click);
             // 
+            // label305
+            // 
+            this.label305.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label305.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label305.ForeColor = System.Drawing.Color.Silver;
+            this.label305.Location = new System.Drawing.Point(0, 71);
+            this.label305.Margin = new System.Windows.Forms.Padding(0);
+            this.label305.Name = "label305";
+            this.label305.Size = new System.Drawing.Size(81, 17);
+            this.label305.TabIndex = 279;
+            this.label305.Text = "Frequency";
+            // 
             // panel115
             // 
             this.panel115.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel115.Controls.Add(this.rjDatePickerDCAEndDate);
-            this.panel115.Location = new System.Drawing.Point(0, 205);
+            this.panel115.Location = new System.Drawing.Point(1, 174);
             this.panel115.Name = "panel115";
             this.panel115.Size = new System.Drawing.Size(110, 22);
             this.panel115.TabIndex = 312;
@@ -17275,11 +17363,23 @@
             this.rjDatePickerDCAEndDate.TextColor = System.Drawing.Color.White;
             this.rjDatePickerDCAEndDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAEndDate_ValueChanged);
             // 
+            // label306
+            // 
+            this.label306.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label306.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label306.ForeColor = System.Drawing.Color.Silver;
+            this.label306.Location = new System.Drawing.Point(0, 114);
+            this.label306.Margin = new System.Windows.Forms.Padding(0);
+            this.label306.Name = "label306";
+            this.label306.Size = new System.Drawing.Size(81, 17);
+            this.label306.TabIndex = 280;
+            this.label306.Text = "Start date";
+            // 
             // panel114
             // 
             this.panel114.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel114.Controls.Add(this.rjDatePickerDCAStartDate);
-            this.panel114.Location = new System.Drawing.Point(0, 162);
+            this.panel114.Location = new System.Drawing.Point(1, 131);
             this.panel114.Name = "panel114";
             this.panel114.Size = new System.Drawing.Size(110, 22);
             this.panel114.TabIndex = 311;
@@ -17301,12 +17401,24 @@
             this.rjDatePickerDCAStartDate.TextColor = System.Drawing.Color.White;
             this.rjDatePickerDCAStartDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAStartDate_ValueChanged);
             // 
+            // label307
+            // 
+            this.label307.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label307.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label307.ForeColor = System.Drawing.Color.Silver;
+            this.label307.Location = new System.Drawing.Point(0, 157);
+            this.label307.Margin = new System.Windows.Forms.Padding(0);
+            this.label307.Name = "label307";
+            this.label307.Size = new System.Drawing.Size(81, 17);
+            this.label307.TabIndex = 281;
+            this.label307.Text = "End date";
+            // 
             // panel113
             // 
             this.panel113.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel113.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel113.Controls.Add(this.comboBoxDCAFrequency);
-            this.panel113.Location = new System.Drawing.Point(0, 119);
+            this.panel113.Location = new System.Drawing.Point(1, 88);
             this.panel113.Name = "panel113";
             this.panel113.Size = new System.Drawing.Size(110, 22);
             this.panel113.TabIndex = 283;
@@ -17336,81 +17448,201 @@
             this.comboBoxDCAFrequency.TabIndex = 254;
             this.comboBoxDCAFrequency.Texts = "daily";
             // 
-            // panel111
+            // panelDCASummary
             // 
-            this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.panel111.Controls.Add(this.textBoxDCAAmountInput);
-            this.panel111.Location = new System.Drawing.Point(0, 76);
-            this.panel111.Name = "panel111";
-            this.panel111.Size = new System.Drawing.Size(110, 22);
-            this.panel111.TabIndex = 282;
+            this.panelDCASummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCASummary.Controls.Add(this.panel116);
+            this.panelDCASummary.Controls.Add(this.lblDCAPercentageChange);
+            this.panelDCASummary.Controls.Add(this.lblDCACurrentValue);
+            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchased);
+            this.panelDCASummary.Controls.Add(this.lblDCAAmountSpent);
+            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchases);
+            this.panelDCASummary.Controls.Add(this.label207);
+            this.panelDCASummary.Controls.Add(this.label206);
+            this.panelDCASummary.Controls.Add(this.label205);
+            this.panelDCASummary.Controls.Add(this.label203);
+            this.panelDCASummary.Controls.Add(this.label202);
+            this.panelDCASummary.Location = new System.Drawing.Point(0, 306);
+            this.panelDCASummary.Name = "panelDCASummary";
+            this.panelDCASummary.Size = new System.Drawing.Size(113, 206);
+            this.panelDCASummary.TabIndex = 315;
             // 
-            // textBoxDCAAmountInput
+            // panel116
             // 
-            this.textBoxDCAAmountInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxDCAAmountInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxDCAAmountInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxDCAAmountInput.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxDCAAmountInput.Location = new System.Drawing.Point(6, 4);
-            this.textBoxDCAAmountInput.MaxLength = 16;
-            this.textBoxDCAAmountInput.Name = "textBoxDCAAmountInput";
-            this.textBoxDCAAmountInput.ShortcutsEnabled = false;
-            this.textBoxDCAAmountInput.Size = new System.Drawing.Size(98, 15);
-            this.textBoxDCAAmountInput.TabIndex = 310;
-            this.textBoxDCAAmountInput.TabStop = false;
-            this.textBoxDCAAmountInput.Text = "10.00";
-            this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.textBoxDCAAmountInput_TextChanged);
-            this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
-            this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
+            this.panel116.BackColor = System.Drawing.Color.Transparent;
+            this.panel116.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel116.BackgroundImage")));
+            this.panel116.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel116.Controls.Add(this.label208);
+            this.panel116.Location = new System.Drawing.Point(0, 0);
+            this.panel116.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel116.Name = "panel116";
+            this.panel116.Size = new System.Drawing.Size(113, 23);
+            this.panel116.TabIndex = 289;
             // 
-            // label307
+            // label208
             // 
-            this.label307.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label307.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label307.ForeColor = System.Drawing.Color.Silver;
-            this.label307.Location = new System.Drawing.Point(0, 188);
-            this.label307.Margin = new System.Windows.Forms.Padding(0);
-            this.label307.Name = "label307";
-            this.label307.Size = new System.Drawing.Size(81, 17);
-            this.label307.TabIndex = 281;
-            this.label307.Text = "End date";
+            this.label208.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label208.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label208.ForeColor = System.Drawing.Color.Gray;
+            this.label208.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label208.Location = new System.Drawing.Point(5, 2);
+            this.label208.Margin = new System.Windows.Forms.Padding(0);
+            this.label208.Name = "label208";
+            this.label208.Size = new System.Drawing.Size(110, 17);
+            this.label208.TabIndex = 153;
+            this.label208.Text = "DCA summary";
+            this.label208.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label306
+            // lblDCAPercentageChange
             // 
-            this.label306.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label306.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label306.ForeColor = System.Drawing.Color.Silver;
-            this.label306.Location = new System.Drawing.Point(0, 145);
-            this.label306.Margin = new System.Windows.Forms.Padding(0);
-            this.label306.Name = "label306";
-            this.label306.Size = new System.Drawing.Size(81, 17);
-            this.label306.TabIndex = 280;
-            this.label306.Text = "Start date";
+            this.lblDCAPercentageChange.AutoSize = true;
+            this.lblDCAPercentageChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAPercentageChange.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCAPercentageChange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCAPercentageChange.Location = new System.Drawing.Point(5, 183);
+            this.lblDCAPercentageChange.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAPercentageChange.Name = "lblDCAPercentageChange";
+            this.lblDCAPercentageChange.Size = new System.Drawing.Size(55, 17);
+            this.lblDCAPercentageChange.TabIndex = 288;
+            this.lblDCAPercentageChange.Text = "no data";
             // 
-            // label305
+            // lblDCACurrentValue
             // 
-            this.label305.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label305.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label305.ForeColor = System.Drawing.Color.Silver;
-            this.label305.Location = new System.Drawing.Point(0, 102);
-            this.label305.Margin = new System.Windows.Forms.Padding(0);
-            this.label305.Name = "label305";
-            this.label305.Size = new System.Drawing.Size(81, 17);
-            this.label305.TabIndex = 279;
-            this.label305.Text = "Frequency";
+            this.lblDCACurrentValue.AutoSize = true;
+            this.lblDCACurrentValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCACurrentValue.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCACurrentValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCACurrentValue.Location = new System.Drawing.Point(5, 149);
+            this.lblDCACurrentValue.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCACurrentValue.Name = "lblDCACurrentValue";
+            this.lblDCACurrentValue.Size = new System.Drawing.Size(55, 17);
+            this.lblDCACurrentValue.TabIndex = 287;
+            this.lblDCACurrentValue.Text = "no data";
             // 
-            // label304
+            // lblDCABTCPurchased
             // 
-            this.label304.AutoSize = true;
-            this.label304.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label304.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label304.ForeColor = System.Drawing.Color.Silver;
-            this.label304.Location = new System.Drawing.Point(0, 59);
-            this.label304.Margin = new System.Windows.Forms.Padding(0);
-            this.label304.Name = "label304";
-            this.label304.Size = new System.Drawing.Size(84, 17);
-            this.label304.TabIndex = 278;
-            this.label304.Text = "DCA amount";
+            this.lblDCABTCPurchased.AutoSize = true;
+            this.lblDCABTCPurchased.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchased.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCABTCPurchased.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchased.Location = new System.Drawing.Point(5, 115);
+            this.lblDCABTCPurchased.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCABTCPurchased.Name = "lblDCABTCPurchased";
+            this.lblDCABTCPurchased.Size = new System.Drawing.Size(55, 17);
+            this.lblDCABTCPurchased.TabIndex = 286;
+            this.lblDCABTCPurchased.Text = "no data";
+            // 
+            // lblDCAAmountSpent
+            // 
+            this.lblDCAAmountSpent.AutoSize = true;
+            this.lblDCAAmountSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAAmountSpent.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCAAmountSpent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCAAmountSpent.Location = new System.Drawing.Point(5, 81);
+            this.lblDCAAmountSpent.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAAmountSpent.Name = "lblDCAAmountSpent";
+            this.lblDCAAmountSpent.Size = new System.Drawing.Size(55, 17);
+            this.lblDCAAmountSpent.TabIndex = 285;
+            this.lblDCAAmountSpent.Text = "no data";
+            // 
+            // lblDCABTCPurchases
+            // 
+            this.lblDCABTCPurchases.AutoSize = true;
+            this.lblDCABTCPurchases.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchases.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCABTCPurchases.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchases.Location = new System.Drawing.Point(5, 47);
+            this.lblDCABTCPurchases.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCABTCPurchases.Name = "lblDCABTCPurchases";
+            this.lblDCABTCPurchases.Size = new System.Drawing.Size(55, 17);
+            this.lblDCABTCPurchases.TabIndex = 284;
+            this.lblDCABTCPurchases.Text = "no data";
+            // 
+            // label207
+            // 
+            this.label207.AutoSize = true;
+            this.label207.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label207.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label207.ForeColor = System.Drawing.Color.Silver;
+            this.label207.Location = new System.Drawing.Point(5, 30);
+            this.label207.Margin = new System.Windows.Forms.Padding(0);
+            this.label207.Name = "label207";
+            this.label207.Size = new System.Drawing.Size(92, 17);
+            this.label207.TabIndex = 283;
+            this.label207.Text = "BTC purchases";
+            // 
+            // label206
+            // 
+            this.label206.AutoSize = true;
+            this.label206.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label206.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label206.ForeColor = System.Drawing.Color.Silver;
+            this.label206.Location = new System.Drawing.Point(5, 64);
+            this.label206.Margin = new System.Windows.Forms.Padding(0);
+            this.label206.Name = "label206";
+            this.label206.Size = new System.Drawing.Size(51, 17);
+            this.label206.TabIndex = 282;
+            this.label206.Text = "$ spent";
+            // 
+            // label205
+            // 
+            this.label205.AutoSize = true;
+            this.label205.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label205.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label205.ForeColor = System.Drawing.Color.Silver;
+            this.label205.Location = new System.Drawing.Point(5, 98);
+            this.label205.Margin = new System.Windows.Forms.Padding(0);
+            this.label205.Name = "label205";
+            this.label205.Size = new System.Drawing.Size(95, 17);
+            this.label205.TabIndex = 281;
+            this.label205.Text = "BTC purchased";
+            // 
+            // label203
+            // 
+            this.label203.AutoSize = true;
+            this.label203.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label203.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label203.ForeColor = System.Drawing.Color.Silver;
+            this.label203.Location = new System.Drawing.Point(5, 166);
+            this.label203.Margin = new System.Windows.Forms.Padding(0);
+            this.label203.Name = "label203";
+            this.label203.Size = new System.Drawing.Size(105, 17);
+            this.label203.TabIndex = 280;
+            this.label203.Text = "Change in value";
+            // 
+            // label202
+            // 
+            this.label202.AutoSize = true;
+            this.label202.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label202.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label202.ForeColor = System.Drawing.Color.Silver;
+            this.label202.Location = new System.Drawing.Point(5, 132);
+            this.label202.Margin = new System.Windows.Forms.Padding(0);
+            this.label202.Name = "label202";
+            this.label202.Size = new System.Drawing.Size(89, 17);
+            this.label202.TabIndex = 279;
+            this.label202.Text = "Current value";
+            // 
+            // panelDCAMessages
+            // 
+            this.panelDCAMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCAMessages.Controls.Add(this.lblDCAMessage);
+            this.panelDCAMessages.Location = new System.Drawing.Point(0, 306);
+            this.panelDCAMessages.Name = "panelDCAMessages";
+            this.panelDCAMessages.Size = new System.Drawing.Size(113, 95);
+            this.panelDCAMessages.TabIndex = 313;
+            // 
+            // lblDCAMessage
+            // 
+            this.lblDCAMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAMessage.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblDCAMessage.ForeColor = System.Drawing.Color.Silver;
+            this.lblDCAMessage.Location = new System.Drawing.Point(0, 4);
+            this.lblDCAMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAMessage.Name = "lblDCAMessage";
+            this.lblDCAMessage.Size = new System.Drawing.Size(113, 211);
+            this.lblDCAMessage.TabIndex = 314;
+            this.lblDCAMessage.Text = "DCA validation msg";
             // 
             // labelDCADefinition
             // 
@@ -17491,13 +17723,13 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
             this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBookmarks);
@@ -17810,13 +18042,18 @@
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
             this.panelDCACalculator.ResumeLayout(false);
-            this.panelDCACalculator.PerformLayout();
-            this.panelDCAMessages.ResumeLayout(false);
+            this.panel117.ResumeLayout(false);
+            this.panel117.PerformLayout();
+            this.panel118.ResumeLayout(false);
+            this.panel111.ResumeLayout(false);
+            this.panel111.PerformLayout();
             this.panel115.ResumeLayout(false);
             this.panel114.ResumeLayout(false);
             this.panel113.ResumeLayout(false);
-            this.panel111.ResumeLayout(false);
-            this.panel111.PerformLayout();
+            this.panelDCASummary.ResumeLayout(false);
+            this.panelDCASummary.PerformLayout();
+            this.panel116.ResumeLayout(false);
+            this.panelDCAMessages.ResumeLayout(false);
             this.panelDCAChartLoadingPanel.ResumeLayout(false);
             this.panelDCAChartLoadingPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
@@ -18931,6 +19168,22 @@
         private CustomControls.RJControls.RJButton btnCalculateDCA;
         private System.Windows.Forms.Panel panelDCAMessages;
         private System.Windows.Forms.Label lblDCAMessage;
+        private System.Windows.Forms.Panel panelDCASummary;
+        private System.Windows.Forms.Label label207;
+        private System.Windows.Forms.Label label206;
+        private System.Windows.Forms.Label label205;
+        private System.Windows.Forms.Label label203;
+        private System.Windows.Forms.Label label202;
+        private System.Windows.Forms.Label lblDCAPercentageChange;
+        private System.Windows.Forms.Label lblDCACurrentValue;
+        private System.Windows.Forms.Label lblDCABTCPurchased;
+        private System.Windows.Forms.Label lblDCAAmountSpent;
+        private System.Windows.Forms.Label lblDCABTCPurchases;
+        private System.Windows.Forms.Panel panel116;
+        private System.Windows.Forms.Label label208;
+        private System.Windows.Forms.Panel panel117;
+        private System.Windows.Forms.Panel panel118;
+        private System.Windows.Forms.Label label209;
     }
 }
 

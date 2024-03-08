@@ -39,10 +39,10 @@
             this.panelComboBoxDocumentationContainer = new System.Windows.Forms.Panel();
             this.comboBoxDocumentation = new CustomControls.RJControls.RJComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.externalLinksTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel5 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSatsumaLogo)).BeginInit();
             this.panelComboBoxDocumentationContainer.SuspendLayout();
@@ -200,6 +200,7 @@
             "bitcoin dashboard",
             "lightning dashboard",
             "bookmarks",
+            "dca calculator",
             "directory",
             "settings",
             "themes",
@@ -230,6 +231,14 @@
             this.panel1.Size = new System.Drawing.Size(461, 526);
             this.panel1.TabIndex = 257;
             // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.panel5.Location = new System.Drawing.Point(0, 528);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(428, 20);
+            this.panel5.TabIndex = 258;
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
@@ -253,14 +262,6 @@
             // 
             this.externalLinksTimer.Interval = 1000;
             this.externalLinksTimer.Tick += new System.EventHandler(this.ExternalLinksTimer_Tick);
-            // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            this.panel5.Location = new System.Drawing.Point(0, 528);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(428, 20);
-            this.panel5.TabIndex = 258;
             // 
             // HelpScreen
             // 

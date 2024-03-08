@@ -17286,7 +17286,7 @@
             this.textBoxDCAAmountInput.TabIndex = 310;
             this.textBoxDCAAmountInput.TabStop = false;
             this.textBoxDCAAmountInput.Text = "10.00";
-            this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.textBoxDCAAmountInput_TextChanged);
+            this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.TextBoxDCAAmountInput_TextChanged);
             this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
             // 

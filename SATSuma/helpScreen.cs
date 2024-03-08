@@ -223,6 +223,12 @@ namespace SATSuma
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-xpub/");
             }
             else
+            if (((SATSuma)this.Owner).GetPanelDCACalculator().Visible == true)
+            {
+                lblHelpHeading.Text = "DCA Calculator";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-dcacalculator/");
+            }
+            else
             if (((SATSuma)this.Owner).GetPanelBookmarks().Visible == true)
             {
                 lblHelpHeading.Text = "Bookmarks";
@@ -421,35 +427,40 @@ namespace SATSuma
             }
             if (comboBoxDocumentation.SelectedIndex == 9)
             {
+                lblHelpHeading.Text = "DCA calculator";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-dcacalculator/");
+            }
+            if (comboBoxDocumentation.SelectedIndex == 10)
+            {
                 lblHelpHeading.Text = "Directory";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-directory/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 10)
+            if (comboBoxDocumentation.SelectedIndex == 11)
             {
                 lblHelpHeading.Text = "Settings";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-settings/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 11)
+            if (comboBoxDocumentation.SelectedIndex == 12)
             {
                 lblHelpHeading.Text = "Themes";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-themes/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 13)
+            if (comboBoxDocumentation.SelectedIndex == 14)
             {
                 lblHelpHeading.Text = "Release notes";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-version-history/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 14)
+            if (comboBoxDocumentation.SelectedIndex == 15)
             {
                 lblHelpHeading.Text = "FAQ";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-faq/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 15)
+            if (comboBoxDocumentation.SelectedIndex == 16)
             {
                 lblHelpHeading.Text = "Source code";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-source-code/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 16)
+            if (comboBoxDocumentation.SelectedIndex == 17)
             {
                 lblHelpHeading.Text = "Support SATSuma";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-support-satsuma/");

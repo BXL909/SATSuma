@@ -201,6 +201,7 @@
             "lightning dashboard",
             "bookmarks",
             "dca calculator",
+            "btc/fiat converter",
             "directory",
             "settings",
             "themes",

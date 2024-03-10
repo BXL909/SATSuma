@@ -26,9 +26,11 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
-* validate date input on dca (can't be same, can't start today)
-* help page on website for DCA screen
+* dca - estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
+* validate date input on dca (can't be same, can't start today, etc)
+* improve clarity of label colours, axis colours on certain themes
+* check main menu appearance when offline mode active
+* test all again
 */
 
 #region Using
@@ -424,6 +426,8 @@ namespace SATSuma
             panelDCAMessages.Paint += Panel_Paint;
             panelDCASummary.Paint += Panel_Paint;
             panel117.Paint += Panel_Paint;
+            panel119.Paint += Panel_Paint;
+            panelPriceConvert.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             panelThemeNameContainer.Paint += Panel_Paint;
@@ -622,8 +626,8 @@ namespace SATSuma
                     { "chart - ⚡channels", () => { BtnMenuCharts_Click(sender, e); BtnChartLightningChannels_Click(sender, e); } },
                     { "chart - price", () => { BtnMenuCharts_Click(sender, e); BtnChartPrice_Click(sender, e); } },
                     { "chart - market cap.", () => { BtnMenuCharts_Click(sender, e); BtnChartMarketCap_Click(sender, e); } },
-                    { "chart - fiat/gold/btc converter", () => { BtnMenuCharts_Click(sender, e); BtnPriceConverter_Click(sender, e); } },
-                    { "dca calculator", () => BtnMenuDCACalculator_Click(sender, e) },
+                    { "btc/fiat converter", () => BtnMenuPriceConverter_Click(sender, e)},
+                    { "dca calculator", () => BtnMenuDCACalculator_Click(sender, e) }
                 };
                 if (buttonClickEvents.TryGetValue(comboBoxStartupScreen.Texts, out Action buttonClickEvent))
                 {
@@ -2096,8 +2100,7 @@ namespace SATSuma
 
         private void PictureBoxConverterChart_Click(object sender, EventArgs e)
         {
-            BtnPriceConverter_Click(sender, e);
-            BtnMenuCharts_Click(sender, e);
+            BtnMenuPriceConverter_Click(sender, e);
         }
         #endregion
         #region api calls for dashboards
@@ -11728,766 +11731,7 @@ namespace SATSuma
             }
         }
         #endregion
-        #region chart - price converter
-        #region set up chart area
-        private void BtnPriceConverter_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                HideAllChartKeysAndPanels();
-
-                formsPlot1.Visible = false;
-                formsPlot2.Visible = false;
-                formsPlot3.Visible = false;
-                panelPriceConverter.Visible = true;
-                panelPriceConverter.BringToFront();
-
-                EnableAllCharts();
-                btnPriceConverter.Enabled = false;
-                ToggleLoadingAnimation("enable");
-                DisableEnableChartButtons("disable");
-                // clear any previous graph
-                ClearAllChartData();
-                PopulateConverterScreen();
-                ToggleLoadingAnimation("disable");
-                DisableEnableChartButtons("enable");
-                HideChartLoadingPanel();
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "BtnPriceConverter_Click");
-            }
-        }
-        #endregion
-        #region populate data
-        private void PopulateConverterScreen()
-        {
-            try
-            {
-                if (!offlineMode && !testNet)
-                {
-                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-
-                    #region USD list
-                    if (string.IsNullOrEmpty(priceUSD) || !double.TryParse(priceUSD, out _))
-                    {
-                        priceUSD = "0";
-                    }
-                    labelPCUSD1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD1.Text = (Convert.ToDecimal(priceUSD) / 100000000).ToString("0.00");
-                    });
-                    labelPCUSD2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD2.Text = (Convert.ToDecimal(priceUSD) / 10000000).ToString("0.00");
-                    });
-                    labelPCUSD3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD3.Text = (Convert.ToDecimal(priceUSD) / 1000000).ToString("0.00");
-                    });
-                    labelPCUSD4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD4.Text = (Convert.ToDecimal(priceUSD) / 100000).ToString("0.00");
-                    });
-                    labelPCUSD5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD5.Text = (Convert.ToDecimal(priceUSD) / 10000).ToString("0.00");
-                    });
-                    labelPCUSD6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD6.Text = (Convert.ToDecimal(priceUSD) / 1000).ToString("0.00");
-                    });
-                    labelPCUSD7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD7.Text = (Convert.ToDecimal(priceUSD) / 100).ToString("0.00");
-                    });
-                    labelPCUSD8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD8.Text = (Convert.ToDecimal(priceUSD) / 10).ToString("0.00");
-                    });
-                    labelPCUSD9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD9.Text = (Convert.ToDecimal(priceUSD)).ToString("0.00");
-                    });
-                    labelPCUSD10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD10.Text = (Convert.ToDecimal(priceUSD) * 10).ToString("0.00");
-                    });
-                    labelPCUSD11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD11.Text = (Convert.ToDecimal(priceUSD) * 100).ToString("0.00");
-                    });
-                    labelPCUSD12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD12.Text = (Convert.ToDecimal(priceUSD) * 1000).ToString("0.00");
-                    });
-                    labelPCUSD13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD13.Text = (Convert.ToDecimal(priceUSD) * 10000).ToString("0.00");
-                    });
-                    labelPCUSD14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD14.Text = (Convert.ToDecimal(priceUSD) * 100000).ToString("0.00");
-                    });
-                    labelPCUSD15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD15.Text = (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00");
-                    });
-                    labelPCUSD16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD16.Text = (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00");
-                    });
-                    labelPCUSD17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
-                    });
-                    #endregion
-                    #region EUR list
-                    if (string.IsNullOrEmpty(priceEUR) || !double.TryParse(priceEUR, out _))
-                    {
-                        priceEUR = "0";
-                    }
-                    labelPCEUR1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR1.Text = (Convert.ToDecimal(priceEUR) / 100000000).ToString("0.00");
-                    });
-                    labelPCEUR2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR2.Text = (Convert.ToDecimal(priceEUR) / 10000000).ToString("0.00");
-                    });
-                    labelPCEUR3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR3.Text = (Convert.ToDecimal(priceEUR) / 1000000).ToString("0.00");
-                    });
-                    labelPCEUR4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR4.Text = (Convert.ToDecimal(priceEUR) / 100000).ToString("0.00");
-                    });
-                    labelPCEUR5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR5.Text = (Convert.ToDecimal(priceEUR) / 10000).ToString("0.00");
-                    });
-                    labelPCEUR6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR6.Text = (Convert.ToDecimal(priceEUR) / 1000).ToString("0.00");
-                    });
-                    labelPCEUR7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR7.Text = (Convert.ToDecimal(priceEUR) / 100).ToString("0.00");
-                    });
-                    labelPCEUR8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR8.Text = (Convert.ToDecimal(priceEUR) / 10).ToString("0.00");
-                    });
-                    labelPCEUR9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR9.Text = (Convert.ToDecimal(priceEUR)).ToString("0.00");
-                    });
-                    labelPCEUR10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR10.Text = (Convert.ToDecimal(priceEUR) * 10).ToString("0.00");
-                    });
-                    labelPCEUR11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR11.Text = (Convert.ToDecimal(priceEUR) * 100).ToString("0.00");
-                    });
-                    labelPCEUR12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR12.Text = (Convert.ToDecimal(priceEUR) * 1000).ToString("0.00");
-                    });
-                    labelPCEUR13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR13.Text = (Convert.ToDecimal(priceEUR) * 10000).ToString("0.00");
-                    });
-                    labelPCEUR14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR14.Text = (Convert.ToDecimal(priceEUR) * 100000).ToString("0.00");
-                    });
-                    labelPCEUR15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR15.Text = (Convert.ToDecimal(priceEUR) * 1000000).ToString("0.00");
-                    });
-                    labelPCEUR16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR16.Text = (Convert.ToDecimal(priceEUR) * 10000000).ToString("0.00");
-                    });
-                    labelPCEUR17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR17.Text = (Convert.ToDecimal(priceEUR) * 21000000).ToString("0.00");
-                    });
-                    #endregion
-                    #region GBP list
-                    if (string.IsNullOrEmpty(priceGBP) || !double.TryParse(priceGBP, out _))
-                    {
-                        priceGBP = "0";
-                    }
-                    labelPCGBP1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP1.Text = (Convert.ToDecimal(priceGBP) / 100000000).ToString("0.00");
-                    });
-                    labelPCGBP2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP2.Text = (Convert.ToDecimal(priceGBP) / 10000000).ToString("0.00");
-                    });
-                    labelPCGBP3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP3.Text = (Convert.ToDecimal(priceGBP) / 1000000).ToString("0.00");
-                    });
-                    labelPCGBP4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP4.Text = (Convert.ToDecimal(priceGBP) / 100000).ToString("0.00");
-                    });
-                    labelPCGBP5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP5.Text = (Convert.ToDecimal(priceGBP) / 10000).ToString("0.00");
-                    });
-                    labelPCGBP6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP6.Text = (Convert.ToDecimal(priceGBP) / 1000).ToString("0.00");
-                    });
-                    labelPCGBP7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP7.Text = (Convert.ToDecimal(priceGBP) / 100).ToString("0.00");
-                    });
-                    labelPCGBP8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP8.Text = (Convert.ToDecimal(priceGBP) / 10).ToString("0.00");
-                    });
-                    labelPCGBP9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP9.Text = (Convert.ToDecimal(priceGBP)).ToString("0.00");
-                    });
-                    labelPCGBP10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP10.Text = (Convert.ToDecimal(priceGBP) * 10).ToString("0.00");
-                    });
-                    labelPCGBP11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP11.Text = (Convert.ToDecimal(priceGBP) * 100).ToString("0.00");
-                    });
-                    labelPCGBP12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP12.Text = (Convert.ToDecimal(priceGBP) * 1000).ToString("0.00");
-                    });
-                    labelPCGBP13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP13.Text = (Convert.ToDecimal(priceGBP) * 10000).ToString("0.00");
-                    });
-                    labelPCGBP14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP14.Text = (Convert.ToDecimal(priceGBP) * 100000).ToString("0.00");
-                    });
-                    labelPCGBP15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP15.Text = (Convert.ToDecimal(priceGBP) * 1000000).ToString("0.00");
-                    });
-                    labelPCGBP16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP16.Text = (Convert.ToDecimal(priceGBP) * 10000000).ToString("0.00");
-                    });
-                    labelPCGBP17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP17.Text = (Convert.ToDecimal(priceGBP) * 21000000).ToString("0.00");
-                    });
-                    #endregion
-                    #region XAU list
-                    if (string.IsNullOrEmpty(priceXAU) || !double.TryParse(priceXAU, out _))
-                    {
-                        priceXAU = "0";
-                    }
-                    labelPCXAU1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU1.Text = (Convert.ToDecimal(priceXAU) / 100000000).ToString("0.00");
-                    });
-                    labelPCXAU2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU2.Text = (Convert.ToDecimal(priceXAU) / 10000000).ToString("0.00");
-                    });
-                    labelPCXAU3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU3.Text = (Convert.ToDecimal(priceXAU) / 1000000).ToString("0.00");
-                    });
-                    labelPCXAU4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU4.Text = (Convert.ToDecimal(priceXAU) / 100000).ToString("0.00");
-                    });
-                    labelPCXAU5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU5.Text = (Convert.ToDecimal(priceXAU) / 10000).ToString("0.00");
-                    });
-                    labelPCXAU6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU6.Text = (Convert.ToDecimal(priceXAU) / 1000).ToString("0.00");
-                    });
-                    labelPCXAU7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU7.Text = (Convert.ToDecimal(priceXAU) / 100).ToString("0.00");
-                    });
-                    labelPCXAU8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU8.Text = (Convert.ToDecimal(priceXAU) / 10).ToString("0.00");
-                    });
-                    labelPCXAU9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU9.Text = (Convert.ToDecimal(priceXAU)).ToString("0.00");
-                    });
-                    labelPCXAU10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU10.Text = (Convert.ToDecimal(priceXAU) * 10).ToString("0.00");
-                    });
-                    labelPCXAU11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU11.Text = (Convert.ToDecimal(priceXAU) * 100).ToString("0.00");
-                    });
-                    labelPCXAU12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU12.Text = (Convert.ToDecimal(priceXAU) * 1000).ToString("0.00");
-                    });
-                    labelPCXAU13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU13.Text = (Convert.ToDecimal(priceXAU) * 10000).ToString("0.00");
-                    });
-                    labelPCXAU14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU14.Text = (Convert.ToDecimal(priceXAU) * 100000).ToString("0.00");
-                    });
-                    labelPCXAU15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU15.Text = (Convert.ToDecimal(priceXAU) * 1000000).ToString("0.00");
-                    });
-                    labelPCXAU16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU16.Text = (Convert.ToDecimal(priceXAU) * 10000000).ToString("0.00");
-                    });
-                    labelPCXAU17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
-                    });
-                    #endregion
-                    #region calculate fields derived from user input
-                    SetCalculatedFiatAmounts();
-                    SetCalculatedUSDAmount();
-                    SetCalculatedEURAmount();
-                    SetCalculatedGBPAmount();
-                    SetCalculatedXAUAmount();
-                    #endregion
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "PopulateConverterScreen");
-            }
-        }
-        #endregion
-        #region set textboxes to 0 if left empty by user
-        private void TextBoxConvertUSDtoBTC_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertUSDtoBTC.Text == "")
-                {
-                    textBoxConvertUSDtoBTC.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxConvertUSDtoBTC.Text = "1.00";
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertUSDtoBTC_Leave");
-            }
-        }
-
-        private void TextBoxConvertEURtoBTC_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertEURtoBTC.Text == "")
-                {
-                    textBoxConvertEURtoBTC.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxConvertEURtoBTC.Text = "1.00";
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertEURtoBTC_Leave");
-            }
-        }
-
-        private void TextBoxConvertGBPtoBTC_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertGBPtoBTC.Text == "")
-                {
-                    textBoxConvertGBPtoBTC.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxConvertGBPtoBTC.Text = "1.00";
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertGBPtoBTC_Leave");
-            }
-        }
-
-        private void TextBoxConvertXAUtoBTC_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertXAUtoBTC.Text == "")
-                {
-                    textBoxConvertXAUtoBTC.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxConvertXAUtoBTC.Text = "1.00";
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertXAUtoBTC_Leave");
-            }
-        }
-
-        private void TextBoxConvertBTCtoFiat_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertBTCtoFiat.Text == "")
-                {
-                    textBoxConvertBTCtoFiat.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxConvertBTCtoFiat.Text = "1.00000000";
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertBTCtoFiat_Leave");
-            }
-        }
-        #endregion
-        #region validate user inputs
-        private void CurrencyTextBoxes_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            try
-            {
-                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
-                string text = textBox.Text;
-
-                // Allow digits, backspace, and decimal point
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                // Only allow one decimal point
-                if (e.KeyChar == '.' && text.Contains('.'))
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                // Get the current caret position
-                int caretPos = textBox.SelectionStart;
-
-                // Check if the new character is being inserted after the decimal point
-                if (text.Contains('.') && caretPos > text.IndexOf('.'))
-                {
-                    // Allow two digits after the decimal point
-                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
-                    if (decimalPlaces >= 2)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                }
-
-                // Combine the current text with the newly typed character
-                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
-
-                // Remove any commas in the text
-                string strippedText = newText.Replace(",", "");
-
-                // max = 100 trillion
-                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
-                {
-                    if (value > 100000000000000)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "CurrencyTextBoxes_KeyPress - validating currency input");
-            }
-        }
-
-        private void TextBoxConvertBTCtoFiat_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            try
-            {
-                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
-                string text = textBox.Text;
-
-                // Allow digits, backspace, and decimal point
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                // Only allow one decimal point
-                if (e.KeyChar == '.' && text.Contains('.'))
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                // Get the current caret position
-                int caretPos = textBox.SelectionStart;
-
-                // Check if the new character is being inserted after the decimal point
-                if (text.Contains('.') && caretPos > text.IndexOf('.'))
-                {
-                    // Allow 8 digits after the decimal point
-                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
-                    if (decimalPlaces >= 8)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                }
-
-                // Combine the current text with the newly typed character
-                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
-
-                // Remove any commas in the text
-                string strippedText = newText.Replace(",", "");
-
-                // max = 21 million
-                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
-                {
-                    if (value > 21000000)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                }
-
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "textBoxConvertBTCtoFiat_KeyPress - validating BTC input");
-            }
-        }
-        #endregion
-        #region respond to and calculate from user inputs
-        private void TextBoxConvertBTCtoFiat_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertBTCtoFiat.Text != "")
-                {
-                    SetCalculatedFiatAmounts();
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TextBoxConvertBTCtoFiat_TextChanged");
-            }
-        }
-
-        private void SetCalculatedFiatAmounts()
-        {
-            try
-            {
-                labelPCUSDcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCUSDcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00");
-                });
-                labelPCEURcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCEURcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00");
-                });
-                labelPCGBPcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
-                });
-                labelPCXAUcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
-                });
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "SetCalculatedFiatAmounts");
-            }
-        }
-
-        private void FiatAmountTextBoxes_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textBoxConvertUSDtoBTC.Text != "")
-                {
-                    SetCalculatedUSDAmount();
-                }
-                if (textBoxConvertEURtoBTC.Text != "")
-                {
-                    SetCalculatedEURAmount();
-                }
-                if (textBoxConvertGBPtoBTC.Text != "")
-                {
-                    SetCalculatedGBPAmount();
-                }
-                if (textBoxConvertXAUtoBTC.Text != "")
-                {
-                    SetCalculatedXAUAmount();
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "FiatAmountTextBoxes_TextChanged");
-            }
-        }
-
-        private void SetCalculatedUSDAmount()
-        {
-            try
-            {
-                if (decimal.TryParse(labelPCUSD9.Text, out decimal pcusd9text) && decimal.TryParse(textBoxConvertUSDtoBTC.Text, out decimal usdtobtctext))
-                {
-                    if (labelPCUSD9.Text != "USD" && pcusd9text > 0)
-                    {
-                        lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedUSDFromBTCAmount.Text = (usdtobtctext / pcusd9text).ToString("0.00000000");
-                        });
-                        label267.Invoke((MethodInvoker)delegate
-                        {
-                            label267.Text = "$" + textBoxConvertUSDtoBTC.Text + " USD (US dollar) =";
-                        });
-                        lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - (int)(4 * UIScale), lblCalculatedUSDFromBTCAmount.Location.Y);
-                        });
-                        label273.Invoke((MethodInvoker)delegate
-                        {
-                            label273.Location = new Point(lblCalculatedUSDFromBTCAmount.Location.X + lblCalculatedUSDFromBTCAmount.Width, label273.Location.Y);
-                        });
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "SetCalculatedUSDAmount");
-            }
-        }
-        private void SetCalculatedEURAmount()
-        {
-            try
-            {
-                if (decimal.TryParse(labelPCEUR9.Text, out decimal pceur9text) && decimal.TryParse(textBoxConvertEURtoBTC.Text, out decimal eurtobtctext))
-                {
-                    if (labelPCEUR9.Text != "EUR" && pceur9text > 0)
-                    {
-                        lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedEURFromBTCAmount.Text = (eurtobtctext / pceur9text).ToString("0.00000000");
-                        });
-                        label270.Invoke((MethodInvoker)delegate
-                        {
-                            label270.Text = "€" + textBoxConvertEURtoBTC.Text + " EUR (European euro) =";
-                        });
-                        lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - (int)(4 * UIScale), lblCalculatedEURFromBTCAmount.Location.Y);
-                        });
-                        label274.Invoke((MethodInvoker)delegate
-                        {
-                            label274.Location = new Point(lblCalculatedEURFromBTCAmount.Location.X + lblCalculatedEURFromBTCAmount.Width, label274.Location.Y);
-                        });
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "SetCalculatedEURAmount");
-            }
-        }
-        private void SetCalculatedGBPAmount()
-        {
-            try
-            {
-                if (decimal.TryParse(labelPCGBP9.Text, out decimal pcgbp9text) && decimal.TryParse(textBoxConvertGBPtoBTC.Text, out decimal gbptobtctext))
-                {
-                    if (labelPCGBP9.Text != "GBP" && pcgbp9text > 0)
-                    {
-                        lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedGBPFromBTCAmount.Text = (gbptobtctext / pcgbp9text).ToString("0.00000000");
-                        });
-                        label269.Invoke((MethodInvoker)delegate
-                        {
-                            label269.Text = "£" + textBoxConvertGBPtoBTC.Text + " GBP (British pound sterling) =";
-                        });
-                        lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - (int)(4 * UIScale), lblCalculatedGBPFromBTCAmount.Location.Y);
-                        });
-                        label276.Invoke((MethodInvoker)delegate
-                        {
-                            label276.Location = new Point(lblCalculatedGBPFromBTCAmount.Location.X + lblCalculatedGBPFromBTCAmount.Width, label276.Location.Y);
-                        });
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "SetCalculatedGBPAmount");
-            }
-        }
-        private void SetCalculatedXAUAmount()
-        {
-            try
-            {
-                if (decimal.TryParse(labelPCXAU9.Text, out decimal pcxau9text) && decimal.TryParse(textBoxConvertXAUtoBTC.Text, out decimal xautobtctext))
-                {
-                    if (labelPCXAU9.Text != "XAU" && pcxau9text > 0)
-                    {
-                        lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedXAUFromBTCAmount.Text = (xautobtctext / pcxau9text).ToString("0.00000000");
-                        });
-                        label268.Invoke((MethodInvoker)delegate
-                        {
-                            label268.Text = "🪙" + textBoxConvertXAUtoBTC.Text + " XAU (ounce of gold) =";
-                        });
-                        lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedXAUFromBTCAmount.Location = new Point(label268.Location.X + label268.Width - 4, lblCalculatedXAUFromBTCAmount.Location.Y);
-                        });
-                        label275.Invoke((MethodInvoker)delegate
-                        {
-                            label275.Location = new Point(lblCalculatedXAUFromBTCAmount.Location.X + lblCalculatedXAUFromBTCAmount.Width, label275.Location.Y);
-                        });
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "SetCalculatedXAUAmount");
-            }
-        }
-        #endregion
-        #endregion
+        
         #region show/hide chart loading panel
         private void ShowChartLoadingPanel()
         {
@@ -12536,7 +11780,6 @@ namespace SATSuma
                 btnChartNodesByCountry.Enabled = true;
                 btnChartPoolsRanking.Enabled = true;
                 btnChartMarketCap.Enabled = true;
-                btnPriceConverter.Enabled = true;
             }
             catch (WebException ex)
             {
@@ -12568,7 +11811,7 @@ namespace SATSuma
                 panelPriceScaleButtons.Visible = false;
                 panelChartMarketCapScaleButtons.Visible = false;
                 panelChartDifficultyScaleButtons.Visible = false;
-                panelPriceConverter.Visible = false;
+//                panelPriceConverter.Visible = false;
             }
             catch (WebException ex)
             {
@@ -12856,7 +12099,6 @@ namespace SATSuma
                     btnChartMarketCapLogWasEnabled = btnChartMarketCapScaleLog.Enabled;
                     btnChartDifficultyLinearWasEnabled = btnChartDifficultyLinear.Enabled;
                     btnChartDifficultyLogWasEnabled = btnChartDifficultyLog.Enabled;
-                    btnPriceConverterWasEnabled = btnPriceConverter.Enabled;
 
                     //disable them all
                     btnChartBlockFees.Enabled = false;
@@ -12894,7 +12136,6 @@ namespace SATSuma
                     btnChartMarketCapScaleLog.Enabled = false;
                     btnChartDifficultyLinear.Enabled = false;
                     btnChartDifficultyLog.Enabled = false;
-                    btnPriceConverter.Enabled = false;
                 }
                 else
                 {
@@ -12935,7 +12176,6 @@ namespace SATSuma
                     btnChartMarketCapScaleLog.Enabled = btnChartMarketCapLogWasEnabled;
                     btnChartDifficultyLinear.Enabled = btnChartDifficultyLinearWasEnabled;
                     btnChartDifficultyLog.Enabled = btnChartDifficultyLogWasEnabled;
-                    btnPriceConverter.Enabled = btnPriceConverterWasEnabled;
                     ignoreMouseMoveOnChart = false;
                 }
                 // disable charts where corresponding API is disabled
@@ -12954,7 +12194,6 @@ namespace SATSuma
         {
             try
             {
-                btnPriceConverter.Enabled = false;
                 btnChartCirculation.Enabled = false;
                 btnChartMarketCap.Enabled = false;
                 btnChartPrice.Enabled = false;
@@ -12967,7 +12206,6 @@ namespace SATSuma
                 lblMarketCapChart.Enabled = false;
                 lblUniqueAddressesChart.Enabled = false;
                 lblHeaderConverterChart.Enabled = false;
-                lblHeaderBlockSizeChart.Enabled = false;
                 lblHeaderMarketCapChart.Enabled = false;
             }
             catch (Exception ex)
@@ -12981,7 +12219,6 @@ namespace SATSuma
         {
             try
             {
-                btnPriceConverter.Enabled = true;
                 btnChartCirculation.Enabled = true;
                 btnChartMarketCap.Enabled = true;
                 btnChartPrice.Enabled = true;
@@ -12994,7 +12231,6 @@ namespace SATSuma
                 lblMarketCapChart.Enabled = true;
                 lblUniqueAddressesChart.Enabled = true;
                 lblHeaderConverterChart.Enabled = true;
-                lblHeaderBlockSizeChart.Enabled = true;
                 lblHeaderMarketCapChart.Enabled = true;
             }
             catch (Exception ex)
@@ -14660,80 +13896,6 @@ namespace SATSuma
         #endregion
 
         #region ⚡DCA CALCULATOR⚡
-        private async void BtnMenuDCACalculator_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                lblMenuHighlightedButtonText.Visible = true;
-                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuHighlightedButtonText.Text = "dca calculator";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDCACalculator.Location.Y + (int)(5 * UIScale));
-                });
-                lblMenuArrow.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuArrow.Visible = true;
-                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
-                });
-                btnMenuXpub.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuSettings.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuCharts.Enabled = true;
-                btnMenuDCACalculator.Enabled = false;
-                SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
-                {
-                    Owner = this,
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(500);
-                #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelBlockList.Visible = false;
-                panelAddress.Visible = false;
-                panelBlock.Visible = false;
-                panelDirectory.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelAppearance.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelDCACalculator.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(2000);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
-                ResumeLayout();
-
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "btnMenuDCACalculator_Click");
-            }
-        }
 
         private async void PopulateDCACalculator()
         {
@@ -15179,6 +14341,737 @@ namespace SATSuma
         {
             ValidateDCAInputs();
         }
+        #endregion
+
+        #region ⚡BTC/FIAT CONVERTER⚡
+        #region populate data
+        private void PopulateConverterScreen()
+        {
+            try
+            {
+                if (!offlineMode && !testNet)
+                {
+                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+
+                    #region USD list
+                    if (string.IsNullOrEmpty(priceUSD) || !double.TryParse(priceUSD, out _))
+                    {
+                        priceUSD = "0";
+                    }
+                    labelPCUSD1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD1.Text = (Convert.ToDecimal(priceUSD) / 100000000).ToString("0.00");
+                    });
+                    labelPCUSD2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD2.Text = (Convert.ToDecimal(priceUSD) / 10000000).ToString("0.00");
+                    });
+                    labelPCUSD3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD3.Text = (Convert.ToDecimal(priceUSD) / 1000000).ToString("0.00");
+                    });
+                    labelPCUSD4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD4.Text = (Convert.ToDecimal(priceUSD) / 100000).ToString("0.00");
+                    });
+                    labelPCUSD5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD5.Text = (Convert.ToDecimal(priceUSD) / 10000).ToString("0.00");
+                    });
+                    labelPCUSD6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD6.Text = (Convert.ToDecimal(priceUSD) / 1000).ToString("0.00");
+                    });
+                    labelPCUSD7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD7.Text = (Convert.ToDecimal(priceUSD) / 100).ToString("0.00");
+                    });
+                    labelPCUSD8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD8.Text = (Convert.ToDecimal(priceUSD) / 10).ToString("0.00");
+                    });
+                    labelPCUSD9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD9.Text = (Convert.ToDecimal(priceUSD)).ToString("0.00");
+                    });
+                    labelPCUSD10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD10.Text = (Convert.ToDecimal(priceUSD) * 10).ToString("0.00");
+                    });
+                    labelPCUSD11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD11.Text = (Convert.ToDecimal(priceUSD) * 100).ToString("0.00");
+                    });
+                    labelPCUSD12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD12.Text = (Convert.ToDecimal(priceUSD) * 1000).ToString("0.00");
+                    });
+                    labelPCUSD13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD13.Text = (Convert.ToDecimal(priceUSD) * 10000).ToString("0.00");
+                    });
+                    labelPCUSD14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD14.Text = (Convert.ToDecimal(priceUSD) * 100000).ToString("0.00");
+                    });
+                    labelPCUSD15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD15.Text = (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00");
+                    });
+                    labelPCUSD16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD16.Text = (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00");
+                    });
+                    labelPCUSD17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region EUR list
+                    if (string.IsNullOrEmpty(priceEUR) || !double.TryParse(priceEUR, out _))
+                    {
+                        priceEUR = "0";
+                    }
+                    labelPCEUR1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR1.Text = (Convert.ToDecimal(priceEUR) / 100000000).ToString("0.00");
+                    });
+                    labelPCEUR2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR2.Text = (Convert.ToDecimal(priceEUR) / 10000000).ToString("0.00");
+                    });
+                    labelPCEUR3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR3.Text = (Convert.ToDecimal(priceEUR) / 1000000).ToString("0.00");
+                    });
+                    labelPCEUR4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR4.Text = (Convert.ToDecimal(priceEUR) / 100000).ToString("0.00");
+                    });
+                    labelPCEUR5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR5.Text = (Convert.ToDecimal(priceEUR) / 10000).ToString("0.00");
+                    });
+                    labelPCEUR6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR6.Text = (Convert.ToDecimal(priceEUR) / 1000).ToString("0.00");
+                    });
+                    labelPCEUR7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR7.Text = (Convert.ToDecimal(priceEUR) / 100).ToString("0.00");
+                    });
+                    labelPCEUR8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR8.Text = (Convert.ToDecimal(priceEUR) / 10).ToString("0.00");
+                    });
+                    labelPCEUR9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR9.Text = (Convert.ToDecimal(priceEUR)).ToString("0.00");
+                    });
+                    labelPCEUR10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR10.Text = (Convert.ToDecimal(priceEUR) * 10).ToString("0.00");
+                    });
+                    labelPCEUR11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR11.Text = (Convert.ToDecimal(priceEUR) * 100).ToString("0.00");
+                    });
+                    labelPCEUR12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR12.Text = (Convert.ToDecimal(priceEUR) * 1000).ToString("0.00");
+                    });
+                    labelPCEUR13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR13.Text = (Convert.ToDecimal(priceEUR) * 10000).ToString("0.00");
+                    });
+                    labelPCEUR14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR14.Text = (Convert.ToDecimal(priceEUR) * 100000).ToString("0.00");
+                    });
+                    labelPCEUR15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR15.Text = (Convert.ToDecimal(priceEUR) * 1000000).ToString("0.00");
+                    });
+                    labelPCEUR16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR16.Text = (Convert.ToDecimal(priceEUR) * 10000000).ToString("0.00");
+                    });
+                    labelPCEUR17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCEUR17.Text = (Convert.ToDecimal(priceEUR) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region GBP list
+                    if (string.IsNullOrEmpty(priceGBP) || !double.TryParse(priceGBP, out _))
+                    {
+                        priceGBP = "0";
+                    }
+                    labelPCGBP1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP1.Text = (Convert.ToDecimal(priceGBP) / 100000000).ToString("0.00");
+                    });
+                    labelPCGBP2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP2.Text = (Convert.ToDecimal(priceGBP) / 10000000).ToString("0.00");
+                    });
+                    labelPCGBP3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP3.Text = (Convert.ToDecimal(priceGBP) / 1000000).ToString("0.00");
+                    });
+                    labelPCGBP4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP4.Text = (Convert.ToDecimal(priceGBP) / 100000).ToString("0.00");
+                    });
+                    labelPCGBP5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP5.Text = (Convert.ToDecimal(priceGBP) / 10000).ToString("0.00");
+                    });
+                    labelPCGBP6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP6.Text = (Convert.ToDecimal(priceGBP) / 1000).ToString("0.00");
+                    });
+                    labelPCGBP7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP7.Text = (Convert.ToDecimal(priceGBP) / 100).ToString("0.00");
+                    });
+                    labelPCGBP8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP8.Text = (Convert.ToDecimal(priceGBP) / 10).ToString("0.00");
+                    });
+                    labelPCGBP9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP9.Text = (Convert.ToDecimal(priceGBP)).ToString("0.00");
+                    });
+                    labelPCGBP10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP10.Text = (Convert.ToDecimal(priceGBP) * 10).ToString("0.00");
+                    });
+                    labelPCGBP11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP11.Text = (Convert.ToDecimal(priceGBP) * 100).ToString("0.00");
+                    });
+                    labelPCGBP12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP12.Text = (Convert.ToDecimal(priceGBP) * 1000).ToString("0.00");
+                    });
+                    labelPCGBP13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP13.Text = (Convert.ToDecimal(priceGBP) * 10000).ToString("0.00");
+                    });
+                    labelPCGBP14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP14.Text = (Convert.ToDecimal(priceGBP) * 100000).ToString("0.00");
+                    });
+                    labelPCGBP15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP15.Text = (Convert.ToDecimal(priceGBP) * 1000000).ToString("0.00");
+                    });
+                    labelPCGBP16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP16.Text = (Convert.ToDecimal(priceGBP) * 10000000).ToString("0.00");
+                    });
+                    labelPCGBP17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCGBP17.Text = (Convert.ToDecimal(priceGBP) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region XAU list
+                    if (string.IsNullOrEmpty(priceXAU) || !double.TryParse(priceXAU, out _))
+                    {
+                        priceXAU = "0";
+                    }
+                    labelPCXAU1.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU1.Text = (Convert.ToDecimal(priceXAU) / 100000000).ToString("0.00");
+                    });
+                    labelPCXAU2.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU2.Text = (Convert.ToDecimal(priceXAU) / 10000000).ToString("0.00");
+                    });
+                    labelPCXAU3.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU3.Text = (Convert.ToDecimal(priceXAU) / 1000000).ToString("0.00");
+                    });
+                    labelPCXAU4.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU4.Text = (Convert.ToDecimal(priceXAU) / 100000).ToString("0.00");
+                    });
+                    labelPCXAU5.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU5.Text = (Convert.ToDecimal(priceXAU) / 10000).ToString("0.00");
+                    });
+                    labelPCXAU6.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU6.Text = (Convert.ToDecimal(priceXAU) / 1000).ToString("0.00");
+                    });
+                    labelPCXAU7.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU7.Text = (Convert.ToDecimal(priceXAU) / 100).ToString("0.00");
+                    });
+                    labelPCXAU8.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU8.Text = (Convert.ToDecimal(priceXAU) / 10).ToString("0.00");
+                    });
+                    labelPCXAU9.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU9.Text = (Convert.ToDecimal(priceXAU)).ToString("0.00");
+                    });
+                    labelPCXAU10.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU10.Text = (Convert.ToDecimal(priceXAU) * 10).ToString("0.00");
+                    });
+                    labelPCXAU11.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU11.Text = (Convert.ToDecimal(priceXAU) * 100).ToString("0.00");
+                    });
+                    labelPCXAU12.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU12.Text = (Convert.ToDecimal(priceXAU) * 1000).ToString("0.00");
+                    });
+                    labelPCXAU13.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU13.Text = (Convert.ToDecimal(priceXAU) * 10000).ToString("0.00");
+                    });
+                    labelPCXAU14.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU14.Text = (Convert.ToDecimal(priceXAU) * 100000).ToString("0.00");
+                    });
+                    labelPCXAU15.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU15.Text = (Convert.ToDecimal(priceXAU) * 1000000).ToString("0.00");
+                    });
+                    labelPCXAU16.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU16.Text = (Convert.ToDecimal(priceXAU) * 10000000).ToString("0.00");
+                    });
+                    labelPCXAU17.Invoke((MethodInvoker)delegate
+                    {
+                        labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
+                    });
+                    #endregion
+                    #region calculate fields derived from user input
+                    SetCalculatedFiatAmounts();
+                    SetCalculatedUSDAmount();
+                    SetCalculatedEURAmount();
+                    SetCalculatedGBPAmount();
+                    SetCalculatedXAUAmount();
+                    #endregion
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "PopulateConverterScreen");
+            }
+        }
+        #endregion
+        #region set textboxes to 0 if left empty by user
+        private void TextBoxConvertUSDtoBTC_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertUSDtoBTC.Text == "")
+                {
+                    textBoxConvertUSDtoBTC.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxConvertUSDtoBTC.Text = "1.00";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertUSDtoBTC_Leave");
+            }
+        }
+
+        private void TextBoxConvertEURtoBTC_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertEURtoBTC.Text == "")
+                {
+                    textBoxConvertEURtoBTC.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxConvertEURtoBTC.Text = "1.00";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertEURtoBTC_Leave");
+            }
+        }
+
+        private void TextBoxConvertGBPtoBTC_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertGBPtoBTC.Text == "")
+                {
+                    textBoxConvertGBPtoBTC.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxConvertGBPtoBTC.Text = "1.00";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertGBPtoBTC_Leave");
+            }
+        }
+
+        private void TextBoxConvertXAUtoBTC_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertXAUtoBTC.Text == "")
+                {
+                    textBoxConvertXAUtoBTC.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxConvertXAUtoBTC.Text = "1.00";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertXAUtoBTC_Leave");
+            }
+        }
+
+        private void TextBoxConvertBTCtoFiat_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertBTCtoFiat.Text == "")
+                {
+                    textBoxConvertBTCtoFiat.Invoke((MethodInvoker)delegate
+                    {
+                        textBoxConvertBTCtoFiat.Text = "1.00000000";
+                    });
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertBTCtoFiat_Leave");
+            }
+        }
+        #endregion
+        #region validate user inputs
+        private void CurrencyTextBoxes_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
+                string text = textBox.Text;
+
+                // Allow digits, backspace, and decimal point
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Only allow one decimal point
+                if (e.KeyChar == '.' && text.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Get the current caret position
+                int caretPos = textBox.SelectionStart;
+
+                // Check if the new character is being inserted after the decimal point
+                if (text.Contains('.') && caretPos > text.IndexOf('.'))
+                {
+                    // Allow two digits after the decimal point
+                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
+                    if (decimalPlaces >= 2)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                // Combine the current text with the newly typed character
+                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+
+                // Remove any commas in the text
+                string strippedText = newText.Replace(",", "");
+
+                // max = 100 trillion
+                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
+                {
+                    if (value > 100000000000000)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "CurrencyTextBoxes_KeyPress - validating currency input");
+            }
+        }
+
+        private void TextBoxConvertBTCtoFiat_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
+                string text = textBox.Text;
+
+                // Allow digits, backspace, and decimal point
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Only allow one decimal point
+                if (e.KeyChar == '.' && text.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Get the current caret position
+                int caretPos = textBox.SelectionStart;
+
+                // Check if the new character is being inserted after the decimal point
+                if (text.Contains('.') && caretPos > text.IndexOf('.'))
+                {
+                    // Allow 8 digits after the decimal point
+                    int decimalPlaces = text.Length - text.IndexOf('.') - 1;
+                    if (decimalPlaces >= 8)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                // Combine the current text with the newly typed character
+                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+
+                // Remove any commas in the text
+                string strippedText = newText.Replace(",", "");
+
+                // max = 21 million
+                if (!string.IsNullOrEmpty(strippedText) && decimal.TryParse(strippedText, out decimal value))
+                {
+                    if (value > 21000000)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "textBoxConvertBTCtoFiat_KeyPress - validating BTC input");
+            }
+        }
+        #endregion
+        #region respond to and calculate from user inputs
+        private void TextBoxConvertBTCtoFiat_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertBTCtoFiat.Text != "")
+                {
+                    SetCalculatedFiatAmounts();
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "TextBoxConvertBTCtoFiat_TextChanged");
+            }
+        }
+
+        private void SetCalculatedFiatAmounts()
+        {
+            try
+            {
+                labelPCUSDcustom.Invoke((MethodInvoker)delegate
+                {
+                    labelPCUSDcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00");
+                });
+                labelPCEURcustom.Invoke((MethodInvoker)delegate
+                {
+                    labelPCEURcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00");
+                });
+                labelPCGBPcustom.Invoke((MethodInvoker)delegate
+                {
+                    labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
+                });
+                labelPCXAUcustom.Invoke((MethodInvoker)delegate
+                {
+                    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
+                });
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "SetCalculatedFiatAmounts");
+            }
+        }
+
+        private void FiatAmountTextBoxes_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxConvertUSDtoBTC.Text != "")
+                {
+                    SetCalculatedUSDAmount();
+                }
+                if (textBoxConvertEURtoBTC.Text != "")
+                {
+                    SetCalculatedEURAmount();
+                }
+                if (textBoxConvertGBPtoBTC.Text != "")
+                {
+                    SetCalculatedGBPAmount();
+                }
+                if (textBoxConvertXAUtoBTC.Text != "")
+                {
+                    SetCalculatedXAUAmount();
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "FiatAmountTextBoxes_TextChanged");
+            }
+        }
+
+        private void SetCalculatedUSDAmount()
+        {
+            try
+            {
+                if (decimal.TryParse(labelPCUSD9.Text, out decimal pcusd9text) && decimal.TryParse(textBoxConvertUSDtoBTC.Text, out decimal usdtobtctext))
+                {
+                    if (labelPCUSD9.Text != "USD" && pcusd9text > 0)
+                    {
+                        lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedUSDFromBTCAmount.Text = (usdtobtctext / pcusd9text).ToString("0.00000000");
+                        });
+                        label267.Invoke((MethodInvoker)delegate
+                        {
+                            label267.Text = "$" + textBoxConvertUSDtoBTC.Text + " USD (US dollar) =";
+                        });
+                        lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - (int)(4 * UIScale), lblCalculatedUSDFromBTCAmount.Location.Y);
+                        });
+                        label273.Invoke((MethodInvoker)delegate
+                        {
+                            label273.Location = new Point(lblCalculatedUSDFromBTCAmount.Location.X + lblCalculatedUSDFromBTCAmount.Width, label273.Location.Y);
+                        });
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "SetCalculatedUSDAmount");
+            }
+        }
+        private void SetCalculatedEURAmount()
+        {
+            try
+            {
+                if (decimal.TryParse(labelPCEUR9.Text, out decimal pceur9text) && decimal.TryParse(textBoxConvertEURtoBTC.Text, out decimal eurtobtctext))
+                {
+                    if (labelPCEUR9.Text != "EUR" && pceur9text > 0)
+                    {
+                        lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedEURFromBTCAmount.Text = (eurtobtctext / pceur9text).ToString("0.00000000");
+                        });
+                        label270.Invoke((MethodInvoker)delegate
+                        {
+                            label270.Text = "€" + textBoxConvertEURtoBTC.Text + " EUR (European euro) =";
+                        });
+                        lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - (int)(4 * UIScale), lblCalculatedEURFromBTCAmount.Location.Y);
+                        });
+                        label274.Invoke((MethodInvoker)delegate
+                        {
+                            label274.Location = new Point(lblCalculatedEURFromBTCAmount.Location.X + lblCalculatedEURFromBTCAmount.Width, label274.Location.Y);
+                        });
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "SetCalculatedEURAmount");
+            }
+        }
+        private void SetCalculatedGBPAmount()
+        {
+            try
+            {
+                if (decimal.TryParse(labelPCGBP9.Text, out decimal pcgbp9text) && decimal.TryParse(textBoxConvertGBPtoBTC.Text, out decimal gbptobtctext))
+                {
+                    if (labelPCGBP9.Text != "GBP" && pcgbp9text > 0)
+                    {
+                        lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedGBPFromBTCAmount.Text = (gbptobtctext / pcgbp9text).ToString("0.00000000");
+                        });
+                        label269.Invoke((MethodInvoker)delegate
+                        {
+                            label269.Text = "£" + textBoxConvertGBPtoBTC.Text + " GBP (British pound sterling) =";
+                        });
+                        lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - (int)(4 * UIScale), lblCalculatedGBPFromBTCAmount.Location.Y);
+                        });
+                        label276.Invoke((MethodInvoker)delegate
+                        {
+                            label276.Location = new Point(lblCalculatedGBPFromBTCAmount.Location.X + lblCalculatedGBPFromBTCAmount.Width, label276.Location.Y);
+                        });
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "SetCalculatedGBPAmount");
+            }
+        }
+        private void SetCalculatedXAUAmount()
+        {
+            try
+            {
+                if (decimal.TryParse(labelPCXAU9.Text, out decimal pcxau9text) && decimal.TryParse(textBoxConvertXAUtoBTC.Text, out decimal xautobtctext))
+                {
+                    if (labelPCXAU9.Text != "XAU" && pcxau9text > 0)
+                    {
+                        lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedXAUFromBTCAmount.Text = (xautobtctext / pcxau9text).ToString("0.00000000");
+                        });
+                        label268.Invoke((MethodInvoker)delegate
+                        {
+                            label268.Text = "🪙" + textBoxConvertXAUtoBTC.Text + " XAU (ounce of gold) =";
+                        });
+                        lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculatedXAUFromBTCAmount.Location = new Point(label268.Location.X + label268.Width - 4, lblCalculatedXAUFromBTCAmount.Location.Y);
+                        });
+                        label275.Invoke((MethodInvoker)delegate
+                        {
+                            label275.Location = new Point(lblCalculatedXAUFromBTCAmount.Location.X + lblCalculatedXAUFromBTCAmount.Width, label275.Location.Y);
+                        });
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "SetCalculatedXAUAmount");
+            }
+        }
+        #endregion
         #endregion
 
         #region ⚡DIRECTORY SCREEN⚡
@@ -15879,7 +15772,7 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = false;
                     blockchairComJSONSelected = "0";
-                    DisableChartsThatDontUseMempoolSpace();
+//                  DisableChartsThatDontUseMempoolSpace();
                 }
                 else
                 {
@@ -15890,7 +15783,7 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = true;
                     blockchairComJSONSelected = "1";
-                    EnableChartsThatDontUseMempoolSpace();
+//                  EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
                 TimerAPIRefreshPeriod_Tick(sender, e);
@@ -15915,7 +15808,8 @@ namespace SATSuma
                     RunBitcoinExplorerEndpointAPI = false;
                     RunBitcoinExplorerOrgJSONAPI = false;
                     bitcoinExplorerEnpointsSelected = "0";
-                    DisableChartsThatDontUseMempoolSpace();
+//                  DisableChartsThatDontUseMempoolSpace();
+                    btnMenuPriceConverter.Enabled = false;
                     HideAllFiatConversionFields();
                 }
                 else
@@ -15927,8 +15821,9 @@ namespace SATSuma
                     });
                     RunBitcoinExplorerEndpointAPI = true;
                     RunBitcoinExplorerOrgJSONAPI = true;
+                    btnMenuPriceConverter.Enabled = true;
                     bitcoinExplorerEnpointsSelected = "1";
-                    EnableChartsThatDontUseMempoolSpace();
+//                  EnableChartsThatDontUseMempoolSpace();
                     ShowAllFiatConversionFields();
                 }
                 SaveSettingsToBookmarksFile();
@@ -16037,12 +15932,14 @@ namespace SATSuma
                 offlineMode = false;
                 lblHelpOffline.Visible = false;
                 btnMenuHelp.Enabled = true;
+                btnMenuPriceConverter.Enabled = true;
+                btnMenuDCACalculator.Enabled = true;
                 btnHelp.Enabled = true;
                 lblOfflineModeLight.Invoke((MethodInvoker)delegate
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.OliveDrab;
-                    //lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
+//                  lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -16115,6 +16012,8 @@ namespace SATSuma
                 offlineMode = true;
                 lblHelpOffline.Visible = true;
                 btnMenuHelp.Enabled = false;
+                btnMenuPriceConverter.Enabled = false;
+                btnMenuDCACalculator.Enabled = false;
                 btnHelp.Enabled = false;
                 lblOfflineModeLight.Invoke((MethodInvoker)delegate
                 {
@@ -16393,7 +16292,7 @@ namespace SATSuma
                 { 22, "chtchannls" },
                 { 23, "chtprice--" },
                 { 24, "chtmrktcap" },
-                { 25, "chtcnvertr" },
+                { 25, "btcconvert" },
                 { 26, "dcacalcrtr" }
             };
 
@@ -16646,7 +16545,7 @@ namespace SATSuma
                         { "chtchannls", "chart - ⚡channels" },
                         { "chtprice--", "chart - price" },
                         { "chtmrktcap", "chart - market cap." },
-                        { "chtcnvertr", "chart - fiat/gold/btc converter" },
+                        { "btcconvert", "btc/fiat converter" },
                         { "dcacalcrtr", "dca calculator" }
                         
                     };
@@ -20461,7 +20360,7 @@ namespace SATSuma
                 }
 
                 // chart
-                RJButton[] chartButtonBordersToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnPriceConverter, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
+                RJButton[] chartButtonBordersToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
                 foreach (RJButton button in chartButtonBordersToColor)
                 {
                     button.BorderRadius = (int)(radius * UIScale);
@@ -20548,6 +20447,8 @@ namespace SATSuma
                 panelDCAMessages.Invalidate();
                 panelDCASummary.Invalidate();
                 panel117.Invalidate();
+                panel119.Invalidate();
+                panelPriceConvert.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -20695,7 +20596,7 @@ namespace SATSuma
                 panelChartDifficultyScaleButtons.BackColor = chartsBackgroundColor;
                 panelHashrateScaleButtons.BackColor = chartsBackgroundColor;
                 panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
-                panelPriceConvert.BackColor = chartsBackgroundColor;
+//              panelPriceConvert.BackColor = chartsBackgroundColor;
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
                 Color newGridlineColor = Color.FromArgb(40, 40, 40);
@@ -21184,7 +21085,7 @@ namespace SATSuma
                     control.BackColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
+                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
                 foreach (Control control in listChartsButtonsToColor)
                 {
                     control.BackColor = thiscolor;
@@ -21210,7 +21111,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator ,btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator ,btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 if (lblChartsDarkBackground.Text == "✔️")
                 {
                     //header
@@ -21289,7 +21190,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceConverter, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
+                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21736,7 +21637,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panel117 };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panel117 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -21761,7 +21662,7 @@ namespace SATSuma
                     btnMenuApplyCustomTheme, btnMenuBitcoinDashboard, btnThemeMenu, btnMenuAddress,
                     btnMenuCreateTheme, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts,
                     btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings,
-                    btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuThemeFranklin,
+                    btnMenuTransaction, btnMenuDCACalculator, btnMenuPriceConverter, btnMenuXpub, btnMenuSplash, btnMenuThemeFranklin,
                     BtnMenuThemeGenesis, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger,
                     btnMenuThemeStackSats, btnMenuThemeSymbol, btnUSD, btnEUR, btnGBP,
                     btnXAU, btnCurrency, btnHelp, btnMinimise, btnShowGlobalSearch,
@@ -21799,7 +21700,7 @@ namespace SATSuma
 
                 Button[] buttonstoMakeTransparent =
                 {
-                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash
+                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash
                 };
                 if (buttonstoMakeTransparent.Contains((Button)sender))
                 {
@@ -22549,6 +22450,13 @@ namespace SATSuma
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
                             lblNowViewing.Text = "DCA calculator";
+                        });
+                    }
+                    if (panelPriceConverter.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "BTC/Fiat converter";
                         });
                     }
                     btnAddToBookmarks.Enabled = false;
@@ -23448,6 +23356,45 @@ namespace SATSuma
         #region ⚡GENERAL FORM NAVIGATION AND CONTROLS⚡
         #region main menu
 
+        private void EnableAllMenuButtons()
+        {
+            btnMenuXpub.Enabled = true;
+            btnMenuAddress.Enabled = true;
+            btnMenuTransaction.Enabled = true;
+            btnMenuBookmarks.Enabled = true;
+            btnMenuCreateTheme.Enabled = true;
+            btnMenuDirectory.Enabled = true;
+            btnMenuBitcoinDashboard.Enabled = true;
+            btnMenuBlockList.Enabled = true;
+            btnMenuLightningDashboard.Enabled = true;
+            btnMenuBlock.Enabled = true;
+            if (!testNet)
+            {
+                btnMenuCharts.Enabled = true;
+                btnMenuDCACalculator.Enabled = true;
+                btnMenuPriceConverter.Enabled = true;
+            }
+            btnMenuSettings.Enabled = true;
+        }
+
+        private void HideAllScreens()
+        {
+            panelBookmarks.Visible = false;
+            panelBlockList.Visible = false;
+            panelLightningDashboard.Visible = false;
+            panelDirectory.Visible = false;
+            panelCharts.Visible = false;
+            panelAddress.Visible = false;
+            panelBlock.Visible = false;
+            panelTransaction.Visible = false;
+            panelSettings.Visible = false;
+            panelAppearance.Visible = false;
+            panelXpub.Visible = false;
+            panelDCACalculator.Visible = false;
+            panelPriceConverter.Visible = false;
+            panelBitcoinDashboard.Visible = false;
+        }
+
         private async void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
         {
             try
@@ -23456,29 +23403,15 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuDirectory.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuBitcoinDashboard.Enabled = false;
-                btnMenuBlockList.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuSettings.Enabled = true;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -23498,18 +23431,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBookmarks.Visible = false;
-                panelBlockList.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelDirectory.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelBlock.Visible = false;
-                panelTransaction.Visible = false;
-                panelSettings.Visible = false;
-                panelAppearance.Visible = false;
-                panelXpub.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelBitcoinDashboard.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23533,28 +23455,14 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuSettings.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
+                EnableAllMenuButtons();
                 btnMenuLightningDashboard.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -23575,18 +23483,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelCharts.Visible = false;
-                panelBlockList.Visible = false;
-                panelAddress.Visible = false;
-                panelDirectory.Visible = false;
-                panelBlock.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelAppearance.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelLightningDashboard.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23610,25 +23507,14 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "charts";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuCharts.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuSettings.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuDCACalculator.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuCharts.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -23649,18 +23535,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(500);
                 #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelBlockList.Visible = false;
-                panelAddress.Visible = false;
-                panelBlock.Visible = false;
-                panelDirectory.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelAppearance.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelCharts.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23685,29 +23560,15 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "address";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddress.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuAddress.Enabled = false;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuSettings.Enabled = true;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -23727,18 +23588,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelBlockList.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelBlock.Visible = false;
-                panelCharts.Visible = false;
-                panelDirectory.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelAppearance.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelAddress.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23764,30 +23614,15 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "block";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlock.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuBlock.Enabled = false;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuSettings.Enabled = true;
-                
                 SuspendLayout();
 
                 #region display loading screen
@@ -23808,21 +23643,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelAddress.Visible = false;
-                panelDirectory.Visible = false;
-                panelAppearance.Visible = false;
-                panelCharts.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelDCACalculator.Visible = false;
-                ResumeLayout();
-                CheckNetworkStatus();
-
+                HideAllScreens();
                 if (numericUpDownSubmittedBlockNumber.Text == "673298")
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -23832,7 +23653,8 @@ namespace SATSuma
                     LookupBlock(); // fetch all the block data automatically for the initial view. 
                 }
                 panelBlock.Visible = true;
-
+                ResumeLayout();
+                CheckNetworkStatus();
                 #region close loading screen
                 //wait a moment to give time for screen to paint
                 await BriefPause(400);
@@ -23854,29 +23676,15 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "xpub";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuXpub.Location.Y);
                 });
+                EnableAllMenuButtons();
                 btnMenuXpub.Enabled = false;
-                btnMenuBlock.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuBlockList.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuSettings.Enabled = true;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -23896,18 +23704,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelBookmarks.Visible = false;
-                panelDirectory.Visible = false;
-                panelAddress.Visible = false;
-                panelAppearance.Visible = false;
-                panelTransaction.Visible = false;
-                panelBlock.Visible = false;
-                panelSettings.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelXpub.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -23932,7 +23729,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "blocks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -23940,21 +23737,8 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlockList.Location.Y);
                 });
                 btnMenuBlockList.Enabled = false;
-                btnMenuXpub.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuSettings.Enabled = true;
+                EnableAllMenuButtons();
+                btnMenuBlockList.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -23974,19 +23758,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelDirectory.Visible = false;
-                panelBlock.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelAppearance.Visible = false;
-                panelSettings.Visible = false;
-                panelDCACalculator.Visible = false;
-                CheckNetworkStatus();
+                HideAllScreens();
                 if (numericUpDownBlockHeightToStartListFrom.Text == "673298")
                 {
                     numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -23996,6 +23768,8 @@ namespace SATSuma
                     LookupBlockList(); // fetch the first 15 blocks automatically for the initial view.
                 }
                 panelBlockList.Visible = true;
+                CheckNetworkStatus();
+
                 #region close loading screen
                 //wait a moment to give time for screen to paint
                 await BriefPause(400);
@@ -24018,7 +23792,7 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "transaction";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
@@ -24026,21 +23800,8 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuTransaction.Location.Y);
                 });
                 btnMenuTransaction.Enabled = false;
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuBookmarks.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                btnMenuSettings.Enabled = true;
+                EnableAllMenuButtons();
+                btnMenuTransaction.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24060,19 +23821,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBitcoinDashboard.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelBookmarks.Visible = false;
-                panelDirectory.Visible = false;
-                panelBlock.Visible = false;
-                panelAppearance.Visible = false;
-                panelTransaction.Visible = false;
-                panelBlockList.Visible = false;
-                panelXpub.Visible = false;
-                panelSettings.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelTransaction.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -24097,29 +23846,14 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "bookmarks";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBookmarks.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuSettings.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuBookmarks.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -24140,19 +23874,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelDirectory.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelAppearance.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelBlock.Visible = false;
-                panelSettings.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 CheckNetworkStatus();
                 SetupBookmarksScreen();
                 panelBookmarks.Visible = true;
@@ -24170,6 +23892,113 @@ namespace SATSuma
             }
         }
 
+        private async void BtnMenuPriceConverter_Click(object sender, EventArgs e)
+        {
+            try
+            { 
+                lblMenuHighlightedButtonText.Visible = true;
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Text = "convert fiat/btc";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuPriceConverter.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPriceConverter.Location.Y);
+                });
+                EnableAllMenuButtons();
+                btnMenuPriceConverter.Enabled = false;
+                SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None,
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
+                };
+                loadingScreen.Show(this);
+                await BriefPause(100);
+                #endregion
+                HideAllScreens();
+                CheckNetworkStatus();
+                PopulateConverterScreen();
+                panelPriceConverter.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(700);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
+                ResumeLayout();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuPriceConverter_Click");
+            }
+}
+
+        private async void BtnMenuDCACalculator_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lblMenuHighlightedButtonText.Visible = true;
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Text = "dca calculator";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDCACalculator.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
+                });
+                EnableAllMenuButtons();
+                btnMenuDCACalculator.Enabled = false;
+                SuspendLayout();
+                #region display loading screen
+                // work out the position to place the loading form
+                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.X -= (int)(13 * UIScale);
+
+                Form loadingScreen = new loadingScreen(UIScale)
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.Manual, // Set the start position manually
+                    FormBorderStyle = FormBorderStyle.None,
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1, // Set the opacity to 100%
+                    Location = panelScreenLocation // Set the location of the loadingScreen form
+                };
+                loadingScreen.Show(this);
+                await BriefPause(500);
+                #endregion
+                HideAllScreens();
+                panelDCACalculator.Visible = true;
+                #region close loading screen
+                //wait a moment to give time for screen to paint
+                await BriefPause(2000);
+                //close the loading screen
+                loadingScreen.Close();
+                #endregion
+                ResumeLayout();
+
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnMenuDCACalculator_Click");
+            }
+        }
+
         private async void BtnMenuDirectory_Click(object sender, EventArgs e)
         {
             try
@@ -24178,29 +24007,14 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "directory";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDirectory.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuCreateTheme.Enabled = true;
-                btnMenuSettings.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuDirectory.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -24221,19 +24035,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelAppearance.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelBlock.Visible = false;
-                panelSettings.Visible = false;
-                panelBookmarks.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelDirectory.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -24258,29 +24060,14 @@ namespace SATSuma
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Text = "settings";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y + (int)(5 * UIScale));
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y);
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
                     lblMenuArrow.Visible = true;
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuSettings.Location.Y);
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                    btnMenuDCACalculator.Enabled = true;
-                }
-                btnMenuBookmarks.Enabled = true;
-                btnMenuCreateTheme.Enabled = true;
+                EnableAllMenuButtons();
                 btnMenuSettings.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -24301,19 +24088,7 @@ namespace SATSuma
                 loadingScreen.Show(this);
                 await BriefPause(100);
                 #endregion
-                panelBlockList.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelDirectory.Visible = false;
-                panelTransaction.Visible = false;
-                panelAppearance.Visible = false;
-                panelXpub.Visible = false;
-                panelBlock.Visible = false;
-                panelBookmarks.Visible = false;
-                panelDCACalculator.Visible = false;
+                HideAllScreens();
                 panelSettings.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -24465,7 +24240,6 @@ namespace SATSuma
         }
 
         #endregion
-
         #region currency menu & get market data
         private void BtnCurrency_Click(object sender, EventArgs e)
         {
@@ -25400,8 +25174,7 @@ namespace SATSuma
         {
             try
             {
-                BtnPriceConverter_Click(sender, e);
-                BtnMenuCharts_Click(sender, e);
+                BtnMenuPriceConverter_Click(sender, e);
             }
             catch (Exception ex)
             {
@@ -25461,6 +25234,11 @@ namespace SATSuma
         public Panel GetPanelDCACalculator() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelDCACalculator;
+        }
+
+        public Panel GetPanelPriceConverter() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelPriceConverter;
         }
 
         public Panel GetPanelCharts() // enables help screen to get state (visible) of panel to determine which help text to show

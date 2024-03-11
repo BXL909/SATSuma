@@ -28,8 +28,6 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * dca - estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
 * validate date input on dca (can't be same, can't start today, etc)
-* improve clarity of label colours, axis colours on certain themes
-* check main menu appearance when offline mode active
 * test all again
 */
 
@@ -265,7 +263,6 @@ namespace SATSuma
         bool btnChartLightningChannelsWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartMarketCapWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartMarketCapLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnPriceConverterWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled = false; // Transaction screen - store button state during queries to return to that state afterwards
@@ -9497,15 +9494,15 @@ namespace SATSuma
                     formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "maximum", color: Color.DarkGray);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("sats per v/byte", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
-                    legend.FillColor = chartsBackgroundColor;
+                    legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
                     legend.ShadowColor = chartsBackgroundColor;
@@ -9601,15 +9598,15 @@ namespace SATSuma
                     formsPlot1.Plot.AddScatter(xValues, yValues4, lineWidth: 1, markerSize: 1, color: Color.Gold, label: "Unknown");
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
-                    legend.FillColor = chartsBackgroundColor;
+                    legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
                     legend.ShadowColor = chartsBackgroundColor;
@@ -9697,8 +9694,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("EH/s", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -9825,8 +9822,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("TH/s", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -9918,8 +9915,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValuesCapacity, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10015,8 +10012,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValuesChannels, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Capacity (BTC)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10118,8 +10115,8 @@ namespace SATSuma
                     double[] yPositions = Enumerable.Range(0, counts.Length).Select(y => (double)y).ToArray();
 
                     // Set the Y-axis tick positions and labels
-                    formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot3.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot3.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot3.Plot.YTicks(yPositions, countryNames);
                     formsPlot3.Plot.YLabel("");
                     formsPlot3.Plot.XLabel("");
@@ -10195,8 +10192,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("BTC", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10282,8 +10279,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("BTC", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10380,9 +10377,9 @@ namespace SATSuma
                     scatter.StepDisplay = true;
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
-                    formsPlot1.Plot.YAxis.Label("trillion", size: (int)(12 * UIScale), bold: false);
+                    formsPlot1.Plot.YAxis.Label("trillion", size: (int)(12 * UIScale), bold: false, color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Label("");
 
                     // prevent navigating beyond the data
@@ -10506,8 +10503,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("trillion", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10594,8 +10591,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Unique addresses", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10716,8 +10713,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Unique addresses", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -10843,8 +10840,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -10997,8 +10994,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -11123,8 +11120,8 @@ namespace SATSuma
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
                     formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: 10);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -11279,8 +11276,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.XAxis.Label("");
 
@@ -11368,8 +11365,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("valid UTXO count", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -11490,8 +11487,8 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.MajorGrid(true);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("valid UTXO count", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -11578,8 +11575,8 @@ namespace SATSuma
                     scatter = formsPlot1.Plot.AddScatter(xValues, yValues, lineWidth: 1, markerSize: 1);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Block size (MB)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -11681,8 +11678,8 @@ namespace SATSuma
                     formsPlot1.Plot.AddScatter(new double[] { 0 }, new double[] { 0 }, markerSize: 0, label: "already mined", color: Color.Orange);
 
                     formsPlot1.Plot.XAxis.DateTimeFormat(true);
-                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlot1.Plot.XAxis.Ticks(true);
                     formsPlot1.Plot.YAxis.Label("Bitcoin (max. 21m)", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
@@ -11700,7 +11697,7 @@ namespace SATSuma
 
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperRight;
-                    legend.FillColor = chartsBackgroundColor;
+                    legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
                     legend.ShadowColor = chartsBackgroundColor;
@@ -14059,16 +14056,16 @@ namespace SATSuma
                     BTCRunningTotalscatter.YAxisIndex = 1;
 
                     formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
-                    formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
-                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: label77.ForeColor);
+                    formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlotDCA.Plot.XAxis.Ticks(true);
                     formsPlotDCA.Plot.XAxis.Label("");
 
 
                     var legend = formsPlotDCA.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
-                    legend.FillColor = chartsBackgroundColor;
+                    legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
                     legend.ShadowColor = chartsBackgroundColor;
@@ -14961,7 +14958,7 @@ namespace SATSuma
                         });
                         lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width - (int)(4 * UIScale), lblCalculatedUSDFromBTCAmount.Location.Y);
+                            lblCalculatedUSDFromBTCAmount.Location = new Point(label267.Location.X + label267.Width, lblCalculatedUSDFromBTCAmount.Location.Y);
                         });
                         label273.Invoke((MethodInvoker)delegate
                         {
@@ -14993,7 +14990,7 @@ namespace SATSuma
                         });
                         lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width - (int)(4 * UIScale), lblCalculatedEURFromBTCAmount.Location.Y);
+                            lblCalculatedEURFromBTCAmount.Location = new Point(label270.Location.X + label270.Width, lblCalculatedEURFromBTCAmount.Location.Y);
                         });
                         label274.Invoke((MethodInvoker)delegate
                         {
@@ -15025,7 +15022,7 @@ namespace SATSuma
                         });
                         lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width - (int)(4 * UIScale), lblCalculatedGBPFromBTCAmount.Location.Y);
+                            lblCalculatedGBPFromBTCAmount.Location = new Point(label269.Location.X + label269.Width, lblCalculatedGBPFromBTCAmount.Location.Y);
                         });
                         label276.Invoke((MethodInvoker)delegate
                         {
@@ -15057,7 +15054,7 @@ namespace SATSuma
                         });
                         lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculatedXAUFromBTCAmount.Location = new Point(label268.Location.X + label268.Width - 4, lblCalculatedXAUFromBTCAmount.Location.Y);
+                            lblCalculatedXAUFromBTCAmount.Location = new Point(label268.Location.X + label268.Width, lblCalculatedXAUFromBTCAmount.Location.Y);
                         });
                         label275.Invoke((MethodInvoker)delegate
                         {
@@ -15930,16 +15927,24 @@ namespace SATSuma
             try
             {
                 offlineMode = false;
-                lblHelpOffline.Visible = false;
-                btnMenuHelp.Enabled = true;
-                btnMenuPriceConverter.Enabled = true;
-                btnMenuDCACalculator.Enabled = true;
+                lblOfflineModeLight.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuHelp.Text = "   help";
+                    btnMenuHelp.Enabled = true;
+                });
+                if (RunBlockchainInfoEndpointAPI)
+                {
+                    btnMenuDCACalculator.Enabled = true;
+                }
+                if (RunBitcoinExplorerEndpointAPI)
+                {
+                    btnMenuPriceConverter.Enabled = true;
+                }
                 btnHelp.Enabled = true;
                 lblOfflineModeLight.Invoke((MethodInvoker)delegate
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.OliveDrab;
-//                  lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + (int)(2 * UIScale));
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -16010,8 +16015,11 @@ namespace SATSuma
             try
             {
                 offlineMode = true;
-                lblHelpOffline.Visible = true;
-                btnMenuHelp.Enabled = false;
+                lblOfflineModeLight.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuHelp.Text = "   help (offline)";
+                    btnMenuHelp.Enabled = false;
+                });
                 btnMenuPriceConverter.Enabled = false;
                 btnMenuDCACalculator.Enabled = false;
                 btnHelp.Enabled = false;
@@ -16019,7 +16027,6 @@ namespace SATSuma
                 {
                     lblOfflineModeLight.Text = "🟢";
                     lblOfflineModeLight.ForeColor = Color.IndianRed;
-                    //lblOfflineModeLight.Location = new Point(lblSaveSettingsLight.Location.X, lblOfflineModeActive.Location.Y + 1);
                 });
                 lblOfflineModeActive.Invoke((MethodInvoker)delegate
                 {
@@ -16699,8 +16706,11 @@ namespace SATSuma
                             lblSettingsNodeMainnetSelected.Enabled = true;
                             lblSettingsNodeTestnetSelected.Enabled = true;
                             lblEnableDirectory.Enabled = true;
-                            lblHelpOffline.Visible = false;
-                            btnMenuHelp.Enabled = true;
+                            btnMenuHelp.Invoke((MethodInvoker)delegate
+                            {
+                                btnMenuHelp.Text = "   help";
+                                btnMenuHelp.Enabled = true;
+                            });
                             btnHelp.Enabled = true;
                         }
                         #endregion
@@ -18476,6 +18486,10 @@ namespace SATSuma
                     {
                         pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
                     });
+                    pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                    });
                 }
             }
 
@@ -18510,6 +18524,10 @@ namespace SATSuma
                     {
                         pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
                     });
+                    pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                    });
                 }
             }
 
@@ -18543,6 +18561,10 @@ namespace SATSuma
                     pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
                     {
                         pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                    });
+                    pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
                     });
                 }
             }
@@ -18759,7 +18781,6 @@ namespace SATSuma
             {
                 control.BackColor = chartsBackgroundColor;
             }
-            lblHelpOffline.BackColor = chartsBackgroundColor;
             lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
             lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
             lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
@@ -18783,7 +18804,6 @@ namespace SATSuma
                 btnMenuApplyCustomTheme.ForeColor = Color.Silver;
                 lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
                 lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                lblHelpOffline.ForeColor = Color.DimGray;
                 lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
                 lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
             }
@@ -18799,7 +18819,6 @@ namespace SATSuma
                 btnMenuApplyCustomTheme.ForeColor = Color.DimGray;
                 lblCurrencyMenuHighlightedButtonText.ForeColor = Color.Silver;
                 lblMenuHighlightedButtonText.ForeColor = Color.Silver;
-                lblHelpOffline.ForeColor = Color.Silver;
                 lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
                 lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
             }
@@ -20163,7 +20182,14 @@ namespace SATSuma
                             lblInfinity3.ForeColor = Color.IndianRed;
                             lblInfinity3.Text = "❌";
                         });
-                        pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                        });
                     }
                     if (theme.OrangeInfinity == 2)
                     {
@@ -20182,7 +20208,14 @@ namespace SATSuma
                             lblInfinity3.ForeColor = Color.IndianRed;
                             lblInfinity3.Text = "❌";
                         });
-                        pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                        });
                     }
                     if (theme.OrangeInfinity == 3)
                     {
@@ -20201,7 +20234,14 @@ namespace SATSuma
                             lblInfinity3.ForeColor = Color.Green;
                             lblInfinity3.Text = "✔️";
                         });
-                        pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                        });
                     }
 
                     if (theme.BackgroundCustomImage == true && theme.WindowImage.Length > 0)
@@ -20242,7 +20282,6 @@ namespace SATSuma
                             lblTime.BringToFront();
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -20535,10 +20574,116 @@ namespace SATSuma
             }
         }
 
+        private void ColorButtonText(Color thiscolor)
+        {
+            try
+            {
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                if (lblChartsDarkBackground.Text == "✔️")
+                {
+                    //header
+
+                    foreach (Control control in listHeaderButtonTextToColor)
+                    {
+                        control.ForeColor = Color.Silver;
+                    }
+                    comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
+                    comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
+                    btnMenuApplyCustomTheme.ForeColor = Color.Silver;
+                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
+                    lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+                }
+                else
+                {
+                    //header
+                    foreach (Control control in listHeaderButtonTextToColor)
+                    {
+                        control.ForeColor = Color.DimGray;
+                    }
+                    comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
+                    comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
+                    btnMenuApplyCustomTheme.ForeColor = Color.DimGray;
+                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
+                    lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
+                }
+                btnUniversalSearch.ForeColor = thiscolor;
+
+                //settings & appearance
+                Control[] listSettingsButtonTextToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
+                foreach (Control control in listSettingsButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //address
+                Control[] listAddressButtonTextToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
+                foreach (Control control in listAddressButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //block
+                Control[] listBlockButtonTextToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
+                foreach (Control control in listBlockButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //blocklist
+                Control[] listBlockListButtonTextToColor = { btnLookUpBlockList, btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
+                foreach (Control control in listBlockListButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //transaction
+                Control[] listTransactionButtonTextToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
+                foreach (Control control in listTransactionButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //xpub
+                Control[] listXpubButtonTextToColor = { btnViewAddressFromXpub, btnXpubAddressesUp, btnXpubAddressesDown };
+                foreach (Control control in listXpubButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //bookmarks
+                Control[] listBookmarksButtonTextToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks, btnDeleteAllBookmarks, btnDeleteAllBookmarksNo, btnDeleteAllBookmarksYes };
+                foreach (Control control in listBookmarksButtonTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //charts
+                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
+                foreach (Control control in listChartsButtonsTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //directory
+                Control[] listDirectoryButtonsTextToColor = { btnDirectoryScrollDown, btnDirectoryScrollUp };
+                foreach (Control control in listDirectoryButtonsTextToColor)
+                {
+                    control.ForeColor = thiscolor;
+                }
+                //dca calculator
+                btnCalculateDCA.ForeColor = thiscolor;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ColorButtonText");
+            }
+        }
+
         private void CustomiseCharts(Color thisColor)
         {
             try
             {
+                label416.ForeColor = btnMenuDirectory.ForeColor;
+                label415.ForeColor = btnMenuDirectory.ForeColor;
+                label232.ForeColor = btnMenuDirectory.ForeColor;
+                label233.ForeColor = btnMenuDirectory.ForeColor;
+
                 formsPlot1.Plot.Margins(x: .1, y: .1);
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
                 formsPlot1.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
@@ -20596,7 +20741,6 @@ namespace SATSuma
                 panelChartDifficultyScaleButtons.BackColor = chartsBackgroundColor;
                 panelHashrateScaleButtons.BackColor = chartsBackgroundColor;
                 panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
-//              panelPriceConvert.BackColor = chartsBackgroundColor;
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
                 Color newGridlineColor = Color.FromArgb(40, 40, 40);
@@ -20606,10 +20750,23 @@ namespace SATSuma
                 }
                 // Update the Grid color
                 formsPlot1.Plot.Style(grid: newGridlineColor);
+                formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot1.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot1.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot2.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot2.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot3.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot1.Refresh();
                 formsPlot2.Refresh();
                 formsPlot3.Refresh();
                 formsPlotDCA.Refresh();
+                formsPlotDCA.Render();
+                formsPlot1.Render();
+                formsPlot2.Render();
+                formsPlot3.Render();
             }
             catch (Exception ex)
             {
@@ -20779,7 +20936,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //charts
-                Control[] listChartsLabelsToColor = { label233, label232, label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
+                Control[] listChartsLabelsToColor = { label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
                 foreach (Control control in listChartsLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21028,7 +21185,6 @@ namespace SATSuma
                 {
                     control.BackColor = chartsBackgroundColor;
                 }
-                lblHelpOffline.BackColor = chartsBackgroundColor;
                 lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
                 lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
@@ -21107,108 +21263,7 @@ namespace SATSuma
             }
         }
 
-        private void ColorButtonText(Color thiscolor)
-        {
-            try
-            {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator ,btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-                if (lblChartsDarkBackground.Text == "✔️")
-                {
-                    //header
 
-                    foreach (Control control in listHeaderButtonTextToColor)
-                    {
-                        control.ForeColor = Color.Silver;
-                    }
-                    comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
-                    comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
-                    btnMenuApplyCustomTheme.ForeColor = Color.Silver;
-                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                    lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                    lblHelpOffline.ForeColor = Color.DimGray;
-                    lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
-                    lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
-                }
-                else
-                {
-                    //header
-                    foreach (Control control in listHeaderButtonTextToColor)
-                    {
-                        control.ForeColor = Color.DimGray;
-                    }
-                    comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
-                    comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
-                    btnMenuApplyCustomTheme.ForeColor = Color.DimGray;
-                    lblCurrencyMenuHighlightedButtonText.ForeColor = Color.Silver;
-                    lblMenuHighlightedButtonText.ForeColor = Color.Silver;
-                    lblHelpOffline.ForeColor = Color.Silver;
-                    lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
-                    lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
-                }
-                btnUniversalSearch.ForeColor = thiscolor;
-
-                //settings & appearance
-                Control[] listSettingsButtonTextToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
-                foreach (Control control in listSettingsButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //address
-                Control[] listAddressButtonTextToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
-                foreach (Control control in listAddressButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //block
-                Control[] listBlockButtonTextToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
-                foreach (Control control in listBlockButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //blocklist
-                Control[] listBlockListButtonTextToColor = { btnLookUpBlockList, btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
-                foreach (Control control in listBlockListButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //transaction
-                Control[] listTransactionButtonTextToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
-                foreach (Control control in listTransactionButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //xpub
-                Control[] listXpubButtonTextToColor = { btnViewAddressFromXpub, btnXpubAddressesUp, btnXpubAddressesDown };
-                foreach (Control control in listXpubButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //bookmarks
-                Control[] listBookmarksButtonTextToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks, btnDeleteAllBookmarks, btnDeleteAllBookmarksNo, btnDeleteAllBookmarksYes };
-                foreach (Control control in listBookmarksButtonTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
-                foreach (Control control in listChartsButtonsTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //directory
-                Control[] listDirectoryButtonsTextToColor = { btnDirectoryScrollDown, btnDirectoryScrollUp };
-                foreach (Control control in listDirectoryButtonsTextToColor)
-                {
-                    control.ForeColor = thiscolor;
-                }
-                //dca calculator
-                btnCalculateDCA.ForeColor = thiscolor;
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ColorButtonText");
-            }
-        }
 
         private void ColorLines(Color thiscolor)
         {
@@ -23371,8 +23426,17 @@ namespace SATSuma
             if (!testNet)
             {
                 btnMenuCharts.Enabled = true;
-                btnMenuDCACalculator.Enabled = true;
-                btnMenuPriceConverter.Enabled = true;
+                if (!offlineMode)
+                {
+                    if (RunBlockchainInfoEndpointAPI)
+                    {
+                        btnMenuDCACalculator.Enabled = true;
+                    }
+                    if (RunBitcoinExplorerEndpointAPI)
+                    {
+                        btnMenuPriceConverter.Enabled = true;
+                    }
+                }
             }
             btnMenuSettings.Enabled = true;
         }

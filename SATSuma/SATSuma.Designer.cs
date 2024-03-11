@@ -446,7 +446,6 @@
             this.btnMenuAddress = new System.Windows.Forms.Button();
             this.btnMenuBitcoinDashboard = new System.Windows.Forms.Button();
             this.btnMenuLightningDashboard = new System.Windows.Forms.Button();
-            this.lblHelpOffline = new System.Windows.Forms.Label();
             this.btnMenuHelp = new System.Windows.Forms.Button();
             this.btnMenuSplash = new System.Windows.Forms.Button();
             this.btnMenuCreateTheme = new System.Windows.Forms.Button();
@@ -7248,20 +7247,6 @@
             this.btnMenuLightningDashboard.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuLightningDashboard.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // lblHelpOffline
-            // 
-            this.lblHelpOffline.AutoSize = true;
-            this.lblHelpOffline.BackColor = System.Drawing.Color.Transparent;
-            this.lblHelpOffline.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHelpOffline.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblHelpOffline.Location = new System.Drawing.Point(22, 427);
-            this.lblHelpOffline.Name = "lblHelpOffline";
-            this.lblHelpOffline.Size = new System.Drawing.Size(81, 16);
-            this.lblHelpOffline.TabIndex = 257;
-            this.lblHelpOffline.Text = "help (offline)";
-            this.lblHelpOffline.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblHelpOffline.Visible = false;
-            // 
             // btnMenuHelp
             // 
             this.btnMenuHelp.BackColor = System.Drawing.Color.Transparent;
@@ -13655,10 +13640,10 @@
             this.btnChartMarketCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartMarketCap.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartMarketCap.ForeColor = System.Drawing.Color.White;
-            this.btnChartMarketCap.Location = new System.Drawing.Point(0, 490);
+            this.btnChartMarketCap.Location = new System.Drawing.Point(0, 475);
             this.btnChartMarketCap.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartMarketCap.Name = "btnChartMarketCap";
-            this.btnChartMarketCap.Size = new System.Drawing.Size(100, 23);
+            this.btnChartMarketCap.Size = new System.Drawing.Size(100, 22);
             this.btnChartMarketCap.TabIndex = 274;
             this.btnChartMarketCap.TabStop = false;
             this.btnChartMarketCap.Text = "market cap.";
@@ -13727,10 +13712,10 @@
             this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 407);
+            this.btnChartLightningChannels.Location = new System.Drawing.Point(0, 394);
             this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartLightningChannels.Name = "btnChartLightningChannels";
-            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 23);
+            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 22);
             this.btnChartLightningChannels.TabIndex = 272;
             this.btnChartLightningChannels.TabStop = false;
             this.btnChartLightningChannels.Text = "channels";
@@ -13751,10 +13736,10 @@
             this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 380);
+            this.btnChartLightningCapacity.Location = new System.Drawing.Point(0, 368);
             this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
-            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 23);
+            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 22);
             this.btnChartLightningCapacity.TabIndex = 271;
             this.btnChartLightningCapacity.TabStop = false;
             this.btnChartLightningCapacity.Text = "capacity";
@@ -13768,7 +13753,7 @@
             this.panel81.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel81.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel81.Controls.Add(this.label231);
-            this.panel81.Location = new System.Drawing.Point(0, 435);
+            this.panel81.Location = new System.Drawing.Point(0, 421);
             this.panel81.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel81.Name = "panel81";
             this.panel81.Size = new System.Drawing.Size(100, 23);
@@ -13827,10 +13812,10 @@
             this.btnChartNodesByCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByCountry.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByCountry.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 353);
+            this.btnChartNodesByCountry.Location = new System.Drawing.Point(0, 342);
             this.btnChartNodesByCountry.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByCountry.Name = "btnChartNodesByCountry";
-            this.btnChartNodesByCountry.Size = new System.Drawing.Size(100, 23);
+            this.btnChartNodesByCountry.Size = new System.Drawing.Size(100, 22);
             this.btnChartNodesByCountry.TabIndex = 269;
             this.btnChartNodesByCountry.TabStop = false;
             this.btnChartNodesByCountry.Text = "countries";
@@ -13902,7 +13887,7 @@
             this.panel79.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel79.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel79.Controls.Add(this.label218);
-            this.panel79.Location = new System.Drawing.Point(0, 298);
+            this.panel79.Location = new System.Drawing.Point(0, 288);
             this.panel79.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel79.Name = "panel79";
             this.panel79.Size = new System.Drawing.Size(100, 23);
@@ -13935,10 +13920,10 @@
             this.btnChartNodesByNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartNodesByNetwork.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartNodesByNetwork.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 326);
+            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(0, 316);
             this.btnChartNodesByNetwork.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartNodesByNetwork.Name = "btnChartNodesByNetwork";
-            this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 23);
+            this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 22);
             this.btnChartNodesByNetwork.TabIndex = 267;
             this.btnChartNodesByNetwork.TabStop = false;
             this.btnChartNodesByNetwork.Text = "networks";
@@ -13959,10 +13944,10 @@
             this.btnChartPoolsRanking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartPoolsRanking.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartPoolsRanking.ForeColor = System.Drawing.Color.White;
-            this.btnChartPoolsRanking.Location = new System.Drawing.Point(0, 271);
+            this.btnChartPoolsRanking.Location = new System.Drawing.Point(0, 262);
             this.btnChartPoolsRanking.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPoolsRanking.Name = "btnChartPoolsRanking";
-            this.btnChartPoolsRanking.Size = new System.Drawing.Size(100, 23);
+            this.btnChartPoolsRanking.Size = new System.Drawing.Size(100, 22);
             this.btnChartPoolsRanking.TabIndex = 265;
             this.btnChartPoolsRanking.TabStop = false;
             this.btnChartPoolsRanking.Text = "pool rankings";
@@ -14041,10 +14026,10 @@
             this.btnChartUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartUTXO.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnChartUTXO.Location = new System.Drawing.Point(0, 244);
+            this.btnChartUTXO.Location = new System.Drawing.Point(0, 236);
             this.btnChartUTXO.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartUTXO.Name = "btnChartUTXO";
-            this.btnChartUTXO.Size = new System.Drawing.Size(100, 23);
+            this.btnChartUTXO.Size = new System.Drawing.Size(100, 22);
             this.btnChartUTXO.TabIndex = 264;
             this.btnChartUTXO.TabStop = false;
             this.btnChartUTXO.Text = "UTXO\'s";
@@ -14125,10 +14110,10 @@
             this.btnChartUniqueAddresses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartUniqueAddresses.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartUniqueAddresses.ForeColor = System.Drawing.Color.White;
-            this.btnChartUniqueAddresses.Location = new System.Drawing.Point(0, 217);
+            this.btnChartUniqueAddresses.Location = new System.Drawing.Point(0, 210);
             this.btnChartUniqueAddresses.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartUniqueAddresses.Name = "btnChartUniqueAddresses";
-            this.btnChartUniqueAddresses.Size = new System.Drawing.Size(100, 23);
+            this.btnChartUniqueAddresses.Size = new System.Drawing.Size(100, 22);
             this.btnChartUniqueAddresses.TabIndex = 259;
             this.btnChartUniqueAddresses.TabStop = false;
             this.btnChartUniqueAddresses.Text = "addresses";
@@ -14176,10 +14161,10 @@
             this.btnChartBlockSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartBlockSize.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartBlockSize.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockSize.Location = new System.Drawing.Point(0, 109);
+            this.btnChartBlockSize.Location = new System.Drawing.Point(0, 106);
             this.btnChartBlockSize.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartBlockSize.Name = "btnChartBlockSize";
-            this.btnChartBlockSize.Size = new System.Drawing.Size(100, 23);
+            this.btnChartBlockSize.Size = new System.Drawing.Size(100, 22);
             this.btnChartBlockSize.TabIndex = 258;
             this.btnChartBlockSize.TabStop = false;
             this.btnChartBlockSize.Text = "block size";
@@ -14200,10 +14185,10 @@
             this.btnChartCirculation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartCirculation.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartCirculation.ForeColor = System.Drawing.Color.White;
-            this.btnChartCirculation.Location = new System.Drawing.Point(0, 190);
+            this.btnChartCirculation.Location = new System.Drawing.Point(0, 184);
             this.btnChartCirculation.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartCirculation.Name = "btnChartCirculation";
-            this.btnChartCirculation.Size = new System.Drawing.Size(100, 23);
+            this.btnChartCirculation.Size = new System.Drawing.Size(100, 22);
             this.btnChartCirculation.TabIndex = 179;
             this.btnChartCirculation.TabStop = false;
             this.btnChartCirculation.Text = "circulation";
@@ -14227,7 +14212,7 @@
             this.btnChartFeeRates.Location = new System.Drawing.Point(0, 28);
             this.btnChartFeeRates.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartFeeRates.Name = "btnChartFeeRates";
-            this.btnChartFeeRates.Size = new System.Drawing.Size(100, 23);
+            this.btnChartFeeRates.Size = new System.Drawing.Size(100, 22);
             this.btnChartFeeRates.TabIndex = 178;
             this.btnChartFeeRates.TabStop = false;
             this.btnChartFeeRates.Text = "fee rates";
@@ -14251,7 +14236,7 @@
             this.btnChartPeriodAll.Location = new System.Drawing.Point(690, 517);
             this.btnChartPeriodAll.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriodAll.Name = "btnChartPeriodAll";
-            this.btnChartPeriodAll.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriodAll.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriodAll.TabIndex = 176;
             this.btnChartPeriodAll.TabStop = false;
             this.btnChartPeriodAll.Text = "all";
@@ -14275,7 +14260,7 @@
             this.btnChartPeriod3y.Location = new System.Drawing.Point(628, 517);
             this.btnChartPeriod3y.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod3y.Name = "btnChartPeriod3y";
-            this.btnChartPeriod3y.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod3y.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod3y.TabIndex = 175;
             this.btnChartPeriod3y.TabStop = false;
             this.btnChartPeriod3y.Text = "3y";
@@ -14299,7 +14284,7 @@
             this.btnChartPeriod2y.Location = new System.Drawing.Point(566, 517);
             this.btnChartPeriod2y.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod2y.Name = "btnChartPeriod2y";
-            this.btnChartPeriod2y.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod2y.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod2y.TabIndex = 174;
             this.btnChartPeriod2y.TabStop = false;
             this.btnChartPeriod2y.Text = "2y";
@@ -14323,7 +14308,7 @@
             this.btnChartPeriod1y.Location = new System.Drawing.Point(504, 517);
             this.btnChartPeriod1y.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod1y.Name = "btnChartPeriod1y";
-            this.btnChartPeriod1y.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod1y.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod1y.TabIndex = 173;
             this.btnChartPeriod1y.TabStop = false;
             this.btnChartPeriod1y.Text = "1y";
@@ -14347,7 +14332,7 @@
             this.btnChartPeriod6m.Location = new System.Drawing.Point(442, 517);
             this.btnChartPeriod6m.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod6m.Name = "btnChartPeriod6m";
-            this.btnChartPeriod6m.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod6m.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod6m.TabIndex = 172;
             this.btnChartPeriod6m.TabStop = false;
             this.btnChartPeriod6m.Text = "6m";
@@ -14371,7 +14356,7 @@
             this.btnChartPeriod3m.Location = new System.Drawing.Point(380, 517);
             this.btnChartPeriod3m.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod3m.Name = "btnChartPeriod3m";
-            this.btnChartPeriod3m.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod3m.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod3m.TabIndex = 171;
             this.btnChartPeriod3m.TabStop = false;
             this.btnChartPeriod3m.Text = "3m";
@@ -14395,7 +14380,7 @@
             this.btnChartPeriod1m.Location = new System.Drawing.Point(318, 517);
             this.btnChartPeriod1m.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod1m.Name = "btnChartPeriod1m";
-            this.btnChartPeriod1m.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod1m.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod1m.TabIndex = 170;
             this.btnChartPeriod1m.TabStop = false;
             this.btnChartPeriod1m.Text = "1m";
@@ -14419,7 +14404,7 @@
             this.btnChartPeriod1w.Location = new System.Drawing.Point(256, 517);
             this.btnChartPeriod1w.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod1w.Name = "btnChartPeriod1w";
-            this.btnChartPeriod1w.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod1w.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod1w.TabIndex = 169;
             this.btnChartPeriod1w.TabStop = false;
             this.btnChartPeriod1w.Text = "1w";
@@ -14443,7 +14428,7 @@
             this.btnChartPeriod3d.Location = new System.Drawing.Point(194, 517);
             this.btnChartPeriod3d.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod3d.Name = "btnChartPeriod3d";
-            this.btnChartPeriod3d.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod3d.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod3d.TabIndex = 168;
             this.btnChartPeriod3d.TabStop = false;
             this.btnChartPeriod3d.Text = "3d";
@@ -14467,7 +14452,7 @@
             this.btnChartPeriod24h.Location = new System.Drawing.Point(132, 517);
             this.btnChartPeriod24h.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPeriod24h.Name = "btnChartPeriod24h";
-            this.btnChartPeriod24h.Size = new System.Drawing.Size(58, 23);
+            this.btnChartPeriod24h.Size = new System.Drawing.Size(58, 22);
             this.btnChartPeriod24h.TabIndex = 167;
             this.btnChartPeriod24h.TabStop = false;
             this.btnChartPeriod24h.Text = "24h";
@@ -14488,10 +14473,10 @@
             this.btnChartBlockFees.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartBlockFees.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartBlockFees.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockFees.Location = new System.Drawing.Point(0, 55);
+            this.btnChartBlockFees.Location = new System.Drawing.Point(0, 54);
             this.btnChartBlockFees.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartBlockFees.Name = "btnChartBlockFees";
-            this.btnChartBlockFees.Size = new System.Drawing.Size(100, 23);
+            this.btnChartBlockFees.Size = new System.Drawing.Size(100, 22);
             this.btnChartBlockFees.TabIndex = 166;
             this.btnChartBlockFees.TabStop = false;
             this.btnChartBlockFees.Text = "block fees";
@@ -14512,10 +14497,10 @@
             this.btnChartReward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartReward.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartReward.ForeColor = System.Drawing.Color.White;
-            this.btnChartReward.Location = new System.Drawing.Point(0, 82);
+            this.btnChartReward.Location = new System.Drawing.Point(0, 80);
             this.btnChartReward.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartReward.Name = "btnChartReward";
-            this.btnChartReward.Size = new System.Drawing.Size(100, 23);
+            this.btnChartReward.Size = new System.Drawing.Size(100, 22);
             this.btnChartReward.TabIndex = 165;
             this.btnChartReward.TabStop = false;
             this.btnChartReward.Text = "block reward";
@@ -14536,10 +14521,10 @@
             this.btnChartPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartPrice.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartPrice.ForeColor = System.Drawing.Color.White;
-            this.btnChartPrice.Location = new System.Drawing.Point(0, 463);
+            this.btnChartPrice.Location = new System.Drawing.Point(0, 449);
             this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartPrice.Name = "btnChartPrice";
-            this.btnChartPrice.Size = new System.Drawing.Size(100, 23);
+            this.btnChartPrice.Size = new System.Drawing.Size(100, 22);
             this.btnChartPrice.TabIndex = 164;
             this.btnChartPrice.TabStop = false;
             this.btnChartPrice.Text = "price";
@@ -14560,10 +14545,10 @@
             this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
-            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 163);
+            this.btnChartDifficulty.Location = new System.Drawing.Point(0, 158);
             this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartDifficulty.Name = "btnChartDifficulty";
-            this.btnChartDifficulty.Size = new System.Drawing.Size(100, 23);
+            this.btnChartDifficulty.Size = new System.Drawing.Size(100, 22);
             this.btnChartDifficulty.TabIndex = 163;
             this.btnChartDifficulty.TabStop = false;
             this.btnChartDifficulty.Text = "difficulty";
@@ -14584,10 +14569,10 @@
             this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnChartHashrate.Location = new System.Drawing.Point(0, 136);
+            this.btnChartHashrate.Location = new System.Drawing.Point(0, 132);
             this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
             this.btnChartHashrate.Name = "btnChartHashrate";
-            this.btnChartHashrate.Size = new System.Drawing.Size(100, 23);
+            this.btnChartHashrate.Size = new System.Drawing.Size(100, 22);
             this.btnChartHashrate.TabIndex = 162;
             this.btnChartHashrate.TabStop = false;
             this.btnChartHashrate.Text = "hashrate";
@@ -14657,7 +14642,7 @@
             // 
             this.panelConvertXAUToBTCContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelConvertXAUToBTCContainer.Controls.Add(this.textBoxConvertXAUtoBTC);
-            this.panelConvertXAUToBTCContainer.Location = new System.Drawing.Point(42, 105);
+            this.panelConvertXAUToBTCContainer.Location = new System.Drawing.Point(47, 105);
             this.panelConvertXAUToBTCContainer.Name = "panelConvertXAUToBTCContainer";
             this.panelConvertXAUToBTCContainer.Size = new System.Drawing.Size(100, 20);
             this.panelConvertXAUToBTCContainer.TabIndex = 256;
@@ -14710,7 +14695,7 @@
             // 
             this.panelConvertGBPToBTCContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelConvertGBPToBTCContainer.Controls.Add(this.textBoxConvertGBPtoBTC);
-            this.panelConvertGBPToBTCContainer.Location = new System.Drawing.Point(42, 79);
+            this.panelConvertGBPToBTCContainer.Location = new System.Drawing.Point(47, 79);
             this.panelConvertGBPToBTCContainer.Name = "panelConvertGBPToBTCContainer";
             this.panelConvertGBPToBTCContainer.Size = new System.Drawing.Size(100, 20);
             this.panelConvertGBPToBTCContainer.TabIndex = 255;
@@ -14739,7 +14724,7 @@
             this.label267.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label267.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label267.ForeColor = System.Drawing.Color.Silver;
-            this.label267.Location = new System.Drawing.Point(154, 31);
+            this.label267.Location = new System.Drawing.Point(159, 31);
             this.label267.Margin = new System.Windows.Forms.Padding(0);
             this.label267.Name = "label267";
             this.label267.Size = new System.Drawing.Size(45, 17);
@@ -14750,7 +14735,7 @@
             // 
             this.panelConvertEURToBTCContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelConvertEURToBTCContainer.Controls.Add(this.textBoxConvertEURtoBTC);
-            this.panelConvertEURToBTCContainer.Location = new System.Drawing.Point(42, 53);
+            this.panelConvertEURToBTCContainer.Location = new System.Drawing.Point(47, 53);
             this.panelConvertEURToBTCContainer.Name = "panelConvertEURToBTCContainer";
             this.panelConvertEURToBTCContainer.Size = new System.Drawing.Size(100, 20);
             this.panelConvertEURToBTCContainer.TabIndex = 254;
@@ -14779,7 +14764,7 @@
             this.label268.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label268.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label268.ForeColor = System.Drawing.Color.Silver;
-            this.label268.Location = new System.Drawing.Point(154, 106);
+            this.label268.Location = new System.Drawing.Point(159, 106);
             this.label268.Margin = new System.Windows.Forms.Padding(0);
             this.label268.Name = "label268";
             this.label268.Size = new System.Drawing.Size(147, 17);
@@ -14790,7 +14775,7 @@
             // 
             this.panelConvertUSDToBTCContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelConvertUSDToBTCContainer.Controls.Add(this.textBoxConvertUSDtoBTC);
-            this.panelConvertUSDToBTCContainer.Location = new System.Drawing.Point(42, 27);
+            this.panelConvertUSDToBTCContainer.Location = new System.Drawing.Point(47, 27);
             this.panelConvertUSDToBTCContainer.Name = "panelConvertUSDToBTCContainer";
             this.panelConvertUSDToBTCContainer.Size = new System.Drawing.Size(100, 20);
             this.panelConvertUSDToBTCContainer.TabIndex = 253;
@@ -14819,7 +14804,7 @@
             this.label269.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label269.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label269.ForeColor = System.Drawing.Color.Silver;
-            this.label269.Location = new System.Drawing.Point(154, 81);
+            this.label269.Location = new System.Drawing.Point(159, 81);
             this.label269.Margin = new System.Windows.Forms.Padding(0);
             this.label269.Name = "label269";
             this.label269.Size = new System.Drawing.Size(42, 17);
@@ -14832,7 +14817,7 @@
             this.label270.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label270.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label270.ForeColor = System.Drawing.Color.Silver;
-            this.label270.Location = new System.Drawing.Point(154, 56);
+            this.label270.Location = new System.Drawing.Point(159, 56);
             this.label270.Margin = new System.Windows.Forms.Padding(0);
             this.label270.Name = "label270";
             this.label270.Size = new System.Drawing.Size(39, 17);
@@ -17041,7 +17026,6 @@
             this.panelLeftPanel.Controls.Add(this.btnThemeMenu);
             this.panelLeftPanel.Controls.Add(this.panelThemeMenu);
             this.panelLeftPanel.Controls.Add(this.lblAlert);
-            this.panelLeftPanel.Controls.Add(this.lblHelpOffline);
             this.panelLeftPanel.Controls.Add(this.labelSettingsSaved);
             this.panelLeftPanel.Controls.Add(this.lblSaveSettingsLight);
             this.panelLeftPanel.Controls.Add(this.lblOfflineModeLight);
@@ -17273,9 +17257,9 @@
             // 
             this.panel111.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel111.Controls.Add(this.textBoxDCAAmountInput);
-            this.panel111.Location = new System.Drawing.Point(1, 45);
+            this.panel111.Location = new System.Drawing.Point(5, 45);
             this.panel111.Name = "panel111";
-            this.panel111.Size = new System.Drawing.Size(110, 22);
+            this.panel111.Size = new System.Drawing.Size(102, 22);
             this.panel111.TabIndex = 282;
             // 
             // textBoxDCAAmountInput
@@ -17288,7 +17272,7 @@
             this.textBoxDCAAmountInput.MaxLength = 16;
             this.textBoxDCAAmountInput.Name = "textBoxDCAAmountInput";
             this.textBoxDCAAmountInput.ShortcutsEnabled = false;
-            this.textBoxDCAAmountInput.Size = new System.Drawing.Size(98, 15);
+            this.textBoxDCAAmountInput.Size = new System.Drawing.Size(90, 15);
             this.textBoxDCAAmountInput.TabIndex = 310;
             this.textBoxDCAAmountInput.TabStop = false;
             this.textBoxDCAAmountInput.Text = "10.00";
@@ -17348,9 +17332,9 @@
             // 
             this.panel115.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel115.Controls.Add(this.rjDatePickerDCAEndDate);
-            this.panel115.Location = new System.Drawing.Point(1, 174);
+            this.panel115.Location = new System.Drawing.Point(5, 174);
             this.panel115.Name = "panel115";
-            this.panel115.Size = new System.Drawing.Size(110, 22);
+            this.panel115.Size = new System.Drawing.Size(102, 22);
             this.panel115.TabIndex = 312;
             // 
             // rjDatePickerDCAEndDate
@@ -17359,11 +17343,11 @@
             this.rjDatePickerDCAEndDate.BorderSize = 0;
             this.rjDatePickerDCAEndDate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rjDatePickerDCAEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.rjDatePickerDCAEndDate.Location = new System.Drawing.Point(6, 2);
+            this.rjDatePickerDCAEndDate.Location = new System.Drawing.Point(3, 2);
             this.rjDatePickerDCAEndDate.MinDate = new System.DateTime(2010, 8, 18, 0, 0, 0, 0);
             this.rjDatePickerDCAEndDate.MinimumSize = new System.Drawing.Size(4, 22);
             this.rjDatePickerDCAEndDate.Name = "rjDatePickerDCAEndDate";
-            this.rjDatePickerDCAEndDate.Size = new System.Drawing.Size(98, 22);
+            this.rjDatePickerDCAEndDate.Size = new System.Drawing.Size(90, 22);
             this.rjDatePickerDCAEndDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAEndDate.TabIndex = 286;
             this.rjDatePickerDCAEndDate.TextColor = System.Drawing.Color.White;
@@ -17385,9 +17369,9 @@
             // 
             this.panel114.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel114.Controls.Add(this.rjDatePickerDCAStartDate);
-            this.panel114.Location = new System.Drawing.Point(1, 131);
+            this.panel114.Location = new System.Drawing.Point(5, 131);
             this.panel114.Name = "panel114";
-            this.panel114.Size = new System.Drawing.Size(110, 22);
+            this.panel114.Size = new System.Drawing.Size(102, 22);
             this.panel114.TabIndex = 311;
             // 
             // rjDatePickerDCAStartDate
@@ -17397,11 +17381,11 @@
             this.rjDatePickerDCAStartDate.CalendarMonthBackground = System.Drawing.SystemColors.HotTrack;
             this.rjDatePickerDCAStartDate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rjDatePickerDCAStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.rjDatePickerDCAStartDate.Location = new System.Drawing.Point(6, 2);
+            this.rjDatePickerDCAStartDate.Location = new System.Drawing.Point(3, 2);
             this.rjDatePickerDCAStartDate.MinDate = new System.DateTime(2010, 8, 18, 0, 0, 0, 0);
             this.rjDatePickerDCAStartDate.MinimumSize = new System.Drawing.Size(4, 22);
             this.rjDatePickerDCAStartDate.Name = "rjDatePickerDCAStartDate";
-            this.rjDatePickerDCAStartDate.Size = new System.Drawing.Size(98, 22);
+            this.rjDatePickerDCAStartDate.Size = new System.Drawing.Size(90, 22);
             this.rjDatePickerDCAStartDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAStartDate.TabIndex = 287;
             this.rjDatePickerDCAStartDate.TextColor = System.Drawing.Color.White;
@@ -17424,9 +17408,9 @@
             this.panel113.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel113.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel113.Controls.Add(this.comboBoxDCAFrequency);
-            this.panel113.Location = new System.Drawing.Point(1, 88);
+            this.panel113.Location = new System.Drawing.Point(5, 88);
             this.panel113.Name = "panel113";
-            this.panel113.Size = new System.Drawing.Size(110, 22);
+            this.panel113.Size = new System.Drawing.Size(102, 22);
             this.panel113.TabIndex = 283;
             // 
             // comboBoxDCAFrequency
@@ -17450,7 +17434,7 @@
             this.comboBoxDCAFrequency.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxDCAFrequency.MinimumSize = new System.Drawing.Size(88, 20);
             this.comboBoxDCAFrequency.Name = "comboBoxDCAFrequency";
-            this.comboBoxDCAFrequency.Size = new System.Drawing.Size(98, 20);
+            this.comboBoxDCAFrequency.Size = new System.Drawing.Size(90, 20);
             this.comboBoxDCAFrequency.TabIndex = 254;
             this.comboBoxDCAFrequency.Texts = "daily";
             // 
@@ -17728,10 +17712,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelPriceConverter);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
@@ -19040,7 +19024,6 @@
         private CustomControls.RJControls.RJButton btnMoveWindow;
         private System.Windows.Forms.Panel panelPresetThemeMenuTitleBG;
         private System.Windows.Forms.Label label60;
-        private System.Windows.Forms.Label lblHelpOffline;
         private System.Windows.Forms.Panel panelUniversalSearchContainer;
         private System.Windows.Forms.TextBox textBoxUniversalSearch;
         private CustomControls.RJControls.RJButton btnUniversalSearch;

@@ -28,6 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * dca - tidy colours on chart (might need a solid BG to match chart colour)
 * dca - convert daily purchase scatter to a bar chart
+* dca - panels don't paint properly on theme change
+* dca - zoom chart to match dca dates or show full history?
 * validate date input on dca (can't be same, can't start today, etc)
 * 
 * test all again
@@ -429,6 +431,7 @@ namespace SATSuma
             panel117.Paint += Panel_Paint;
             panel119.Paint += Panel_Paint;
             panelPriceConvert.Paint += Panel_Paint;
+            panelDCAChartContainer.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             panelThemeNameContainer.Paint += Panel_Paint;
@@ -14036,7 +14039,8 @@ namespace SATSuma
                     {
                         { 0, 1 },
                         { 1, 7 },
-                        { 2, 30 }
+                        { 2, 30 },
+                        { 3, 365 }
                     };
                     if (screenMap.ContainsKey(comboBoxDCAFrequency.SelectedIndex))
                     {
@@ -14122,14 +14126,18 @@ namespace SATSuma
                     scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "Market price of 1 BTC");
 
                     // plot another set of data to show amount bought per purchase using the additional axis
-                    
-                    var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
+                    //var BTCscatter = formsPlotDCA.Plot.AddFill(xDCAChartDates, yDCAChartBitcoinAmounts, stepFill: true, color: Color.FromArgb(50, Color.Green));
+
+                    var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, label: "BTC purchased");
                     BTCscatter.YAxisIndex = 2;
+
+
+
                     formsPlotDCA.Plot.YAxis2.Label("Accumulated bitcoin (BTC)");
                     formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
                     // plot another set of data to show running total bought using the additional axis
-                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.Purple, lineWidth: 1, markerSize: 1, label: "BTC purchased over time");
+                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.Purple, lineWidth: 1, label: "BTC purchased over time");
                     BTCRunningTotalscatter.YAxisIndex = 1;
 
                     formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
@@ -14423,19 +14431,26 @@ namespace SATSuma
             int DCACalcMinimumPeriod = 0;
             if (DCAFrequencyDays == 1)
             {
-                DCACalcMinimumPeriod = 14;
+                DCACalcMinimumPeriod = 7; // 7 days
             }
             else
             {
                 if (DCAFrequencyDays == 7)
                 {
-                    DCACalcMinimumPeriod = 30;
+                    DCACalcMinimumPeriod = 21; // 3 weeks
                 }
                 else
                 {
                     if (DCAFrequencyDays == 30)
                     {
-                        DCACalcMinimumPeriod = 120;
+                        DCACalcMinimumPeriod = 90; // 3 months
+                    }
+                    else
+                    {
+                        if (DCAFrequencyDays == 365)
+                        {
+                            DCACalcMinimumPeriod = 730; // 2 years
+                        }
                     }
                 }
             }
@@ -20611,6 +20626,7 @@ namespace SATSuma
                 panel117.Invalidate();
                 panel119.Invalidate();
                 panelPriceConvert.Invalidate();
+                panelDCAChartContainer.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -20866,6 +20882,7 @@ namespace SATSuma
                 panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
+                panelDCAChartContainer.BackColor = chartsBackgroundColor;
                 Color newGridlineColor = Color.FromArgb(40, 40, 40);
                 if (lblChartsLightBackground.Text == "✔️")
                 {

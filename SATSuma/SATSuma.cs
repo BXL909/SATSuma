@@ -26,8 +26,10 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* dca - estimate a purchased amount when weekly or monthly freq selected and no matching date has been found on first item
+* dca - tidy colours on chart (might need a solid BG to match chart colour)
+* dca - convert daily purchase scatter to a bar chart
 * validate date input on dca (can't be same, can't start today, etc)
+* 
 * test all again
 */
 
@@ -63,6 +65,8 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
+using ScottPlot.Drawing.Colormaps;
+using static ScottPlot.Plottable.PopulationPlot;
 #endregion
 
 namespace SATSuma
@@ -503,6 +507,8 @@ namespace SATSuma
             #endregion
         }
 
+        Axis yAxis3 = null;
+
         private void SATSuma_Load(object sender, EventArgs e)
         {
             try
@@ -586,6 +592,9 @@ namespace SATSuma
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
+                // add an extra Y axis to the chart to show the daily BTC amount bought
+                yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2);
+                // populate dca chart if the api is enabled
                 if (lblBlockchainInfoEndpoints.Text == "✔️")
                 {
                     PopulateDCACalculator();
@@ -13894,6 +13903,9 @@ namespace SATSuma
 
         #region ⚡DCA CALCULATOR⚡
 
+        bool existingAxis = false;
+        
+
         private async void PopulateDCACalculator()
         {
             try
@@ -13906,6 +13918,9 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllDCAChartData();
+                
+
+
                 formsPlotDCA.Plot.Title("", size: (int)(13 * UIScale), bold: false);
                 formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleDCAChart();
@@ -13918,6 +13933,60 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
                     List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+
+
+
+
+                    
+                    long minUnixTime = long.MaxValue;
+                    long maxUnixTime = long.MinValue;
+
+                    // Find start and end dates in Unix timestamp format
+                    foreach (var item in PriceList)
+                    {
+                        long unixTime = long.Parse(item.X);
+                        if (unixTime < minUnixTime)
+                            minUnixTime = unixTime;
+                        if (unixTime > maxUnixTime)
+                            maxUnixTime = unixTime;
+                    }
+
+                    // Insert missing dates with specified Y value in Unix timestamp format
+                    DateTime startDate = DateTimeOffset.FromUnixTimeSeconds(minUnixTime).DateTime;
+                    DateTime endDate = DateTimeOffset.FromUnixTimeSeconds(maxUnixTime).DateTime;
+
+                    DateTime currentDate = startDate;
+                    List<PriceCoordinatesList> updatedList = new List<PriceCoordinatesList>();
+
+                    while (currentDate <= endDate)
+                    {
+                        long currentDateUnix = ((DateTimeOffset)currentDate).ToUnixTimeSeconds();
+                        var existingItem = PriceList.Find(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.X)).DateTime.Date == currentDate.Date);
+                        if (existingItem != null)
+                        {
+                            updatedList.Add(existingItem);
+                        }
+                        else
+                        {
+                            if (currentDateUnix < 1282089600)
+                            {
+                                updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 0 });
+                            }
+                            else
+                            {
+                                updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 999999912345 });
+                            }
+                        }
+                        currentDate = currentDate.AddDays(1);
+                    }
+                    // Update PriceList with the updated list
+                    PriceList = updatedList;
+
+                    ProcessPriceList(PriceList);
+
+
+
+
 
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
@@ -14042,12 +14111,20 @@ namespace SATSuma
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.05, yAxisIndex: 0); // price
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.05, yAxisIndex: 1);  // bitcoin acquired
 
+                    // Add the additional Y axis with index 2
+
+                    yAxis3.Label("BTC bought per transaction", color: Color.Green);
+                        yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.5);
+                        existingAxis = true;
+
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.5, yAxisIndex: 2); 
 
                     scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "Market price of 1 BTC");
 
                     // plot another set of data to show amount bought per purchase using the additional axis
-                    //var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
-                    //BTCscatter.YAxisIndex = 1;
+                    
+                    var BTCscatter = formsPlotDCA.Plot.AddScatter(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, markerSize: 1, label: "BTC purchased");
+                    BTCscatter.YAxisIndex = 2;
                     formsPlotDCA.Plot.YAxis2.Label("Accumulated bitcoin (BTC)");
                     formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
@@ -14074,6 +14151,7 @@ namespace SATSuma
                     formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.05);
                     formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
                     formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.05);
+                    
 
                     formsPlotDCA.Plot.XAxis.Ticks(true);
                     formsPlotDCA.Plot.YAxis.Ticks(true);
@@ -14162,6 +14240,49 @@ namespace SATSuma
             }
         }
 
+        static void ProcessPriceList(List<PriceCoordinatesList> priceList)
+        {
+            for (int i = 0; i < priceList.Count; i++)
+            {
+                if (priceList[i].Y == 999999912345)
+                {
+                    // Find the previous non-999999912345 Y value
+                    decimal prevY = FindPreviousNonSpecialValue(priceList, i);
+
+                    // Find the next non-999999912345 Y value
+                    decimal nextY = FindNextNonSpecialValue(priceList, i);
+
+                    // Calculate the average and update the current Y value
+                    decimal average = (prevY + nextY) / 2;
+                    priceList[i].Y = average;
+                }
+            }
+        }
+
+        static decimal FindPreviousNonSpecialValue(List<PriceCoordinatesList> priceList, int currentIndex)
+        {
+            for (int i = currentIndex - 1; i >= 0; i--)
+            {
+                if (priceList[i].Y != 999999912345)
+                {
+                    return priceList[i].Y;
+                }
+            }
+            return 0; // Default value if not found
+        }
+
+        static decimal FindNextNonSpecialValue(List<PriceCoordinatesList> priceList, int currentIndex)
+        {
+            for (int i = currentIndex + 1; i < priceList.Count; i++)
+            {
+                if (priceList[i].Y != 999999912345)
+                {
+                    return priceList[i].Y;
+                }
+            }
+            return 0; // Default value if not found
+        }
+
         #region show/hide DCA chart loading panel
         private void ShowDCAChartLoadingPanel()
         {
@@ -14195,7 +14316,9 @@ namespace SATSuma
             try
             {
                 formsPlotDCA.Plot.Clear();
+                
             }
+
             catch (WebException ex)
             {
                 HandleException(ex, "ClearAllDCAChartData");

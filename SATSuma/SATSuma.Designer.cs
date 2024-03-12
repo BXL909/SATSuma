@@ -17305,7 +17305,7 @@
             this.btnCalculateDCA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalculateDCA.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCalculateDCA.ForeColor = System.Drawing.Color.White;
-            this.btnCalculateDCA.Location = new System.Drawing.Point(3, 204);
+            this.btnCalculateDCA.Location = new System.Drawing.Point(5, 204);
             this.btnCalculateDCA.Margin = new System.Windows.Forms.Padding(1);
             this.btnCalculateDCA.Name = "btnCalculateDCA";
             this.btnCalculateDCA.Size = new System.Drawing.Size(88, 22);

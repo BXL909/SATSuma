@@ -27,11 +27,9 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * dca - tidy colours on chart (might need a solid BG to match chart colour)
-* dca - convert daily purchase scatter to a bar chart
 * dca - panels don't paint properly on theme change
-* dca - zoom chart to match dca dates or show full history?
-* validate date input on dca (can't be same, can't start today, etc)
-* 
+* dca - zoom chart to match dca dates and lower range so legend doesn't obscure data
+* dca - validate date input on dca (can't be same, can't start today, etc)
 * test all again
 */
 
@@ -596,7 +594,7 @@ namespace SATSuma
                 rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
                 // add an extra Y axis to the chart to show the daily BTC amount bought
-                yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2);
+                yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color:btnMenuDirectory.ForeColor);
                 // populate dca chart if the api is enabled
                 if (lblBlockchainInfoEndpoints.Text == "✔️")
                 {
@@ -13924,7 +13922,7 @@ namespace SATSuma
                 
 
 
-                formsPlotDCA.Plot.Title("", size: (int)(13 * UIScale), bold: false);
+                formsPlotDCA.Plot.Title("BTC purchased over time (green) & per transaction (red)", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
                 formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleDCAChart();
 
@@ -14117,33 +14115,44 @@ namespace SATSuma
 
                     // Add the additional Y axis with index 2
 
-                    yAxis3.Label("BTC bought per transaction", color: Color.Green);
-                        yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.5);
-                        existingAxis = true;
+                   // yAxis3.Label("BTC bought per transaction", color: btnMenuDirectory.ForeColor);
+                     //   yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.05);
+                       // existingAxis = true;
 
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.5, yAxisIndex: 2); 
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.05, yAxisIndex: 2); 
 
-                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.DarkOrange, label: "Market price of 1 BTC");
+                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.Orange, label: "Market price of 1 BTC");
 
                     // plot another set of data to show amount bought per purchase using the additional axis
                     //var BTCscatter = formsPlotDCA.Plot.AddFill(xDCAChartDates, yDCAChartBitcoinAmounts, stepFill: true, color: Color.FromArgb(50, Color.Green));
 
-                    var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.Green, lineWidth: 1, label: "BTC purchased");
+                    var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.IndianRed, lineWidth: 1, label: "BTC purchased per transaction");
                     BTCscatter.YAxisIndex = 2;
 
 
 
-                    formsPlotDCA.Plot.YAxis2.Label("Accumulated bitcoin (BTC)");
-                    formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis2.Label("", color: btnMenuDirectory.ForeColor);
+                    //formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
                     // plot another set of data to show running total bought using the additional axis
-                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.Purple, lineWidth: 1, label: "BTC purchased over time");
+                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
+                    yAxis3.Label("", color: btnMenuDirectory.ForeColor);
+                    yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.05);
+                    existingAxis = true;
                     BTCRunningTotalscatter.YAxisIndex = 1;
 
                     formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
+
+                    formsPlotDCA.Plot.XAxis.Color(color: label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis.Color(color: label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis2.Color(color: label77.ForeColor);
+                    yAxis3.Color(color: btnMenuDirectory.ForeColor);
+
                     formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
-                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
-                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.Orange);
+                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.OliveDrab);
+                    yAxis3.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.IndianRed);
+
                     formsPlotDCA.Plot.XAxis.Ticks(true);
                     formsPlotDCA.Plot.XAxis.Label("");
 
@@ -14154,7 +14163,7 @@ namespace SATSuma
                     legend.FontColor = label77.ForeColor;
                     legend.OutlineColor = chartsBackgroundColor;
                     legend.ShadowColor = chartsBackgroundColor;
-
+                    
                     // prevent navigating beyond the data
                     formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.05);
                     formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
@@ -18003,21 +18012,8 @@ namespace SATSuma
                 {
                     lblMenuHighlightedButtonText.Visible = false;
                 });
-                btnMenuXpub.Enabled = true;
-                btnMenuBlockList.Enabled = true;
-                btnMenuTransaction.Enabled = true;
-                btnMenuBookmarks.Enabled = true;
-                btnMenuBlock.Enabled = true;
-                btnMenuAddress.Enabled = true;
-                btnMenuDirectory.Enabled = true;
-                btnMenuBitcoinDashboard.Enabled = true;
-                btnMenuLightningDashboard.Enabled = true;
-                if (!testNet)
-                {
-                    btnMenuCharts.Enabled = true;
-                }
-                btnMenuBookmarks.Enabled = true;
-                btnMenuSettings.Enabled = true;
+                EnableAllMenuButtons();
+                btnMenuCreateTheme.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -18041,18 +18037,7 @@ namespace SATSuma
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
                 });
-                panelBlockList.Visible = false;
-                panelDirectory.Visible = false;
-                panelBitcoinDashboard.Visible = false;
-                panelBookmarks.Visible = false;
-                panelLightningDashboard.Visible = false;
-                panelCharts.Visible = false;
-                panelAddress.Visible = false;
-                panelTransaction.Visible = false;
-                panelXpub.Visible = false;
-                panelBlock.Visible = false;
-                panelBookmarks.Visible = false;
-                panelSettings.Visible = false;
+                HideAllScreens();
                 panelAppearance.Visible = true;
                 #region close loading screen
                 //wait a moment to give time for screen to paint
@@ -18776,53 +18761,40 @@ namespace SATSuma
         {
             try
             {
-                if (lblChartsLightBackground.Text == "✔️")
-                {
-                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
-                    {
-                        lblChartsLightBackground.ForeColor = Color.IndianRed;
-                        lblChartsLightBackground.Text = "❌";
-                    });
-                    lblChartsDarkBackground.Invoke((MethodInvoker)delegate
-                    {
-                        lblChartsDarkBackground.ForeColor = Color.Green;
-                        lblChartsDarkBackground.Text = "✔️";
-                    });
-                    chartsBackgroundColor = Color.FromArgb(20, 20, 20);
-                    panelLoadingAnimationContainer.Invoke((MethodInvoker)delegate
-                    {
-                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(20, 20, 20);
-                    });
-                    pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
-                    {
-                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
-                    });
-                }
-                else
+                if (lblChartsLightBackground.Text == "❌")
                 {
                     lblChartsLightBackground.Invoke((MethodInvoker)delegate
                     {
                         lblChartsLightBackground.ForeColor = Color.Green;
                         lblChartsLightBackground.Text = "✔️";
                     });
+                    lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                        lblChartsMediumBackground.Text = "❌";
+                    });
                     lblChartsDarkBackground.Invoke((MethodInvoker)delegate
                     {
                         lblChartsDarkBackground.ForeColor = Color.IndianRed;
                         lblChartsDarkBackground.Text = "❌";
                     });
-                    chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    chartsBackgroundColor = Color.FromArgb(244, 244, 244);
                     panelLoadingAnimationContainer.Invoke((MethodInvoker)delegate
                     {
-                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
+                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(244, 244, 244);
                     });
                     pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
                     {
                         pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
                     });
-                }
-                CustomiseCharts(lblHeaderPrice.ForeColor);
+                    CustomiseCharts(lblHeaderPrice.ForeColor);
 
-                ColorMenuAndHeaderButtons();
+                    ColorMenuAndHeaderButtons();
+                }
+                else
+                {
+                    return;
+                }
             }
 
             catch (Exception ex)
@@ -18831,33 +18803,58 @@ namespace SATSuma
             }
         }
 
-        private void LblChartsDarkBackground_Click(object sender, EventArgs e)
+        private void lblChartsMediumBackground_Click(object sender, EventArgs e)
         {
             try
             {
-                if (lblChartsDarkBackground.Text == "✔️")
+                if (lblChartsMediumBackground.Text == "❌")
                 {
+                    lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsMediumBackground.ForeColor = Color.Green;
+                        lblChartsMediumBackground.Text = "✔️";
+                    });
+                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsLightBackground.ForeColor = Color.IndianRed;
+                        lblChartsLightBackground.Text = "❌";
+                    });
                     lblChartsDarkBackground.Invoke((MethodInvoker)delegate
                     {
                         lblChartsDarkBackground.ForeColor = Color.IndianRed;
                         lblChartsDarkBackground.Text = "❌";
                     });
-                    lblChartsLightBackground.Invoke((MethodInvoker)delegate
-                    {
-                        lblChartsLightBackground.ForeColor = Color.Green;
-                        lblChartsLightBackground.Text = "✔️";
-                    });
-                    chartsBackgroundColor = Color.FromArgb(255, 255, 255);
+                    chartsBackgroundColor = Color.FromArgb(40, 40, 40);
                     panelLoadingAnimationContainer.Invoke((MethodInvoker)delegate
                     {
-                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
+                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(40, 40, 40);
                     });
                     pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
                     {
-                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                     });
+                    CustomiseCharts(lblHeaderPrice.ForeColor);
+
+                    ColorMenuAndHeaderButtons();
                 }
                 else
+                {
+                    return;
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblChartsMediumBackground_Click");
+            }
+        }
+
+        private void LblChartsDarkBackground_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblChartsDarkBackground.Text == "❌")
                 {
                     lblChartsDarkBackground.Invoke((MethodInvoker)delegate
                     {
@@ -18869,6 +18866,11 @@ namespace SATSuma
                         lblChartsLightBackground.ForeColor = Color.IndianRed;
                         lblChartsLightBackground.Text = "❌";
                     });
+                    lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                    {
+                        lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                        lblChartsMediumBackground.Text = "❌";
+                    });
                     chartsBackgroundColor = Color.FromArgb(20, 20, 20);
                     panelLoadingAnimationContainer.Invoke((MethodInvoker)delegate
                     {
@@ -18878,10 +18880,13 @@ namespace SATSuma
                     {
                         pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                     });
+                    CustomiseCharts(lblHeaderPrice.ForeColor);
+                    ColorMenuAndHeaderButtons();
                 }
-                CustomiseCharts(lblHeaderPrice.ForeColor);
-                ColorMenuAndHeaderButtons();
-
+                else
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -18913,23 +18918,32 @@ namespace SATSuma
             loadingTheme.Show(this);
             #endregion
 
+            Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40,40,40))
+            {
+                menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            }
+            else
+            {
+                menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
+            }
 
             Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
             foreach (Control control in listHeaderButtonsToColor)
             {
-                control.BackColor = chartsBackgroundColor;
+                control.BackColor = menuAndHeaderButtonsColour;
             }
-            lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
-            lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
-            lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
-            comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
-            comboBoxHeaderCustomThemes.ListBackColor = chartsBackgroundColor;
-            btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
-            btnMenuSplash.FlatAppearance.BorderColor = chartsBackgroundColor;
-            btnMenuHelp.FlatAppearance.BorderColor = chartsBackgroundColor;
+            lblCurrencyMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
+            lblThemeMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
+            lblApplyThemeButtonDisabledMask.BackColor = menuAndHeaderButtonsColour;
+            comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+            comboBoxHeaderCustomThemes.ListBackColor = menuAndHeaderButtonsColour;
+            btnMenuApplyCustomTheme.BackColor = menuAndHeaderButtonsColour;
+            btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
+            btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
 
             Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-            if (lblChartsDarkBackground.Text == "✔️")
+            if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
             {
                 //header
 
@@ -19737,12 +19751,19 @@ namespace SATSuma
                 Color tablebackgrounds = panel66.BackColor;
                 Color tabletitlebars = panel67.BackColor;
                 Color panels = panel73.BackColor;
-                bool chartsDark = false;
+                string chartsDark = "D";
                 if (lblChartsDarkBackground.Text == "✔️")
                 {
-                    chartsDark = true;
+                    chartsDark = "D";
                 }
-
+                if (lblChartsMediumBackground.Text == "✔️")
+                {
+                    chartsDark = "M";
+                }
+                if (lblChartsLightBackground.Text == "✔️")
+                {
+                    chartsDark = "L";
+                }
                 bool showtime = lblTime.Visible;
                 bool headingbgdefault = false;
                 if (lblTitlesBackgroundImage.Text == "✔️")
@@ -20049,7 +20070,7 @@ namespace SATSuma
                 }
                 try
                 {
-                    if (theme.ChartsDark == true)
+                    if (theme.ChartsDark == "D")
                     {
                         chartsBackgroundColor = Color.FromArgb(20, 20, 20);
 
@@ -20062,6 +20083,11 @@ namespace SATSuma
                         {
                             lblChartsLightBackground.ForeColor = Color.IndianRed;
                             lblChartsLightBackground.Text = "❌";
+                        });
+                        lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                        {
+                            lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                            lblChartsMediumBackground.Text = "❌";
                         });
                         lblChartsDarkBackground.Invoke((MethodInvoker)delegate
                         {
@@ -20079,30 +20105,73 @@ namespace SATSuma
                     }
                     else
                     {
-                        chartsBackgroundColor = Color.FromArgb(255, 255, 255);
-                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(255, 255, 255);
-                        pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                        if (theme.ChartsDark == "M")
                         {
-                            pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
-                        });
-                        lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                            chartsBackgroundColor = Color.FromArgb(40, 40, 40);
+                            panelLoadingAnimationContainer.BackColor = Color.FromArgb(40, 40, 40);
+                            pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                            });
+                            lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsLightBackground.ForeColor = Color.IndianRed;
+                                lblChartsLightBackground.Text = "❌";
+                            });
+                            lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsMediumBackground.ForeColor = Color.Green;
+                                lblChartsMediumBackground.Text = "✔️";
+                            });
+                            lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                                lblChartsDarkBackground.Text = "❌";
+                            });
+                            panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                            {
+                                panelCustomThemeMenuTitleBG.BackColor = Color.Black;
+                            });
+                            panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                            {
+                                panelPresetThemeMenuTitleBG.BackColor = Color.Black;
+                            });
+                        }
+                        else
                         {
-                            lblChartsLightBackground.ForeColor = Color.Green;
-                            lblChartsLightBackground.Text = "✔️";
-                        });
-                        lblChartsDarkBackground.Invoke((MethodInvoker)delegate
-                        {
-                            lblChartsDarkBackground.ForeColor = Color.IndianRed;
-                            lblChartsDarkBackground.Text = "❌";
-                        });
-                        panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
-                        {
-                            panelCustomThemeMenuTitleBG.BackColor = Color.Gainsboro;
-                        });
-                        panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
-                        {
-                            panelPresetThemeMenuTitleBG.BackColor = Color.Gainsboro;
-                        });
+                            if (theme.ChartsDark == "L")
+                            {
+                                chartsBackgroundColor = Color.FromArgb(244, 244, 244);
+                                panelLoadingAnimationContainer.BackColor = Color.FromArgb(244, 244, 244);
+                                pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                                {
+                                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                                });
+                                lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsLightBackground.ForeColor = Color.Green;
+                                    lblChartsLightBackground.Text = "✔️";
+                                });
+                                lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                                    lblChartsMediumBackground.Text = "❌";
+                                });
+                                lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                                    lblChartsDarkBackground.Text = "❌";
+                                });
+                                panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                                {
+                                    panelCustomThemeMenuTitleBG.BackColor = Color.Gainsboro;
+                                });
+                                panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                                {
+                                    panelPresetThemeMenuTitleBG.BackColor = Color.Gainsboro;
+                                });
+                            }
+                        }
                     }
 
                     comboBoxTitlesBackgroundImage.SelectedIndex = (theme.TitlesBackgroundImage);
@@ -20718,7 +20787,7 @@ namespace SATSuma
             try
             {
                 Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-                if (lblChartsDarkBackground.Text == "✔️")
+                if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
                 {
                     //header
 
@@ -20883,7 +20952,7 @@ namespace SATSuma
                 panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
                 panelThemeMenuFiller.BackColor = chartsBackgroundColor;
                 panelDCAChartContainer.BackColor = chartsBackgroundColor;
-                Color newGridlineColor = Color.FromArgb(40, 40, 40);
+                Color newGridlineColor = Color.FromArgb(50, 50, 50);
                 if (lblChartsLightBackground.Text == "✔️")
                 {
                     newGridlineColor = Color.FromArgb(220, 220, 220);
@@ -20898,7 +20967,8 @@ namespace SATSuma
                 formsPlot2.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot2.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
-                formsPlot3.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                formsPlot3.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                //formsPlot3.Plot.yAxis3.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot1.Refresh();
                 formsPlot2.Refresh();
                 formsPlot3.Refresh();
@@ -21319,20 +21389,30 @@ namespace SATSuma
         {
             try
             {
+                Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+                if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40, 40, 40))
+                {
+                    menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+                }
+                else
+                {
+                    menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
+                }
+
                 //header
                 Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
-                    control.BackColor = chartsBackgroundColor;
+                    control.BackColor = menuAndHeaderButtonsColour;
                 }
-                lblCurrencyMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
-                lblThemeMenuHighlightedButtonText.BackColor = chartsBackgroundColor;
-                lblApplyThemeButtonDisabledMask.BackColor = chartsBackgroundColor;
-                comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
-                comboBoxHeaderCustomThemes.ListBackColor = chartsBackgroundColor;
-                btnMenuApplyCustomTheme.BackColor = chartsBackgroundColor;
-                btnMenuSplash.FlatAppearance.BorderColor = chartsBackgroundColor;
-                btnMenuHelp.FlatAppearance.BorderColor = chartsBackgroundColor;
+                lblCurrencyMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
+                lblThemeMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
+                lblApplyThemeButtonDisabledMask.BackColor = menuAndHeaderButtonsColour;
+                comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+                comboBoxHeaderCustomThemes.ListBackColor = menuAndHeaderButtonsColour;
+                btnMenuApplyCustomTheme.BackColor = menuAndHeaderButtonsColour;
+                btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
+                btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
 
                 btnUniversalSearch.BackColor = thiscolor;
 
@@ -21426,7 +21506,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
+                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -21884,13 +21964,23 @@ namespace SATSuma
         {
             try
             {
+                Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+                if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40, 40, 40))
+                {
+                    menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+                }
+                else
+                {
+                    menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
+                }
+
                 Button[] buttonsToMatchChartsBackgroundColor =
                 {
                     btnMenuApplyCustomTheme, btnMenuCreateTheme, btnMenuThemeFranklin, BtnMenuThemeGenesis, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, btnShowGlobalSearch, btnUSD, btnEUR, btnGBP, btnXAU, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnAddToBookmarks, btnHideErrorMessage, btnCopyErrorMessage
                 };
                 if (buttonsToMatchChartsBackgroundColor.Contains((Button)sender))
                 {
-                    ((Button)sender).BackColor = chartsBackgroundColor;
+                    ((Button)sender).BackColor = menuAndHeaderButtonsColour;
                 }
 
                 Button[] buttonstoMakeTransparent =
@@ -21918,7 +22008,7 @@ namespace SATSuma
                 }
                 if (sender == comboBoxHeaderCustomThemes)
                 {
-                    comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
+                    comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
                 }
             }
             catch (Exception ex)
@@ -21934,7 +22024,16 @@ namespace SATSuma
 
         private void ComboBoxHeaderCustomThemes_MouseLeave(object sender, EventArgs e)
         {
-            comboBoxHeaderCustomThemes.BackColor = chartsBackgroundColor;
+            Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40, 40, 40))
+            {
+                menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            }
+            else
+            {
+                menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
+            }
+            comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
         }
 
         #endregion
@@ -22781,7 +22880,7 @@ namespace SATSuma
                     //stop the animation
                     pictureBoxLoadingAnimation.Enabled = false;
                     //reset the image to return to the original frame in the animation
-                    if (btnExit.BackColor == Color.FromArgb(20,20,20))
+                    if (btnExit.BackColor == Color.FromArgb(20,20,20) || btnExit.BackColor == Color.FromArgb(40, 40, 40))
                     {
                         pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
                     }
@@ -25563,7 +25662,7 @@ namespace SATSuma
             public bool BackgroundCustomColor { get; set; }
             public bool BackgroundCustomImage { get; set; }
             public Color Panels { get; set; }
-            public bool ChartsDark { get; set; }
+            public string ChartsDark { get; set; }
             public int OrangeInfinity { get; set; }
             public int BorderRadius { get; set; }
             public Color FiatConversionText { get; set; }
@@ -26582,5 +26681,7 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+
     }
 }                

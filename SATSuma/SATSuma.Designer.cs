@@ -1114,11 +1114,11 @@
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
             this.panelDCAChartContainer = new System.Windows.Forms.Panel();
-            this.formsPlotDCA = new ScottPlot.FormsPlot();
             this.panelDCAChartLoadingPanel = new System.Windows.Forms.Panel();
             this.label415 = new System.Windows.Forms.Label();
             this.label416 = new System.Windows.Forms.Label();
             this.pictureBoxDCAChartLoadingAnimation = new System.Windows.Forms.PictureBox();
+            this.formsPlotDCA = new ScottPlot.FormsPlot();
             this.panel117 = new System.Windows.Forms.Panel();
             this.panel118 = new System.Windows.Forms.Panel();
             this.label209 = new System.Windows.Forms.Label();
@@ -1151,6 +1151,8 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
+            this.lblChartsMediumBackground = new System.Windows.Forms.Label();
+            this.label211 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -11806,6 +11808,8 @@
             // panel103
             // 
             this.panel103.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel103.Controls.Add(this.lblChartsMediumBackground);
+            this.panel103.Controls.Add(this.label211);
             this.panel103.Controls.Add(this.lblChartsDarkBackground);
             this.panel103.Controls.Add(this.label246);
             this.panel103.Controls.Add(this.lblChartsLightBackground);
@@ -11821,7 +11825,7 @@
             this.lblChartsDarkBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblChartsDarkBackground.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblChartsDarkBackground.ForeColor = System.Drawing.Color.Green;
-            this.lblChartsDarkBackground.Location = new System.Drawing.Point(101, 34);
+            this.lblChartsDarkBackground.Location = new System.Drawing.Point(153, 34);
             this.lblChartsDarkBackground.Name = "lblChartsDarkBackground";
             this.lblChartsDarkBackground.Size = new System.Drawing.Size(19, 14);
             this.lblChartsDarkBackground.TabIndex = 264;
@@ -11832,7 +11836,7 @@
             // 
             this.label246.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label246.ForeColor = System.Drawing.Color.Silver;
-            this.label246.Location = new System.Drawing.Point(123, 34);
+            this.label246.Location = new System.Drawing.Point(175, 34);
             this.label246.Name = "label246";
             this.label246.Size = new System.Drawing.Size(35, 17);
             this.label246.TabIndex = 263;
@@ -17212,22 +17216,13 @@
             // 
             // panelDCAChartContainer
             // 
-            this.panelDCAChartContainer.BackColor = System.Drawing.Color.IndianRed;
-            this.panelDCAChartContainer.Controls.Add(this.formsPlotDCA);
+            this.panelDCAChartContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.panelDCAChartContainer.Controls.Add(this.panelDCAChartLoadingPanel);
+            this.panelDCAChartContainer.Controls.Add(this.formsPlotDCA);
             this.panelDCAChartContainer.Location = new System.Drawing.Point(121, 60);
             this.panelDCAChartContainer.Name = "panelDCAChartContainer";
             this.panelDCAChartContainer.Size = new System.Drawing.Size(632, 480);
             this.panelDCAChartContainer.TabIndex = 317;
-            // 
-            // formsPlotDCA
-            // 
-            this.formsPlotDCA.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlotDCA.Location = new System.Drawing.Point(5, 9);
-            this.formsPlotDCA.Name = "formsPlotDCA";
-            this.formsPlotDCA.Size = new System.Drawing.Size(620, 462);
-            this.formsPlotDCA.TabIndex = 274;
-            this.formsPlotDCA.Visible = false;
             // 
             // panelDCAChartLoadingPanel
             // 
@@ -17276,6 +17271,15 @@
             this.pictureBoxDCAChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxDCAChartLoadingAnimation.TabIndex = 250;
             this.pictureBoxDCAChartLoadingAnimation.TabStop = false;
+            // 
+            // formsPlotDCA
+            // 
+            this.formsPlotDCA.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotDCA.Location = new System.Drawing.Point(5, 9);
+            this.formsPlotDCA.Name = "formsPlotDCA";
+            this.formsPlotDCA.Size = new System.Drawing.Size(620, 462);
+            this.formsPlotDCA.TabIndex = 274;
+            this.formsPlotDCA.Visible = false;
             // 
             // panel117
             // 
@@ -17715,6 +17719,29 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
+            // lblChartsMediumBackground
+            // 
+            this.lblChartsMediumBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblChartsMediumBackground.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblChartsMediumBackground.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblChartsMediumBackground.Location = new System.Drawing.Point(81, 34);
+            this.lblChartsMediumBackground.Name = "lblChartsMediumBackground";
+            this.lblChartsMediumBackground.Size = new System.Drawing.Size(19, 14);
+            this.lblChartsMediumBackground.TabIndex = 266;
+            this.lblChartsMediumBackground.Text = "❌";
+            this.lblChartsMediumBackground.Click += new System.EventHandler(this.lblChartsMediumBackground_Click);
+            // 
+            // label211
+            // 
+            this.label211.AutoSize = true;
+            this.label211.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label211.ForeColor = System.Drawing.Color.Silver;
+            this.label211.Location = new System.Drawing.Point(103, 34);
+            this.label211.Name = "label211";
+            this.label211.Size = new System.Drawing.Size(30, 17);
+            this.label211.TabIndex = 265;
+            this.label211.Text = "Mid";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -17724,6 +17751,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelPriceConverter);
@@ -17733,7 +17761,6 @@
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
@@ -17958,6 +17985,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel47.ResumeLayout(false);
             this.panel103.ResumeLayout(false);
+            this.panel103.PerformLayout();
             this.panel104.ResumeLayout(false);
             this.panel91.ResumeLayout(false);
             this.panel91.PerformLayout();
@@ -19190,6 +19218,8 @@
         private System.Windows.Forms.Panel panel119;
         private System.Windows.Forms.Panel panelDCAChartContainer;
         private ScottPlot.FormsPlot formsPlotDCA;
+        private System.Windows.Forms.Label lblChartsMediumBackground;
+        private System.Windows.Forms.Label label211;
     }
 }
 

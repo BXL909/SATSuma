@@ -763,6 +763,8 @@
             this.panel47 = new System.Windows.Forms.Panel();
             this.label248 = new System.Windows.Forms.Label();
             this.panel103 = new System.Windows.Forms.Panel();
+            this.lblChartsMediumBackground = new System.Windows.Forms.Label();
+            this.label211 = new System.Windows.Forms.Label();
             this.lblChartsDarkBackground = new System.Windows.Forms.Label();
             this.label246 = new System.Windows.Forms.Label();
             this.lblChartsLightBackground = new System.Windows.Forms.Label();
@@ -1113,13 +1115,7 @@
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
-            this.panelDCAChartContainer = new System.Windows.Forms.Panel();
-            this.panelDCAChartLoadingPanel = new System.Windows.Forms.Panel();
-            this.label415 = new System.Windows.Forms.Label();
-            this.label416 = new System.Windows.Forms.Label();
-            this.pictureBoxDCAChartLoadingAnimation = new System.Windows.Forms.PictureBox();
-            this.formsPlotDCA = new ScottPlot.FormsPlot();
-            this.panel117 = new System.Windows.Forms.Panel();
+            this.panelDCAInputs = new System.Windows.Forms.Panel();
             this.panel118 = new System.Windows.Forms.Panel();
             this.label209 = new System.Windows.Forms.Label();
             this.panel111 = new System.Windows.Forms.Panel();
@@ -1135,6 +1131,14 @@
             this.label307 = new System.Windows.Forms.Label();
             this.panel113 = new System.Windows.Forms.Panel();
             this.comboBoxDCAFrequency = new CustomControls.RJControls.RJComboBox();
+            this.panelDCAChartContainer = new System.Windows.Forms.Panel();
+            this.panelRefreshChart = new System.Windows.Forms.Panel();
+            this.label212 = new System.Windows.Forms.Label();
+            this.panelDCAChartLoadingPanel = new System.Windows.Forms.Panel();
+            this.label415 = new System.Windows.Forms.Label();
+            this.label416 = new System.Windows.Forms.Label();
+            this.pictureBoxDCAChartLoadingAnimation = new System.Windows.Forms.PictureBox();
+            this.formsPlotDCA = new ScottPlot.FormsPlot();
             this.panelDCASummary = new System.Windows.Forms.Panel();
             this.panel116 = new System.Windows.Forms.Panel();
             this.label208 = new System.Windows.Forms.Label();
@@ -1151,8 +1155,6 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
-            this.lblChartsMediumBackground = new System.Windows.Forms.Label();
-            this.label211 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1343,15 +1345,16 @@
             this.panelLeftPanel.SuspendLayout();
             this.panelErrorMessage.SuspendLayout();
             this.panelDCACalculator.SuspendLayout();
-            this.panelDCAChartContainer.SuspendLayout();
-            this.panelDCAChartLoadingPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
-            this.panel117.SuspendLayout();
+            this.panelDCAInputs.SuspendLayout();
             this.panel118.SuspendLayout();
             this.panel111.SuspendLayout();
             this.panel115.SuspendLayout();
             this.panel114.SuspendLayout();
             this.panel113.SuspendLayout();
+            this.panelDCAChartContainer.SuspendLayout();
+            this.panelRefreshChart.SuspendLayout();
+            this.panelDCAChartLoadingPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCASummary.SuspendLayout();
             this.panel116.SuspendLayout();
             this.panelDCAMessages.SuspendLayout();
@@ -11820,6 +11823,29 @@
             this.panel103.Size = new System.Drawing.Size(221, 60);
             this.panel103.TabIndex = 297;
             // 
+            // lblChartsMediumBackground
+            // 
+            this.lblChartsMediumBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblChartsMediumBackground.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblChartsMediumBackground.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblChartsMediumBackground.Location = new System.Drawing.Point(81, 34);
+            this.lblChartsMediumBackground.Name = "lblChartsMediumBackground";
+            this.lblChartsMediumBackground.Size = new System.Drawing.Size(19, 14);
+            this.lblChartsMediumBackground.TabIndex = 266;
+            this.lblChartsMediumBackground.Text = "❌";
+            this.lblChartsMediumBackground.Click += new System.EventHandler(this.lblChartsMediumBackground_Click);
+            // 
+            // label211
+            // 
+            this.label211.AutoSize = true;
+            this.label211.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label211.ForeColor = System.Drawing.Color.Silver;
+            this.label211.Location = new System.Drawing.Point(103, 34);
+            this.label211.Name = "label211";
+            this.label211.Size = new System.Drawing.Size(30, 17);
+            this.label211.TabIndex = 265;
+            this.label211.Text = "Mid";
+            // 
             // lblChartsDarkBackground
             // 
             this.lblChartsDarkBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -17203,9 +17229,9 @@
             // panelDCACalculator
             // 
             this.panelDCACalculator.BackColor = System.Drawing.Color.Transparent;
-            this.panelDCACalculator.Controls.Add(this.panelDCAChartContainer);
-            this.panelDCACalculator.Controls.Add(this.panel117);
             this.panelDCACalculator.Controls.Add(this.panelDCASummary);
+            this.panelDCACalculator.Controls.Add(this.panelDCAInputs);
+            this.panelDCACalculator.Controls.Add(this.panelDCAChartContainer);
             this.panelDCACalculator.Controls.Add(this.panelDCAMessages);
             this.panelDCACalculator.Controls.Add(this.labelDCADefinition);
             this.panelDCACalculator.Location = new System.Drawing.Point(162, 187);
@@ -17214,90 +17240,23 @@
             this.panelDCACalculator.TabIndex = 277;
             this.panelDCACalculator.Visible = false;
             // 
-            // panelDCAChartContainer
+            // panelDCAInputs
             // 
-            this.panelDCAChartContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panelDCAChartContainer.Controls.Add(this.panelDCAChartLoadingPanel);
-            this.panelDCAChartContainer.Controls.Add(this.formsPlotDCA);
-            this.panelDCAChartContainer.Location = new System.Drawing.Point(121, 60);
-            this.panelDCAChartContainer.Name = "panelDCAChartContainer";
-            this.panelDCAChartContainer.Size = new System.Drawing.Size(632, 480);
-            this.panelDCAChartContainer.TabIndex = 317;
-            // 
-            // panelDCAChartLoadingPanel
-            // 
-            this.panelDCAChartLoadingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelDCAChartLoadingPanel.Controls.Add(this.label415);
-            this.panelDCAChartLoadingPanel.Controls.Add(this.label416);
-            this.panelDCAChartLoadingPanel.Controls.Add(this.pictureBoxDCAChartLoadingAnimation);
-            this.panelDCAChartLoadingPanel.Location = new System.Drawing.Point(259, 187);
-            this.panelDCAChartLoadingPanel.Name = "panelDCAChartLoadingPanel";
-            this.panelDCAChartLoadingPanel.Size = new System.Drawing.Size(154, 35);
-            this.panelDCAChartLoadingPanel.TabIndex = 273;
-            this.panelDCAChartLoadingPanel.Visible = false;
-            // 
-            // label415
-            // 
-            this.label415.AutoSize = true;
-            this.label415.BackColor = System.Drawing.Color.Transparent;
-            this.label415.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label415.ForeColor = System.Drawing.Color.Gray;
-            this.label415.Location = new System.Drawing.Point(49, 14);
-            this.label415.Name = "label415";
-            this.label415.Size = new System.Drawing.Size(98, 16);
-            this.label415.TabIndex = 251;
-            this.label415.Text = "generating chart";
-            // 
-            // label416
-            // 
-            this.label416.AutoSize = true;
-            this.label416.BackColor = System.Drawing.Color.Transparent;
-            this.label416.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label416.ForeColor = System.Drawing.Color.Gray;
-            this.label416.Location = new System.Drawing.Point(49, 1);
-            this.label416.Name = "label416";
-            this.label416.Size = new System.Drawing.Size(93, 16);
-            this.label416.TabIndex = 85;
-            this.label416.Text = "fetching data &&";
-            // 
-            // pictureBoxDCAChartLoadingAnimation
-            // 
-            this.pictureBoxDCAChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBoxDCAChartLoadingAnimation.Enabled = false;
-            this.pictureBoxDCAChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDCAChartLoadingAnimation.Image")));
-            this.pictureBoxDCAChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
-            this.pictureBoxDCAChartLoadingAnimation.Name = "pictureBoxDCAChartLoadingAnimation";
-            this.pictureBoxDCAChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
-            this.pictureBoxDCAChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxDCAChartLoadingAnimation.TabIndex = 250;
-            this.pictureBoxDCAChartLoadingAnimation.TabStop = false;
-            // 
-            // formsPlotDCA
-            // 
-            this.formsPlotDCA.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlotDCA.Location = new System.Drawing.Point(5, 9);
-            this.formsPlotDCA.Name = "formsPlotDCA";
-            this.formsPlotDCA.Size = new System.Drawing.Size(620, 462);
-            this.formsPlotDCA.TabIndex = 274;
-            this.formsPlotDCA.Visible = false;
-            // 
-            // panel117
-            // 
-            this.panel117.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel117.Controls.Add(this.panel118);
-            this.panel117.Controls.Add(this.panel111);
-            this.panel117.Controls.Add(this.label304);
-            this.panel117.Controls.Add(this.btnCalculateDCA);
-            this.panel117.Controls.Add(this.label305);
-            this.panel117.Controls.Add(this.panel115);
-            this.panel117.Controls.Add(this.label306);
-            this.panel117.Controls.Add(this.panel114);
-            this.panel117.Controls.Add(this.label307);
-            this.panel117.Controls.Add(this.panel113);
-            this.panel117.Location = new System.Drawing.Point(0, 60);
-            this.panel117.Name = "panel117";
-            this.panel117.Size = new System.Drawing.Size(113, 234);
-            this.panel117.TabIndex = 316;
+            this.panelDCAInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCAInputs.Controls.Add(this.panel118);
+            this.panelDCAInputs.Controls.Add(this.panel111);
+            this.panelDCAInputs.Controls.Add(this.label304);
+            this.panelDCAInputs.Controls.Add(this.btnCalculateDCA);
+            this.panelDCAInputs.Controls.Add(this.label305);
+            this.panelDCAInputs.Controls.Add(this.panel115);
+            this.panelDCAInputs.Controls.Add(this.label306);
+            this.panelDCAInputs.Controls.Add(this.panel114);
+            this.panelDCAInputs.Controls.Add(this.label307);
+            this.panelDCAInputs.Controls.Add(this.panel113);
+            this.panelDCAInputs.Location = new System.Drawing.Point(0, 60);
+            this.panelDCAInputs.Name = "panelDCAInputs";
+            this.panelDCAInputs.Size = new System.Drawing.Size(113, 234);
+            this.panelDCAInputs.TabIndex = 316;
             // 
             // panel118
             // 
@@ -17347,7 +17306,7 @@
             this.textBoxDCAAmountInput.Size = new System.Drawing.Size(90, 15);
             this.textBoxDCAAmountInput.TabIndex = 310;
             this.textBoxDCAAmountInput.TabStop = false;
-            this.textBoxDCAAmountInput.Text = "10.00";
+            this.textBoxDCAAmountInput.Text = "100.00";
             this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.TextBoxDCAAmountInput_TextChanged);
             this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
@@ -17509,7 +17468,98 @@
             this.comboBoxDCAFrequency.Name = "comboBoxDCAFrequency";
             this.comboBoxDCAFrequency.Size = new System.Drawing.Size(90, 20);
             this.comboBoxDCAFrequency.TabIndex = 254;
-            this.comboBoxDCAFrequency.Texts = "daily";
+            this.comboBoxDCAFrequency.Texts = "monthly";
+            this.comboBoxDCAFrequency.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxDCAFrequency_OnSelectedIndexChanged);
+            // 
+            // panelDCAChartContainer
+            // 
+            this.panelDCAChartContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCAChartContainer.Controls.Add(this.panelRefreshChart);
+            this.panelDCAChartContainer.Controls.Add(this.panelDCAChartLoadingPanel);
+            this.panelDCAChartContainer.Controls.Add(this.formsPlotDCA);
+            this.panelDCAChartContainer.Location = new System.Drawing.Point(121, 60);
+            this.panelDCAChartContainer.Name = "panelDCAChartContainer";
+            this.panelDCAChartContainer.Size = new System.Drawing.Size(632, 480);
+            this.panelDCAChartContainer.TabIndex = 317;
+            // 
+            // panelRefreshChart
+            // 
+            this.panelRefreshChart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelRefreshChart.Controls.Add(this.label212);
+            this.panelRefreshChart.Location = new System.Drawing.Point(249, 187);
+            this.panelRefreshChart.Name = "panelRefreshChart";
+            this.panelRefreshChart.Size = new System.Drawing.Size(174, 35);
+            this.panelRefreshChart.TabIndex = 274;
+            this.panelRefreshChart.Visible = false;
+            // 
+            // label212
+            // 
+            this.label212.BackColor = System.Drawing.Color.Transparent;
+            this.label212.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label212.ForeColor = System.Drawing.Color.Gray;
+            this.label212.Location = new System.Drawing.Point(0, 0);
+            this.label212.Name = "label212";
+            this.label212.Size = new System.Drawing.Size(174, 35);
+            this.label212.TabIndex = 85;
+            this.label212.Text = "DCA parameters changed. Recalculate to update chart";
+            this.label212.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panelDCAChartLoadingPanel
+            // 
+            this.panelDCAChartLoadingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelDCAChartLoadingPanel.Controls.Add(this.label415);
+            this.panelDCAChartLoadingPanel.Controls.Add(this.label416);
+            this.panelDCAChartLoadingPanel.Controls.Add(this.pictureBoxDCAChartLoadingAnimation);
+            this.panelDCAChartLoadingPanel.Location = new System.Drawing.Point(259, 187);
+            this.panelDCAChartLoadingPanel.Name = "panelDCAChartLoadingPanel";
+            this.panelDCAChartLoadingPanel.Size = new System.Drawing.Size(154, 35);
+            this.panelDCAChartLoadingPanel.TabIndex = 273;
+            this.panelDCAChartLoadingPanel.Visible = false;
+            // 
+            // label415
+            // 
+            this.label415.AutoSize = true;
+            this.label415.BackColor = System.Drawing.Color.Transparent;
+            this.label415.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label415.ForeColor = System.Drawing.Color.Gray;
+            this.label415.Location = new System.Drawing.Point(49, 14);
+            this.label415.Name = "label415";
+            this.label415.Size = new System.Drawing.Size(98, 16);
+            this.label415.TabIndex = 251;
+            this.label415.Text = "generating chart";
+            // 
+            // label416
+            // 
+            this.label416.AutoSize = true;
+            this.label416.BackColor = System.Drawing.Color.Transparent;
+            this.label416.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label416.ForeColor = System.Drawing.Color.Gray;
+            this.label416.Location = new System.Drawing.Point(49, 1);
+            this.label416.Name = "label416";
+            this.label416.Size = new System.Drawing.Size(93, 16);
+            this.label416.TabIndex = 85;
+            this.label416.Text = "fetching data &&";
+            // 
+            // pictureBoxDCAChartLoadingAnimation
+            // 
+            this.pictureBoxDCAChartLoadingAnimation.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxDCAChartLoadingAnimation.Enabled = false;
+            this.pictureBoxDCAChartLoadingAnimation.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDCAChartLoadingAnimation.Image")));
+            this.pictureBoxDCAChartLoadingAnimation.Location = new System.Drawing.Point(5, 7);
+            this.pictureBoxDCAChartLoadingAnimation.Name = "pictureBoxDCAChartLoadingAnimation";
+            this.pictureBoxDCAChartLoadingAnimation.Size = new System.Drawing.Size(40, 20);
+            this.pictureBoxDCAChartLoadingAnimation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxDCAChartLoadingAnimation.TabIndex = 250;
+            this.pictureBoxDCAChartLoadingAnimation.TabStop = false;
+            // 
+            // formsPlotDCA
+            // 
+            this.formsPlotDCA.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotDCA.Location = new System.Drawing.Point(5, 9);
+            this.formsPlotDCA.Name = "formsPlotDCA";
+            this.formsPlotDCA.Size = new System.Drawing.Size(620, 462);
+            this.formsPlotDCA.TabIndex = 274;
+            this.formsPlotDCA.Visible = false;
             // 
             // panelDCASummary
             // 
@@ -17525,7 +17575,7 @@
             this.panelDCASummary.Controls.Add(this.label205);
             this.panelDCASummary.Controls.Add(this.label203);
             this.panelDCASummary.Controls.Add(this.label202);
-            this.panelDCASummary.Location = new System.Drawing.Point(0, 306);
+            this.panelDCASummary.Location = new System.Drawing.Point(1, 306);
             this.panelDCASummary.Name = "panelDCASummary";
             this.panelDCASummary.Size = new System.Drawing.Size(113, 206);
             this.panelDCASummary.TabIndex = 315;
@@ -17719,29 +17769,6 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
-            // lblChartsMediumBackground
-            // 
-            this.lblChartsMediumBackground.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblChartsMediumBackground.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblChartsMediumBackground.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblChartsMediumBackground.Location = new System.Drawing.Point(81, 34);
-            this.lblChartsMediumBackground.Name = "lblChartsMediumBackground";
-            this.lblChartsMediumBackground.Size = new System.Drawing.Size(19, 14);
-            this.lblChartsMediumBackground.TabIndex = 266;
-            this.lblChartsMediumBackground.Text = "❌";
-            this.lblChartsMediumBackground.Click += new System.EventHandler(this.lblChartsMediumBackground_Click);
-            // 
-            // label211
-            // 
-            this.label211.AutoSize = true;
-            this.label211.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label211.ForeColor = System.Drawing.Color.Silver;
-            this.label211.Location = new System.Drawing.Point(103, 34);
-            this.label211.Name = "label211";
-            this.label211.Size = new System.Drawing.Size(30, 17);
-            this.label211.TabIndex = 265;
-            this.label211.Text = "Mid";
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -17751,12 +17778,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
@@ -18074,18 +18101,19 @@
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
             this.panelDCACalculator.ResumeLayout(false);
-            this.panelDCAChartContainer.ResumeLayout(false);
-            this.panelDCAChartLoadingPanel.ResumeLayout(false);
-            this.panelDCAChartLoadingPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
-            this.panel117.ResumeLayout(false);
-            this.panel117.PerformLayout();
+            this.panelDCAInputs.ResumeLayout(false);
+            this.panelDCAInputs.PerformLayout();
             this.panel118.ResumeLayout(false);
             this.panel111.ResumeLayout(false);
             this.panel111.PerformLayout();
             this.panel115.ResumeLayout(false);
             this.panel114.ResumeLayout(false);
             this.panel113.ResumeLayout(false);
+            this.panelDCAChartContainer.ResumeLayout(false);
+            this.panelRefreshChart.ResumeLayout(false);
+            this.panelDCAChartLoadingPanel.ResumeLayout(false);
+            this.panelDCAChartLoadingPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
             this.panelDCASummary.ResumeLayout(false);
             this.panelDCASummary.PerformLayout();
             this.panel116.ResumeLayout(false);
@@ -19211,7 +19239,7 @@
         private System.Windows.Forms.Label lblDCABTCPurchases;
         private System.Windows.Forms.Panel panel116;
         private System.Windows.Forms.Label label208;
-        private System.Windows.Forms.Panel panel117;
+        private System.Windows.Forms.Panel panelDCAInputs;
         private System.Windows.Forms.Panel panel118;
         private System.Windows.Forms.Label label209;
         private System.Windows.Forms.Button btnMenuPriceConverter;
@@ -19220,6 +19248,8 @@
         private ScottPlot.FormsPlot formsPlotDCA;
         private System.Windows.Forms.Label lblChartsMediumBackground;
         private System.Windows.Forms.Label label211;
+        private System.Windows.Forms.Panel panelRefreshChart;
+        private System.Windows.Forms.Label label212;
     }
 }
 

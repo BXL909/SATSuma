@@ -26,10 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* dca - tidy colours on chart (might need a solid BG to match chart colour)
-* dca - panels don't paint properly on theme change
-* dca - zoom chart to match dca dates and lower range so legend doesn't obscure data
-* dca - validate date input on dca (can't be same, can't start today, etc)
+* regenerate charts on theme change, but check for overlayed plots, double legends, etc (these only seem to occur on launch so a launch flag might do)
+* sometimes the white satsuma logo shows on dark themes (e.g Satsuma theme). Why?
 * test all again
 */
 
@@ -67,6 +65,7 @@ using SATSuma.Properties;
 using ScottPlot.Renderable;
 using ScottPlot.Drawing.Colormaps;
 using static ScottPlot.Plottable.PopulationPlot;
+using ScottPlot.Plottable;
 #endregion
 
 namespace SATSuma
@@ -320,6 +319,7 @@ namespace SATSuma
         bool firstTimeLoadingScreen = true;
         bool firstTimeCustomThemeIndexChanged = true;
         double DCAFrequencyDays = 1; // for dca calculator screen
+        Axis yAxis3 = null;
         #endregion
         #endregion
 
@@ -426,7 +426,7 @@ namespace SATSuma
             panelSettingsUIScaleContainer.Paint += Panel_Paint;
             panelDCAMessages.Paint += Panel_Paint;
             panelDCASummary.Paint += Panel_Paint;
-            panel117.Paint += Panel_Paint;
+            panelDCAInputs.Paint += Panel_Paint;
             panel119.Paint += Panel_Paint;
             panelPriceConvert.Paint += Panel_Paint;
             panelDCAChartContainer.Paint += Panel_Paint;
@@ -508,7 +508,7 @@ namespace SATSuma
             #endregion
         }
 
-        Axis yAxis3 = null;
+        
 
         private void SATSuma_Load(object sender, EventArgs e)
         {
@@ -593,6 +593,7 @@ namespace SATSuma
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
+                comboBoxDCAFrequency.SelectedIndex = 2; // default to monthly
                 // add an extra Y axis to the chart to show the daily BTC amount bought
                 yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color:btnMenuDirectory.ForeColor);
                 // populate dca chart if the api is enabled
@@ -9510,11 +9511,20 @@ namespace SATSuma
                     formsPlot1.Plot.YAxis.Label("sats per v/byte", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
+                    Color legendOutlineColour = Color.FromArgb(50,50,50);
+                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    {
+                        legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    }
+                    else
+                    {
+                        legendOutlineColour = Color.FromArgb(220, 220, 200);
+                    }
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
                     legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
-                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.OutlineColor = legendOutlineColour;
                     legend.ShadowColor = chartsBackgroundColor;
 
                     // Set the tick and gridline settings
@@ -9543,6 +9553,7 @@ namespace SATSuma
                 HandleException(ex, "Generating fee rates chart");
             }
         }
+
         #endregion
         #region chart - nodes by network
         private async void BtnChartNodesByNetwork_Click(object sender, EventArgs e)
@@ -9614,11 +9625,20 @@ namespace SATSuma
                     formsPlot1.Plot.YAxis.Label("lightning nodes per network", size: (int)(12 * UIScale), bold: false);
                     formsPlot1.Plot.XAxis.Label("");
 
+                    Color legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    {
+                        legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    }
+                    else
+                    {
+                        legendOutlineColour = Color.FromArgb(220, 220, 200);
+                    }
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
                     legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
-                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.OutlineColor = legendOutlineColour;
                     legend.ShadowColor = chartsBackgroundColor;
 
                     // Set the tick and gridline settings
@@ -11705,11 +11725,20 @@ namespace SATSuma
                     HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
                     HighlightedPoint.IsVisible = false;
 
+                    Color legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    {
+                        legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    }
+                    else
+                    {
+                        legendOutlineColour = Color.FromArgb(220, 220, 200);
+                    }
                     var legend = formsPlot1.Plot.Legend();
                     legend.Location = Alignment.UpperRight;
                     legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
-                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.OutlineColor = legendOutlineColour;
                     legend.ShadowColor = chartsBackgroundColor;
 
                     formsPlot1.Plot.XAxis.Ticks(true);
@@ -13913,14 +13942,14 @@ namespace SATSuma
             {
                 ShowDCAChartLoadingPanel();
 
-                formsPlotDCA.Visible = true;
+                panelRefreshChart.Visible = false;
 
                 ToggleLoadingAnimation("enable");
 
                 // clear any previous graph
                 ClearAllDCAChartData();
-                
 
+                formsPlotDCA.Visible = true;
 
                 formsPlotDCA.Plot.Title("BTC purchased over time (green) & per transaction (red)", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
                 formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
@@ -14110,8 +14139,8 @@ namespace SATSuma
 
                     // set axis limits
                     formsPlotDCA.Plot.SetAxisLimits(xMin: xPriceChartDates.Min(), xMax: xPriceChartDates.Max()); // date
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.05, yAxisIndex: 0); // price
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.05, yAxisIndex: 1);  // bitcoin acquired
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.1, yAxisIndex: 0); // price
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.1, yAxisIndex: 1);  // bitcoin acquired
 
                     // Add the additional Y axis with index 2
 
@@ -14119,7 +14148,7 @@ namespace SATSuma
                      //   yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.05);
                        // existingAxis = true;
 
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.05, yAxisIndex: 2); 
+                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.1, yAxisIndex: 2); 
 
                     scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.Orange, label: "Market price of 1 BTC");
 
@@ -14129,15 +14158,13 @@ namespace SATSuma
                     var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.IndianRed, lineWidth: 1, label: "BTC purchased per transaction");
                     BTCscatter.YAxisIndex = 2;
 
-
-
                     formsPlotDCA.Plot.YAxis2.Label("", color: btnMenuDirectory.ForeColor);
                     //formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
                     // plot another set of data to show running total bought using the additional axis
                     var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
                     yAxis3.Label("", color: btnMenuDirectory.ForeColor);
-                    yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.05);
+                    yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.1);
                     existingAxis = true;
                     BTCRunningTotalscatter.YAxisIndex = 1;
 
@@ -14156,18 +14183,26 @@ namespace SATSuma
                     formsPlotDCA.Plot.XAxis.Ticks(true);
                     formsPlotDCA.Plot.XAxis.Label("");
 
-
+                    Color legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    {
+                        legendOutlineColour = Color.FromArgb(50, 50, 50);
+                    }
+                    else
+                    {
+                        legendOutlineColour = Color.FromArgb(220, 220, 200);
+                    }
                     var legend = formsPlotDCA.Plot.Legend();
                     legend.Location = Alignment.UpperLeft;
                     legend.FillColor = Color.Transparent;
                     legend.FontColor = label77.ForeColor;
-                    legend.OutlineColor = chartsBackgroundColor;
+                    legend.OutlineColor = legendOutlineColour;
                     legend.ShadowColor = chartsBackgroundColor;
                     
                     // prevent navigating beyond the data
-                    formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.05);
+                    formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.1);
                     formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
-                    formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.05);
+                    formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.1);
                     
 
                     formsPlotDCA.Plot.XAxis.Ticks(true);
@@ -14176,6 +14211,14 @@ namespace SATSuma
                     formsPlotDCA.Plot.XAxis.MajorGrid(true);
                     formsPlotDCA.Plot.YAxis.MajorGrid(true);
 
+
+                    double minX2 = xDCAChartDates.Min();
+                    double maxX2 = xDCAChartDates.Max();
+                    double rangeX2 = maxX2 - minX2;
+
+                    // Set the initial visible range of the x-axis to focus on the DCA data
+                    //formsPlotDCA.Plot.SetAxisLimits(xMin: minX2 - rangeX2 * 0.1, xMax: maxX2 + rangeX2 * 0.1);
+                    formsPlotDCA.Plot.SetAxisLimits(xMin: minX2, xMax: maxX2);
 
                     // refresh the graph
                     formsPlotDCA.Refresh();
@@ -14238,7 +14281,7 @@ namespace SATSuma
                     });
                     lblDCAPercentageChange.Invoke((MethodInvoker)delegate
                     {
-                        lblDCAPercentageChange.Text = percentageChange.ToString("0.00");
+                        lblDCAPercentageChange.Text = percentageChange.ToString("0.00") + "%";
                     });
                     panelDCASummary.Visible = true;
 
@@ -14377,6 +14420,11 @@ namespace SATSuma
             ValidateDCAInputs();
         }
 
+        private void comboBoxDCAFrequency_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateDCAInputs();
+        }
+
         private void TextBoxDCAAmountInput_Leave(object sender, EventArgs e)
         {
             try
@@ -14478,6 +14526,9 @@ namespace SATSuma
             btnCalculateDCA.Enabled = true;
             panelDCAMessages.Visible = false;
             panelDCASummary.Visible = false;
+
+
+            panelRefreshChart.Visible = true;
             lblDCAMessage.Text = "";
         }
 
@@ -20461,8 +20512,9 @@ namespace SATSuma
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
-
+                    
                     ReloadScreensWithListviews();
+                    RegenerateVisibleCharts();
                     LoadAndStyleDirectoryBrowser();
                     formsPlot1.Render();
                     if (theme.ShowTime == false)
@@ -20506,6 +20558,13 @@ namespace SATSuma
             {
                 HandleException(ex, "RestoreTheme");
             }
+        }
+
+        private void RegenerateVisibleCharts()
+        {
+
+            PopulateDCACalculator();
+
         }
 
         private async Task Wait2Secs()
@@ -20692,7 +20751,7 @@ namespace SATSuma
                 panelErrorMessage.Invalidate();
                 panelDCAMessages.Invalidate();
                 panelDCASummary.Invalidate();
-                panel117.Invalidate();
+                panelDCAInputs.Invalidate();
                 panel119.Invalidate();
                 panelPriceConvert.Invalidate();
                 panelDCAChartContainer.Invalidate();
@@ -21158,7 +21217,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //dca calculator
-                Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage, label202, label203, label205, label206, label207, labelDCADefinition };
+                Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage, label202, label203, label205, label206, label207, labelDCADefinition, label212 };
                 foreach (Control control in listDCALabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21581,7 +21640,7 @@ namespace SATSuma
             try
             {
                 // Declare ImageFile variable
-                Image ImageFile = Properties.Resources.titleBGLongerOrange;
+                System.Drawing.Image ImageFile = Properties.Resources.titleBGLongerOrange;
                 if (comboBoxTitlesBackgroundImage.SelectedIndex == 0)
                 {
                     ImageFile = Properties.Resources.titleBGLongerOrange;
@@ -21912,7 +21971,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panel117 };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -24318,6 +24377,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDirectory.Location.Y);
                 });
                 EnableAllMenuButtons();
+                this.DoubleBuffered = true;
                 btnMenuDirectory.Enabled = false;
                 SuspendLayout();
                 #region display loading screen
@@ -26669,6 +26729,7 @@ namespace SATSuma
                 return string.Empty;
             }
         }
+
 
 
 

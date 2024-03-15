@@ -1115,6 +1115,19 @@
             this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
+            this.panelDCASummary = new System.Windows.Forms.Panel();
+            this.panel116 = new System.Windows.Forms.Panel();
+            this.label208 = new System.Windows.Forms.Label();
+            this.lblDCAPercentageChange = new System.Windows.Forms.Label();
+            this.lblDCACurrentValue = new System.Windows.Forms.Label();
+            this.lblDCABTCPurchased = new System.Windows.Forms.Label();
+            this.lblDCAAmountSpent = new System.Windows.Forms.Label();
+            this.lblDCABTCPurchases = new System.Windows.Forms.Label();
+            this.label207 = new System.Windows.Forms.Label();
+            this.label206 = new System.Windows.Forms.Label();
+            this.label205 = new System.Windows.Forms.Label();
+            this.label203 = new System.Windows.Forms.Label();
+            this.label202 = new System.Windows.Forms.Label();
             this.panelDCAInputs = new System.Windows.Forms.Panel();
             this.panel118 = new System.Windows.Forms.Panel();
             this.label209 = new System.Windows.Forms.Label();
@@ -1139,19 +1152,6 @@
             this.label416 = new System.Windows.Forms.Label();
             this.pictureBoxDCAChartLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.formsPlotDCA = new ScottPlot.FormsPlot();
-            this.panelDCASummary = new System.Windows.Forms.Panel();
-            this.panel116 = new System.Windows.Forms.Panel();
-            this.label208 = new System.Windows.Forms.Label();
-            this.lblDCAPercentageChange = new System.Windows.Forms.Label();
-            this.lblDCACurrentValue = new System.Windows.Forms.Label();
-            this.lblDCABTCPurchased = new System.Windows.Forms.Label();
-            this.lblDCAAmountSpent = new System.Windows.Forms.Label();
-            this.lblDCABTCPurchases = new System.Windows.Forms.Label();
-            this.label207 = new System.Windows.Forms.Label();
-            this.label206 = new System.Windows.Forms.Label();
-            this.label205 = new System.Windows.Forms.Label();
-            this.label203 = new System.Windows.Forms.Label();
-            this.label202 = new System.Windows.Forms.Label();
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
@@ -1345,6 +1345,8 @@
             this.panelLeftPanel.SuspendLayout();
             this.panelErrorMessage.SuspendLayout();
             this.panelDCACalculator.SuspendLayout();
+            this.panelDCASummary.SuspendLayout();
+            this.panel116.SuspendLayout();
             this.panelDCAInputs.SuspendLayout();
             this.panel118.SuspendLayout();
             this.panel111.SuspendLayout();
@@ -1355,8 +1357,6 @@
             this.panelRefreshChart.SuspendLayout();
             this.panelDCAChartLoadingPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
-            this.panelDCASummary.SuspendLayout();
-            this.panel116.SuspendLayout();
             this.panelDCAMessages.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -17240,6 +17240,181 @@
             this.panelDCACalculator.TabIndex = 277;
             this.panelDCACalculator.Visible = false;
             // 
+            // panelDCASummary
+            // 
+            this.panelDCASummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panelDCASummary.Controls.Add(this.panel116);
+            this.panelDCASummary.Controls.Add(this.lblDCAPercentageChange);
+            this.panelDCASummary.Controls.Add(this.lblDCACurrentValue);
+            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchased);
+            this.panelDCASummary.Controls.Add(this.lblDCAAmountSpent);
+            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchases);
+            this.panelDCASummary.Controls.Add(this.label207);
+            this.panelDCASummary.Controls.Add(this.label206);
+            this.panelDCASummary.Controls.Add(this.label205);
+            this.panelDCASummary.Controls.Add(this.label203);
+            this.panelDCASummary.Controls.Add(this.label202);
+            this.panelDCASummary.Location = new System.Drawing.Point(1, 306);
+            this.panelDCASummary.Name = "panelDCASummary";
+            this.panelDCASummary.Size = new System.Drawing.Size(113, 206);
+            this.panelDCASummary.TabIndex = 315;
+            // 
+            // panel116
+            // 
+            this.panel116.BackColor = System.Drawing.Color.Transparent;
+            this.panel116.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel116.BackgroundImage")));
+            this.panel116.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel116.Controls.Add(this.label208);
+            this.panel116.Location = new System.Drawing.Point(0, 0);
+            this.panel116.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel116.Name = "panel116";
+            this.panel116.Size = new System.Drawing.Size(113, 23);
+            this.panel116.TabIndex = 289;
+            // 
+            // label208
+            // 
+            this.label208.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label208.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label208.ForeColor = System.Drawing.Color.Gray;
+            this.label208.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label208.Location = new System.Drawing.Point(5, 2);
+            this.label208.Margin = new System.Windows.Forms.Padding(0);
+            this.label208.Name = "label208";
+            this.label208.Size = new System.Drawing.Size(110, 17);
+            this.label208.TabIndex = 153;
+            this.label208.Text = "DCA summary";
+            this.label208.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblDCAPercentageChange
+            // 
+            this.lblDCAPercentageChange.AutoSize = true;
+            this.lblDCAPercentageChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAPercentageChange.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCAPercentageChange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCAPercentageChange.Location = new System.Drawing.Point(5, 183);
+            this.lblDCAPercentageChange.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAPercentageChange.Name = "lblDCAPercentageChange";
+            this.lblDCAPercentageChange.Size = new System.Drawing.Size(55, 17);
+            this.lblDCAPercentageChange.TabIndex = 288;
+            this.lblDCAPercentageChange.Text = "no data";
+            // 
+            // lblDCACurrentValue
+            // 
+            this.lblDCACurrentValue.AutoSize = true;
+            this.lblDCACurrentValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCACurrentValue.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCACurrentValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCACurrentValue.Location = new System.Drawing.Point(5, 149);
+            this.lblDCACurrentValue.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCACurrentValue.Name = "lblDCACurrentValue";
+            this.lblDCACurrentValue.Size = new System.Drawing.Size(55, 17);
+            this.lblDCACurrentValue.TabIndex = 287;
+            this.lblDCACurrentValue.Text = "no data";
+            // 
+            // lblDCABTCPurchased
+            // 
+            this.lblDCABTCPurchased.AutoSize = true;
+            this.lblDCABTCPurchased.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchased.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCABTCPurchased.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchased.Location = new System.Drawing.Point(5, 115);
+            this.lblDCABTCPurchased.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCABTCPurchased.Name = "lblDCABTCPurchased";
+            this.lblDCABTCPurchased.Size = new System.Drawing.Size(55, 17);
+            this.lblDCABTCPurchased.TabIndex = 286;
+            this.lblDCABTCPurchased.Text = "no data";
+            // 
+            // lblDCAAmountSpent
+            // 
+            this.lblDCAAmountSpent.AutoSize = true;
+            this.lblDCAAmountSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCAAmountSpent.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCAAmountSpent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCAAmountSpent.Location = new System.Drawing.Point(5, 81);
+            this.lblDCAAmountSpent.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCAAmountSpent.Name = "lblDCAAmountSpent";
+            this.lblDCAAmountSpent.Size = new System.Drawing.Size(55, 17);
+            this.lblDCAAmountSpent.TabIndex = 285;
+            this.lblDCAAmountSpent.Text = "no data";
+            // 
+            // lblDCABTCPurchases
+            // 
+            this.lblDCABTCPurchases.AutoSize = true;
+            this.lblDCABTCPurchases.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchases.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDCABTCPurchases.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblDCABTCPurchases.Location = new System.Drawing.Point(5, 47);
+            this.lblDCABTCPurchases.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDCABTCPurchases.Name = "lblDCABTCPurchases";
+            this.lblDCABTCPurchases.Size = new System.Drawing.Size(55, 17);
+            this.lblDCABTCPurchases.TabIndex = 284;
+            this.lblDCABTCPurchases.Text = "no data";
+            // 
+            // label207
+            // 
+            this.label207.AutoSize = true;
+            this.label207.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label207.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label207.ForeColor = System.Drawing.Color.Silver;
+            this.label207.Location = new System.Drawing.Point(5, 30);
+            this.label207.Margin = new System.Windows.Forms.Padding(0);
+            this.label207.Name = "label207";
+            this.label207.Size = new System.Drawing.Size(92, 17);
+            this.label207.TabIndex = 283;
+            this.label207.Text = "BTC purchases";
+            // 
+            // label206
+            // 
+            this.label206.AutoSize = true;
+            this.label206.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label206.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label206.ForeColor = System.Drawing.Color.Silver;
+            this.label206.Location = new System.Drawing.Point(5, 64);
+            this.label206.Margin = new System.Windows.Forms.Padding(0);
+            this.label206.Name = "label206";
+            this.label206.Size = new System.Drawing.Size(51, 17);
+            this.label206.TabIndex = 282;
+            this.label206.Text = "$ spent";
+            // 
+            // label205
+            // 
+            this.label205.AutoSize = true;
+            this.label205.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label205.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label205.ForeColor = System.Drawing.Color.Silver;
+            this.label205.Location = new System.Drawing.Point(5, 98);
+            this.label205.Margin = new System.Windows.Forms.Padding(0);
+            this.label205.Name = "label205";
+            this.label205.Size = new System.Drawing.Size(95, 17);
+            this.label205.TabIndex = 281;
+            this.label205.Text = "BTC purchased";
+            // 
+            // label203
+            // 
+            this.label203.AutoSize = true;
+            this.label203.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label203.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label203.ForeColor = System.Drawing.Color.Silver;
+            this.label203.Location = new System.Drawing.Point(5, 166);
+            this.label203.Margin = new System.Windows.Forms.Padding(0);
+            this.label203.Name = "label203";
+            this.label203.Size = new System.Drawing.Size(105, 17);
+            this.label203.TabIndex = 280;
+            this.label203.Text = "Change in value";
+            // 
+            // label202
+            // 
+            this.label202.AutoSize = true;
+            this.label202.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label202.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label202.ForeColor = System.Drawing.Color.Silver;
+            this.label202.Location = new System.Drawing.Point(5, 132);
+            this.label202.Margin = new System.Windows.Forms.Padding(0);
+            this.label202.Name = "label202";
+            this.label202.Size = new System.Drawing.Size(89, 17);
+            this.label202.TabIndex = 279;
+            this.label202.Text = "Current value";
+            // 
             // panelDCAInputs
             // 
             this.panelDCAInputs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -17561,181 +17736,6 @@
             this.formsPlotDCA.TabIndex = 274;
             this.formsPlotDCA.Visible = false;
             // 
-            // panelDCASummary
-            // 
-            this.panelDCASummary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panelDCASummary.Controls.Add(this.panel116);
-            this.panelDCASummary.Controls.Add(this.lblDCAPercentageChange);
-            this.panelDCASummary.Controls.Add(this.lblDCACurrentValue);
-            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchased);
-            this.panelDCASummary.Controls.Add(this.lblDCAAmountSpent);
-            this.panelDCASummary.Controls.Add(this.lblDCABTCPurchases);
-            this.panelDCASummary.Controls.Add(this.label207);
-            this.panelDCASummary.Controls.Add(this.label206);
-            this.panelDCASummary.Controls.Add(this.label205);
-            this.panelDCASummary.Controls.Add(this.label203);
-            this.panelDCASummary.Controls.Add(this.label202);
-            this.panelDCASummary.Location = new System.Drawing.Point(1, 306);
-            this.panelDCASummary.Name = "panelDCASummary";
-            this.panelDCASummary.Size = new System.Drawing.Size(113, 206);
-            this.panelDCASummary.TabIndex = 315;
-            // 
-            // panel116
-            // 
-            this.panel116.BackColor = System.Drawing.Color.Transparent;
-            this.panel116.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel116.BackgroundImage")));
-            this.panel116.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel116.Controls.Add(this.label208);
-            this.panel116.Location = new System.Drawing.Point(0, 0);
-            this.panel116.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel116.Name = "panel116";
-            this.panel116.Size = new System.Drawing.Size(113, 23);
-            this.panel116.TabIndex = 289;
-            // 
-            // label208
-            // 
-            this.label208.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label208.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label208.ForeColor = System.Drawing.Color.Gray;
-            this.label208.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label208.Location = new System.Drawing.Point(5, 2);
-            this.label208.Margin = new System.Windows.Forms.Padding(0);
-            this.label208.Name = "label208";
-            this.label208.Size = new System.Drawing.Size(110, 17);
-            this.label208.TabIndex = 153;
-            this.label208.Text = "DCA summary";
-            this.label208.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblDCAPercentageChange
-            // 
-            this.lblDCAPercentageChange.AutoSize = true;
-            this.lblDCAPercentageChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCAPercentageChange.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDCAPercentageChange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblDCAPercentageChange.Location = new System.Drawing.Point(5, 183);
-            this.lblDCAPercentageChange.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCAPercentageChange.Name = "lblDCAPercentageChange";
-            this.lblDCAPercentageChange.Size = new System.Drawing.Size(55, 17);
-            this.lblDCAPercentageChange.TabIndex = 288;
-            this.lblDCAPercentageChange.Text = "no data";
-            // 
-            // lblDCACurrentValue
-            // 
-            this.lblDCACurrentValue.AutoSize = true;
-            this.lblDCACurrentValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCACurrentValue.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDCACurrentValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblDCACurrentValue.Location = new System.Drawing.Point(5, 149);
-            this.lblDCACurrentValue.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCACurrentValue.Name = "lblDCACurrentValue";
-            this.lblDCACurrentValue.Size = new System.Drawing.Size(55, 17);
-            this.lblDCACurrentValue.TabIndex = 287;
-            this.lblDCACurrentValue.Text = "no data";
-            // 
-            // lblDCABTCPurchased
-            // 
-            this.lblDCABTCPurchased.AutoSize = true;
-            this.lblDCABTCPurchased.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCABTCPurchased.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDCABTCPurchased.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblDCABTCPurchased.Location = new System.Drawing.Point(5, 115);
-            this.lblDCABTCPurchased.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCABTCPurchased.Name = "lblDCABTCPurchased";
-            this.lblDCABTCPurchased.Size = new System.Drawing.Size(55, 17);
-            this.lblDCABTCPurchased.TabIndex = 286;
-            this.lblDCABTCPurchased.Text = "no data";
-            // 
-            // lblDCAAmountSpent
-            // 
-            this.lblDCAAmountSpent.AutoSize = true;
-            this.lblDCAAmountSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCAAmountSpent.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDCAAmountSpent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblDCAAmountSpent.Location = new System.Drawing.Point(5, 81);
-            this.lblDCAAmountSpent.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCAAmountSpent.Name = "lblDCAAmountSpent";
-            this.lblDCAAmountSpent.Size = new System.Drawing.Size(55, 17);
-            this.lblDCAAmountSpent.TabIndex = 285;
-            this.lblDCAAmountSpent.Text = "no data";
-            // 
-            // lblDCABTCPurchases
-            // 
-            this.lblDCABTCPurchases.AutoSize = true;
-            this.lblDCABTCPurchases.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblDCABTCPurchases.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDCABTCPurchases.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblDCABTCPurchases.Location = new System.Drawing.Point(5, 47);
-            this.lblDCABTCPurchases.Margin = new System.Windows.Forms.Padding(0);
-            this.lblDCABTCPurchases.Name = "lblDCABTCPurchases";
-            this.lblDCABTCPurchases.Size = new System.Drawing.Size(55, 17);
-            this.lblDCABTCPurchases.TabIndex = 284;
-            this.lblDCABTCPurchases.Text = "no data";
-            // 
-            // label207
-            // 
-            this.label207.AutoSize = true;
-            this.label207.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label207.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label207.ForeColor = System.Drawing.Color.Silver;
-            this.label207.Location = new System.Drawing.Point(5, 30);
-            this.label207.Margin = new System.Windows.Forms.Padding(0);
-            this.label207.Name = "label207";
-            this.label207.Size = new System.Drawing.Size(92, 17);
-            this.label207.TabIndex = 283;
-            this.label207.Text = "BTC purchases";
-            // 
-            // label206
-            // 
-            this.label206.AutoSize = true;
-            this.label206.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label206.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label206.ForeColor = System.Drawing.Color.Silver;
-            this.label206.Location = new System.Drawing.Point(5, 64);
-            this.label206.Margin = new System.Windows.Forms.Padding(0);
-            this.label206.Name = "label206";
-            this.label206.Size = new System.Drawing.Size(51, 17);
-            this.label206.TabIndex = 282;
-            this.label206.Text = "$ spent";
-            // 
-            // label205
-            // 
-            this.label205.AutoSize = true;
-            this.label205.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label205.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label205.ForeColor = System.Drawing.Color.Silver;
-            this.label205.Location = new System.Drawing.Point(5, 98);
-            this.label205.Margin = new System.Windows.Forms.Padding(0);
-            this.label205.Name = "label205";
-            this.label205.Size = new System.Drawing.Size(95, 17);
-            this.label205.TabIndex = 281;
-            this.label205.Text = "BTC purchased";
-            // 
-            // label203
-            // 
-            this.label203.AutoSize = true;
-            this.label203.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label203.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label203.ForeColor = System.Drawing.Color.Silver;
-            this.label203.Location = new System.Drawing.Point(5, 166);
-            this.label203.Margin = new System.Windows.Forms.Padding(0);
-            this.label203.Name = "label203";
-            this.label203.Size = new System.Drawing.Size(105, 17);
-            this.label203.TabIndex = 280;
-            this.label203.Text = "Change in value";
-            // 
-            // label202
-            // 
-            this.label202.AutoSize = true;
-            this.label202.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label202.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label202.ForeColor = System.Drawing.Color.Silver;
-            this.label202.Location = new System.Drawing.Point(5, 132);
-            this.label202.Margin = new System.Windows.Forms.Padding(0);
-            this.label202.Name = "label202";
-            this.label202.Size = new System.Drawing.Size(89, 17);
-            this.label202.TabIndex = 279;
-            this.label202.Text = "Current value";
-            // 
             // panelDCAMessages
             // 
             this.panelDCAMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -17778,10 +17778,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlockList);
@@ -18101,6 +18101,9 @@
             this.panelLeftPanel.PerformLayout();
             this.panelErrorMessage.ResumeLayout(false);
             this.panelDCACalculator.ResumeLayout(false);
+            this.panelDCASummary.ResumeLayout(false);
+            this.panelDCASummary.PerformLayout();
+            this.panel116.ResumeLayout(false);
             this.panelDCAInputs.ResumeLayout(false);
             this.panelDCAInputs.PerformLayout();
             this.panel118.ResumeLayout(false);
@@ -18114,9 +18117,6 @@
             this.panelDCAChartLoadingPanel.ResumeLayout(false);
             this.panelDCAChartLoadingPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
-            this.panelDCASummary.ResumeLayout(false);
-            this.panelDCASummary.PerformLayout();
-            this.panel116.ResumeLayout(false);
             this.panelDCAMessages.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

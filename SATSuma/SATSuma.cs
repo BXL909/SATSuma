@@ -26,9 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* regenerate charts on theme change, but check for overlayed plots, double legends, etc (these only seem to occur on launch so a launch flag might do)
-* sometimes the white satsuma logo shows on dark themes (e.g Satsuma theme). Why?
-* test all again
+* more testing!
 */
 
 #region Using
@@ -319,7 +317,9 @@ namespace SATSuma
         bool firstTimeLoadingScreen = true;
         bool firstTimeCustomThemeIndexChanged = true;
         double DCAFrequencyDays = 1; // for dca calculator screen
-        Axis yAxis3 = null;
+        Axis yAxis3 = null; // dca chart
+        string ActiveChart = "FeeRates"; // used to determine which chart needs refreshing when a theme change takes place
+        bool firstThemeChange = true;
         #endregion
         #endregion
 
@@ -507,8 +507,6 @@ namespace SATSuma
             Padding = new Padding(1);
             #endregion
         }
-
-        
 
         private void SATSuma_Load(object sender, EventArgs e)
         {
@@ -9279,6 +9277,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "PoolsRanking";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot1.Visible = false;
@@ -9438,6 +9437,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "FeeRates";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -9560,6 +9560,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "NodesByNetwork";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -9674,6 +9675,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "Hashrate";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -9773,6 +9775,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "HashrateLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -9896,6 +9899,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "LightningCapacity";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -9993,6 +9997,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "LightningChannels";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10090,6 +10095,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "NodesByCountry";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot1.Visible = false;
@@ -10182,6 +10188,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "Reward";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10270,6 +10277,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "BlockFees";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10356,6 +10364,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "Difficulty";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10454,6 +10463,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "DifficultyLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10577,6 +10587,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "UniqueAddresses";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10669,6 +10680,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "UniqueAddressesLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10788,6 +10800,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "Price";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -10916,6 +10929,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "PriceLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11067,6 +11081,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "MarketCap";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11197,6 +11212,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "MarketCapLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11349,6 +11365,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "UTXO";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11443,6 +11460,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "UTXOLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11561,6 +11579,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "BlockSize";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -11652,6 +11671,7 @@ namespace SATSuma
         {
             try
             {
+                ActiveChart = "Circulation";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
@@ -13935,7 +13955,6 @@ namespace SATSuma
 
         bool existingAxis = false;
         
-
         private async void PopulateDCACalculator()
         {
             try
@@ -13955,6 +13974,7 @@ namespace SATSuma
                 formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleDCAChart();
 
+                // nb the api doesn't return items for every single date so we fill in all missing dates and prices (using average of the price either side of the missing date)
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
                 var HistoricPriceDataJsonForDCA = HistoricPriceDataJson;
@@ -13963,10 +13983,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
                     List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
-
-
-
-
                     
                     long minUnixTime = long.MaxValue;
                     long maxUnixTime = long.MinValue;
@@ -14014,34 +14030,26 @@ namespace SATSuma
 
                     ProcessPriceList(PriceList);
 
-
-
-
-
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        // get 
                         var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
                         //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
-                            //formsPlotDCA.Plot.Title("GBP/BTC DCA illustration", size: 13, bold: true);
                             formsPlotDCA.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
                         }
                         if (!btnEUR.Enabled) //EUR is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceEUR);
-                            //formsPlotDCA.Plot.Title("EUR market price across major bitcoin exchanges with DCA illustration", size: 13, bold: true);
                             formsPlotDCA.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
-                            //formsPlotDCA.Plot.Title("Average XAU market price across major bitcoin exchanges with DCA illustration", size: 13, bold: true);
                             formsPlotDCA.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
@@ -14116,8 +14124,6 @@ namespace SATSuma
                         // Find the index of xDCAValue in xValues
                         int index = Array.FindIndex(xPriceChartDates, x => (int)x == xDCADateWhole);
 
-
-
                         if (index != -1)
                         {
                             // Corresponding price found
@@ -14142,24 +14148,15 @@ namespace SATSuma
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.1, yAxisIndex: 0); // price
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.1, yAxisIndex: 1);  // bitcoin acquired
 
-                    // Add the additional Y axis with index 2
-
-                   // yAxis3.Label("BTC bought per transaction", color: btnMenuDirectory.ForeColor);
-                     //   yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.05);
-                       // existingAxis = true;
-
                     formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.1, yAxisIndex: 2); 
 
                     scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.Orange, label: "Market price of 1 BTC");
 
                     // plot another set of data to show amount bought per purchase using the additional axis
-                    //var BTCscatter = formsPlotDCA.Plot.AddFill(xDCAChartDates, yDCAChartBitcoinAmounts, stepFill: true, color: Color.FromArgb(50, Color.Green));
-
                     var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.IndianRed, lineWidth: 1, label: "BTC purchased per transaction");
                     BTCscatter.YAxisIndex = 2;
 
                     formsPlotDCA.Plot.YAxis2.Label("", color: btnMenuDirectory.ForeColor);
-                    //formsPlotDCA.Plot.YAxis2.Color(label77.ForeColor);
 
                     // plot another set of data to show running total bought using the additional axis
                     var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
@@ -14203,7 +14200,6 @@ namespace SATSuma
                     formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.1);
                     formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
                     formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.1);
-                    
 
                     formsPlotDCA.Plot.XAxis.Ticks(true);
                     formsPlotDCA.Plot.YAxis.Ticks(true);
@@ -14217,7 +14213,6 @@ namespace SATSuma
                     double rangeX2 = maxX2 - minX2;
 
                     // Set the initial visible range of the x-axis to focus on the DCA data
-                    //formsPlotDCA.Plot.SetAxisLimits(xMin: minX2 - rangeX2 * 0.1, xMax: maxX2 + rangeX2 * 0.1);
                     formsPlotDCA.Plot.SetAxisLimits(xMin: minX2, xMax: maxX2);
 
                     // refresh the graph
@@ -14328,7 +14323,7 @@ namespace SATSuma
                     return priceList[i].Y;
                 }
             }
-            return 0; // Default value if not found
+            return 0; 
         }
 
         static decimal FindNextNonSpecialValue(List<PriceCoordinatesList> priceList, int currentIndex)
@@ -14340,7 +14335,7 @@ namespace SATSuma
                     return priceList[i].Y;
                 }
             }
-            return 0; // Default value if not found
+            return 0; 
         }
 
         #region show/hide DCA chart loading panel
@@ -14376,7 +14371,6 @@ namespace SATSuma
             try
             {
                 formsPlotDCA.Plot.Clear();
-                
             }
 
             catch (WebException ex)
@@ -14526,7 +14520,6 @@ namespace SATSuma
             btnCalculateDCA.Enabled = true;
             panelDCAMessages.Visible = false;
             panelDCASummary.Visible = false;
-
 
             panelRefreshChart.Visible = true;
             lblDCAMessage.Text = "";
@@ -18069,7 +18062,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -20087,7 +20080,7 @@ namespace SATSuma
                     Opacity = 1, 
                 };
                 loadingTheme.StartPosition = FormStartPosition.CenterParent;
-                
+
                 // Calculate the overlay form's location to place it in the center of the parent form
                 loadingTheme.StartPosition = FormStartPosition.Manual;
                 int parentCenterX = this.Location.X + this.Width / 2;
@@ -20097,6 +20090,8 @@ namespace SATSuma
                 loadingTheme.Location = new Point(overlayX, overlayY);
                 loadingTheme.Show(this);
                 #endregion 
+
+                await BriefPause(100); // this small pause gives time for the loading screen to appear before items are re-themed (the loading screen hides flicker that occurs when themes are applied)
 
                 currentlyActiveTheme = theme.ThemeName;
                 if (theme.BackgroundGenesis)
@@ -20514,7 +20509,11 @@ namespace SATSuma
                     }
                     
                     ReloadScreensWithListviews();
-                    RegenerateVisibleCharts();
+                    if (!firstThemeChange)
+                    {
+                        RegenerateVisibleCharts();
+                    }
+                    firstThemeChange = false;
                     LoadAndStyleDirectoryBrowser();
                     formsPlot1.Render();
                     if (theme.ShowTime == false)
@@ -20560,11 +20559,187 @@ namespace SATSuma
             }
         }
 
-        private void RegenerateVisibleCharts()
+        private void RegenerateVisibleCharts() // this is just to force theme changes to be reflected in the charts
         {
-
+            // this always needs updating
             PopulateDCACalculator();
 
+            // check the rest of the charts and refresh whichever is active (even if not visible at the time theme was changed)
+            if (ActiveChart == "FeeRates")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartFeeRates;
+                EventArgs e = EventArgs.Empty;
+                BtnChartFeeRates_Click(sender, e);
+            }
+
+            if (ActiveChart == "BlockFees")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartBlockFees;
+                EventArgs e = EventArgs.Empty;
+                BtnChartBlockFees_Click(sender, e);
+            }
+
+            if (ActiveChart == "Reward")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartReward;
+                EventArgs e = EventArgs.Empty;
+                BtnChartReward_Click(sender, e);
+            }
+
+            if (ActiveChart == "BlockSize")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartBlockSize;
+                EventArgs e = EventArgs.Empty;
+                BtnChartBlockSize_Click(sender, e);
+            }
+
+            if (ActiveChart == "Hashrate")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartHashrate;
+                EventArgs e = EventArgs.Empty;
+                BtnChartHashrate_Click(sender, e);
+            }
+
+            if (ActiveChart == "HashrateLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartHashrate;
+                EventArgs e = EventArgs.Empty;
+                BtnChartHashrate_Click(sender, e);
+            }
+
+            if (ActiveChart == "Difficulty")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartDifficulty;
+                EventArgs e = EventArgs.Empty;
+                BtnChartDifficulty_Click(sender, e);
+            }
+
+            if (ActiveChart == "DifficultyLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartDifficulty;
+                EventArgs e = EventArgs.Empty;
+                BtnChartDifficulty_Click(sender, e);
+            }
+
+            if (ActiveChart == "Circulation")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartCirculation;
+                EventArgs e = EventArgs.Empty;
+                BtnChartCirculation_Click(sender, e);
+            }
+
+            if (ActiveChart == "UniqueAddresses")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartUniqueAddresses;
+                EventArgs e = EventArgs.Empty;
+                BtnChartUniqueAddresses_Click(sender, e);
+            }
+
+            if (ActiveChart == "UniqueAddressesLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartUniqueAddresses;
+                EventArgs e = EventArgs.Empty;
+                BtnChartUniqueAddresses_Click(sender, e);
+            }
+
+            if (ActiveChart == "UTXO")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartUTXO;
+                EventArgs e = EventArgs.Empty;
+                BtnChartUTXO_Click(sender, e);
+            }
+
+            if (ActiveChart == "UTXOLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartUTXO;
+                EventArgs e = EventArgs.Empty;
+                BtnChartUTXO_Click(sender, e);
+            }
+
+            if (ActiveChart == "PoolsRanking")
+            {
+                formsPlot2.Plot.Clear();
+                object sender = btnChartPoolsRanking;
+                EventArgs e = EventArgs.Empty;
+                BtnChartPoolsRanking_Click(sender, e);
+            }
+
+            if (ActiveChart == "NodesByNetwork")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartNodesByNetwork;
+                EventArgs e = EventArgs.Empty;
+                BtnChartNodesByNetwork_Click(sender, e);
+            }
+
+            if (ActiveChart == "NodesByCountry")
+            {
+                formsPlot3.Plot.Clear();
+                object sender = btnChartNodesByCountry;
+                EventArgs e = EventArgs.Empty;
+                BtnChartNodesByCountry_Click(sender, e);
+            }
+
+            if (ActiveChart == "LightningCapacity")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartLightningCapacity;
+                EventArgs e = EventArgs.Empty;
+                BtnChartLightningCapacity_Click(sender, e);
+            }
+
+            if (ActiveChart == "LightningChannels")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartLightningChannels;
+                EventArgs e = EventArgs.Empty;
+                BtnChartLightningChannels_Click(sender, e);
+            }
+
+            if (ActiveChart == "Price")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartPrice;
+                EventArgs e = EventArgs.Empty;
+                BtnChartPrice_Click(sender, e);
+            }
+
+            if (ActiveChart == "PriceLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartPrice;
+                EventArgs e = EventArgs.Empty;
+                BtnChartPrice_Click(sender, e);
+            }
+
+            if (ActiveChart == "MarketCap")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartMarketCap;
+                EventArgs e = EventArgs.Empty;
+                BtnChartMarketCap_Click(sender, e);
+            }
+
+            if (ActiveChart == "MarketCapLog")
+            {
+                formsPlot1.Plot.Clear();
+                object sender = btnChartMarketCap;
+                EventArgs e = EventArgs.Empty;
+                BtnChartMarketCap_Click(sender, e);
+            }
         }
 
         private async Task Wait2Secs()
@@ -20576,7 +20751,7 @@ namespace SATSuma
             }
             else
             {
-                await Task.Delay(2500);
+                await Task.Delay(4500);
             }
         }
 
@@ -23778,7 +23953,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -23830,7 +24005,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -23882,7 +24057,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -23935,7 +24110,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -23990,7 +24165,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24051,7 +24226,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24105,7 +24280,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24168,7 +24343,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24221,7 +24396,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24275,7 +24450,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24329,7 +24504,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24383,7 +24558,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -24436,7 +24611,7 @@ namespace SATSuma
                 #region display loading screen
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(161 * UIScale);
+                panelScreenLocation.Y -= (int)(162 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new loadingScreen(UIScale)
@@ -26742,7 +26917,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-
     }
 }                

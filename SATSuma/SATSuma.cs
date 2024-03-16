@@ -26,6 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
+* add more sample bookmarks
 * more testing!
 */
 
@@ -1081,6 +1082,10 @@ namespace SATSuma
                                 {
                                     lblTotalCapacity.Text = totalCapacity;
                                 });
+                                lblTotalCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTotalCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                });
                                 lblTorNodes.Invoke((MethodInvoker)delegate
                                 {
                                     lblTorNodes.Text = torNodes;
@@ -1093,9 +1098,21 @@ namespace SATSuma
                                 {
                                     lblAverageCapacity.Text = avgCapacity;
                                 });
+                                lblAverageCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
+                                    lblAverageCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblAverageCapacityFiat.Location = new Point(lblAverageCapacity.Location.X + lblAverageCapacity.Width, lblAverageCapacityFiat.Location.Y);
+                                });
                                 lblAverageFeeRate.Invoke((MethodInvoker)delegate
                                 {
                                     lblAverageFeeRate.Text = avgFeeRate;
+                                });
+                                lblAverageFeeRateFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
+                                    lblAverageFeeRateFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblAverageFeeRateFiat.Location = new Point(lblAverageFeeRate.Location.X + lblAverageFeeRate.Width, lblAverageFeeRateFiat.Location.Y);
                                 });
                                 lblUnannouncedNodes.Invoke((MethodInvoker)delegate
                                 {
@@ -1105,17 +1122,41 @@ namespace SATSuma
                                 {
                                     lblAverageBaseFeeMtokens.Text = avgBaseeFeeMtokens;
                                 });
+                                lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
+                                    lblAverageBaseFeeMtokensFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
+                                });
                                 lblMedCapacity.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedCapacity.Text = medCapacity;
+                                });
+                                lblMedCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
+                                    lblMedCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblMedCapacityFiat.Location = new Point(lblMedCapacity.Location.X + lblMedCapacity.Width, lblMedCapacityFiat.Location.Y);
                                 });
                                 lblMedFeeRate.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedFeeRate.Text = medFeeRate;
                                 });
+                                lblMedFeeRateFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
+                                    lblMedFeeRateFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblMedFeeRateFiat.Location = new Point(lblMedFeeRate.Location.X + lblMedFeeRate.Width, lblMedFeeRateFiat.Location.Y);
+                                });
                                 lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedBaseFeeTokens.Text = medBaseeFeeMtokens;
+                                });
+                                lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
+                                    lblMedBaseFeeTokensFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
                                 });
                                 lblClearnetTorNodes.Invoke((MethodInvoker)delegate
                                 {
@@ -1196,13 +1237,28 @@ namespace SATSuma
                                 {
                                     lblClearnetCapacity.Text = clearnetCapacity;
                                 });
+                                lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblClearnetCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblClearnetCapacityFiat.Location = new Point(lblClearnetCapacity.Location.X + lblClearnetCapacity.Width, lblClearnetCapacityFiat.Location.Y);
+                                });
                                 lblTorCapacity.Invoke((MethodInvoker)delegate
                                 {
                                     lblTorCapacity.Text = torCapacity;
                                 });
+                                lblTorCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblTorCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblTorCapacityFiat.Location = new Point(lblTorCapacity.Location.X + lblTorCapacity.Width, lblTorCapacityFiat.Location.Y);
+                                });
                                 lblUnknownCapacity.Invoke((MethodInvoker)delegate
                                 {
                                     lblUnknownCapacity.Text = unknownCapacity;
+                                });
+                                lblUnknownCapacityFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUnknownCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
                                 });
                             }
                             else
@@ -1231,9 +1287,15 @@ namespace SATSuma
                                         aliasLabel.Text = aliases[i];
                                     });
                                     System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
+                                    System.Windows.Forms.Label capacityLabelFiat = (System.Windows.Forms.Label)this.Controls.Find("capacityLabelFiat" + (i + 1), true)[0];
                                     capacityLabel.Invoke((MethodInvoker)delegate
                                     {
                                         capacityLabel.Text = capacities[i];
+                                    });
+                                    capacityLabelFiat.Invoke((MethodInvoker)delegate
+                                    {
+                                        capacityLabelFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                        capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
                                     });
                                 }
                                 var result7 = MempoolSpaceConnectivityRankingJSONRefresh();
@@ -8074,7 +8136,7 @@ namespace SATSuma
                         }
                         lblSegwitSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + "," + segwitTotalConfirmedSpentDisplay + "," + segwitAddressesConfirmedUnspentBalanceDisplay;
+                            lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + ", " + segwitTotalConfirmedSpentDisplay + ", " + segwitAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
 
@@ -8325,7 +8387,7 @@ namespace SATSuma
                         }
                         lblLegacySummary.Invoke((MethodInvoker)delegate
                         {
-                            lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + "," + legacyTotalConfirmedSpentDisplay + "," + legacyAddressesConfirmedUnspentBalanceDisplay;
+                            lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + ", " + legacyTotalConfirmedSpentDisplay + ", " + legacyAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
 
@@ -8577,7 +8639,7 @@ namespace SATSuma
                         }
                         lblSegwitP2SHSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + "," + segwitP2SHTotalConfirmedSpentDisplay + "," + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
+                            lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + ", " + segwitP2SHTotalConfirmedSpentDisplay + ", " + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
 
@@ -8828,7 +8890,7 @@ namespace SATSuma
                         }
                         lblP2SHSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + "," + P2SHTotalConfirmedSpentDisplay + "," + P2SHAddressesConfirmedUnspentBalanceDisplay;
+                            lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + ", " + P2SHTotalConfirmedSpentDisplay + ", " + P2SHAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
 
@@ -13970,7 +14032,7 @@ namespace SATSuma
 
                 formsPlotDCA.Visible = true;
 
-                formsPlotDCA.Plot.Title("BTC purchased over time (green) & per transaction (red)", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
+                formsPlotDCA.Plot.Title("", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
                 formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleDCAChart();
 
@@ -14414,7 +14476,7 @@ namespace SATSuma
             ValidateDCAInputs();
         }
 
-        private void comboBoxDCAFrequency_OnSelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxDCAFrequency_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             ValidateDCAInputs();
         }
@@ -17580,7 +17642,7 @@ namespace SATSuma
         }
 
         #endregion
-
+        #region reset all settings (restore original json files)
         private void LblConfirmReset_Click(object sender, EventArgs e)
         {
             if (lblConfirmReset.Text == "❌")
@@ -17641,7 +17703,7 @@ namespace SATSuma
 
             BtnExit_Click(sender, e);
         }
-
+        #endregion
         #endregion
 
         #region ⚡CREATE THEME SCREEN⚡
@@ -18058,6 +18120,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuCreateTheme.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -18090,6 +18153,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)
@@ -18847,7 +18911,7 @@ namespace SATSuma
             }
         }
 
-        private void lblChartsMediumBackground_Click(object sender, EventArgs e)
+        private void LblChartsMediumBackground_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18962,7 +19026,7 @@ namespace SATSuma
             loadingTheme.Show(this);
             #endregion
 
-            Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            Color menuAndHeaderButtonsColour;
             if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40,40,40))
             {
                 menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
@@ -21408,7 +21472,8 @@ namespace SATSuma
         {
             try
             {
-                Control[] listFiatConversionsToColor = { label288, lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat };
+                Control[] listFiatConversionsToColor = { label288, lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
+                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                 foreach (Control control in listFiatConversionsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -22258,7 +22323,7 @@ namespace SATSuma
 
         private void ComboBoxHeaderCustomThemes_MouseLeave(object sender, EventArgs e)
         {
-            Color menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
+            Color menuAndHeaderButtonsColour;
             if (chartsBackgroundColor == Color.FromArgb(20, 20, 20) || chartsBackgroundColor == Color.FromArgb(40, 40, 40))
             {
                 menuAndHeaderButtonsColour = Color.FromArgb(20, 20, 20);
@@ -22579,7 +22644,8 @@ namespace SATSuma
         {
             try
             {
-                Control[] listFiatConversionsToHide = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat };
+                Control[] listFiatConversionsToHide = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
+                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                 foreach (Control control in listFiatConversionsToHide)
                 {
                     control.Visible = false;
@@ -22596,7 +22662,8 @@ namespace SATSuma
             {
                 if (!testNet && !offlineMode && RunBitcoinExplorerEndpointAPI && RunBitcoinExplorerOrgJSONAPI)
                 {
-                    Control[] listFiatConversionsToShow = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat };
+                    Control[] listFiatConversionsToShow = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
+                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                     foreach (Control control in listFiatConversionsToShow)
                     {
                         control.Visible = true;
@@ -23886,6 +23953,10 @@ namespace SATSuma
 
         private void EnableAllMenuButtons()
         {
+            btnMenuCreateTheme.Invoke((MethodInvoker)delegate
+            {
+                btnMenuCreateTheme.BackgroundImage = null;
+            });
             btnMenuXpub.Enabled = true;
             btnMenuAddress.Enabled = true;
             btnMenuTransaction.Enabled = true;
@@ -23949,6 +24020,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuBitcoinDashboard.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -23977,6 +24049,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24001,6 +24074,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuLightningDashboard.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24029,6 +24103,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24053,6 +24128,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuCharts.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24081,7 +24157,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
-
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24106,6 +24182,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuAddress.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24134,6 +24211,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)
@@ -24160,6 +24238,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuBlock.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
 
                 #region display loading screen
@@ -24198,6 +24277,7 @@ namespace SATSuma
                 //close the loading screen
                 loadingScreen.Close();
                 #endregion
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24222,6 +24302,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuXpub.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24250,6 +24331,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)
@@ -24276,6 +24358,7 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = false;
                 EnableAllMenuButtons();
                 btnMenuBlockList.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24314,6 +24397,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24339,6 +24423,7 @@ namespace SATSuma
                 btnMenuTransaction.Enabled = false;
                 EnableAllMenuButtons();
                 btnMenuTransaction.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24367,6 +24452,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)
@@ -24392,6 +24478,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuBookmarks.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24422,6 +24509,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24446,6 +24534,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuPriceConverter.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24476,6 +24565,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24500,6 +24590,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuDCACalculator.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24528,7 +24619,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
-
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -24554,6 +24645,7 @@ namespace SATSuma
                 EnableAllMenuButtons();
                 this.DoubleBuffered = true;
                 btnMenuDirectory.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24582,6 +24674,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)
@@ -24607,6 +24700,7 @@ namespace SATSuma
                 });
                 EnableAllMenuButtons();
                 btnMenuSettings.Enabled = false;
+                ToggleLoadingAnimation("enable");
                 SuspendLayout();
                 #region display loading screen
                 // work out the position to place the loading form
@@ -24635,6 +24729,7 @@ namespace SATSuma
                 loadingScreen.Close();
                 #endregion
                 ResumeLayout();
+                ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
             }
             catch (Exception ex)

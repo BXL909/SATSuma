@@ -515,9 +515,7 @@
             this.lblTransactionOutputCount = new System.Windows.Forms.Label();
             this.label136 = new System.Windows.Forms.Label();
             this.panel102 = new System.Windows.Forms.Panel();
-            this.panel28 = new System.Windows.Forms.Panel();
             this.label107 = new System.Windows.Forms.Label();
-            this.panel27 = new System.Windows.Forms.Panel();
             this.label102 = new System.Windows.Forms.Label();
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
@@ -1175,6 +1173,14 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
+            this.panel117 = new System.Windows.Forms.Panel();
+            this.panel120 = new System.Windows.Forms.Panel();
+            this.panel121 = new System.Windows.Forms.Panel();
+            this.panel122 = new System.Windows.Forms.Panel();
+            this.panel123 = new System.Windows.Forms.Panel();
+            this.panel124 = new System.Windows.Forms.Panel();
+            this.panel125 = new System.Windows.Forms.Panel();
+            this.panel27 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1226,8 +1232,6 @@
             this.panelTransactionHeadline.SuspendLayout();
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
-            this.panel28.SuspendLayout();
-            this.panel27.SuspendLayout();
             this.panelXpub.SuspendLayout();
             this.panel30.SuspendLayout();
             this.panelXpubContainer.SuspendLayout();
@@ -1615,10 +1619,10 @@
             // 
             this.lblHalvingSecondsRemaining.AutoSize = true;
             this.lblHalvingSecondsRemaining.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblHalvingSecondsRemaining.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHalvingSecondsRemaining.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHalvingSecondsRemaining.Location = new System.Drawing.Point(363, 344);
             this.lblHalvingSecondsRemaining.Name = "lblHalvingSecondsRemaining";
-            this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(64, 18);
+            this.lblHalvingSecondsRemaining.Size = new System.Drawing.Size(61, 17);
             this.lblHalvingSecondsRemaining.TabIndex = 140;
             this.lblHalvingSecondsRemaining.Text = "no data";
             this.toolTip1.SetToolTip(this.lblHalvingSecondsRemaining, "(estimated)");
@@ -1667,7 +1671,7 @@
             this.lblAvgNoTransactions.AutoSize = true;
             this.lblAvgNoTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAvgNoTransactions.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAvgNoTransactions.Location = new System.Drawing.Point(3, 342);
+            this.lblAvgNoTransactions.Location = new System.Drawing.Point(3, 344);
             this.lblAvgNoTransactions.Name = "lblAvgNoTransactions";
             this.lblAvgNoTransactions.Size = new System.Drawing.Size(61, 17);
             this.lblAvgNoTransactions.TabIndex = 214;
@@ -3560,6 +3564,10 @@
             // panelBlockList
             // 
             this.panelBlockList.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlockList.Controls.Add(this.btnViewBlockFromBlockList);
+            this.panelBlockList.Controls.Add(this.listViewBlockList);
+            this.panelBlockList.Controls.Add(this.panel120);
+            this.panelBlockList.Controls.Add(this.panel117);
             this.panelBlockList.Controls.Add(this.lblBlockListHashrateChart);
             this.panelBlockList.Controls.Add(this.lblBlockListDifficultyChart);
             this.panelBlockList.Controls.Add(this.lblBlockListFeeChart2);
@@ -3597,8 +3605,6 @@
             this.panelBlockList.Controls.Add(this.panel19);
             this.panelBlockList.Controls.Add(this.panel17);
             this.panelBlockList.Controls.Add(this.panel14);
-            this.panelBlockList.Controls.Add(this.btnViewBlockFromBlockList);
-            this.panelBlockList.Controls.Add(this.listViewBlockList);
             this.panelBlockList.Controls.Add(this.lblBlockListPositionInList);
             this.panelBlockList.Controls.Add(this.btnNewer15Blocks);
             this.panelBlockList.Controls.Add(this.btnOlder15Blocks);
@@ -4056,7 +4062,7 @@
             this.listViewBlockList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBlockList.HideSelection = false;
             this.listViewBlockList.LabelWrap = false;
-            this.listViewBlockList.Location = new System.Drawing.Point(250, 3);
+            this.listViewBlockList.Location = new System.Drawing.Point(250, 11);
             this.listViewBlockList.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBlockList.MultiSelect = false;
             this.listViewBlockList.Name = "listViewBlockList";
@@ -4089,7 +4095,7 @@
             this.lblBlockListPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockListPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 294);
+            this.lblBlockListPositionInList.Location = new System.Drawing.Point(248, 310);
             this.lblBlockListPositionInList.Name = "lblBlockListPositionInList";
             this.lblBlockListPositionInList.Size = new System.Drawing.Size(91, 17);
             this.lblBlockListPositionInList.TabIndex = 157;
@@ -4107,7 +4113,7 @@
             this.btnNewer15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewer15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewer15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 294);
+            this.btnNewer15Blocks.Location = new System.Drawing.Point(598, 310);
             this.btnNewer15Blocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnNewer15Blocks.Name = "btnNewer15Blocks";
             this.btnNewer15Blocks.Size = new System.Drawing.Size(78, 22);
@@ -4130,7 +4136,7 @@
             this.btnOlder15Blocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOlder15Blocks.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOlder15Blocks.ForeColor = System.Drawing.Color.White;
-            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 294);
+            this.btnOlder15Blocks.Location = new System.Drawing.Point(681, 310);
             this.btnOlder15Blocks.Margin = new System.Windows.Forms.Padding(0);
             this.btnOlder15Blocks.Name = "btnOlder15Blocks";
             this.btnOlder15Blocks.Size = new System.Drawing.Size(70, 22);
@@ -5986,12 +5992,15 @@
             // panelAddress
             // 
             this.panelAddress.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddress.Controls.Add(this.panelOwnNodeAddressTXInfo);
             this.panelAddress.Controls.Add(this.BtnViewBlockFromAddress);
             this.panelAddress.Controls.Add(this.BtnViewTransactionFromAddress);
+            this.panelAddress.Controls.Add(this.listViewAddressTransactions);
+            this.panelAddress.Controls.Add(this.panel124);
+            this.panelAddress.Controls.Add(this.panel123);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedSpentFiat);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedReceivedFiat);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedUnspentFiat);
-            this.panelAddress.Controls.Add(this.panelOwnNodeAddressTXInfo);
             this.panelAddress.Controls.Add(this.panel44);
             this.panelAddress.Controls.Add(this.panel43);
             this.panelAddress.Controls.Add(this.panel42);
@@ -6003,7 +6012,6 @@
             this.panelAddress.Controls.Add(this.lblAddressTXPositionInList);
             this.panelAddress.Controls.Add(this.btnFirstAddressTransaction);
             this.panelAddress.Controls.Add(this.btnNextAddressTransactions);
-            this.panelAddress.Controls.Add(this.listViewAddressTransactions);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedUnspentOutputs);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedSpentOutputs);
             this.panelAddress.Controls.Add(this.lblAddressConfirmedReceivedOutputs);
@@ -6249,7 +6257,7 @@
             this.btnShowAllTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowAllTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowAllTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowAllTX.Location = new System.Drawing.Point(251, 518);
+            this.btnShowAllTX.Location = new System.Drawing.Point(251, 524);
             this.btnShowAllTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowAllTX.Name = "btnShowAllTX";
             this.btnShowAllTX.Size = new System.Drawing.Size(88, 22);
@@ -6273,7 +6281,7 @@
             this.btnShowConfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowConfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowConfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowConfirmedTX.Location = new System.Drawing.Point(346, 518);
+            this.btnShowConfirmedTX.Location = new System.Drawing.Point(346, 524);
             this.btnShowConfirmedTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowConfirmedTX.Name = "btnShowConfirmedTX";
             this.btnShowConfirmedTX.Size = new System.Drawing.Size(88, 22);
@@ -6296,7 +6304,7 @@
             this.btnShowUnconfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowUnconfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowUnconfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(441, 518);
+            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(441, 524);
             this.btnShowUnconfirmedTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowUnconfirmedTX.Name = "btnShowUnconfirmedTX";
             this.btnShowUnconfirmedTX.Size = new System.Drawing.Size(88, 22);
@@ -6314,7 +6322,7 @@
             this.lblAddressTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressTXPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 492);
+            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(248, 508);
             this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
             this.lblAddressTXPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblAddressTXPositionInList.TabIndex = 142;
@@ -6333,7 +6341,7 @@
             this.btnFirstAddressTransaction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFirstAddressTransaction.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFirstAddressTransaction.ForeColor = System.Drawing.Color.White;
-            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(614, 518);
+            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(614, 524);
             this.btnFirstAddressTransaction.Margin = new System.Windows.Forms.Padding(1);
             this.btnFirstAddressTransaction.Name = "btnFirstAddressTransaction";
             this.btnFirstAddressTransaction.Size = new System.Drawing.Size(68, 22);
@@ -6356,7 +6364,7 @@
             this.btnNextAddressTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextAddressTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextAddressTransactions.Location = new System.Drawing.Point(689, 518);
+            this.btnNextAddressTransactions.Location = new System.Drawing.Point(689, 524);
             this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
             this.btnNextAddressTransactions.Size = new System.Drawing.Size(60, 22);
@@ -6378,7 +6386,7 @@
             this.listViewAddressTransactions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewAddressTransactions.HideSelection = false;
             this.listViewAddressTransactions.LabelWrap = false;
-            this.listViewAddressTransactions.Location = new System.Drawing.Point(250, 36);
+            this.listViewAddressTransactions.Location = new System.Drawing.Point(250, 44);
             this.listViewAddressTransactions.MultiSelect = false;
             this.listViewAddressTransactions.Name = "listViewAddressTransactions";
             this.listViewAddressTransactions.OwnerDraw = true;
@@ -6514,6 +6522,11 @@
             // panelBlock
             // 
             this.panelBlock.BackColor = System.Drawing.Color.Transparent;
+            this.panelBlock.Controls.Add(this.btnViewTransactionFromBlock);
+            this.panelBlock.Controls.Add(this.panelOwnNodeBlockTXInfo);
+            this.panelBlock.Controls.Add(this.listViewBlockTransactions);
+            this.panelBlock.Controls.Add(this.panel122);
+            this.panelBlock.Controls.Add(this.panel121);
             this.panelBlock.Controls.Add(this.lblBlockScreenPoolRankingChart);
             this.panelBlock.Controls.Add(this.lblBlockScreenChartFeeRange);
             this.panelBlock.Controls.Add(this.lblBlockScreenChartReward);
@@ -6521,11 +6534,8 @@
             this.panelBlock.Controls.Add(this.lblBlockScreenChartBlockSize);
             this.panelBlock.Controls.Add(this.panel53);
             this.panelBlock.Controls.Add(this.lblRewardFiat);
-            this.panelBlock.Controls.Add(this.panelOwnNodeBlockTXInfo);
             this.panelBlock.Controls.Add(this.panel56);
             this.panelBlock.Controls.Add(this.lblTotalFeesFiat);
-            this.panelBlock.Controls.Add(this.btnViewTransactionFromBlock);
-            this.panelBlock.Controls.Add(this.listViewBlockTransactions);
             this.panelBlock.Controls.Add(this.label71);
             this.panelBlock.Controls.Add(this.lblBlockTXPositionInList);
             this.panelBlock.Controls.Add(this.btnPreviousBlockTransactions);
@@ -6825,7 +6835,7 @@
             this.lblBlockTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockTXPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockTXPositionInList.Location = new System.Drawing.Point(248, 512);
+            this.lblBlockTXPositionInList.Location = new System.Drawing.Point(248, 520);
             this.lblBlockTXPositionInList.Name = "lblBlockTXPositionInList";
             this.lblBlockTXPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblBlockTXPositionInList.TabIndex = 157;
@@ -6844,7 +6854,7 @@
             this.btnPreviousBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreviousBlockTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPreviousBlockTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnPreviousBlockTransactions.Location = new System.Drawing.Point(495, 518);
+            this.btnPreviousBlockTransactions.Location = new System.Drawing.Point(495, 526);
             this.btnPreviousBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnPreviousBlockTransactions.Name = "btnPreviousBlockTransactions";
             this.btnPreviousBlockTransactions.Size = new System.Drawing.Size(123, 22);
@@ -6879,7 +6889,7 @@
             this.btnNextBlockTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextBlockTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextBlockTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextBlockTransactions.Location = new System.Drawing.Point(625, 518);
+            this.btnNextBlockTransactions.Location = new System.Drawing.Point(625, 526);
             this.btnNextBlockTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnNextBlockTransactions.Name = "btnNextBlockTransactions";
             this.btnNextBlockTransactions.Size = new System.Drawing.Size(123, 22);
@@ -7637,18 +7647,19 @@
             // panelTransaction
             // 
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
-            this.panelTransaction.Controls.Add(this.panelTransactionIDContainer);
-            this.panelTransaction.Controls.Add(this.panel25);
+            this.panelTransaction.Controls.Add(this.label107);
+            this.panelTransaction.Controls.Add(this.label102);
             this.panelTransaction.Controls.Add(this.panel24);
-            this.panelTransaction.Controls.Add(this.panelTransactionOutputs);
             this.panelTransaction.Controls.Add(this.panelTransactionInputs);
+            this.panelTransaction.Controls.Add(this.panel25);
+            this.panelTransaction.Controls.Add(this.panelTransactionOutputs);
+            this.panelTransaction.Controls.Add(this.panel125);
+            this.panelTransaction.Controls.Add(this.panelTransactionIDContainer);
             this.panelTransaction.Controls.Add(this.lblInvalidTransaction);
             this.panelTransaction.Controls.Add(this.panelTransactionHeadline);
             this.panelTransaction.Controls.Add(this.panelTransactionDiagram);
             this.panelTransaction.Controls.Add(this.label136);
             this.panelTransaction.Controls.Add(this.panel102);
-            this.panelTransaction.Controls.Add(this.panel28);
-            this.panelTransaction.Controls.Add(this.panel27);
             this.panelTransaction.Location = new System.Drawing.Point(162, 187);
             this.panelTransaction.Name = "panelTransaction";
             this.panelTransaction.Size = new System.Drawing.Size(773, 556);
@@ -7684,7 +7695,7 @@
             this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel25.Controls.Add(this.btnTransactionOutputsUp);
             this.panel25.Controls.Add(this.btnTransactionOutputsDown);
-            this.panel25.Location = new System.Drawing.Point(734, 433);
+            this.panel25.Location = new System.Drawing.Point(730, 433);
             this.panel25.Name = "panel25";
             this.panel25.Size = new System.Drawing.Size(21, 105);
             this.panel25.TabIndex = 215;
@@ -7735,7 +7746,7 @@
             this.panel24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel24.Controls.Add(this.btnTransactionInputsUp);
             this.panel24.Controls.Add(this.btnTransactionInputDown);
-            this.panel24.Location = new System.Drawing.Point(356, 433);
+            this.panel24.Location = new System.Drawing.Point(360, 433);
             this.panel24.Name = "panel24";
             this.panel24.Size = new System.Drawing.Size(26, 105);
             this.panel24.TabIndex = 213;
@@ -7786,7 +7797,7 @@
             this.panelTransactionOutputs.AutoScroll = true;
             this.panelTransactionOutputs.Controls.Add(this.btnViewAddressFromTXOutput);
             this.panelTransactionOutputs.Controls.Add(this.listViewTransactionOutputs);
-            this.panelTransactionOutputs.Location = new System.Drawing.Point(388, 433);
+            this.panelTransactionOutputs.Location = new System.Drawing.Point(384, 433);
             this.panelTransactionOutputs.Name = "panelTransactionOutputs";
             this.panelTransactionOutputs.Size = new System.Drawing.Size(363, 104);
             this.panelTransactionOutputs.TabIndex = 214;
@@ -7827,7 +7838,7 @@
             this.panelTransactionInputs.AutoScroll = true;
             this.panelTransactionInputs.Controls.Add(this.btnViewAddressFromTXInput);
             this.panelTransactionInputs.Controls.Add(this.listViewTransactionInputs);
-            this.panelTransactionInputs.Location = new System.Drawing.Point(10, 433);
+            this.panelTransactionInputs.Location = new System.Drawing.Point(14, 433);
             this.panelTransactionInputs.Name = "panelTransactionInputs";
             this.panelTransactionInputs.Size = new System.Drawing.Size(363, 104);
             this.panelTransactionInputs.TabIndex = 212;
@@ -8025,7 +8036,7 @@
             this.panelTransactionDiagram.Controls.Add(this.lblTransactionOutputCount);
             this.panelTransactionDiagram.Location = new System.Drawing.Point(9, 64);
             this.panelTransactionDiagram.Name = "panelTransactionDiagram";
-            this.panelTransactionDiagram.Size = new System.Drawing.Size(753, 350);
+            this.panelTransactionDiagram.Size = new System.Drawing.Size(753, 338);
             this.panelTransactionDiagram.TabIndex = 170;
             this.panelTransactionDiagram.Visible = false;
             this.panelTransactionDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelTransactionDiagram_Paint);
@@ -8107,7 +8118,7 @@
             this.panelTransactionMiddle.Controls.Add(this.label130);
             this.panelTransactionMiddle.Controls.Add(this.lblTransactionSize);
             this.panelTransactionMiddle.Controls.Add(this.lblTransactionWeight);
-            this.panelTransactionMiddle.Location = new System.Drawing.Point(335, 135);
+            this.panelTransactionMiddle.Location = new System.Drawing.Point(335, 129);
             this.panelTransactionMiddle.Name = "panelTransactionMiddle";
             this.panelTransactionMiddle.Size = new System.Drawing.Size(80, 80);
             this.panelTransactionMiddle.TabIndex = 0;
@@ -8223,44 +8234,19 @@
             this.panel102.TabIndex = 216;
             this.panel102.Visible = false;
             // 
-            // panel28
-            // 
-            this.panel28.BackColor = System.Drawing.Color.Transparent;
-            this.panel28.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel28.BackgroundImage")));
-            this.panel28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel28.Controls.Add(this.label107);
-            this.panel28.Location = new System.Drawing.Point(388, 412);
-            this.panel28.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(370, 23);
-            this.panel28.TabIndex = 198;
-            this.panel28.Visible = false;
-            // 
             // label107
             // 
             this.label107.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label107.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label107.ForeColor = System.Drawing.Color.Gray;
             this.label107.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label107.Location = new System.Drawing.Point(5, 2);
+            this.label107.Location = new System.Drawing.Point(554, 408);
             this.label107.Name = "label107";
             this.label107.Size = new System.Drawing.Size(200, 16);
             this.label107.TabIndex = 153;
             this.label107.Text = "Transaction outputs";
-            this.label107.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // panel27
-            // 
-            this.panel27.BackColor = System.Drawing.Color.Transparent;
-            this.panel27.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel27.BackgroundImage")));
-            this.panel27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel27.Controls.Add(this.label102);
-            this.panel27.Location = new System.Drawing.Point(7, 412);
-            this.panel27.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(370, 23);
-            this.panel27.TabIndex = 197;
-            this.panel27.Visible = false;
+            this.label107.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label107.Visible = false;
             // 
             // label102
             // 
@@ -8268,12 +8254,13 @@
             this.label102.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label102.ForeColor = System.Drawing.Color.Gray;
             this.label102.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label102.Location = new System.Drawing.Point(5, 2);
+            this.label102.Location = new System.Drawing.Point(9, 408);
             this.label102.Name = "label102";
             this.label102.Size = new System.Drawing.Size(200, 16);
             this.label102.TabIndex = 153;
             this.label102.Text = "Transaction inputs";
             this.label102.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label102.Visible = false;
             // 
             // TXInScrollTimer
             // 
@@ -8335,7 +8322,7 @@
             this.panel30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel30.Controls.Add(this.btnXpubAddressesDown);
             this.panel30.Controls.Add(this.btnXpubAddressesUp);
-            this.panel30.Location = new System.Drawing.Point(712, 85);
+            this.panel30.Location = new System.Drawing.Point(712, 93);
             this.panel30.Name = "panel30";
             this.panel30.Size = new System.Drawing.Size(32, 446);
             this.panel30.TabIndex = 214;
@@ -8351,7 +8338,7 @@
             this.btnXpubAddressesDown.ForeColor = System.Drawing.Color.White;
             this.btnXpubAddressesDown.Location = new System.Drawing.Point(3, 422);
             this.btnXpubAddressesDown.Name = "btnXpubAddressesDown";
-            this.btnXpubAddressesDown.Size = new System.Drawing.Size(28, 24);
+            this.btnXpubAddressesDown.Size = new System.Drawing.Size(24, 24);
             this.btnXpubAddressesDown.TabIndex = 212;
             this.btnXpubAddressesDown.TabStop = false;
             this.btnXpubAddressesDown.Text = "▼";
@@ -8371,7 +8358,7 @@
             this.btnXpubAddressesUp.ForeColor = System.Drawing.Color.White;
             this.btnXpubAddressesUp.Location = new System.Drawing.Point(3, 1);
             this.btnXpubAddressesUp.Name = "btnXpubAddressesUp";
-            this.btnXpubAddressesUp.Size = new System.Drawing.Size(28, 24);
+            this.btnXpubAddressesUp.Size = new System.Drawing.Size(24, 24);
             this.btnXpubAddressesUp.TabIndex = 214;
             this.btnXpubAddressesUp.TabStop = false;
             this.btnXpubAddressesUp.Text = "▲";
@@ -8386,9 +8373,9 @@
             this.panelXpubContainer.AutoScroll = true;
             this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
             this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
-            this.panelXpubContainer.Location = new System.Drawing.Point(249, 85);
+            this.panelXpubContainer.Location = new System.Drawing.Point(251, 93);
             this.panelXpubContainer.Name = "panelXpubContainer";
-            this.panelXpubContainer.Size = new System.Drawing.Size(494, 446);
+            this.panelXpubContainer.Size = new System.Drawing.Size(492, 446);
             this.panelXpubContainer.TabIndex = 213;
             this.panelXpubContainer.Visible = false;
             this.panelXpubContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpubContainer_Paint);
@@ -8907,7 +8894,7 @@
             this.panel101.BackColor = System.Drawing.Color.IndianRed;
             this.panel101.Location = new System.Drawing.Point(249, 85);
             this.panel101.Name = "panel101";
-            this.panel101.Size = new System.Drawing.Size(493, 448);
+            this.panel101.Size = new System.Drawing.Size(495, 464);
             this.panel101.TabIndex = 239;
             this.panel101.Visible = false;
             // 
@@ -9208,7 +9195,7 @@
             this.textBoxBookmarkEncryptionKey.ForeColor = System.Drawing.Color.Gray;
             this.textBoxBookmarkEncryptionKey.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkEncryptionKey.Name = "textBoxBookmarkEncryptionKey";
-            this.textBoxBookmarkEncryptionKey.Size = new System.Drawing.Size(252, 15);
+            this.textBoxBookmarkEncryptionKey.Size = new System.Drawing.Size(238, 15);
             this.textBoxBookmarkEncryptionKey.TabIndex = 216;
             this.textBoxBookmarkEncryptionKey.TabStop = false;
             this.textBoxBookmarkEncryptionKey.Text = "optional encryption key";
@@ -9235,7 +9222,7 @@
             this.textBoxBookmarkProposedNote.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkProposedNote.MaxLength = 165;
             this.textBoxBookmarkProposedNote.Name = "textBoxBookmarkProposedNote";
-            this.textBoxBookmarkProposedNote.Size = new System.Drawing.Size(252, 15);
+            this.textBoxBookmarkProposedNote.Size = new System.Drawing.Size(238, 15);
             this.textBoxBookmarkProposedNote.TabIndex = 215;
             this.textBoxBookmarkProposedNote.TabStop = false;
             this.textBoxBookmarkProposedNote.Text = "optional notes";
@@ -9528,6 +9515,7 @@
             this.panelBookmarks.Controls.Add(this.panel33);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
             this.panelBookmarks.Controls.Add(this.panel36);
+            this.panelBookmarks.Controls.Add(this.panel27);
             this.panelBookmarks.Location = new System.Drawing.Point(162, 187);
             this.panelBookmarks.Name = "panelBookmarks";
             this.panelBookmarks.Size = new System.Drawing.Size(773, 556);
@@ -9743,9 +9731,9 @@
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel33.Controls.Add(this.btnBookmarksListDown);
             this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Location = new System.Drawing.Point(717, 37);
+            this.panel33.Location = new System.Drawing.Point(717, 45);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(31, 408);
+            this.panel33.Size = new System.Drawing.Size(31, 393);
             this.panel33.TabIndex = 214;
             // 
             // btnBookmarksListDown
@@ -9756,13 +9744,12 @@
             this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListDown.Location = new System.Drawing.Point(1, 384);
+            this.btnBookmarksListDown.Location = new System.Drawing.Point(5, 368);
             this.btnBookmarksListDown.Name = "btnBookmarksListDown";
-            this.btnBookmarksListDown.Size = new System.Drawing.Size(28, 24);
+            this.btnBookmarksListDown.Size = new System.Drawing.Size(24, 24);
             this.btnBookmarksListDown.TabIndex = 212;
             this.btnBookmarksListDown.TabStop = false;
             this.btnBookmarksListDown.Text = "▼";
-            this.btnBookmarksListDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBookmarksListDown.UseVisualStyleBackColor = false;
             this.btnBookmarksListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
             this.btnBookmarksListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
@@ -9776,13 +9763,12 @@
             this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.Location = new System.Drawing.Point(1, 0);
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(5, 0);
             this.btnBookmarksListUp.Name = "btnBookmarksListUp";
-            this.btnBookmarksListUp.Size = new System.Drawing.Size(28, 24);
+            this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
             this.btnBookmarksListUp.TabIndex = 214;
             this.btnBookmarksListUp.TabStop = false;
             this.btnBookmarksListUp.Text = "▲";
-            this.btnBookmarksListUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBookmarksListUp.UseVisualStyleBackColor = false;
             this.btnBookmarksListUp.Click += new System.EventHandler(this.BtnBookmarksListUp_Click);
             this.btnBookmarksListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseDown);
@@ -9793,9 +9779,9 @@
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
             this.panelBookmarksContainer.Controls.Add(this.panel100);
-            this.panelBookmarksContainer.Location = new System.Drawing.Point(0, 37);
+            this.panelBookmarksContainer.Location = new System.Drawing.Point(2, 45);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
-            this.panelBookmarksContainer.Size = new System.Drawing.Size(747, 408);
+            this.panelBookmarksContainer.Size = new System.Drawing.Size(745, 390);
             this.panelBookmarksContainer.TabIndex = 213;
             this.panelBookmarksContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelBookmarksContainer_Paint);
             // 
@@ -9818,7 +9804,7 @@
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(717, 409);
+            this.listViewBookmarks.Size = new System.Drawing.Size(717, 385);
             this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
@@ -9832,9 +9818,9 @@
             // panel100
             // 
             this.panel100.BackColor = System.Drawing.Color.IndianRed;
-            this.panel100.Location = new System.Drawing.Point(1, -10);
+            this.panel100.Location = new System.Drawing.Point(1, -2);
             this.panel100.Name = "panel100";
-            this.panel100.Size = new System.Drawing.Size(725, 420);
+            this.panel100.Size = new System.Drawing.Size(725, 380);
             this.panel100.TabIndex = 165;
             // 
             // panel36
@@ -9899,7 +9885,7 @@
             this.label285.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label285.ForeColor = System.Drawing.Color.Silver;
             this.label285.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label285.Location = new System.Drawing.Point(10, 8);
+            this.label285.Location = new System.Drawing.Point(10, 7);
             this.label285.Name = "label285";
             this.label285.Size = new System.Drawing.Size(82, 16);
             this.label285.TabIndex = 255;
@@ -9944,7 +9930,7 @@
             this.label284.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label284.ForeColor = System.Drawing.Color.Silver;
             this.label284.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label284.Location = new System.Drawing.Point(3, 8);
+            this.label284.Location = new System.Drawing.Point(3, 7);
             this.label284.Name = "label284";
             this.label284.Size = new System.Drawing.Size(117, 16);
             this.label284.TabIndex = 255;
@@ -9976,12 +9962,12 @@
             // 
             this.lblBookmarkTotalCount.AutoSize = true;
             this.lblBookmarkTotalCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBookmarkTotalCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBookmarkTotalCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblBookmarkTotalCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblBookmarkTotalCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBookmarkTotalCount.Location = new System.Drawing.Point(3, 7);
             this.lblBookmarkTotalCount.Name = "lblBookmarkTotalCount";
-            this.lblBookmarkTotalCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkTotalCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkTotalCount.TabIndex = 214;
             this.lblBookmarkTotalCount.Text = "0";
             // 
@@ -9991,7 +9977,7 @@
             this.label144.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label144.ForeColor = System.Drawing.Color.Silver;
             this.label144.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label144.Location = new System.Drawing.Point(20, 8);
+            this.label144.Location = new System.Drawing.Point(20, 7);
             this.label144.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label144.Name = "label144";
             this.label144.Size = new System.Drawing.Size(75, 16);
@@ -10004,7 +9990,7 @@
             this.label153.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label153.ForeColor = System.Drawing.Color.Silver;
             this.label153.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label153.Location = new System.Drawing.Point(107, 8);
+            this.label153.Location = new System.Drawing.Point(107, 7);
             this.label153.Name = "label153";
             this.label153.Size = new System.Drawing.Size(62, 16);
             this.label153.TabIndex = 153;
@@ -10014,10 +10000,10 @@
             // 
             this.lblBookmarkBlocksCount.AutoSize = true;
             this.lblBookmarkBlocksCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBookmarkBlocksCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBookmarkBlocksCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblBookmarkBlocksCount.Location = new System.Drawing.Point(166, 7);
             this.lblBookmarkBlocksCount.Name = "lblBookmarkBlocksCount";
-            this.lblBookmarkBlocksCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkBlocksCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkBlocksCount.TabIndex = 213;
             this.lblBookmarkBlocksCount.Text = "0";
             // 
@@ -10027,7 +10013,7 @@
             this.label151.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label151.ForeColor = System.Drawing.Color.Silver;
             this.label151.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label151.Location = new System.Drawing.Point(180, 8);
+            this.label151.Location = new System.Drawing.Point(180, 7);
             this.label151.Name = "label151";
             this.label151.Size = new System.Drawing.Size(41, 16);
             this.label151.TabIndex = 167;
@@ -10037,10 +10023,10 @@
             // 
             this.lblBookmarkTransactionsCount.AutoSize = true;
             this.lblBookmarkTransactionsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBookmarkTransactionsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBookmarkTransactionsCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblBookmarkTransactionsCount.Location = new System.Drawing.Point(218, 7);
             this.lblBookmarkTransactionsCount.Name = "lblBookmarkTransactionsCount";
-            this.lblBookmarkTransactionsCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkTransactionsCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkTransactionsCount.TabIndex = 212;
             this.lblBookmarkTransactionsCount.Text = "0";
             // 
@@ -10050,7 +10036,7 @@
             this.label147.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label147.ForeColor = System.Drawing.Color.Silver;
             this.label147.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label147.Location = new System.Drawing.Point(232, 8);
+            this.label147.Location = new System.Drawing.Point(232, 7);
             this.label147.Name = "label147";
             this.label147.Size = new System.Drawing.Size(76, 16);
             this.label147.TabIndex = 200;
@@ -10060,10 +10046,10 @@
             // 
             this.lblBookmarkAddressCount.AutoSize = true;
             this.lblBookmarkAddressCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBookmarkAddressCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBookmarkAddressCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblBookmarkAddressCount.Location = new System.Drawing.Point(93, 7);
             this.lblBookmarkAddressCount.Name = "lblBookmarkAddressCount";
-            this.lblBookmarkAddressCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkAddressCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkAddressCount.TabIndex = 211;
             this.lblBookmarkAddressCount.Text = "0";
             // 
@@ -10071,10 +10057,10 @@
             // 
             this.lblBookmarkXpubsCount.AutoSize = true;
             this.lblBookmarkXpubsCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBookmarkXpubsCount.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBookmarkXpubsCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblBookmarkXpubsCount.Location = new System.Drawing.Point(305, 7);
             this.lblBookmarkXpubsCount.Name = "lblBookmarkXpubsCount";
-            this.lblBookmarkXpubsCount.Size = new System.Drawing.Size(14, 14);
+            this.lblBookmarkXpubsCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkXpubsCount.TabIndex = 202;
             this.lblBookmarkXpubsCount.Text = "0";
             // 
@@ -10084,7 +10070,7 @@
             this.label142.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.label142.ForeColor = System.Drawing.Color.Silver;
             this.label142.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label142.Location = new System.Drawing.Point(319, 8);
+            this.label142.Location = new System.Drawing.Point(319, 7);
             this.label142.Name = "label142";
             this.label142.Size = new System.Drawing.Size(44, 16);
             this.label142.TabIndex = 203;
@@ -18049,6 +18035,71 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
+            // panel117
+            // 
+            this.panel117.BackColor = System.Drawing.Color.White;
+            this.panel117.Location = new System.Drawing.Point(250, 3);
+            this.panel117.Name = "panel117";
+            this.panel117.Size = new System.Drawing.Size(499, 20);
+            this.panel117.TabIndex = 276;
+            // 
+            // panel120
+            // 
+            this.panel120.BackColor = System.Drawing.Color.White;
+            this.panel120.Location = new System.Drawing.Point(250, 286);
+            this.panel120.Name = "panel120";
+            this.panel120.Size = new System.Drawing.Size(499, 20);
+            this.panel120.TabIndex = 277;
+            // 
+            // panel121
+            // 
+            this.panel121.BackColor = System.Drawing.Color.White;
+            this.panel121.Location = new System.Drawing.Point(250, 28);
+            this.panel121.Name = "panel121";
+            this.panel121.Size = new System.Drawing.Size(499, 20);
+            this.panel121.TabIndex = 277;
+            // 
+            // panel122
+            // 
+            this.panel122.BackColor = System.Drawing.Color.White;
+            this.panel122.Location = new System.Drawing.Point(250, 500);
+            this.panel122.Name = "panel122";
+            this.panel122.Size = new System.Drawing.Size(499, 20);
+            this.panel122.TabIndex = 278;
+            // 
+            // panel123
+            // 
+            this.panel123.BackColor = System.Drawing.Color.White;
+            this.panel123.Location = new System.Drawing.Point(250, 36);
+            this.panel123.Name = "panel123";
+            this.panel123.Size = new System.Drawing.Size(499, 20);
+            this.panel123.TabIndex = 217;
+            // 
+            // panel124
+            // 
+            this.panel124.BackColor = System.Drawing.Color.White;
+            this.panel124.Location = new System.Drawing.Point(250, 484);
+            this.panel124.Name = "panel124";
+            this.panel124.Size = new System.Drawing.Size(499, 20);
+            this.panel124.TabIndex = 218;
+            // 
+            // panel125
+            // 
+            this.panel125.BackColor = System.Drawing.Color.White;
+            this.panel125.Location = new System.Drawing.Point(9, 424);
+            this.panel125.Name = "panel125";
+            this.panel125.Size = new System.Drawing.Size(745, 126);
+            this.panel125.TabIndex = 278;
+            this.panel125.Visible = false;
+            // 
+            // panel27
+            // 
+            this.panel27.BackColor = System.Drawing.Color.White;
+            this.panel27.Location = new System.Drawing.Point(0, 37);
+            this.panel27.Name = "panel27";
+            this.panel27.Size = new System.Drawing.Size(747, 408);
+            this.panel27.TabIndex = 216;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -18058,18 +18109,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
@@ -18193,8 +18244,6 @@
             this.panelTransactionDiagram.ResumeLayout(false);
             this.panelTransactionDiagram.PerformLayout();
             this.panelTransactionMiddle.ResumeLayout(false);
-            this.panel28.ResumeLayout(false);
-            this.panel27.ResumeLayout(false);
             this.panelXpub.ResumeLayout(false);
             this.panelXpub.PerformLayout();
             this.panel30.ResumeLayout(false);
@@ -18966,9 +19015,7 @@
         private System.Windows.Forms.PictureBox pictureBoxSatsuma;
         private System.Windows.Forms.Panel panel100;
         private System.Windows.Forms.Panel panel101;
-        private System.Windows.Forms.Panel panel27;
         private System.Windows.Forms.Label label102;
-        private System.Windows.Forms.Panel panel28;
         private System.Windows.Forms.Label label107;
         private System.Windows.Forms.Panel panel25;
         private System.Windows.Forms.Button btnTransactionOutputsUp;
@@ -19550,6 +19597,14 @@
         private System.Windows.Forms.Label lblAverageBaseFeeMtokensFiat;
         private System.Windows.Forms.Label lblMedFeeRateFiat;
         private System.Windows.Forms.Label lblMedBaseFeeTokensFiat;
+        private System.Windows.Forms.Panel panel120;
+        private System.Windows.Forms.Panel panel117;
+        private System.Windows.Forms.Panel panel121;
+        private System.Windows.Forms.Panel panel122;
+        private System.Windows.Forms.Panel panel124;
+        private System.Windows.Forms.Panel panel123;
+        private System.Windows.Forms.Panel panel125;
+        private System.Windows.Forms.Panel panel27;
     }
 }
 

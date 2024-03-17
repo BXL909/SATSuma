@@ -26,7 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* add more sample bookmarks
+* TX screen - reposition 'view address' button
+* tidy bookmarks panel
 * more testing!
 */
 
@@ -62,9 +63,7 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
-using ScottPlot.Drawing.Colormaps;
-using static ScottPlot.Plottable.PopulationPlot;
-using ScottPlot.Plottable;
+
 #endregion
 
 namespace SATSuma
@@ -431,6 +430,15 @@ namespace SATSuma
             panel119.Paint += Panel_Paint;
             panelPriceConvert.Paint += Panel_Paint;
             panelDCAChartContainer.Paint += Panel_Paint;
+            panel117.Paint += Panel_Paint;
+            panel120.Paint += Panel_Paint;
+            panel121.Paint += Panel_Paint;
+            panel122.Paint += Panel_Paint;
+            panel123.Paint += Panel_Paint;
+            panel124.Paint += Panel_Paint;
+            panel125.Paint += Panel_Paint;
+            panel101.Paint += Panel_Paint;
+            panel27.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             panelThemeNameContainer.Paint += Panel_Paint;
@@ -480,8 +488,6 @@ namespace SATSuma
             panel23.Paint += Panel_Paint;
             panel26.Paint += Panel_Paint;
             panel29.Paint += Panel_Paint;
-            panel27.Paint += Panel_Paint;
-            panel28.Paint += Panel_Paint;
             panel31.Paint += Panel_Paint;
             panel38.Paint += Panel_Paint;
             panel39.Paint += Panel_Paint;
@@ -1125,7 +1131,7 @@ namespace SATSuma
                                 lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
                                 {
                                     string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
-                                    lblAverageBaseFeeMtokensFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblAverageBaseFeeMtokensFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4");
                                     lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
                                 });
                                 lblMedCapacity.Invoke((MethodInvoker)delegate
@@ -1155,7 +1161,7 @@ namespace SATSuma
                                 lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
                                 {
                                     string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
-                                    lblMedBaseFeeTokensFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency).ToString("N2");
+                                    lblMedBaseFeeTokensFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4");
                                     lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
                                 });
                                 lblClearnetTorNodes.Invoke((MethodInvoker)delegate
@@ -4354,7 +4360,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockTransactions.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockTransactions.Columns.Add(" Transaction ID", (int)(250 * UIScale));
+                            listViewBlockTransactions.Columns.Add("Transaction ID", (int)(250 * UIScale));
                         });
                     }
 
@@ -4893,8 +4899,6 @@ namespace SATSuma
                         panelTransactionDiagram.Visible = false;
                         panel24.Visible = false;
                         panel25.Visible = false;
-                        panel27.Visible = false;
-                        panel28.Visible = false;
                         panel102.Visible = false;
                         panelTransactionOutputs.Visible = false;
                         panelTransactionInputs.Visible = false;
@@ -4906,6 +4910,9 @@ namespace SATSuma
                         listViewTransactionOutputs.Visible = false;
                         btnViewAddressFromTXInput.Visible = false;
                         btnViewAddressFromTXOutput.Visible = false;
+                        label107.Visible = false;
+                        label102.Visible = false;
+                        panel125.Visible = false;
                         lblInvalidTransaction.Invoke((MethodInvoker)delegate
                         {
                             lblInvalidTransaction.ForeColor = Color.IndianRed;
@@ -4919,8 +4926,6 @@ namespace SATSuma
                     panelTransactionDiagram.Visible = false;
                     panel24.Visible = false;
                     panel25.Visible = false;
-                    panel27.Visible = false;
-                    panel28.Visible = false;
                     panel102.Visible = false;
                     panelTransactionOutputs.Visible = false;
                     panelTransactionInputs.Visible = false;
@@ -4932,6 +4937,9 @@ namespace SATSuma
                     listViewTransactionOutputs.Visible = false;
                     btnViewAddressFromTXInput.Visible = false;
                     btnViewAddressFromTXOutput.Visible = false;
+                    label107.Visible = false;
+                    label102.Visible = false;
+                    panel125.Visible = false;
                     if (transactionIdToValidate == "")
                     {
                         lblInvalidTransaction.Invoke((MethodInvoker)delegate
@@ -5488,8 +5496,6 @@ namespace SATSuma
             panelTransactionDiagram.Visible = true;
             panel24.Visible = true;
             panel25.Visible = true;
-            panel27.Visible = true;
-            panel28.Visible = true;
             panel102.Visible = true;
             panelTransactionOutputs.Visible = true;
             panelTransactionInputs.Visible = true;
@@ -5501,6 +5507,9 @@ namespace SATSuma
             listViewTransactionOutputs.Visible = true;
             btnViewAddressFromTXInput.Visible = true;
             btnViewAddressFromTXOutput.Visible = true;
+            label107.Visible = true;
+            label102.Visible = true;
+            panel125.Visible = true;
         }
         #endregion
         #region listview appearance
@@ -6320,7 +6329,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
-                            listViewBlockList.Columns.Add(" Date / time", (int)(115 * UIScale));
+                            listViewBlockList.Columns.Add("Date / time", (int)(115 * UIScale));
                         });
                     }
 
@@ -6509,7 +6518,7 @@ namespace SATSuma
                     Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
                     panel14.Invoke((MethodInvoker)delegate
                     {
-                        panel14.Top = itemRect.Top + (int)(8 * UIScale);
+                        panel14.Top = itemRect.Top + (int)(16 * UIScale);
                     });
                     panel19.Invoke((MethodInvoker)delegate
                     {
@@ -12735,7 +12744,7 @@ namespace SATSuma
         {
             try
             {
-                DateTime today = DateTime.Today;
+                DateTime today = DateTime.Today.Date;
                 bool toBeEncrypted = false;
                 if (textBoxBookmarkEncryptionKey.Text == "" || textBoxBookmarkEncryptionKey.Text == "optional encryption key")
                 {
@@ -13119,7 +13128,7 @@ namespace SATSuma
                     // If not, add the column header
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add(" Date added", (int)(100 * UIScale));
+                        listViewBookmarks.Columns.Add("Date added", (int)(80 * UIScale));
                     });
                 }
 
@@ -13127,7 +13136,7 @@ namespace SATSuma
                 {
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Type", (int)(95 * UIScale));
+                        listViewBookmarks.Columns.Add("Type", (int)(80 * UIScale));
                     });
                 }
 
@@ -13142,14 +13151,14 @@ namespace SATSuma
                 {
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Bookmark", (int)(233 * UIScale));
+                        listViewBookmarks.Columns.Add("Bookmark", (int)(203 * UIScale));
                     });
                 }
                 if (listViewBookmarks.Columns.Count == 4)
                 {
                     listViewBookmarks.Invoke((MethodInvoker)delegate
                     {
-                        listViewBookmarks.Columns.Add("Note", (int)(600 * UIScale));
+                        listViewBookmarks.Columns.Add("Note", (int)(665 * UIScale));
                     });
                 }
                 if (listViewBookmarks.Columns.Count == 5)
@@ -13170,7 +13179,8 @@ namespace SATSuma
                 {
                     if (bookmark.Type != "node" && bookmark.Type != "defaulttheme" && bookmark.Type != "settings")
                     {
-                        ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
+                        //ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
+                        ListViewItem item = new ListViewItem(bookmark.DateAdded.ToString("yyyy-MM-dd").Substring(0, 10));
                         item.SubItems.Add(bookmark.Type);
                         if (bookmark.Encrypted == true)
                         {
@@ -13602,24 +13612,24 @@ namespace SATSuma
             {
                 if (e.ColumnIndex == 0)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(80 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(100 * UIScale);
+                        e.NewWidth = (int)(80 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(150 * UIScale)) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(80 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(150 * UIScale);
+                        e.NewWidth = (int)(80 * UIScale);
                     }
                 }
 
                 if (e.ColumnIndex == 1)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != (int)(95 * UIScale)) // don't allow this one to change
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width != (int)(80 * UIScale)) // don't allow this one to change
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(95 * UIScale);
+                        e.NewWidth = (int)(80 * UIScale);
                     }
                 }
 
@@ -13635,28 +13645,28 @@ namespace SATSuma
 
                 if (e.ColumnIndex == 3)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(203 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(100 * UIScale);
+                        e.NewWidth = (int)(203 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(400 * UIScale)) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(203 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(400 * UIScale);
+                        e.NewWidth = (int)(203 * UIScale);
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(100 * UIScale)) // min width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width < (int)(665 * UIScale)) // min width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(100 * UIScale);
+                        e.NewWidth = (int)(665 * UIScale);
                     }
-                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(600 * UIScale)) // max width
+                    if (listViewBookmarks.Columns[e.ColumnIndex].Width > (int)(665 * UIScale)) // max width
                     {
                         e.Cancel = true;
-                        e.NewWidth = (int)(600 * UIScale);
+                        e.NewWidth = (int)(665 * UIScale);
                     }
                 }
             }
@@ -20994,6 +21004,14 @@ namespace SATSuma
                 panel119.Invalidate();
                 panelPriceConvert.Invalidate();
                 panelDCAChartContainer.Invalidate();
+                panel117.Invalidate();
+                panel120.Invalidate();
+                panel121.Invalidate();
+                panel122.Invalidate();
+                panel123.Invalidate();
+                panel124.Invalidate();
+                panel125.Invalidate();
+                panel101.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -21026,6 +21044,7 @@ namespace SATSuma
                 panel113.Invalidate();
                 panel114.Invalidate();
                 panel115.Invalidate();
+                panel27.Invalidate();
                 #endregion
                 #region panels (heading containers)
                 panel1.Invalidate();
@@ -21044,8 +21063,6 @@ namespace SATSuma
                 panel23.Invalidate();
                 panel26.Invalidate();
                 panel29.Invalidate();
-                panel27.Invalidate();
-                panel28.Invalidate();
                 panel31.Invalidate();
                 panel38.Invalidate();
                 panel39.Invalidate();
@@ -21420,7 +21437,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //transaction
-                Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label130, label132 };
+                Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label130, label132, label102, label107 };
                 foreach (Control control in listTransactionLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21532,7 +21549,7 @@ namespace SATSuma
                     control.ForeColor = thiscolor;
                 }
                 //transaction
-                Control[] listTransactionHeadingsToColor = { label102, label107 };
+                Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -21854,6 +21871,11 @@ namespace SATSuma
                     }
                 }
                 subItemBackColor = MakeColorLighter(thiscolor, -10);
+                panel120.BackColor = thiscolor;
+                panel122.BackColor = thiscolor;
+                panel124.BackColor = thiscolor;
+                panel125.BackColor = thiscolor;
+                panel27.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21868,6 +21890,9 @@ namespace SATSuma
                 listViewHeaderColor = thiscolor;
                 panel67.BackColor = thiscolor;
                 panel68.BackColor = thiscolor;
+                panel117.BackColor = thiscolor;
+                panel121.BackColor = thiscolor;
+                panel123.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21987,7 +22012,7 @@ namespace SATSuma
                     control.BackgroundImage = ImageFile;
                 }
                 //transaction
-                Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+                Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -22089,7 +22114,7 @@ namespace SATSuma
                     control.BackgroundImage = null;
                 }
                 //transaction
-                Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+                Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.BackColor = Color.Transparent;
@@ -22175,7 +22200,7 @@ namespace SATSuma
                     control.BackColor = titleBackgroundColor;
                 }
                 //transaction
-                Control[] listTransactionHeadingsToColor = { panel27, panel28 };
+                Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
                     control.BackgroundImage = null;
@@ -23522,7 +23547,7 @@ namespace SATSuma
                         });
                         headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub queries only)";
+                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub query)";
                         });
                         lblSettingsOwnNodeSelected.Enabled = true;
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
@@ -23558,7 +23583,7 @@ namespace SATSuma
                         });
                         headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub queries only)";
+                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub query)";
                         });
                         label174.Invoke((MethodInvoker)delegate
                         {

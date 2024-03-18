@@ -26,9 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* check 'go to' buttons dont move when columns are resized manually, and that they scale to the right place too
-* xpub row selector needs styling like the others still
-* more testing!
+* more testing! make sure row selectors are correct at different scales
 */
 
 #region Using
@@ -9049,10 +9047,6 @@ namespace SATSuma
                         e.NewWidth = (int)(460 * UIScale);
                     }
 
-                    btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
-                    {
-                        btnViewAddressFromXpub.Location = new Point(listViewXpubAddresses.Columns[0].Width + listViewXpubAddresses.Location.X - btnViewAddressFromXpub.Width - (int)(6 * UIScale), btnViewAddressFromXpub.Location.Y);
-                    });
                 }
 
                 if (e.ColumnIndex == 1)
@@ -9135,7 +9129,7 @@ namespace SATSuma
                             }
                             btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                             {
-                                btnViewAddressFromXpub.Location = new Point(item.Position.X + listViewXpubAddresses.Location.X + listViewXpubAddresses.Columns[0].Width - btnViewAddressFromXpub.Width - (int)(8 * UIScale), item.Position.Y + listViewXpubAddresses.Location.Y - 1);
+                                btnViewAddressFromXpub.Location = new Point(panel101.Location.X - btnViewAddressFromXpub.Width + (int)(12 * UIScale), item.Position.Y + listViewXpubAddresses.Location.Y + panelXpubContainer.Location.Y);
                                 btnViewAddressFromXpub.Height = item.Bounds.Height;
                             });
                         }
@@ -20945,6 +20939,9 @@ namespace SATSuma
 
                 //dca calculator
                 btnCalculateDCA.BorderRadius = (int)(radius * UIScale);
+
+                //xpub
+                btnViewAddressFromXpub.BorderRadius = (int)((radius - 4) * UIScale);
                 // force refresh of panels
                 PanelsRepaint();
             }

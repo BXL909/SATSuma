@@ -26,8 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* TX screen - reposition 'view address' button
-* tidy bookmarks panel
+* check 'go to' buttons dont move when columns are resized manually, and that they scale to the right place too
+* xpub row selector needs styling like the others still
 * more testing!
 */
 
@@ -3745,7 +3745,8 @@ namespace SATSuma
                             }
                             BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                             {
-                                BtnViewTransactionFromAddress.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
+                                //rjButton1.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
+                                BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width + (int)(12 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
                                 BtnViewTransactionFromAddress.Height = item.Bounds.Height;
                             });
                             BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
@@ -3848,10 +3849,6 @@ namespace SATSuma
                         e.NewWidth = (int)(460 * UIScale);
                     }
 
-                    BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
-                    {
-                        BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width - (int)(6 * UIScale), BtnViewTransactionFromAddress.Location.Y);
-                    });
                     BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
                     {
                         BtnViewBlockFromAddress.Location = new Point(listViewAddressTransactions.Columns[0].Width + listViewAddressTransactions.Columns[1].Width + listViewAddressTransactions.Location.X - BtnViewBlockFromAddress.Width + (int)(2 * UIScale), BtnViewBlockFromAddress.Location.Y);
@@ -3905,6 +3902,8 @@ namespace SATSuma
                 label61.Visible = true;
                 label67.Visible = true;
                 label63.Visible = true;
+                panel123.Visible = true;
+                panel124.Visible = true;
                 listViewAddressTransactions.Visible = true;
                 lblAddressConfirmedUnspent.Visible = true;
                 lblAddressConfirmedUnspentOutputs.Visible = true;
@@ -3925,6 +3924,8 @@ namespace SATSuma
                 panel43.Visible = true;
                 panel44.Visible = true;
                 listViewAddressTransactions.Visible = true;
+                listViewAddressTransactions.BringToFront();
+                BtnViewBlockFromAddress.BringToFront();
             }
             catch (Exception ex)
             {
@@ -3946,6 +3947,8 @@ namespace SATSuma
                     label61.Visible = false;
                     label67.Visible = false;
                     label63.Visible = false;
+                    panel123.Visible = false;
+                    panel124.Visible = false;
                     listViewAddressTransactions.Visible = false;
                     lblAddressConfirmedUnspent.Visible = false;
                     lblAddressConfirmedUnspentOutputs.Visible = false;
@@ -4569,7 +4572,8 @@ namespace SATSuma
                                 }
                                 btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                                 {
-                                    btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
+                                    //btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
+                                    btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width + (int)(8 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
                                     btnViewTransactionFromBlock.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -4609,10 +4613,6 @@ namespace SATSuma
                         e.Cancel = true;
                         e.NewWidth = (int)(460 * UIScale);
                     }
-                    btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
-                    {
-                        btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Columns[0].Width + listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), btnViewTransactionFromBlock.Location.Y);
-                    });
                 }
 
                 if (e.ColumnIndex == 1)
@@ -5534,7 +5534,8 @@ namespace SATSuma
                                 btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXInput.Visible = true;
-                                    btnViewAddressFromTXInput.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
+                                    //rjButton1.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
+                                    btnViewAddressFromTXInput.Location = new Point(listViewTransactionInputs.Location.X - btnViewAddressFromTXInput.Width + (int)(12 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                     btnViewAddressFromTXInput.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -5582,7 +5583,8 @@ namespace SATSuma
                                 btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXOutput.Visible = true;
-                                    btnViewAddressFromTXOutput.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - btnViewAddressFromTXOutput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
+                                    //rjButton2.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - rjButton2.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
+                                    btnViewAddressFromTXOutput.Location = new Point(listViewTransactionOutputs.Location.X - btnViewAddressFromTXOutput.Width + (int)(12 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                     btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -6710,7 +6712,8 @@ namespace SATSuma
                             anySelected = true;
                             btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                             {
-                                btnViewBlockFromBlockList.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width  - btnViewBlockFromBlockList.Width - (int)(3 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
+                                //rjButton1.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width  - btnViewBlockFromBlockList.Width - (int)(3 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
+                                btnViewBlockFromBlockList.Location = new Point(listViewBlockList.Location.X - btnViewBlockFromBlockList.Width + (int)(12 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
                                 btnViewBlockFromBlockList.Height = item.Bounds.Height;
                             });
                             // display block hash
@@ -20843,7 +20846,7 @@ namespace SATSuma
                 }
 
                 // block
-                RJButton[] blockButtonBordersToColor = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
+                RJButton[] blockButtonBordersToColor = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnViewTransactionFromBlock };
                 foreach (RJButton button in blockButtonBordersToColor)
                 {
                     button.BorderRadius = radius;
@@ -20857,6 +20860,7 @@ namespace SATSuma
                 {
                     button.BorderRadius = (int)(radius * UIScale);
                 }
+                btnViewBlockFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
                 btnNumericUpDownBlockHeightToStartListFromUp.BorderRadius = 0;
                 btnNumericUpDownBlockHeightToStartListFromDown.BorderRadius = 0;
 
@@ -20880,6 +20884,7 @@ namespace SATSuma
                 {
                     button.BorderRadius = (int)(radius * UIScale);
                 }
+                BtnViewTransactionFromAddress.BorderRadius = (int)((radius - 4) * UIScale);
 
                 // appearance & settings
                 RJButton[] appearanceButtonBordersToColor = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
@@ -20933,6 +20938,10 @@ namespace SATSuma
                 {
                     button.BorderRadius = (int)(radius * UIScale);
                 }
+
+                // transaction
+                btnViewAddressFromTXInput.BorderRadius = (int)((radius - 4) * UIScale);
+                btnViewAddressFromTXOutput.BorderRadius = (int)((radius - 4) * UIScale);
 
                 //dca calculator
                 btnCalculateDCA.BorderRadius = (int)(radius * UIScale);
@@ -21283,7 +21292,6 @@ namespace SATSuma
                 formsPlot2.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot3.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot3.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
-                //formsPlot3.Plot.yAxis3.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                 formsPlot1.Refresh();
                 formsPlot2.Refresh();
                 formsPlot3.Refresh();

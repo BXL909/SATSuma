@@ -24037,6 +24037,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24091,6 +24093,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24145,6 +24149,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24199,6 +24205,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24254,7 +24262,8 @@ namespace SATSuma
         {
             try
             {
-                
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24319,6 +24328,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24374,6 +24385,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24439,6 +24452,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24495,6 +24510,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24550,7 +24567,9 @@ namespace SATSuma
         private async void BtnMenuPriceConverter_Click(object sender, EventArgs e)
         {
             try
-            { 
+            {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24607,6 +24626,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24661,6 +24682,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24717,6 +24740,8 @@ namespace SATSuma
         {
             try
             {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
                 lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {

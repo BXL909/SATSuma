@@ -8930,7 +8930,7 @@
             this.panel26.Location = new System.Drawing.Point(0, 85);
             this.panel26.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(242, 23);
+            this.panel26.Size = new System.Drawing.Size(180, 23);
             this.panel26.TabIndex = 199;
             this.panel26.Visible = false;
             // 
@@ -9019,7 +9019,7 @@
             this.panel23.Location = new System.Drawing.Point(-1, 204);
             this.panel23.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(242, 23);
+            this.panel23.Size = new System.Drawing.Size(180, 23);
             this.panel23.TabIndex = 198;
             this.panel23.Visible = false;
             // 
@@ -9145,7 +9145,7 @@
             this.panel29.Location = new System.Drawing.Point(-1, 376);
             this.panel29.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel29.Name = "panel29";
-            this.panel29.Size = new System.Drawing.Size(242, 23);
+            this.panel29.Size = new System.Drawing.Size(180, 23);
             this.panel29.TabIndex = 206;
             this.panel29.Visible = false;
             // 
@@ -18149,11 +18149,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);

@@ -26,7 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* more testing! make sure row selectors are correct at different scales
+* send all label updates through the red/green changer.
+* more testing! 
 */
 
 #region Using
@@ -61,6 +62,7 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
+using System.Runtime.Remoting.Channels;
 
 #endregion
 
@@ -318,6 +320,7 @@ namespace SATSuma
         Axis yAxis3 = null; // dca chart
         string ActiveChart = "FeeRates"; // used to determine which chart needs refreshing when a theme change takes place
         bool firstThemeChange = true;
+        bool readyToShowRedAndGreenLabelsYet = false;
         #endregion
         #endregion
 
@@ -513,10 +516,12 @@ namespace SATSuma
             #endregion
         }
 
+
         private void SATSuma_Load(object sender, EventArgs e)
         {
             try
             {
+                
                 #region UIScale
                 StoreOriginalDimensions(this);
 
@@ -573,6 +578,7 @@ namespace SATSuma
                     lblCurrentVersion.Text = "v" + CurrentVersion;
                     lblCurrentVersion.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width, lblCurrentVersion.Location.Y);
                 });
+
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
                 GetBlockTip();
@@ -687,6 +693,7 @@ namespace SATSuma
                 UpdateSecondsToHalving();
                 if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh, clear error alert symblol & error message
                 {
+                    readyToShowRedAndGreenLabelsYet = true; // we suppressed red/green changes on fields at startup, but we're ready to start colouring them now
                     ClearAlertAndErrorMessage();
                 }
                 totalSecondsSinceLastBlock++;
@@ -812,10 +819,11 @@ namespace SATSuma
                         {
                             if (blocks.Count > 0)
                             {
-                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderTransactions.Text = Convert.ToString(blocks[0].Tx_count);
-                                });
+                                UpdateLabelValue(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
+//                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
+//                                {
+//                                    lblHeaderTransactions.Text = Convert.ToString(blocks[0].Tx_count);
+//                                });
 
                                 string newBlockHeight = blocks[0].Height;
                                 string oldBlockHeight = lblBlockNumber.Text;
@@ -832,10 +840,11 @@ namespace SATSuma
                                     {
                                         lblHeaderBlockAge.Text = formattedTime;
                                     });
-                                    lblBlockNumber.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
-                                    });
+                                    UpdateLabelValue(lblBlockNumber, Convert.ToString(blocks[0].Height));
+//                                    lblBlockNumber.Invoke((MethodInvoker)delegate
+//                                    {
+//                                        lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
+//                                    });
                                     lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                     {
                                         lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
@@ -859,10 +868,11 @@ namespace SATSuma
                                     double sizeInMB = (double)sizeInBytes / (1000 * 1000);
                                     sizeString = $"{sizeInMB:N2} MB";
                                 }
-                                lblHeaderBlockSize.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderBlockSize.Text = sizeString;
-                                });
+                                UpdateLabelValue(lblHeaderBlockSize, sizeString);
+//                                lblHeaderBlockSize.Invoke((MethodInvoker)delegate
+//                                {
+//                                    lblHeaderBlockSize.Text = sizeString;
+//                                });
                                 lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
                                     lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
@@ -1049,14 +1059,16 @@ namespace SATSuma
                     {
                         var (txCount, vSize, totalFees) = GetMempool();
                         string txInMempool = txCount;
-                        lblTXInMempool.Invoke((MethodInvoker)delegate
-                        {
-                            lblTXInMempool.Text = txInMempool;
-                        });
-                        lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
-                        {
-                            lblBlockListTXInMempool.Text = txInMempool;
-                        });
+                        UpdateLabelValue(lblTXInMempool, txInMempool);
+//                        lblTXInMempool.Invoke((MethodInvoker)delegate
+//                        {
+//                            lblTXInMempool.Text = txInMempool;
+//                        });
+                        UpdateLabelValue(lblBlockListTXInMempool, txInMempool);
+//                        lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
+//                        {
+//                            lblBlockListTXInMempool.Text = txInMempool;
+//                        });
                     }
                     catch (Exception ex)
                     {
@@ -7818,8 +7830,8 @@ namespace SATSuma
                 int DerivationPath = 0;
                 int NumberOfDerivationPathsToCheck = Convert.ToInt32(numberUpDownDerivationPathsToCheck.Value);
 
-                progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses;
-                progressBarCheckAllAddressTypes.Maximum = MaxNumberOfConsecutiveUnusedAddresses * 4 * NumberOfDerivationPathsToCheck;
+                progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses + 1;
+                progressBarCheckAllAddressTypes.Maximum = (MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck;
 
                 progressBarCheckAllAddressTypes.Visible = true;
                 progressBarCheckEachAddressType.Visible = true;
@@ -7924,7 +7936,7 @@ namespace SATSuma
 
                     label140.Invoke((MethodInvoker)delegate
                     {
-                        label140.Text = "derivation path " + DerivationPath;
+                        label140.Text = "P2WPKH path " + DerivationPath;
                     });
 
                     // query the balance for each address
@@ -8149,8 +8161,6 @@ namespace SATSuma
                             lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + ", " + segwitTotalConfirmedSpentDisplay + ", " + segwitAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
-
-                    progressBarCheckEachAddressType.Value = 0;
                     consecutiveUnusedAddressesForType = 0;
                     checkingAddressCount = 1;
                     DerivationPath++;
@@ -8173,10 +8183,7 @@ namespace SATSuma
                         var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
                         legacyAddresses.Add(BitcoinAddress);
                     }
-                    label140.Invoke((MethodInvoker)delegate
-                    {
-                        label140.Text = "derivation path " + DerivationPath;
-                    });
+                    
 
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
@@ -8296,6 +8303,11 @@ namespace SATSuma
                         string legacyTotalConfirmedSpentDisplay = "";
                         string legacyAddressesConfirmedUnspentBalanceDisplay = "";
 
+                        label140.Invoke((MethodInvoker)delegate
+                        {
+                            label140.Text = "P2PKH path " + DerivationPath;
+                        });
+
                         if (confirmedReceivedForCalc == 0)
                         {
                             consecutiveUnusedAddressesForType++; // unused addresses for this type of address
@@ -8400,8 +8412,6 @@ namespace SATSuma
                             lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + ", " + legacyTotalConfirmedSpentDisplay + ", " + legacyAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
-
-                    progressBarCheckEachAddressType.Value = 0;
                     consecutiveUnusedAddressesForType = 0;
                     checkingAddressCount = 1;
                     DerivationPath++;
@@ -8423,10 +8433,7 @@ namespace SATSuma
                         var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
                         segwitP2SHAddresses.Add(BitcoinAddress);
                     }
-                    label140.Invoke((MethodInvoker)delegate
-                    {
-                        label140.Text = "derivation path " + DerivationPath;
-                    });
+
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
@@ -8544,6 +8551,11 @@ namespace SATSuma
                         });
                         panelXpubContainer.VerticalScroll.Minimum = 0;
 
+                        label140.Invoke((MethodInvoker)delegate
+                        {
+                            label140.Text = "P2SH-P2WPKH path " + DerivationPath;
+                        });
+
                         string segwitP2SHTotalConfirmedReceivedDisplay = "";
                         string segwitP2SHTotalConfirmedSpentDisplay = "";
                         string segwitP2SHAddressesConfirmedUnspentBalanceDisplay = "";
@@ -8652,8 +8664,6 @@ namespace SATSuma
                             lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + ", " + segwitP2SHTotalConfirmedSpentDisplay + ", " + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
-
-                    progressBarCheckEachAddressType.Value = 0;
                     consecutiveUnusedAddressesForType = 0;
                     checkingAddressCount = 1;
                     DerivationPath++;
@@ -8677,10 +8687,7 @@ namespace SATSuma
                         var BitcoinAddress = scriptPubKey.GetDestinationAddress(Network.Main);
                         P2SHAddresses.Add(BitcoinAddress);
                     }
-                    label140.Invoke((MethodInvoker)delegate
-                    {
-                        label140.Text = "derivation path " + DerivationPath;
-                    });
+
 
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
@@ -8796,6 +8803,11 @@ namespace SATSuma
                         });
                         panelXpubContainer.VerticalScroll.Minimum = 0;
 
+                        label140.Invoke((MethodInvoker)delegate
+                        {
+                            label140.Text = "P2SH path " + DerivationPath;
+                        });
+
                         string P2SHTotalConfirmedReceivedDisplay = "";
                         string P2SHTotalConfirmedSpentDisplay = "";
                         string P2SHAddressesConfirmedUnspentBalanceDisplay = "";
@@ -8903,8 +8915,6 @@ namespace SATSuma
                             lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + ", " + P2SHTotalConfirmedSpentDisplay + ", " + P2SHAddressesConfirmedUnspentBalanceDisplay;
                         });
                     }
-
-                    progressBarCheckEachAddressType.Value = 0;
                     consecutiveUnusedAddressesForType = 0;
                     checkingAddressCount = 1;
                     DerivationPath++;
@@ -8920,7 +8930,7 @@ namespace SATSuma
                 #region totals after processing, hide progress bars, re-enable textboxes
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubStatus.Text = "Finished scanning addresses\r\n" + numberOfAddressesChecked + " addresses checked";
+                    lblXpubStatus.Text = "Scan complete\r\n" + numberOfAddressesChecked + " addresses checked";
                 });
                 lblXpubConfirmedReceived.Invoke((MethodInvoker)delegate
                 {
@@ -13298,6 +13308,30 @@ namespace SATSuma
         {
             try
             {
+                if (listViewBookmarks.SelectedItems.Count > 0)
+                {
+                    panel127.Visible = true;
+                    panel126.Visible = true;
+                    panel28.Visible = true;
+                    Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
+                    panel127.Invoke((MethodInvoker)delegate
+                    {
+                        panel127.Top = itemRect.Top + panel27.Top + (int)(16 * UIScale);
+                    });
+                    panel28.Invoke((MethodInvoker)delegate
+                    {
+                        panel28.Height = panel126.Top - panel127.Top;
+                        panel28.Top = panel127.Top;
+                    });
+                }
+                else
+                {
+                    panel127.Visible = false;
+                    panel126.Visible = false;
+                    panel28.Visible = false;
+                }
+
+
                 textBoxBookmarkKey.Visible = false;
                 panelBookmarkKeyContainer.Visible = false;
                 btnDecryptBookmark.Visible = false;
@@ -21810,7 +21844,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel127, panel126, panel28 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.BackColor = thiscolor;
@@ -25434,39 +25468,44 @@ namespace SATSuma
                     {
                         lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
                     });
-                    lblPriceUSD.Invoke((MethodInvoker)delegate
-                    {
-                        lblPriceUSD.Text = price;
-                    });
-                    lblHeaderPrice.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderPrice.Text = price;
-                    });
+                    UpdateLabelValue(lblPriceUSD, price);
+//                    lblPriceUSD.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblPriceUSD.Text = price;
+//                    });
+                    UpdateLabelValue(lblHeaderPrice, price);
+//                    lblHeaderPrice.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblHeaderPrice.Text = price;
+//                    });
                     lblHeaderPriceChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
                     });
-
-                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                    {
-                        lblMarketCapUSD.Text = mCap;
-                    });
-                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMarketCap.Text = mCap;
-                    });
+                    UpdateLabelValue(lblMarketCapUSD, mCap);
+//                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblMarketCapUSD.Text = mCap;
+//                    });
+                    UpdateLabelValue(lblHeaderMarketCap, mCap);
+//                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblHeaderMarketCap.Text = mCap;
+//                    });
                     lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
                     });
-                    lblMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblMoscowTime.Text = satsPerUnit;
-                    });
-                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMoscowTime.Text = satsPerUnit;
-                    });
+                    UpdateLabelValue(lblMoscowTime, satsPerUnit);
+//                    lblMoscowTime.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblMoscowTime.Text = satsPerUnit;
+//                    });
+                    UpdateLabelValue(lblHeaderMoscowTime, satsPerUnit);
+//                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+//                    {
+//                        lblHeaderMoscowTime.Text = satsPerUnit;
+//                    });
                     lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
@@ -27067,5 +27106,61 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+        private async void UpdateLabelValue(Label label, string newValue)
+        {
+            if (readyToShowRedAndGreenLabelsYet == true)
+            {
+
+                double currentValueDouble;
+                double newValueDouble;
+                Color currentColor = label.ForeColor;
+                // Get the current value from the label
+                if (label.Text == "no data")
+                {
+                    currentValueDouble = 0;
+                }
+                else
+                {
+                    // Remove non-numeric characters except decimal point
+                    string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "");
+
+                    // Parse the cleaned text to double
+                    currentValueDouble = double.Parse(cleanedText);
+                }
+
+                string cleanedNewValue = Regex.Replace(newValue, @"[^0-9.]", "");
+                newValueDouble = double.Parse(cleanedNewValue);
+
+                // Update the label text
+                label.Invoke((MethodInvoker)delegate
+                {
+                    label.Text = newValue.ToString();
+                });
+
+                // Change label color based on the comparison between old and new values
+                if (newValueDouble > currentValueDouble)
+                {
+                    label.ForeColor = Color.OliveDrab;
+                }
+                else if (newValueDouble < currentValueDouble)
+                {
+                    label.ForeColor = Color.IndianRed;
+                }
+
+                // Wait for 1 second
+                await Task.Delay(1000);
+
+                // Restore original color
+                label.ForeColor = currentColor;
+            }
+            else
+            {
+                label.Invoke((MethodInvoker)delegate
+                {
+                    label.Text = newValue.ToString();
+                });
+            }
+        }
     }
 }                

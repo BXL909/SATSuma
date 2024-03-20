@@ -110,6 +110,12 @@
             this.lblLightningCapacityChart = new System.Windows.Forms.Label();
             this.lblLightningNodesChart = new System.Windows.Forms.Label();
             this.lblLightningChannelsChart = new System.Windows.Forms.Label();
+            this.btnViewBlockFromBlockList = new CustomControls.RJControls.RJButton();
+            this.BtnViewTransactionFromAddress = new CustomControls.RJControls.RJButton();
+            this.btnViewTransactionFromBlock = new CustomControls.RJControls.RJButton();
+            this.btnViewAddressFromTXInput = new CustomControls.RJControls.RJButton();
+            this.btnViewAddressFromTXOutput = new CustomControls.RJControls.RJButton();
+            this.btnViewAddressFromXpub = new CustomControls.RJControls.RJButton();
             this.label134 = new System.Windows.Forms.Label();
             this.lblBlocksUntilDiffAdj = new System.Windows.Forms.Label();
             this.lblHeaderPrice = new System.Windows.Forms.Label();
@@ -185,7 +191,6 @@
             this.panelBlockList = new System.Windows.Forms.Panel();
             this.listViewBlockList = new System.Windows.Forms.ListView();
             this.imageListUpDownArrows = new System.Windows.Forms.ImageList(this.components);
-            this.btnViewBlockFromBlockList = new CustomControls.RJControls.RJButton();
             this.panel120 = new System.Windows.Forms.Panel();
             this.panel117 = new System.Windows.Forms.Panel();
             this.lblBlockListTotalFeesInNextBlockFiat = new System.Windows.Forms.Label();
@@ -367,7 +372,6 @@
             this.lblTotalCapacity = new System.Windows.Forms.Label();
             this.panelAddress = new System.Windows.Forms.Panel();
             this.listViewAddressTransactions = new System.Windows.Forms.ListView();
-            this.BtnViewTransactionFromAddress = new CustomControls.RJControls.RJButton();
             this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
             this.label164 = new System.Windows.Forms.Label();
             this.panel124 = new System.Windows.Forms.Panel();
@@ -406,7 +410,6 @@
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
             this.listViewBlockTransactions = new System.Windows.Forms.ListView();
-            this.btnViewTransactionFromBlock = new CustomControls.RJControls.RJButton();
             this.panelOwnNodeBlockTXInfo = new System.Windows.Forms.Panel();
             this.label160 = new System.Windows.Forms.Label();
             this.panel122 = new System.Windows.Forms.Panel();
@@ -483,13 +486,11 @@
             this.btnTransactionInputDown = new System.Windows.Forms.Button();
             this.panelTransactionInputs = new System.Windows.Forms.Panel();
             this.listViewTransactionInputs = new System.Windows.Forms.ListView();
-            this.btnViewAddressFromTXInput = new CustomControls.RJControls.RJButton();
             this.panel25 = new System.Windows.Forms.Panel();
             this.btnTransactionOutputsUp = new System.Windows.Forms.Button();
             this.btnTransactionOutputsDown = new System.Windows.Forms.Button();
             this.panelTransactionOutputs = new System.Windows.Forms.Panel();
             this.listViewTransactionOutputs = new System.Windows.Forms.ListView();
-            this.btnViewAddressFromTXOutput = new CustomControls.RJControls.RJButton();
             this.panel125 = new System.Windows.Forms.Panel();
             this.panelTransactionIDContainer = new System.Windows.Forms.Panel();
             this.textBoxTransactionID = new System.Windows.Forms.TextBox();
@@ -1180,7 +1181,9 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
-            this.btnViewAddressFromXpub = new CustomControls.RJControls.RJButton();
+            this.panel28 = new System.Windows.Forms.Panel();
+            this.panel126 = new System.Windows.Forms.Panel();
+            this.panel127 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -2513,6 +2516,160 @@
             this.toolTip1.SetToolTip(this.lblLightningChannelsChart, "view lightning channels chart");
             this.lblLightningChannelsChart.Click += new System.EventHandler(this.PictureBoxLightningChannelsChart_Click);
             // 
+            // btnViewBlockFromBlockList
+            // 
+            this.btnViewBlockFromBlockList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewBlockFromBlockList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewBlockFromBlockList.BorderColor = System.Drawing.Color.Transparent;
+            this.btnViewBlockFromBlockList.BorderRadius = 7;
+            this.btnViewBlockFromBlockList.BorderSize = 0;
+            this.btnViewBlockFromBlockList.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewBlockFromBlockList.FlatAppearance.BorderSize = 0;
+            this.btnViewBlockFromBlockList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewBlockFromBlockList.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewBlockFromBlockList.ForeColor = System.Drawing.Color.White;
+            this.btnViewBlockFromBlockList.Location = new System.Drawing.Point(219, 83);
+            this.btnViewBlockFromBlockList.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewBlockFromBlockList.Name = "btnViewBlockFromBlockList";
+            this.btnViewBlockFromBlockList.Size = new System.Drawing.Size(40, 15);
+            this.btnViewBlockFromBlockList.TabIndex = 280;
+            this.btnViewBlockFromBlockList.TabStop = false;
+            this.btnViewBlockFromBlockList.Text = "view";
+            this.btnViewBlockFromBlockList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewBlockFromBlockList.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnViewBlockFromBlockList, "view block");
+            this.btnViewBlockFromBlockList.UseVisualStyleBackColor = false;
+            this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.BtnViewBlockFromBlockList_Click);
+            // 
+            // BtnViewTransactionFromAddress
+            // 
+            this.BtnViewTransactionFromAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.BtnViewTransactionFromAddress.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.BtnViewTransactionFromAddress.BorderColor = System.Drawing.Color.Transparent;
+            this.BtnViewTransactionFromAddress.BorderRadius = 7;
+            this.BtnViewTransactionFromAddress.BorderSize = 0;
+            this.BtnViewTransactionFromAddress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.BtnViewTransactionFromAddress.FlatAppearance.BorderSize = 0;
+            this.BtnViewTransactionFromAddress.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnViewTransactionFromAddress.Font = new System.Drawing.Font("Consolas", 7F);
+            this.BtnViewTransactionFromAddress.ForeColor = System.Drawing.Color.White;
+            this.BtnViewTransactionFromAddress.Location = new System.Drawing.Point(219, 144);
+            this.BtnViewTransactionFromAddress.Margin = new System.Windows.Forms.Padding(1);
+            this.BtnViewTransactionFromAddress.Name = "BtnViewTransactionFromAddress";
+            this.BtnViewTransactionFromAddress.Size = new System.Drawing.Size(40, 15);
+            this.BtnViewTransactionFromAddress.TabIndex = 281;
+            this.BtnViewTransactionFromAddress.TabStop = false;
+            this.BtnViewTransactionFromAddress.Text = "view";
+            this.BtnViewTransactionFromAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnViewTransactionFromAddress.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.BtnViewTransactionFromAddress, "view transaction");
+            this.BtnViewTransactionFromAddress.UseVisualStyleBackColor = false;
+            this.BtnViewTransactionFromAddress.Visible = false;
+            this.BtnViewTransactionFromAddress.Click += new System.EventHandler(this.BtnViewTransactionFromAddress_Click);
+            // 
+            // btnViewTransactionFromBlock
+            // 
+            this.btnViewTransactionFromBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewTransactionFromBlock.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewTransactionFromBlock.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnViewTransactionFromBlock.BorderRadius = 7;
+            this.btnViewTransactionFromBlock.BorderSize = 0;
+            this.btnViewTransactionFromBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewTransactionFromBlock.FlatAppearance.BorderSize = 0;
+            this.btnViewTransactionFromBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewTransactionFromBlock.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewTransactionFromBlock.ForeColor = System.Drawing.Color.White;
+            this.btnViewTransactionFromBlock.Location = new System.Drawing.Point(176, 229);
+            this.btnViewTransactionFromBlock.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewTransactionFromBlock.Name = "btnViewTransactionFromBlock";
+            this.btnViewTransactionFromBlock.Size = new System.Drawing.Size(37, 15);
+            this.btnViewTransactionFromBlock.TabIndex = 279;
+            this.btnViewTransactionFromBlock.TabStop = false;
+            this.btnViewTransactionFromBlock.Text = "view";
+            this.btnViewTransactionFromBlock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewTransactionFromBlock.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnViewTransactionFromBlock, "view transaction");
+            this.btnViewTransactionFromBlock.UseVisualStyleBackColor = false;
+            this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.BtnViewTransactionFromBlock_Click);
+            // 
+            // btnViewAddressFromTXInput
+            // 
+            this.btnViewAddressFromTXInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXInput.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXInput.BorderColor = System.Drawing.Color.Transparent;
+            this.btnViewAddressFromTXInput.BorderRadius = 7;
+            this.btnViewAddressFromTXInput.BorderSize = 0;
+            this.btnViewAddressFromTXInput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromTXInput.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromTXInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromTXInput.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewAddressFromTXInput.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromTXInput.Location = new System.Drawing.Point(14, 28);
+            this.btnViewAddressFromTXInput.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewAddressFromTXInput.Name = "btnViewAddressFromTXInput";
+            this.btnViewAddressFromTXInput.Size = new System.Drawing.Size(40, 15);
+            this.btnViewAddressFromTXInput.TabIndex = 282;
+            this.btnViewAddressFromTXInput.TabStop = false;
+            this.btnViewAddressFromTXInput.Text = "view";
+            this.btnViewAddressFromTXInput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewAddressFromTXInput.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXInput, "view address");
+            this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromTXInput.Visible = false;
+            this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
+            // 
+            // btnViewAddressFromTXOutput
+            // 
+            this.btnViewAddressFromTXOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXOutput.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromTXOutput.BorderColor = System.Drawing.Color.Transparent;
+            this.btnViewAddressFromTXOutput.BorderRadius = 7;
+            this.btnViewAddressFromTXOutput.BorderSize = 0;
+            this.btnViewAddressFromTXOutput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromTXOutput.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromTXOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromTXOutput.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewAddressFromTXOutput.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromTXOutput.Location = new System.Drawing.Point(5, 26);
+            this.btnViewAddressFromTXOutput.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewAddressFromTXOutput.Name = "btnViewAddressFromTXOutput";
+            this.btnViewAddressFromTXOutput.Size = new System.Drawing.Size(40, 15);
+            this.btnViewAddressFromTXOutput.TabIndex = 283;
+            this.btnViewAddressFromTXOutput.TabStop = false;
+            this.btnViewAddressFromTXOutput.Text = "view";
+            this.btnViewAddressFromTXOutput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewAddressFromTXOutput.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnViewAddressFromTXOutput, "view address");
+            this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromTXOutput.Visible = false;
+            this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
+            // 
+            // btnViewAddressFromXpub
+            // 
+            this.btnViewAddressFromXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromXpub.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressFromXpub.BorderColor = System.Drawing.Color.Transparent;
+            this.btnViewAddressFromXpub.BorderRadius = 7;
+            this.btnViewAddressFromXpub.BorderSize = 0;
+            this.btnViewAddressFromXpub.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressFromXpub.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressFromXpub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressFromXpub.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewAddressFromXpub.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressFromXpub.Location = new System.Drawing.Point(193, 434);
+            this.btnViewAddressFromXpub.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewAddressFromXpub.Name = "btnViewAddressFromXpub";
+            this.btnViewAddressFromXpub.Size = new System.Drawing.Size(40, 15);
+            this.btnViewAddressFromXpub.TabIndex = 282;
+            this.btnViewAddressFromXpub.TabStop = false;
+            this.btnViewAddressFromXpub.Text = "view";
+            this.btnViewAddressFromXpub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewAddressFromXpub.TextColor = System.Drawing.Color.White;
+            this.toolTip1.SetToolTip(this.btnViewAddressFromXpub, "view address");
+            this.btnViewAddressFromXpub.UseVisualStyleBackColor = false;
+            this.btnViewAddressFromXpub.Visible = false;
+            this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
+            // 
             // label134
             // 
             this.label134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -3535,31 +3692,6 @@
             this.imageListUpDownArrows.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListUpDownArrows.Images.SetKeyName(0, "greentriangle.png");
             this.imageListUpDownArrows.Images.SetKeyName(1, "redtriangle.png");
-            // 
-            // btnViewBlockFromBlockList
-            // 
-            this.btnViewBlockFromBlockList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewBlockFromBlockList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewBlockFromBlockList.BorderColor = System.Drawing.Color.Transparent;
-            this.btnViewBlockFromBlockList.BorderRadius = 7;
-            this.btnViewBlockFromBlockList.BorderSize = 0;
-            this.btnViewBlockFromBlockList.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewBlockFromBlockList.FlatAppearance.BorderSize = 0;
-            this.btnViewBlockFromBlockList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewBlockFromBlockList.Font = new System.Drawing.Font("Consolas", 7F);
-            this.btnViewBlockFromBlockList.ForeColor = System.Drawing.Color.White;
-            this.btnViewBlockFromBlockList.Location = new System.Drawing.Point(219, 83);
-            this.btnViewBlockFromBlockList.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewBlockFromBlockList.Name = "btnViewBlockFromBlockList";
-            this.btnViewBlockFromBlockList.Size = new System.Drawing.Size(40, 15);
-            this.btnViewBlockFromBlockList.TabIndex = 280;
-            this.btnViewBlockFromBlockList.TabStop = false;
-            this.btnViewBlockFromBlockList.Text = "view";
-            this.btnViewBlockFromBlockList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnViewBlockFromBlockList.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnViewBlockFromBlockList, "view block");
-            this.btnViewBlockFromBlockList.UseVisualStyleBackColor = false;
-            this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.BtnViewBlockFromBlockList_Click);
             // 
             // panel120
             // 
@@ -5982,32 +6114,6 @@
             this.listViewAddressTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressTransactions_DrawSubItem);
             this.listViewAddressTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressTransactions_ItemSelectionChanged);
             // 
-            // BtnViewTransactionFromAddress
-            // 
-            this.BtnViewTransactionFromAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.BtnViewTransactionFromAddress.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.BtnViewTransactionFromAddress.BorderColor = System.Drawing.Color.Transparent;
-            this.BtnViewTransactionFromAddress.BorderRadius = 7;
-            this.BtnViewTransactionFromAddress.BorderSize = 0;
-            this.BtnViewTransactionFromAddress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.BtnViewTransactionFromAddress.FlatAppearance.BorderSize = 0;
-            this.BtnViewTransactionFromAddress.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnViewTransactionFromAddress.Font = new System.Drawing.Font("Consolas", 7F);
-            this.BtnViewTransactionFromAddress.ForeColor = System.Drawing.Color.White;
-            this.BtnViewTransactionFromAddress.Location = new System.Drawing.Point(219, 144);
-            this.BtnViewTransactionFromAddress.Margin = new System.Windows.Forms.Padding(1);
-            this.BtnViewTransactionFromAddress.Name = "BtnViewTransactionFromAddress";
-            this.BtnViewTransactionFromAddress.Size = new System.Drawing.Size(40, 15);
-            this.BtnViewTransactionFromAddress.TabIndex = 281;
-            this.BtnViewTransactionFromAddress.TabStop = false;
-            this.BtnViewTransactionFromAddress.Text = "view";
-            this.BtnViewTransactionFromAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnViewTransactionFromAddress.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.BtnViewTransactionFromAddress, "view transaction");
-            this.BtnViewTransactionFromAddress.UseVisualStyleBackColor = false;
-            this.BtnViewTransactionFromAddress.Visible = false;
-            this.BtnViewTransactionFromAddress.Click += new System.EventHandler(this.BtnViewTransactionFromAddress_Click);
-            // 
             // panelOwnNodeAddressTXInfo
             // 
             this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
@@ -6564,31 +6670,6 @@
             this.listViewBlockTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBlockTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlockTransactions_DrawSubItem);
             this.listViewBlockTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockTransactions_ItemSelectionChanged);
-            // 
-            // btnViewTransactionFromBlock
-            // 
-            this.btnViewTransactionFromBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewTransactionFromBlock.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewTransactionFromBlock.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnViewTransactionFromBlock.BorderRadius = 7;
-            this.btnViewTransactionFromBlock.BorderSize = 0;
-            this.btnViewTransactionFromBlock.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewTransactionFromBlock.FlatAppearance.BorderSize = 0;
-            this.btnViewTransactionFromBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewTransactionFromBlock.Font = new System.Drawing.Font("Consolas", 7F);
-            this.btnViewTransactionFromBlock.ForeColor = System.Drawing.Color.White;
-            this.btnViewTransactionFromBlock.Location = new System.Drawing.Point(176, 229);
-            this.btnViewTransactionFromBlock.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewTransactionFromBlock.Name = "btnViewTransactionFromBlock";
-            this.btnViewTransactionFromBlock.Size = new System.Drawing.Size(37, 15);
-            this.btnViewTransactionFromBlock.TabIndex = 279;
-            this.btnViewTransactionFromBlock.TabStop = false;
-            this.btnViewTransactionFromBlock.Text = "view";
-            this.btnViewTransactionFromBlock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnViewTransactionFromBlock.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnViewTransactionFromBlock, "view transaction");
-            this.btnViewTransactionFromBlock.UseVisualStyleBackColor = false;
-            this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.BtnViewTransactionFromBlock_Click);
             // 
             // panelOwnNodeBlockTXInfo
             // 
@@ -7797,32 +7878,6 @@
             this.listViewTransactionInputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionInputs_DrawSubItem);
             this.listViewTransactionInputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionInputs_ItemSelectionChanged);
             // 
-            // btnViewAddressFromTXInput
-            // 
-            this.btnViewAddressFromTXInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXInput.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXInput.BorderColor = System.Drawing.Color.Transparent;
-            this.btnViewAddressFromTXInput.BorderRadius = 7;
-            this.btnViewAddressFromTXInput.BorderSize = 0;
-            this.btnViewAddressFromTXInput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressFromTXInput.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressFromTXInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressFromTXInput.Font = new System.Drawing.Font("Consolas", 7F);
-            this.btnViewAddressFromTXInput.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressFromTXInput.Location = new System.Drawing.Point(14, 28);
-            this.btnViewAddressFromTXInput.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewAddressFromTXInput.Name = "btnViewAddressFromTXInput";
-            this.btnViewAddressFromTXInput.Size = new System.Drawing.Size(40, 15);
-            this.btnViewAddressFromTXInput.TabIndex = 282;
-            this.btnViewAddressFromTXInput.TabStop = false;
-            this.btnViewAddressFromTXInput.Text = "view";
-            this.btnViewAddressFromTXInput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnViewAddressFromTXInput.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnViewAddressFromTXInput, "view address");
-            this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
-            this.btnViewAddressFromTXInput.Visible = false;
-            this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
-            // 
             // panel25
             // 
             this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
@@ -7914,32 +7969,6 @@
             this.listViewTransactionOutputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
             this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
-            // 
-            // btnViewAddressFromTXOutput
-            // 
-            this.btnViewAddressFromTXOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXOutput.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromTXOutput.BorderColor = System.Drawing.Color.Transparent;
-            this.btnViewAddressFromTXOutput.BorderRadius = 7;
-            this.btnViewAddressFromTXOutput.BorderSize = 0;
-            this.btnViewAddressFromTXOutput.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressFromTXOutput.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressFromTXOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressFromTXOutput.Font = new System.Drawing.Font("Consolas", 7F);
-            this.btnViewAddressFromTXOutput.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressFromTXOutput.Location = new System.Drawing.Point(5, 26);
-            this.btnViewAddressFromTXOutput.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewAddressFromTXOutput.Name = "btnViewAddressFromTXOutput";
-            this.btnViewAddressFromTXOutput.Size = new System.Drawing.Size(40, 15);
-            this.btnViewAddressFromTXOutput.TabIndex = 283;
-            this.btnViewAddressFromTXOutput.TabStop = false;
-            this.btnViewAddressFromTXOutput.Text = "view";
-            this.btnViewAddressFromTXOutput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnViewAddressFromTXOutput.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnViewAddressFromTXOutput, "view address");
-            this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
-            this.btnViewAddressFromTXOutput.Visible = false;
-            this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
             // 
             // panel125
             // 
@@ -8487,7 +8516,7 @@
             this.progressBarCheckEachAddressType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.progressBarCheckEachAddressType.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
             this.progressBarCheckEachAddressType.ForeColor = System.Drawing.Color.Black;
-            this.progressBarCheckEachAddressType.Location = new System.Drawing.Point(114, 170);
+            this.progressBarCheckEachAddressType.Location = new System.Drawing.Point(129, 170);
             this.progressBarCheckEachAddressType.Maximum = 100;
             this.progressBarCheckEachAddressType.Minimum = 0;
             this.progressBarCheckEachAddressType.Name = "progressBarCheckEachAddressType";
@@ -8503,7 +8532,7 @@
             this.progressBarCheckAllAddressTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.progressBarCheckAllAddressTypes.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
             this.progressBarCheckAllAddressTypes.ForeColor = System.Drawing.Color.Black;
-            this.progressBarCheckAllAddressTypes.Location = new System.Drawing.Point(114, 184);
+            this.progressBarCheckAllAddressTypes.Location = new System.Drawing.Point(129, 184);
             this.progressBarCheckAllAddressTypes.Maximum = 100;
             this.progressBarCheckAllAddressTypes.Minimum = 0;
             this.progressBarCheckAllAddressTypes.Name = "progressBarCheckAllAddressTypes";
@@ -8518,7 +8547,7 @@
             this.lblCheckEachAddressTypeCount.AutoSize = true;
             this.lblCheckEachAddressTypeCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblCheckEachAddressTypeCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.lblCheckEachAddressTypeCount.Location = new System.Drawing.Point(184, 168);
+            this.lblCheckEachAddressTypeCount.Location = new System.Drawing.Point(199, 168);
             this.lblCheckEachAddressTypeCount.Name = "lblCheckEachAddressTypeCount";
             this.lblCheckEachAddressTypeCount.Size = new System.Drawing.Size(13, 16);
             this.lblCheckEachAddressTypeCount.TabIndex = 232;
@@ -8530,7 +8559,7 @@
             this.lblCheckAllAddressTypesCount.AutoSize = true;
             this.lblCheckAllAddressTypesCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblCheckAllAddressTypesCount.Font = new System.Drawing.Font("Century Gothic", 7.8F);
-            this.lblCheckAllAddressTypesCount.Location = new System.Drawing.Point(184, 182);
+            this.lblCheckAllAddressTypesCount.Location = new System.Drawing.Point(199, 182);
             this.lblCheckAllAddressTypesCount.Name = "lblCheckAllAddressTypesCount";
             this.lblCheckAllAddressTypesCount.Size = new System.Drawing.Size(13, 16);
             this.lblCheckAllAddressTypesCount.TabIndex = 233;
@@ -8552,13 +8581,14 @@
             // 
             // label140
             // 
+            this.label140.AutoSize = true;
             this.label140.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label140.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label140.ForeColor = System.Drawing.Color.Silver;
             this.label140.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label140.Location = new System.Drawing.Point(0, 168);
             this.label140.Name = "label140";
-            this.label140.Size = new System.Drawing.Size(100, 16);
+            this.label140.Size = new System.Drawing.Size(93, 16);
             this.label140.TabIndex = 154;
             this.label140.Text = "derivation path";
             this.label140.Visible = false;
@@ -8693,7 +8723,7 @@
             this.panel95.Controls.Add(this.btnNonZeroBalancesUp);
             this.panel95.Controls.Add(this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses);
             this.panel95.Controls.Add(this.btnNonZeroBalancesDown);
-            this.panel95.Location = new System.Drawing.Point(274, 27);
+            this.panel95.Location = new System.Drawing.Point(279, 27);
             this.panel95.Name = "panel95";
             this.panel95.Size = new System.Drawing.Size(66, 22);
             this.panel95.TabIndex = 258;
@@ -8791,7 +8821,7 @@
             // 
             this.label239.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label239.ForeColor = System.Drawing.Color.Silver;
-            this.label239.Location = new System.Drawing.Point(340, 29);
+            this.label239.Location = new System.Drawing.Point(345, 29);
             this.label239.Name = "label239";
             this.label239.Size = new System.Drawing.Size(42, 17);
             this.label239.TabIndex = 242;
@@ -9225,7 +9255,7 @@
             // 
             // timerHideProgressBars
             // 
-            this.timerHideProgressBars.Interval = 2000;
+            this.timerHideProgressBars.Interval = 5000;
             this.timerHideProgressBars.Tick += new System.EventHandler(this.TimerHideProgressBars_Tick);
             // 
             // XpubScrollTimer
@@ -9582,6 +9612,9 @@
             // panelBookmarks
             // 
             this.panelBookmarks.BackColor = System.Drawing.Color.Transparent;
+            this.panelBookmarks.Controls.Add(this.panel28);
+            this.panelBookmarks.Controls.Add(this.panel126);
+            this.panelBookmarks.Controls.Add(this.panel127);
             this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panel33);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
@@ -9606,9 +9639,9 @@
             this.panel32.Controls.Add(this.lblBookmarkNoteInFull);
             this.panel32.Controls.Add(this.lblSelectedBookmarkType);
             this.panel32.Controls.Add(this.lblBookmarkDataInFull);
-            this.panel32.Location = new System.Drawing.Point(0, 450);
+            this.panel32.Location = new System.Drawing.Point(50, 450);
             this.panel32.Name = "panel32";
-            this.panel32.Size = new System.Drawing.Size(748, 100);
+            this.panel32.Size = new System.Drawing.Size(698, 100);
             this.panel32.TabIndex = 215;
             // 
             // panelBookmarkKeyContainer
@@ -9617,7 +9650,7 @@
             this.panelBookmarkKeyContainer.Controls.Add(this.textBoxBookmarkKey);
             this.panelBookmarkKeyContainer.Location = new System.Drawing.Point(105, 69);
             this.panelBookmarkKeyContainer.Name = "panelBookmarkKeyContainer";
-            this.panelBookmarkKeyContainer.Size = new System.Drawing.Size(252, 22);
+            this.panelBookmarkKeyContainer.Size = new System.Drawing.Size(202, 22);
             this.panelBookmarkKeyContainer.TabIndex = 253;
             // 
             // textBoxBookmarkKey
@@ -9629,7 +9662,7 @@
             this.textBoxBookmarkKey.Location = new System.Drawing.Point(6, 4);
             this.textBoxBookmarkKey.MaxLength = 165;
             this.textBoxBookmarkKey.Name = "textBoxBookmarkKey";
-            this.textBoxBookmarkKey.Size = new System.Drawing.Size(240, 16);
+            this.textBoxBookmarkKey.Size = new System.Drawing.Size(190, 16);
             this.textBoxBookmarkKey.TabIndex = 217;
             this.textBoxBookmarkKey.Text = "enter key to unlock";
             this.textBoxBookmarkKey.Visible = false;
@@ -9650,7 +9683,7 @@
             this.btnDecryptBookmark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDecryptBookmark.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDecryptBookmark.ForeColor = System.Drawing.Color.White;
-            this.btnDecryptBookmark.Location = new System.Drawing.Point(362, 69);
+            this.btnDecryptBookmark.Location = new System.Drawing.Point(312, 69);
             this.btnDecryptBookmark.Margin = new System.Windows.Forms.Padding(1);
             this.btnDecryptBookmark.Name = "btnDecryptBookmark";
             this.btnDecryptBookmark.Size = new System.Drawing.Size(42, 24);
@@ -9667,7 +9700,7 @@
             this.lblBookmarkStatusMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBookmarkStatusMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkStatusMessage.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(424, 73);
+            this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(374, 73);
             this.lblBookmarkStatusMessage.Name = "lblBookmarkStatusMessage";
             this.lblBookmarkStatusMessage.Size = new System.Drawing.Size(118, 17);
             this.lblBookmarkStatusMessage.TabIndex = 217;
@@ -9710,7 +9743,7 @@
             this.btnDeleteBookmark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteBookmark.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteBookmark.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteBookmark.Location = new System.Drawing.Point(557, 69);
+            this.btnDeleteBookmark.Location = new System.Drawing.Point(507, 69);
             this.btnDeleteBookmark.Margin = new System.Windows.Forms.Padding(1);
             this.btnDeleteBookmark.Name = "btnDeleteBookmark";
             this.btnDeleteBookmark.Size = new System.Drawing.Size(88, 24);
@@ -9733,7 +9766,7 @@
             this.btnViewBookmark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewBookmark.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewBookmark.ForeColor = System.Drawing.Color.White;
-            this.btnViewBookmark.Location = new System.Drawing.Point(651, 69);
+            this.btnViewBookmark.Location = new System.Drawing.Point(601, 69);
             this.btnViewBookmark.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewBookmark.Name = "btnViewBookmark";
             this.btnViewBookmark.Size = new System.Drawing.Size(88, 24);
@@ -9764,7 +9797,7 @@
             this.lblBookmarkNoteInFull.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblBookmarkNoteInFull.Location = new System.Drawing.Point(42, 24);
             this.lblBookmarkNoteInFull.Name = "lblBookmarkNoteInFull";
-            this.lblBookmarkNoteInFull.Size = new System.Drawing.Size(708, 46);
+            this.lblBookmarkNoteInFull.Size = new System.Drawing.Size(655, 46);
             this.lblBookmarkNoteInFull.TabIndex = 223;
             this.lblBookmarkNoteInFull.Text = "123451234567890abcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnop" +
     "qrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstu" +
@@ -9850,9 +9883,9 @@
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
             this.panelBookmarksContainer.Controls.Add(this.panel100);
-            this.panelBookmarksContainer.Location = new System.Drawing.Point(2, 45);
+            this.panelBookmarksContainer.Location = new System.Drawing.Point(52, 45);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
-            this.panelBookmarksContainer.Size = new System.Drawing.Size(745, 390);
+            this.panelBookmarksContainer.Size = new System.Drawing.Size(695, 390);
             this.panelBookmarksContainer.TabIndex = 213;
             this.panelBookmarksContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelBookmarksContainer_Paint);
             // 
@@ -9875,7 +9908,7 @@
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(717, 385);
+            this.listViewBookmarks.Size = new System.Drawing.Size(667, 385);
             this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
@@ -9891,7 +9924,7 @@
             this.panel100.BackColor = System.Drawing.Color.IndianRed;
             this.panel100.Location = new System.Drawing.Point(1, -2);
             this.panel100.Name = "panel100";
-            this.panel100.Size = new System.Drawing.Size(725, 380);
+            this.panel100.Size = new System.Drawing.Size(675, 380);
             this.panel100.TabIndex = 165;
             // 
             // panel36
@@ -10150,9 +10183,9 @@
             // panel27
             // 
             this.panel27.BackColor = System.Drawing.Color.White;
-            this.panel27.Location = new System.Drawing.Point(0, 37);
+            this.panel27.Location = new System.Drawing.Point(50, 37);
             this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(747, 408);
+            this.panel27.Size = new System.Drawing.Size(697, 408);
             this.panel27.TabIndex = 216;
             // 
             // BookmarksScrollTimer
@@ -10182,9 +10215,9 @@
             this.lblHeaderMarketCap.Location = new System.Drawing.Point(215, 111);
             this.lblHeaderMarketCap.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMarketCap.Name = "lblHeaderMarketCap";
-            this.lblHeaderMarketCap.Size = new System.Drawing.Size(22, 17);
+            this.lblHeaderMarketCap.Size = new System.Drawing.Size(55, 17);
             this.lblHeaderMarketCap.TabIndex = 209;
-            this.lblHeaderMarketCap.Text = "$0";
+            this.lblHeaderMarketCap.Text = "no data";
             // 
             // label77
             // 
@@ -10207,9 +10240,9 @@
             this.lblHeaderMoscowTime.Location = new System.Drawing.Point(237, 130);
             this.lblHeaderMoscowTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderMoscowTime.Name = "lblHeaderMoscowTime";
-            this.lblHeaderMoscowTime.Size = new System.Drawing.Size(22, 17);
+            this.lblHeaderMoscowTime.Size = new System.Drawing.Size(55, 17);
             this.lblHeaderMoscowTime.TabIndex = 210;
-            this.lblHeaderMoscowTime.Text = "$0";
+            this.lblHeaderMoscowTime.Text = "no data";
             // 
             // panel38
             // 
@@ -18114,31 +18147,32 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
-            // btnViewAddressFromXpub
+            // panel28
             // 
-            this.btnViewAddressFromXpub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromXpub.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressFromXpub.BorderColor = System.Drawing.Color.Transparent;
-            this.btnViewAddressFromXpub.BorderRadius = 7;
-            this.btnViewAddressFromXpub.BorderSize = 0;
-            this.btnViewAddressFromXpub.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressFromXpub.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressFromXpub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressFromXpub.Font = new System.Drawing.Font("Consolas", 7F);
-            this.btnViewAddressFromXpub.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressFromXpub.Location = new System.Drawing.Point(193, 434);
-            this.btnViewAddressFromXpub.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewAddressFromXpub.Name = "btnViewAddressFromXpub";
-            this.btnViewAddressFromXpub.Size = new System.Drawing.Size(40, 15);
-            this.btnViewAddressFromXpub.TabIndex = 282;
-            this.btnViewAddressFromXpub.TabStop = false;
-            this.btnViewAddressFromXpub.Text = "view";
-            this.btnViewAddressFromXpub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnViewAddressFromXpub.TextColor = System.Drawing.Color.White;
-            this.toolTip1.SetToolTip(this.btnViewAddressFromXpub, "view address");
-            this.btnViewAddressFromXpub.UseVisualStyleBackColor = false;
-            this.btnViewAddressFromXpub.Visible = false;
-            this.btnViewAddressFromXpub.Click += new System.EventHandler(this.BtnViewAddressFromXpub_Click);
+            this.panel28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel28.Location = new System.Drawing.Point(15, 285);
+            this.panel28.Name = "panel28";
+            this.panel28.Size = new System.Drawing.Size(1, 176);
+            this.panel28.TabIndex = 219;
+            // 
+            // panel126
+            // 
+            this.panel126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel126.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel126.Location = new System.Drawing.Point(15, 487);
+            this.panel126.Name = "panel126";
+            this.panel126.Size = new System.Drawing.Size(35, 1);
+            this.panel126.TabIndex = 218;
+            // 
+            // panel127
+            // 
+            this.panel127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.Location = new System.Drawing.Point(15, 207);
+            this.panel127.Name = "panel127";
+            this.panel127.Size = new System.Drawing.Size(35, 1);
+            this.panel127.TabIndex = 217;
             // 
             // SATSuma
             // 
@@ -18149,13 +18183,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
@@ -19645,6 +19679,9 @@
         private CustomControls.RJControls.RJButton btnViewAddressFromTXInput;
         private CustomControls.RJControls.RJButton btnViewAddressFromTXOutput;
         private CustomControls.RJControls.RJButton btnViewAddressFromXpub;
+        private System.Windows.Forms.Panel panel28;
+        private System.Windows.Forms.Panel panel126;
+        private System.Windows.Forms.Panel panel127;
     }
 }
 

@@ -613,6 +613,9 @@
             this.lblHeaderfeesHighPriority = new System.Windows.Forms.Label();
             this.lblHeaderFeesMediumPriority = new System.Windows.Forms.Label();
             this.panelBookmarks = new System.Windows.Forms.Panel();
+            this.panel28 = new System.Windows.Forms.Panel();
+            this.panel126 = new System.Windows.Forms.Panel();
+            this.panel127 = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
             this.panelBookmarkKeyContainer = new System.Windows.Forms.Panel();
             this.textBoxBookmarkKey = new System.Windows.Forms.TextBox();
@@ -1181,9 +1184,6 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
-            this.panel28 = new System.Windows.Forms.Panel();
-            this.panel126 = new System.Windows.Forms.Panel();
-            this.panel127 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -9625,6 +9625,33 @@
             this.panelBookmarks.Size = new System.Drawing.Size(773, 556);
             this.panelBookmarks.TabIndex = 215;
             this.panelBookmarks.Visible = false;
+            // 
+            // panel28
+            // 
+            this.panel28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel28.Location = new System.Drawing.Point(15, 285);
+            this.panel28.Name = "panel28";
+            this.panel28.Size = new System.Drawing.Size(1, 176);
+            this.panel28.TabIndex = 219;
+            // 
+            // panel126
+            // 
+            this.panel126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel126.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel126.Location = new System.Drawing.Point(15, 487);
+            this.panel126.Name = "panel126";
+            this.panel126.Size = new System.Drawing.Size(35, 1);
+            this.panel126.TabIndex = 218;
+            // 
+            // panel127
+            // 
+            this.panel127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.Location = new System.Drawing.Point(15, 207);
+            this.panel127.Name = "panel127";
+            this.panel127.Size = new System.Drawing.Size(35, 1);
+            this.panel127.TabIndex = 217;
             // 
             // panel32
             // 
@@ -18147,33 +18174,6 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
-            // panel28
-            // 
-            this.panel28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel28.Location = new System.Drawing.Point(15, 285);
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(1, 176);
-            this.panel28.TabIndex = 219;
-            // 
-            // panel126
-            // 
-            this.panel126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel126.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel126.Location = new System.Drawing.Point(15, 487);
-            this.panel126.Name = "panel126";
-            this.panel126.Size = new System.Drawing.Size(35, 1);
-            this.panel126.TabIndex = 218;
-            // 
-            // panel127
-            // 
-            this.panel127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel127.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel127.Location = new System.Drawing.Point(15, 207);
-            this.panel127.Name = "panel127";
-            this.panel127.Size = new System.Drawing.Size(35, 1);
-            this.panel127.TabIndex = 217;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -18183,14 +18183,14 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelPriceConverter);

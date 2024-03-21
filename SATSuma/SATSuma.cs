@@ -26,7 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* send all label updates through the red/green changer.
+* send all label updates through the red/green changer (remember RefreshFiatValuesEverywhere())
 * more testing! 
 */
 
@@ -63,6 +63,7 @@ using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
 using System.Runtime.Remoting.Channels;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 #endregion
 
@@ -806,10 +807,7 @@ namespace SATSuma
                             years--;
                             months += 12;
                         }
-                        lblNetworkAge.Invoke((MethodInvoker)delegate
-                        {
-                            lblNetworkAge.Text = $"{years} years, {months} months, {days} days"; 
-                        });
+                        UpdateLabelValue(lblNetworkAge, $"{years} years, {months} months, {days} days");
                         #endregion
 
                         var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
@@ -820,11 +818,6 @@ namespace SATSuma
                             if (blocks.Count > 0)
                             {
                                 UpdateLabelValue(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
-//                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
-//                                {
-//                                    lblHeaderTransactions.Text = Convert.ToString(blocks[0].Tx_count);
-//                                });
-
                                 string newBlockHeight = blocks[0].Height;
                                 string oldBlockHeight = lblBlockNumber.Text;
                                 if ((newBlockHeight != oldBlockHeight) || (firstTimeGettingBlockTip == true))
@@ -841,10 +834,6 @@ namespace SATSuma
                                         lblHeaderBlockAge.Text = formattedTime;
                                     });
                                     UpdateLabelValue(lblBlockNumber, Convert.ToString(blocks[0].Height));
-//                                    lblBlockNumber.Invoke((MethodInvoker)delegate
-//                                    {
-//                                        lblBlockNumber.Text = Convert.ToString(blocks[0].Height);
-//                                    });
                                     lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                     {
                                         lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
@@ -869,19 +858,12 @@ namespace SATSuma
                                     sizeString = $"{sizeInMB:N2} MB";
                                 }
                                 UpdateLabelValue(lblHeaderBlockSize, sizeString);
-//                                lblHeaderBlockSize.Invoke((MethodInvoker)delegate
-//                                {
-//                                    lblHeaderBlockSize.Text = sizeString;
-//                                });
                                 lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
                                     lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
                                 });
                                 // difficulty epoch = block height / 2016 rounded up to an integer
-                                lblDifficultyEpoch.Invoke((MethodInvoker)delegate
-                                {
-                                    lblDifficultyEpoch.Text = Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblBlockNumber.Text) / 2016));
-                                });
+                                UpdateLabelValue(lblDifficultyEpoch, Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblBlockNumber.Text) / 2016)));
                             }
                         }
                     }
@@ -895,22 +877,10 @@ namespace SATSuma
                     try
                     {
                         var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
-                        lblHeaderfeesHighPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderfeesHighPriority.Text = fastestFee;
-                        });
-                        lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesMediumPriority.Text = halfHourFee;
-                        });
-                        lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesLowPriority.Text = hourFee;
-                        });
-                        lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesNoPriority.Text = economyFee;
-                        });
+                        UpdateLabelValue(lblHeaderfeesHighPriority, fastestFee);
+                        UpdateLabelValue(lblHeaderFeesMediumPriority, halfHourFee);
+                        UpdateLabelValue(lblHeaderFeesLowPriority, hourFee);
+                        UpdateLabelValue(lblHeaderFeesNoPriority, economyFee);
                         lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
                             lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width, lblHeaderFeeRatesChart.Location.Y);
@@ -926,26 +896,17 @@ namespace SATSuma
                     try
                     {
                         var (currentHashrate, currentDifficulty) = GetHashrate();
-                        lblHeaderHashrate.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderHashrate.Text = currentHashrate;
-                        });
+                        UpdateLabelValue(lblHeaderHashrate, currentHashrate);
                         lblHeaderHashRateChart.Invoke((MethodInvoker)delegate
                         {
                             lblHeaderHashRateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width, lblHeaderHashRateChart.Location.Y);
                         });
-                        lblEstHashrate.Invoke((MethodInvoker)delegate
-                        {
-                            lblEstHashrate.Text = currentHashrate;
-                        });
+                        UpdateLabelValue(lblEstHashrate, currentHashrate);
                         lblHashrateChart.Invoke((MethodInvoker)delegate
                         {
                             lblHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width, lblHashrateChart.Location.Y);
                         });
-                        lblBlockListEstHashRate.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockListEstHashRate.Text = currentHashrate;
-                        });
+                        UpdateLabelValue(lblBlockListEstHashRate, currentHashrate);
                         lblBlockListHashrateChart.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width, lblBlockListHashrateChart.Location.Y);
@@ -967,15 +928,8 @@ namespace SATSuma
                             progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
                             truncatedPercent = string.Format("{0:F2}%", progressValue2 * 100); // truncate to two decimal places
                         }
-
-                        lblProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate
-                        {
-                            lblProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")";
-                        });
-                        lblBlockListProgressNextDiffAdjPercentage.Invoke((MethodInvoker)delegate //Block List
-                        {
-                            lblBlockListProgressNextDiffAdjPercentage.Text = "(" + truncatedPercent + ")";
-                        });
+                        UpdateLabelValue(lblProgressNextDiffAdjPercentage, truncatedPercent);
+                        UpdateLabelValue(lblBlockListProgressNextDiffAdjPercentage, truncatedPercent);
 
                         if (decimal.TryParse(progressPercent, out decimal progressValue))
                         {
@@ -983,26 +937,17 @@ namespace SATSuma
                             progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
                             progressBarBlockListNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range - Block List
                         }
-                        lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
-                        {
-                            lblDifficultyAdjEst.Text = difficultyChange + "%";
-                        });
+                        UpdateLabelValue(lblDifficultyAdjEst, difficultyChange + "%");
                         lblDifficultyChart.Invoke((MethodInvoker)delegate
                         {
                             lblDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width, lblDifficultyChart.Location.Y);
                         });
-                        lblBlockListNextDifficultyAdjustment.Invoke((MethodInvoker)delegate  // (Blocks list)
-                        {
-                            lblBlockListNextDifficultyAdjustment.Text = difficultyChange + "%";
-                        });
+                        UpdateLabelValue(lblBlockListNextDifficultyAdjustment, difficultyChange + "%");
                         lblBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
                             lblBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width, lblBlockListDifficultyChart.Location.Y);
                         });
-                        lblBlocksUntilDiffAdj.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlocksUntilDiffAdj.Text = remainingBlocks.ToString();
-                        });
+                        UpdateLabelValue(lblBlocksUntilDiffAdj, remainingBlocks.ToString());
                         string formattedDate;
                         if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
                         {
@@ -1017,14 +962,8 @@ namespace SATSuma
                             DateTime dateTime = dateTimeOffset.LocalDateTime;
                             formattedDate = dateTime.ToString();
                         }
-                        lblEstDiffAdjDate.Invoke((MethodInvoker)delegate
-                        {
-                            lblEstDiffAdjDate.Text = formattedDate;
-                        });
-                        lblNextDiffAdjBlock.Invoke((MethodInvoker)delegate
-                        {
-                            lblNextDiffAdjBlock.Text = nextRetargetHeight;
-                        });
+                        UpdateLabelValue(lblEstDiffAdjDate, formattedDate);
+                        UpdateLabelValue(lblNextDiffAdjBlock, nextRetargetHeight);
                         lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // (Blocks list)
                         {
                             lblBlockListNextDiffAdjBlock.Text = nextRetargetHeight;
@@ -1039,14 +978,8 @@ namespace SATSuma
                             seconds = (int)((AvgTimeBetweenBlocks - minutes) * 60);
                         }
                         string timeString = $"{minutes} mins {seconds} secs";
-                        lblAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate
-                        {
-                            lblAvgTimeBetweenBlocks.Text = timeString;
-                        });
-                        lblBlockListAvgTimeBetweenBlocks.Invoke((MethodInvoker)delegate // (Blocks list)
-                        {
-                            lblBlockListAvgTimeBetweenBlocks.Text = timeString;
-                        });
+                        UpdateLabelValue(lblAvgTimeBetweenBlocks, timeString);
+                        UpdateLabelValue(lblBlockListAvgTimeBetweenBlocks, timeString);
                     }
                     catch (Exception ex)
                     {
@@ -1060,15 +993,7 @@ namespace SATSuma
                         var (txCount, vSize, totalFees) = GetMempool();
                         string txInMempool = txCount;
                         UpdateLabelValue(lblTXInMempool, txInMempool);
-//                        lblTXInMempool.Invoke((MethodInvoker)delegate
-//                        {
-//                            lblTXInMempool.Text = txInMempool;
-//                        });
                         UpdateLabelValue(lblBlockListTXInMempool, txInMempool);
-//                        lblBlockListTXInMempool.Invoke((MethodInvoker)delegate  // Blocks list
-//                        {
-//                            lblBlockListTXInMempool.Text = txInMempool;
-//                        });
                     }
                     catch (Exception ex)
                     {
@@ -1086,98 +1011,56 @@ namespace SATSuma
                             if (RunMempoolSpaceLightningAPI)
                             {
                                 var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
-                                lblChannelCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblChannelCount.Text = channelCount;
-                                });
-                                lblNodeCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNodeCount.Text = nodeCount;
-                                });
-                                lblTotalCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTotalCapacity.Text = totalCapacity;
-                                });
-                                lblTotalCapacityFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTotalCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
-                                });
-                                lblTorNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTorNodes.Text = torNodes;
-                                });
-                                lblClearnetNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetNodes.Text = clearnetNodes;
-                                });
-                                lblAverageCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageCapacity.Text = avgCapacity;
-                                });
+                                UpdateLabelValue(lblChannelCount, channelCount);
+                                UpdateLabelValue(lblNodeCount, nodeCount);
+                                UpdateLabelValue(lblTotalCapacity, totalCapacity);
+                                UpdateLabelValue(lblTotalCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblTorNodes, torNodes);
+                                UpdateLabelValue(lblClearnetNodes, clearnetNodes);
+                                UpdateLabelValue(lblAverageCapacity, avgCapacity);
+                                string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
+                                UpdateLabelValue(lblAverageCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblAverageCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
-                                    lblAverageCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblAverageCapacityFiat.Location = new Point(lblAverageCapacity.Location.X + lblAverageCapacity.Width, lblAverageCapacityFiat.Location.Y);
                                 });
-                                lblAverageFeeRate.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageFeeRate.Text = avgFeeRate;
-                                });
+                                UpdateLabelValue(lblAverageFeeRate, avgFeeRate);
+                                string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
+                                UpdateLabelValue(lblAverageFeeRateFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblAverageFeeRateFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
-                                    lblAverageFeeRateFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblAverageFeeRateFiat.Location = new Point(lblAverageFeeRate.Location.X + lblAverageFeeRate.Width, lblAverageFeeRateFiat.Location.Y);
                                 });
-                                lblUnannouncedNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblUnannouncedNodes.Text = unannouncedNodes;
-                                });
-                                lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageBaseFeeMtokens.Text = avgBaseeFeeMtokens;
-                                });
+                                UpdateLabelValue(lblUnannouncedNodes, unannouncedNodes);
+                                UpdateLabelValue(lblAverageBaseFeeMtokens, avgBaseeFeeMtokens);
+                                string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
+                                UpdateLabelValue(lblAverageBaseFeeMtokensFiat, lblHeaderPrice.Text[0] + ((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4"));
                                 lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
-                                    lblAverageBaseFeeMtokensFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4");
                                     lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
                                 });
-                                lblMedCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedCapacity.Text = medCapacity;
-                                });
+                                UpdateLabelValue(lblMedCapacity, medCapacity);
+                                string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
+                                UpdateLabelValue(lblMedCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblMedCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
-                                    lblMedCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblMedCapacityFiat.Location = new Point(lblMedCapacity.Location.X + lblMedCapacity.Width, lblMedCapacityFiat.Location.Y);
                                 });
-                                lblMedFeeRate.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedFeeRate.Text = medFeeRate;
-                                });
+                                UpdateLabelValue(lblMedFeeRate, medFeeRate);
+                                string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
+                                UpdateLabelValue(lblMedFeeRateFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblMedFeeRateFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
-                                    lblMedFeeRateFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblMedFeeRateFiat.Location = new Point(lblMedFeeRate.Location.X + lblMedFeeRate.Width, lblMedFeeRateFiat.Location.Y);
                                 });
-                                lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedBaseFeeTokens.Text = medBaseeFeeMtokens;
-                                });
+                                UpdateLabelValue(lblMedBaseFeeTokens, medBaseeFeeMtokens);
+                                string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
+                                UpdateLabelValue(lblMedBaseFeeTokensFiat, lblHeaderPrice.Text[0] + ((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4"));
                                 lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
-                                    lblMedBaseFeeTokensFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4");
                                     lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
                                 });
-                                lblClearnetTorNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetTorNodes.Text = clearnetTorNodes;
-                                });
+                                UpdateLabelValue(lblClearnetTorNodes, clearnetTorNodes);
                             }
                             else
                             {
@@ -1249,31 +1132,22 @@ namespace SATSuma
                             if (RunMempoolSpaceLightningAPI)
                             {
                                 var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
-                                lblClearnetCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetCapacity.Text = clearnetCapacity;
-                                });
+                                UpdateLabelValue(lblClearnetCapacity, clearnetCapacity);
+                                UpdateLabelValue(lblClearnetCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    lblClearnetCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblClearnetCapacityFiat.Location = new Point(lblClearnetCapacity.Location.X + lblClearnetCapacity.Width, lblClearnetCapacityFiat.Location.Y);
                                 });
-                                lblTorCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTorCapacity.Text = torCapacity;
-                                });
+                                UpdateLabelValue(lblTorCapacity, torCapacity);
+                                UpdateLabelValue(lblTorCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblTorCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    lblTorCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblTorCapacityFiat.Location = new Point(lblTorCapacity.Location.X + lblTorCapacity.Width, lblTorCapacityFiat.Location.Y);
                                 });
-                                lblUnknownCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblUnknownCapacity.Text = unknownCapacity;
-                                });
+                                UpdateLabelValue(lblUnknownCapacity, unknownCapacity);
+                                UpdateLabelValue(lblUnknownCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblUnknownCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    lblUnknownCapacityFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2");
                                     lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
                                 });
                             }
@@ -1304,13 +1178,10 @@ namespace SATSuma
                                     });
                                     System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
                                     System.Windows.Forms.Label capacityLabelFiat = (System.Windows.Forms.Label)this.Controls.Find("capacityLabelFiat" + (i + 1), true)[0];
-                                    capacityLabel.Invoke((MethodInvoker)delegate
-                                    {
-                                        capacityLabel.Text = capacities[i];
-                                    });
+                                    UpdateLabelValue(capacityLabel, capacities[i]);
+                                    UpdateLabelValue(capacityLabelFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                     capacityLabelFiat.Invoke((MethodInvoker)delegate
                                     {
-                                        capacityLabelFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency).ToString("N2");
                                         capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
                                     });
                                 }
@@ -1325,10 +1196,7 @@ namespace SATSuma
                                             aliasLabel.Text = result7.aliases[i];
                                         });
                                         System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
-                                        channelLabel.Invoke((MethodInvoker)delegate
-                                        {
-                                            channelLabel.Text = result7.channels[i];
-                                        });
+                                        UpdateLabelValue(channelLabel, result7.channels[i]);
                                     }
                                 }
                             }
@@ -1485,10 +1353,7 @@ namespace SATSuma
                                 if (RunBitcoinExplorerOrgJSONAPI)
                                 {
                                     var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
-                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblTransInNextBlock.Text = txInNextBlock;
-                                    });
+                                    UpdateLabelValue(lblTransInNextBlock, txInNextBlock);
                                     lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                                     {
                                         lblBlockListTXInNextBlock.Text = txInNextBlock;
@@ -1501,25 +1366,22 @@ namespace SATSuma
                                     {
                                         lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
                                     });
-                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFees.Text = nextBlockTotalFees;
-                                    });
+                                    UpdateLabelValue(lblNextBlockTotalFees, nextBlockTotalFees);
                                     lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                                     {
-                                        lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2");
+                                        UpdateLabelValue(lblNextBlockTotalFeesFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
                                         lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
                                     });
+                                    UpdateLabelValue(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
                                     lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                                     {
                                         lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
                                     });
 
 
-
+                                    UpdateLabelValue(lblBlockListTotalFeesInNextBlockFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
                                     lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
                                     {
-                                        lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2");
                                         lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
                                     });
                                 }
@@ -1637,14 +1499,8 @@ namespace SATSuma
                                 if (RunBlockchainInfoEndpointAPI)
                                 {
                                     var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
-                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblAvgNoTransactions.Text = avgNoTransactions;
-                                    });
-                                    lblBlockReward.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockReward.Text = blockReward;
-                                    });
+                                    UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
+                                    UpdateLabelValue(lblBlockReward, blockReward);
 
                                     if (decimal.TryParse(blockReward, out decimal epoch))
                                     {
@@ -1654,16 +1510,13 @@ namespace SATSuma
                                     {
                                         epoch = 0;
                                     }
-                                    lblSubsidyEpoch.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblSubsidyEpoch.Text = Convert.ToString(epoch);
-                                    });
+                                    UpdateLabelValue(lblSubsidyEpoch, Convert.ToString(epoch));
 
                                     if (decimal.TryParse(blockReward, out decimal decimalBlockReward))
                                     {
+                                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2"));
                                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                                         {
-                                            lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2");
                                             lblBlockRewardFiat.Location = new Point(lblBlockReward.Location.X + lblBlockReward.Width, lblBlockRewardFiat.Location.Y);
                                         });
                                     }
@@ -1685,24 +1538,18 @@ namespace SATSuma
                                         DecBlockReward = 0;
                                     }
                                     decimal NextBlockReward = DecBlockReward / 2;
-                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockRewardAfterHalving.Text = Convert.ToString(NextBlockReward);
-                                    });
+                                    UpdateLabelValue(lblBlockRewardAfterHalving, Convert.ToString(NextBlockReward));
+                                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockReward) * OneBTCinSelectedCurrency).ToString("N2"));
                                     lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                                     {
-                                        lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockReward) * OneBTCinSelectedCurrency).ToString("N2");
                                         lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockRewardAfterHalving.Location.X + lblBlockRewardAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
                                     });
-                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListBlockReward.Text = blockReward;
-                                    });
+                                    UpdateLabelValue(lblBlockListBlockReward, blockReward);
                                     if (decimal.TryParse(blockReward, out decimal blockReward2))
                                     {
+                                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2"));
                                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
                                         {
-                                            lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2");
                                             lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
                                         });
                                     }
@@ -1714,17 +1561,10 @@ namespace SATSuma
                                             lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
                                         });
                                     }
-                                    
-                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBTCInCirc.Text = btcInCirc + " / 21000000";
-                                    });
+                                    UpdateLabelValue(lblBTCInCirc, btcInCirc + " / 21000000");
                                     if (decimal.TryParse(btcInCirc, out decimal btcInCircDec))
                                     {
-                                        lblBTCToBeIssued.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblBTCToBeIssued.Text = Convert.ToString(21000000 - btcInCircDec);
-                                        });
+                                        UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - btcInCircDec));
                                     }
                                     else
                                     {
@@ -1736,36 +1576,21 @@ namespace SATSuma
                                     }
                                     
                                     decimal percentIssued = Math.Round((100m / 21000000) * btcInCircDec, 2);
-                                    lblPercentIssued.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblPercentIssued.Text = Convert.ToString(percentIssued);
-                                    });
+                                    UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
 
                                     progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                     {
                                         progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
                                     });
-                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHashesToSolve.Text = hashesToSolve;
-                                    });
-                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListAttemptsToSolveBlock.Text = hashesToSolve;
-                                    });
-                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourTransCount.Text = twentyFourHourTransCount;
-                                    });
+                                    UpdateLabelValue(lblHashesToSolve, hashesToSolve);
+                                    UpdateLabelValue(lblBlockListAttemptsToSolveBlock, hashesToSolve);
+                                    UpdateLabelValue(lbl24HourTransCount, twentyFourHourTransCount);
                                     if (decimal.TryParse(twentyFourHourBTCSent, out decimal twentyFourHourBTCSentDec))
                                     {
-                                        lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                        {
-                                            lbl24HourBTCSent.Text = twentyFourHourBTCSentDec.ToString("F2");
-                                        });
+                                        UpdateLabelValue(lbl24HourBTCSent, twentyFourHourBTCSentDec.ToString("F2"));
+                                        UpdateLabelValue(lbl24HourBTCSentFiat, lblHeaderPrice.Text[0] + (twentyFourHourBTCSentDec * OneBTCinSelectedCurrency).ToString("N2"));
                                         lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                                         {
-                                            lbl24HourBTCSentFiat.Text = lblHeaderPrice.Text[0] + (twentyFourHourBTCSentDec * OneBTCinSelectedCurrency).ToString("N2");
                                             lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
                                         });
                                     }
@@ -1895,10 +1720,7 @@ namespace SATSuma
                                 int hodling_addresses = int.Parse(result7.hodling_addresses);
                                 if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                                 {
-                                    lblHodlingAddresses.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHodlingAddresses.Text = result7.hodling_addresses;
-                                    });
+                                    UpdateLabelValue(lblHodlingAddresses, result7.hodling_addresses);
                                 }
                                 else
                                 {
@@ -1907,14 +1729,8 @@ namespace SATSuma
                                         lblHodlingAddresses.Text = "no data";
                                     });
                                 }
-                                lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlocksIn24Hours.Text = result7.blocks_24h;
-                                });
-                                lblNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNodes.Text = result7.nodes;
-                                });
+                                UpdateLabelValue(lblBlocksIn24Hours, result7.blocks_24h);
+                                UpdateLabelValue(lblNodes, result7.nodes);
                                 dynamic blockchainSize = result7.blockchain_size;
                                 double blockchainSizeGB = 0;
                                 if (decimal.TryParse(blockchainSize, out decimal blockchainSizeGBtemp))
@@ -1925,10 +1741,7 @@ namespace SATSuma
                                 {
                                     blockchainSizeGB = 0;
                                 }
-                                lblBlockchainSize.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockchainSize.Text = blockchainSizeGB.ToString();
-                                });
+                                UpdateLabelValue(lblBlockchainSize, blockchainSizeGB.ToString());
                             }
                             else
                             {
@@ -1994,10 +1807,7 @@ namespace SATSuma
                             if (RunBlockchairComJSONAPI)
                             {
                                 var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
-                                lblProgressToHalving.Invoke((MethodInvoker)delegate
-                                {
-                                    lblProgressToHalving.Text = halveningBlock + " / " + blocksLeft;
-                                });
+                                UpdateLabelValue(lblProgressToHalving, halveningBlock + " / " + blocksLeft);
                                 int progressBarValue = 0;
                                 try
                                 {
@@ -2013,10 +1823,7 @@ namespace SATSuma
                                 }
                                 progressBarProgressToHalving.Value = progressBarValue;
                                 progressBarBlockListHalvingProgress.Value = progressBarValue;
-                                lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListHalvingBlockAndRemaining.Text = halveningBlock + " / " + blocksLeft;
-                                });
+                                UpdateLabelValue(lblBlockListHalvingBlockAndRemaining, halveningBlock + " / " + blocksLeft);
                                 string halvening_time = halveningTime;
                                 string halveningDate = "";
                                 try
@@ -22295,7 +22102,7 @@ namespace SATSuma
         {
             try
             {
-                Button[] buttonsToUpdateBackColor =
+                System.Windows.Forms.Button[] buttonsToUpdateBackColor =
                 {
                     btnMenuApplyCustomTheme, btnMenuBitcoinDashboard, btnThemeMenu, btnMenuAddress,
                     btnMenuCreateTheme, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts,
@@ -22307,9 +22114,9 @@ namespace SATSuma
                     btnMoveWindow, btnExit, btnAddToBookmarks, btnHideErrorMessage,
                     btnCopyErrorMessage
                 };
-                if (buttonsToUpdateBackColor.Contains((Button)sender))
+                if (buttonsToUpdateBackColor.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((Button)sender).BackColor = btnDeleteTheme.BackColor;
+                    ((System.Windows.Forms.Button)sender).BackColor = btnDeleteTheme.BackColor;
                 }
 
                 if (sender == comboBoxHeaderCustomThemes)
@@ -22337,22 +22144,22 @@ namespace SATSuma
                     menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
                 }
 
-                Button[] buttonsToMatchChartsBackgroundColor =
+                System.Windows.Forms.Button[] buttonsToMatchChartsBackgroundColor =
                 {
                     btnMenuApplyCustomTheme, btnMenuCreateTheme, btnMenuThemeFranklin, BtnMenuThemeGenesis, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, btnShowGlobalSearch, btnUSD, btnEUR, btnGBP, btnXAU, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnAddToBookmarks, btnHideErrorMessage, btnCopyErrorMessage
                 };
-                if (buttonsToMatchChartsBackgroundColor.Contains((Button)sender))
+                if (buttonsToMatchChartsBackgroundColor.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((Button)sender).BackColor = menuAndHeaderButtonsColour;
+                    ((System.Windows.Forms.Button)sender).BackColor = menuAndHeaderButtonsColour;
                 }
 
-                Button[] buttonstoMakeTransparent =
+                System.Windows.Forms.Button[] buttonstoMakeTransparent =
                 {
                     btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash
                 };
-                if (buttonstoMakeTransparent.Contains((Button)sender))
+                if (buttonstoMakeTransparent.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((Button)sender).BackColor = Color.Transparent;
+                    ((System.Windows.Forms.Button)sender).BackColor = Color.Transparent;
                 }
 
                 if (sender == btnThemeMenu)
@@ -25213,10 +25020,11 @@ namespace SATSuma
                 if (!offlineMode && !testNet && RunBitcoinExplorerEndpointAPI)
                 {
                     #region recalculate fiat values on bitcoin dashboard
+
                     lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockRewardAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
-                });
+                        {
+                            lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockRewardAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        });
                     lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                     {
                         lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
@@ -25469,43 +25277,19 @@ namespace SATSuma
                         lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
                     });
                     UpdateLabelValue(lblPriceUSD, price);
-//                    lblPriceUSD.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblPriceUSD.Text = price;
-//                    });
                     UpdateLabelValue(lblHeaderPrice, price);
-//                    lblHeaderPrice.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblHeaderPrice.Text = price;
-//                    });
                     lblHeaderPriceChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
                     });
                     UpdateLabelValue(lblMarketCapUSD, mCap);
-//                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblMarketCapUSD.Text = mCap;
-//                    });
                     UpdateLabelValue(lblHeaderMarketCap, mCap);
-//                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblHeaderMarketCap.Text = mCap;
-//                    });
                     lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
                     });
                     UpdateLabelValue(lblMoscowTime, satsPerUnit);
-//                    lblMoscowTime.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblMoscowTime.Text = satsPerUnit;
-//                    });
                     UpdateLabelValue(lblHeaderMoscowTime, satsPerUnit);
-//                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-//                    {
-//                        lblHeaderMoscowTime.Text = satsPerUnit;
-//                    });
                     lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
@@ -27094,13 +26878,6 @@ namespace SATSuma
             }
         }
 
-
-
-
-
-
-
-
         #endregion
 
         #endregion
@@ -27114,8 +26891,10 @@ namespace SATSuma
 
                 double currentValueDouble;
                 double newValueDouble;
-                Color currentColor = label.ForeColor;
-                // Get the current value from the label
+                // get the current colour. Will revert to this after making red or green
+                Color currentColor = label.ForeColor; 
+
+                // Get the current value from the label so we know if it's gone up or down
                 if (label.Text == "no data")
                 {
                     currentValueDouble = 0;
@@ -27130,6 +26909,7 @@ namespace SATSuma
                 }
 
                 string cleanedNewValue = Regex.Replace(newValue, @"[^0-9.]", "");
+                
                 newValueDouble = double.Parse(cleanedNewValue);
 
                 // Update the label text
@@ -27148,8 +26928,8 @@ namespace SATSuma
                     label.ForeColor = Color.IndianRed;
                 }
 
-                // Wait for 1 second
-                await Task.Delay(1000);
+                // Wait a moment
+                await Task.Delay(5000);
 
                 // Restore original color
                 label.ForeColor = currentColor;

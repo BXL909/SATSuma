@@ -33,7 +33,6 @@
             this.lblTime = new System.Windows.Forms.Label();
             this.timer1Sec = new System.Windows.Forms.Timer(this.components);
             this.lblBlockNumber = new System.Windows.Forms.Label();
-            this.timerAPIRefreshPeriod = new System.Windows.Forms.Timer(this.components);
             this.btnMoveWindow = new CustomControls.RJControls.RJButton();
             this.lblStatusLight = new System.Windows.Forms.Label();
             this.lblErrorMessage = new System.Windows.Forms.Label();
@@ -1420,11 +1419,6 @@
             this.lblBlockNumber.Size = new System.Drawing.Size(122, 47);
             this.lblBlockNumber.TabIndex = 5;
             this.lblBlockNumber.Text = "000000";
-            // 
-            // timerAPIRefreshPeriod
-            // 
-            this.timerAPIRefreshPeriod.Interval = 60000;
-            this.timerAPIRefreshPeriod.Tick += new System.EventHandler(this.TimerAPIRefreshPeriod_Tick);
             // 
             // btnMoveWindow
             // 
@@ -2979,7 +2973,7 @@
             this.lblPercentIssued.AutoSize = true;
             this.lblPercentIssued.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblPercentIssued.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPercentIssued.Location = new System.Drawing.Point(162, 272);
+            this.lblPercentIssued.Location = new System.Drawing.Point(158, 272);
             this.lblPercentIssued.Name = "lblPercentIssued";
             this.lblPercentIssued.Size = new System.Drawing.Size(52, 16);
             this.lblPercentIssued.TabIndex = 250;
@@ -3493,7 +3487,7 @@
             this.lblProgressToHalving.AutoSize = true;
             this.lblProgressToHalving.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblProgressToHalving.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgressToHalving.Location = new System.Drawing.Point(426, 311);
+            this.lblProgressToHalving.Location = new System.Drawing.Point(419, 311);
             this.lblProgressToHalving.Name = "lblProgressToHalving";
             this.lblProgressToHalving.Size = new System.Drawing.Size(52, 16);
             this.lblProgressToHalving.TabIndex = 136;
@@ -15309,9 +15303,9 @@
             this.lblCalculatedXAUFromBTCAmount.Location = new System.Drawing.Point(301, 106);
             this.lblCalculatedXAUFromBTCAmount.Margin = new System.Windows.Forms.Padding(0);
             this.lblCalculatedXAUFromBTCAmount.Name = "lblCalculatedXAUFromBTCAmount";
-            this.lblCalculatedXAUFromBTCAmount.Size = new System.Drawing.Size(79, 17);
+            this.lblCalculatedXAUFromBTCAmount.Size = new System.Drawing.Size(15, 17);
             this.lblCalculatedXAUFromBTCAmount.TabIndex = 313;
-            this.lblCalculatedXAUFromBTCAmount.Text = "unavailable";
+            this.lblCalculatedXAUFromBTCAmount.Text = "0";
             // 
             // label280
             // 
@@ -15836,9 +15830,9 @@
             this.labelPCXAUcustom.Location = new System.Drawing.Point(606, 384);
             this.labelPCXAUcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAUcustom.Name = "labelPCXAUcustom";
-            this.labelPCXAUcustom.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAUcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAUcustom.TabIndex = 299;
-            this.labelPCXAUcustom.Text = "unavailable";
+            this.labelPCXAUcustom.Text = "0";
             // 
             // labelPCGBPcustom
             // 
@@ -15849,9 +15843,9 @@
             this.labelPCGBPcustom.Location = new System.Drawing.Point(458, 384);
             this.labelPCGBPcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBPcustom.Name = "labelPCGBPcustom";
-            this.labelPCGBPcustom.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBPcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBPcustom.TabIndex = 298;
-            this.labelPCGBPcustom.Text = "GBP";
+            this.labelPCGBPcustom.Text = "0";
             // 
             // labelPCEURcustom
             // 
@@ -15862,9 +15856,9 @@
             this.labelPCEURcustom.Location = new System.Drawing.Point(310, 384);
             this.labelPCEURcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEURcustom.Name = "labelPCEURcustom";
-            this.labelPCEURcustom.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEURcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCEURcustom.TabIndex = 297;
-            this.labelPCEURcustom.Text = "EUR";
+            this.labelPCEURcustom.Text = "0";
             // 
             // labelPCUSDcustom
             // 
@@ -15875,9 +15869,9 @@
             this.labelPCUSDcustom.Location = new System.Drawing.Point(161, 384);
             this.labelPCUSDcustom.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSDcustom.Name = "labelPCUSDcustom";
-            this.labelPCUSDcustom.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSDcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSDcustom.TabIndex = 296;
-            this.labelPCUSDcustom.Text = "USD";
+            this.labelPCUSDcustom.Text = "0";
             // 
             // labelPCXAU13
             // 
@@ -15888,9 +15882,9 @@
             this.labelPCXAU13.Location = new System.Drawing.Point(606, 284);
             this.labelPCXAU13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU13.Name = "labelPCXAU13";
-            this.labelPCXAU13.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU13.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU13.TabIndex = 294;
-            this.labelPCXAU13.Text = "unavailable";
+            this.labelPCXAU13.Text = "0";
             // 
             // labelPCXAU14
             // 
@@ -15901,9 +15895,9 @@
             this.labelPCXAU14.Location = new System.Drawing.Point(606, 304);
             this.labelPCXAU14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU14.Name = "labelPCXAU14";
-            this.labelPCXAU14.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU14.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU14.TabIndex = 293;
-            this.labelPCXAU14.Text = "unavailable";
+            this.labelPCXAU14.Text = "0";
             // 
             // labelPCXAU15
             // 
@@ -15914,9 +15908,9 @@
             this.labelPCXAU15.Location = new System.Drawing.Point(606, 324);
             this.labelPCXAU15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU15.Name = "labelPCXAU15";
-            this.labelPCXAU15.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU15.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU15.TabIndex = 292;
-            this.labelPCXAU15.Text = "unavailable";
+            this.labelPCXAU15.Text = "0";
             // 
             // labelPCXAU16
             // 
@@ -15927,9 +15921,9 @@
             this.labelPCXAU16.Location = new System.Drawing.Point(606, 344);
             this.labelPCXAU16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU16.Name = "labelPCXAU16";
-            this.labelPCXAU16.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU16.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU16.TabIndex = 291;
-            this.labelPCXAU16.Text = "unavailable";
+            this.labelPCXAU16.Text = "0";
             // 
             // labelPCXAU17
             // 
@@ -15940,9 +15934,9 @@
             this.labelPCXAU17.Location = new System.Drawing.Point(606, 364);
             this.labelPCXAU17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU17.Name = "labelPCXAU17";
-            this.labelPCXAU17.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU17.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU17.TabIndex = 290;
-            this.labelPCXAU17.Text = "unavailable";
+            this.labelPCXAU17.Text = "0";
             // 
             // labelPCXAU4
             // 
@@ -15953,9 +15947,9 @@
             this.labelPCXAU4.Location = new System.Drawing.Point(606, 104);
             this.labelPCXAU4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU4.Name = "labelPCXAU4";
-            this.labelPCXAU4.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU4.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU4.TabIndex = 289;
-            this.labelPCXAU4.Text = "unavailable";
+            this.labelPCXAU4.Text = "0";
             // 
             // labelPCXAU5
             // 
@@ -15966,9 +15960,9 @@
             this.labelPCXAU5.Location = new System.Drawing.Point(606, 124);
             this.labelPCXAU5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU5.Name = "labelPCXAU5";
-            this.labelPCXAU5.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU5.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU5.TabIndex = 288;
-            this.labelPCXAU5.Text = "unavailable";
+            this.labelPCXAU5.Text = "0";
             // 
             // labelPCXAU6
             // 
@@ -15979,9 +15973,9 @@
             this.labelPCXAU6.Location = new System.Drawing.Point(606, 144);
             this.labelPCXAU6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU6.Name = "labelPCXAU6";
-            this.labelPCXAU6.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU6.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU6.TabIndex = 287;
-            this.labelPCXAU6.Text = "unavailable";
+            this.labelPCXAU6.Text = "0";
             // 
             // labelPCXAU7
             // 
@@ -15992,9 +15986,9 @@
             this.labelPCXAU7.Location = new System.Drawing.Point(606, 164);
             this.labelPCXAU7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU7.Name = "labelPCXAU7";
-            this.labelPCXAU7.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU7.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU7.TabIndex = 286;
-            this.labelPCXAU7.Text = "unavailable";
+            this.labelPCXAU7.Text = "0";
             // 
             // labelPCXAU8
             // 
@@ -16005,9 +15999,9 @@
             this.labelPCXAU8.Location = new System.Drawing.Point(606, 184);
             this.labelPCXAU8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU8.Name = "labelPCXAU8";
-            this.labelPCXAU8.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU8.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU8.TabIndex = 285;
-            this.labelPCXAU8.Text = "unavailable";
+            this.labelPCXAU8.Text = "0";
             // 
             // labelPCXAU9
             // 
@@ -16018,9 +16012,9 @@
             this.labelPCXAU9.Location = new System.Drawing.Point(606, 204);
             this.labelPCXAU9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU9.Name = "labelPCXAU9";
-            this.labelPCXAU9.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU9.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU9.TabIndex = 284;
-            this.labelPCXAU9.Text = "unavailable";
+            this.labelPCXAU9.Text = "0";
             // 
             // labelPCXAU10
             // 
@@ -16031,9 +16025,9 @@
             this.labelPCXAU10.Location = new System.Drawing.Point(606, 224);
             this.labelPCXAU10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU10.Name = "labelPCXAU10";
-            this.labelPCXAU10.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU10.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU10.TabIndex = 283;
-            this.labelPCXAU10.Text = "unavailable";
+            this.labelPCXAU10.Text = "0";
             // 
             // labelPCXAU11
             // 
@@ -16044,9 +16038,9 @@
             this.labelPCXAU11.Location = new System.Drawing.Point(606, 244);
             this.labelPCXAU11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU11.Name = "labelPCXAU11";
-            this.labelPCXAU11.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU11.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU11.TabIndex = 282;
-            this.labelPCXAU11.Text = "unavailable";
+            this.labelPCXAU11.Text = "0";
             // 
             // labelPCXAU12
             // 
@@ -16057,9 +16051,9 @@
             this.labelPCXAU12.Location = new System.Drawing.Point(606, 264);
             this.labelPCXAU12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU12.Name = "labelPCXAU12";
-            this.labelPCXAU12.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU12.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU12.TabIndex = 281;
-            this.labelPCXAU12.Text = "unavailable";
+            this.labelPCXAU12.Text = "0";
             // 
             // labelPCXAU1
             // 
@@ -16070,9 +16064,9 @@
             this.labelPCXAU1.Location = new System.Drawing.Point(606, 44);
             this.labelPCXAU1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU1.Name = "labelPCXAU1";
-            this.labelPCXAU1.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU1.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU1.TabIndex = 280;
-            this.labelPCXAU1.Text = "unavailable";
+            this.labelPCXAU1.Text = "0";
             // 
             // labelPCXAU2
             // 
@@ -16083,9 +16077,9 @@
             this.labelPCXAU2.Location = new System.Drawing.Point(606, 64);
             this.labelPCXAU2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU2.Name = "labelPCXAU2";
-            this.labelPCXAU2.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU2.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU2.TabIndex = 279;
-            this.labelPCXAU2.Text = "unavailable";
+            this.labelPCXAU2.Text = "0";
             // 
             // labelPCXAU3
             // 
@@ -16096,9 +16090,9 @@
             this.labelPCXAU3.Location = new System.Drawing.Point(606, 84);
             this.labelPCXAU3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCXAU3.Name = "labelPCXAU3";
-            this.labelPCXAU3.Size = new System.Drawing.Size(79, 17);
+            this.labelPCXAU3.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU3.TabIndex = 278;
-            this.labelPCXAU3.Text = "unavailable";
+            this.labelPCXAU3.Text = "0";
             // 
             // labelPCGBP13
             // 
@@ -16109,9 +16103,9 @@
             this.labelPCGBP13.Location = new System.Drawing.Point(458, 284);
             this.labelPCGBP13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP13.Name = "labelPCGBP13";
-            this.labelPCGBP13.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP13.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP13.TabIndex = 277;
-            this.labelPCGBP13.Text = "GBP";
+            this.labelPCGBP13.Text = "0";
             // 
             // labelPCGBP14
             // 
@@ -16122,9 +16116,9 @@
             this.labelPCGBP14.Location = new System.Drawing.Point(458, 304);
             this.labelPCGBP14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP14.Name = "labelPCGBP14";
-            this.labelPCGBP14.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP14.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP14.TabIndex = 276;
-            this.labelPCGBP14.Text = "GBP";
+            this.labelPCGBP14.Text = "0";
             // 
             // labelPCGBP15
             // 
@@ -16135,9 +16129,9 @@
             this.labelPCGBP15.Location = new System.Drawing.Point(458, 324);
             this.labelPCGBP15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP15.Name = "labelPCGBP15";
-            this.labelPCGBP15.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP15.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP15.TabIndex = 275;
-            this.labelPCGBP15.Text = "GBP";
+            this.labelPCGBP15.Text = "0";
             // 
             // labelPCGBP16
             // 
@@ -16148,9 +16142,9 @@
             this.labelPCGBP16.Location = new System.Drawing.Point(458, 344);
             this.labelPCGBP16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP16.Name = "labelPCGBP16";
-            this.labelPCGBP16.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP16.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP16.TabIndex = 274;
-            this.labelPCGBP16.Text = "GBP";
+            this.labelPCGBP16.Text = "0";
             // 
             // labelPCGBP17
             // 
@@ -16161,9 +16155,9 @@
             this.labelPCGBP17.Location = new System.Drawing.Point(458, 364);
             this.labelPCGBP17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP17.Name = "labelPCGBP17";
-            this.labelPCGBP17.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP17.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP17.TabIndex = 273;
-            this.labelPCGBP17.Text = "GBP";
+            this.labelPCGBP17.Text = "0";
             // 
             // labelPCGBP4
             // 
@@ -16174,9 +16168,9 @@
             this.labelPCGBP4.Location = new System.Drawing.Point(458, 104);
             this.labelPCGBP4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP4.Name = "labelPCGBP4";
-            this.labelPCGBP4.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP4.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP4.TabIndex = 272;
-            this.labelPCGBP4.Text = "GBP";
+            this.labelPCGBP4.Text = "0";
             // 
             // labelPCGBP5
             // 
@@ -16187,9 +16181,9 @@
             this.labelPCGBP5.Location = new System.Drawing.Point(458, 124);
             this.labelPCGBP5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP5.Name = "labelPCGBP5";
-            this.labelPCGBP5.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP5.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP5.TabIndex = 271;
-            this.labelPCGBP5.Text = "GBP";
+            this.labelPCGBP5.Text = "0";
             // 
             // labelPCGBP6
             // 
@@ -16200,9 +16194,9 @@
             this.labelPCGBP6.Location = new System.Drawing.Point(458, 144);
             this.labelPCGBP6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP6.Name = "labelPCGBP6";
-            this.labelPCGBP6.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP6.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP6.TabIndex = 270;
-            this.labelPCGBP6.Text = "GBP";
+            this.labelPCGBP6.Text = "0";
             // 
             // labelPCGBP7
             // 
@@ -16213,9 +16207,9 @@
             this.labelPCGBP7.Location = new System.Drawing.Point(458, 164);
             this.labelPCGBP7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP7.Name = "labelPCGBP7";
-            this.labelPCGBP7.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP7.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP7.TabIndex = 269;
-            this.labelPCGBP7.Text = "GBP";
+            this.labelPCGBP7.Text = "0";
             // 
             // labelPCGBP8
             // 
@@ -16226,9 +16220,9 @@
             this.labelPCGBP8.Location = new System.Drawing.Point(458, 184);
             this.labelPCGBP8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP8.Name = "labelPCGBP8";
-            this.labelPCGBP8.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP8.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP8.TabIndex = 268;
-            this.labelPCGBP8.Text = "GBP";
+            this.labelPCGBP8.Text = "0";
             // 
             // labelPCGBP9
             // 
@@ -16239,9 +16233,9 @@
             this.labelPCGBP9.Location = new System.Drawing.Point(458, 204);
             this.labelPCGBP9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP9.Name = "labelPCGBP9";
-            this.labelPCGBP9.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP9.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP9.TabIndex = 267;
-            this.labelPCGBP9.Text = "GBP";
+            this.labelPCGBP9.Text = "0";
             // 
             // labelPCGBP10
             // 
@@ -16252,9 +16246,9 @@
             this.labelPCGBP10.Location = new System.Drawing.Point(458, 224);
             this.labelPCGBP10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP10.Name = "labelPCGBP10";
-            this.labelPCGBP10.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP10.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP10.TabIndex = 266;
-            this.labelPCGBP10.Text = "GBP";
+            this.labelPCGBP10.Text = "0";
             // 
             // labelPCGBP11
             // 
@@ -16265,9 +16259,9 @@
             this.labelPCGBP11.Location = new System.Drawing.Point(458, 244);
             this.labelPCGBP11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP11.Name = "labelPCGBP11";
-            this.labelPCGBP11.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP11.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP11.TabIndex = 265;
-            this.labelPCGBP11.Text = "GBP";
+            this.labelPCGBP11.Text = "0";
             // 
             // labelPCGBP12
             // 
@@ -16278,9 +16272,9 @@
             this.labelPCGBP12.Location = new System.Drawing.Point(458, 264);
             this.labelPCGBP12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP12.Name = "labelPCGBP12";
-            this.labelPCGBP12.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP12.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP12.TabIndex = 264;
-            this.labelPCGBP12.Text = "GBP";
+            this.labelPCGBP12.Text = "0";
             // 
             // labelPCGBP1
             // 
@@ -16291,9 +16285,9 @@
             this.labelPCGBP1.Location = new System.Drawing.Point(458, 44);
             this.labelPCGBP1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP1.Name = "labelPCGBP1";
-            this.labelPCGBP1.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP1.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP1.TabIndex = 263;
-            this.labelPCGBP1.Text = "GBP";
+            this.labelPCGBP1.Text = "0";
             // 
             // labelPCGBP2
             // 
@@ -16304,9 +16298,9 @@
             this.labelPCGBP2.Location = new System.Drawing.Point(458, 64);
             this.labelPCGBP2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP2.Name = "labelPCGBP2";
-            this.labelPCGBP2.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP2.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP2.TabIndex = 262;
-            this.labelPCGBP2.Text = "GBP";
+            this.labelPCGBP2.Text = "0";
             // 
             // labelPCGBP3
             // 
@@ -16317,9 +16311,9 @@
             this.labelPCGBP3.Location = new System.Drawing.Point(458, 84);
             this.labelPCGBP3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCGBP3.Name = "labelPCGBP3";
-            this.labelPCGBP3.Size = new System.Drawing.Size(32, 17);
+            this.labelPCGBP3.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP3.TabIndex = 261;
-            this.labelPCGBP3.Text = "GBP";
+            this.labelPCGBP3.Text = "0";
             // 
             // labelPCEUR13
             // 
@@ -16330,9 +16324,9 @@
             this.labelPCEUR13.Location = new System.Drawing.Point(310, 284);
             this.labelPCEUR13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR13.Name = "labelPCEUR13";
-            this.labelPCEUR13.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR13.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR13.TabIndex = 260;
-            this.labelPCEUR13.Text = "EUR";
+            this.labelPCEUR13.Text = "0";
             // 
             // labelPCEUR14
             // 
@@ -16343,9 +16337,9 @@
             this.labelPCEUR14.Location = new System.Drawing.Point(310, 304);
             this.labelPCEUR14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR14.Name = "labelPCEUR14";
-            this.labelPCEUR14.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR14.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR14.TabIndex = 259;
-            this.labelPCEUR14.Text = "EUR";
+            this.labelPCEUR14.Text = "0";
             // 
             // labelPCEUR15
             // 
@@ -16356,9 +16350,9 @@
             this.labelPCEUR15.Location = new System.Drawing.Point(310, 324);
             this.labelPCEUR15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR15.Name = "labelPCEUR15";
-            this.labelPCEUR15.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR15.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR15.TabIndex = 258;
-            this.labelPCEUR15.Text = "EUR";
+            this.labelPCEUR15.Text = "0";
             // 
             // labelPCEUR16
             // 
@@ -16369,9 +16363,9 @@
             this.labelPCEUR16.Location = new System.Drawing.Point(310, 344);
             this.labelPCEUR16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR16.Name = "labelPCEUR16";
-            this.labelPCEUR16.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR16.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR16.TabIndex = 257;
-            this.labelPCEUR16.Text = "EUR";
+            this.labelPCEUR16.Text = "0";
             // 
             // labelPCEUR17
             // 
@@ -16382,9 +16376,9 @@
             this.labelPCEUR17.Location = new System.Drawing.Point(310, 364);
             this.labelPCEUR17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR17.Name = "labelPCEUR17";
-            this.labelPCEUR17.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR17.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR17.TabIndex = 256;
-            this.labelPCEUR17.Text = "EUR";
+            this.labelPCEUR17.Text = "0";
             // 
             // labelPCEUR4
             // 
@@ -16395,9 +16389,9 @@
             this.labelPCEUR4.Location = new System.Drawing.Point(310, 104);
             this.labelPCEUR4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR4.Name = "labelPCEUR4";
-            this.labelPCEUR4.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR4.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR4.TabIndex = 255;
-            this.labelPCEUR4.Text = "EUR";
+            this.labelPCEUR4.Text = "0";
             // 
             // labelPCEUR5
             // 
@@ -16408,9 +16402,9 @@
             this.labelPCEUR5.Location = new System.Drawing.Point(310, 124);
             this.labelPCEUR5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR5.Name = "labelPCEUR5";
-            this.labelPCEUR5.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR5.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR5.TabIndex = 254;
-            this.labelPCEUR5.Text = "EUR";
+            this.labelPCEUR5.Text = "0";
             // 
             // labelPCEUR6
             // 
@@ -16421,9 +16415,9 @@
             this.labelPCEUR6.Location = new System.Drawing.Point(310, 144);
             this.labelPCEUR6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR6.Name = "labelPCEUR6";
-            this.labelPCEUR6.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR6.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR6.TabIndex = 253;
-            this.labelPCEUR6.Text = "EUR";
+            this.labelPCEUR6.Text = "0";
             // 
             // labelPCEUR7
             // 
@@ -16434,9 +16428,9 @@
             this.labelPCEUR7.Location = new System.Drawing.Point(310, 164);
             this.labelPCEUR7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR7.Name = "labelPCEUR7";
-            this.labelPCEUR7.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR7.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR7.TabIndex = 252;
-            this.labelPCEUR7.Text = "EUR";
+            this.labelPCEUR7.Text = "0";
             // 
             // labelPCEUR8
             // 
@@ -16447,9 +16441,9 @@
             this.labelPCEUR8.Location = new System.Drawing.Point(310, 184);
             this.labelPCEUR8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR8.Name = "labelPCEUR8";
-            this.labelPCEUR8.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR8.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR8.TabIndex = 251;
-            this.labelPCEUR8.Text = "EUR";
+            this.labelPCEUR8.Text = "0";
             // 
             // labelPCEUR9
             // 
@@ -16460,9 +16454,9 @@
             this.labelPCEUR9.Location = new System.Drawing.Point(310, 204);
             this.labelPCEUR9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR9.Name = "labelPCEUR9";
-            this.labelPCEUR9.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR9.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR9.TabIndex = 250;
-            this.labelPCEUR9.Text = "EUR";
+            this.labelPCEUR9.Text = "0";
             // 
             // labelPCEUR10
             // 
@@ -16473,9 +16467,9 @@
             this.labelPCEUR10.Location = new System.Drawing.Point(310, 224);
             this.labelPCEUR10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR10.Name = "labelPCEUR10";
-            this.labelPCEUR10.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR10.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR10.TabIndex = 249;
-            this.labelPCEUR10.Text = "EUR";
+            this.labelPCEUR10.Text = "0";
             // 
             // labelPCEUR11
             // 
@@ -16486,9 +16480,9 @@
             this.labelPCEUR11.Location = new System.Drawing.Point(310, 244);
             this.labelPCEUR11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR11.Name = "labelPCEUR11";
-            this.labelPCEUR11.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR11.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR11.TabIndex = 248;
-            this.labelPCEUR11.Text = "EUR";
+            this.labelPCEUR11.Text = "0";
             // 
             // labelPCEUR12
             // 
@@ -16499,9 +16493,9 @@
             this.labelPCEUR12.Location = new System.Drawing.Point(310, 264);
             this.labelPCEUR12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR12.Name = "labelPCEUR12";
-            this.labelPCEUR12.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR12.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR12.TabIndex = 247;
-            this.labelPCEUR12.Text = "EUR";
+            this.labelPCEUR12.Text = "0";
             // 
             // labelPCEUR1
             // 
@@ -16512,9 +16506,9 @@
             this.labelPCEUR1.Location = new System.Drawing.Point(310, 44);
             this.labelPCEUR1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR1.Name = "labelPCEUR1";
-            this.labelPCEUR1.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR1.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR1.TabIndex = 246;
-            this.labelPCEUR1.Text = "EUR";
+            this.labelPCEUR1.Text = "0";
             // 
             // labelPCEUR2
             // 
@@ -16525,9 +16519,9 @@
             this.labelPCEUR2.Location = new System.Drawing.Point(310, 64);
             this.labelPCEUR2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR2.Name = "labelPCEUR2";
-            this.labelPCEUR2.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR2.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR2.TabIndex = 245;
-            this.labelPCEUR2.Text = "EUR";
+            this.labelPCEUR2.Text = "0";
             // 
             // labelPCEUR3
             // 
@@ -16538,9 +16532,9 @@
             this.labelPCEUR3.Location = new System.Drawing.Point(310, 84);
             this.labelPCEUR3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCEUR3.Name = "labelPCEUR3";
-            this.labelPCEUR3.Size = new System.Drawing.Size(29, 17);
+            this.labelPCEUR3.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR3.TabIndex = 244;
-            this.labelPCEUR3.Text = "EUR";
+            this.labelPCEUR3.Text = "0";
             // 
             // labelPCUSD13
             // 
@@ -16551,9 +16545,9 @@
             this.labelPCUSD13.Location = new System.Drawing.Point(161, 284);
             this.labelPCUSD13.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD13.Name = "labelPCUSD13";
-            this.labelPCUSD13.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD13.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD13.TabIndex = 243;
-            this.labelPCUSD13.Text = "USD";
+            this.labelPCUSD13.Text = "0";
             // 
             // labelPCUSD14
             // 
@@ -16564,9 +16558,9 @@
             this.labelPCUSD14.Location = new System.Drawing.Point(161, 304);
             this.labelPCUSD14.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD14.Name = "labelPCUSD14";
-            this.labelPCUSD14.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD14.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD14.TabIndex = 242;
-            this.labelPCUSD14.Text = "USD";
+            this.labelPCUSD14.Text = "0";
             // 
             // labelPCUSD15
             // 
@@ -16577,9 +16571,9 @@
             this.labelPCUSD15.Location = new System.Drawing.Point(161, 324);
             this.labelPCUSD15.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD15.Name = "labelPCUSD15";
-            this.labelPCUSD15.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD15.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD15.TabIndex = 241;
-            this.labelPCUSD15.Text = "USD";
+            this.labelPCUSD15.Text = "0";
             // 
             // labelPCUSD16
             // 
@@ -16590,9 +16584,9 @@
             this.labelPCUSD16.Location = new System.Drawing.Point(161, 344);
             this.labelPCUSD16.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD16.Name = "labelPCUSD16";
-            this.labelPCUSD16.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD16.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD16.TabIndex = 240;
-            this.labelPCUSD16.Text = "USD";
+            this.labelPCUSD16.Text = "0";
             // 
             // labelPCUSD17
             // 
@@ -16603,9 +16597,9 @@
             this.labelPCUSD17.Location = new System.Drawing.Point(161, 364);
             this.labelPCUSD17.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD17.Name = "labelPCUSD17";
-            this.labelPCUSD17.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD17.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD17.TabIndex = 239;
-            this.labelPCUSD17.Text = "USD";
+            this.labelPCUSD17.Text = "0";
             // 
             // labelPCUSD4
             // 
@@ -16616,9 +16610,9 @@
             this.labelPCUSD4.Location = new System.Drawing.Point(161, 104);
             this.labelPCUSD4.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD4.Name = "labelPCUSD4";
-            this.labelPCUSD4.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD4.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD4.TabIndex = 238;
-            this.labelPCUSD4.Text = "USD";
+            this.labelPCUSD4.Text = "0";
             // 
             // labelPCUSD5
             // 
@@ -16629,9 +16623,9 @@
             this.labelPCUSD5.Location = new System.Drawing.Point(161, 124);
             this.labelPCUSD5.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD5.Name = "labelPCUSD5";
-            this.labelPCUSD5.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD5.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD5.TabIndex = 237;
-            this.labelPCUSD5.Text = "USD";
+            this.labelPCUSD5.Text = "0";
             // 
             // labelPCUSD6
             // 
@@ -16642,9 +16636,9 @@
             this.labelPCUSD6.Location = new System.Drawing.Point(161, 144);
             this.labelPCUSD6.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD6.Name = "labelPCUSD6";
-            this.labelPCUSD6.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD6.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD6.TabIndex = 236;
-            this.labelPCUSD6.Text = "USD";
+            this.labelPCUSD6.Text = "0";
             // 
             // labelPCUSD7
             // 
@@ -16655,9 +16649,9 @@
             this.labelPCUSD7.Location = new System.Drawing.Point(161, 164);
             this.labelPCUSD7.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD7.Name = "labelPCUSD7";
-            this.labelPCUSD7.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD7.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD7.TabIndex = 235;
-            this.labelPCUSD7.Text = "USD";
+            this.labelPCUSD7.Text = "0";
             // 
             // labelPCUSD8
             // 
@@ -16668,9 +16662,9 @@
             this.labelPCUSD8.Location = new System.Drawing.Point(161, 184);
             this.labelPCUSD8.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD8.Name = "labelPCUSD8";
-            this.labelPCUSD8.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD8.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD8.TabIndex = 234;
-            this.labelPCUSD8.Text = "USD";
+            this.labelPCUSD8.Text = "0";
             // 
             // labelPCUSD9
             // 
@@ -16681,9 +16675,9 @@
             this.labelPCUSD9.Location = new System.Drawing.Point(161, 204);
             this.labelPCUSD9.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD9.Name = "labelPCUSD9";
-            this.labelPCUSD9.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD9.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD9.TabIndex = 233;
-            this.labelPCUSD9.Text = "USD";
+            this.labelPCUSD9.Text = "0";
             // 
             // labelPCUSD10
             // 
@@ -16694,9 +16688,9 @@
             this.labelPCUSD10.Location = new System.Drawing.Point(161, 224);
             this.labelPCUSD10.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD10.Name = "labelPCUSD10";
-            this.labelPCUSD10.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD10.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD10.TabIndex = 232;
-            this.labelPCUSD10.Text = "USD";
+            this.labelPCUSD10.Text = "0";
             // 
             // labelPCUSD11
             // 
@@ -16707,9 +16701,9 @@
             this.labelPCUSD11.Location = new System.Drawing.Point(161, 244);
             this.labelPCUSD11.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD11.Name = "labelPCUSD11";
-            this.labelPCUSD11.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD11.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD11.TabIndex = 231;
-            this.labelPCUSD11.Text = "USD";
+            this.labelPCUSD11.Text = "0";
             // 
             // labelPCUSD12
             // 
@@ -16720,9 +16714,9 @@
             this.labelPCUSD12.Location = new System.Drawing.Point(161, 264);
             this.labelPCUSD12.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD12.Name = "labelPCUSD12";
-            this.labelPCUSD12.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD12.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD12.TabIndex = 230;
-            this.labelPCUSD12.Text = "USD";
+            this.labelPCUSD12.Text = "0";
             // 
             // labelPCUSD1
             // 
@@ -16733,9 +16727,9 @@
             this.labelPCUSD1.Location = new System.Drawing.Point(161, 44);
             this.labelPCUSD1.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD1.Name = "labelPCUSD1";
-            this.labelPCUSD1.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD1.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD1.TabIndex = 229;
-            this.labelPCUSD1.Text = "USD";
+            this.labelPCUSD1.Text = "0";
             // 
             // labelPCUSD2
             // 
@@ -16746,9 +16740,9 @@
             this.labelPCUSD2.Location = new System.Drawing.Point(161, 64);
             this.labelPCUSD2.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD2.Name = "labelPCUSD2";
-            this.labelPCUSD2.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD2.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD2.TabIndex = 228;
-            this.labelPCUSD2.Text = "USD";
+            this.labelPCUSD2.Text = "0";
             // 
             // labelPCUSD3
             // 
@@ -16759,9 +16753,9 @@
             this.labelPCUSD3.Location = new System.Drawing.Point(161, 84);
             this.labelPCUSD3.Margin = new System.Windows.Forms.Padding(0);
             this.labelPCUSD3.Name = "labelPCUSD3";
-            this.labelPCUSD3.Size = new System.Drawing.Size(32, 17);
+            this.labelPCUSD3.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD3.TabIndex = 227;
-            this.labelPCUSD3.Text = "USD";
+            this.labelPCUSD3.Text = "0";
             // 
             // label251
             // 
@@ -18183,17 +18177,17 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelPriceConverter);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDirectory);
@@ -18531,7 +18525,6 @@
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Timer timer1Sec;
         private System.Windows.Forms.Label lblBlockNumber;
-        private System.Windows.Forms.Timer timerAPIRefreshPeriod;
         private System.Windows.Forms.Label lblStatusLight;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.Label lblAlert;

@@ -26,7 +26,8 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* send all label updates through the red/green changer (remember RefreshFiatValuesEverywhere())
+* BitcoinExplorerOrgJSONRefresh() - gives occasional error but could an issue with the api
+* green/red the fiat values on the block screen
 * more testing! 
 */
 
@@ -91,7 +92,6 @@ namespace SATSuma
         private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
         private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api refreshes
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
-        private int intDisplaySecondsElapsedSinceUpdate = 0; // used to count seconds since the data was last refreshed, for display only.
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
         #endregion
         #region header variables
@@ -522,7 +522,7 @@ namespace SATSuma
         {
             try
             {
-                
+
                 #region UIScale
                 StoreOriginalDimensions(this);
 
@@ -601,11 +601,11 @@ namespace SATSuma
                 // prepopulate the DCA calculator
                 rjDatePickerDCAStartDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
-                rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4); 
+                rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4);
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
                 comboBoxDCAFrequency.SelectedIndex = 2; // default to monthly
                 // add an extra Y axis to the chart to show the daily BTC amount bought
-                yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color:btnMenuDirectory.ForeColor);
+                yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color: btnMenuDirectory.ForeColor);
                 // populate dca chart if the api is enabled
                 if (lblBlockchainInfoEndpoints.Text == "✔️")
                 {
@@ -615,7 +615,7 @@ namespace SATSuma
                 CheckForUpdates();
                 PopulateThemeComboboxes();
                 LoadAndStyleDirectoryBrowser();
-                
+
                 #region navigate to the saved startup screen
 
                 Dictionary<string, Action> buttonClickEvents = new Dictionary<string, Action>
@@ -664,7 +664,7 @@ namespace SATSuma
             }
         }
         #endregion
-        
+
         #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
         private void StartTheClocksTicking()
         {
@@ -674,9 +674,7 @@ namespace SATSuma
                 intDisplayCountdownToRefresh = (APIRefreshFrequency * 60); //turn minutes into seconds. This is the number used to display remaning time until refresh
                 APIGroup1DisplayTimerIntervalSecsConstant = (APIRefreshFrequency * 60); //turn minutes into seconds. This is kept constant and used to reset the timer to this number
                 intAPIGroup1TimerIntervalMillisecsConstant = ((APIRefreshFrequency * 60) * 1000); // turn minutes into seconds, then into milliseconds
-                timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant; // set the timer interval
                 timer1Sec.Start(); // timer used to refresh the clock values
-                timerAPIRefreshPeriod.Start(); // used to trigger API refreshes
             }
             catch (Exception ex)
             {
@@ -688,15 +686,21 @@ namespace SATSuma
         {
             try
             {
+                // clock on genesis theme
                 UpdateOnScreenClock();
+
+                // countdown in lower-left corner
                 UpdateOnScreenCountdownAndFlashLights();
-                UpdateOnScreenElapsedTimeSinceUpdate();
+                // seconds to halving on bitcoin dashboard
                 UpdateSecondsToHalving();
+
                 if (intDisplayCountdownToRefresh < 11) // when there are only 10 seconds left until the refresh, clear error alert symblol & error message
                 {
                     readyToShowRedAndGreenLabelsYet = true; // we suppressed red/green changes on fields at startup, but we're ready to start colouring them now
                     ClearAlertAndErrorMessage();
                 }
+
+                // time since last block mined on header
                 totalSecondsSinceLastBlock++;
                 int minutesSinceLastBlock = totalSecondsSinceLastBlock / 60;
                 int secondsSinceLastBlock = totalSecondsSinceLastBlock % 60;
@@ -705,6 +709,8 @@ namespace SATSuma
                 {
                     lblHeaderBlockAge.Text = formattedTime;
                 });
+
+                // flash the update button if update available
                 if (lblUpdaterLight.Visible)
                 {
                     if (secondsSinceLastBlock % 2 == 0)
@@ -731,38 +737,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "Timer1Sec_Tick");
-            }
-        }
-
-        private void TimerAPIRefreshPeriod_Tick(object sender, EventArgs e) // update the btc/lightning dashboard fields
-        {
-            try
-            {
-                ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-                CheckNetworkStatus();
-                using (WebClient client = new WebClient())
-                {
-                    try
-                    {
-                        string BlockTipURL = NodeURL + "blocks/tip/height";
-                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                        if (decimal.TryParse(BlockTip, out decimal blockTipValue))
-                        {
-                            numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
-                            numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        HandleException(ex, "TimerAPIRefreshPeriod_Tick");
-                    }
-                }
-                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards
-                PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "TimerAPIRefreshPeriod_Tick");
             }
         }
         #endregion
@@ -2093,24 +2067,19 @@ namespace SATSuma
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
                 var data = JObject.Parse(response);
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
-                {
-                    string priceUSD = Convert.ToString(data["usd"]);
-                    string priceGBP = Convert.ToString(data["gbp"]);
-                    string priceEUR = Convert.ToString(data["eur"]);
-                    string priceXAU = Convert.ToString(data["xau"]);
-                    return (priceUSD, priceGBP, priceEUR, priceXAU);
-                }
-                else
-                {
-                    return ("error", "error", "error", "error");
-                }
+
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string priceUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
+                string priceGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
+                string priceEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
+                string priceXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
+                return (priceUSD, priceGBP, priceEUR, priceXAU);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetPrice");
             }
-            return ("error", "error", "error", "error");
+            return ("0", "0", "0", "0");
         }
 
         private (string mCapUSD, string mCapGBP, string mCapEUR, string mCapXAU) BitcoinExplorerOrgGetMarketCap()
@@ -2120,24 +2089,18 @@ namespace SATSuma
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price/marketcap");
                 var data = JObject.Parse(response);
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
-                {
-                    string mCapUSD = Convert.ToString(data["usd"]);
-                    string mCapGBP = Convert.ToString(data["gbp"]);
-                    string mCapEUR = Convert.ToString(data["eur"]);
-                    string mCapXAU = Convert.ToString(data["xau"]);
-                    return (mCapUSD, mCapGBP, mCapEUR, mCapXAU);
-                }
-                else
-                {
-                    return ("error", "error", "error", "error");
-                }
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string mCapUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
+                string mCapGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
+                string mCapEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
+                string mCapXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
+                return (mCapUSD, mCapGBP, mCapEUR, mCapXAU);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetMarketCap");
             }
-            return ("error", "error", "error", "error");
+            return ("0", "0", "0", "0");
         }
 
         private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
@@ -2147,24 +2110,18 @@ namespace SATSuma
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://bitcoinexplorer.org/api/price/sats");
                 var data = JObject.Parse(response);
-                if (data["usd"] != null && data["gbp"] != null && data["eur"] != null && data["xau"] != null)
-                {
-                    string satsUSD = Convert.ToString(data["usd"]);
-                    string satsGBP = Convert.ToString(data["gbp"]);
-                    string satsEUR = Convert.ToString(data["eur"]);
-                    string satsXAU = Convert.ToString(data["xau"]);
-                    return (satsUSD, satsGBP, satsEUR, satsXAU);
-                }
-                else
-                {
-                    return ("error", "error", "error", "error");
-                }
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string satsUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
+                string satsGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
+                string satsEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
+                string satsXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
+                return (satsUSD, satsGBP, satsEUR, satsXAU);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BitcoinExplorerOrgGetMoscowTime");
             }
-            return ("error", "error", "error", "error");
+            return ("0", "0", "0", "0");
         }
 
         private (string txCount, string vSize, string totalFees) GetMempool()
@@ -2453,11 +2410,15 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
+        string errorMess;
+
         private (string nextBlockFee, string thirtyMinFee, string sixtyMinFee, string oneDayFee, string txInNextBlock, string nextBlockMinFee, string nextBlockMaxFee, string nextBlockTotalFees) BitcoinExplorerOrgJSONRefresh()
         {
+            
             try
             {
                 // fees
+                errorMess = "fees";
                 var client = new HttpClient();
                 var response = client.GetAsync("https://bitcoinexplorer.org/api/mempool/fees").Result;
                 var json = response.Content.ReadAsStringAsync().Result;
@@ -2466,13 +2427,12 @@ namespace SATSuma
                 var thirtyMinFee = "0";
                 var sixtyMinFee = "0";
                 var oneDayFee = "0";
-                if (data["nextBlock"] != null && data["30min"] != null && data["60min"] != null && data["1day"] != null)
-                {
-                    thirtyMinFee = (string)data["30min"];
-                    sixtyMinFee = (string)data["60min"];
-                    oneDayFee = (string)data["1day"];
-                }
+                thirtyMinFee = data.ContainsKey("30min") ? (string)data["30min"] : "0";
+                sixtyMinFee = data.ContainsKey("60min") ? (string)data["60min"] : "0";
+                oneDayFee = data.ContainsKey("1day") ? (string)data["1day"] : "0";
+
                 // next block
+                errorMess = "nextblock";
                 var response2 = client.GetAsync("https://bitcoinexplorer.org/api/mining/next-block").Result;
                 var json2 = response2.Content.ReadAsStringAsync().Result;
                 var data2 = JObject.Parse(json2);
@@ -2480,23 +2440,48 @@ namespace SATSuma
                 {
                     var txInNextBlock = (string)data2["txCount"];
                     var nextBlockMinFee = (string)data2["minFeeRate"];
-                    double valuetoround = Convert.ToDouble(nextBlockMinFee);
-                    double roundedValue = Math.Round(valuetoround, 2);
-                    nextBlockMinFee = Convert.ToString(roundedValue);
+                    double valuetoround;
+                    double roundedValue;
+                    if (double.TryParse(nextBlockMinFee, out valuetoround))
+                    {
+                        valuetoround = Convert.ToDouble(nextBlockMinFee);
+                        roundedValue = Math.Round(valuetoround, 2);
+                        nextBlockMinFee = Convert.ToString(roundedValue);
+                    }
+                    else
+                    {
+                        nextBlockMinFee = "0";
+                    }
+
                     var nextBlockMaxFee = (string)data2["maxFeeRate"];
-                    valuetoround = Convert.ToDouble(nextBlockMaxFee);
-                    roundedValue = Math.Round(valuetoround, 2);
-                    nextBlockMaxFee = Convert.ToString(roundedValue);
+                    if (double.TryParse(nextBlockMaxFee, out valuetoround))
+                    {
+                        valuetoround = Convert.ToDouble(nextBlockMaxFee);
+                        roundedValue = Math.Round(valuetoround, 2);
+                        nextBlockMaxFee = Convert.ToString(roundedValue);
+                    }
+                    else
+                    {
+                        nextBlockMaxFee = "0";
+                    }
                     var nextBlockTotalFees = (string)data2["totalFees"];
-                    valuetoround = Convert.ToDouble(nextBlockTotalFees);
-                    roundedValue = Math.Round(valuetoround, 2);
-                    nextBlockTotalFees = Convert.ToString(roundedValue);
+
+                    if (double.TryParse(nextBlockTotalFees, out valuetoround))
+                    {
+                        valuetoround = Convert.ToDouble(nextBlockTotalFees);
+                        roundedValue = Math.Round(valuetoround, 2);
+                        nextBlockTotalFees = Convert.ToString(roundedValue);
+                    }
+                    else
+                    {
+                        nextBlockTotalFees = "0";
+                    }
                     return (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BitcoinExplorerOrgJSONRefresh");
+                HandleException(ex, "BitcoinExplorerOrgJSONRefresh" + errorMess);
             }
             return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
@@ -14456,296 +14441,96 @@ namespace SATSuma
                     {
                         priceUSD = "0";
                     }
-                    labelPCUSD1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD1.Text = (Convert.ToDecimal(priceUSD) / 100000000).ToString("0.00");
-                    });
-                    labelPCUSD2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD2.Text = (Convert.ToDecimal(priceUSD) / 10000000).ToString("0.00");
-                    });
-                    labelPCUSD3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD3.Text = (Convert.ToDecimal(priceUSD) / 1000000).ToString("0.00");
-                    });
-                    labelPCUSD4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD4.Text = (Convert.ToDecimal(priceUSD) / 100000).ToString("0.00");
-                    });
-                    labelPCUSD5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD5.Text = (Convert.ToDecimal(priceUSD) / 10000).ToString("0.00");
-                    });
-                    labelPCUSD6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD6.Text = (Convert.ToDecimal(priceUSD) / 1000).ToString("0.00");
-                    });
-                    labelPCUSD7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD7.Text = (Convert.ToDecimal(priceUSD) / 100).ToString("0.00");
-                    });
-                    labelPCUSD8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD8.Text = (Convert.ToDecimal(priceUSD) / 10).ToString("0.00");
-                    });
-                    labelPCUSD9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD9.Text = (Convert.ToDecimal(priceUSD)).ToString("0.00");
-                    });
-                    labelPCUSD10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD10.Text = (Convert.ToDecimal(priceUSD) * 10).ToString("0.00");
-                    });
-                    labelPCUSD11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD11.Text = (Convert.ToDecimal(priceUSD) * 100).ToString("0.00");
-                    });
-                    labelPCUSD12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD12.Text = (Convert.ToDecimal(priceUSD) * 1000).ToString("0.00");
-                    });
-                    labelPCUSD13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD13.Text = (Convert.ToDecimal(priceUSD) * 10000).ToString("0.00");
-                    });
-                    labelPCUSD14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD14.Text = (Convert.ToDecimal(priceUSD) * 100000).ToString("0.00");
-                    });
-                    labelPCUSD15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD15.Text = (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00");
-                    });
-                    labelPCUSD16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD16.Text = (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00");
-                    });
-                    labelPCUSD17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
-                    });
+                    UpdateLabelValue(labelPCUSD1, (Convert.ToDecimal(priceUSD) / 100000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD2, (Convert.ToDecimal(priceUSD) / 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD3, (Convert.ToDecimal(priceUSD) / 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD4, (Convert.ToDecimal(priceUSD) / 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD5, (Convert.ToDecimal(priceUSD) / 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD6, (Convert.ToDecimal(priceUSD) / 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD7, (Convert.ToDecimal(priceUSD) / 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD8, (Convert.ToDecimal(priceUSD) / 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD9, (Convert.ToDecimal(priceUSD)).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD10, (Convert.ToDecimal(priceUSD) * 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD11, (Convert.ToDecimal(priceUSD) * 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD12, (Convert.ToDecimal(priceUSD) * 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD13, (Convert.ToDecimal(priceUSD) * 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD14, (Convert.ToDecimal(priceUSD) * 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD15, (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD16, (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCUSD17, (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00"));
+                    //labelPCUSD17.Invoke((MethodInvoker)delegate
+                   // {
+                   //     labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
+                   // });
                     #endregion
                     #region EUR list
                     if (string.IsNullOrEmpty(priceEUR) || !double.TryParse(priceEUR, out _))
                     {
                         priceEUR = "0";
                     }
-                    labelPCEUR1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR1.Text = (Convert.ToDecimal(priceEUR) / 100000000).ToString("0.00");
-                    });
-                    labelPCEUR2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR2.Text = (Convert.ToDecimal(priceEUR) / 10000000).ToString("0.00");
-                    });
-                    labelPCEUR3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR3.Text = (Convert.ToDecimal(priceEUR) / 1000000).ToString("0.00");
-                    });
-                    labelPCEUR4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR4.Text = (Convert.ToDecimal(priceEUR) / 100000).ToString("0.00");
-                    });
-                    labelPCEUR5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR5.Text = (Convert.ToDecimal(priceEUR) / 10000).ToString("0.00");
-                    });
-                    labelPCEUR6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR6.Text = (Convert.ToDecimal(priceEUR) / 1000).ToString("0.00");
-                    });
-                    labelPCEUR7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR7.Text = (Convert.ToDecimal(priceEUR) / 100).ToString("0.00");
-                    });
-                    labelPCEUR8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR8.Text = (Convert.ToDecimal(priceEUR) / 10).ToString("0.00");
-                    });
-                    labelPCEUR9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR9.Text = (Convert.ToDecimal(priceEUR)).ToString("0.00");
-                    });
-                    labelPCEUR10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR10.Text = (Convert.ToDecimal(priceEUR) * 10).ToString("0.00");
-                    });
-                    labelPCEUR11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR11.Text = (Convert.ToDecimal(priceEUR) * 100).ToString("0.00");
-                    });
-                    labelPCEUR12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR12.Text = (Convert.ToDecimal(priceEUR) * 1000).ToString("0.00");
-                    });
-                    labelPCEUR13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR13.Text = (Convert.ToDecimal(priceEUR) * 10000).ToString("0.00");
-                    });
-                    labelPCEUR14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR14.Text = (Convert.ToDecimal(priceEUR) * 100000).ToString("0.00");
-                    });
-                    labelPCEUR15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR15.Text = (Convert.ToDecimal(priceEUR) * 1000000).ToString("0.00");
-                    });
-                    labelPCEUR16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR16.Text = (Convert.ToDecimal(priceEUR) * 10000000).ToString("0.00");
-                    });
-                    labelPCEUR17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCEUR17.Text = (Convert.ToDecimal(priceEUR) * 21000000).ToString("0.00");
-                    });
+                    UpdateLabelValue(labelPCEUR1, (Convert.ToDecimal(priceEUR) / 100000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR2, (Convert.ToDecimal(priceEUR) / 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR3, (Convert.ToDecimal(priceEUR) / 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR4, (Convert.ToDecimal(priceEUR) / 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR5, (Convert.ToDecimal(priceEUR) / 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR6, (Convert.ToDecimal(priceEUR) / 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR7, (Convert.ToDecimal(priceEUR) / 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR8, (Convert.ToDecimal(priceEUR) / 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR9, (Convert.ToDecimal(priceEUR)).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR10, (Convert.ToDecimal(priceEUR) * 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR11, (Convert.ToDecimal(priceEUR) * 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR12, (Convert.ToDecimal(priceEUR) * 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR13, (Convert.ToDecimal(priceEUR) * 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR14, (Convert.ToDecimal(priceEUR) * 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR15, (Convert.ToDecimal(priceEUR) * 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR16, (Convert.ToDecimal(priceEUR) * 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCEUR17, (Convert.ToDecimal(priceEUR) * 21000000).ToString("0.00"));
                     #endregion
                     #region GBP list
                     if (string.IsNullOrEmpty(priceGBP) || !double.TryParse(priceGBP, out _))
                     {
                         priceGBP = "0";
                     }
-                    labelPCGBP1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP1.Text = (Convert.ToDecimal(priceGBP) / 100000000).ToString("0.00");
-                    });
-                    labelPCGBP2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP2.Text = (Convert.ToDecimal(priceGBP) / 10000000).ToString("0.00");
-                    });
-                    labelPCGBP3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP3.Text = (Convert.ToDecimal(priceGBP) / 1000000).ToString("0.00");
-                    });
-                    labelPCGBP4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP4.Text = (Convert.ToDecimal(priceGBP) / 100000).ToString("0.00");
-                    });
-                    labelPCGBP5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP5.Text = (Convert.ToDecimal(priceGBP) / 10000).ToString("0.00");
-                    });
-                    labelPCGBP6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP6.Text = (Convert.ToDecimal(priceGBP) / 1000).ToString("0.00");
-                    });
-                    labelPCGBP7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP7.Text = (Convert.ToDecimal(priceGBP) / 100).ToString("0.00");
-                    });
-                    labelPCGBP8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP8.Text = (Convert.ToDecimal(priceGBP) / 10).ToString("0.00");
-                    });
-                    labelPCGBP9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP9.Text = (Convert.ToDecimal(priceGBP)).ToString("0.00");
-                    });
-                    labelPCGBP10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP10.Text = (Convert.ToDecimal(priceGBP) * 10).ToString("0.00");
-                    });
-                    labelPCGBP11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP11.Text = (Convert.ToDecimal(priceGBP) * 100).ToString("0.00");
-                    });
-                    labelPCGBP12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP12.Text = (Convert.ToDecimal(priceGBP) * 1000).ToString("0.00");
-                    });
-                    labelPCGBP13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP13.Text = (Convert.ToDecimal(priceGBP) * 10000).ToString("0.00");
-                    });
-                    labelPCGBP14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP14.Text = (Convert.ToDecimal(priceGBP) * 100000).ToString("0.00");
-                    });
-                    labelPCGBP15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP15.Text = (Convert.ToDecimal(priceGBP) * 1000000).ToString("0.00");
-                    });
-                    labelPCGBP16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP16.Text = (Convert.ToDecimal(priceGBP) * 10000000).ToString("0.00");
-                    });
-                    labelPCGBP17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCGBP17.Text = (Convert.ToDecimal(priceGBP) * 21000000).ToString("0.00");
-                    });
+                    UpdateLabelValue(labelPCGBP1, (Convert.ToDecimal(priceGBP) / 100000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP2, (Convert.ToDecimal(priceGBP) / 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP3, (Convert.ToDecimal(priceGBP) / 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP4, (Convert.ToDecimal(priceGBP) / 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP5, (Convert.ToDecimal(priceGBP) / 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP6, (Convert.ToDecimal(priceGBP) / 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP7, (Convert.ToDecimal(priceGBP) / 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP8, (Convert.ToDecimal(priceGBP) / 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP9, (Convert.ToDecimal(priceGBP)).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP10, (Convert.ToDecimal(priceGBP) * 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP11, (Convert.ToDecimal(priceGBP) * 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP12, (Convert.ToDecimal(priceGBP) * 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP13, (Convert.ToDecimal(priceGBP) * 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP14, (Convert.ToDecimal(priceGBP) * 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP15, (Convert.ToDecimal(priceGBP) * 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP16, (Convert.ToDecimal(priceGBP) * 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCGBP17, (Convert.ToDecimal(priceGBP) * 21000000).ToString("0.00"));
                     #endregion
                     #region XAU list
                     if (string.IsNullOrEmpty(priceXAU) || !double.TryParse(priceXAU, out _))
                     {
                         priceXAU = "0";
                     }
-                    labelPCXAU1.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU1.Text = (Convert.ToDecimal(priceXAU) / 100000000).ToString("0.00");
-                    });
-                    labelPCXAU2.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU2.Text = (Convert.ToDecimal(priceXAU) / 10000000).ToString("0.00");
-                    });
-                    labelPCXAU3.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU3.Text = (Convert.ToDecimal(priceXAU) / 1000000).ToString("0.00");
-                    });
-                    labelPCXAU4.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU4.Text = (Convert.ToDecimal(priceXAU) / 100000).ToString("0.00");
-                    });
-                    labelPCXAU5.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU5.Text = (Convert.ToDecimal(priceXAU) / 10000).ToString("0.00");
-                    });
-                    labelPCXAU6.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU6.Text = (Convert.ToDecimal(priceXAU) / 1000).ToString("0.00");
-                    });
-                    labelPCXAU7.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU7.Text = (Convert.ToDecimal(priceXAU) / 100).ToString("0.00");
-                    });
-                    labelPCXAU8.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU8.Text = (Convert.ToDecimal(priceXAU) / 10).ToString("0.00");
-                    });
-                    labelPCXAU9.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU9.Text = (Convert.ToDecimal(priceXAU)).ToString("0.00");
-                    });
-                    labelPCXAU10.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU10.Text = (Convert.ToDecimal(priceXAU) * 10).ToString("0.00");
-                    });
-                    labelPCXAU11.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU11.Text = (Convert.ToDecimal(priceXAU) * 100).ToString("0.00");
-                    });
-                    labelPCXAU12.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU12.Text = (Convert.ToDecimal(priceXAU) * 1000).ToString("0.00");
-                    });
-                    labelPCXAU13.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU13.Text = (Convert.ToDecimal(priceXAU) * 10000).ToString("0.00");
-                    });
-                    labelPCXAU14.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU14.Text = (Convert.ToDecimal(priceXAU) * 100000).ToString("0.00");
-                    });
-                    labelPCXAU15.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU15.Text = (Convert.ToDecimal(priceXAU) * 1000000).ToString("0.00");
-                    });
-                    labelPCXAU16.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU16.Text = (Convert.ToDecimal(priceXAU) * 10000000).ToString("0.00");
-                    });
-                    labelPCXAU17.Invoke((MethodInvoker)delegate
-                    {
-                        labelPCXAU17.Text = (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00");
-                    });
+                    UpdateLabelValue(labelPCXAU1, (Convert.ToDecimal(priceXAU) / 100000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU2, (Convert.ToDecimal(priceXAU) / 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU3, (Convert.ToDecimal(priceXAU) / 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU4, (Convert.ToDecimal(priceXAU) / 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU5, (Convert.ToDecimal(priceXAU) / 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU6, (Convert.ToDecimal(priceXAU) / 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU7, (Convert.ToDecimal(priceXAU) / 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU8, (Convert.ToDecimal(priceXAU) / 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU9, (Convert.ToDecimal(priceXAU)).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU10, (Convert.ToDecimal(priceXAU) * 10).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU11, (Convert.ToDecimal(priceXAU) * 100).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU12, (Convert.ToDecimal(priceXAU) * 1000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU13, (Convert.ToDecimal(priceXAU) * 10000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU14, (Convert.ToDecimal(priceXAU) * 100000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU15, (Convert.ToDecimal(priceXAU) * 1000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU16, (Convert.ToDecimal(priceXAU) * 10000000).ToString("0.00"));
+                    UpdateLabelValue(labelPCXAU17, (Convert.ToDecimal(priceXAU) * 21000000).ToString("0.00"));
                     #endregion
                     #region calculate fields derived from user input
                     SetCalculatedFiatAmounts();
@@ -14991,22 +14776,10 @@ namespace SATSuma
         {
             try
             {
-                labelPCUSDcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCUSDcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00");
-                });
-                labelPCEURcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCEURcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00");
-                });
-                labelPCGBPcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCGBPcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00");
-                });
-                labelPCXAUcustom.Invoke((MethodInvoker)delegate
-                {
-                    labelPCXAUcustom.Text = (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00");
-                });
+                UpdateLabelValue(labelPCUSDcustom, (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCUSD9.Text)).ToString("0.00"));
+                UpdateLabelValue(labelPCEURcustom, (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCEUR9.Text)).ToString("0.00"));
+                UpdateLabelValue(labelPCGBPcustom, (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCGBP9.Text)).ToString("0.00"));
+                UpdateLabelValue(labelPCXAUcustom, (Convert.ToDecimal(textBoxConvertBTCtoFiat.Text) * Convert.ToDecimal(labelPCXAU9.Text)).ToString("0.00"));
             }
             catch (WebException ex)
             {
@@ -15049,10 +14822,7 @@ namespace SATSuma
                 {
                     if (labelPCUSD9.Text != "USD" && pcusd9text > 0)
                     {
-                        lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedUSDFromBTCAmount.Text = (usdtobtctext / pcusd9text).ToString("0.00000000");
-                        });
+                        UpdateLabelValue(lblCalculatedUSDFromBTCAmount, (usdtobtctext / pcusd9text).ToString("0.00000000"));
                         label267.Invoke((MethodInvoker)delegate
                         {
                             label267.Text = "$" + textBoxConvertUSDtoBTC.Text + " USD (US dollar) =";
@@ -15081,10 +14851,7 @@ namespace SATSuma
                 {
                     if (labelPCEUR9.Text != "EUR" && pceur9text > 0)
                     {
-                        lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedEURFromBTCAmount.Text = (eurtobtctext / pceur9text).ToString("0.00000000");
-                        });
+                        UpdateLabelValue(lblCalculatedEURFromBTCAmount, (eurtobtctext / pceur9text).ToString("0.00000000"));
                         label270.Invoke((MethodInvoker)delegate
                         {
                             label270.Text = "€" + textBoxConvertEURtoBTC.Text + " EUR (European euro) =";
@@ -15113,10 +14880,7 @@ namespace SATSuma
                 {
                     if (labelPCGBP9.Text != "GBP" && pcgbp9text > 0)
                     {
-                        lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedGBPFromBTCAmount.Text = (gbptobtctext / pcgbp9text).ToString("0.00000000");
-                        });
+                        UpdateLabelValue(lblCalculatedGBPFromBTCAmount, (gbptobtctext / pcgbp9text).ToString("0.00000000"));
                         label269.Invoke((MethodInvoker)delegate
                         {
                             label269.Text = "£" + textBoxConvertGBPtoBTC.Text + " GBP (British pound sterling) =";
@@ -15145,10 +14909,7 @@ namespace SATSuma
                 {
                     if (labelPCXAU9.Text != "XAU" && pcxau9text > 0)
                     {
-                        lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
-                        {
-                            lblCalculatedXAUFromBTCAmount.Text = (xautobtctext / pcxau9text).ToString("0.00000000");
-                        });
+                        UpdateLabelValue(lblCalculatedXAUFromBTCAmount, (xautobtctext / pcxau9text).ToString("0.00000000"));
                         label268.Invoke((MethodInvoker)delegate
                         {
                             label268.Text = "🪙" + textBoxConvertXAUtoBTC.Text + " XAU (ounce of gold) =";
@@ -15884,7 +15645,7 @@ namespace SATSuma
 //                  EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
-                TimerAPIRefreshPeriod_Tick(sender, e);
+                RefreshScreens();
             }
             catch (Exception ex)
             {
@@ -15925,7 +15686,7 @@ namespace SATSuma
                     ShowAllFiatConversionFields();
                 }
                 SaveSettingsToBookmarksFile();
-                TimerAPIRefreshPeriod_Tick(sender, e);
+                RefreshScreens();
             }
             catch (Exception ex)
             {
@@ -15962,7 +15723,7 @@ namespace SATSuma
                     EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
-                TimerAPIRefreshPeriod_Tick(sender, e);
+                RefreshScreens();
             }
             catch (Exception ex)
             {
@@ -16226,9 +15987,6 @@ namespace SATSuma
                 APIGroup1DisplayTimerIntervalSecsConstant = (int)numericUpDownDashboardRefresh.Value * 60;
                 intAPIGroup1TimerIntervalMillisecsConstant = (((int)numericUpDownDashboardRefresh.Value * 60) * 1000);
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                timerAPIRefreshPeriod.Stop();
-                timerAPIRefreshPeriod.Interval = intAPIGroup1TimerIntervalMillisecsConstant;
-                timerAPIRefreshPeriod.Start();
                 SaveSettingsToBookmarksFile();
             }
             catch (Exception ex)
@@ -23002,22 +22760,7 @@ namespace SATSuma
             }
         }
         #endregion
-        #region status message/alert at bottom of window
-        private void UpdateOnScreenElapsedTimeSinceUpdate()
-        {
-            try
-            {
-                intDisplaySecondsElapsedSinceUpdate++; // increment displayed time elapsed since last update
-                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
-                {
-                    lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "UpdateOnScreenElapsedTimeSinceUpdate");
-            }
-        }
+        #region refresh screens/status message/alert at bottom of window
 
         private void ShowAlertSymbol()
         {
@@ -23072,10 +22815,15 @@ namespace SATSuma
         {
             try
             {
+                lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
+                {
+                    lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
+                });
                 intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
-                if (intDisplayCountdownToRefresh <= 0) // if the 1 minute timer countdown has reached zero...
+                if (intDisplayCountdownToRefresh < 0) // if the 1 minute timer countdown has reached zero...
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset it
+                    RefreshScreens();
                 }
                 if (intDisplayCountdownToRefresh < (APIGroup1DisplayTimerIntervalSecsConstant - 1)) // if more than a second has expired since the data from the blocktimer was refreshed...
                 {
@@ -23085,6 +22833,38 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "UpdateOnScreenCountdownAndFlashLights");
+            }
+        }
+
+        private void RefreshScreens()
+        {
+            try
+            {
+                ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
+                CheckNetworkStatus();
+                using (WebClient client = new WebClient())
+                {
+                    try
+                    {
+                        string BlockTipURL = NodeURL + "blocks/tip/height";
+                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
+                        if (decimal.TryParse(BlockTip, out decimal blockTipValue))
+                        {
+                            numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
+                            numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "RefreshScreens");
+                    }
+                }
+                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards
+                PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "RefreshScreens");
             }
         }
 
@@ -23155,7 +22935,6 @@ namespace SATSuma
                     lblStatusLight.Text = "🟢"; // circle/light
                 });
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset the timer
-                intDisplaySecondsElapsedSinceUpdate = 0; // reset the seconds since last refresh
             }
             catch (Exception ex)
             {
@@ -25294,6 +25073,7 @@ namespace SATSuma
                     {
                         lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
                     });
+                    
                 }
             }
             catch (WebException ex)

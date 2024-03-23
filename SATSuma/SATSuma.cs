@@ -27,7 +27,7 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * BitcoinExplorerOrgJSONRefresh() - gives occasional error but could an issue with the api
-* green/red the fiat values on the block screen
+* overall progress bar on xpub screen misses a ++ at some point so doesn't reach max when scan completes
 * more testing! 
 */
 
@@ -65,7 +65,6 @@ using SATSuma.Properties;
 using ScottPlot.Renderable;
 using System.Runtime.Remoting.Channels;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
 #endregion
 
 namespace SATSuma
@@ -583,7 +582,7 @@ namespace SATSuma
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
                 GetBlockTip();
-                UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
+                _ = UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
                 numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                 {
@@ -690,7 +689,7 @@ namespace SATSuma
                 UpdateOnScreenClock();
 
                 // countdown in lower-left corner
-                UpdateOnScreenCountdownAndFlashLights();
+                UpdateOnScreenCountdownFlashLightsRefreshData();
                 // seconds to halving on bitcoin dashboard
                 UpdateSecondsToHalving();
 
@@ -743,7 +742,10 @@ namespace SATSuma
 
         #region ⚡BITCOIN AND LIGHTNING DASHBOARD SCREENS⚡
         #region update dashboards
-        public async void UpdateBitcoinAndLightningDashboards()
+        public async         
+
+        Task
+        UpdateBitcoinAndLightningDashboards()
         {
             ToggleLoadingAnimation("enable");
 
@@ -2440,9 +2442,8 @@ namespace SATSuma
                 {
                     var txInNextBlock = (string)data2["txCount"];
                     var nextBlockMinFee = (string)data2["minFeeRate"];
-                    double valuetoround;
                     double roundedValue;
-                    if (double.TryParse(nextBlockMinFee, out valuetoround))
+                    if (double.TryParse(nextBlockMinFee, out double valuetoround))
                     {
                         valuetoround = Convert.ToDouble(nextBlockMinFee);
                         roundedValue = Math.Round(valuetoround, 2);
@@ -15416,7 +15417,7 @@ namespace SATSuma
                     GetBlockTip();
                     LookupBlockList();
                     EnableFunctionalityForMainNet();
-                    UpdateBitcoinAndLightningDashboards();
+                    _ = UpdateBitcoinAndLightningDashboards();
                 }
             }
             catch (Exception ex)
@@ -15455,7 +15456,7 @@ namespace SATSuma
                     DisableFunctionalityForTestNet();
                     GetBlockTip();
                     LookupBlockList();
-                    UpdateBitcoinAndLightningDashboards();
+                    _ = UpdateBitcoinAndLightningDashboards();
                 }
             }
             catch (Exception ex)
@@ -15508,7 +15509,7 @@ namespace SATSuma
                         SaveSettingsToBookmarksFile();
                         GetBlockTip();
                         LookupBlockList();
-                        UpdateBitcoinAndLightningDashboards();
+                        _ = UpdateBitcoinAndLightningDashboards();
 
                         // write the node url to the bookmarks file for auto retrieval next time (only if it's different to the one that might already be there)
                         DateTime today = DateTime.Today;
@@ -22120,6 +22121,66 @@ namespace SATSuma
 
         #region ⚡COMMON CODE⚡
 
+        #region colour change data if it's gone up or down since previous change
+        private async void UpdateLabelValue(Label label, string newValue)
+        {
+            if (readyToShowRedAndGreenLabelsYet == true)
+            {
+
+                double currentValueDouble;
+                double newValueDouble;
+                // get the current colour. Will revert to this after making red or green
+                Color currentColor = label.ForeColor;
+
+                // Get the current value from the label so we know if it's gone up or down
+                if (label.Text == "no data")
+                {
+                    currentValueDouble = 0;
+                }
+                else
+                {
+                    // Remove non-numeric characters except decimal point
+                    string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "");
+
+                    // Parse the cleaned text to double
+                    currentValueDouble = double.Parse(cleanedText);
+                }
+
+                string cleanedNewValue = Regex.Replace(newValue, @"[^0-9.]", "");
+
+                newValueDouble = double.Parse(cleanedNewValue);
+
+                // Update the label text
+                label.Invoke((MethodInvoker)delegate
+                {
+                    label.Text = newValue.ToString();
+                });
+
+                // Change label color based on the comparison between old and new values
+                if (newValueDouble > currentValueDouble)
+                {
+                    label.ForeColor = Color.OliveDrab;
+                }
+                else if (newValueDouble < currentValueDouble)
+                {
+                    label.ForeColor = Color.IndianRed;
+                }
+
+                // Wait a moment
+                await Task.Delay(5000);
+
+                // Restore original color
+                label.ForeColor = currentColor;
+            }
+            else
+            {
+                label.Invoke((MethodInvoker)delegate
+                {
+                    label.Text = newValue.ToString();
+                });
+            }
+        }
+        #endregion
         #region expanding panels (vert)
 
         private void StartExpandingPanelVert(Panel panel)
@@ -22811,7 +22872,7 @@ namespace SATSuma
             }
         }
 
-        private void UpdateOnScreenCountdownAndFlashLights()
+        private void UpdateOnScreenCountdownFlashLightsRefreshData()
         {
             try
             {
@@ -22836,7 +22897,7 @@ namespace SATSuma
             }
         }
 
-        private void RefreshScreens()
+        private async void RefreshScreens()
         {
             try
             {
@@ -22859,8 +22920,70 @@ namespace SATSuma
                         HandleException(ex, "RefreshScreens");
                     }
                 }
-                UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards
+                
+                await UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards (+ a few for block list screen)
                 PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
+                // block screen fiat values
+                if (decimal.TryParse(lblTotalFees.Text, out decimal totalBlockFeesDec))
+                {
+                    UpdateLabelValue(lblTotalFeesFiat, lblHeaderPrice.Text[0] + (totalBlockFeesDec * OneBTCinSelectedCurrency).ToString("N2"));
+                }
+
+                if (decimal.TryParse(lblReward.Text, out decimal RewardDec))
+                {
+                    UpdateLabelValue(lblRewardFiat, lblHeaderPrice.Text[0] + (RewardDec * OneBTCinSelectedCurrency).ToString("N2"));
+                }
+
+                // address screen
+                if (listViewAddressTransactions.Visible) // only do this stuff if there's actually a valid address on the address screen
+                {
+                    if (decimal.TryParse(lblAddressConfirmedUnspent.Text, out decimal confirmedUnspent))
+                    {
+                        UpdateLabelValue(lblAddressConfirmedUnspentFiat, lblHeaderPrice.Text[0] + (confirmedUnspent * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblAddressConfirmedReceived.Text, out decimal confirmedReceived))
+                    {
+                        UpdateLabelValue(lblAddressConfirmedReceivedFiat, lblHeaderPrice.Text[0] + (confirmedReceived * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblAddressConfirmedSpent.Text, out decimal confirmedSpent))
+                    {
+                        UpdateLabelValue(lblAddressConfirmedSpentFiat, lblHeaderPrice.Text[0] + (confirmedSpent * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                }
+
+                // transaction screen
+                if (panelTransactionDiagram.Visible) // only do this stuff in there's a valid tx on the tx screen
+                {
+                    if (decimal.TryParse(lblTotalOutputValue.Text, out decimal outputValue))
+                    {
+                        UpdateLabelValue(lblTotalOutputValueFiat, lblHeaderPrice.Text[0] + (outputValue * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblTotalInputValue.Text, out decimal inputValue))
+                    {
+                        UpdateLabelValue(lblTotalInputValueFiat, lblHeaderPrice.Text[0] + (inputValue * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblTransactionFee.Text, out decimal TXFeeValue))
+                    {
+                        UpdateLabelValue(lblTransactionFeeFiat, lblHeaderPrice.Text[0] + (TXFeeValue * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                }
+
+                // xpub screen
+                if (panel101.Visible) // only if an xpub scan has taken place
+                {
+                    if (decimal.TryParse(lblXpubConfirmedReceived.Text, out decimal xpubConfReceived))
+                    {
+                        UpdateLabelValue(lblXpubConfirmedReceivedFiat, lblHeaderPrice.Text[0] + (xpubConfReceived * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblXpubConfirmedSpent.Text, out decimal xpubConfSpent))
+                    {
+                        UpdateLabelValue(lblXpubConfirmedSpentFiat, lblHeaderPrice.Text[0] + (xpubConfSpent * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                    if (decimal.TryParse(lblXpubConfirmedUnspent.Text, out decimal xpubConfUnspent))
+                    {
+                        UpdateLabelValue(lblXpubConfirmedUnspentFiat, lblHeaderPrice.Text[0] + (xpubConfUnspent * OneBTCinSelectedCurrency).ToString("N2"));
+                    }
+                }
             }
             catch (WebException ex)
             {
@@ -24678,7 +24801,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "   BtnEUR_Click");
+                HandleException(ex, "BtnEUR_Click");
             }
         }
 
@@ -26663,64 +26786,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private async void UpdateLabelValue(Label label, string newValue)
-        {
-            if (readyToShowRedAndGreenLabelsYet == true)
-            {
-
-                double currentValueDouble;
-                double newValueDouble;
-                // get the current colour. Will revert to this after making red or green
-                Color currentColor = label.ForeColor; 
-
-                // Get the current value from the label so we know if it's gone up or down
-                if (label.Text == "no data")
-                {
-                    currentValueDouble = 0;
-                }
-                else
-                {
-                    // Remove non-numeric characters except decimal point
-                    string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "");
-
-                    // Parse the cleaned text to double
-                    currentValueDouble = double.Parse(cleanedText);
-                }
-
-                string cleanedNewValue = Regex.Replace(newValue, @"[^0-9.]", "");
-                
-                newValueDouble = double.Parse(cleanedNewValue);
-
-                // Update the label text
-                label.Invoke((MethodInvoker)delegate
-                {
-                    label.Text = newValue.ToString();
-                });
-
-                // Change label color based on the comparison between old and new values
-                if (newValueDouble > currentValueDouble)
-                {
-                    label.ForeColor = Color.OliveDrab;
-                }
-                else if (newValueDouble < currentValueDouble)
-                {
-                    label.ForeColor = Color.IndianRed;
-                }
-
-                // Wait a moment
-                await Task.Delay(5000);
-
-                // Restore original color
-                label.ForeColor = currentColor;
-            }
-            else
-            {
-                label.Invoke((MethodInvoker)delegate
-                {
-                    label.Text = newValue.ToString();
-                });
-            }
-        }
     }
-}                
+}

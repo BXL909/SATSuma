@@ -27,7 +27,6 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * BitcoinExplorerOrgJSONRefresh() - gives occasional error but could an issue with the api
-* overall progress bar on xpub screen misses a ++ at some point so doesn't reach max when scan completes
 * more testing! 
 */
 
@@ -7872,7 +7871,7 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                progressBarCheckAllAddressTypes.Value = (DerivationPath * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                                progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                             }
                             else
                             {
@@ -7880,7 +7879,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
                             });
                             // assume there are no more used addresses at this point
                             if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
@@ -7892,7 +7891,7 @@ namespace SATSuma
                         {
                             usedSegwitAddresses++;
                             consecutiveUnusedAddressesForType = 0;  
-                            totalUnusedAddresses = DerivationPath * MaxNumberOfConsecutiveUnusedAddresses;  
+                            totalUnusedAddresses = DerivationPath * (MaxNumberOfConsecutiveUnusedAddresses + 1);  
                         }
 
                         if (confirmedReceivedForCalc > 0)
@@ -8122,7 +8121,7 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                progressBarCheckAllAddressTypes.Value = ((NumberOfDerivationPathsToCheck + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                                progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                             }
                             else
                             {
@@ -8130,7 +8129,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
                             });
 
                             // assume there are no more used addresses at this point
@@ -8143,7 +8142,7 @@ namespace SATSuma
                         {
                             usedLegacyAddresses++;
                             consecutiveUnusedAddressesForType = 0;  //
-                            totalUnusedAddresses = (NumberOfDerivationPathsToCheck + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the second address type, so reset to account for that, rather than 0
+                            totalUnusedAddresses = (NumberOfDerivationPathsToCheck + DerivationPath) * (MaxNumberOfConsecutiveUnusedAddresses + 1);  // this is the second address type, so reset to account for that, rather than 0
                         }
 
                         if (confirmedReceivedForCalc > 0)
@@ -8374,7 +8373,7 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                                progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                             }
                             else
                             {
@@ -8382,7 +8381,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
                             });
 
                             // assume there are no more used addresses at this point
@@ -8395,7 +8394,7 @@ namespace SATSuma
                         {
                             usedSegwitP2SHAddresses++;
                             consecutiveUnusedAddressesForType = 0;  //
-                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the third address type, so reset to account for that, rather than 0
+                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * (MaxNumberOfConsecutiveUnusedAddresses + 1);  // this is the third address type, so reset to account for that, rather than 0
                         }
 
                         if (confirmedReceivedForCalc > 0)
@@ -8626,7 +8625,7 @@ namespace SATSuma
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
                             {
-                                progressBarCheckAllAddressTypes.Value = (((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses) + consecutiveUnusedAddressesForType;
+                                progressBarCheckAllAddressTypes.Value = totalUnusedAddresses;
                             }
                             else
                             {
@@ -8634,7 +8633,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + ((MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck).ToString();
+                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
                             });
 
                             // assume there are no more used addresses at this point
@@ -8647,7 +8646,7 @@ namespace SATSuma
                         {
                             usedP2SHAddresses++;
                             consecutiveUnusedAddressesForType = 0;  //
-                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * MaxNumberOfConsecutiveUnusedAddresses;  // this is the fourth address type, so reset to account for that, rather than 0
+                            totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 3) + DerivationPath) * (MaxNumberOfConsecutiveUnusedAddresses + 1);  // this is the fourth address type, so reset to account for that, rather than 0
                         }
 
                         if (confirmedReceivedForCalc > 0)

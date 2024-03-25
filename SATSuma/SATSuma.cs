@@ -532,11 +532,11 @@ namespace SATSuma
 
                 Dictionary<string, string> scaleTextMap = new Dictionary<string, string> // Transalte saved UIScale value (1-5) to strings to display on the settings screen
                 {
-                    { "1", "100%" },
-                    { "2", "125%" },
-                    { "3", "150%" },
-                    { "4", "175%" },
-                    { "5", "200%" }
+                    { "1", "smallest" },
+                    { "2", "small" },
+                    { "3", "normal" },
+                    { "4", "big" },
+                    { "5", "biggest" }
                 };
                 if (UIScaleInFile == "1")
                 {
@@ -6896,45 +6896,41 @@ namespace SATSuma
             try
             {
                 xpubValid = false;
-                progressBarCheckAllAddressTypes.Visible = false;
-                progressBarCheckEachAddressType.Visible = false;
-                lblCheckAllAddressTypesCount.Visible = false;
-                lblCheckEachAddressTypeCount.Visible = false;
-                panelXpubContainer.Visible = false;
-                panel26.Visible = false;
-                lblXpubStatus.Visible = false;
-                panel23.Visible = false;
-                label123.Visible = false;
-                lblSegwitUsedAddresses.Visible = false;
-                lblSegwitSummary.Visible = false;
-                label111.Visible = false;
-                lblLegacyUsedAddresses.Visible = false;
-                lblLegacySummary.Visible = false;
-                label119.Visible = false;
-                lblSegwitP2SHUsedAddresses.Visible = false;
-                lblSegwitP2SHSummary.Visible = false;
-                panel29.Visible = false;
-                label133.Visible = false;
-                lblXpubConfirmedReceived.Visible = false;
-                label129.Visible = false;
-                lblXpubConfirmedSpent.Visible = false;
-                label121.Visible = false;
-                lblXpubConfirmedUnspent.Visible = false;
-                btnXpubAddressesUp.Visible = false;
-                btnXpubAddressesDown.Visible = false;
-                listViewXpubAddresses.Visible = false;
-                label135.Visible = false;
-                lblP2SHSummary.Visible = false;
-                lblP2SHUsedAddresses.Visible = false;
-                label140.Visible = false;
-                label141.Visible = false;
-                btnViewAddressFromXpub.Visible = false;
-                panel101.Visible = false;
-                panel30.Visible = false;
-                lblXpubConfirmedReceivedFiat.Visible = false;
-                lblXpubConfirmedSpentFiat.Visible = false;
-                lblXpubConfirmedUnspentFiat.Visible = false;
-
+                panelXpubResults.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubResults.Visible = false;
+                });
+                panel101.Invoke((MethodInvoker)delegate
+                {
+                    panel101.Visible = false;
+                });
+                panelXpubContainer.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubContainer.Visible = false;
+                });
+                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+                {
+                    btnViewAddressFromXpub.Visible = false;
+                });
+                progressBarCheckAllAddressTypes.Value = 0;
+                progressBarCheckEachAddressType.Value = 0;
+                lblCheckEachAddressTypeCount.Text = "";
+                lblCheckAllAddressTypesCount.Text = "";
+                lblSegwitUsedAddresses.Text = "0 used";
+                lblSegwitSummary.Text = "";
+                lblLegacyUsedAddresses.Text = "0 used";
+                lblLegacySummary.Text = "";
+                lblSegwitP2SHUsedAddresses.Text = "0 used";
+                lblSegwitP2SHSummary.Text = "";
+                lblXpubConfirmedReceived.Text = "0";
+                lblXpubConfirmedSpent.Text = "0";
+                lblXpubConfirmedUnspent.Text = "0";
+                listViewXpubAddresses.Clear();
+                lblP2SHSummary.Text = "";
+                lblP2SHUsedAddresses.Text = "0 used";
+                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + "0.00";
+                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + "0.00";
+                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + "0.00";
                 if (textBoxSubmittedXpub.Text == "")
                 {
                     lblValidXpubIndicator.Invoke((MethodInvoker)delegate
@@ -7625,43 +7621,54 @@ namespace SATSuma
                 progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses + 1;
                 progressBarCheckAllAddressTypes.Maximum = (MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck;
 
-                progressBarCheckAllAddressTypes.Visible = true;
-                progressBarCheckEachAddressType.Visible = true;
-
-                panelXpubContainer.Visible = true;
-                panel26.Visible = true;
-                lblXpubStatus.Visible = true;
-                panel23.Visible = true;
-                label123.Visible = true;
-                lblSegwitUsedAddresses.Visible = true;
-                lblSegwitSummary.Visible = true;
-                label111.Visible = true;
-                lblLegacyUsedAddresses.Visible = true;
-                lblLegacySummary.Visible = true;
-                label119.Visible = true;
-                lblSegwitP2SHUsedAddresses.Visible = true;
-                lblSegwitP2SHSummary.Visible = true;
-                panel29.Visible = true;
-                label133.Visible = true;
-                lblXpubConfirmedReceived.Visible = true;
-                label129.Visible = true;
-                lblXpubConfirmedSpent.Visible = true;
-                label121.Visible = true;
-                lblXpubConfirmedUnspent.Visible = true;
-                listViewXpubAddresses.Visible = true;
-                lblCheckAllAddressTypesCount.Visible = true;
-                lblCheckEachAddressTypeCount.Visible = true;
-                label135.Visible = true;
-                lblP2SHSummary.Visible = true;
-                lblP2SHUsedAddresses.Visible = true;
-                label140.Visible = true;
-                label141.Visible = true;
-                panel101.Visible = true;
-                panel30.Visible = true;
-                panel30.BringToFront();
-                lblXpubConfirmedReceivedFiat.Visible = true;
-                lblXpubConfirmedSpentFiat.Visible = true;
-                lblXpubConfirmedUnspentFiat.Visible = true;
+                panelXpubResults.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubResults.Visible = true;
+                });
+                btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
+                {
+                    btnViewAddressFromXpub.Visible = false;
+                });
+                panel101.Invoke((MethodInvoker)delegate
+                {
+                    panel101.Visible = true;
+                });
+                panelXpubContainer.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubContainer.Visible = true;
+                });
+                listViewXpubAddresses.Invoke((MethodInvoker)delegate
+                {
+                    listViewXpubAddresses.Visible = true;
+                });
+                progressBarCheckAllAddressTypes.Invoke((MethodInvoker)delegate
+                {
+                    progressBarCheckAllAddressTypes.Visible = true;
+                });
+                progressBarCheckEachAddressType.Invoke((MethodInvoker)delegate
+                {
+                    progressBarCheckEachAddressType.Visible = true;
+                });
+                lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
+                {
+                    lblCheckAllAddressTypesCount.Visible = true;
+                });
+                lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
+                {
+                    lblCheckEachAddressTypeCount.Visible = true;
+                });
+                label140.Invoke((MethodInvoker)delegate
+                {
+                    label140.Visible = true;
+                });
+                label141.Invoke((MethodInvoker)delegate
+                {
+                    label141.Visible = true;
+                });
+                panelXpubScrollbar.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubScrollbar.BringToFront();
+                });
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
                 #region set up the listview
@@ -16264,31 +16271,31 @@ namespace SATSuma
                 {
                     startupScreenToSave = "blocks----";
                 }
-                if (lblScaleAmount.Text == "100%")
+                if (lblScaleAmount.Text == "smallest")
                 {
                     UIScaleToBeSavedToSettings = 1;
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "125%")
+                    if (lblScaleAmount.Text == "small")
                     {
                         UIScaleToBeSavedToSettings = 2;
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "150%")
+                        if (lblScaleAmount.Text == "normal")
                         {
                             UIScaleToBeSavedToSettings = 3;
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "175%")
+                            if (lblScaleAmount.Text == "big")
                             {
                                 UIScaleToBeSavedToSettings = 4;
                             }
                             else
                             {
-                                if (lblScaleAmount.Text == "200%")
+                                if (lblScaleAmount.Text == "biggest")
                                 {
                                     UIScaleToBeSavedToSettings = 5;
                                 }
@@ -17080,11 +17087,11 @@ namespace SATSuma
         {
             try
             {
-                if (lblScaleAmount.Text == "100%")
+                if (lblScaleAmount.Text == "smallest")
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
-                        lblScaleAmount.Text = "125%";
+                        lblScaleAmount.Text = "small";
                     });
                     UIScaleToBeSavedToSettings = 2;
 
@@ -17100,11 +17107,11 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "125%")
+                    if (lblScaleAmount.Text == "small")
                     {
                         lblScaleAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblScaleAmount.Text = "150%";
+                            lblScaleAmount.Text = "normal";
                         });
                         UIScaleToBeSavedToSettings = 3;
                         if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
@@ -17114,11 +17121,11 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "150%")
+                        if (lblScaleAmount.Text == "normal")
                         {
                             lblScaleAmount.Invoke((MethodInvoker)delegate
                             {
-                                lblScaleAmount.Text = "175%";
+                                lblScaleAmount.Text = "big";
                             });
                             UIScaleToBeSavedToSettings = 4;
                             if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
@@ -17128,11 +17135,11 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "175%")
+                            if (lblScaleAmount.Text == "big")
                             {
                                 lblScaleAmount.Invoke((MethodInvoker)delegate
                                 {
-                                    lblScaleAmount.Text = "200%";
+                                    lblScaleAmount.Text = "biggest";
                                 });
                                 UIScaleToBeSavedToSettings = 5;
 
@@ -17165,11 +17172,11 @@ namespace SATSuma
         {
             try
             {
-                if (lblScaleAmount.Text == "200%")
+                if (lblScaleAmount.Text == "biggest")
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
-                        lblScaleAmount.Text = "175%";
+                        lblScaleAmount.Text = "big";
                     });
                     UIScaleToBeSavedToSettings = 4;
 
@@ -17186,11 +17193,11 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "175%")
+                    if (lblScaleAmount.Text == "big")
                     {
                         lblScaleAmount.Invoke((MethodInvoker)delegate
                         {
-                            lblScaleAmount.Text = "150%";
+                            lblScaleAmount.Text = "normal";
                         });
                         UIScaleToBeSavedToSettings = 3;
                         if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
@@ -17200,11 +17207,11 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "150%")
+                        if (lblScaleAmount.Text == "normal")
                         {
                             lblScaleAmount.Invoke((MethodInvoker)delegate
                             {
-                                lblScaleAmount.Text = "125%";
+                                lblScaleAmount.Text = "small";
                             });
                             UIScaleToBeSavedToSettings = 2;
                             if (UIScaleInFile != Convert.ToString(UIScaleToBeSavedToSettings))
@@ -17214,11 +17221,11 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "125%")
+                            if (lblScaleAmount.Text == "small")
                             {
                                 lblScaleAmount.Invoke((MethodInvoker)delegate
                                 {
-                                    lblScaleAmount.Text = "100%";
+                                    lblScaleAmount.Text = "smallest";
                                 });
                                 UIScaleToBeSavedToSettings = 1;
 
@@ -19226,7 +19233,7 @@ namespace SATSuma
                     {
                         this.BackColor = colorDlgForFormBackground.Color;
                         panel33.BackColor = colorDlgForFormBackground.Color;
-                        panel30.BackColor = colorDlgForFormBackground.Color;
+                        panelXpubScrollbar.BackColor = colorDlgForFormBackground.Color;
                         panel24.BackColor = colorDlgForFormBackground.Color;
                         panel25.BackColor = colorDlgForFormBackground.Color;
                         this.BackgroundImage = null;
@@ -21183,9 +21190,13 @@ namespace SATSuma
                     button.BorderSize = 1;
                     button.BorderColor = thiscolor;
                 }
-                //dca
+                // dca
                 label208.ForeColor = thiscolor;
                 label209.ForeColor = thiscolor;
+                // main menu
+                label210.ForeColor = thiscolor;
+                label213.ForeColor = thiscolor;
+                label214.ForeColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21396,6 +21407,9 @@ namespace SATSuma
                 btnCalculateDCA.BackColor = thiscolor;
                 //add to bookmarks panel (uses button colour)
                 panelAddToBookmarksBorder.BackColor = thiscolor;
+                //main menu drop-down panels
+                panelThemeMenu.BackColor = thiscolor;
+                panelCurrency.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21467,7 +21481,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panel30, panel33, panel100, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     {
@@ -21840,7 +21854,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panelThemeMenu, panelCurrency, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
+                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -22194,11 +22208,11 @@ namespace SATSuma
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = (int)(112 * UIScale);
+                panelMaxHeight = (int)(111 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
-                panelMaxHeight = (int)(280 * UIScale);
+                panelMaxHeight = (int)(279 * UIScale);
             }
             if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
             {
@@ -22357,13 +22371,6 @@ namespace SATSuma
                     {
                         control.Visible = true;
                     }
-                }
-                // undo the above for fiat values on xpub screen if they're all = 0
-                if (lblXpubConfirmedReceivedFiat.Text == "0" && lblXpubConfirmedSpentFiat.Text == "0" && lblXpubConfirmedUnspentFiat.Text == "0")
-                {
-                    lblXpubConfirmedReceivedFiat.Visible = false;
-                    lblXpubConfirmedSpentFiat.Visible = false;
-                    lblXpubConfirmedUnspentFiat.Visible = false;
                 }
             }
             catch (Exception ex)

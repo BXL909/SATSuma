@@ -1117,6 +1117,7 @@
             this.ExpandPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.ShrinkPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.panelLeftPanel = new System.Windows.Forms.Panel();
+            this.lblMenuArrow = new System.Windows.Forms.Label();
             this.btnThemeMenu = new CustomControls.RJControls.RJButton();
             this.btnMenuBookmarks = new System.Windows.Forms.Button();
             this.btnMenuDCACalculator = new System.Windows.Forms.Button();
@@ -1132,7 +1133,6 @@
             this.label216 = new System.Windows.Forms.Label();
             this.panel130 = new System.Windows.Forms.Panel();
             this.label215 = new System.Windows.Forms.Label();
-            this.lblMenuArrow = new System.Windows.Forms.Label();
             this.btnMenuCharts = new System.Windows.Forms.Button();
             this.btnMenuLightningDashboard = new System.Windows.Forms.Button();
             this.panel129 = new System.Windows.Forms.Panel();
@@ -1192,6 +1192,7 @@
             this.panelDCAMessages = new System.Windows.Forms.Panel();
             this.lblDCAMessage = new System.Windows.Forms.Label();
             this.labelDCADefinition = new System.Windows.Forms.Label();
+            this.lblHeaderPriceChange = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -7363,10 +7364,10 @@
             this.btnMenuCreateTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuCreateTheme.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuCreateTheme.ForeColor = System.Drawing.Color.White;
-            this.btnMenuCreateTheme.Location = new System.Drawing.Point(1, 206);
+            this.btnMenuCreateTheme.Location = new System.Drawing.Point(1, 190);
             this.btnMenuCreateTheme.Name = "btnMenuCreateTheme";
             this.btnMenuCreateTheme.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenuCreateTheme.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuCreateTheme.Size = new System.Drawing.Size(120, 22);
             this.btnMenuCreateTheme.TabIndex = 160;
             this.btnMenuCreateTheme.TabStop = false;
             this.btnMenuCreateTheme.Text = "create/delete";
@@ -10087,11 +10088,11 @@
             this.btnXAU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXAU.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXAU.ForeColor = System.Drawing.Color.White;
-            this.btnXAU.Location = new System.Drawing.Point(1, 86);
+            this.btnXAU.Location = new System.Drawing.Point(1, 80);
             this.btnXAU.Margin = new System.Windows.Forms.Padding(0);
             this.btnXAU.Name = "btnXAU";
             this.btnXAU.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnXAU.Size = new System.Drawing.Size(120, 24);
+            this.btnXAU.Size = new System.Drawing.Size(120, 22);
             this.btnXAU.TabIndex = 155;
             this.btnXAU.TabStop = false;
             this.btnXAU.Text = "XAU🪙";
@@ -10116,7 +10117,7 @@
             this.btnUSD.Margin = new System.Windows.Forms.Padding(0);
             this.btnUSD.Name = "btnUSD";
             this.btnUSD.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnUSD.Size = new System.Drawing.Size(120, 24);
+            this.btnUSD.Size = new System.Drawing.Size(120, 22);
             this.btnUSD.TabIndex = 154;
             this.btnUSD.TabStop = false;
             this.btnUSD.Text = "USD $";
@@ -10136,11 +10137,11 @@
             this.btnEUR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEUR.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEUR.ForeColor = System.Drawing.Color.White;
-            this.btnEUR.Location = new System.Drawing.Point(1, 38);
+            this.btnEUR.Location = new System.Drawing.Point(1, 36);
             this.btnEUR.Margin = new System.Windows.Forms.Padding(0);
             this.btnEUR.Name = "btnEUR";
             this.btnEUR.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnEUR.Size = new System.Drawing.Size(120, 24);
+            this.btnEUR.Size = new System.Drawing.Size(120, 22);
             this.btnEUR.TabIndex = 150;
             this.btnEUR.TabStop = false;
             this.btnEUR.Text = "EUR €";
@@ -10160,11 +10161,11 @@
             this.btnGBP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGBP.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGBP.ForeColor = System.Drawing.Color.White;
-            this.btnGBP.Location = new System.Drawing.Point(1, 62);
+            this.btnGBP.Location = new System.Drawing.Point(1, 58);
             this.btnGBP.Margin = new System.Windows.Forms.Padding(0);
             this.btnGBP.Name = "btnGBP";
             this.btnGBP.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnGBP.Size = new System.Drawing.Size(120, 24);
+            this.btnGBP.Size = new System.Drawing.Size(120, 22);
             this.btnGBP.TabIndex = 92;
             this.btnGBP.TabStop = false;
             this.btnGBP.Text = "GBP £";
@@ -16488,7 +16489,7 @@
             this.panelPresetThemeMenuTitleBG.Controls.Add(this.label60);
             this.panelPresetThemeMenuTitleBG.Location = new System.Drawing.Point(1, 14);
             this.panelPresetThemeMenuTitleBG.Name = "panelPresetThemeMenuTitleBG";
-            this.panelPresetThemeMenuTitleBG.Size = new System.Drawing.Size(120, 24);
+            this.panelPresetThemeMenuTitleBG.Size = new System.Drawing.Size(120, 22);
             this.panelPresetThemeMenuTitleBG.TabIndex = 254;
             // 
             // label60
@@ -16514,11 +16515,11 @@
             this.btnMenuThemeSymbol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeSymbol.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuThemeSymbol.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeSymbol.Location = new System.Drawing.Point(1, 158);
+            this.btnMenuThemeSymbol.Location = new System.Drawing.Point(1, 146);
             this.btnMenuThemeSymbol.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeSymbol.Name = "btnMenuThemeSymbol";
             this.btnMenuThemeSymbol.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnMenuThemeSymbol.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuThemeSymbol.Size = new System.Drawing.Size(120, 22);
             this.btnMenuThemeSymbol.TabIndex = 259;
             this.btnMenuThemeSymbol.TabStop = false;
             this.btnMenuThemeSymbol.Text = "symbol";
@@ -16538,11 +16539,11 @@
             this.btnMenuThemeStackSats.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeStackSats.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuThemeStackSats.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeStackSats.Location = new System.Drawing.Point(1, 134);
+            this.btnMenuThemeStackSats.Location = new System.Drawing.Point(1, 124);
             this.btnMenuThemeStackSats.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeStackSats.Name = "btnMenuThemeStackSats";
             this.btnMenuThemeStackSats.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnMenuThemeStackSats.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuThemeStackSats.Size = new System.Drawing.Size(120, 22);
             this.btnMenuThemeStackSats.TabIndex = 258;
             this.btnMenuThemeStackSats.TabStop = false;
             this.btnMenuThemeStackSats.Text = "stack sats";
@@ -16562,11 +16563,11 @@
             this.btnMenuThemeHoneyBadger.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeHoneyBadger.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuThemeHoneyBadger.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeHoneyBadger.Location = new System.Drawing.Point(1, 110);
+            this.btnMenuThemeHoneyBadger.Location = new System.Drawing.Point(1, 102);
             this.btnMenuThemeHoneyBadger.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeHoneyBadger.Name = "btnMenuThemeHoneyBadger";
             this.btnMenuThemeHoneyBadger.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnMenuThemeHoneyBadger.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuThemeHoneyBadger.Size = new System.Drawing.Size(120, 22);
             this.btnMenuThemeHoneyBadger.TabIndex = 257;
             this.btnMenuThemeHoneyBadger.TabStop = false;
             this.btnMenuThemeHoneyBadger.Text = "honey badger";
@@ -16588,9 +16589,9 @@
             // 
             this.panelCustomThemeMenuTitleBG.BackColor = System.Drawing.Color.Black;
             this.panelCustomThemeMenuTitleBG.Controls.Add(this.label281);
-            this.panelCustomThemeMenuTitleBG.Location = new System.Drawing.Point(1, 182);
+            this.panelCustomThemeMenuTitleBG.Location = new System.Drawing.Point(1, 168);
             this.panelCustomThemeMenuTitleBG.Name = "panelCustomThemeMenuTitleBG";
-            this.panelCustomThemeMenuTitleBG.Size = new System.Drawing.Size(120, 24);
+            this.panelCustomThemeMenuTitleBG.Size = new System.Drawing.Size(120, 22);
             this.panelCustomThemeMenuTitleBG.TabIndex = 253;
             // 
             // label281
@@ -16617,11 +16618,11 @@
             this.btnMenuApplyCustomTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuApplyCustomTheme.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuApplyCustomTheme.ForeColor = System.Drawing.Color.White;
-            this.btnMenuApplyCustomTheme.Location = new System.Drawing.Point(1, 254);
+            this.btnMenuApplyCustomTheme.Location = new System.Drawing.Point(1, 234);
             this.btnMenuApplyCustomTheme.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuApplyCustomTheme.Name = "btnMenuApplyCustomTheme";
             this.btnMenuApplyCustomTheme.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenuApplyCustomTheme.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuApplyCustomTheme.Size = new System.Drawing.Size(120, 22);
             this.btnMenuApplyCustomTheme.TabIndex = 252;
             this.btnMenuApplyCustomTheme.TabStop = false;
             this.btnMenuApplyCustomTheme.Text = "apply theme";
@@ -16644,7 +16645,7 @@
             this.comboBoxHeaderCustomThemes.IconColor = System.Drawing.Color.White;
             this.comboBoxHeaderCustomThemes.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxHeaderCustomThemes.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxHeaderCustomThemes.Location = new System.Drawing.Point(1, 230);
+            this.comboBoxHeaderCustomThemes.Location = new System.Drawing.Point(1, 212);
             this.comboBoxHeaderCustomThemes.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxHeaderCustomThemes.MinimumSize = new System.Drawing.Size(96, 24);
             this.comboBoxHeaderCustomThemes.Name = "comboBoxHeaderCustomThemes";
@@ -16665,11 +16666,11 @@
             this.BtnMenuThemeGenesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnMenuThemeGenesis.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnMenuThemeGenesis.ForeColor = System.Drawing.Color.White;
-            this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(1, 38);
+            this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(1, 36);
             this.BtnMenuThemeGenesis.Margin = new System.Windows.Forms.Padding(0);
             this.BtnMenuThemeGenesis.Name = "BtnMenuThemeGenesis";
             this.BtnMenuThemeGenesis.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.BtnMenuThemeGenesis.Size = new System.Drawing.Size(120, 24);
+            this.BtnMenuThemeGenesis.Size = new System.Drawing.Size(120, 22);
             this.BtnMenuThemeGenesis.TabIndex = 154;
             this.BtnMenuThemeGenesis.TabStop = false;
             this.BtnMenuThemeGenesis.Text = "genesis";
@@ -16689,11 +16690,11 @@
             this.btnMenuThemeFranklin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeFranklin.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuThemeFranklin.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeFranklin.Location = new System.Drawing.Point(1, 62);
+            this.btnMenuThemeFranklin.Location = new System.Drawing.Point(1, 58);
             this.btnMenuThemeFranklin.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeFranklin.Name = "btnMenuThemeFranklin";
             this.btnMenuThemeFranklin.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenuThemeFranklin.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuThemeFranklin.Size = new System.Drawing.Size(120, 22);
             this.btnMenuThemeFranklin.TabIndex = 150;
             this.btnMenuThemeFranklin.TabStop = false;
             this.btnMenuThemeFranklin.Text = "franklin";
@@ -16713,11 +16714,11 @@
             this.btnMenuThemeSatsuma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeSatsuma.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuThemeSatsuma.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(1, 86);
+            this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(1, 80);
             this.btnMenuThemeSatsuma.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeSatsuma.Name = "btnMenuThemeSatsuma";
             this.btnMenuThemeSatsuma.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-            this.btnMenuThemeSatsuma.Size = new System.Drawing.Size(120, 24);
+            this.btnMenuThemeSatsuma.Size = new System.Drawing.Size(120, 22);
             this.btnMenuThemeSatsuma.TabIndex = 92;
             this.btnMenuThemeSatsuma.TabStop = false;
             this.btnMenuThemeSatsuma.Text = "satsuma";
@@ -17159,6 +17160,18 @@
             this.panelLeftPanel.Size = new System.Drawing.Size(148, 749);
             this.panelLeftPanel.TabIndex = 262;
             // 
+            // lblMenuArrow
+            // 
+            this.lblMenuArrow.BackColor = System.Drawing.Color.Transparent;
+            this.lblMenuArrow.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblMenuArrow.ForeColor = System.Drawing.Color.Orange;
+            this.lblMenuArrow.Location = new System.Drawing.Point(6, 66);
+            this.lblMenuArrow.Name = "lblMenuArrow";
+            this.lblMenuArrow.Size = new System.Drawing.Size(16, 22);
+            this.lblMenuArrow.TabIndex = 279;
+            this.lblMenuArrow.Text = "▶️";
+            this.lblMenuArrow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // btnThemeMenu
             // 
             this.btnThemeMenu.BackColor = System.Drawing.Color.Transparent;
@@ -17455,18 +17468,6 @@
             this.label215.TabIndex = 153;
             this.label215.Text = "LIGHTNING";
             this.label215.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblMenuArrow
-            // 
-            this.lblMenuArrow.BackColor = System.Drawing.Color.Transparent;
-            this.lblMenuArrow.Font = new System.Drawing.Font("Consolas", 9F);
-            this.lblMenuArrow.ForeColor = System.Drawing.Color.Orange;
-            this.lblMenuArrow.Location = new System.Drawing.Point(6, 66);
-            this.lblMenuArrow.Name = "lblMenuArrow";
-            this.lblMenuArrow.Size = new System.Drawing.Size(16, 22);
-            this.lblMenuArrow.TabIndex = 279;
-            this.lblMenuArrow.Text = "▶️";
-            this.lblMenuArrow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnMenuCharts
             // 
@@ -18276,6 +18277,19 @@
             this.labelDCADefinition.TabIndex = 278;
             this.labelDCADefinition.Text = resources.GetString("labelDCADefinition.Text");
             // 
+            // lblHeaderPriceChange
+            // 
+            this.lblHeaderPriceChange.AutoSize = true;
+            this.lblHeaderPriceChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderPriceChange.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderPriceChange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblHeaderPriceChange.Location = new System.Drawing.Point(272, 89);
+            this.lblHeaderPriceChange.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderPriceChange.Name = "lblHeaderPriceChange";
+            this.lblHeaderPriceChange.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderPriceChange.TabIndex = 278;
+            this.lblHeaderPriceChange.Text = "no data";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -18285,6 +18299,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.lblHeaderPriceChange);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
@@ -19801,6 +19816,7 @@
         private System.Windows.Forms.Label label216;
         private System.Windows.Forms.Panel panel130;
         private System.Windows.Forms.Label label215;
+        private System.Windows.Forms.Label lblHeaderPriceChange;
     }
 }
 

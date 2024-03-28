@@ -27,8 +27,7 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * BitcoinExplorerOrgJSONRefresh() - gives occasional error but could an issue with the api
-* change heading text colours on the honey badger and symbol themes
-* display previous price above current price? Or don't update current price (to zero) if it can't be obtained?
+* maybe add https://api.coindesk.com/v1/bpi/currentprice.json as a backup (or average the two sources) price api
 * more testing! 
 */
 
@@ -20917,7 +20916,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate, lblHeaderPriceChange };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.ForeColor = thisColor;
@@ -21014,7 +21013,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart};
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.ForeColor = thiscolor;
@@ -22197,6 +22196,55 @@ namespace SATSuma
                 });
             }
         }
+
+        private async void UpdateHeaderPriceChangeValue(Label label, string priceChange)
+        {
+            if (readyToShowRedAndGreenLabelsYet == true)
+            {
+                // get the current colour. Will revert to this after making red or green
+                Color currentColor = label.ForeColor;
+
+                if (decimal.TryParse(priceChange, out decimal priceChangeDecimal))
+                {
+                    if (priceChangeDecimal > 0)
+                    {
+                        label.Invoke((MethodInvoker)delegate
+                        {
+                            label.ForeColor = Color.OliveDrab;
+                            label.Text = "+" + lblHeaderPrice.Text[0] + priceChange;
+                        });
+                    }
+                    else
+                    {
+                        if (priceChangeDecimal < 0)
+                        {
+                            label.Invoke((MethodInvoker)delegate
+                            {
+                                string cleanedPriceChange = Regex.Replace(priceChange, @"[^0-9.]", "");
+                                label.ForeColor = Color.IndianRed;
+                                label.Text = "-" + lblHeaderPrice.Text[0] + cleanedPriceChange;
+                            });
+                        }
+                        else
+                        {
+                            label.Invoke((MethodInvoker)delegate
+                            {
+                                label.ForeColor = currentColor;
+                            });
+                        }
+                    }
+                }
+                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChange.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChange.Location.Y);
+                });
+                // Wait a moment
+                await Task.Delay(5000);
+
+                // Restore original color
+                label.ForeColor = currentColor;
+            }
+        }
         #endregion
         #region expanding panels (vert)
 
@@ -22212,11 +22260,11 @@ namespace SATSuma
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = (int)(111 * UIScale);
+                panelMaxHeight = (int)(103 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
-                panelMaxHeight = (int)(279 * UIScale);
+                panelMaxHeight = (int)(257 * UIScale);
             }
             if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
             {
@@ -25189,11 +25237,52 @@ namespace SATSuma
                         lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
                     });
                     UpdateLabelValue(lblPriceUSD, price);
-                    UpdateLabelValue(lblHeaderPrice, price);
+                    // calculate and assign difference here.
+                    if (decimal.TryParse(lblHeaderPrice.Text.Substring(1), out decimal oldPrice))
+                    {
+                        if (decimal.TryParse(price.Substring(1), out decimal newPrice))
+                        {
+                            decimal priceChange = newPrice - oldPrice;
+                            string priceChangeDisp = Convert.ToString(priceChange);
+                            if (priceChange == newPrice) // first time getting price
+                            {
+                                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPriceChange.Visible = false;
+                                });
+                                UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                            }
+                            else 
+                            {
+                                if (priceChange == 0  || newPrice == 0) // price hasn't changed or we failed to get a new price
+                                {
+                                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderPriceChange.Visible = false;
+                                    });
+                                    UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                                }
+                                else // price has changed since previous update
+                                {
+                                    UpdateHeaderPriceChangeValue(lblHeaderPriceChange, priceChangeDisp);
+                                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderPriceChange.Visible = true;
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (OneBTCinSelectedCurrency > 0)
+                    {
+                        UpdateLabelValue(lblHeaderPrice, price);
+                    }
                     lblHeaderPriceChart.Invoke((MethodInvoker)delegate
                     {
                         lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
                     });
+                    
                     UpdateLabelValue(lblMarketCapUSD, mCap);
                     UpdateLabelValue(lblHeaderMarketCap, mCap);
                     lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate

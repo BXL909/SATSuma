@@ -28,8 +28,9 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * include marketcap from coingecko too
 * more testing! 
-* re-do all tooltips (on toolTipGeneralUse)
-* add guide to which API's do what so it's easier to know which ones to disable/enable
+* reduce reliance on external API's where possible
+* check for more lists of statements that should really be in list loops
+* make sure existing control state loops, etc use an invoke 
 */
 
 #region Using
@@ -67,6 +68,7 @@ using ScottPlot.Renderable;
 using System.Runtime.Remoting.Channels;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Diagnostics.Eventing.Reader;
+using ScottPlot.Plottable;
 #endregion
 
 namespace SATSuma
@@ -445,6 +447,7 @@ namespace SATSuma
             panel125.Paint += Panel_Paint;
             panel101.Paint += Panel_Paint;
             panel27.Paint += Panel_Paint;
+            panel132.Paint += Panel_Paint;
             #endregion
             #region rounded panels (textbox containers)
             panelThemeNameContainer.Paint += Panel_Paint;
@@ -611,7 +614,7 @@ namespace SATSuma
                 // add an extra Y axis to the chart to show the daily BTC amount bought
                 yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color: btnMenuDirectory.ForeColor);
                 // populate dca chart if the api is enabled
-                if (lblBlockchainInfoEndpoints.Text == "✔️")
+                if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
                 {
                     PopulateDCACalculator();
                 }
@@ -3737,33 +3740,17 @@ namespace SATSuma
                     btnNextAddressTransactions.Visible = false;
                     btnFirstAddressTransaction.Visible = false;
                 }
-                lblAddressTXPositionInList.Visible = true;
-                label59.Visible = true;
-                label61.Visible = true;
-                label67.Visible = true;
-                label63.Visible = true;
-                panel123.Visible = true;
-                panel124.Visible = true;
-                listViewAddressTransactions.Visible = true;
-                lblAddressConfirmedUnspent.Visible = true;
-                lblAddressConfirmedUnspentOutputs.Visible = true;
-                lblAddressConfirmedTransactionCount.Visible = true;
-                lblAddressConfirmedReceived.Visible = true;
-                lblAddressConfirmedReceivedOutputs.Visible = true;
-                lblAddressConfirmedSpent.Visible = true;
-                lblAddressConfirmedSpentOutputs.Visible = true;
-                lblAddressConfirmedReceivedFiat.Visible = true;
-                lblAddressConfirmedSpentFiat.Visible = true;
-                lblAddressConfirmedUnspentFiat.Visible = true;
-                btnShowAllTX.Visible = true;
-                btnShowConfirmedTX.Visible = true;
-                btnShowUnconfirmedTX.Visible = true;
-                lblAddressType.Visible = true;
-                panel41.Visible = true;
-                panel42.Visible = true;
-                panel43.Visible = true;
-                panel44.Visible = true;
-                listViewAddressTransactions.Visible = true;
+
+                Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, panel123, panel124, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, 
+                    lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions };
+                foreach (Control control in controlsToShow)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = true;
+                    });
+                }
+
                 listViewAddressTransactions.BringToFront();
                 BtnViewBlockFromAddress.BringToFront();
             }
@@ -3780,35 +3767,15 @@ namespace SATSuma
             {
                 if (lblAddressType.Visible)
                 {
-                    btnNextAddressTransactions.Visible = false;
-                    btnFirstAddressTransaction.Visible = false;
-                    lblAddressTXPositionInList.Visible = false;
-                    label59.Visible = false;
-                    label61.Visible = false;
-                    label67.Visible = false;
-                    label63.Visible = false;
-                    panel123.Visible = false;
-                    panel124.Visible = false;
-                    listViewAddressTransactions.Visible = false;
-                    lblAddressConfirmedUnspent.Visible = false;
-                    lblAddressConfirmedUnspentOutputs.Visible = false;
-                    lblAddressConfirmedTransactionCount.Visible = false;
-                    lblAddressConfirmedReceived.Visible = false;
-                    lblAddressConfirmedReceivedOutputs.Visible = false;
-                    lblAddressConfirmedSpent.Visible = false;
-                    lblAddressConfirmedSpentOutputs.Visible = false;
-                    lblAddressConfirmedReceivedFiat.Visible = false;
-                    lblAddressConfirmedSpentFiat.Visible = false;
-                    lblAddressConfirmedUnspentFiat.Visible = false;
-                    btnShowAllTX.Visible = false;
-                    btnShowConfirmedTX.Visible = false;
-                    btnShowUnconfirmedTX.Visible = false;
-                    lblAddressType.Visible = false;
-                    panel41.Visible = false;
-                    panel42.Visible = false;
-                    panel43.Visible = false;
-                    panel44.Visible = false;
-                    listViewAddressTransactions.Visible = false;
+                    Control[] controlsToHide = { btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, panel123, panel124, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs,
+                        lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions };
+                    foreach (Control control in controlsToHide)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
                 }
             }
             catch (Exception ex)
@@ -12072,46 +12039,22 @@ namespace SATSuma
                     btnChartDifficultyLogWasEnabled = btnChartDifficultyLog.Enabled;
 
                     //disable them all
-                    btnChartBlockFees.Enabled = false;
-                    btnChartDifficulty.Enabled = false;
-                    btnChartHashrate.Enabled = false;
-                    btnChartPrice.Enabled = false;
-                    btnChartReward.Enabled = false;
-                    btnChartFeeRates.Enabled = false;
-                    btnChartCirculation.Enabled = false;
-                    btnChartPeriod1m.Enabled = false;
-                    btnChartPeriod1w.Enabled = false;
-                    btnChartPeriod1y.Enabled = false;
-                    btnChartPeriod24h.Enabled = false;
-                    btnChartPeriod2y.Enabled = false;
-                    btnChartPeriod3d.Enabled = false;
-                    btnChartPeriod3m.Enabled = false;
-                    btnChartPeriod3y.Enabled = false;
-                    btnChartPeriod6m.Enabled = false;
-                    btnChartPeriodAll.Enabled = false;
-                    btnChartBlockSize.Enabled = false;
-                    btnChartUniqueAddresses.Enabled = false;
-                    btnHashrateScaleLinear.Enabled = false;
-                    btnHashrateScaleLog.Enabled = false;
-                    btnChartAddressScaleLinear.Enabled = false;
-                    btnChartAddressScaleLog.Enabled = false;
-                    btnPriceChartScaleLog.Enabled = false;
-                    btnPriceChartScaleLinear.Enabled = false;
-                    btnChartUTXO.Enabled = false;
-                    btnChartPoolsRanking.Enabled = false;
-                    btnChartNodesByNetwork.Enabled = false;
-                    btnChartNodesByCountry.Enabled = false;
-                    btnChartLightningCapacity.Enabled = false;
-                    btnChartLightningChannels.Enabled = false;
-                    btnChartMarketCap.Enabled = false;
-                    btnChartMarketCapScaleLog.Enabled = false;
-                    btnChartDifficultyLinear.Enabled = false;
-                    btnChartDifficultyLog.Enabled = false;
+
+                    Control[] disableTheseControls = { btnChartBlockFees, btnChartDifficulty, btnChartHashrate, btnChartPrice, btnChartReward, btnChartFeeRates, btnChartCirculation, btnChartPeriod1m, btnChartPeriod1w, btnChartPeriod1y,
+                        btnChartPeriod24h, btnChartPeriod2y, btnChartPeriod3d, btnChartPeriod3m, btnChartPeriod3y, btnChartPeriod6m, btnChartPeriodAll, btnChartBlockSize, btnChartUniqueAddresses, btnHashrateScaleLinear,
+                        btnHashrateScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry,
+                        btnChartLightningCapacity, btnChartLightningChannels, btnChartMarketCap, btnChartMarketCapScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
+                    foreach (Control control in disableTheseControls)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Enabled = false;
+                        });
+                    }
                 }
                 else
                 {
                     // use previously saved states to reinstate buttons
-
                     btnChartBlockFees.Enabled = btnChartBlockFeesWasEnabled;
                     btnChartDifficulty.Enabled = btnChartDifficultyWasEnabled;
                     btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
@@ -12165,19 +12108,14 @@ namespace SATSuma
         {
             try
             {
-                btnChartCirculation.Enabled = false;
-                btnChartMarketCap.Enabled = false;
-                btnChartPrice.Enabled = false;
-                btnChartUniqueAddresses.Enabled = false;
-                btnChartUTXO.Enabled = false;
-                lblChartCirculation.Enabled = false;
-                lblHeaderPriceChart.Enabled = false;
-                lblPriceChart.Enabled = false;
-                lblConverterChart.Enabled = false;
-                lblMarketCapChart.Enabled = false;
-                lblUniqueAddressesChart.Enabled = false;
-                lblHeaderConverterChart.Enabled = false;
-                lblHeaderMarketCapChart.Enabled = false;
+                Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                foreach (Control control in disableTheseControls)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = false;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -12190,19 +12128,15 @@ namespace SATSuma
         {
             try
             {
-                btnChartCirculation.Enabled = true;
-                btnChartMarketCap.Enabled = true;
-                btnChartPrice.Enabled = true;
-                btnChartUniqueAddresses.Enabled = true;
-                btnChartUTXO.Enabled = true;
-                lblChartCirculation.Enabled = true;
-                lblConverterChart.Enabled = true;
-                lblHeaderPriceChart.Enabled = true;
-                lblPriceChart.Enabled = true;
-                lblMarketCapChart.Enabled = true;
-                lblUniqueAddressesChart.Enabled = true;
-                lblHeaderConverterChart.Enabled = true;
-                lblHeaderMarketCapChart.Enabled = true;
+                Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                foreach (Control control in disableTheseControls)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = true;
+                    });
+                }
+
             }
             catch (Exception ex)
             {
@@ -13893,8 +13827,6 @@ namespace SATSuma
 
         #region ⚡DCA CALCULATOR⚡
 
-        bool existingAxis = false;
-        
         private async void PopulateDCACalculator()
         {
             try
@@ -14102,7 +14034,6 @@ namespace SATSuma
                     var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
                     yAxis3.Label("", color: btnMenuDirectory.ForeColor);
                     yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.1);
-                    existingAxis = true;
                     BTCRunningTotalscatter.YAxisIndex = 1;
 
                     formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
@@ -14379,7 +14310,7 @@ namespace SATSuma
 
         private void BtnCalculateDCA_Click(object sender, EventArgs e)
         {
-            if (lblBlockchainInfoEndpoints.Text == "✔️")
+            if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
             {
                 PopulateDCACalculator();
             }
@@ -16234,8 +16165,7 @@ namespace SATSuma
                     EnableChartsThatDontUseMempoolSpace();
                 }
                 Control[] EnableThisStuffForMainnet = { lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
-                    lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart
-            };
+                    lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in EnableThisStuffForMainnet)
                 {
                     control.Enabled = true;
@@ -20766,6 +20696,7 @@ namespace SATSuma
                 panel124.Invalidate();
                 panel125.Invalidate();
                 panel101.Invalidate();
+                panel132.Invalidate();
                 #endregion
                 #region panels (textbox containers)
                 panelThemeNameContainer.Invalidate();
@@ -21561,8 +21492,6 @@ namespace SATSuma
             }
         }
 
-
-
         private void ColorLines(Color thiscolor)
         {
             try
@@ -21998,7 +21927,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
+                Control[] listPanelsToColor = { panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -23952,7 +23881,7 @@ namespace SATSuma
                 btnMenuCharts.Enabled = true;
                 if (!offlineMode)
                 {
-                    if (RunBlockchainInfoEndpointAPI)
+                    if (RunBlockchainInfoEndpointAPI && RunBitcoinExplorerEndpointAPI)
                     {
                         btnMenuDCACalculator.Enabled = true;
                     }
@@ -25234,7 +25163,7 @@ namespace SATSuma
                     }
                     #endregion
                     #region recalculate dca screen
-                    if (lblBlockchainInfoEndpoints.Text == "✔️")
+                    if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
                     {
                         PopulateDCACalculator();
                     }
@@ -27207,7 +27136,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-
     }
 }

@@ -513,6 +513,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap tooltiplogo {
+            get {
+                object obj = ResourceManager.GetObject("tooltiplogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap transpTitle {
             get {
                 object obj = ResourceManager.GetObject("transpTitle", resourceCulture);

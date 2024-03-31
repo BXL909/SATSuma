@@ -29,8 +29,10 @@ https://satsuma.btcdir.org/download/
 * include marketcap from coingecko too
 * more testing! 
 * reduce reliance on external API's where possible
-* check for more lists of statements that should really be in list loops
+* check for more lists of statements that should really be in list loops - from 3144
 * make sure existing control state loops, etc use an invoke 
+* add more tooltips
+* supress small loading screen when big loading screen is visible
 */
 
 #region Using
@@ -65,10 +67,9 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
-using System.Runtime.Remoting.Channels;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Diagnostics.Eventing.Reader;
+using NBitcoin.Logging;
 using ScottPlot.Plottable;
+
 #endregion
 
 namespace SATSuma
@@ -398,123 +399,30 @@ namespace SATSuma
             }
             #endregion
             #region rounded panels
-            panel32.Paint += Panel_Paint;
-            panel74.Paint += Panel_Paint;
-            panel76.Paint += Panel_Paint;
-            panel77.Paint += Panel_Paint;
-            panel99.Paint += Panel_Paint;
-            panel84.Paint += Panel_Paint;
-            panel88.Paint += Panel_Paint;
-            panel89.Paint += Panel_Paint;
-            panel90.Paint += Panel_Paint;
-            panel86.Paint += Panel_Paint;
-            panel87.Paint += Panel_Paint;
-            panel103.Paint += Panel_Paint;
-            panel46.Paint += Panel_Paint;
-            panel51.Paint += Panel_Paint;
-            panel91.Paint += Panel_Paint;
-            panel70.Paint += Panel_Paint;
-            panel71.Paint += Panel_Paint;
-            panel16.Paint += Panel_Paint;
-            panel21.Paint += Panel_Paint;
-            panel85.Paint += Panel_Paint;
-            panel53.Paint += Panel_Paint;
-            panel96.Paint += Panel_Paint;
-            panel106.Paint += Panel_Paint;
-            panel107.Paint += Panel_Paint;
-            panel92.Paint += Panel_Paint;
-            panelAddToBookmarks.Paint += Panel_Paint;
-            panelAddToBookmarksBorder.Paint += Panel_Paint;
-            panelLeftPanel.Paint += Panel_Paint;
-            panelOwnNodeAddressTXInfo.Paint += Panel_Paint;
-            panelOwnNodeBlockTXInfo.Paint += Panel_Paint;
-            panelTransactionMiddle.Paint += Panel_Paint;
-            panelErrorMessage.Paint += Panel_Paint;
-            panelSettingsUIScale.Paint += Panel_Paint;
-            panelSettingsUIScaleContainer.Paint += Panel_Paint;
-            panelDCAMessages.Paint += Panel_Paint;
-            panelDCASummary.Paint += Panel_Paint;
-            panelDCAInputs.Paint += Panel_Paint;
-            panel119.Paint += Panel_Paint;
-            panelPriceConvert.Paint += Panel_Paint;
-            panelDCAChartContainer.Paint += Panel_Paint;
-            panel117.Paint += Panel_Paint;
-            panel120.Paint += Panel_Paint;
-            panel121.Paint += Panel_Paint;
-            panel122.Paint += Panel_Paint;
-            panel123.Paint += Panel_Paint;
-            panel124.Paint += Panel_Paint;
-            panel125.Paint += Panel_Paint;
-            panel101.Paint += Panel_Paint;
-            panel27.Paint += Panel_Paint;
-            panel132.Paint += Panel_Paint;
+            Control[] panelsToRound = { panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
+                panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
+                panel122, panel123, panel124, panel125, panel101, panel27, panel132 };
+            foreach (Control control in panelsToRound)
+            {
+                control.Paint += Panel_Paint;
+            }
             #endregion
             #region rounded panels (textbox containers)
-            panelThemeNameContainer.Paint += Panel_Paint;
-            panelOptionalNotesContainer.Paint += Panel_Paint;
-            panelEncryptionKeyContainer.Paint += Panel_Paint;
-            panelSubmittedAddressContainer.Paint += Panel_Paint;
-            panelBlockHeightToStartFromContainer.Paint += Panel_Paint;
-            panelTransactionIDContainer.Paint += Panel_Paint;
-            panelSubmittedXpubContainer.Paint += Panel_Paint;
-            panelXpubScreenOwnNodeURLContainer.Paint += Panel_Paint;
-            panelBookmarkKeyContainer.Paint += Panel_Paint;
-            panelConvertBTCToFiatContainer.Paint += Panel_Paint;
-            panelConvertUSDToBTCContainer.Paint += Panel_Paint;
-            panelConvertEURToBTCContainer.Paint += Panel_Paint;
-            panelConvertGBPToBTCContainer.Paint += Panel_Paint;
-            panelConvertXAUToBTCContainer.Paint += Panel_Paint;
-            panelSettingsOwnNodeURLContainer.Paint += Panel_Paint;
-            panelAppearanceTextbox1Container.Paint += Panel_Paint;
-            panelComboBoxStartupScreenContainer.Paint += Panel_Paint;
-            panelCustomizeThemeListContainer.Paint += Panel_Paint;
-            panelHeadingBackgroundSelect.Paint += Panel_Paint;
-            panelSelectBlockNumberContainer.Paint += Panel_Paint;
-            panelUniversalSearchContainer.Paint += Panel_Paint;
-            panel75.Paint += Panel_Paint;
-            panel95.Paint += Panel_Paint;
-            panel93.Paint += Panel_Paint;
-            panel98.Paint += Panel_Paint;
-            panel111.Paint += Panel_Paint;
-            panel113.Paint += Panel_Paint;
-            panel114.Paint += Panel_Paint;
-            panel115.Paint += Panel_Paint;
+            Control[] panelContainersToRound = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, 
+                panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, 
+                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115 };
+            foreach (Control control in panelContainersToRound)
+            {
+                control.Paint += Panel_Paint;
+            }
             #endregion
             #region panels (heading containers)
-            panel1.Paint += Panel_Paint;
-            panel2.Paint += Panel_Paint;
-            panel3.Paint += Panel_Paint;
-            panel4.Paint += Panel_Paint;
-            panel5.Paint += Panel_Paint;
-            panel6.Paint += Panel_Paint;
-            panel7.Paint += Panel_Paint;
-            panel8.Paint += Panel_Paint;
-            panel9.Paint += Panel_Paint;
-            panel10.Paint += Panel_Paint;
-            panel11.Paint += Panel_Paint;
-            panel12.Paint += Panel_Paint;
-            panel20.Paint += Panel_Paint;
-            panel23.Paint += Panel_Paint;
-            panel26.Paint += Panel_Paint;
-            panel29.Paint += Panel_Paint;
-            panel31.Paint += Panel_Paint;
-            panel38.Paint += Panel_Paint;
-            panel39.Paint += Panel_Paint;
-            panel40.Paint += Panel_Paint;
-            panel41.Paint += Panel_Paint;
-            panel42.Paint += Panel_Paint;
-            panel43.Paint += Panel_Paint;
-            panel44.Paint += Panel_Paint;
-            panel45.Paint += Panel_Paint;
-            panel57.Paint += Panel_Paint;
-            panel78.Paint += Panel_Paint;
-            panel79.Paint += Panel_Paint;
-            panel80.Paint += Panel_Paint;
-            panel81.Paint += Panel_Paint;
-            panel94.Paint += Panel_Paint;
-            panel105.Paint += Panel_Paint;
-            panel109.Paint += Panel_Paint;
-            panelLoadingAnimationContainer.Paint += Panel_Paint;
+            Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78, panel79, panel80, panel81, 
+                panel94, panel105, panel109, panelLoadingAnimationContainer };
+            foreach (Control control in panelHeadingContainersToRound)
+            {
+                control.Paint += Panel_Paint;
+            }
             #endregion
             #region rounded form
             this.FormBorderStyle = FormBorderStyle.None;
@@ -524,12 +432,10 @@ namespace SATSuma
             #endregion
         }
 
-
         private void SATSuma_Load(object sender, EventArgs e)
         {
             try
             {
-
                 #region UIScale
                 StoreOriginalDimensions(this);
 
@@ -1239,60 +1145,26 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    lblPriceUSD.Invoke((MethodInvoker)delegate
+                                    Control[] controlsToShowAsDisabled = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
+                                    foreach (Control control in controlsToShowAsDisabled)
                                     {
-                                        lblPriceUSD.Text = "disabled";
-                                    });
-
-                                    lblMoscowTime.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblMoscowTime.Text = "disabled";
-                                    });
-                                    lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblMarketCapUSD.Text = "disabled";
-                                    });
-                                    lblHeaderPrice.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderPrice.Text = "disabled";
-                                    });
-
-                                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderMoscowTime.Text = "disabled";
-                                    });
-                                    lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderMarketCap.Text = "disabled";
-                                    });
+                                        control.Invoke((MethodInvoker)delegate
+                                        {
+                                            control.Text = "disabled";
+                                        });
+                                    }
                                 }
                             }
                             else
                             {
-                                lblPriceUSD.Invoke((MethodInvoker)delegate
+                                Control[] controlsToShowAsTestnet = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
+                                foreach (Control control in controlsToShowAsTestnet)
                                 {
-                                    lblPriceUSD.Text = "0 (TestNet)";
-                                });
-                                lblMoscowTime.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMoscowTime.Text = "0 (TestNet)";
-                                });
-                                lblMarketCapUSD.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMarketCapUSD.Text = "0 (TestNet)";
-                                });
-                                lblHeaderPrice.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderPrice.Text = "0 (TestNet)";
-                                });
-                                lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderMoscowTime.Text = "0 (TestNet)";
-                                });
-                                lblHeaderMarketCap.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderMarketCap.Text = "0 (TestNet)";
-                                });
+                                    control.Invoke((MethodInvoker)delegate
+                                    {
+                                        control.Text = "0 (TestNet)";
+                                    });
+                                }
                             }
                             lblMarketCapChart.Invoke((MethodInvoker)delegate
                             {
@@ -1373,65 +1245,35 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                    Control[] controlsToShowAsDisabled = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
+                                    foreach (Control control in controlsToShowAsDisabled)
                                     {
-                                        lblTransInNextBlock.Text = "disabled";
-                                    });
-                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTXInNextBlock.Text = "disabled";
-                                    });
-                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockMinMaxFee.Text = "disabled";
-                                    });
-                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListMinMaxInFeeNextBlock.Text = "disabled";
-                                    });
-                                    lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFees.Text = "disabled";
-                                    });
+                                        control.Invoke((MethodInvoker)delegate
+                                        {
+                                            control.Text = "disabled";
+                                        });
+                                    }
+
                                     lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                                     {
                                         lblNextBlockTotalFeesFiat.Visible = false;
-                                    });
-                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTotalFeesInNextBlock.Text = "disabled";
                                     });
                                 }
                             }
                             else
                             {
-                                lblTransInNextBlock.Invoke((MethodInvoker)delegate
+                                Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
+                                foreach (Control control in controlsToShowAsTestnet)
                                 {
-                                    lblTransInNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListTXInNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNextBlockMinMaxFee.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListMinMaxInFeeNextBlock.Text = "unavailable on TestNet";
-                                });
-                                lblNextBlockTotalFees.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNextBlockTotalFees.Text = "unavailable on TestNet";
-                                });
+                                    control.Invoke((MethodInvoker)delegate
+                                    {
+                                        control.Text = "unavailable on TestNet";
+                                    });
+                                }
+
                                 lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblNextBlockTotalFeesFiat.Visible = false;
-                                });
-                                lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListTotalFeesInNextBlock.Text = "unavailable on TestNet";
                                 });
                             }
                             if (!testNet && lblNextBlockTotalFeesFiat.Text != "no data" && lblNextBlockTotalFeesFiat.Visible)
@@ -1591,46 +1433,14 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblBlockReward, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
+                                    foreach (Control control in controlsToShowAsDisabled)
                                     {
-                                        lblAvgNoTransactions.Text = "disabled";
-                                    });
-                                    lblBlockReward.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockReward.Text = "disabled";
-                                    });
-                                    lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListBlockReward.Text = "disabled";
-                                    });
-                                    lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockRewardAfterHalving.Text = "disabled";
-                                    });
-                                    lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBTCInCirc.Text = "disabled";
-                                    });
-                                    lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHashesToSolve.Text = "disabled";
-                                    });
-                                    lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                    {
-                                        lblBlockListAttemptsToSolveBlock.Text = "disabled";
-                                    });
-                                    lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourTransCount.Text = "disabled";
-                                    });
-                                    lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourBTCSent.Text = "disabled";
-                                    });
-                                    lblPercentIssued.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblPercentIssued.Text = "disabled";
-                                    });
+                                        control.Invoke((MethodInvoker)delegate
+                                        {
+                                            control.Text = "disabled";
+                                        });
+                                    }
 
                                     progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                     {
@@ -1640,46 +1450,14 @@ namespace SATSuma
                             }
                             else
                             {
-                                lblAvgNoTransactions.Invoke((MethodInvoker)delegate
+                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblBlockReward, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
+                                foreach (Control control in controlsToShowAsTestnet)
                                 {
-                                    lblAvgNoTransactions.Text = "unavailable on TestNet";
-                                });
-                                lblBlockReward.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockReward.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListBlockReward.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListBlockReward.Text = "unavailable on TestNet";
-                                });
-                                lblBlockRewardAfterHalving.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockRewardAfterHalving.Text = "unavailable on TestNet";
-                                });
-                                lblBTCInCirc.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBTCInCirc.Text = "unavailable on TestNet";
-                                });
-                                lblHashesToSolve.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHashesToSolve.Text = "unavailable on TestNet";
-                                });
-                                lblBlockListAttemptsToSolveBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                                {
-                                    lblBlockListAttemptsToSolveBlock.Text = "unavailable on TestNet";
-                                });
-                                lbl24HourTransCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lbl24HourTransCount.Text = "unavailable on TestNet";
-                                });
-                                lbl24HourBTCSent.Invoke((MethodInvoker)delegate
-                                {
-                                    lbl24HourBTCSent.Text = "unavailable on TestNet";
-                                });
-                                lblPercentIssued.Invoke((MethodInvoker)delegate
-                                {
-                                    lblPercentIssued.Text = "unavailable on TestNet";
-                                });
+                                    control.Invoke((MethodInvoker)delegate
+                                    {
+                                        control.Text = "unavailable on TestNet";
+                                    });
+                                }
 
                                 progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                 {
@@ -1739,42 +1517,26 @@ namespace SATSuma
                             }
                             else
                             {
-                                lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                                Control[] controlsToShowAsDisabled = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize };
+                                foreach (Control control in controlsToShowAsDisabled)
                                 {
-                                    lblHodlingAddresses.Text = "disabled";
-                                });
-                                lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlocksIn24Hours.Text = "disabled";
-                                });
-                                lblNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNodes.Text = "disabled";
-                                });
-                                lblBlockchainSize.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockchainSize.Text = "disabled";
-                                });
+                                    control.Invoke((MethodInvoker)delegate
+                                    {
+                                        control.Text = "disabled";
+                                    });
+                                }
                             }
                         }
                         else
                         {
-                            lblHodlingAddresses.Invoke((MethodInvoker)delegate
+                            Control[] controlsToShowAsTestnet = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize };
+                            foreach (Control control in controlsToShowAsTestnet)
                             {
-                                lblHodlingAddresses.Text = "unavailable on TestNet";
-                            });
-                            lblBlocksIn24Hours.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlocksIn24Hours.Text = "unavailable on TestNet";
-                            });
-                            lblNodes.Invoke((MethodInvoker)delegate
-                            {
-                                lblNodes.Text = "unavailable on TestNet";
-                            });
-                            lblBlockchainSize.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockchainSize.Text = "unavailable on TestNet";
-                            });
+                                control.Invoke((MethodInvoker)delegate
+                                {
+                                    control.Text = "unavailable on TestNet";
+                                });
+                            }
                         }
                         lblPoolRankingChart.Invoke((MethodInvoker)delegate
                         {
@@ -1848,23 +1610,15 @@ namespace SATSuma
                             {
                                 progressBarProgressToHalving.Value = 0;
                                 progressBarBlockListHalvingProgress.Value = 0;
-                                lblProgressToHalving.Invoke((MethodInvoker)delegate
-                                {
-                                    lblProgressToHalving.Text = "disabled";
-                                });
-                                lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
-                                {
-                                    lblBlockListHalvingBlockAndRemaining.Text = "disabled";
-                                });
 
-                                lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                                Control[] controlsToShowAsDisabled = { lblProgressToHalving, lblBlockListHalvingBlockAndRemaining, lblEstimatedHalvingDate, lblHalvingSecondsRemaining };
+                                foreach (Control control in controlsToShowAsDisabled)
                                 {
-                                    lblEstimatedHalvingDate.Text = "disabled";
-                                });
-                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHalvingSecondsRemaining.Text = "disabled";
-                                });
+                                    control.Invoke((MethodInvoker)delegate
+                                    {
+                                        control.Text = "disabled";
+                                    });
+                                }
                             }
                         }
                         else
@@ -2170,7 +1924,6 @@ namespace SATSuma
         {
             try
             {
-
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
                 var response = client.DownloadString(NodeURL + "mempool");
@@ -2287,14 +2040,12 @@ namespace SATSuma
                         HandleException(ex, $"Parsing error for element {i}");
                     }
                 }
-
                 return (aliases, capacities);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "MempoolSpaceLiquidityRankingJSONRefresh");
             }
-
             return (new List<string>(), new List<string>());
         }
 
@@ -2334,14 +2085,12 @@ namespace SATSuma
                         HandleException(ex, $"Parsing error for element {i}");
                     }
                 }
-
                 return (aliases, channels);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "MempoolSpaceConnectivityRankingJSONRefresh");
             }
-
             return (new List<string>(), new List<string>());
         }
 
@@ -2740,34 +2489,16 @@ namespace SATSuma
                     {
                         AddressQRCodePicturebox.Image = null;
                     });
-                    lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
+
+                    Control[] controlsToSetEmpty = { lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs };
+                    foreach (Control control in controlsToSetEmpty)
                     {
-                        lblAddressConfirmedReceived.Text = string.Empty;
-                    });
-                    lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedReceivedOutputs.Text = string.Empty;
-                    });
-                    lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedSpent.Text = string.Empty;
-                    });
-                    lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedSpentOutputs.Text = string.Empty;
-                    });
-                    lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedTransactionCount.Text = string.Empty;
-                    });
-                    lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedUnspent.Text = string.Empty;
-                    });
-                    lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
-                    {
-                        lblAddressConfirmedUnspentOutputs.Text = string.Empty;
-                    });
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Text = string.Empty;
+                        });
+                    }
+
                     AddressInvalidHideControls();
                 }
             }
@@ -2804,7 +2535,6 @@ namespace SATSuma
                         {
                             bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
                         }
-
                     }
                 }
 
@@ -21162,6 +20892,8 @@ namespace SATSuma
                 {
                     control.ForeColor = thiscolor;
                 }
+                toolTipForLblHeaderPrice.ForeColor = thiscolor;
+                toolTipGeneralUse.ForeColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21934,6 +21666,8 @@ namespace SATSuma
                         control.BackColor = thiscolor;
                     }
                 }
+                toolTipForLblHeaderPrice.BackColor = thiscolor;
+                toolTipGeneralUse.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -25233,7 +24967,7 @@ namespace SATSuma
                         PriceEUR = BitExPriceEUR;
                         PriceGBP = BitExPriceGBP;
                         PriceXAU = BitExPriceXAU;
-                        sourceOfCurrentPrice = "bitcoinexplorer.org";
+                        sourceOfCurrentPrice = "source: bitcoinexplorer.org";
                     }
 
                     if (RunCoingeckoAPI && !RunBitcoinExplorerEndpointAPI) // coingecko.com only
@@ -25242,7 +24976,7 @@ namespace SATSuma
                         PriceEUR = GeckoPriceEUR;
                         PriceGBP = GeckoPriceGBP;
                         PriceXAU = GeckoPriceXAU;
-                        sourceOfCurrentPrice = "coingecko.com";
+                        sourceOfCurrentPrice = "source: coingecko.com";
                     }
 
                     if (RunBitcoinExplorerEndpointAPI && RunCoingeckoAPI) // bitcoinexplorer.org and coingecko.com - use an average price of the two of them
@@ -25251,7 +24985,7 @@ namespace SATSuma
                         if (Convert.ToDecimal(BitExPriceUSD) > 0 && Convert.ToDecimal(GeckoPriceUSD) > 0) // if both USD prices were returned use an average, or use the highest, or set to 0.
                         {
                             PriceUSD = ((Convert.ToDecimal(GeckoPriceUSD) + Convert.ToDecimal(BitExPriceUSD)) / 2).ToString("F2");
-                            sourceOfCurrentPrice = "Avg of coingecko.com & bitcoinexplorer.com";
+                            sourceOfCurrentPrice = "source: average of coingecko.com and bitcoinexplorer.org";
                         }
                         else
                         {
@@ -25265,12 +24999,12 @@ namespace SATSuma
                                 if (Convert.ToDecimal(GeckoPriceUSD) > Convert.ToDecimal(BitExPriceUSD))
                                 {
                                     PriceUSD = GeckoPriceUSD;
-                                    sourceOfCurrentPrice = "coingecko.com (bitcoinexplorer.com unavailable)";
+                                    sourceOfCurrentPrice = "source: coingecko.com (bitcoinexplorer.org unavailable)";
                                 }
                                 else
                                 {
                                     PriceUSD = BitExPriceUSD;
-                                    sourceOfCurrentPrice = "bitcoinexplorer.com (coingecko.com unavailable)";
+                                    sourceOfCurrentPrice = "source: bitcoinexplorer.org (coingecko.com unavailable)";
                                 }
                             }
                         }
@@ -25278,7 +25012,7 @@ namespace SATSuma
                         if (Convert.ToDecimal(BitExPriceEUR) > 0 && Convert.ToDecimal(GeckoPriceEUR) > 0) // if both USD prices were returned use an average, or use the highest, or set to 0.
                         {
                             PriceEUR = ((Convert.ToDecimal(GeckoPriceEUR) + Convert.ToDecimal(BitExPriceEUR)) / 2).ToString("F2");
-                            sourceOfCurrentPrice = "Avg of coingecko.com & bitcoinexplorer.com";
+                            sourceOfCurrentPrice = "source: average of coingecko.com and bitcoinexplorer.org";
                         }
                         else
                         {
@@ -25292,12 +25026,12 @@ namespace SATSuma
                                 if (Convert.ToDecimal(GeckoPriceEUR) > Convert.ToDecimal(BitExPriceEUR))
                                 {
                                     PriceEUR = GeckoPriceEUR;
-                                    sourceOfCurrentPrice = "coingecko.com (bitcoinexplorer.com unavailable)";
+                                    sourceOfCurrentPrice = "source: coingecko.com (bitcoinexplorer.org unavailable)";
                                 }
                                 else
                                 {
                                     PriceEUR = BitExPriceEUR;
-                                    sourceOfCurrentPrice = "bitcoinexplorer.com (coingecko.com unavailable)";
+                                    sourceOfCurrentPrice = "source: bitcoinexplorer.org (coingecko.com unavailable)";
                                 }
                             }
                         }
@@ -25305,7 +25039,7 @@ namespace SATSuma
                         if (Convert.ToDecimal(BitExPriceGBP) > 0 && Convert.ToDecimal(GeckoPriceGBP) > 0) // if both USD prices were returned use an average, or use the highest, or set to 0.
                         {
                             PriceGBP = ((Convert.ToDecimal(GeckoPriceGBP) + Convert.ToDecimal(BitExPriceGBP)) / 2).ToString("F2");
-                            sourceOfCurrentPrice = "Avg of coingecko.com & bitcoinexplorer.com";
+                            sourceOfCurrentPrice = "source: average of coingecko.com and bitcoinexplorer.org";
                         }
                         else
                         {
@@ -25319,12 +25053,12 @@ namespace SATSuma
                                 if (Convert.ToDecimal(GeckoPriceGBP) > Convert.ToDecimal(BitExPriceGBP))
                                 {
                                     PriceGBP = GeckoPriceGBP;
-                                    sourceOfCurrentPrice = "coingecko.com (bitcoinexplorer.com unavailable)";
+                                    sourceOfCurrentPrice = "source: coingecko.com (bitcoinexplorer.org unavailable)";
                                 }
                                 else
                                 {
                                     PriceGBP = BitExPriceGBP;
-                                    sourceOfCurrentPrice = "bitcoinexplorer.com (coingecko.com unavailable)";
+                                    sourceOfCurrentPrice = "source: bitcoinexplorer.org (coingecko.com unavailable)";
                                 }
                             }
                         }
@@ -25333,7 +25067,7 @@ namespace SATSuma
                         {
                             //PriceXAU = Convert.ToString((Convert.ToDecimal(GeckoPriceXAU) + Convert.ToDecimal(BitExPriceXAU)) / 2);
                             PriceXAU = ((Convert.ToDecimal(GeckoPriceXAU) + Convert.ToDecimal(BitExPriceXAU)) / 2).ToString("F2");
-                            sourceOfCurrentPrice = "Avg of coingecko.com & bitcoinexplorer.com";
+                            sourceOfCurrentPrice = "source: average of coingecko.com and bitcoinexplorer.org";
                         }
                         else
                         {
@@ -25347,12 +25081,12 @@ namespace SATSuma
                                 if (Convert.ToDecimal(GeckoPriceXAU) > Convert.ToDecimal(BitExPriceXAU))
                                 {
                                     PriceXAU = GeckoPriceXAU;
-                                    sourceOfCurrentPrice = "coingecko.com (bitcoinexplorer.com unavailable)";
+                                    sourceOfCurrentPrice = "source: coingecko.com (bitcoinexplorer.org unavailable)";
                                 }
                                 else
                                 {
                                     PriceXAU = BitExPriceXAU;
-                                    sourceOfCurrentPrice = "bitcoinexplorer.com (coingecko.com unavailable)";
+                                    sourceOfCurrentPrice = "source: bitcoinexplorer.org (coingecko.com unavailable)";
                                 }
                             }
                         }
@@ -26033,6 +25767,48 @@ namespace SATSuma
         public Panel GetPanelDirectory() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelDirectory;
+        }
+        #endregion
+        #region style tooltips
+        private void ToolTip_Draw(object sender, DrawToolTipEventArgs e) => DrawToolTip(e);
+
+        private void DrawToolTip(DrawToolTipEventArgs e)
+        {
+            //background
+            using (var linearGradientBrush = new LinearGradientBrush(e.Bounds, btnExit.BackColor, btnExit.BackColor, 45f))
+            {
+                e.Graphics.FillRectangle(linearGradientBrush, e.Bounds);
+            }
+
+            //border
+            using (var borderPen = new Pen(panelBlockHeightToStartFromContainer.BackColor, 1))
+            {
+                Rectangle borderRect = new Rectangle(e.Bounds.Location, new Size(e.Bounds.Width - 1, e.Bounds.Height - 1));
+                e.Graphics.DrawRectangle(borderPen, borderRect);
+            }
+
+            var r = e.Bounds;
+            // icon
+            e.Graphics.DrawImage(Resources.tinylogo1, new Rectangle(r.X + 6, r.Y + 4, 20, 21));
+            // add some space before the text to make way for the icon
+            string tipToShow = "       " + e.ToolTipText;
+            TextRenderer.DrawText(e.Graphics, tipToShow, toolTipFont, e.Bounds, btnExit.ForeColor, toolTipFlags);
+        }
+
+        TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
+        TextFormatFlags.LeftAndRightPadding | TextFormatFlags.HorizontalCenter | TextFormatFlags.NoClipping;
+        Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
+
+        private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
+        {
+            // add some space before the text to make way for the icon
+            string toolTipText = "       " + (sender as ToolTip).GetToolTip(e.AssociatedControl);
+            using (var g = e.AssociatedControl.CreateGraphics())
+            {
+                var textSize = Size.Add(TextRenderer.MeasureText(
+                    g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
+                e.ToolTipSize = textSize;
+            }
         }
         #endregion
         #region close menus

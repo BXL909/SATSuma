@@ -361,7 +361,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomToolTipRenderer.cs" />
     <Compile Include="helpScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -468,6 +467,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\tooltiplogo.bmp" />
     <None Include="Resources\MainMenuFade.png" />
     <None Include="Resources\calendarWhite.png" />
     <None Include="Resources\calendarDark.png" />

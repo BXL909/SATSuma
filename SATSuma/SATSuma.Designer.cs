@@ -369,6 +369,9 @@
             this.label38 = new System.Windows.Forms.Label();
             this.lblTotalCapacity = new System.Windows.Forms.Label();
             this.panelAddress = new System.Windows.Forms.Panel();
+            this.panel132 = new System.Windows.Forms.Panel();
+            this.AddressQRCodePicturebox = new System.Windows.Forms.PictureBox();
+            this.lblAddressType = new System.Windows.Forms.Label();
             this.listViewAddressTransactions = new System.Windows.Forms.ListView();
             this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
             this.label164 = new System.Windows.Forms.Label();
@@ -399,12 +402,10 @@
             this.lblAddressConfirmedUnspentOutputs = new System.Windows.Forms.Label();
             this.lblAddressConfirmedSpentOutputs = new System.Windows.Forms.Label();
             this.lblAddressConfirmedReceivedOutputs = new System.Windows.Forms.Label();
-            this.AddressQRCodePicturebox = new System.Windows.Forms.PictureBox();
             this.lblAddressConfirmedUnspent = new System.Windows.Forms.Label();
             this.lblAddressConfirmedSpent = new System.Windows.Forms.Label();
             this.lblAddressConfirmedReceived = new System.Windows.Forms.Label();
             this.lblAddressConfirmedTransactionCount = new System.Windows.Forms.Label();
-            this.lblAddressType = new System.Windows.Forms.Label();
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
             this.listViewBlockTransactions = new System.Windows.Forms.ListView();
@@ -1197,7 +1198,6 @@
             this.lblHeaderPriceChange = new System.Windows.Forms.Label();
             this.toolTipForLblHeaderPrice = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipGeneralUse = new System.Windows.Forms.ToolTip(this.components);
-            this.panel132 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1222,6 +1222,8 @@
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelAddress.SuspendLayout();
+            this.panel132.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).BeginInit();
             this.panelOwnNodeAddressTXInfo.SuspendLayout();
             this.panel44.SuspendLayout();
             this.panel43.SuspendLayout();
@@ -1229,7 +1231,6 @@
             this.panel41.SuspendLayout();
             this.panel35.SuspendLayout();
             this.panelSubmittedAddressContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoadingAnimation)).BeginInit();
             this.panelBlock.SuspendLayout();
             this.panelOwnNodeBlockTXInfo.SuspendLayout();
@@ -1404,7 +1405,6 @@
             this.panelDCAChartLoadingPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCAMessages.SuspendLayout();
-            this.panel132.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1439,6 +1439,7 @@
             this.lblBlockNumber.Name = "lblBlockNumber";
             this.lblBlockNumber.Size = new System.Drawing.Size(122, 47);
             this.lblBlockNumber.TabIndex = 5;
+            this.lblBlockNumber.Tag = "";
             this.lblBlockNumber.Text = "000000";
             // 
             // btnMoveWindow
@@ -1563,7 +1564,7 @@
             this.label20.Size = new System.Drawing.Size(182, 17);
             this.label20.TabIndex = 115;
             this.label20.Text = "Total fees in next block (BTC)*";
-            this.toolTipGeneralUse.SetToolTip(this.label20, "Estimation until the block is mined");
+            this.toolTipGeneralUse.SetToolTip(this.label20, "Estimation. Total fees won\'t be known until the block is mined");
             // 
             // lblNextBlockMinMaxFee
             // 
@@ -6073,6 +6074,37 @@
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // panel132
+            // 
+            this.panel132.Controls.Add(this.AddressQRCodePicturebox);
+            this.panel132.Controls.Add(this.lblAddressType);
+            this.panel132.Location = new System.Drawing.Point(0, 36);
+            this.panel132.Name = "panel132";
+            this.panel132.Size = new System.Drawing.Size(156, 153);
+            this.panel132.TabIndex = 282;
+            this.panel132.Visible = false;
+            // 
+            // AddressQRCodePicturebox
+            // 
+            this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(18, 11);
+            this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
+            this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
+            this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.AddressQRCodePicturebox.TabIndex = 131;
+            this.AddressQRCodePicturebox.TabStop = false;
+            // 
+            // lblAddressType
+            // 
+            this.lblAddressType.AutoSize = true;
+            this.lblAddressType.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressType.Location = new System.Drawing.Point(10, 131);
+            this.lblAddressType.Name = "lblAddressType";
+            this.lblAddressType.Size = new System.Drawing.Size(52, 16);
+            this.lblAddressType.TabIndex = 3;
+            this.lblAddressType.Text = "no data";
+            this.lblAddressType.Visible = false;
+            // 
             // listViewAddressTransactions
             // 
             this.listViewAddressTransactions.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -6500,16 +6532,6 @@
             this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
             this.lblAddressConfirmedReceivedOutputs.Visible = false;
             // 
-            // AddressQRCodePicturebox
-            // 
-            this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(18, 11);
-            this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
-            this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
-            this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.AddressQRCodePicturebox.TabIndex = 131;
-            this.AddressQRCodePicturebox.TabStop = false;
-            // 
             // lblAddressConfirmedUnspent
             // 
             this.lblAddressConfirmedUnspent.AutoSize = true;
@@ -6557,17 +6579,6 @@
             this.lblAddressConfirmedTransactionCount.TabIndex = 117;
             this.lblAddressConfirmedTransactionCount.Text = "no data";
             this.lblAddressConfirmedTransactionCount.Visible = false;
-            // 
-            // lblAddressType
-            // 
-            this.lblAddressType.AutoSize = true;
-            this.lblAddressType.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressType.Location = new System.Drawing.Point(10, 131);
-            this.lblAddressType.Name = "lblAddressType";
-            this.lblAddressType.Size = new System.Drawing.Size(52, 16);
-            this.lblAddressType.TabIndex = 3;
-            this.lblAddressType.Text = "no data";
-            this.lblAddressType.Visible = false;
             // 
             // pictureBoxLoadingAnimation
             // 
@@ -12001,7 +12012,7 @@
             this.label244.Name = "label244";
             this.label244.Size = new System.Drawing.Size(210, 17);
             this.label244.TabIndex = 153;
-            this.label244.Text = "Charts && menu buttons";
+            this.label244.Text = "Charts, tooltips && menu buttons";
             this.label244.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel91
@@ -18324,24 +18335,16 @@
             // 
             this.toolTipForLblHeaderPrice.BackColor = System.Drawing.Color.DimGray;
             this.toolTipForLblHeaderPrice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.toolTipForLblHeaderPrice.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipForLblHeaderPrice.ToolTipTitle = "Current price data source:";
+            this.toolTipForLblHeaderPrice.OwnerDraw = true;
+            this.toolTipForLblHeaderPrice.Draw += new System.Windows.Forms.DrawToolTipEventHandler(this.ToolTip_Draw);
+            this.toolTipForLblHeaderPrice.Popup += new System.Windows.Forms.PopupEventHandler(this.ToolTip_Popup);
             // 
             // toolTipGeneralUse
             // 
             this.toolTipGeneralUse.AutomaticDelay = 750;
-            this.toolTipGeneralUse.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipGeneralUse.ToolTipTitle = "information:";
-            // 
-            // panel132
-            // 
-            this.panel132.Controls.Add(this.AddressQRCodePicturebox);
-            this.panel132.Controls.Add(this.lblAddressType);
-            this.panel132.Location = new System.Drawing.Point(0, 36);
-            this.panel132.Name = "panel132";
-            this.panel132.Size = new System.Drawing.Size(156, 153);
-            this.panel132.TabIndex = 282;
-            this.panel132.Visible = false;
+            this.toolTipGeneralUse.OwnerDraw = true;
+            this.toolTipGeneralUse.Draw += new System.Windows.Forms.DrawToolTipEventHandler(this.ToolTip_Draw);
+            this.toolTipGeneralUse.Popup += new System.Windows.Forms.PopupEventHandler(this.ToolTip_Popup);
             // 
             // SATSuma
             // 
@@ -18352,6 +18355,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelPriceConverter);
@@ -18362,10 +18367,8 @@
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.lblHeaderPriceChange);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
             this.Controls.Add(this.lblHeaderHashRateChart);
@@ -18453,6 +18456,9 @@
             this.panel1.ResumeLayout(false);
             this.panelAddress.ResumeLayout(false);
             this.panelAddress.PerformLayout();
+            this.panel132.ResumeLayout(false);
+            this.panel132.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).EndInit();
             this.panelOwnNodeAddressTXInfo.ResumeLayout(false);
             this.panel44.ResumeLayout(false);
             this.panel43.ResumeLayout(false);
@@ -18462,7 +18468,6 @@
             this.panel35.PerformLayout();
             this.panelSubmittedAddressContainer.ResumeLayout(false);
             this.panelSubmittedAddressContainer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoadingAnimation)).EndInit();
             this.panelBlock.ResumeLayout(false);
             this.panelBlock.PerformLayout();
@@ -18700,8 +18705,6 @@
             this.panelDCAChartLoadingPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
             this.panelDCAMessages.ResumeLayout(false);
-            this.panel132.ResumeLayout(false);
-            this.panel132.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

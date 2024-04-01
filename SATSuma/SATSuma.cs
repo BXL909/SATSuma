@@ -26,10 +26,11 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* include marketcap from coingecko too
+* include marketcap from coingecko too?
 * more testing! 
 * reduce reliance on external API's where possible
-* add more tooltips
+* add more tooltips (bitcoin dashboard done so far)
+* theme - make dash/solid progress bars optional?
 */
 
 #region Using
@@ -594,6 +595,9 @@ namespace SATSuma
         {
             try
             {
+                progressBarRefreshData.Value = (progressBarRefreshData.Maximum - (((intDisplayCountdownToRefresh - 1) * 1000) + 1000));
+                timer50thSec.Start();
+
                 // clock on genesis theme
                 UpdateOnScreenClock();
 
@@ -15662,7 +15666,7 @@ namespace SATSuma
                 APIGroup1DisplayTimerIntervalSecsConstant = (int)numericUpDownDashboardRefresh.Value * 60;
                 intAPIGroup1TimerIntervalMillisecsConstant = (((int)numericUpDownDashboardRefresh.Value * 60) * 1000);
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                progressBarRefreshData.Maximum = (int)numericUpDownDashboardRefresh.Value * 60;
+                progressBarRefreshData.Maximum = (int)(numericUpDownDashboardRefresh.Value * 60000);
                 SaveSettingsToBookmarksFile();
             }
             catch (Exception ex)
@@ -16460,6 +16464,7 @@ namespace SATSuma
                         }
                         #endregion
                         numericUpDownDashboardRefresh.Value = Convert.ToInt32(bookmark.Data.Substring(8, 4));
+                        progressBarRefreshData.Maximum = (int)(numericUpDownDashboardRefresh.Value * 60000);
                         numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(bookmark.Data.Substring(12, 2));
                         numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(bookmark.Data.Substring(14, 3));
 
@@ -21418,6 +21423,14 @@ namespace SATSuma
                 {
                     progressBarCheckAllAddressTypes.BarColor = thiscolor;
                 });
+                if (chartsBackgroundColor == Color.FromArgb(244, 244, 244))
+                {
+                    progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed; // shows up much better on a pale background than solid
+                }
+                else
+                {
+                    progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                }
             }
             catch (Exception ex)
             {
@@ -22305,7 +22318,7 @@ namespace SATSuma
         {
             if (readyToShowPriceChangeLabelYet == true)
             {
-                // get the current colour. Will revert to this after making red or green
+                // get the normal state colour. Will revert to this after making red or green
                 Color currentColor = label154.ForeColor;
 
                 if (decimal.TryParse(priceChange, out decimal priceChangeDecimal))
@@ -23036,8 +23049,12 @@ namespace SATSuma
                 {
                     lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
                 });
-                progressBarRefreshData.Value = progressBarRefreshData.Maximum - intDisplayCountdownToRefresh;
+                //progressBarRefreshData.Value = progressBarRefreshData.Maximum - intDisplayCountdownToRefresh;
                 intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
+
+                
+                
+
                 if (intDisplayCountdownToRefresh < 0) // if the 1 minute timer countdown has reached zero...
                 {
                     intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant; // reset it
@@ -27286,5 +27303,16 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+        private void timer50thSec_Tick(object sender, EventArgs e)
+        {
+            if (progressBarRefreshData.Value == (intDisplayCountdownToRefresh * 1000))
+            {
+                timer50thSec.Stop();
+                return;
+            }
+            progressBarRefreshData.Value += 60;
+         
+        }
     }
 }

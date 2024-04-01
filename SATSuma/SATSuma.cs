@@ -29,10 +29,7 @@ https://satsuma.btcdir.org/download/
 * include marketcap from coingecko too
 * more testing! 
 * reduce reliance on external API's where possible
-* check for more lists of statements that should really be in list loops - from 3144
-* make sure existing control state loops, etc use an invoke 
 * add more tooltips
-* supress small loading screen when big loading screen is visible
 */
 
 #region Using
@@ -67,9 +64,6 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
-using NBitcoin.Logging;
-using ScottPlot.Plottable;
-
 #endregion
 
 namespace SATSuma
@@ -329,6 +323,7 @@ namespace SATSuma
         bool firstThemeChange = true;
         bool readyToShowRedAndGreenLabelsYet = false;
         bool readyToShowPriceChangeLabelYet = false;
+        bool fullScreenLoadingScreenVisible = false; // if the full size loading screen is visible, the smaller one won't be shown on top of it
         #endregion
         #endregion
 
@@ -3144,7 +3139,7 @@ namespace SATSuma
         #region confirmed/mempool/both
         //------------------------ SHOW TRANSACTIONS IN MEMPOOL ------------------------------------------------------
         private void BtnShowUnconfirmedTXForAddress_Click(object sender, EventArgs e)
-        {
+        { 
             try
             {
                 btnShowConfirmedTX.Enabled = true;
@@ -3531,15 +3526,14 @@ namespace SATSuma
                     textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
 
                     //disable them all
-                    btnShowAllTX.Enabled = false;
-                    btnShowConfirmedTX.Enabled = false;
-                    btnShowUnconfirmedTX.Enabled = false;
-                    btnFirstAddressTransaction.Enabled = false;
-                    btnNextAddressTransactions.Enabled = false;
-                    BtnViewTransactionFromAddress.Enabled = false;
-                    BtnViewBlockFromAddress.Enabled = false;
-                    textboxSubmittedAddress.Enabled = false;
-                    //panelLeftPanel.Enabled = false;
+                    Control[] controlsToDisable = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress, textboxSubmittedAddress };
+                    foreach (Control control in controlsToDisable)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Enabled = false;
+                        });
+                    }
                 }
                 else
                 {
@@ -3552,7 +3546,6 @@ namespace SATSuma
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                     BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
-                    //panelLeftPanel.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -4109,7 +4102,6 @@ namespace SATSuma
                                 }
                                 btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                                 {
-                                    //btnViewTransactionFromBlock.Location = new Point(item.Position.X + listViewBlockTransactions.Location.X + listViewBlockTransactions.Columns[0].Width - btnViewTransactionFromBlock.Width - (int)(6 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
                                     btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width + (int)(8 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
                                     btnViewTransactionFromBlock.Height = item.Bounds.Height;
                                 });
@@ -4294,14 +4286,14 @@ namespace SATSuma
                     btnLookUpBlockWasEnabled = btnLookUpBlock.Enabled;
 
                     //disable them all
-                    btnPreviousBlockTransactions.Enabled = false;
-                    btnNextBlockTransactions.Enabled = false;
-                    numericUpDownSubmittedBlockNumber.Enabled = false;
-                    btnNumericUpDownSubmittedBlockNumberUp.Enabled = false;
-                    btnNumericUpDownSubmittedBlockNumberDown.Enabled = false;
-                    btnNextBlock.Enabled = false;
-                    btnPreviousBlock.Enabled = false;
-                    btnLookUpBlock.Enabled = false;
+                    Control[] controlsToDisable = { btnPreviousBlockTransactions, btnNextBlockTransactions, numericUpDownSubmittedBlockNumber, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnLookUpBlock };
+                    foreach (Control control in controlsToDisable)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Enabled = false;
+                        });
+                    }
                 }
                 else
                 {
@@ -4432,24 +4424,14 @@ namespace SATSuma
                     }
                     else
                     {
-                        panelTransactionHeadline.Visible = false;
-                        panelTransactionDiagram.Visible = false;
-                        panel24.Visible = false;
-                        panel25.Visible = false;
-                        panel102.Visible = false;
-                        panelTransactionOutputs.Visible = false;
-                        panelTransactionInputs.Visible = false;
-                        btnTransactionInputsUp.Visible = false;
-                        btnTransactionInputDown.Visible = false;
-                        btnTransactionOutputsUp.Visible = false;
-                        btnTransactionOutputsDown.Visible = false;
-                        listViewTransactionInputs.Visible = false;
-                        listViewTransactionOutputs.Visible = false;
-                        btnViewAddressFromTXInput.Visible = false;
-                        btnViewAddressFromTXOutput.Visible = false;
-                        label107.Visible = false;
-                        label102.Visible = false;
-                        panel125.Visible = false;
+                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         lblInvalidTransaction.Invoke((MethodInvoker)delegate
                         {
                             lblInvalidTransaction.ForeColor = Color.IndianRed;
@@ -4459,24 +4441,14 @@ namespace SATSuma
                 }
                 else
                 {
-                    panelTransactionHeadline.Visible = false;
-                    panelTransactionDiagram.Visible = false;
-                    panel24.Visible = false;
-                    panel25.Visible = false;
-                    panel102.Visible = false;
-                    panelTransactionOutputs.Visible = false;
-                    panelTransactionInputs.Visible = false;
-                    btnTransactionInputsUp.Visible = false;
-                    btnTransactionInputDown.Visible = false;
-                    btnTransactionOutputsUp.Visible = false;
-                    btnTransactionOutputsDown.Visible = false;
-                    listViewTransactionInputs.Visible = false;
-                    listViewTransactionOutputs.Visible = false;
-                    btnViewAddressFromTXInput.Visible = false;
-                    btnViewAddressFromTXOutput.Visible = false;
-                    label107.Visible = false;
-                    label102.Visible = false;
-                    panel125.Visible = false;
+                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+                    foreach (Control control in controlsToHide)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
                     if (transactionIdToValidate == "")
                     {
                         lblInvalidTransaction.Invoke((MethodInvoker)delegate
@@ -4563,12 +4535,8 @@ namespace SATSuma
                 loadingTheme.Show(this);
                 #endregion
 
-
-
                 string submittedTransactionID = textBoxTransactionID.Text;
                 await GetTransaction(submittedTransactionID);
-
-
 
                 //wait 2 secs 
                 await Wait2Secs();
@@ -5029,24 +4997,15 @@ namespace SATSuma
             {
                 HandleException(ex, "GetTransaction");
             }
-            panelTransactionHeadline.Visible = true;
-            panelTransactionDiagram.Visible = true;
-            panel24.Visible = true;
-            panel25.Visible = true;
-            panel102.Visible = true;
-            panelTransactionOutputs.Visible = true;
-            panelTransactionInputs.Visible = true;
-            btnTransactionInputsUp.Visible = true;
-            btnTransactionInputDown.Visible = true;
-            btnTransactionOutputsUp.Visible = true;
-            btnTransactionOutputsDown.Visible = true;
-            listViewTransactionInputs.Visible = true;
-            listViewTransactionOutputs.Visible = true;
-            btnViewAddressFromTXInput.Visible = true;
-            btnViewAddressFromTXOutput.Visible = true;
-            label107.Visible = true;
-            label102.Visible = true;
-            panel125.Visible = true;
+
+            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+            foreach (Control control in controlsToShow)
+            {
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.Visible = true;
+                });
+            }
         }
         #endregion
         #region listview appearance
@@ -5071,7 +5030,6 @@ namespace SATSuma
                                 btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXInput.Visible = true;
-                                    //rjButton1.Location = new Point(item.Position.X + listViewTransactionInputs.Location.X + listViewTransactionInputs.Columns[0].Width - btnViewAddressFromTXInput.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                     btnViewAddressFromTXInput.Location = new Point(listViewTransactionInputs.Location.X - btnViewAddressFromTXInput.Width + (int)(12 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                     btnViewAddressFromTXInput.Height = item.Bounds.Height;
                                 });
@@ -5120,7 +5078,6 @@ namespace SATSuma
                                 btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                 {
                                     btnViewAddressFromTXOutput.Visible = true;
-                                    //rjButton2.Location = new Point(item.Position.X + listViewTransactionOutputs.Location.X + listViewTransactionOutputs.Columns[0].Width - rjButton2.Width - (int)(8 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                     btnViewAddressFromTXOutput.Location = new Point(listViewTransactionOutputs.Location.X - btnViewAddressFromTXOutput.Width + (int)(12 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                     btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                                 });
@@ -5361,7 +5318,6 @@ namespace SATSuma
         {
             try
             {
-                //scrollPosition = new Point(panel26.HorizontalScroll.Value, panel26.VerticalScroll.Value);
                 isOutputButtonPressed = true;
                 OutputDownButtonPressed = true;
                 TXOutScrollTimer.Start();
@@ -5682,12 +5638,14 @@ namespace SATSuma
                     btnViewAddressFromTXOutputWasEnabled = btnViewAddressFromTXOutput.Enabled;
 
                     //disable them all
-                    btnTransactionInputsUp.Enabled = false;
-                    btnTransactionInputDown.Enabled = false;
-                    btnTransactionOutputsUp.Enabled = false;
-                    btnTransactionOutputsDown.Enabled = false;
-                    btnViewAddressFromTXInput.Enabled = false;
-                    btnViewAddressFromTXOutput.Enabled = false;
+                    Control[] controlsToDisable = { btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, btnViewAddressFromTXInput, btnViewAddressFromTXOutput };
+                    foreach (Control control in controlsToDisable)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Enabled = false;
+                        });
+                    }
                 }
                 else
                 {
@@ -6249,7 +6207,6 @@ namespace SATSuma
                             anySelected = true;
                             btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
                             {
-                                //rjButton1.Location = new Point(item.Position.X + listViewBlockList.Location.X + listViewBlockList.Columns[0].Width  - btnViewBlockFromBlockList.Width - (int)(3 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
                                 btnViewBlockFromBlockList.Location = new Point(listViewBlockList.Location.X - btnViewBlockFromBlockList.Width + (int)(12 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
                                 btnViewBlockFromBlockList.Height = item.Bounds.Height;
                             });
@@ -6568,13 +6525,14 @@ namespace SATSuma
                         btnLookUpBlockListWasEnabled = btnLookUpBlockList.Enabled;
 
                         //disable them all
-                        btnViewBlockFromBlockList.Enabled = false;
-                        btnNewer15Blocks.Enabled = false;
-                        btnOlder15Blocks.Enabled = false;
-                        numericUpDownBlockHeightToStartListFrom.Enabled = false;
-                        btnNumericUpDownBlockHeightToStartListFromUp.Enabled = false;
-                        btnNumericUpDownBlockHeightToStartListFromDown.Enabled = false;
-                        btnLookUpBlockList.Enabled = false;
+                        Control[] controlsToDisable = { btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnLookUpBlockList };
+                        foreach (Control control in controlsToDisable)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Enabled = false;
+                            });
+                        }
                     }
                     else
                     {
@@ -7356,50 +7314,20 @@ namespace SATSuma
                 progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses + 1;
                 progressBarCheckAllAddressTypes.Maximum = (MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck;
 
-                panelXpubResults.Invoke((MethodInvoker)delegate
-                {
-                    panelXpubResults.Visible = true;
-                });
                 btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                 {
                     btnViewAddressFromXpub.Visible = false;
                 });
-                panel101.Invoke((MethodInvoker)delegate
+
+                Control[] controlsToShow = { panelXpubResults, panel101, panelXpubContainer, listViewXpubAddresses, progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                foreach (Control control in controlsToShow)
                 {
-                    panel101.Visible = true;
-                });
-                panelXpubContainer.Invoke((MethodInvoker)delegate
-                {
-                    panelXpubContainer.Visible = true;
-                });
-                listViewXpubAddresses.Invoke((MethodInvoker)delegate
-                {
-                    listViewXpubAddresses.Visible = true;
-                });
-                progressBarCheckAllAddressTypes.Invoke((MethodInvoker)delegate
-                {
-                    progressBarCheckAllAddressTypes.Visible = true;
-                });
-                progressBarCheckEachAddressType.Invoke((MethodInvoker)delegate
-                {
-                    progressBarCheckEachAddressType.Visible = true;
-                });
-                lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
-                {
-                    lblCheckAllAddressTypesCount.Visible = true;
-                });
-                lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
-                {
-                    lblCheckEachAddressTypeCount.Visible = true;
-                });
-                label140.Invoke((MethodInvoker)delegate
-                {
-                    label140.Visible = true;
-                });
-                label141.Invoke((MethodInvoker)delegate
-                {
-                    label141.Visible = true;
-                });
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = true;
+                    });
+                }
+
                 panelXpubScrollbar.Invoke((MethodInvoker)delegate
                 {
                     panelXpubScrollbar.BringToFront();
@@ -8699,12 +8627,14 @@ namespace SATSuma
         {
             try
             {
-                progressBarCheckAllAddressTypes.Visible = false;
-                progressBarCheckEachAddressType.Visible = false;
-                lblCheckAllAddressTypesCount.Visible = false;
-                lblCheckEachAddressTypeCount.Visible = false;
-                label140.Visible = false;
-                label141.Visible = false;
+                Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
 
                 timerHideProgressBars.Stop();
             }
@@ -9263,7 +9193,6 @@ namespace SATSuma
                     // refresh the graph
                     formsPlot1.Refresh();
                     formsPlot1.Visible = true;
-                    //panelFeeRatesKey.Visible = true;
 
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
@@ -9438,7 +9367,6 @@ namespace SATSuma
 
                     for (int i = 0; i < hashratesList.Count; i++)
                     {
-                        //double yValue = (double)hashratesList[i].AvgHashrate;
                         double yValue = (double)yValues[i];
                         if (yValue > 0)
                         {
@@ -9475,7 +9403,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10163,7 +10090,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10375,7 +10301,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10455,7 +10380,6 @@ namespace SATSuma
                     {
                         // get 
                         var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10582,7 +10506,6 @@ namespace SATSuma
                     {
                         // get 
                         var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10657,7 +10580,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -10737,7 +10659,6 @@ namespace SATSuma
                     {
                         // get 
                         var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10864,9 +10785,7 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        // get 
                         var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10941,7 +10860,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11155,7 +11073,6 @@ namespace SATSuma
 
                     // prevent navigating beyond the data
                     formsPlot1.Plot.YAxis.SetBoundary(minY, maxY);
-                    //formsPlot1.Plot.YAxis.SetBoundary(0, yValues.Max());
                     formsPlot1.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
 
                     // Add a red circle we can move around later as a highlighted point indicator
@@ -11226,7 +11143,6 @@ namespace SATSuma
                     // create arrays of doubles of the hashrates and the dates
 
                     double[] yValues = blockSizeList.Select(h => (double)h.AvgSize / (1000 * 1000)).ToArray();
-                    //double[] yValues = blockSizeList.Select(h => (double)(h.AvgSize / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = blockSizeList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
                     double[] xValues = dateTimes.Select(x => x.ToOADate()).ToArray();
@@ -11432,22 +11348,14 @@ namespace SATSuma
         {
             try
             {
-                btnChartHashrate.Enabled = true;
-                btnChartDifficulty.Enabled = true;
-                btnChartFeeRates.Enabled = true;
-                btnChartPrice.Enabled = true;
-                btnChartReward.Enabled = true;
-                btnChartBlockFees.Enabled = true;
-                btnChartCirculation.Enabled = true;
-                btnChartBlockSize.Enabled = true;
-                btnChartUniqueAddresses.Enabled = true;
-                btnChartNodesByNetwork.Enabled = true;
-                btnChartLightningCapacity.Enabled = true;
-                btnChartLightningChannels.Enabled = true;
-                btnChartUTXO.Enabled = true;
-                btnChartNodesByCountry.Enabled = true;
-                btnChartPoolsRanking.Enabled = true;
-                btnChartMarketCap.Enabled = true;
+                Control[] controlsToEnable = { btnChartHashrate, btnChartDifficulty, btnChartFeeRates, btnChartPrice, btnChartReward, btnChartBlockFees, btnChartCirculation, btnChartBlockSize, btnChartUniqueAddresses, btnChartNodesByNetwork, btnChartLightningCapacity, btnChartLightningChannels, btnChartUTXO, btnChartNodesByCountry, btnChartPoolsRanking, btnChartMarketCap };
+                foreach (Control control in controlsToEnable)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = true;
+                    });
+                }
             }
             catch (WebException ex)
             {
@@ -11473,13 +11381,14 @@ namespace SATSuma
         {
             try
             {
-                panelHashrateScaleButtons.Visible = false;
-                panelChartUTXOScaleButtons.Visible = false;
-                panelUniqueAddressesScaleButtons.Visible = false;
-                panelPriceScaleButtons.Visible = false;
-                panelChartMarketCapScaleButtons.Visible = false;
-                panelChartDifficultyScaleButtons.Visible = false;
-//                panelPriceConverter.Visible = false;
+                Control[] controlsToHide = { panelHashrateScaleButtons, panelChartUTXOScaleButtons, panelUniqueAddressesScaleButtons, panelPriceScaleButtons, panelChartMarketCapScaleButtons, panelChartDifficultyScaleButtons };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
             }
             catch (WebException ex)
             {
@@ -12135,7 +12044,6 @@ namespace SATSuma
             {
                 if (!panelAddToBookmarks.Visible)
                 {
-                    //panelFees.Visible = false;
                     panelAddToBookmarks.Visible = true;
                     panelAddToBookmarksBorder.Visible = true;
                     lblBookmarkSavedSuccess.Visible = false;
@@ -12147,7 +12055,6 @@ namespace SATSuma
                 {
                     panelAddToBookmarks.Visible = false;
                     panelAddToBookmarksBorder.Visible = false;
-                    //panelFees.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -12239,7 +12146,6 @@ namespace SATSuma
             {
                 panelAddToBookmarks.Visible = false;
                 panelAddToBookmarksBorder.Visible = false;
-                //panelFees.Visible = true;
             }
             catch (Exception ex)
             {
@@ -13466,7 +13372,6 @@ namespace SATSuma
                 if (btnViewBookmark.Enabled)
                 {
                     panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
-
                 }
             }
             catch (Exception ex)
@@ -14164,10 +14069,6 @@ namespace SATSuma
                     UpdateLabelValue(labelPCUSD15, (Convert.ToDecimal(priceUSD) * 1000000).ToString("0.00"));
                     UpdateLabelValue(labelPCUSD16, (Convert.ToDecimal(priceUSD) * 10000000).ToString("0.00"));
                     UpdateLabelValue(labelPCUSD17, (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00"));
-                    //labelPCUSD17.Invoke((MethodInvoker)delegate
-                   // {
-                   //     labelPCUSD17.Text = (Convert.ToDecimal(priceUSD) * 21000000).ToString("0.00");
-                   // });
                     #endregion
                     #region EUR list
                     if (string.IsNullOrEmpty(priceEUR) || !double.TryParse(priceEUR, out _))
@@ -14647,7 +14548,6 @@ namespace SATSuma
             {
                 if (!offlineMode && enableDirectory)
                 {
-
                     webBrowserDirectory.Visible = true;
                     string directoryURL = "https://btcdir.org/satsuma-dir/";
                     webBrowserDirectory.Navigate(new Uri(directoryURL));
@@ -14683,7 +14583,6 @@ namespace SATSuma
                         }
                     }
 
-
                     var spanElements2 = document.GetElementsByTagName("div");
                     var linksPadding = (int)(170 * UIScale);
                     foreach (HtmlElement spanElement in spanElements2)
@@ -14699,9 +14598,7 @@ namespace SATSuma
                         {
                             spanElement.Style = $"padding-left: {linksPadding}px; width: 98%;";
                         }
-
                     }
-
 
                     // Modify background color
                     var backgroundColor = panel88.BackColor;
@@ -15337,7 +15234,6 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = false;
                     blockchairComJSONSelected = "0";
-//                  DisableChartsThatDontUseMempoolSpace();
                 }
                 else
                 {
@@ -15348,7 +15244,6 @@ namespace SATSuma
                     });
                     RunBlockchairComJSONAPI = true;
                     blockchairComJSONSelected = "1";
-//                  EnableChartsThatDontUseMempoolSpace();
                 }
                 SaveSettingsToBookmarksFile();
                 RefreshScreens();
@@ -15423,7 +15318,6 @@ namespace SATSuma
                     });
                     RunCoingeckoAPI = false;
                     coingeckoAPISelected = "0";
-                    //                  DisableChartsThatDontUseMempoolSpace();
                     btnMenuPriceConverter.Enabled = false;
 
                     // don't show a value for price change
@@ -15450,7 +15344,6 @@ namespace SATSuma
                     RunCoingeckoAPI = true;
                     btnMenuPriceConverter.Enabled = true;
                     coingeckoAPISelected = "1";
-                    //                  EnableChartsThatDontUseMempoolSpace();
                     ShowAllFiatConversionFields();
                 }
                 SaveSettingsToBookmarksFile();
@@ -15769,6 +15662,7 @@ namespace SATSuma
                 APIGroup1DisplayTimerIntervalSecsConstant = (int)numericUpDownDashboardRefresh.Value * 60;
                 intAPIGroup1TimerIntervalMillisecsConstant = (((int)numericUpDownDashboardRefresh.Value * 60) * 1000);
                 intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
+                progressBarRefreshData.Maximum = (int)numericUpDownDashboardRefresh.Value * 60;
                 SaveSettingsToBookmarksFile();
             }
             catch (Exception ex)
@@ -15871,11 +15765,13 @@ namespace SATSuma
             try
             {
                 Control[] DisableThisStuffForTestnet = { lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderHashRateChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, 
-                    lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPriceChart, lblMarketCapChart, lblChartCirculation, lblUniqueAddressesChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart
-            };
+                    lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPriceChart, lblMarketCapChart, lblChartCirculation, lblUniqueAddressesChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in DisableThisStuffForTestnet)
                 {
-                    control.Enabled = false;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = false;
+                    });
                 }
                 HideAllFiatConversionFields();
             }
@@ -15898,7 +15794,10 @@ namespace SATSuma
                     lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in EnableThisStuffForMainnet)
                 {
-                    control.Enabled = true;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = true;
+                    });
                 }
                 ShowAllFiatConversionFields();
             }
@@ -17169,7 +17068,6 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Visible = false;
                         });
                     }
-
                 }
                 
                 firstTimeCustomThemeIndexChanged = false;
@@ -18071,7 +17969,6 @@ namespace SATSuma
                     {
                         lblTime.Visible = false;
                     }
-
                 }
             }
             catch (Exception ex)
@@ -18454,7 +18351,10 @@ namespace SATSuma
             Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
             foreach (Control control in listHeaderButtonsToColor)
             {
-                control.BackColor = menuAndHeaderButtonsColour;
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.BackColor = menuAndHeaderButtonsColour;
+                });
             }
             lblCurrencyMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
             lblThemeMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
@@ -18472,7 +18372,10 @@ namespace SATSuma
 
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
-                    control.ForeColor = Color.Silver;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = Color.Silver;
+                    });
                 }
                 comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
                 comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
@@ -18487,7 +18390,10 @@ namespace SATSuma
                 //header
                 foreach (Control control in listHeaderButtonTextToColor)
                 {
-                    control.ForeColor = Color.DimGray;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = Color.DimGray;
+                    });
                 }
                 comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
                 comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
@@ -18635,13 +18541,14 @@ namespace SATSuma
                     this.BackgroundImage = Properties.Resources.Genesis;
                 });
                 lblBackgroundGenesisSelected.Visible = true;
-                lblBackgroundFranklinSelected.Visible = false;
-                lblBackgroundHoneyBadgerSelected.Visible = false;
-                lblBackgroundSymbolSelected.Visible = false;
-                lblBackgroundStackSatsSelected.Visible = false;
-                lblBackgroundSatsumaSelected.Visible = false;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
+                Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundSatsumaSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
                 lblTime.Visible = true;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
@@ -18689,15 +18596,17 @@ namespace SATSuma
                 {
                     this.BackgroundImage = Properties.Resources.Franklin;
                 });
-                lblTime.Visible = false;
-                lblBackgroundGenesisSelected.Visible = false;
-                lblBackgroundSatsumaSelected.Visible = false;
-                lblBackgroundHoneyBadgerSelected.Visible = false;
-                lblBackgroundSymbolSelected.Visible = false;
-                lblBackgroundStackSatsSelected.Visible = false;
+
+                Control[] controlsToHide = { lblTime, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+                
                 lblBackgroundFranklinSelected.Visible = true;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
                     lblThemeImage.Text = "no custom image selected";
@@ -18744,15 +18653,16 @@ namespace SATSuma
                 {
                     this.BackgroundImage = Properties.Resources.Satsuma;
                 });
-                lblTime.Visible = false;
-                lblBackgroundGenesisSelected.Visible = false;
-                lblBackgroundFranklinSelected.Visible = false;
-                lblBackgroundHoneyBadgerSelected.Visible = false;
-                lblBackgroundSymbolSelected.Visible = false;
-                lblBackgroundStackSatsSelected.Visible = false;
+                Control[] controlsToHide = { lblTime, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+                
                 lblBackgroundSatsumaSelected.Visible = true;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
                     lblThemeImage.Text = "no custom image selected";
@@ -18799,15 +18709,16 @@ namespace SATSuma
                 {
                     this.BackgroundImage = Properties.Resources.HoneyBadger;
                 });
-                lblTime.Visible = false;
-                lblBackgroundGenesisSelected.Visible = false;
-                lblBackgroundFranklinSelected.Visible = false;
-                lblBackgroundSatsumaSelected.Visible = false;
-                lblBackgroundSymbolSelected.Visible = false;
-                lblBackgroundStackSatsSelected.Visible = false;
+                Control[] controlsToHide = { lblTime, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+                
                 lblBackgroundHoneyBadgerSelected.Visible = true;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
                     lblThemeImage.Text = "no custom image selected";
@@ -18854,15 +18765,16 @@ namespace SATSuma
                 {
                     this.BackgroundImage = Properties.Resources.Symbol;
                 });
-                lblTime.Visible = false;
-                lblBackgroundGenesisSelected.Visible = false;
-                lblBackgroundFranklinSelected.Visible = false;
-                lblBackgroundSatsumaSelected.Visible = false;
+                Control[] controlsToHide = { lblTime, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+                
                 lblBackgroundSymbolSelected.Visible = true;
-                lblBackgroundStackSatsSelected.Visible = false;
-                lblBackgroundHoneyBadgerSelected.Visible = false;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
                     lblThemeImage.Text = "no custom image selected";
@@ -18910,15 +18822,16 @@ namespace SATSuma
                 {
                     this.BackgroundImage = Properties.Resources.StackSats;
                 });
-                lblTime.Visible = false;
-                lblBackgroundGenesisSelected.Visible = false;
-                lblBackgroundFranklinSelected.Visible = false;
-                lblBackgroundSatsumaSelected.Visible = false;
-                lblBackgroundSymbolSelected.Visible = false;
+                Control[] controlsToHide = { lblTime, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundSymbolSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+                
                 lblBackgroundStackSatsSelected.Visible = true;
-                lblBackgroundHoneyBadgerSelected.Visible = false;
-                lblBackgroundCustomColorSelected.Visible = false;
-                lblBackgroundCustomImageSelected.Visible = false;
                 lblThemeImage.Invoke((MethodInvoker)delegate
                 {
                     lblThemeImage.Text = "no custom image selected";
@@ -18973,13 +18886,15 @@ namespace SATSuma
                     lblThemeImage.Text = selectedFilePath;
                     this.BackgroundImage = System.Drawing.Image.FromFile(selectedFilePath);
                     pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(selectedFilePath);
-                    lblBackgroundGenesisSelected.Visible = false;
-                    lblBackgroundSatsumaSelected.Visible = false;
-                    lblBackgroundSymbolSelected.Visible = false;
-                    lblBackgroundFranklinSelected.Visible = false;
-                    lblBackgroundHoneyBadgerSelected.Visible = false;
-                    lblBackgroundStackSatsSelected.Visible = false;
-                    lblBackgroundCustomColorSelected.Visible = false;
+                    Control[] controlsToHide = { lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundSymbolSelected, lblBackgroundFranklinSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected };
+                    foreach (Control control in controlsToHide)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
+                    
                     lblBackgroundCustomImageSelected.Visible = true;
                     lblTime.Visible = false;
 
@@ -19040,14 +18955,16 @@ namespace SATSuma
                         panel25.BackColor = colorDlgForFormBackground.Color;
                         this.BackgroundImage = null;
                     });
-                    lblTime.Visible = false;
-                    lblBackgroundStackSatsSelected.Visible = false;
-                    lblBackgroundSymbolSelected.Visible = false;
-                    lblBackgroundGenesisSelected.Visible = false;
-                    lblBackgroundFranklinSelected.Visible = false;
-                    lblBackgroundSatsumaSelected.Visible = false;
+                    Control[] controlsToHide = { lblTime, lblBackgroundStackSatsSelected, lblBackgroundSymbolSelected, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundCustomImageSelected };
+                    foreach (Control control in controlsToHide)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
+
                     lblBackgroundCustomColorSelected.Visible = true;
-                    lblBackgroundCustomImageSelected.Visible = false;
                     lblThemeImage.Invoke((MethodInvoker)delegate
                     {
                         lblThemeImage.Text = "no custom image selected";
@@ -19550,6 +19467,7 @@ namespace SATSuma
             try
             {
                 #region display loading screen
+                fullScreenLoadingScreenVisible = true;
                 Form loadingTheme = new loadingTheme(UIScale)
                 {
                     Owner = this, 
@@ -19788,27 +19706,29 @@ namespace SATSuma
                     if (theme.BackgroundFranklin == true)
                     {
                         lblBackgroundFranklinSelected.Visible = true;
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         this.BackgroundImage = Properties.Resources.Franklin;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundGenesis == true)
                     {
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         lblBackgroundGenesisSelected.Visible = true;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
                         this.BackgroundImage = Properties.Resources.Genesis;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
@@ -19816,69 +19736,75 @@ namespace SATSuma
                     if (theme.BackgroundSatsuma == true)
                     {
                         lblBackgroundSatsumaSelected.Visible = true;
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         this.BackgroundImage = Properties.Resources.Satsuma;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundHoneyBadger == true)
                     {
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
                         lblBackgroundHoneyBadgerSelected.Visible = true;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        
                         this.BackgroundImage = Properties.Resources.HoneyBadger;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundSymbol == true)
                     {
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
                         lblBackgroundSymbolSelected.Visible = true;
-                        lblBackgroundStackSatsSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         this.BackgroundImage = Properties.Resources.Symbol;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundStackSats == true)
                     {
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
                         lblBackgroundStackSatsSelected.Visible = true;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundCustomColorSelected.Visible = false;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         this.BackgroundImage = Properties.Resources.StackSats;
                         lblThemeImage.Text = "no custom image selected";
                         pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
                     }
                     if (theme.BackgroundCustomColor == true)
                     {
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
                         lblBackgroundCustomColorSelected.Visible = true;
-                        lblBackgroundCustomImageSelected.Visible = false;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         this.BackgroundImage = null;
                         this.BackColor = theme.WindowBackground;
                         lblThemeImage.Text = "no custom image selected";
@@ -19886,14 +19812,15 @@ namespace SATSuma
                     }
                     if (theme.BackgroundCustomImage == true)
                     {
-                        lblBackgroundFranklinSelected.Visible = false;
-                        lblBackgroundSatsumaSelected.Visible = false;
-                        lblBackgroundGenesisSelected.Visible = false;
-                        lblBackgroundSymbolSelected.Visible = false;
-                        lblBackgroundStackSatsSelected.Visible = false;
-                        lblBackgroundHoneyBadgerSelected.Visible = false;
-                        lblBackgroundCustomColorSelected.Visible = false;
                         lblBackgroundCustomImageSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
                         lblThemeImage.Text = theme.WindowImage;
                         this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
                     }
@@ -20029,6 +19956,7 @@ namespace SATSuma
                 await Wait2Secs();
                 //close the loading screen
                 loadingTheme.Close();
+                fullScreenLoadingScreenVisible = false;
 
 
             }
@@ -20241,58 +20169,72 @@ namespace SATSuma
             try
             {
                 // main menu
-                RJButton[] mainMenuButtonBordersToColor = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch, btnHideErrorMessage };
-                foreach (RJButton button in mainMenuButtonBordersToColor)
+                RJButton[] mainMenuButtonBorders = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnUniversalSearch, btnShowGlobalSearch, btnHideErrorMessage };
+                foreach (RJButton button in mainMenuButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
 
                 // block
-                RJButton[] blockButtonBordersToColor = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnViewTransactionFromBlock };
-                foreach (RJButton button in blockButtonBordersToColor)
+                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnViewTransactionFromBlock };
+                foreach (RJButton button in blockButtonBorders)
                 {
-                    button.BorderRadius = radius;
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
-                btnNumericUpDownSubmittedBlockNumberUp.BorderRadius = 0;
-                btnNumericUpDownSubmittedBlockNumberDown.BorderRadius = 0;
+                btnNumericUpDownSubmittedBlockNumberUp.Invoke((MethodInvoker)delegate
+                {
+                    btnNumericUpDownSubmittedBlockNumberUp.BorderRadius = 0;
+                });
+                btnNumericUpDownSubmittedBlockNumberDown.Invoke((MethodInvoker)delegate
+                {
+                    btnNumericUpDownSubmittedBlockNumberDown.BorderRadius = 0;
+                });
 
                 // blocks
-                RJButton[] blocksButtonBordersToColor = { btnLookUpBlockList, btnNewer15Blocks, btnOlder15Blocks };
-                foreach (RJButton button in blocksButtonBordersToColor)
+                RJButton[] blocksButtonBorders = { btnLookUpBlockList, btnNewer15Blocks, btnOlder15Blocks };
+                foreach (RJButton button in blocksButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
                 btnViewBlockFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
-                btnNumericUpDownBlockHeightToStartListFromUp.BorderRadius = 0;
-                btnNumericUpDownBlockHeightToStartListFromDown.BorderRadius = 0;
 
-                btnNonZeroBalancesUp.BorderRadius = 0;
-                btnNonZeroBalancesDown.BorderRadius = 0;
-                btnDerivationPathsUp.BorderRadius = 0;
-                btnDerivationPathsDown.BorderRadius = 0;
-                btnOpacityUp.BorderRadius = 0;
-                btnOpacityDown.BorderRadius = 0;
-                btnDataRefreshPeriodUp.BorderRadius = 0;
-                btnDataRefreshPeriodDown.BorderRadius = 0;
-                btnBiggerScale.BorderRadius = 0;
-                btnSmallerScale.BorderRadius = 0;
-                btnThemeMenu.BorderRadius = 0;
-                btnCurrency.BorderRadius = 0;
-                btnCopyErrorMessage.BorderRadius = 0;
+                RJButton[] otherButtonBorders = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsUp, btnDerivationPathsDown, btnOpacityUp, btnOpacityDown, btnDataRefreshPeriodUp, btnDataRefreshPeriodDown, btnBiggerScale, btnSmallerScale, btnThemeMenu, btnCurrency, btnCopyErrorMessage };
+                foreach (RJButton button in otherButtonBorders)
+                {
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = 0;
+                    });
+                }
 
                 // address
-                RJButton[] addressButtonBordersToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions };
-                foreach (RJButton button in addressButtonBordersToColor)
+                RJButton[] addressButtonBorders = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions };
+                foreach (RJButton button in addressButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
                 BtnViewTransactionFromAddress.BorderRadius = (int)((radius - 4) * UIScale);
 
                 // appearance & settings
-                RJButton[] appearanceButtonBordersToColor = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
-                foreach (RJButton button in appearanceButtonBordersToColor)
+                RJButton[] appearanceButtonBorders = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
+                foreach (RJButton button in appearanceButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
 
                 if (radius == 1)
@@ -20321,24 +20263,33 @@ namespace SATSuma
                 }
 
                 // chart
-                RJButton[] chartButtonBordersToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
-                foreach (RJButton button in chartButtonBordersToColor)
+                RJButton[] chartButtonBorders = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
+                foreach (RJButton button in chartButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
 
                 // bookmarks
-                RJButton[] bookmarkButtonBordersToColor = { btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks };
-                foreach (RJButton button in bookmarkButtonBordersToColor)
+                RJButton[] bookmarkButtonBorders = { btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks };
+                foreach (RJButton button in bookmarkButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
 
                 // directory
-                RJButton[] directoryButtonBordersToColor = { btnDirectoryScrollDown, btnDirectoryScrollUp };
-                foreach (RJButton button in directoryButtonBordersToColor)
+                RJButton[] directoryButtonBorders = { btnDirectoryScrollDown, btnDirectoryScrollUp };
+                foreach (RJButton button in directoryButtonBorders)
                 {
-                    button.BorderRadius = (int)(radius * UIScale);
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
                 }
 
                 // transaction
@@ -20381,129 +20332,39 @@ namespace SATSuma
             try
             {
                 #region rounded panels
-                panel92.Invalidate();
-                panel32.Invalidate();
-                panel74.Invalidate();
-                panel76.Invalidate();
-                panel77.Invalidate();
-                panel99.Invalidate();
-                panel84.Invalidate();
-                panel88.Invalidate();
-                panel89.Invalidate();
-                panel90.Invalidate();
-                panel86.Invalidate();
-                panel87.Invalidate();
-                panel103.Invalidate();
-                panel46.Invalidate();
-                panel51.Invalidate();
-                panel91.Invalidate();
-                panel70.Invalidate();
-                panel71.Invalidate();
-                panel16.Invalidate();
-                panel21.Invalidate();
-                panel85.Invalidate();
-                panel53.Invalidate();
-                panel96.Invalidate();
-                panel106.Invalidate();
-                panel107.Invalidate();
-                panelAddToBookmarks.Invalidate();
-                panelAddToBookmarksBorder.Invalidate();
-                panelOwnNodeAddressTXInfo.Invalidate();
-                panelOwnNodeBlockTXInfo.Invalidate();
-                panelTransactionMiddle.Invalidate();
-                panelErrorMessage.Invalidate();
-                panelDCAMessages.Invalidate();
-                panelDCASummary.Invalidate();
-                panelDCAInputs.Invalidate();
-                panel119.Invalidate();
-                panelPriceConvert.Invalidate();
-                panelDCAChartContainer.Invalidate();
-                panel117.Invalidate();
-                panel120.Invalidate();
-                panel121.Invalidate();
-                panel122.Invalidate();
-                panel123.Invalidate();
-                panel124.Invalidate();
-                panel125.Invalidate();
-                panel101.Invalidate();
-                panel132.Invalidate();
+                Control[] panelsToInvalidate = { panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
+                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123, 
+                    panel124, panel125, panel101, panel132 };
+                foreach (Control control in panelsToInvalidate)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Invalidate();
+                    });
+                }
                 #endregion
                 #region panels (textbox containers)
-                panelThemeNameContainer.Invalidate();
-                panelOptionalNotesContainer.Invalidate();
-                panelEncryptionKeyContainer.Invalidate();
-                panelSubmittedAddressContainer.Invalidate();
-                panelBlockHeightToStartFromContainer.Invalidate();
-                panelTransactionIDContainer.Invalidate();
-                panelSubmittedXpubContainer.Invalidate();
-                panelXpubScreenOwnNodeURLContainer.Invalidate();
-                panelBookmarkKeyContainer.Invalidate();
-                panelConvertBTCToFiatContainer.Invalidate();
-                panelConvertUSDToBTCContainer.Invalidate();
-                panelConvertEURToBTCContainer.Invalidate();
-                panelConvertGBPToBTCContainer.Invalidate();
-                panelConvertXAUToBTCContainer.Invalidate();
-                panelSettingsOwnNodeURLContainer.Invalidate();
-                panelSettingsUIScaleContainer.Invalidate();
-                panelAppearanceTextbox1Container.Invalidate();
-                panelComboBoxStartupScreenContainer.Invalidate();
-                panelCustomizeThemeListContainer.Invalidate();
-                panelHeadingBackgroundSelect.Invalidate();
-                panelSelectBlockNumberContainer.Invalidate();
-                panelUniversalSearchContainer.Invalidate();
-                panel75.Invalidate();
-                panel95.Invalidate();
-                panel93.Invalidate();
-                panel98.Invalidate();
-                panel111.Invalidate();
-                panel113.Invalidate();
-                panel114.Invalidate();
-                panel115.Invalidate();
-                panel27.Invalidate();
+                Control[] textboxPanelsToInvalidate = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, 
+                    panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelSettingsUIScaleContainer, panelAppearanceTextbox1Container, 
+                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27 };
+                foreach (Control control in textboxPanelsToInvalidate)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Invalidate();
+                    });
+                }
                 #endregion
                 #region panels (heading containers)
-                panel1.Invalidate();
-                panel2.Invalidate();
-                panel3.Invalidate();
-                panel4.Invalidate();
-                panel5.Invalidate();
-                panel6.Invalidate();
-                panel7.Invalidate();
-                panel8.Invalidate();
-                panel9.Invalidate();
-                panel10.Invalidate();
-                panel11.Invalidate();
-                panel12.Invalidate();
-                panel20.Invalidate();
-                panel23.Invalidate();
-                panel26.Invalidate();
-                panel29.Invalidate();
-                panel31.Invalidate();
-                panel38.Invalidate();
-                panel39.Invalidate();
-                panel40.Invalidate();
-                panel41.Invalidate();
-                panel42.Invalidate();
-                panel43.Invalidate();
-                panel44.Invalidate();
-                panel45.Invalidate();
-                panel54.Invalidate();
-                panel57.Invalidate();
-                panel78.Invalidate();
-                panel79.Invalidate();
-                panel80.Invalidate();
-                panel81.Invalidate();
-                panel82.Invalidate();
-                panel83.Invalidate();
-                panel94.Invalidate();
-                panel105.Invalidate();
-                panel22.Invalidate();
-                panel34.Invalidate();
-                panel37.Invalidate();
-                panel97.Invalidate();
-                panel98.Invalidate();
-                panel108.Invalidate();
-                panel109.Invalidate();
+                Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, 
+                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109 };
+                foreach (Control control in headingPanelsToInvalidate)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Invalidate();
+                    });
+                }
                 #endregion
             }
             catch (Exception ex)
@@ -20523,7 +20384,10 @@ namespace SATSuma
 
                     foreach (Control control in listHeaderButtonTextToColor)
                     {
-                        control.ForeColor = Color.Silver;
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.ForeColor = Color.Silver;
+                        });
                     }
                     comboBoxHeaderCustomThemes.ForeColor = Color.Silver;
                     comboBoxHeaderCustomThemes.ListTextColor = Color.Silver;
@@ -20538,7 +20402,10 @@ namespace SATSuma
                     //header
                     foreach (Control control in listHeaderButtonTextToColor)
                     {
-                        control.ForeColor = Color.DimGray;
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.ForeColor = Color.DimGray;
+                        });
                     }
                     comboBoxHeaderCustomThemes.ForeColor = Color.DimGray;
                     comboBoxHeaderCustomThemes.ListTextColor = Color.DimGray;
@@ -20554,58 +20421,92 @@ namespace SATSuma
                 Control[] listSettingsButtonTextToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //address
                 Control[] listAddressButtonTextToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
                 foreach (Control control in listAddressButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //block
                 Control[] listBlockButtonTextToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
                 foreach (Control control in listBlockButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListButtonTextToColor = { btnLookUpBlockList, btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
                 foreach (Control control in listBlockListButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //transaction
                 Control[] listTransactionButtonTextToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
                 foreach (Control control in listTransactionButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //xpub
                 Control[] listXpubButtonTextToColor = { btnViewAddressFromXpub, btnXpubAddressesUp, btnXpubAddressesDown };
                 foreach (Control control in listXpubButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //bookmarks
                 Control[] listBookmarksButtonTextToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks, btnDeleteAllBookmarks, btnDeleteAllBookmarksNo, btnDeleteAllBookmarksYes };
                 foreach (Control control in listBookmarksButtonTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //charts
                 Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //directory
                 Control[] listDirectoryButtonsTextToColor = { btnDirectoryScrollDown, btnDirectoryScrollUp };
                 foreach (Control control in listDirectoryButtonsTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //dca calculator
-                btnCalculateDCA.ForeColor = thiscolor;
+                Control[] listDCAButtonsTextToColor = { btnCalculateDCA };
+                foreach (Control control in listDCAButtonsTextToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -20617,10 +20518,14 @@ namespace SATSuma
         {
             try
             {
-                label416.ForeColor = btnMenuDirectory.ForeColor;
-                label415.ForeColor = btnMenuDirectory.ForeColor;
-                label232.ForeColor = btnMenuDirectory.ForeColor;
-                label233.ForeColor = btnMenuDirectory.ForeColor;
+                Control[] labelsToColor = { label416, label415, label232, label233 };
+                foreach (Control control in labelsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = btnMenuDirectory.ForeColor; 
+                    });
+                }
 
                 formsPlot1.Plot.Margins(x: .1, y: .1);
                 formsPlot1.Plot.Style(ScottPlot.Style.Black);
@@ -20673,15 +20578,15 @@ namespace SATSuma
                     titleLabel: thisColor,
                     axisLabel: label148.ForeColor); // using any random label to get the color from
 
-                panelPriceScaleButtons.BackColor = chartsBackgroundColor;
-                panelChartMarketCapScaleButtons.BackColor = chartsBackgroundColor;
-                panelChartUTXOScaleButtons.BackColor = chartsBackgroundColor;
-                panelChartDifficultyScaleButtons.BackColor = chartsBackgroundColor;
-                panelHashrateScaleButtons.BackColor = chartsBackgroundColor;
-                panelUniqueAddressesScaleButtons.BackColor = chartsBackgroundColor;
-                panelCurrencyMenuFiller.BackColor = chartsBackgroundColor;
-                panelThemeMenuFiller.BackColor = chartsBackgroundColor;
-                panelDCAChartContainer.BackColor = chartsBackgroundColor;
+                Control[] panelsToColor = { panelPriceScaleButtons, panelChartMarketCapScaleButtons, panelChartUTXOScaleButtons, panelChartDifficultyScaleButtons, panelHashrateScaleButtons, panelUniqueAddressesScaleButtons, panelCurrencyMenuFiller, panelThemeMenuFiller, panelDCAChartContainer };
+                foreach (Control control in panelsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = chartsBackgroundColor;
+                    });
+                }
+                
                 Color newGridlineColor = Color.FromArgb(50, 50, 50);
                 if (lblChartsLightBackground.Text == "✔️")
                 {
@@ -20721,87 +20626,111 @@ namespace SATSuma
                 Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate, lblHeaderPriceChange };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardDataFieldsToColor = { lblTotalCapacity, lblClearnetCapacity, lblTorCapacity, lblUnknownCapacity, lblNodeCount, lblTorNodes, lblClearnetNodes, lblClearnetTorNodes, lblUnannouncedNodes, lblChannelCount, lblAverageCapacity, lblAverageFeeRate, lblAverageBaseFeeMtokens, lblMedCapacity, lblMedFeeRate, lblMedBaseFeeTokens, aliasLabel1, aliasLabel2, aliasLabel3, aliasLabel4, aliasLabel5, aliasLabel6, aliasLabel7, aliasLabel8, aliasLabel9, aliasLabel10, capacityLabel1, capacityLabel2, capacityLabel3, capacityLabel4, capacityLabel5, capacityLabel6, capacityLabel7, capacityLabel8, capacityLabel9, capacityLabel10, aliasConnLabel1, aliasConnLabel2, aliasConnLabel3, aliasConnLabel4, aliasConnLabel5, aliasConnLabel6, aliasConnLabel7, aliasConnLabel8, aliasConnLabel9, aliasConnLabel10, channelLabel1, channelLabel2, channelLabel3, channelLabel4, channelLabel5, channelLabel6, channelLabel7, channelLabel8, channelLabel9, channelLabel10 };
                 foreach (Control control in listLightningDashboardDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //address
                 Control[] listAddressDataFieldsToColor = { lblAddressType, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs };
                 foreach (Control control in listAddressDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //block
                 Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner, lblBlockBlockHeight };
                 foreach (Control control in listBlockDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
-                btnNumericUpDownSubmittedBlockNumberDown.ForeColor = thisColor;
-                btnNumericUpDownSubmittedBlockNumberUp.ForeColor = thisColor;
                 //blocklist
-                Control[] listBlocklistDataFieldsToColor = { lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockReward, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
+                Control[] listBlocklistDataFieldsToColor = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockReward, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
                 foreach (Control control in listBlocklistDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
-                btnNumericUpDownBlockHeightToStartListFromUp.ForeColor = thisColor;
-                btnNumericUpDownBlockHeightToStartListFromDown.ForeColor = thisColor;
                 //transaction
                 Control[] listTransactionDataFieldsToColor = { lblTransactionBlockHeight, lblTransactionBlockTime, lblTransactionConfirmations, lblTransactionLockTime, lblTransactionVersion, lblTransactionInputCount, lblCoinbase, lblTransactionFee, lblTransactionOutputCount, lblTotalInputValue, lblTotalOutputValue, lblTransactionSize, lblTransactionWeight };
                 foreach (Control control in listTransactionDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //xpub
-                Control[] listXpubDataFieldsToColor = { lblCheckEachAddressTypeCount, lblCheckAllAddressTypesCount, lblSegwitUsedAddresses, lblSegwitSummary, lblLegacyUsedAddresses, lblLegacySummary, lblSegwitP2SHUsedAddresses, lblSegwitP2SHSummary, lblP2SHUsedAddresses, lblP2SHSummary, lblXpubConfirmedReceived, lblXpubConfirmedSpent, lblXpubConfirmedUnspent };
+                Control[] listXpubDataFieldsToColor = { btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, lblCheckEachAddressTypeCount, lblCheckAllAddressTypesCount, lblSegwitUsedAddresses, lblSegwitSummary, lblLegacyUsedAddresses, lblLegacySummary, lblSegwitP2SHUsedAddresses, lblSegwitP2SHSummary, lblP2SHUsedAddresses, lblP2SHSummary, lblXpubConfirmedReceived, lblXpubConfirmedSpent, lblXpubConfirmedUnspent };
                 foreach (Control control in listXpubDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
-                btnNonZeroBalancesUp.ForeColor = thisColor;
-                btnNonZeroBalancesDown.ForeColor = thisColor;
-                btnDerivationPathsDown.ForeColor = thisColor;
-                btnDerivationPathsUp.ForeColor = thisColor;
 
                 //bookmarks
                 Control[] listBookmarksDataFieldsToColor = { lblBookmarkTotalCount, lblBookmarkAddressCount, lblBookmarkBlocksCount, lblBookmarkTransactionsCount, lblBookmarkXpubsCount, lblBookmarkDataInFull, lblBookmarkNoteInFull, lblBookmarkProposalData };
                 foreach (Control control in listBookmarksDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //settings
-                Control[] listSettingsDataFieldsToColor = { label154 };
+                Control[] listSettingsDataFieldsToColor = { label154, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale };
                 foreach (Control control in listSettingsDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
-                btnDataRefreshPeriodDown.ForeColor = thisColor;
-                btnDataRefreshPeriodUp.ForeColor = thisColor;
-                btnBiggerScale.ForeColor = thisColor;
-                btnSmallerScale.ForeColor = thisColor;
 
                 //charts
                 Control[] listChartsDataFieldsToColor = { labelPCUSD1, labelPCUSD2, labelPCUSD3, labelPCUSD4, labelPCUSD5, labelPCUSD6, labelPCUSD7, labelPCUSD8, labelPCUSD9, labelPCUSD10, labelPCUSD11, labelPCUSD12, labelPCUSD13, labelPCUSD14, labelPCUSD15, labelPCUSD16, labelPCUSD17, labelPCUSDcustom, labelPCEUR1, labelPCEUR2, labelPCEUR3, labelPCEUR4, labelPCEUR5, labelPCEUR6, labelPCEUR7, labelPCEUR8, labelPCEUR9, labelPCEUR10, labelPCEUR11, labelPCEUR12, labelPCEUR13, labelPCEUR14, labelPCEUR15, labelPCEUR16, labelPCEUR17, labelPCEURcustom, labelPCGBP1, labelPCGBP2, labelPCGBP3, labelPCGBP4, labelPCGBP5, labelPCGBP6, labelPCGBP7, labelPCGBP8, labelPCGBP9, labelPCGBP10, labelPCGBP11, labelPCGBP12, labelPCGBP13, labelPCGBP14, labelPCGBP15, labelPCGBP16, labelPCGBP17, labelPCGBPcustom, labelPCXAU1, labelPCXAU2, labelPCXAU3, labelPCXAU4, labelPCXAU5, labelPCXAU6, labelPCXAU7, labelPCXAU8, labelPCXAU9, labelPCXAU10, labelPCXAU11, labelPCXAU12, labelPCXAU13, labelPCXAU14, labelPCXAU15, labelPCXAU16, labelPCXAU17, labelPCXAUcustom, lblCalculatedUSDFromBTCAmount, lblCalculatedEURFromBTCAmount, lblCalculatedGBPFromBTCAmount, lblCalculatedXAUFromBTCAmount };
                 foreach (Control control in listChartsDataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
                 //dca calculator
                 Control[] listDCADataFieldsToColor = { lblDCAAmountSpent, lblDCABTCPurchased, lblDCABTCPurchases, lblDCACurrentValue, lblDCAPercentageChange };
                 foreach (Control control in listDCADataFieldsToColor)
                 {
-                    control.ForeColor = thisColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
                 }
             }
             catch (Exception ex)
@@ -20818,79 +20747,118 @@ namespace SATSuma
                 Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart};
                 foreach (Control control in listHeaderLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //settings and appearance
                 Control[] listSettingsLabelsToColor = { label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardLabelsToColor = { lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardLabelsToColor = { lblLightningChannelsChart, lblLightningNodesChart, lblLightningCapacityChart, label38, label47, label48, label49, label40, label36, label35, label45, label46, label34, label37, label39, label41, label42, label44, label43, label51, label52, label56, label55 };
                 foreach (Control control in listLightningDashboardLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //address
                 Control[] listAddressLabelsToColor = { label58, lblAddressTXPositionInList };
                 foreach (Control control in listAddressLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //block
                 Control[] listBlockLabelsToColor = { label64, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart };
                 foreach (Control control in listBlockLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //transaction
                 Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label130, label132, label102, label107 };
                 foreach (Control control in listTransactionLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListPoolRanking, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
                 foreach (Control control in listBlockListLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //xpub
                 Control[] listXpubLabelsToColor = { label114, label238, label139, label146, lblXpubScreenOwnNodeStatus, label140, label141, label123, label111, label119, label135, label133, label129, label121, lblXpubStatus };
                 foreach (Control control in listXpubLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //bookmarks
                 Control[] listBookmarksLabelsToColor = { label144, label153, label151, label147, label142, lblSelectedBookmarkType, label138, lblBookmarkProposalType, label284, label285 };
                 foreach (Control control in listBookmarksLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //charts
                 Control[] listChartsLabelsToColor = { label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
                 foreach (Control control in listChartsLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //directory
                 Control[] listDirectoryLabelsToColor = { label286 };
                 foreach (Control control in listDirectoryLabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //dca calculator
                 Control[] listDCALabelsToColor = { label304, label305, label306, label307, lblDCAMessage, label202, label203, label205, label206, label207, labelDCADefinition, label212 };
                 foreach (Control control in listDCALabelsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 toolTipForLblHeaderPrice.ForeColor = thiscolor;
                 toolTipGeneralUse.ForeColor = thiscolor;
@@ -20909,7 +20877,10 @@ namespace SATSuma
                     lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                 foreach (Control control in listFiatConversionsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
             }
             catch (Exception ex)
@@ -20926,84 +20897,129 @@ namespace SATSuma
                 Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150, lblCurrentVersion, lblNowViewing };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //settings & appearance
                 Control[] listSettingsHeadingsToColor = { label300, label200, label293, label295, label283, label248, label162, label163, label155, label5, label156, label166, label181, label182, label183, label184, label192, label195, label234, label237, label244, label169 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardHeadingsToColor = { label79, label84, label80, label81, label83, label299, label86, label82 };
                 foreach (Control control in listBitcoinDashboardHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardHeadingsToColor = { label76, label78, label75, label53, label54 };
                 foreach (Control control in listLightningDashboardHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //address
                 Control[] listAddressHeadingsToColor = { label61, label59, label67, label63 };
                 foreach (Control control in listAddressHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight, label6 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //block
                 Control[] listBlockHeadingsToColor = { lblBlockBlockHeight, label18 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //transaction
                 Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //xpub
                 Control[] listXpubHeadingsToColor = { label124, label117, label127 };
                 foreach (Control control in listXpubHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //bookmarks
                 Control[] listBookmarksHeadingsToColor = { label131 };
                 foreach (Control control in listBookmarksHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 //charts
                 Control[] listChartsHeadingsToColor = { label228, label218, label231, label217, label271, label272 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 // also use this colour to set the bordercolor of the top row of buttons (menus, exit, etc)
                 RJButton[] mainMenuButtonBordersToColor = { btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnHelp, btnAddToBookmarks, btnAnimation, btnShowGlobalSearch, btnHideErrorMessage, btnCopyErrorMessage };
                 foreach (RJButton button in mainMenuButtonBordersToColor)
                 {
-                    button.BorderSize = 1;
-                    button.BorderColor = thiscolor;
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderSize = 1;
+                        button.BorderColor = thiscolor;
+                    });
                 }
                 // dca
-                label208.ForeColor = thiscolor;
-                label209.ForeColor = thiscolor;
+                Control[] listDCAHeadingsToColor = { label208, label209 };
+                foreach (Control control in listDCAHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
                 // main menu
-                label210.ForeColor = thiscolor;
-                label213.ForeColor = thiscolor;
-                label214.ForeColor = thiscolor;
-                label215.ForeColor = thiscolor;
-                label216.ForeColor = thiscolor;
+                Control[] listMenuHeadingsToColor = { label210, label213, label214, label215, label216 };
+                foreach (Control control in listMenuHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21018,7 +21034,10 @@ namespace SATSuma
                 Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186 };
                 foreach (Control control in listTableTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
                 tableTextColor = thiscolor;
                 #region force refresh listviews to update their text colours
@@ -21054,8 +21073,14 @@ namespace SATSuma
             try
             {
                 listViewHeaderTextColor = thiscolor;
-                label188.ForeColor = thiscolor;
-                label190.ForeColor = thiscolor;
+                label188.Invoke((MethodInvoker)delegate
+                {
+                    label188.ForeColor = thiscolor;
+                });
+                label190.Invoke((MethodInvoker)delegate
+                {
+                    label190.ForeColor = thiscolor;
+                });
             }
             catch (Exception ex)
             {
@@ -21067,22 +21092,47 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency };
+                Control[] listOtherTextToColor = { comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency };
                 foreach (Control control in listOtherTextToColor)
                 {
-                    control.ForeColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
                 }
-                comboBoxCustomizeScreenThemeList.ForeColor = thiscolor;
-                comboBoxCustomizeScreenThemeList.ListTextColor = thiscolor;
-                comboBoxCustomizeScreenThemeList.ListBackColor = chartsBackgroundColor;
-                comboBoxStartupScreen.ForeColor = thiscolor;
-                comboBoxStartupScreen.ListTextColor = thiscolor;
-                comboBoxStartupScreen.ListBackColor = chartsBackgroundColor;
-                comboBoxTitlesBackgroundImage.ForeColor = thiscolor;
-                comboBoxTitlesBackgroundImage.ListTextColor = thiscolor;
-                comboBoxTitlesBackgroundImage.ListBackColor = chartsBackgroundColor;
-                rjDatePickerDCAStartDate.TextColor = thiscolor;
-                rjDatePickerDCAEndDate.TextColor = thiscolor;
+
+                comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxCustomizeScreenThemeList.ListTextColor = thiscolor;
+                });
+                comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxCustomizeScreenThemeList.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxStartupScreen.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxStartupScreen.ListTextColor = thiscolor;
+                });
+                comboBoxStartupScreen.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxStartupScreen.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxTitlesBackgroundImage.ListTextColor = thiscolor;
+                });
+                comboBoxTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxTitlesBackgroundImage.ListBackColor = chartsBackgroundColor;
+                });
+                rjDatePickerDCAStartDate.Invoke((MethodInvoker)delegate
+                {
+                    rjDatePickerDCAStartDate.TextColor = thiscolor;
+                });
+                rjDatePickerDCAEndDate.Invoke((MethodInvoker)delegate
+                {
+                    rjDatePickerDCAEndDate.TextColor = thiscolor;
+                });
             }
             catch (Exception ex)
             {
@@ -21094,9 +21144,14 @@ namespace SATSuma
         {
             try
             {
-                lblHeaderPrice.ForeColor = thiscolor;
-                lblBlockNumber.ForeColor = thiscolor;
-                label175.ForeColor = thiscolor;
+                Control[] PriceBlockItemsToColor = { lblHeaderPrice, lblBlockNumber, label175 };
+                foreach (Control control in PriceBlockItemsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21108,14 +21163,14 @@ namespace SATSuma
         {
             try
             {
-
-                labelSettingsSaved.ForeColor = thiscolor;
-                lblErrorAlert.ForeColor = thiscolor;
-                lblErrorMessage.ForeColor = thiscolor;
-                label176.ForeColor = thiscolor;
-                lblOfflineModeActive.ForeColor = thiscolor;
-                lblElapsedSinceUpdate.ForeColor = thiscolor;
-                headerSelectedNodeStatus.ForeColor = thiscolor;
+                Control[] StatusErrorToColor = { labelSettingsSaved, lblErrorAlert, lblErrorMessage, label176, lblOfflineModeActive, lblElapsedSinceUpdate, headerSelectedNodeStatus };
+                foreach (Control control in StatusErrorToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21138,85 +21193,132 @@ namespace SATSuma
                 }
 
                 //header
-                Control[] listHeaderButtonsToColor = { btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonsToColor = { btnUniversalSearch, btnMenuApplyCustomTheme, comboBoxHeaderCustomThemes, lblApplyThemeButtonDisabledMask, lblThemeMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol ,BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
-                    control.BackColor = menuAndHeaderButtonsColour;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = menuAndHeaderButtonsColour;
+                    });
                 }
-                lblCurrencyMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
-                lblThemeMenuHighlightedButtonText.BackColor = menuAndHeaderButtonsColour;
-                lblApplyThemeButtonDisabledMask.BackColor = menuAndHeaderButtonsColour;
-                comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
-                comboBoxHeaderCustomThemes.ListBackColor = menuAndHeaderButtonsColour;
-                btnMenuApplyCustomTheme.BackColor = menuAndHeaderButtonsColour;
-                btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
-                btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
-
-                btnUniversalSearch.BackColor = thiscolor;
+                comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxHeaderCustomThemes.ListBackColor = menuAndHeaderButtonsColour;
+                });
+                btnMenuSplash.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
+                });
+                btnMenuHelp.Invoke((MethodInvoker)delegate
+                {
+                    btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
+                });
 
                 //settings & appearance
                 Control[] listSettingsButtonsToColor = { btnResetAll, button1, button2, btnSaveTheme, btnLoadTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners };
                 foreach (Control control in listSettingsButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
-                btnPreviewAnimations.ForeColor = thiscolor;
+                btnPreviewAnimations.Invoke((MethodInvoker)delegate
+                {
+                    btnPreviewAnimations.ForeColor = thiscolor;
+                });
                 //address
                 Control[] listAddressButtonsToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
                 foreach (Control control in listAddressButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //block
                 Control[] listBlockButtonsToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
                 foreach (Control control in listBlockButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListButtonsToColor = { btnLookUpBlockList, btnViewBlockFromBlockList, btnNewer15Blocks, btnOlder15Blocks };
                 foreach (Control control in listBlockListButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
 
                 //transaction
                 Control[] listTransactionButtonsToColor = { btnViewAddressFromTXInput, btnViewAddressFromTXOutput, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown };
                 foreach (Control control in listTransactionButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //xpub
                 Control[] listXpubButtonsToColor = { btnViewAddressFromXpub, btnXpubAddressesUp, btnXpubAddressesDown };
                 foreach (Control control in listXpubButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //bookmarks
                 Control[] listBookmarksButtonsToColor = { btnBookmarksListUp, btnBookmarksListDown, btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks, btnDeleteAllBookmarks, btnDeleteAllBookmarksNo, btnDeleteAllBookmarksYes };
                 foreach (Control control in listBookmarksButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //charts
                 Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
                 foreach (Control control in listChartsButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //directory
                 Control[] listDirectoryButtonsToColor = { btnDirectoryScrollUp, btnDirectoryScrollDown };
                 foreach (Control control in listDirectoryButtonsToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 //dca calculator
-                btnCalculateDCA.BackColor = thiscolor;
+                btnCalculateDCA.Invoke((MethodInvoker)delegate
+                {
+                    btnCalculateDCA.BackColor = thiscolor;
+                });
                 //add to bookmarks panel (uses button colour)
-                panelAddToBookmarksBorder.BackColor = thiscolor;
+                panelAddToBookmarksBorder.Invoke((MethodInvoker)delegate
+                {
+                    panelAddToBookmarksBorder.BackColor = thiscolor;
+                });
                 //main menu drop-down panels
-                panelThemeMenu.BackColor = thiscolor;
-                panelCurrency.BackColor = thiscolor;
+                panelThemeMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenu.BackColor = thiscolor;
+                });
+                panelCurrency.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrency.BackColor = thiscolor;
+                });
             }
             catch (Exception ex)
             {
@@ -21231,7 +21333,10 @@ namespace SATSuma
                 Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel127, panel126, panel28 };
                 foreach (Control control in listLinesToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
                 linesColor = thiscolor;
             }
@@ -21248,10 +21353,19 @@ namespace SATSuma
                 Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
-                    control.BackColor = thiscolor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
                 }
-                rjDatePickerDCAStartDate.SkinColor = thiscolor;
-                rjDatePickerDCAEndDate.SkinColor = thiscolor;
+                rjDatePickerDCAStartDate.Invoke((MethodInvoker)delegate
+                {
+                    rjDatePickerDCAStartDate.SkinColor = thiscolor;
+                });
+                rjDatePickerDCAEndDate.Invoke((MethodInvoker)delegate
+                {
+                    rjDatePickerDCAEndDate.SkinColor = thiscolor;
+                });
             }
             catch (Exception ex)
             {
@@ -21263,18 +21377,47 @@ namespace SATSuma
         {
             try
             {
-                //settings
-                colorProgressBar1.BarColor = thiscolor;
+                //header
+                progressBarRefreshData.Invoke((MethodInvoker)delegate
+                {
+                    progressBarRefreshData.BarColor = thiscolor;
+                });
+                //themes
+                colorProgressBar1.Invoke((MethodInvoker)delegate
+                {
+                    colorProgressBar1.BarColor = thiscolor;
+                });
                 //bitcoindashboard
-                progressBarNextDiffAdj.BarColor = thiscolor;
-                progressBarProgressToHalving.BarColor = thiscolor;
-                progressBarPercentIssued.BarColor = thiscolor;
+                progressBarNextDiffAdj.Invoke((MethodInvoker)delegate
+                {
+                    progressBarNextDiffAdj.BarColor = thiscolor;
+                });
+                progressBarProgressToHalving.Invoke((MethodInvoker)delegate
+                {
+                    progressBarProgressToHalving.BarColor = thiscolor;
+                });
+                progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                {
+                    progressBarPercentIssued.BarColor = thiscolor;
+                });
                 //blocklist
-                progressBarBlockListNextDiffAdj.BarColor = thiscolor;
-                progressBarBlockListHalvingProgress.BarColor = thiscolor;
+                progressBarBlockListNextDiffAdj.Invoke((MethodInvoker)delegate
+                {
+                    progressBarBlockListNextDiffAdj.BarColor = thiscolor;
+                });
+                progressBarBlockListHalvingProgress.Invoke((MethodInvoker)delegate
+                {
+                    progressBarBlockListHalvingProgress.BarColor = thiscolor;
+                });
                 //xpub
-                progressBarCheckEachAddressType.BarColor = thiscolor;
-                progressBarCheckAllAddressTypes.BarColor = thiscolor;
+                progressBarCheckEachAddressType.Invoke((MethodInvoker)delegate
+                {
+                    progressBarCheckEachAddressType.BarColor = thiscolor;
+                });
+                progressBarCheckAllAddressTypes.Invoke((MethodInvoker)delegate
+                {
+                    progressBarCheckAllAddressTypes.BarColor = thiscolor;
+                });
             }
             catch (Exception ex)
             {
@@ -21286,19 +21429,15 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
+                    control.Invoke((MethodInvoker)delegate
                     {
                         control.BackColor = thiscolor;
-                    }
+                    });
                 }
                 subItemBackColor = MakeColorLighter(thiscolor, -10);
-                panel120.BackColor = thiscolor;
-                panel122.BackColor = thiscolor;
-                panel124.BackColor = thiscolor;
-                panel125.BackColor = thiscolor;
-                panel27.BackColor = thiscolor;
             }
             catch (Exception ex)
             {
@@ -21311,11 +21450,14 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                panel67.BackColor = thiscolor;
-                panel68.BackColor = thiscolor;
-                panel117.BackColor = thiscolor;
-                panel121.BackColor = thiscolor;
-                panel123.BackColor = thiscolor;
+                Control[] tableTitleBarsToColor = { panel67, panel68, panel117, panel121, panel123 };
+                foreach (Control control in tableTitleBarsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21389,77 +21531,112 @@ namespace SATSuma
                 Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //settings & appearance
                 Control[] listSettingsHeadingsToColor = { panel110, panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9, panel109 };
                 foreach (Control control in listBitcoinDashboardHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
                 foreach (Control control in listLightningDashboardHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //address
                 Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
                 foreach (Control control in listAddressHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //transaction
                 Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //xpub
                 Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
                 foreach (Control control in listXpubHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //charts
                 Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = ImageFile;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
                 }
                 //dca
-                panel116.BackColor = Color.Transparent;
-                panel116.BackgroundImage = ImageFile;
-                panel118.BackColor = Color.Transparent;
-                panel118.BackgroundImage = ImageFile;
+                Control[] listDCAHeadingsToColor = { panel116, panel118 };
+                foreach (Control control in listDCAHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21491,77 +21668,112 @@ namespace SATSuma
                 Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //settings & appearance
                 Control[] listSettingsHeadingsToColor = { panel110, panel97, panel108, panel54, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9, panel109 };
                 foreach (Control control in listBitcoinDashboardHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
                 foreach (Control control in listLightningDashboardHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //address
                 Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
                 foreach (Control control in listAddressHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //transaction
                 Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //xpub
                 Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
                 foreach (Control control in listXpubHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //charts
                 Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
-                    control.BackColor = Color.Transparent;
-                    control.BackgroundImage = null;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
                 }
                 //dca
-                panel116.BackColor = Color.Transparent;
-                panel116.BackgroundImage = null;
-                panel118.BackColor = Color.Transparent;
-                panel118.BackgroundImage = null;
+                Control[] listDCAHeadingsToColor = { panel116, panel118 };
+                foreach (Control control in listDCAHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21577,77 +21789,112 @@ namespace SATSuma
                 Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //settings & appearance
                 Control[] listSettingsHeadingsToColor = { panel110, panel97, panel54, panel108, panel52, panel47, panel58, panel59, panel60, panel62, panel63, panel64, panel22, panel34, panel37, panel65, panel69, panel72, panel82, panel83, panel104, panel112 };
                 foreach (Control control in listSettingsHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //bitcoindashboard
                 Control[] listBitcoinDashboardHeadingsToColor = { panel6, panel11, panel7, panel8, panel10, panel12, panel9, panel109 };
                 foreach (Control control in listBitcoinDashboardHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //lightningdashboard
                 Control[] listLightningDashboardHeadingsToColor = { panel4, panel5, panel1, panel2, panel3 };
                 foreach (Control control in listLightningDashboardHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //address
                 Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
                 foreach (Control control in listAddressHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //blocklist
                 Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //transaction
                 Control[] listTransactionHeadingsToColor = {  };
                 foreach (Control control in listTransactionHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //xpub
                 Control[] listXpubHeadingsToColor = { panel23, panel26, panel29 };
                 foreach (Control control in listXpubHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //charts
                 Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
-                    control.BackgroundImage = null;
-                    control.BackColor = titleBackgroundColor;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
                 }
                 //dca
-                panel116.BackgroundImage = null;
-                panel116.BackColor = titleBackgroundColor;
-                panel118.BackgroundImage = null;
-                panel118.BackColor = titleBackgroundColor;
+                Control[] listDCAHeadingsToColor = { panel116, panel118 };
+                foreach (Control control in listDCAHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -21663,7 +21910,10 @@ namespace SATSuma
                 foreach (Control control in listPanelsToColor)
                 {
                     {
-                        control.BackColor = thiscolor;
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.BackColor = thiscolor;
+                        });
                     }
                 }
                 toolTipForLblHeaderPrice.BackColor = thiscolor;
@@ -21694,12 +21944,18 @@ namespace SATSuma
                 };
                 if (buttonsToUpdateBackColor.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((System.Windows.Forms.Button)sender).BackColor = btnDeleteTheme.BackColor;
+                    ((Button)sender).Invoke((MethodInvoker)delegate
+                    {
+                        ((Button)sender).BackColor = btnDeleteTheme.BackColor;
+                    });
                 }
 
                 if (sender == comboBoxHeaderCustomThemes)
                 {
-                    comboBoxHeaderCustomThemes.BackColor = btnDeleteTheme.BackColor;
+                    comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxHeaderCustomThemes.BackColor = btnDeleteTheme.BackColor;
+                    });
                 }
             }
             catch (Exception ex)
@@ -21728,7 +21984,10 @@ namespace SATSuma
                 };
                 if (buttonsToMatchChartsBackgroundColor.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((System.Windows.Forms.Button)sender).BackColor = menuAndHeaderButtonsColour;
+                    ((Button)sender).Invoke((MethodInvoker)delegate
+                    {
+                        ((Button)sender).BackColor = menuAndHeaderButtonsColour;
+                    });
                 }
 
                 System.Windows.Forms.Button[] buttonstoMakeTransparent =
@@ -21737,26 +21996,38 @@ namespace SATSuma
                 };
                 if (buttonstoMakeTransparent.Contains((System.Windows.Forms.Button)sender))
                 {
-                    ((System.Windows.Forms.Button)sender).BackColor = Color.Transparent;
+                    ((Button)sender).Invoke((MethodInvoker)delegate
+                    {
+                        ((System.Windows.Forms.Button)sender).BackColor = Color.Transparent;
+                    });
                 }
 
                 if (sender == btnThemeMenu)
                 {
                     if (panelThemeMenu.Height == 0)
                     {
-                        btnThemeMenu.BackColor = Color.Transparent;
+                        btnThemeMenu.Invoke((MethodInvoker)delegate
+                        {
+                            btnThemeMenu.BackColor = Color.Transparent;
+                        });
                     }
                 }
                 if (sender == btnCurrency)
                 {
                     if (panelCurrency.Height == 0)
                     {
-                        btnCurrency.BackColor = Color.Transparent;
+                        btnCurrency.Invoke((MethodInvoker)delegate
+                        {
+                            btnCurrency.BackColor = Color.Transparent;
+                        });
                     }
                 }
                 if (sender == comboBoxHeaderCustomThemes)
                 {
-                    comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+                    comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+                    });
                 }
             }
             catch (Exception ex)
@@ -21767,7 +22038,10 @@ namespace SATSuma
 
         private void ComboBoxHeaderCustomThemes_MouseEnter(object sender, EventArgs e)
         {
-            comboBoxHeaderCustomThemes.BackColor = btnDeleteTheme.BackColor;
+            comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+            {
+                comboBoxHeaderCustomThemes.BackColor = btnDeleteTheme.BackColor;
+            });
         }
 
         private void ComboBoxHeaderCustomThemes_MouseLeave(object sender, EventArgs e)
@@ -21781,7 +22055,10 @@ namespace SATSuma
             {
                 menuAndHeaderButtonsColour = Color.FromArgb(244, 244, 244);
             }
-            comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+            comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+            {
+                comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+            });
         }
 
         #endregion
@@ -21901,7 +22178,10 @@ namespace SATSuma
         {
             try
             {
-                lblThemeSaved.Visible = false;
+                lblThemeSaved.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeSaved.Visible = false;
+                });
                 hideThemeSavedTimer.Stop();
             }
             catch (Exception ex)
@@ -21914,7 +22194,10 @@ namespace SATSuma
         {
             try
             {
-                lblThemeDeleted.Visible = false;
+                lblThemeDeleted.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeDeleted.Visible = false;
+                });
                 hideThemeDeletedTimer.Stop();
             }
             catch (Exception ex)
@@ -21927,7 +22210,10 @@ namespace SATSuma
         {
             try
             {
-                lblThemeNameInUse.Visible = false;
+                lblThemeNameInUse.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeNameInUse.Visible = false;
+                });
                 timerHideThemeNameInUse.Stop();
             }
             catch (Exception ex)
@@ -21948,8 +22234,23 @@ namespace SATSuma
 
                 double currentValueDouble;
                 double newValueDouble;
-                // get the current colour. Will revert to this after making red or green
-                Color currentColor = label.ForeColor;
+                // get the normal state colour. Will revert to this after making red or green
+                Color currentColor;
+                if (label == lblHeaderPrice || label == lblBlockNumber)
+                {
+                    currentColor = label175.ForeColor;
+                }
+                else
+                {
+                    if (label.Name.Contains("Fiat"))
+                    {
+                        currentColor = label288.ForeColor;
+                    }
+                    else
+                    {
+                        currentColor = label154.ForeColor;
+                    }
+                }
 
                 // Get the current value from the label so we know if it's gone up or down
                 if (label.Text == "no data" || label.Text == "disabled" || label.Text == "0 (TestNet)")
@@ -22005,7 +22306,7 @@ namespace SATSuma
             if (readyToShowPriceChangeLabelYet == true)
             {
                 // get the current colour. Will revert to this after making red or green
-                Color currentColor = label.ForeColor;
+                Color currentColor = label154.ForeColor;
 
                 if (decimal.TryParse(priceChange, out decimal priceChangeDecimal))
                 {
@@ -22093,7 +22394,10 @@ namespace SATSuma
         private void StartExpandingPanelHoriz(Panel panel)
         {
             panelToExpand = panel;
-            panelToExpand.Width = 0;
+            panelToExpand.Invoke((MethodInvoker)delegate
+            {
+                panelToExpand.Width = 0;
+            });
             currentWidthExpandingPanel = 0;
             ExpandPanelTimerHoriz.Start();
         }
@@ -22207,7 +22511,10 @@ namespace SATSuma
                     lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                 foreach (Control control in listFiatConversionsToHide)
                 {
-                    control.Visible = false;
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
                 }
             }
             catch (Exception ex)
@@ -22226,7 +22533,10 @@ namespace SATSuma
                         lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                         foreach (Control control in listFiatConversionsToShow)
                         {
-                            control.Visible = true;
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = true;
+                            });
                         }
                     }
             }
@@ -22260,34 +22570,14 @@ namespace SATSuma
         {
             try
             {
-                btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
+                Control[] markersToClear = { btnMenuApplyCustomTheme, BtnMenuThemeGenesis, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol };
+                foreach (Control control in markersToClear)
                 {
-                    btnMenuApplyCustomTheme.BackgroundImage = null;
-                });
-                BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
-                {
-                    BtnMenuThemeGenesis.BackgroundImage = null;
-                });
-                btnMenuThemeFranklin.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuThemeFranklin.BackgroundImage = null;
-                });
-                btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuThemeSatsuma.BackgroundImage = null;
-                });
-                btnMenuThemeHoneyBadger.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuThemeHoneyBadger.BackgroundImage = null;
-                });
-                btnMenuThemeStackSats.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuThemeStackSats.BackgroundImage = null;
-                });
-                btnMenuThemeSymbol.Invoke((MethodInvoker)delegate
-                {
-                    btnMenuThemeSymbol.BackgroundImage = null;
-                });
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -22300,22 +22590,14 @@ namespace SATSuma
         {
             try
             {
-                btnUSD.Invoke((MethodInvoker)delegate
+                Control[] markersToClear = { btnUSD, btnEUR, btnGBP, btnXAU };
+                foreach (Control control in markersToClear)
                 {
-                    btnUSD.BackgroundImage = null;
-                });
-                btnEUR.Invoke((MethodInvoker)delegate
-                {
-                    btnEUR.BackgroundImage = null;
-                });
-                btnGBP.Invoke((MethodInvoker)delegate
-                {
-                    btnGBP.BackgroundImage = null;
-                });
-                btnXAU.Invoke((MethodInvoker)delegate
-                {
-                    btnXAU.BackgroundImage = null;
-                });
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -22335,11 +22617,17 @@ namespace SATSuma
                     string LatestVersion = client.DownloadString(VersionURL);
                     if (LatestVersion != CurrentVersion)
                     {
-                        lblUpdaterLight.Visible = true;
+                        lblUpdaterLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblUpdaterLight.Visible = true;
+                        });
                     }
                     else
                     {
-                        lblUpdaterLight.Visible = false;
+                        lblUpdaterLight.Invoke((MethodInvoker)delegate
+                        {
+                            lblUpdaterLight.Visible = false;
+                        });
                     }
                 }
             }
@@ -22354,15 +22642,14 @@ namespace SATSuma
         {
             try
             {
-                numericUpDownBlockHeightToStartListFrom.Enabled = true;
-                btnNumericUpDownBlockHeightToStartListFromDown.Enabled = true;
-                btnNumericUpDownBlockHeightToStartListFromUp.Enabled = true;
-                btnLookUpBlockList.Enabled = true;
-
-                numericUpDownSubmittedBlockNumber.Enabled = true;
-                btnNumericUpDownSubmittedBlockNumberDown.Enabled = true;
-                btnNumericUpDownSubmittedBlockNumberUp.Enabled = true;
-                btnLookUpBlock.Enabled = true;
+                Control[] buttonsToEnable = { numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromDown, btnNumericUpDownBlockHeightToStartListFromUp, btnLookUpBlockList, numericUpDownSubmittedBlockNumber, btnNumericUpDownSubmittedBlockNumberDown, btnNumericUpDownSubmittedBlockNumberUp, btnLookUpBlock };
+                foreach (Control control in buttonsToEnable)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = true;
+                    });
+                }
 
                 #region hacky way of overcoming titlebar of listviews getting color artefacts when changing themes.
                 listViewBlockList.Visible = false;
@@ -22440,9 +22727,9 @@ namespace SATSuma
                 {
                     if (panelAddress.Visible && lblAddressType.Text != "Invalid address format" && lblAddressType.Text != "no data")
                     {
-                        btnAddToBookmarks.Enabled = true;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = true;
                             btnAddToBookmarks.Text = "🖤";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22452,9 +22739,9 @@ namespace SATSuma
                     }
                     if (panelAddress.Visible && (lblAddressType.Text == "Invalid address format" || lblAddressType.Text == "no data"))
                     {
-                        btnAddToBookmarks.Enabled = false;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = false;
                             btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22464,9 +22751,9 @@ namespace SATSuma
                     }
                     if (panelBlock.Visible && lblBlockHash.Text != "")
                     {
-                        btnAddToBookmarks.Enabled = true;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = true;
                             btnAddToBookmarks.Text = "🖤";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22476,9 +22763,9 @@ namespace SATSuma
                     }
                     if (panelBlock.Visible && lblBlockHash.Text == "")
                     {
-                        btnAddToBookmarks.Enabled = false;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = false;
                             btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22488,9 +22775,9 @@ namespace SATSuma
                     }
                     if (panelTransaction.Visible && lblInvalidTransaction.Text == "✔️ valid transaction ID")
                     {
-                        btnAddToBookmarks.Enabled = true;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = true;
                             btnAddToBookmarks.Text = "🖤";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22500,9 +22787,9 @@ namespace SATSuma
                     }
                     if (panelTransaction.Visible && lblInvalidTransaction.Text != "✔️ valid transaction ID")
                     {
-                        btnAddToBookmarks.Enabled = false;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = false;
                             btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22512,9 +22799,9 @@ namespace SATSuma
                     }
                     if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
                     {
-                        btnAddToBookmarks.Enabled = false;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = false;
                             btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22524,9 +22811,9 @@ namespace SATSuma
                     }
                     if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
                     {
-                        btnAddToBookmarks.Enabled = true;
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
+                            btnAddToBookmarks.Enabled = true;
                             btnAddToBookmarks.Text = "🖤";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -22607,9 +22894,9 @@ namespace SATSuma
                             lblNowViewing.Text = "BTC/Fiat converter";
                         });
                     }
-                    btnAddToBookmarks.Enabled = false;
                     btnAddToBookmarks.Invoke((MethodInvoker)delegate
                     {
+                        btnAddToBookmarks.Enabled = false;
                         btnAddToBookmarks.Text = "🤍";
                     });
                 }
@@ -22721,11 +23008,17 @@ namespace SATSuma
                     //reset the image to return to the original frame in the animation
                     if (btnExit.BackColor == Color.FromArgb(20,20,20) || btnExit.BackColor == Color.FromArgb(40, 40, 40))
                     {
-                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                        pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                        });
                     }
                     else
                     {
-                        pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                        pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                        });
                     }
                 }
             }
@@ -22743,6 +23036,7 @@ namespace SATSuma
                 {
                     lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
                 });
+                progressBarRefreshData.Value = progressBarRefreshData.Maximum - intDisplayCountdownToRefresh;
                 intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
                 if (intDisplayCountdownToRefresh < 0) // if the 1 minute timer countdown has reached zero...
                 {
@@ -23600,16 +23894,15 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            btnMenuXpub.Enabled = true;
-            btnMenuAddress.Enabled = true;
-            btnMenuTransaction.Enabled = true;
-            btnMenuBookmarks.Enabled = true;
-            btnMenuCreateTheme.Enabled = true;
-            btnMenuDirectory.Enabled = true;
-            btnMenuBitcoinDashboard.Enabled = true;
-            btnMenuBlockList.Enabled = true;
-            btnMenuLightningDashboard.Enabled = true;
-            btnMenuBlock.Enabled = true;
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
+            foreach (Control control in buttonsToEnable)
+            {
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.Enabled = true;
+                });
+            }
+
             if (!testNet)
             {
                 btnMenuCharts.Enabled = true;
@@ -23625,25 +23918,19 @@ namespace SATSuma
                     }
                 }
             }
-            btnMenuSettings.Enabled = true;
         }
 
         private void HideAllScreens()
         {
-            panelBookmarks.Visible = false;
-            panelBlockList.Visible = false;
-            panelLightningDashboard.Visible = false;
-            panelDirectory.Visible = false;
-            panelCharts.Visible = false;
-            panelAddress.Visible = false;
-            panelBlock.Visible = false;
-            panelTransaction.Visible = false;
-            panelSettings.Visible = false;
-            panelAppearance.Visible = false;
-            panelXpub.Visible = false;
-            panelDCACalculator.Visible = false;
-            panelPriceConverter.Visible = false;
-            panelBitcoinDashboard.Visible = false;
+            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard };
+            foreach (Control control in screensToHide)
+            {
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.Visible = false;
+                });
+            }
+            
         }
 
         private async void BtnMenuBitcoinDashboard_Click(object sender, EventArgs e)
@@ -23652,9 +23939,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "₿ dashboard";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y);
                 });
@@ -23667,32 +23954,39 @@ namespace SATSuma
                 btnMenuBitcoinDashboard.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelBitcoinDashboard.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -23708,9 +24002,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "⚡dashboard";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y);
                 });
@@ -23723,32 +24017,39 @@ namespace SATSuma
                 btnMenuLightningDashboard.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelLightningDashboard.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -23764,9 +24065,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "charts";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuCharts.Location.Y);
                 });
@@ -23779,32 +24080,39 @@ namespace SATSuma
                 btnMenuCharts.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(500);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(500);
+                    #endregion
+                }
                 HideAllScreens();
                 panelCharts.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(2000);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(2000);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -23820,9 +24128,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "address";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddress.Location.Y);
                 });
@@ -23835,32 +24143,39 @@ namespace SATSuma
                 btnMenuAddress.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelAddress.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
@@ -23877,9 +24192,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "block";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlock.Location.Y);
                 });
@@ -23892,25 +24207,28 @@ namespace SATSuma
                 btnMenuBlock.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 if (numericUpDownSubmittedBlockNumber.Text == "673298")
                 {
@@ -23923,12 +24241,15 @@ namespace SATSuma
                 panelBlock.Visible = true;
                 ResumeLayout();
                 CheckNetworkStatus();
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -23943,9 +24264,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "xpub";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuXpub.Location.Y);
                 });
@@ -23958,32 +24279,39 @@ namespace SATSuma
                 btnMenuXpub.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelXpub.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
@@ -24000,9 +24328,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "blocks";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBlockList.Location.Y);
                 });
@@ -24016,24 +24344,28 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 if (numericUpDownBlockHeightToStartListFrom.Text == "673298")
                 {
@@ -24045,13 +24377,15 @@ namespace SATSuma
                 }
                 panelBlockList.Visible = true;
                 CheckNetworkStatus();
-
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -24067,9 +24401,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "transaction";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuTransaction.Location.Y);
                 });
@@ -24083,32 +24417,39 @@ namespace SATSuma
                 btnMenuTransaction.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelTransaction.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(1500);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(1500);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
@@ -24125,9 +24466,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "bookmarks";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBookmarks.Location.Y);
                 });
@@ -24140,34 +24481,41 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 CheckNetworkStatus();
                 SetupBookmarksScreen();
                 panelBookmarks.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(700);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(700);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -24183,9 +24531,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "convert fiat/btc";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuPriceConverter.Location.Y);
                 });
@@ -24198,34 +24546,41 @@ namespace SATSuma
                 btnMenuPriceConverter.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this,
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 CheckNetworkStatus();
                 PopulateConverterScreen();
                 panelPriceConverter.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(700);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(700);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -24241,9 +24596,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "dca calculator";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDCACalculator.Location.Y);
                 });
@@ -24256,32 +24611,39 @@ namespace SATSuma
                 btnMenuDCACalculator.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this,
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(500);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(500);
+                    #endregion
+                }
                 HideAllScreens();
                 panelDCACalculator.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(2000);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(2000);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
             }
@@ -24297,9 +24659,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "directory";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuDirectory.Location.Y);
                 });
@@ -24313,32 +24675,39 @@ namespace SATSuma
                 btnMenuDirectory.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelDirectory.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(700);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(700);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
@@ -24355,9 +24724,9 @@ namespace SATSuma
             {
                 CloseCurrencyMenu();
                 CloseThemeMenu();
-                lblMenuHighlightedButtonText.Visible = true;
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
+                    lblMenuHighlightedButtonText.Visible = true;
                     lblMenuHighlightedButtonText.Text = "settings";
                     lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuSettings.Location.Y);
                 });
@@ -24370,32 +24739,39 @@ namespace SATSuma
                 btnMenuSettings.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new loadingScreen(UIScale)
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
                 {
-                    Owner = this, 
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None, 
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPause(100);
-                #endregion
+                    #region display loading screen
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new loadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPause(100);
+                    #endregion
+                }
                 HideAllScreens();
                 panelSettings.Visible = true;
-                #region close loading screen
-                //wait a moment to give time for screen to paint
-                await BriefPause(400);
-                //close the loading screen
-                loadingScreen.Close();
-                #endregion
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPause(400);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    #endregion
+                }
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatus();
@@ -24573,7 +24949,10 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (USD)  ▼";
+                btnCurrency.Invoke((MethodInvoker)delegate
+                {
+                    btnCurrency.Text = "   currency (USD)  ▼";
+                });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24628,7 +25007,10 @@ namespace SATSuma
                 btnEUR.Enabled = false;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (EUR)  ▼";
+                btnCurrency.Invoke((MethodInvoker)delegate
+                {
+                    btnCurrency.Text = "   currency (EUR)  ▼";
+                });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24683,7 +25065,10 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = false;
                 btnXAU.Enabled = true;
-                btnCurrency.Text = "   currency (GBP)  ▼";
+                btnCurrency.Invoke((MethodInvoker)delegate
+                {
+                    btnCurrency.Text = "   currency (GBP)  ▼";
+                });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -24738,7 +25123,10 @@ namespace SATSuma
                 btnEUR.Enabled = true;
                 btnGBP.Enabled = true;
                 btnXAU.Enabled = false;
-                btnCurrency.Text = "   currency (XAU)  ▼";
+                btnCurrency.Invoke((MethodInvoker)delegate
+                {
+                    btnCurrency.Text = "   currency (XAU)  ▼";
+                });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -25413,11 +25801,8 @@ namespace SATSuma
                 {
                     textBoxUniversalSearch.Invoke((MethodInvoker)delegate
                     {
-                        textBoxUniversalSearch.Invoke((MethodInvoker)delegate
-                        {
-                            textBoxUniversalSearch.Text = "";
-                            textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
-                        });
+                        textBoxUniversalSearch.Text = "";
+                        textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
                     });
                     isTextBoxUniversalSearchWatermarkTextDisplayed = false;
                 }
@@ -25436,11 +25821,8 @@ namespace SATSuma
                 {
                     textBoxUniversalSearch.Invoke((MethodInvoker)delegate
                     {
-                        textBoxUniversalSearch.Invoke((MethodInvoker)delegate
-                        {
-                            textBoxUniversalSearch.Text = "";
-                            textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
-                        });
+                        textBoxUniversalSearch.Text = "";
+                        textBoxUniversalSearch.ForeColor = numericUpDownBlockHeightToStartListFrom.ForeColor;
                     });
                     isTextBoxUniversalSearchWatermarkTextDisplayed = false;
                 }
@@ -25795,20 +26177,18 @@ namespace SATSuma
             TextRenderer.DrawText(e.Graphics, tipToShow, toolTipFont, e.Bounds, btnExit.ForeColor, toolTipFlags);
         }
 
-        TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
+        readonly TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
         TextFormatFlags.LeftAndRightPadding | TextFormatFlags.HorizontalCenter | TextFormatFlags.NoClipping;
-        Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
+        readonly Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
 
         private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
         {
             // add some space before the text to make way for the icon
             string toolTipText = "       " + (sender as ToolTip).GetToolTip(e.AssociatedControl);
-            using (var g = e.AssociatedControl.CreateGraphics())
-            {
-                var textSize = Size.Add(TextRenderer.MeasureText(
-                    g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
-                e.ToolTipSize = textSize;
-            }
+            using var g = e.AssociatedControl.CreateGraphics();
+            var textSize = Size.Add(TextRenderer.MeasureText(
+                g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
+            e.ToolTipSize = textSize;
         }
         #endregion
         #region close menus
@@ -25819,9 +26199,6 @@ namespace SATSuma
                 panelThemeMenu.Invoke((MethodInvoker)delegate
                 {
                     panelThemeMenu.Height = 0;
-                });
-                btnThemeMenu.Invoke((MethodInvoker)delegate
-                {
                     btnThemeMenu.BackColor = Color.Transparent;
                 });
             }
@@ -25838,9 +26215,6 @@ namespace SATSuma
                 panelCurrency.Invoke((MethodInvoker)delegate
                 {
                     panelCurrency.Height = 0;
-                });
-                btnCurrency.Invoke((MethodInvoker)delegate
-                {
                     btnCurrency.BackColor = Color.Transparent;
                 });
             }

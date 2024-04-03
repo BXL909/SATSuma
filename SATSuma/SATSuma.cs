@@ -29,8 +29,10 @@ https://satsuma.btcdir.org/download/
 * include marketcap from coingecko too?
 * more testing! 
 * reduce reliance on external API's where possible
-* add more tooltips (bitcoin dashboard done so far)
-* theme - make dash/solid progress bars optional?
+* market data from mempool.space if bitcoinexplorer.org and coingecko both disabled or both fail
+* vertically increase size of menu marker only when showing bottom buttons from each group
+* view transaction button on block screen slightly wrong size/place
+* address screen - line up address type with QR code
 */
 
 #region Using
@@ -65,6 +67,7 @@ using CustomControls.RJControls;
 using System.Diagnostics;
 using SATSuma.Properties;
 using ScottPlot.Renderable;
+using ScottPlot.Plottable;
 #endregion
 
 namespace SATSuma
@@ -574,7 +577,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region ⚡CLOCK TICK EVENTS (1 sec and API refresh clock only)⚡
+        #region ⚡CLOCK TICK EVENTS (1 sec for everything except progress bar for API refresh, which is 50th sec)⚡
         private void StartTheClocksTicking()
         {
             try
@@ -651,6 +654,17 @@ namespace SATSuma
             {
                 HandleException(ex, "Timer1Sec_Tick");
             }
+        }
+
+        private void timer50thSec_Tick(object sender, EventArgs e)
+        {
+            if (progressBarRefreshData.Value == (intDisplayCountdownToRefresh * 1000))
+            {
+                timer50thSec.Stop();
+                return;
+            }
+            progressBarRefreshData.Value += 60;
+
         }
         #endregion
 
@@ -17942,6 +17956,46 @@ namespace SATSuma
         }
 
         #endregion
+        #region style progress bars
+        private void StyleProgressBars_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblSolidProgressBars.Text == "❌")
+                {
+                    lblSolidProgressBars.Invoke((MethodInvoker)delegate
+                    {
+                        lblSolidProgressBars.ForeColor = Color.Green;
+                        lblSolidProgressBars.Text = "✔️";
+                    });
+                    lblDashedProgressBars.Invoke((MethodInvoker)delegate
+                    {
+                        lblDashedProgressBars.ForeColor = Color.IndianRed;
+                        lblDashedProgressBars.Text = "❌";
+                    });
+                    StyleProgressBars("solid");
+                }
+                else
+                {
+                    lblDashedProgressBars.Invoke((MethodInvoker)delegate
+                    {
+                        lblDashedProgressBars.ForeColor = Color.Green;
+                        lblDashedProgressBars.Text = "✔️";
+                    });
+                    lblSolidProgressBars.Invoke((MethodInvoker)delegate
+                    {
+                        lblSolidProgressBars.ForeColor = Color.IndianRed;
+                        lblSolidProgressBars.Text = "❌";
+                    });
+                    StyleProgressBars("dashed");
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblChartsLightBackground_Click");
+            }
+        }
+        #endregion
         #region enable/disable realtime clock in genesis background
         private void LblShowClock_Click(object sender, EventArgs e)
         {
@@ -19334,9 +19388,18 @@ namespace SATSuma
                 decimal opacity = numericUpDownOpacity.Value;
 
                 int titlesBackgroundImage = comboBoxTitlesBackgroundImage.SelectedIndex;
-                
 
-                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundFranklin = backgroundFranklin, BackgroundSatsuma = backgroundSatsuma, BackgroundHoneyBadger = backgroundHoneyBadger, BackgroundSymbol = backgroundSymbol, BackgroundStackSats = backgroundStackSats, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage };
+                string progBarStyle;
+                if (lblSolidProgressBars.Text == "❌")
+                {
+                    progBarStyle = "dashed";
+                }
+                else
+                {
+                    progBarStyle = "solid";
+                }
+
+                var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundFranklin = backgroundFranklin, BackgroundSatsuma = backgroundSatsuma, BackgroundHoneyBadger = backgroundHoneyBadger, BackgroundSymbol = backgroundSymbol, BackgroundStackSats = backgroundStackSats, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage, ProgressBarStyle = progBarStyle };
 
                 // Read the existing themes from the JSON file
                 var themes = ReadThemesFromJsonFile();
@@ -19645,6 +19708,7 @@ namespace SATSuma
                     ColorPanels(theme.Panels);
                     SetButtonAndPanelRadius(theme.BorderRadius);
                     SetOpacity(theme.Opacity);
+                    StyleProgressBars(theme.ProgressBarStyle);
 
 
                     if (theme.HeadingBGDefault == true)
@@ -20758,7 +20822,7 @@ namespace SATSuma
                     });
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { btnPreviewAnimations, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21228,10 +21292,6 @@ namespace SATSuma
                         control.BackColor = thiscolor;
                     });
                 }
-                btnPreviewAnimations.Invoke((MethodInvoker)delegate
-                {
-                    btnPreviewAnimations.ForeColor = thiscolor;
-                });
                 //address
                 Control[] listAddressButtonsToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
                 foreach (Control control in listAddressButtonsToColor)
@@ -21355,7 +21415,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
+                Control[] listTextBoxesToColor = { lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21423,14 +21483,6 @@ namespace SATSuma
                 {
                     progressBarCheckAllAddressTypes.BarColor = thiscolor;
                 });
-                if (chartsBackgroundColor == Color.FromArgb(244, 244, 244))
-                {
-                    progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed; // shows up much better on a pale background than solid
-                }
-                else
-                {
-                    progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-                }
             }
             catch (Exception ex)
             {
@@ -21935,6 +21987,105 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "ColorPanels");
+            }
+        }
+
+        private void StyleProgressBars(String style)
+        {
+            try
+            {
+                if (style == "solid")
+                {
+                    //header
+                    progressBarRefreshData.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    //themes
+                    colorProgressBar1.Invoke((MethodInvoker)delegate
+                    {
+                        colorProgressBar1.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    //bitcoindashboard
+                    progressBarNextDiffAdj.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarNextDiffAdj.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    progressBarProgressToHalving.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarProgressToHalving.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarPercentIssued.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    //blocklist
+                    progressBarBlockListNextDiffAdj.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarBlockListNextDiffAdj.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    progressBarBlockListHalvingProgress.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarBlockListHalvingProgress.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    //xpub
+                    progressBarCheckEachAddressType.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarCheckEachAddressType.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                    progressBarCheckAllAddressTypes.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarCheckAllAddressTypes.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
+                    });
+                }
+                else
+                {
+                    //header
+                    progressBarRefreshData.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarRefreshData.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    //themes
+                    colorProgressBar1.Invoke((MethodInvoker)delegate
+                    {
+                        colorProgressBar1.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    //bitcoindashboard
+                    progressBarNextDiffAdj.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarNextDiffAdj.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    progressBarProgressToHalving.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarProgressToHalving.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarPercentIssued.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    //blocklist
+                    progressBarBlockListNextDiffAdj.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarBlockListNextDiffAdj.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    progressBarBlockListHalvingProgress.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarBlockListHalvingProgress.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    //xpub
+                    progressBarCheckEachAddressType.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarCheckEachAddressType.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                    progressBarCheckAllAddressTypes.Invoke((MethodInvoker)delegate
+                    {
+                        progressBarCheckAllAddressTypes.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Dashed;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "StyleProgressBars");
             }
         }
 
@@ -26296,6 +26447,7 @@ namespace SATSuma
             public Color FiatConversionText { get; set; }
             public decimal Opacity { get; set; }
             public int TitlesBackgroundImage { get; set; }
+            public string ProgressBarStyle { get; set; }
         }
         #endregion
         #region address transactions
@@ -27303,16 +27455,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private void timer50thSec_Tick(object sender, EventArgs e)
-        {
-            if (progressBarRefreshData.Value == (intDisplayCountdownToRefresh * 1000))
-            {
-                timer50thSec.Stop();
-                return;
-            }
-            progressBarRefreshData.Value += 60;
-         
-        }
     }
 }

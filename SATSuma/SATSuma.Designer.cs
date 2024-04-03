@@ -823,6 +823,10 @@
             this.panel67 = new System.Windows.Forms.Panel();
             this.label188 = new System.Windows.Forms.Label();
             this.panel89 = new System.Windows.Forms.Panel();
+            this.label222 = new System.Windows.Forms.Label();
+            this.label221 = new System.Windows.Forms.Label();
+            this.lblDashedProgressBars = new System.Windows.Forms.Label();
+            this.lblSolidProgressBars = new System.Windows.Forms.Label();
             this.panelAppearanceTextbox1Container = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel60 = new System.Windows.Forms.Panel();
@@ -1733,7 +1737,7 @@
             this.label100.Size = new System.Drawing.Size(165, 17);
             this.label100.TabIndex = 205;
             this.label100.Text = "Transactions in next block*";
-            this.toolTipGeneralUse.SetToolTip(this.label100, "estimate");
+            this.toolTipGeneralUse.SetToolTip(this.label100, "Estimate. Actual number of transactions won\'t be known until the block is mined.");
             // 
             // lblBlockListTXInNextBlock
             // 
@@ -1745,6 +1749,7 @@
             this.lblBlockListTXInNextBlock.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListTXInNextBlock.TabIndex = 206;
             this.lblBlockListTXInNextBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTXInNextBlock, "Estimate. Actual number of transactions won\'t be known until the block is mined.");
             // 
             // lblBlockListMinMaxInFeeNextBlock
             // 
@@ -1756,6 +1761,7 @@
             this.lblBlockListMinMaxInFeeNextBlock.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListMinMaxInFeeNextBlock.TabIndex = 208;
             this.lblBlockListMinMaxInFeeNextBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListMinMaxInFeeNextBlock, "Estimate. Actual min/max fees won\'t be known until the block is mined");
             // 
             // label106
             // 
@@ -1769,7 +1775,7 @@
             this.label106.Size = new System.Drawing.Size(221, 17);
             this.label106.TabIndex = 207;
             this.label106.Text = "Min/max fee in next block (sats/vB)*";
-            this.toolTipGeneralUse.SetToolTip(this.label106, "estimate");
+            this.toolTipGeneralUse.SetToolTip(this.label106, "Estimate. Actual min/max fees won\'t be known until the block is mined");
             // 
             // lblBlockListTotalFeesInNextBlock
             // 
@@ -1781,6 +1787,7 @@
             this.lblBlockListTotalFeesInNextBlock.Size = new System.Drawing.Size(15, 17);
             this.lblBlockListTotalFeesInNextBlock.TabIndex = 210;
             this.lblBlockListTotalFeesInNextBlock.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTotalFeesInNextBlock, "Estimate. Actual total fees won\'t be known until the block is mined");
             // 
             // label108
             // 
@@ -1793,7 +1800,7 @@
             this.label108.Size = new System.Drawing.Size(182, 17);
             this.label108.TabIndex = 209;
             this.label108.Text = "Total fees in next block (BTC)*";
-            this.toolTipGeneralUse.SetToolTip(this.label108, "estimate");
+            this.toolTipGeneralUse.SetToolTip(this.label108, "Estimate. Actual total fees won\'t be known until the block is mined");
             // 
             // label115
             // 
@@ -1806,6 +1813,7 @@
             this.label115.Size = new System.Drawing.Size(161, 17);
             this.label115.TabIndex = 218;
             this.label115.Text = "Avg time between blocks";
+            this.toolTipGeneralUse.SetToolTip(this.label115, "The difficulty will adjust to target an average of 10 minutes between blocks");
             // 
             // label116
             // 
@@ -1818,7 +1826,7 @@
             this.label116.Size = new System.Drawing.Size(166, 17);
             this.label116.TabIndex = 221;
             this.label116.Text = "Next difficulty adjustment*";
-            this.toolTipGeneralUse.SetToolTip(this.label116, "estimate");
+            this.toolTipGeneralUse.SetToolTip(this.label116, "Estimate, increasing in accuracy the nearer the next adjustment is");
             // 
             // lblBlockListNextDifficultyAdjustment
             // 
@@ -1830,6 +1838,7 @@
             this.lblBlockListNextDifficultyAdjustment.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListNextDifficultyAdjustment.TabIndex = 220;
             this.lblBlockListNextDifficultyAdjustment.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListNextDifficultyAdjustment, "Estimate, increasing in accuracy the nearer the next adjustment is");
             // 
             // BtnViewBlockFromAddress
             // 
@@ -1845,7 +1854,7 @@
             this.BtnViewBlockFromAddress.Size = new System.Drawing.Size(20, 15);
             this.BtnViewBlockFromAddress.TabIndex = 144;
             this.BtnViewBlockFromAddress.Text = "▶️";
-            this.toolTipGeneralUse.SetToolTip(this.BtnViewBlockFromAddress, "view block");
+            this.toolTipGeneralUse.SetToolTip(this.BtnViewBlockFromAddress, "View block");
             this.BtnViewBlockFromAddress.UseVisualStyleBackColor = false;
             this.BtnViewBlockFromAddress.Visible = false;
             this.BtnViewBlockFromAddress.Click += new System.EventHandler(this.BtnViewBlockFromAddress_Click);
@@ -1947,6 +1956,7 @@
             this.btnPreviewAnimations.TabStop = false;
             this.btnPreviewAnimations.Text = "▶️";
             this.btnPreviewAnimations.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnPreviewAnimations, "Preview animations");
             this.btnPreviewAnimations.UseVisualStyleBackColor = false;
             this.btnPreviewAnimations.Click += new System.EventHandler(this.BtnPreviewAnimations_Click);
             // 
@@ -2492,7 +2502,7 @@
             this.btnViewBlockFromBlockList.Text = "view";
             this.btnViewBlockFromBlockList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnViewBlockFromBlockList.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnViewBlockFromBlockList, "view block");
+            this.toolTipGeneralUse.SetToolTip(this.btnViewBlockFromBlockList, "View block");
             this.btnViewBlockFromBlockList.UseVisualStyleBackColor = false;
             this.btnViewBlockFromBlockList.Click += new System.EventHandler(this.BtnViewBlockFromBlockList_Click);
             // 
@@ -2517,7 +2527,7 @@
             this.BtnViewTransactionFromAddress.Text = "view";
             this.BtnViewTransactionFromAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnViewTransactionFromAddress.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.BtnViewTransactionFromAddress, "view transaction");
+            this.toolTipGeneralUse.SetToolTip(this.BtnViewTransactionFromAddress, "View transaction");
             this.BtnViewTransactionFromAddress.UseVisualStyleBackColor = false;
             this.BtnViewTransactionFromAddress.Visible = false;
             this.BtnViewTransactionFromAddress.Click += new System.EventHandler(this.BtnViewTransactionFromAddress_Click);
@@ -2543,7 +2553,7 @@
             this.btnViewTransactionFromBlock.Text = "view";
             this.btnViewTransactionFromBlock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnViewTransactionFromBlock.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnViewTransactionFromBlock, "view transaction");
+            this.toolTipGeneralUse.SetToolTip(this.btnViewTransactionFromBlock, "View transaction");
             this.btnViewTransactionFromBlock.UseVisualStyleBackColor = false;
             this.btnViewTransactionFromBlock.Click += new System.EventHandler(this.BtnViewTransactionFromBlock_Click);
             // 
@@ -2568,7 +2578,7 @@
             this.btnViewAddressFromTXInput.Text = "view";
             this.btnViewAddressFromTXInput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnViewAddressFromTXInput.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnViewAddressFromTXInput, "view address");
+            this.toolTipGeneralUse.SetToolTip(this.btnViewAddressFromTXInput, "View address");
             this.btnViewAddressFromTXInput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXInput.Visible = false;
             this.btnViewAddressFromTXInput.Click += new System.EventHandler(this.BtnViewAddressFromTXInput_Click);
@@ -2594,7 +2604,7 @@
             this.btnViewAddressFromTXOutput.Text = "view";
             this.btnViewAddressFromTXOutput.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnViewAddressFromTXOutput.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnViewAddressFromTXOutput, "view address");
+            this.toolTipGeneralUse.SetToolTip(this.btnViewAddressFromTXOutput, "View address");
             this.btnViewAddressFromTXOutput.UseVisualStyleBackColor = false;
             this.btnViewAddressFromTXOutput.Visible = false;
             this.btnViewAddressFromTXOutput.Click += new System.EventHandler(this.BtnViewAddressFromTXOutput_Click);
@@ -3645,7 +3655,7 @@
             this.label11.Size = new System.Drawing.Size(154, 17);
             this.label11.TabIndex = 94;
             this.label11.Text = "Transactions in Mempool";
-            this.toolTipGeneralUse.SetToolTip(this.label11, "Number of transaction in the mempool of connected node");
+            this.toolTipGeneralUse.SetToolTip(this.label11, "Number of transactions in the mempool of connected node");
             // 
             // lblTXInMempool
             // 
@@ -3657,7 +3667,7 @@
             this.lblTXInMempool.Size = new System.Drawing.Size(61, 17);
             this.lblTXInMempool.TabIndex = 93;
             this.lblTXInMempool.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblTXInMempool, "Number of transaction in the mempool of connected node");
+            this.toolTipGeneralUse.SetToolTip(this.lblTXInMempool, "Number of transactions in the mempool of connected node");
             // 
             // panelBlockList
             // 
@@ -3822,6 +3832,7 @@
             this.btnLookUpBlockList.TabStop = false;
             this.btnLookUpBlockList.Text = "submit";
             this.btnLookUpBlockList.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnLookUpBlockList, "Update list");
             this.btnLookUpBlockList.UseVisualStyleBackColor = false;
             this.btnLookUpBlockList.Click += new System.EventHandler(this.BtnLookUpBlockList_Click);
             // 
@@ -3883,6 +3894,7 @@
             this.btnNumericUpDownBlockHeightToStartListFromUp.TabStop = false;
             this.btnNumericUpDownBlockHeightToStartListFromUp.Text = "▲";
             this.btnNumericUpDownBlockHeightToStartListFromUp.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnNumericUpDownBlockHeightToStartListFromUp, "Next block");
             this.btnNumericUpDownBlockHeightToStartListFromUp.UseVisualStyleBackColor = false;
             this.btnNumericUpDownBlockHeightToStartListFromUp.Click += new System.EventHandler(this.BtnNumericUpDownBlockHeightToStartListFromUp_Click);
             this.btnNumericUpDownBlockHeightToStartListFromUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnNumericUpDownBlockHeightToStartListFromUp_MouseDown);
@@ -3908,6 +3920,7 @@
             this.btnNumericUpDownBlockHeightToStartListFromDown.TabStop = false;
             this.btnNumericUpDownBlockHeightToStartListFromDown.Text = "▼";
             this.btnNumericUpDownBlockHeightToStartListFromDown.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnNumericUpDownBlockHeightToStartListFromDown, "Previous block");
             this.btnNumericUpDownBlockHeightToStartListFromDown.UseVisualStyleBackColor = false;
             this.btnNumericUpDownBlockHeightToStartListFromDown.Click += new System.EventHandler(this.BtnNumericUpDownBlockHeightToStartListFromDown_Click);
             this.btnNumericUpDownBlockHeightToStartListFromDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnNumericUpDownBlockHeightToStartListFromDown_MouseDown);
@@ -3929,6 +3942,7 @@
             this.numericUpDownBlockHeightToStartListFrom.Size = new System.Drawing.Size(88, 22);
             this.numericUpDownBlockHeightToStartListFrom.TabIndex = 264;
             this.numericUpDownBlockHeightToStartListFrom.TabStop = false;
+            this.toolTipGeneralUse.SetToolTip(this.numericUpDownBlockHeightToStartListFrom, "Select block height to start the list from");
             this.numericUpDownBlockHeightToStartListFrom.Value = new decimal(new int[] {
             673298,
             0,
@@ -3986,6 +4000,7 @@
             this.progressBarBlockListHalvingProgress.Size = new System.Drawing.Size(100, 8);
             this.progressBarBlockListHalvingProgress.Step = 10;
             this.progressBarBlockListHalvingProgress.TabIndex = 236;
+            this.toolTipForLblHeaderPrice.SetToolTip(this.progressBarBlockListHalvingProgress, "The block at which the next halving will occur, and number of blocks remaining");
             this.progressBarBlockListHalvingProgress.Value = 0;
             // 
             // progressBarBlockListNextDiffAdj
@@ -4001,6 +4016,7 @@
             this.progressBarBlockListNextDiffAdj.Size = new System.Drawing.Size(100, 8);
             this.progressBarBlockListNextDiffAdj.Step = 10;
             this.progressBarBlockListNextDiffAdj.TabIndex = 235;
+            this.toolTipForLblHeaderPrice.SetToolTip(this.progressBarBlockListNextDiffAdj, "Progress towards next difficulty adjustment as a percentage");
             this.progressBarBlockListNextDiffAdj.Value = 0;
             // 
             // label16
@@ -4014,6 +4030,7 @@
             this.label16.Size = new System.Drawing.Size(197, 17);
             this.label16.TabIndex = 234;
             this.label16.Text = "Progress to difficulty adjustment";
+            this.toolTipGeneralUse.SetToolTip(this.label16, "Progress towards next difficulty adjustment as a percentage");
             // 
             // lblBlockListProgressNextDiffAdjPercentage
             // 
@@ -4036,6 +4053,7 @@
             this.lblBlockListHalvingBlockAndRemaining.Size = new System.Drawing.Size(52, 16);
             this.lblBlockListHalvingBlockAndRemaining.TabIndex = 231;
             this.lblBlockListHalvingBlockAndRemaining.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListHalvingBlockAndRemaining, "The block at which the next halving will occur, and number of blocks remaining");
             // 
             // label122
             // 
@@ -4048,6 +4066,7 @@
             this.label122.Size = new System.Drawing.Size(159, 17);
             this.label122.TabIndex = 227;
             this.label122.Text = "Halving block / remaining";
+            this.toolTipGeneralUse.SetToolTip(this.label122, "The block at which the next halving will occur, and number of blocks remaining");
             // 
             // label120
             // 
@@ -4060,6 +4079,7 @@
             this.label120.Size = new System.Drawing.Size(118, 17);
             this.label120.TabIndex = 225;
             this.label120.Text = "Block subsidy (BTC)";
+            this.toolTipGeneralUse.SetToolTip(this.label120, "The amount of bitcoin issued for each mined block this subsidy epoch");
             // 
             // lblBlockListBlockReward
             // 
@@ -4071,6 +4091,7 @@
             this.lblBlockListBlockReward.Size = new System.Drawing.Size(15, 17);
             this.lblBlockListBlockReward.TabIndex = 224;
             this.lblBlockListBlockReward.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockReward, "The amount of bitcoin issued for each mined block this subsidy epoch");
             // 
             // label118
             // 
@@ -4083,6 +4104,7 @@
             this.label118.Size = new System.Drawing.Size(160, 17);
             this.label118.TabIndex = 223;
             this.label118.Text = "Est. hashrate (hashes/sec)";
+            this.toolTipGeneralUse.SetToolTip(this.label118, "Estimated hashrate (hashes/sec)");
             // 
             // lblBlockListEstHashRate
             // 
@@ -4094,6 +4116,7 @@
             this.lblBlockListEstHashRate.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListEstHashRate.TabIndex = 222;
             this.lblBlockListEstHashRate.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListEstHashRate, "Estimated hashrate (hashes/sec)");
             // 
             // lblBlockListAvgTimeBetweenBlocks
             // 
@@ -4105,6 +4128,7 @@
             this.lblBlockListAvgTimeBetweenBlocks.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListAvgTimeBetweenBlocks.TabIndex = 219;
             this.lblBlockListAvgTimeBetweenBlocks.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListAvgTimeBetweenBlocks, "The difficulty will adjust to target an average of 10 minutes between blocks");
             // 
             // label112
             // 
@@ -4117,6 +4141,7 @@
             this.label112.Size = new System.Drawing.Size(196, 17);
             this.label112.TabIndex = 215;
             this.label112.Text = "Next difficulty adjustment block";
+            this.toolTipGeneralUse.SetToolTip(this.label112, "A difficulty adjustment occurs every 2016 blocks");
             // 
             // lblBlockListNextDiffAdjBlock
             // 
@@ -4128,6 +4153,7 @@
             this.lblBlockListNextDiffAdjBlock.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListNextDiffAdjBlock.TabIndex = 214;
             this.lblBlockListNextDiffAdjBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListNextDiffAdjBlock, "A difficulty adjustment occurs every 2016 blocks");
             // 
             // label110
             // 
@@ -4140,6 +4166,7 @@
             this.label110.Size = new System.Drawing.Size(178, 17);
             this.label110.TabIndex = 213;
             this.label110.Text = "Avg attempts to solve block";
+            this.toolTipGeneralUse.SetToolTip(this.label110, "Average number of hash attempts needed to solve a block");
             // 
             // lblBlockListAttemptsToSolveBlock
             // 
@@ -4151,6 +4178,7 @@
             this.lblBlockListAttemptsToSolveBlock.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListAttemptsToSolveBlock.TabIndex = 212;
             this.lblBlockListAttemptsToSolveBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListAttemptsToSolveBlock, "Average number of hash attempts needed to solve a block");
             // 
             // label87
             // 
@@ -4163,6 +4191,7 @@
             this.label87.Size = new System.Drawing.Size(154, 17);
             this.label87.TabIndex = 204;
             this.label87.Text = "Transactions in Mempool";
+            this.toolTipGeneralUse.SetToolTip(this.label87, "Number of transactions in the mempool of connected node");
             // 
             // lblBlockListTXInMempool
             // 
@@ -4174,6 +4203,7 @@
             this.lblBlockListTXInMempool.Size = new System.Drawing.Size(61, 17);
             this.lblBlockListTXInMempool.TabIndex = 203;
             this.lblBlockListTXInMempool.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTXInMempool, "Number of transactions in the mempool of connected node");
             // 
             // panel19
             // 
@@ -4235,6 +4265,7 @@
             this.btnNewer15Blocks.TabStop = false;
             this.btnNewer15Blocks.Text = "◁ newer";
             this.btnNewer15Blocks.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnNewer15Blocks, "View more recent blocks");
             this.btnNewer15Blocks.UseVisualStyleBackColor = false;
             this.btnNewer15Blocks.Click += new System.EventHandler(this.BtnNewer15Blocks_Click);
             // 
@@ -4258,6 +4289,7 @@
             this.btnOlder15Blocks.TabStop = false;
             this.btnOlder15Blocks.Text = "▷ older";
             this.btnOlder15Blocks.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnOlder15Blocks, "View older blocks");
             this.btnOlder15Blocks.UseVisualStyleBackColor = false;
             this.btnOlder15Blocks.Click += new System.EventHandler(this.BtnOlder15Blocks_Click);
             // 
@@ -4338,6 +4370,7 @@
             this.label90.Size = new System.Drawing.Size(36, 17);
             this.label90.TabIndex = 172;
             this.label90.Text = "Hash";
+            this.toolTipGeneralUse.SetToolTip(this.label90, "The SHA256 hash of this block");
             // 
             // lblBlockListBlockSize
             // 
@@ -4349,6 +4382,7 @@
             this.lblBlockListBlockSize.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListBlockSize.TabIndex = 136;
             this.lblBlockListBlockSize.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockSize, "The size of this block in MB");
             // 
             // label105
             // 
@@ -4361,6 +4395,7 @@
             this.label105.Size = new System.Drawing.Size(64, 17);
             this.label105.TabIndex = 137;
             this.label105.Text = "Block size";
+            this.toolTipGeneralUse.SetToolTip(this.label105, "The size of this block in MB");
             // 
             // lblBlockListBlockWeight
             // 
@@ -4372,6 +4407,7 @@
             this.lblBlockListBlockWeight.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListBlockWeight.TabIndex = 138;
             this.lblBlockListBlockWeight.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockWeight, "The weight of this block (MWU - Million Weight Units)");
             // 
             // label103
             // 
@@ -4384,6 +4420,7 @@
             this.label103.Size = new System.Drawing.Size(128, 17);
             this.label103.TabIndex = 139;
             this.label103.Text = "Block weight (MWU)";
+            this.toolTipGeneralUse.SetToolTip(this.label103, "The weight of this block (MWU - Million Weight Units)");
             // 
             // lblBlockListReward
             // 
@@ -4395,6 +4432,7 @@
             this.lblBlockListReward.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListReward.TabIndex = 140;
             this.lblBlockListReward.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListReward, "Total reward (fees + subsidy) for this block");
             // 
             // label101
             // 
@@ -4407,6 +4445,7 @@
             this.label101.Size = new System.Drawing.Size(146, 17);
             this.label101.TabIndex = 141;
             this.label101.Text = "Reward (subsidy + fees)";
+            this.toolTipGeneralUse.SetToolTip(this.label101, "Total reward (fees + subsidy) for this block");
             // 
             // label96
             // 
@@ -4417,6 +4456,7 @@
             this.label96.Size = new System.Drawing.Size(52, 17);
             this.label96.TabIndex = 182;
             this.label96.Text = "Version";
+            this.toolTipGeneralUse.SetToolTip(this.label96, "Version of the protocol rules that the block adheres to");
             // 
             // lblBlockListTransactionCount
             // 
@@ -4428,6 +4468,7 @@
             this.lblBlockListTransactionCount.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListTransactionCount.TabIndex = 142;
             this.lblBlockListTransactionCount.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTransactionCount, "Total number of transactions in this block");
             // 
             // lblBlockListVersion
             // 
@@ -4438,6 +4479,7 @@
             this.lblBlockListVersion.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListVersion.TabIndex = 181;
             this.lblBlockListVersion.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListVersion, "Version of the protocol rules that the block adheres to");
             // 
             // label99
             // 
@@ -4450,6 +4492,7 @@
             this.label99.Size = new System.Drawing.Size(114, 17);
             this.label99.TabIndex = 143;
             this.label99.Text = "Transaction count";
+            this.toolTipGeneralUse.SetToolTip(this.label99, "Total number of transactions in this block");
             // 
             // label92
             // 
@@ -4462,6 +4505,7 @@
             this.label92.Size = new System.Drawing.Size(144, 17);
             this.label92.TabIndex = 180;
             this.label92.Text = "Average TX size (bytes)";
+            this.toolTipGeneralUse.SetToolTip(this.label92, "Average transaction size in this block");
             // 
             // lblBlockListAverageFee
             // 
@@ -4473,6 +4517,7 @@
             this.lblBlockListAverageFee.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListAverageFee.TabIndex = 144;
             this.lblBlockListAverageFee.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListAverageFee, "Average fee included in this block");
             // 
             // lblBlockListAverageTransactionSize
             // 
@@ -4484,6 +4529,7 @@
             this.lblBlockListAverageTransactionSize.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListAverageTransactionSize.TabIndex = 179;
             this.lblBlockListAverageTransactionSize.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListAverageTransactionSize, "Average transaction size in this block");
             // 
             // label97
             // 
@@ -4496,6 +4542,7 @@
             this.label97.Size = new System.Drawing.Size(119, 17);
             this.label97.TabIndex = 145;
             this.label97.Text = "Average fee (sats)";
+            this.toolTipGeneralUse.SetToolTip(this.label97, "Average fee included in this block");
             // 
             // label94
             // 
@@ -4508,6 +4555,7 @@
             this.label94.Size = new System.Drawing.Size(85, 17);
             this.label94.TabIndex = 178;
             this.label94.Text = "Total outputs";
+            this.toolTipGeneralUse.SetToolTip(this.label94, "Total number of transaction outputs in this block");
             // 
             // lblBlockListMiner
             // 
@@ -4519,6 +4567,7 @@
             this.lblBlockListMiner.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListMiner.TabIndex = 148;
             this.lblBlockListMiner.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListMiner, "The miner or pool that mined this block");
             // 
             // lblBlockListTotalOutputs
             // 
@@ -4530,6 +4579,7 @@
             this.lblBlockListTotalOutputs.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListTotalOutputs.TabIndex = 177;
             this.lblBlockListTotalOutputs.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTotalOutputs, "Total number of transaction outputs in this block");
             // 
             // label95
             // 
@@ -4542,6 +4592,7 @@
             this.label95.Size = new System.Drawing.Size(78, 17);
             this.label95.TabIndex = 149;
             this.label95.Text = "Miner / Pool";
+            this.toolTipGeneralUse.SetToolTip(this.label95, "The miner or pool that mined this block");
             // 
             // label89
             // 
@@ -4554,6 +4605,7 @@
             this.label89.Size = new System.Drawing.Size(75, 17);
             this.label89.TabIndex = 176;
             this.label89.Text = "Total inputs";
+            this.toolTipGeneralUse.SetToolTip(this.label89, "Total number of transaction inputs in this block");
             // 
             // lblBlockListBlockFeeRangeAndMedianFee
             // 
@@ -4565,6 +4617,7 @@
             this.lblBlockListBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListBlockFeeRangeAndMedianFee.TabIndex = 150;
             this.lblBlockListBlockFeeRangeAndMedianFee.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockFeeRangeAndMedianFee, "Minimum, maximum and median fees included in this block");
             // 
             // lblBlockListTotalInputs
             // 
@@ -4576,6 +4629,7 @@
             this.lblBlockListTotalInputs.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListTotalInputs.TabIndex = 175;
             this.lblBlockListTotalInputs.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTotalInputs, "Total number of transaction inputs in this block");
             // 
             // label93
             // 
@@ -4588,6 +4642,7 @@
             this.label93.Size = new System.Drawing.Size(129, 17);
             this.label93.TabIndex = 151;
             this.label93.Text = "Fee range / median";
+            this.toolTipGeneralUse.SetToolTip(this.label93, "Minimum, maximum and median fees included in this block");
             // 
             // lblBlockListBlockTime
             // 
@@ -4599,6 +4654,7 @@
             this.lblBlockListBlockTime.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListBlockTime.TabIndex = 152;
             this.lblBlockListBlockTime.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockTime, "The date and time that this block was mined");
             // 
             // lblBlockListBlockHash
             // 
@@ -4609,6 +4665,7 @@
             this.lblBlockListBlockHash.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListBlockHash.TabIndex = 171;
             this.lblBlockListBlockHash.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListBlockHash, "The SHA256 hash of this block");
             // 
             // label91
             // 
@@ -4621,6 +4678,7 @@
             this.label91.Size = new System.Drawing.Size(70, 17);
             this.label91.TabIndex = 153;
             this.label91.Text = "Block time";
+            this.toolTipGeneralUse.SetToolTip(this.label91, "The date and time that this block was mined");
             // 
             // lblBlockListTotalFees
             // 
@@ -4632,6 +4690,7 @@
             this.lblBlockListTotalFees.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListTotalFees.TabIndex = 166;
             this.lblBlockListTotalFees.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListTotalFees, "Total fees included in this block");
             // 
             // label24
             // 
@@ -4644,6 +4703,7 @@
             this.label24.Size = new System.Drawing.Size(48, 17);
             this.label24.TabIndex = 169;
             this.label24.Text = "Nonce";
+            this.toolTipGeneralUse.SetToolTip(this.label24, "The nonce (\"number used once\") for this block");
             // 
             // label88
             // 
@@ -4656,6 +4716,7 @@
             this.label88.Size = new System.Drawing.Size(65, 17);
             this.label88.TabIndex = 167;
             this.label88.Text = "Total fees";
+            this.toolTipGeneralUse.SetToolTip(this.label88, "Total fees included in this block");
             // 
             // lblBlockListNonce
             // 
@@ -4667,6 +4728,7 @@
             this.lblBlockListNonce.Size = new System.Drawing.Size(55, 17);
             this.lblBlockListNonce.TabIndex = 168;
             this.lblBlockListNonce.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockListNonce, "The nonce (\"number used once\") for this block");
             // 
             // formsPlot1
             // 
@@ -4789,6 +4851,7 @@
             this.panelLightningDashboard.Name = "panelLightningDashboard";
             this.panelLightningDashboard.Size = new System.Drawing.Size(773, 556);
             this.panelLightningDashboard.TabIndex = 88;
+            this.toolTipForLblHeaderPrice.SetToolTip(this.panelLightningDashboard, "Node alias");
             this.panelLightningDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelLightningDashboard.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelLightningDashboard_Paint);
             // 
@@ -5066,6 +5129,7 @@
             this.label52.Size = new System.Drawing.Size(63, 17);
             this.label52.TabIndex = 259;
             this.label52.Text = "Capacity";
+            this.toolTipGeneralUse.SetToolTip(this.label52, "Node capacity");
             // 
             // label51
             // 
@@ -5078,6 +5142,7 @@
             this.label51.Size = new System.Drawing.Size(36, 17);
             this.label51.TabIndex = 258;
             this.label51.Text = "Alias";
+            this.toolTipGeneralUse.SetToolTip(this.label51, "Node alias");
             // 
             // capacityLabel9
             // 
@@ -5091,6 +5156,7 @@
             this.capacityLabel9.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel9.TabIndex = 257;
             this.capacityLabel9.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel9, "Node capacity");
             // 
             // capacityLabel10
             // 
@@ -5104,6 +5170,7 @@
             this.capacityLabel10.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel10.TabIndex = 256;
             this.capacityLabel10.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel10, "Node capacity");
             // 
             // aliasLabel10
             // 
@@ -5118,6 +5185,7 @@
             this.aliasLabel10.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel10.TabIndex = 255;
             this.aliasLabel10.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel10, "Node alias");
             // 
             // aliasLabel9
             // 
@@ -5132,6 +5200,7 @@
             this.aliasLabel9.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel9.TabIndex = 254;
             this.aliasLabel9.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel9, "Node alias");
             // 
             // capacityLabel7
             // 
@@ -5145,6 +5214,7 @@
             this.capacityLabel7.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel7.TabIndex = 253;
             this.capacityLabel7.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel7, "Node capacity");
             // 
             // capacityLabel8
             // 
@@ -5158,6 +5228,7 @@
             this.capacityLabel8.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel8.TabIndex = 252;
             this.capacityLabel8.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel8, "Node capacity");
             // 
             // aliasLabel8
             // 
@@ -5172,6 +5243,7 @@
             this.aliasLabel8.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel8.TabIndex = 251;
             this.aliasLabel8.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel8, "Node alias");
             // 
             // aliasLabel7
             // 
@@ -5186,6 +5258,7 @@
             this.aliasLabel7.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel7.TabIndex = 250;
             this.aliasLabel7.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel7, "Node alias");
             // 
             // capacityLabel5
             // 
@@ -5199,6 +5272,7 @@
             this.capacityLabel5.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel5.TabIndex = 249;
             this.capacityLabel5.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel5, "Node capacity");
             // 
             // capacityLabel6
             // 
@@ -5212,6 +5286,7 @@
             this.capacityLabel6.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel6.TabIndex = 248;
             this.capacityLabel6.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel6, "Node capacity");
             // 
             // aliasLabel6
             // 
@@ -5226,6 +5301,7 @@
             this.aliasLabel6.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel6.TabIndex = 247;
             this.aliasLabel6.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel6, "Node alias");
             // 
             // aliasLabel5
             // 
@@ -5240,6 +5316,7 @@
             this.aliasLabel5.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel5.TabIndex = 246;
             this.aliasLabel5.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel5, "Node alias");
             // 
             // capacityLabel3
             // 
@@ -5253,6 +5330,7 @@
             this.capacityLabel3.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel3.TabIndex = 245;
             this.capacityLabel3.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel3, "Node capacity");
             // 
             // capacityLabel4
             // 
@@ -5266,6 +5344,7 @@
             this.capacityLabel4.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel4.TabIndex = 244;
             this.capacityLabel4.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel4, "Node capacity");
             // 
             // aliasLabel4
             // 
@@ -5280,6 +5359,7 @@
             this.aliasLabel4.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel4.TabIndex = 243;
             this.aliasLabel4.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel4, "Node alias");
             // 
             // aliasLabel3
             // 
@@ -5294,6 +5374,7 @@
             this.aliasLabel3.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel3.TabIndex = 242;
             this.aliasLabel3.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel3, "Node alias");
             // 
             // capacityLabel1
             // 
@@ -5307,6 +5388,7 @@
             this.capacityLabel1.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel1.TabIndex = 241;
             this.capacityLabel1.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel1, "Node capacity");
             // 
             // capacityLabel2
             // 
@@ -5320,6 +5402,7 @@
             this.capacityLabel2.Size = new System.Drawing.Size(61, 17);
             this.capacityLabel2.TabIndex = 240;
             this.capacityLabel2.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.capacityLabel2, "Node capacity");
             // 
             // aliasLabel2
             // 
@@ -5334,6 +5417,7 @@
             this.aliasLabel2.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel2.TabIndex = 239;
             this.aliasLabel2.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel2, "Node alias");
             // 
             // aliasLabel1
             // 
@@ -5348,6 +5432,7 @@
             this.aliasLabel1.Size = new System.Drawing.Size(61, 17);
             this.aliasLabel1.TabIndex = 238;
             this.aliasLabel1.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasLabel1, "Node alias");
             // 
             // panel5
             // 
@@ -5452,6 +5537,7 @@
             this.label43.Size = new System.Drawing.Size(166, 17);
             this.label43.TabIndex = 189;
             this.label43.Text = "Med base fee rate (mSats)";
+            this.toolTipGeneralUse.SetToolTip(this.label43, "Median base fee rate charged by routing nodes (mSats)");
             // 
             // lblMedBaseFeeTokens
             // 
@@ -5463,6 +5549,7 @@
             this.lblMedBaseFeeTokens.Size = new System.Drawing.Size(61, 17);
             this.lblMedBaseFeeTokens.TabIndex = 188;
             this.lblMedBaseFeeTokens.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblMedBaseFeeTokens, "Median base fee rate charged by routing nodes (mSats)");
             // 
             // label44
             // 
@@ -5475,6 +5562,7 @@
             this.label44.Size = new System.Drawing.Size(125, 17);
             this.label44.TabIndex = 187;
             this.label44.Text = "Med fee rate (ppm)";
+            this.toolTipGeneralUse.SetToolTip(this.label44, "Median fee rate charged by routing nodes (ppm)");
             // 
             // lblMedFeeRate
             // 
@@ -5486,6 +5574,7 @@
             this.lblMedFeeRate.Size = new System.Drawing.Size(61, 17);
             this.lblMedFeeRate.TabIndex = 186;
             this.lblMedFeeRate.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblMedFeeRate, "Median fee rate charged by routing nodes (ppm)");
             // 
             // label42
             // 
@@ -5498,6 +5587,7 @@
             this.label42.Size = new System.Drawing.Size(127, 17);
             this.label42.TabIndex = 185;
             this.label42.Text = "Med capacity (sats)";
+            this.toolTipGeneralUse.SetToolTip(this.label42, "Median channel capacity (sats)");
             // 
             // lblMedCapacity
             // 
@@ -5509,6 +5599,7 @@
             this.lblMedCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblMedCapacity.TabIndex = 184;
             this.lblMedCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblMedCapacity, "Median channel capacity (sats)");
             // 
             // label41
             // 
@@ -5521,6 +5612,7 @@
             this.label41.Size = new System.Drawing.Size(164, 17);
             this.label41.TabIndex = 183;
             this.label41.Text = "Avg base fee rate (mSats)";
+            this.toolTipGeneralUse.SetToolTip(this.label41, "Average base fee rate charged by routing nodes (mSats)");
             // 
             // lblAverageBaseFeeMtokens
             // 
@@ -5532,6 +5624,7 @@
             this.lblAverageBaseFeeMtokens.Size = new System.Drawing.Size(61, 17);
             this.lblAverageBaseFeeMtokens.TabIndex = 182;
             this.lblAverageBaseFeeMtokens.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAverageBaseFeeMtokens, "Average base fee rate charged by routing nodes (mSats)");
             // 
             // label39
             // 
@@ -5544,6 +5637,7 @@
             this.label39.Size = new System.Drawing.Size(123, 17);
             this.label39.TabIndex = 181;
             this.label39.Text = "Avg fee rate (ppm)";
+            this.toolTipGeneralUse.SetToolTip(this.label39, "Average fee rate charged by routing nodes (ppm)");
             // 
             // lblAverageFeeRate
             // 
@@ -5555,6 +5649,7 @@
             this.lblAverageFeeRate.Size = new System.Drawing.Size(61, 17);
             this.lblAverageFeeRate.TabIndex = 180;
             this.lblAverageFeeRate.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAverageFeeRate, "Average fee rate charged by routing nodes (ppm)");
             // 
             // label37
             // 
@@ -5567,6 +5662,7 @@
             this.label37.Size = new System.Drawing.Size(125, 17);
             this.label37.TabIndex = 179;
             this.label37.Text = "Avg capacity (sats)";
+            this.toolTipGeneralUse.SetToolTip(this.label37, "Average channel capacity (sats)");
             // 
             // lblAverageCapacity
             // 
@@ -5578,6 +5674,7 @@
             this.lblAverageCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblAverageCapacity.TabIndex = 178;
             this.lblAverageCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAverageCapacity, "Average channel capacity (sats)");
             // 
             // label34
             // 
@@ -5590,6 +5687,7 @@
             this.label34.Size = new System.Drawing.Size(95, 17);
             this.label34.TabIndex = 177;
             this.label34.Text = "Channel count";
+            this.toolTipGeneralUse.SetToolTip(this.label34, "Total amount of lightning channels");
             // 
             // lblChannelCount
             // 
@@ -5601,6 +5699,7 @@
             this.lblChannelCount.Size = new System.Drawing.Size(61, 17);
             this.lblChannelCount.TabIndex = 176;
             this.lblChannelCount.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblChannelCount, "Total amount of lightning channels");
             // 
             // label46
             // 
@@ -5613,6 +5712,7 @@
             this.label46.Size = new System.Drawing.Size(130, 17);
             this.label46.TabIndex = 175;
             this.label46.Text = "Unannounced nodes";
+            this.toolTipGeneralUse.SetToolTip(this.label46, "Amount of unannounced lightning nodes");
             // 
             // lblUnannouncedNodes
             // 
@@ -5624,6 +5724,7 @@
             this.lblUnannouncedNodes.Size = new System.Drawing.Size(61, 17);
             this.lblUnannouncedNodes.TabIndex = 174;
             this.lblUnannouncedNodes.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblUnannouncedNodes, "Amount of unannounced lightning nodes");
             // 
             // label45
             // 
@@ -5636,6 +5737,7 @@
             this.label45.Size = new System.Drawing.Size(121, 17);
             this.label45.TabIndex = 173;
             this.label45.Text = "Clearnet Tor Nodes";
+            this.toolTipGeneralUse.SetToolTip(this.label45, "Amount of lightning nodes advertising at least 1 clearnet IP address");
             // 
             // lblClearnetTorNodes
             // 
@@ -5647,6 +5749,7 @@
             this.lblClearnetTorNodes.Size = new System.Drawing.Size(61, 17);
             this.lblClearnetTorNodes.TabIndex = 172;
             this.lblClearnetTorNodes.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblClearnetTorNodes, "Amount of lightning nodes advertising at least 1 clearnet IP address");
             // 
             // label35
             // 
@@ -5659,6 +5762,7 @@
             this.label35.Size = new System.Drawing.Size(99, 17);
             this.label35.TabIndex = 171;
             this.label35.Text = "Clearnet nodes";
+            this.toolTipGeneralUse.SetToolTip(this.label35, "Amount of lightning nodes advertising at least 1 clearnet IP address");
             // 
             // lblClearnetNodes
             // 
@@ -5670,6 +5774,7 @@
             this.lblClearnetNodes.Size = new System.Drawing.Size(61, 17);
             this.lblClearnetNodes.TabIndex = 170;
             this.lblClearnetNodes.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblClearnetNodes, "Amount of lightning nodes advertising at least 1 clearnet IP address");
             // 
             // label40
             // 
@@ -5682,6 +5787,7 @@
             this.label40.Size = new System.Drawing.Size(79, 17);
             this.label40.TabIndex = 169;
             this.label40.Text = "Node count";
+            this.toolTipGeneralUse.SetToolTip(this.label40, "Total amount of lightning nodes");
             // 
             // lblNodeCount
             // 
@@ -5693,6 +5799,7 @@
             this.lblNodeCount.Size = new System.Drawing.Size(61, 17);
             this.lblNodeCount.TabIndex = 168;
             this.lblNodeCount.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblNodeCount, "Total amount of lightning nodes");
             // 
             // label36
             // 
@@ -5705,6 +5812,7 @@
             this.label36.Size = new System.Drawing.Size(64, 17);
             this.label36.TabIndex = 167;
             this.label36.Text = "Tor nodes";
+            this.toolTipGeneralUse.SetToolTip(this.label36, "Amount of lightning nodes advertising only Tor addresses");
             // 
             // lblTorNodes
             // 
@@ -5716,6 +5824,7 @@
             this.lblTorNodes.Size = new System.Drawing.Size(61, 17);
             this.lblTorNodes.TabIndex = 166;
             this.lblTorNodes.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTorNodes, "Amount of lightning nodes advertising only Tor addresses");
             // 
             // label55
             // 
@@ -5728,6 +5837,7 @@
             this.label55.Size = new System.Drawing.Size(62, 17);
             this.label55.TabIndex = 164;
             this.label55.Text = "Channels";
+            this.toolTipGeneralUse.SetToolTip(this.label55, "Number of channels");
             // 
             // label56
             // 
@@ -5740,6 +5850,7 @@
             this.label56.Size = new System.Drawing.Size(36, 17);
             this.label56.TabIndex = 163;
             this.label56.Text = "Alias";
+            this.toolTipGeneralUse.SetToolTip(this.label56, "Node alias");
             // 
             // channelLabel9
             // 
@@ -5753,6 +5864,7 @@
             this.channelLabel9.Size = new System.Drawing.Size(61, 17);
             this.channelLabel9.TabIndex = 162;
             this.channelLabel9.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel9, "Number of channels");
             // 
             // channelLabel10
             // 
@@ -5766,6 +5878,7 @@
             this.channelLabel10.Size = new System.Drawing.Size(61, 17);
             this.channelLabel10.TabIndex = 161;
             this.channelLabel10.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel10, "Number of channels");
             // 
             // aliasConnLabel10
             // 
@@ -5780,6 +5893,7 @@
             this.aliasConnLabel10.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel10.TabIndex = 160;
             this.aliasConnLabel10.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel10, "Node alias");
             // 
             // aliasConnLabel9
             // 
@@ -5794,6 +5908,7 @@
             this.aliasConnLabel9.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel9.TabIndex = 159;
             this.aliasConnLabel9.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel9, "Node alias");
             // 
             // channelLabel7
             // 
@@ -5807,6 +5922,7 @@
             this.channelLabel7.Size = new System.Drawing.Size(61, 17);
             this.channelLabel7.TabIndex = 158;
             this.channelLabel7.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel7, "Number of channels");
             // 
             // channelLabel8
             // 
@@ -5820,6 +5936,7 @@
             this.channelLabel8.Size = new System.Drawing.Size(61, 17);
             this.channelLabel8.TabIndex = 157;
             this.channelLabel8.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel8, "Number of channels");
             // 
             // aliasConnLabel8
             // 
@@ -5834,6 +5951,7 @@
             this.aliasConnLabel8.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel8.TabIndex = 156;
             this.aliasConnLabel8.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel8, "Node alias");
             // 
             // aliasConnLabel7
             // 
@@ -5848,6 +5966,7 @@
             this.aliasConnLabel7.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel7.TabIndex = 155;
             this.aliasConnLabel7.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel7, "Node alias");
             // 
             // channelLabel5
             // 
@@ -5861,6 +5980,7 @@
             this.channelLabel5.Size = new System.Drawing.Size(61, 17);
             this.channelLabel5.TabIndex = 154;
             this.channelLabel5.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel5, "Number of channels");
             // 
             // channelLabel6
             // 
@@ -5874,6 +5994,7 @@
             this.channelLabel6.Size = new System.Drawing.Size(61, 17);
             this.channelLabel6.TabIndex = 153;
             this.channelLabel6.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel6, "Number of channels");
             // 
             // aliasConnLabel6
             // 
@@ -5888,6 +6009,7 @@
             this.aliasConnLabel6.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel6.TabIndex = 152;
             this.aliasConnLabel6.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel6, "Node alias");
             // 
             // aliasConnLabel5
             // 
@@ -5902,6 +6024,7 @@
             this.aliasConnLabel5.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel5.TabIndex = 151;
             this.aliasConnLabel5.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel5, "Node alias");
             // 
             // channelLabel3
             // 
@@ -5915,6 +6038,7 @@
             this.channelLabel3.Size = new System.Drawing.Size(61, 17);
             this.channelLabel3.TabIndex = 150;
             this.channelLabel3.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel3, "Number of channels");
             // 
             // channelLabel4
             // 
@@ -5928,6 +6052,7 @@
             this.channelLabel4.Size = new System.Drawing.Size(61, 17);
             this.channelLabel4.TabIndex = 149;
             this.channelLabel4.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel4, "Number of channels");
             // 
             // aliasConnLabel4
             // 
@@ -5942,6 +6067,7 @@
             this.aliasConnLabel4.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel4.TabIndex = 148;
             this.aliasConnLabel4.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel4, "Node alias");
             // 
             // aliasConnLabel3
             // 
@@ -5956,6 +6082,7 @@
             this.aliasConnLabel3.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel3.TabIndex = 147;
             this.aliasConnLabel3.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel3, "Node alias");
             // 
             // channelLabel1
             // 
@@ -5969,6 +6096,7 @@
             this.channelLabel1.Size = new System.Drawing.Size(61, 17);
             this.channelLabel1.TabIndex = 146;
             this.channelLabel1.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel1, "Number of channels");
             // 
             // channelLabel2
             // 
@@ -5982,6 +6110,7 @@
             this.channelLabel2.Size = new System.Drawing.Size(61, 17);
             this.channelLabel2.TabIndex = 145;
             this.channelLabel2.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.channelLabel2, "Number of channels");
             // 
             // aliasConnLabel2
             // 
@@ -5996,6 +6125,7 @@
             this.aliasConnLabel2.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel2.TabIndex = 144;
             this.aliasConnLabel2.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel2, "Node alias");
             // 
             // aliasConnLabel1
             // 
@@ -6010,6 +6140,7 @@
             this.aliasConnLabel1.Size = new System.Drawing.Size(61, 17);
             this.aliasConnLabel1.TabIndex = 143;
             this.aliasConnLabel1.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.aliasConnLabel1, "Node alias");
             // 
             // label49
             // 
@@ -6022,6 +6153,7 @@
             this.label49.Size = new System.Drawing.Size(118, 17);
             this.label49.TabIndex = 118;
             this.label49.Text = "Unknown capacity";
+            this.toolTipGeneralUse.SetToolTip(this.label49, "Total amount of liquidity on all nodes where ISP info is unavailable");
             // 
             // lblUnknownCapacity
             // 
@@ -6033,6 +6165,7 @@
             this.lblUnknownCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblUnknownCapacity.TabIndex = 117;
             this.lblUnknownCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblUnknownCapacity, "Total amount of liquidity on all nodes where ISP info is unavailable");
             // 
             // label48
             // 
@@ -6045,6 +6178,7 @@
             this.label48.Size = new System.Drawing.Size(82, 17);
             this.label48.TabIndex = 116;
             this.label48.Text = "Tor capacity";
+            this.toolTipGeneralUse.SetToolTip(this.label48, "Total amount of liquidity on all nodes advertising only Tor addresses");
             // 
             // lblTorCapacity
             // 
@@ -6056,6 +6190,7 @@
             this.lblTorCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblTorCapacity.TabIndex = 115;
             this.lblTorCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTorCapacity, "Total amount of liquidity on all nodes advertising only Tor addresses");
             // 
             // label47
             // 
@@ -6068,6 +6203,8 @@
             this.label47.Size = new System.Drawing.Size(117, 17);
             this.label47.TabIndex = 114;
             this.label47.Text = "Clearnet capacity";
+            this.toolTipGeneralUse.SetToolTip(this.label47, "Total amount of liquidity on all nodes advertising at least 1 clearnet IP address" +
+        "");
             // 
             // lblClearnetCapacity
             // 
@@ -6079,6 +6216,8 @@
             this.lblClearnetCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblClearnetCapacity.TabIndex = 113;
             this.lblClearnetCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblClearnetCapacity, "Total amount of liquidity on all nodes advertising at least 1 clearnet IP address" +
+        "");
             // 
             // label38
             // 
@@ -6091,6 +6230,7 @@
             this.label38.Size = new System.Drawing.Size(127, 17);
             this.label38.TabIndex = 92;
             this.label38.Text = "Total capacity (BTC)";
+            this.toolTipGeneralUse.SetToolTip(this.label38, "Total amount of liquidity on all nodes");
             // 
             // lblTotalCapacity
             // 
@@ -6102,6 +6242,7 @@
             this.lblTotalCapacity.Size = new System.Drawing.Size(61, 17);
             this.lblTotalCapacity.TabIndex = 91;
             this.lblTotalCapacity.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTotalCapacity, "Total amount of liquidity on all nodes");
             // 
             // panelAddress
             // 
@@ -6170,6 +6311,7 @@
             this.lblAddressType.Size = new System.Drawing.Size(52, 16);
             this.lblAddressType.TabIndex = 3;
             this.lblAddressType.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressType, "Address type");
             this.lblAddressType.Visible = false;
             // 
             // listViewAddressTransactions
@@ -6455,6 +6597,7 @@
             this.btnShowAllTX.TabIndex = 147;
             this.btnShowAllTX.Text = "all";
             this.btnShowAllTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowAllTX, "View confirmed and unconfirmed transactions");
             this.btnShowAllTX.UseVisualStyleBackColor = false;
             this.btnShowAllTX.Visible = false;
             this.btnShowAllTX.Click += new System.EventHandler(this.BtnShowAllTXForAddress_Click);
@@ -6479,6 +6622,7 @@
             this.btnShowConfirmedTX.TabIndex = 146;
             this.btnShowConfirmedTX.Text = "confirmed";
             this.btnShowConfirmedTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowConfirmedTX, "View confirmed transactions only");
             this.btnShowConfirmedTX.UseVisualStyleBackColor = false;
             this.btnShowConfirmedTX.Visible = false;
             this.btnShowConfirmedTX.Click += new System.EventHandler(this.BtnShowConfirmedTXForAddress_Click);
@@ -6502,6 +6646,7 @@
             this.btnShowUnconfirmedTX.TabIndex = 145;
             this.btnShowUnconfirmedTX.Text = "unconfirmed";
             this.btnShowUnconfirmedTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowUnconfirmedTX, "View unconfirmed transactions only");
             this.btnShowUnconfirmedTX.UseVisualStyleBackColor = false;
             this.btnShowUnconfirmedTX.Visible = false;
             this.btnShowUnconfirmedTX.Click += new System.EventHandler(this.BtnShowUnconfirmedTXForAddress_Click);
@@ -6575,6 +6720,7 @@
             this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(60, 16);
             this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputs, "Number of confirmed unspent outputs");
             this.lblAddressConfirmedUnspentOutputs.Visible = false;
             // 
             // lblAddressConfirmedSpentOutputs
@@ -6586,6 +6732,7 @@
             this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(60, 16);
             this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputs, "Number of confirmed spent outputs");
             this.lblAddressConfirmedSpentOutputs.Visible = false;
             // 
             // lblAddressConfirmedReceivedOutputs
@@ -6597,6 +6744,7 @@
             this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(60, 16);
             this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
             this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedOutputs, "Number of confirmed received outputs");
             this.lblAddressConfirmedReceivedOutputs.Visible = false;
             // 
             // lblAddressConfirmedUnspent
@@ -6609,6 +6757,7 @@
             this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedUnspent.TabIndex = 129;
             this.lblAddressConfirmedUnspent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspent, "Confirmed amount of unspent bitcoin");
             this.lblAddressConfirmedUnspent.Visible = false;
             // 
             // lblAddressConfirmedSpent
@@ -6621,6 +6770,7 @@
             this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedSpent.TabIndex = 127;
             this.lblAddressConfirmedSpent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpent, "Confirmed amount of spent bitcoin");
             this.lblAddressConfirmedSpent.Visible = false;
             // 
             // lblAddressConfirmedReceived
@@ -6633,6 +6783,7 @@
             this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedReceived.TabIndex = 125;
             this.lblAddressConfirmedReceived.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceived, "Confirmed amount of received bitcoin");
             this.lblAddressConfirmedReceived.Visible = false;
             // 
             // lblAddressConfirmedTransactionCount
@@ -6645,6 +6796,7 @@
             this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(61, 17);
             this.lblAddressConfirmedTransactionCount.TabIndex = 117;
             this.lblAddressConfirmedTransactionCount.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedTransactionCount, "Number of confirmed transactions");
             this.lblAddressConfirmedTransactionCount.Visible = false;
             // 
             // pictureBoxLoadingAnimation
@@ -6950,6 +7102,7 @@
             this.label64.Size = new System.Drawing.Size(36, 17);
             this.label64.TabIndex = 9;
             this.label64.Text = "Hash";
+            this.toolTipGeneralUse.SetToolTip(this.label64, "The SHA256 hash of this block");
             // 
             // lblBlockHash
             // 
@@ -6960,6 +7113,7 @@
             this.lblBlockHash.Size = new System.Drawing.Size(55, 17);
             this.lblBlockHash.TabIndex = 8;
             this.lblBlockHash.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockHash, "The SHA256 hash of this block");
             // 
             // lblTotalFeesFiat
             // 
@@ -6984,6 +7138,7 @@
             this.label71.Size = new System.Drawing.Size(79, 17);
             this.label71.TabIndex = 249;
             this.label71.Text = "Miner / pool";
+            this.toolTipGeneralUse.SetToolTip(this.label71, "The miner or pool that mined this block");
             // 
             // lblBlockTXPositionInList
             // 
@@ -6997,6 +7152,7 @@
             this.lblBlockTXPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblBlockTXPositionInList.TabIndex = 157;
             this.lblBlockTXPositionInList.Text = "Transactions n-n of n";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockTXPositionInList, "Transactions currently being viewed");
             // 
             // btnPreviousBlockTransactions
             // 
@@ -7019,6 +7175,7 @@
             this.btnPreviousBlockTransactions.TabStop = false;
             this.btnPreviousBlockTransactions.Text = "◁ prev transactions";
             this.btnPreviousBlockTransactions.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnPreviousBlockTransactions, "Previous transactions");
             this.btnPreviousBlockTransactions.UseVisualStyleBackColor = false;
             this.btnPreviousBlockTransactions.Click += new System.EventHandler(this.BtnPreviousBlockTransactions_Click);
             // 
@@ -7033,6 +7190,7 @@
             this.label62.Size = new System.Drawing.Size(48, 17);
             this.label62.TabIndex = 248;
             this.label62.Text = "Nonce";
+            this.toolTipGeneralUse.SetToolTip(this.label62, "The nonce (\"number used once\") for this block");
             // 
             // btnNextBlockTransactions
             // 
@@ -7054,6 +7212,7 @@
             this.btnNextBlockTransactions.TabStop = false;
             this.btnNextBlockTransactions.Text = "next transactions ▷";
             this.btnNextBlockTransactions.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnNextBlockTransactions, "Next transactions");
             this.btnNextBlockTransactions.UseVisualStyleBackColor = false;
             this.btnNextBlockTransactions.Click += new System.EventHandler(this.BtnNextBlockTransactions_Click);
             // 
@@ -7068,6 +7227,7 @@
             this.label65.Size = new System.Drawing.Size(119, 17);
             this.label65.TabIndex = 247;
             this.label65.Text = "Average fee (sats)";
+            this.toolTipGeneralUse.SetToolTip(this.label65, "Average fee included in this block");
             // 
             // panel105
             // 
@@ -7157,6 +7317,7 @@
             this.lblNonce.Size = new System.Drawing.Size(61, 17);
             this.lblNonce.TabIndex = 168;
             this.lblNonce.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblNonce, "The nonce (\"number used once\") for this block");
             // 
             // label70
             // 
@@ -7169,6 +7330,7 @@
             this.label70.Size = new System.Drawing.Size(179, 17);
             this.label70.TabIndex = 246;
             this.label70.Text = "Fee range / median (sat/vB)";
+            this.toolTipGeneralUse.SetToolTip(this.label70, "Minimum, maximum and median fees included in this block");
             // 
             // lblTotalFees
             // 
@@ -7180,6 +7342,7 @@
             this.lblTotalFees.Size = new System.Drawing.Size(15, 17);
             this.lblTotalFees.TabIndex = 166;
             this.lblTotalFees.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblTotalFees, "Total fees included in this block");
             // 
             // lblBlockTime
             // 
@@ -7191,6 +7354,7 @@
             this.lblBlockTime.Size = new System.Drawing.Size(61, 17);
             this.lblBlockTime.TabIndex = 152;
             this.lblBlockTime.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockTime, "The date and time that this block was mined");
             // 
             // label66
             // 
@@ -7203,6 +7367,7 @@
             this.label66.Size = new System.Drawing.Size(146, 17);
             this.label66.TabIndex = 245;
             this.label66.Text = "Reward (subsidy + fees)";
+            this.toolTipGeneralUse.SetToolTip(this.label66, "Total reward (fees + subsidy) for this block");
             // 
             // lblBlockFeeRangeAndMedianFee
             // 
@@ -7214,6 +7379,7 @@
             this.lblBlockFeeRangeAndMedianFee.Size = new System.Drawing.Size(61, 17);
             this.lblBlockFeeRangeAndMedianFee.TabIndex = 150;
             this.lblBlockFeeRangeAndMedianFee.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockFeeRangeAndMedianFee, "Minimum, maximum and median fees included in this block");
             // 
             // lblMiner
             // 
@@ -7225,6 +7391,7 @@
             this.lblMiner.Size = new System.Drawing.Size(61, 17);
             this.lblMiner.TabIndex = 148;
             this.lblMiner.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblMiner, "The miner or pool that mined this block");
             // 
             // label72
             // 
@@ -7237,6 +7404,7 @@
             this.label72.Size = new System.Drawing.Size(65, 17);
             this.label72.TabIndex = 244;
             this.label72.Text = "Total fees";
+            this.toolTipGeneralUse.SetToolTip(this.label72, "Total fees included in this block");
             // 
             // lblBlockAverageFee
             // 
@@ -7248,6 +7416,7 @@
             this.lblBlockAverageFee.Size = new System.Drawing.Size(61, 17);
             this.lblBlockAverageFee.TabIndex = 144;
             this.lblBlockAverageFee.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockAverageFee, "Average fee included in this block");
             // 
             // lblNumberOfTXInBlock
             // 
@@ -7259,6 +7428,7 @@
             this.lblNumberOfTXInBlock.Size = new System.Drawing.Size(61, 17);
             this.lblNumberOfTXInBlock.TabIndex = 142;
             this.lblNumberOfTXInBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblNumberOfTXInBlock, "Total number of transactions in this block");
             // 
             // label74
             // 
@@ -7271,6 +7441,7 @@
             this.label74.Size = new System.Drawing.Size(128, 17);
             this.label74.TabIndex = 243;
             this.label74.Text = "Block weight (MWU)";
+            this.toolTipGeneralUse.SetToolTip(this.label74, "The weight of this block (MWU - Million Weight Units)");
             // 
             // lblReward
             // 
@@ -7282,6 +7453,7 @@
             this.lblReward.Size = new System.Drawing.Size(15, 17);
             this.lblReward.TabIndex = 140;
             this.lblReward.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblReward, "Total reward (fees + subsidy) for this block");
             // 
             // lblBlockWeight
             // 
@@ -7293,6 +7465,7 @@
             this.lblBlockWeight.Size = new System.Drawing.Size(61, 17);
             this.lblBlockWeight.TabIndex = 138;
             this.lblBlockWeight.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockWeight, "The weight of this block (MWU - Million Weight Units)");
             // 
             // label68
             // 
@@ -7305,6 +7478,7 @@
             this.label68.Size = new System.Drawing.Size(64, 17);
             this.label68.TabIndex = 242;
             this.label68.Text = "Block size";
+            this.toolTipGeneralUse.SetToolTip(this.label68, "The size of this block in MB");
             // 
             // lblSizeOfBlock
             // 
@@ -7316,6 +7490,7 @@
             this.lblSizeOfBlock.Size = new System.Drawing.Size(61, 17);
             this.lblSizeOfBlock.TabIndex = 136;
             this.lblSizeOfBlock.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblSizeOfBlock, "The size of this block in MB");
             // 
             // label69
             // 
@@ -7328,6 +7503,7 @@
             this.label69.Size = new System.Drawing.Size(114, 17);
             this.label69.TabIndex = 241;
             this.label69.Text = "Transaction count";
+            this.toolTipGeneralUse.SetToolTip(this.label69, "Total number of transactions in this block");
             // 
             // label145
             // 
@@ -7340,6 +7516,7 @@
             this.label145.Size = new System.Drawing.Size(70, 17);
             this.label145.TabIndex = 211;
             this.label145.Text = "Block time";
+            this.toolTipGeneralUse.SetToolTip(this.label145, "The date and time that this block was mined");
             // 
             // lblSatsumaTitle
             // 
@@ -7782,6 +7959,7 @@
             this.lblTransactionConfirmations.Size = new System.Drawing.Size(52, 16);
             this.lblTransactionConfirmations.TabIndex = 171;
             this.lblTransactionConfirmations.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionConfirmations, "Number of confirmations");
             // 
             // label125
             // 
@@ -7794,6 +7972,7 @@
             this.label125.Size = new System.Drawing.Size(83, 16);
             this.label125.TabIndex = 170;
             this.label125.Text = "Confirmations";
+            this.toolTipGeneralUse.SetToolTip(this.label125, "Number of confirmations");
             // 
             // label113
             // 
@@ -7806,6 +7985,7 @@
             this.label113.Size = new System.Drawing.Size(103, 16);
             this.label113.TabIndex = 153;
             this.label113.Text = "Included in block";
+            this.toolTipGeneralUse.SetToolTip(this.label113, "Block number that contains this transaction");
             // 
             // label98
             // 
@@ -7818,6 +7998,7 @@
             this.label98.Size = new System.Drawing.Size(47, 16);
             this.label98.TabIndex = 169;
             this.label98.Text = "Version";
+            this.toolTipGeneralUse.SetToolTip(this.label98, "Transaction version");
             // 
             // lblTransactionVersion
             // 
@@ -7829,6 +8010,7 @@
             this.lblTransactionVersion.Size = new System.Drawing.Size(52, 16);
             this.lblTransactionVersion.TabIndex = 168;
             this.lblTransactionVersion.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionVersion, "Transaction version");
             // 
             // lblTransactionBlockHeight
             // 
@@ -7840,6 +8022,7 @@
             this.lblTransactionBlockHeight.Size = new System.Drawing.Size(52, 16);
             this.lblTransactionBlockHeight.TabIndex = 152;
             this.lblTransactionBlockHeight.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionBlockHeight, "Block number that contains this transaction");
             // 
             // label126
             // 
@@ -7852,6 +8035,7 @@
             this.label126.Size = new System.Drawing.Size(63, 16);
             this.label126.TabIndex = 143;
             this.label126.Text = "Block time";
+            this.toolTipGeneralUse.SetToolTip(this.label126, "Date & time the containing block was mined");
             // 
             // lblTransactionBlockTime
             // 
@@ -7863,6 +8047,7 @@
             this.lblTransactionBlockTime.Size = new System.Drawing.Size(52, 16);
             this.lblTransactionBlockTime.TabIndex = 142;
             this.lblTransactionBlockTime.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionBlockTime, "Date & time the containing block was mined");
             // 
             // label128
             // 
@@ -7874,7 +8059,8 @@
             this.label128.Name = "label128";
             this.label128.Size = new System.Drawing.Size(59, 16);
             this.label128.TabIndex = 141;
-            this.label128.Text = "Lock time";
+            this.label128.Text = "lock time";
+            this.toolTipGeneralUse.SetToolTip(this.label128, "Earliest time or block height the transaction can be added to the blockchain");
             // 
             // lblTransactionLockTime
             // 
@@ -7883,9 +8069,10 @@
             this.lblTransactionLockTime.Font = new System.Drawing.Font("Century Gothic", 7.8F);
             this.lblTransactionLockTime.Location = new System.Drawing.Point(526, 1);
             this.lblTransactionLockTime.Name = "lblTransactionLockTime";
-            this.lblTransactionLockTime.Size = new System.Drawing.Size(52, 16);
+            this.lblTransactionLockTime.Size = new System.Drawing.Size(54, 16);
             this.lblTransactionLockTime.TabIndex = 140;
-            this.lblTransactionLockTime.Text = "no data";
+            this.lblTransactionLockTime.Text = "lock time";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionLockTime, "Earliest time or block height the transaction can be added to the blockchain");
             // 
             // panelTransactionDiagram
             // 
@@ -7954,6 +8141,7 @@
             this.lblTotalOutputValue.Size = new System.Drawing.Size(13, 16);
             this.lblTotalOutputValue.TabIndex = 170;
             this.lblTotalOutputValue.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblTotalOutputValue, "Amount of bitcoin in transaction outputs");
             // 
             // lblTotalInputValue
             // 
@@ -7965,6 +8153,7 @@
             this.lblTotalInputValue.Size = new System.Drawing.Size(13, 16);
             this.lblTotalInputValue.TabIndex = 169;
             this.lblTotalInputValue.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblTotalInputValue, "Amount of bitcoin in transaction inputs");
             // 
             // lblCoinbase
             // 
@@ -7976,6 +8165,8 @@
             this.lblCoinbase.Size = new System.Drawing.Size(70, 16);
             this.lblCoinbase.TabIndex = 168;
             this.lblCoinbase.Text = "Is_coinbase";
+            this.toolTipGeneralUse.SetToolTip(this.lblCoinbase, "The coinbase transaction issues new bitcoin to the miner and has no inputs or fee" +
+        "s");
             // 
             // panelTransactionMiddle
             // 
@@ -8002,6 +8193,7 @@
             this.label132.TabIndex = 137;
             this.label132.Text = "size";
             this.label132.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTipGeneralUse.SetToolTip(this.label132, "Size of transaction in bytes");
             // 
             // label130
             // 
@@ -8015,6 +8207,7 @@
             this.label130.TabIndex = 139;
             this.label130.Text = "weight";
             this.label130.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTipGeneralUse.SetToolTip(this.label130, "Weight of the transaction (MWU - Million Weight Units)");
             // 
             // lblTransactionSize
             // 
@@ -8026,6 +8219,7 @@
             this.lblTransactionSize.TabIndex = 136;
             this.lblTransactionSize.Text = "no data";
             this.lblTransactionSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionSize, "Size of transaction in bytes");
             // 
             // lblTransactionWeight
             // 
@@ -8037,6 +8231,7 @@
             this.lblTransactionWeight.TabIndex = 138;
             this.lblTransactionWeight.Text = "no data";
             this.lblTransactionWeight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionWeight, "Weight of the transaction (MWU - Million Weight Units)");
             // 
             // lblTransactionFee
             // 
@@ -8048,6 +8243,7 @@
             this.lblTransactionFee.Size = new System.Drawing.Size(13, 16);
             this.lblTransactionFee.TabIndex = 166;
             this.lblTransactionFee.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionFee, "Fee paid for this transaction");
             // 
             // label104
             // 
@@ -8060,6 +8256,7 @@
             this.label104.Size = new System.Drawing.Size(30, 16);
             this.label104.TabIndex = 167;
             this.label104.Text = "Fee";
+            this.toolTipGeneralUse.SetToolTip(this.label104, "Fee paid for this transaction");
             // 
             // lblTransactionInputCount
             // 
@@ -8071,6 +8268,7 @@
             this.lblTransactionInputCount.Size = new System.Drawing.Size(39, 16);
             this.lblTransactionInputCount.TabIndex = 150;
             this.lblTransactionInputCount.Text = "inputs";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionInputCount, "Number of inputs to this transaction");
             // 
             // lblTransactionOutputCount
             // 
@@ -8082,6 +8280,7 @@
             this.lblTransactionOutputCount.Size = new System.Drawing.Size(48, 16);
             this.lblTransactionOutputCount.TabIndex = 144;
             this.lblTransactionOutputCount.Text = "outputs";
+            this.toolTipGeneralUse.SetToolTip(this.lblTransactionOutputCount, "Number of outputs in this transaction");
             // 
             // label136
             // 
@@ -8271,6 +8470,7 @@
             this.progressBarCheckEachAddressType.Size = new System.Drawing.Size(68, 8);
             this.progressBarCheckEachAddressType.Step = 10;
             this.progressBarCheckEachAddressType.TabIndex = 277;
+            this.toolTipForLblHeaderPrice.SetToolTip(this.progressBarCheckEachAddressType, "Progress of scanning current derivation path");
             this.progressBarCheckEachAddressType.Value = 0;
             // 
             // progressBarCheckAllAddressTypes
@@ -8286,6 +8486,7 @@
             this.progressBarCheckAllAddressTypes.Size = new System.Drawing.Size(68, 8);
             this.progressBarCheckAllAddressTypes.Step = 10;
             this.progressBarCheckAllAddressTypes.TabIndex = 278;
+            this.toolTipForLblHeaderPrice.SetToolTip(this.progressBarCheckAllAddressTypes, "Progress of overall scan");
             this.progressBarCheckAllAddressTypes.Value = 0;
             // 
             // lblCheckEachAddressTypeCount
@@ -8298,6 +8499,7 @@
             this.lblCheckEachAddressTypeCount.Size = new System.Drawing.Size(13, 16);
             this.lblCheckEachAddressTypeCount.TabIndex = 279;
             this.lblCheckEachAddressTypeCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblCheckEachAddressTypeCount, "Progress of scanning current derivation path");
             // 
             // lblCheckAllAddressTypesCount
             // 
@@ -8309,6 +8511,7 @@
             this.lblCheckAllAddressTypesCount.Size = new System.Drawing.Size(13, 16);
             this.lblCheckAllAddressTypesCount.TabIndex = 280;
             this.lblCheckAllAddressTypesCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblCheckAllAddressTypesCount, "Progress of overall scan");
             // 
             // label141
             // 
@@ -8321,6 +8524,7 @@
             this.label141.Size = new System.Drawing.Size(100, 16);
             this.label141.TabIndex = 284;
             this.label141.Text = "overall progress";
+            this.toolTipGeneralUse.SetToolTip(this.label141, "Progress of overall scan");
             // 
             // label140
             // 
@@ -8334,6 +8538,7 @@
             this.label140.Size = new System.Drawing.Size(93, 16);
             this.label140.TabIndex = 259;
             this.label140.Text = "derivation path";
+            this.toolTipGeneralUse.SetToolTip(this.label140, "Progress of scanning current derivation path");
             // 
             // lblXpubConfirmedUnspentFiat
             // 
@@ -8479,6 +8684,7 @@
             this.lblXpubConfirmedReceived.Size = new System.Drawing.Size(13, 16);
             this.lblXpubConfirmedReceived.TabIndex = 267;
             this.lblXpubConfirmedReceived.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblXpubConfirmedReceived, "Total confirmed received");
             // 
             // label133
             // 
@@ -8491,6 +8697,7 @@
             this.label133.Size = new System.Drawing.Size(119, 16);
             this.label133.TabIndex = 268;
             this.label133.Text = "Confirmed received";
+            this.toolTipGeneralUse.SetToolTip(this.label133, "Total confirmed received");
             // 
             // lblP2SHUsedAddresses
             // 
@@ -8502,6 +8709,7 @@
             this.lblP2SHUsedAddresses.Size = new System.Drawing.Size(13, 16);
             this.lblP2SHUsedAddresses.TabIndex = 283;
             this.lblP2SHUsedAddresses.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblP2SHUsedAddresses, "Number of used addresses");
             // 
             // lblXpubConfirmedSpent
             // 
@@ -8513,6 +8721,7 @@
             this.lblXpubConfirmedSpent.Size = new System.Drawing.Size(13, 16);
             this.lblXpubConfirmedSpent.TabIndex = 269;
             this.lblXpubConfirmedSpent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblXpubConfirmedSpent, "Total confirmed spent");
             // 
             // label129
             // 
@@ -8525,6 +8734,7 @@
             this.label129.Size = new System.Drawing.Size(100, 16);
             this.label129.TabIndex = 270;
             this.label129.Text = "Confirmed spent";
+            this.toolTipGeneralUse.SetToolTip(this.label129, "Total confirmed spent");
             // 
             // label135
             // 
@@ -8574,6 +8784,7 @@
             this.lblXpubConfirmedUnspent.Size = new System.Drawing.Size(13, 16);
             this.lblXpubConfirmedUnspent.TabIndex = 272;
             this.lblXpubConfirmedUnspent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblXpubConfirmedUnspent, "Total confirmed unspent");
             // 
             // label121
             // 
@@ -8586,6 +8797,7 @@
             this.label121.Size = new System.Drawing.Size(172, 16);
             this.label121.TabIndex = 273;
             this.label121.Text = "Confirmed unspent (balance)";
+            this.toolTipGeneralUse.SetToolTip(this.label121, "Total confirmed unspent");
             // 
             // lblSegwitUsedAddresses
             // 
@@ -8597,6 +8809,7 @@
             this.lblSegwitUsedAddresses.Size = new System.Drawing.Size(13, 16);
             this.lblSegwitUsedAddresses.TabIndex = 274;
             this.lblSegwitUsedAddresses.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblSegwitUsedAddresses, "Number of used addresses");
             // 
             // lblSegwitP2SHUsedAddresses
             // 
@@ -8608,6 +8821,7 @@
             this.lblSegwitP2SHUsedAddresses.Size = new System.Drawing.Size(13, 16);
             this.lblSegwitP2SHUsedAddresses.TabIndex = 275;
             this.lblSegwitP2SHUsedAddresses.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblSegwitP2SHUsedAddresses, "Number of used addresses");
             // 
             // lblLegacyUsedAddresses
             // 
@@ -8619,6 +8833,7 @@
             this.lblLegacyUsedAddresses.Size = new System.Drawing.Size(13, 16);
             this.lblLegacyUsedAddresses.TabIndex = 276;
             this.lblLegacyUsedAddresses.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblLegacyUsedAddresses, "Number of used addresses");
             // 
             // panel99
             // 
@@ -8698,6 +8913,7 @@
             this.numberUpDownDerivationPathsToCheck.Size = new System.Drawing.Size(36, 18);
             this.numberUpDownDerivationPathsToCheck.TabIndex = 218;
             this.numberUpDownDerivationPathsToCheck.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTipGeneralUse.SetToolTip(this.numberUpDownDerivationPathsToCheck, "Number of derivation paths to check addresses for");
             this.numberUpDownDerivationPathsToCheck.Value = new decimal(new int[] {
             2,
             0,
@@ -8789,6 +9005,8 @@
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TabIndex = 241;
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TabStop = false;
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTipGeneralUse.SetToolTip(this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses, "SATSuma assumes all non-zero balance addresses have been\r\nfound after this many c" +
+        "onsecutive zero-balance addresses\r\n");
             this.numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = new decimal(new int[] {
             20,
             0,
@@ -8850,6 +9068,8 @@
             this.label238.Size = new System.Drawing.Size(267, 17);
             this.label238.TabIndex = 250;
             this.label238.Text = "Max consecutive unused addresses to scan";
+            this.toolTipGeneralUse.SetToolTip(this.label238, "SATSuma assumes all non-zero balance addresses have been\r\nfound after this many c" +
+        "onsecutive zero-balance addresses");
             // 
             // label114
             // 
@@ -8860,6 +9080,7 @@
             this.label114.Size = new System.Drawing.Size(68, 17);
             this.label114.TabIndex = 168;
             this.label114.Text = "Your node";
+            this.toolTipGeneralUse.SetToolTip(this.label114, "Path to mempool.space on your own full node");
             // 
             // panelXpubScreenOwnNodeURLContainer
             // 
@@ -8881,6 +9102,7 @@
             this.textBoxXpubScreenOwnNodeURL.Size = new System.Drawing.Size(248, 15);
             this.textBoxXpubScreenOwnNodeURL.TabIndex = 200;
             this.textBoxXpubScreenOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxXpubScreenOwnNodeURL, "Path to mempool.space on your own full node");
             this.textBoxXpubScreenOwnNodeURL.TextChanged += new System.EventHandler(this.TextBoxXpubScreenOwnNodeURL_TextChanged);
             this.textBoxXpubScreenOwnNodeURL.Enter += new System.EventHandler(this.TextBoxXpubScreenOwnNodeURL_Enter);
             this.textBoxXpubScreenOwnNodeURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxXpubScreenOwnNodeURL_KeyPress);
@@ -8964,6 +9186,7 @@
             this.label139.Size = new System.Drawing.Size(191, 17);
             this.label139.TabIndex = 237;
             this.label139.Text = "No. of derivation paths to scan";
+            this.toolTipGeneralUse.SetToolTip(this.label139, "Number of derivation paths to check addresses for");
             // 
             // panel101
             // 
@@ -9021,6 +9244,7 @@
             this.textBoxBookmarkEncryptionKey.TabIndex = 216;
             this.textBoxBookmarkEncryptionKey.TabStop = false;
             this.textBoxBookmarkEncryptionKey.Text = "optional encryption key";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxBookmarkEncryptionKey, "If you use a key to encrypt this bookmark there is no way to recover it");
             this.textBoxBookmarkEncryptionKey.TextChanged += new System.EventHandler(this.TextBoxBookmarkEncryptionKey_TextChanged);
             this.textBoxBookmarkEncryptionKey.Enter += new System.EventHandler(this.TextBoxBookmarkEncryptionKey_Enter);
             this.textBoxBookmarkEncryptionKey.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxBookmarkEncryptionKey_KeyPress);
@@ -9048,6 +9272,7 @@
             this.textBoxBookmarkProposedNote.TabIndex = 215;
             this.textBoxBookmarkProposedNote.TabStop = false;
             this.textBoxBookmarkProposedNote.Text = "optional notes";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxBookmarkProposedNote, "Optional bookmark note");
             this.textBoxBookmarkProposedNote.TextChanged += new System.EventHandler(this.TextBoxBookmarkProposedNote_TextChanged);
             this.textBoxBookmarkProposedNote.Enter += new System.EventHandler(this.TextBoxBookmarkProposedNote_Enter);
             this.textBoxBookmarkProposedNote.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxBookmarkProposedNote_KeyPress);
@@ -9422,6 +9647,7 @@
             this.textBoxBookmarkKey.Size = new System.Drawing.Size(190, 16);
             this.textBoxBookmarkKey.TabIndex = 217;
             this.textBoxBookmarkKey.Text = "enter key to unlock";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxBookmarkKey, "Enter key/password to unlock");
             this.textBoxBookmarkKey.Visible = false;
             this.textBoxBookmarkKey.TextChanged += new System.EventHandler(this.TextBoxBookmarkKey_TextChanged);
             this.textBoxBookmarkKey.Enter += new System.EventHandler(this.TextBoxBookmarkKey_Enter);
@@ -9447,6 +9673,7 @@
             this.btnDecryptBookmark.TabIndex = 228;
             this.btnDecryptBookmark.Text = "🔓";
             this.btnDecryptBookmark.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnDecryptBookmark, "Decrypt bookmark to make it readable");
             this.btnDecryptBookmark.UseVisualStyleBackColor = false;
             this.btnDecryptBookmark.Visible = false;
             this.btnDecryptBookmark.Click += new System.EventHandler(this.BtnDecryptBookmark_Click);
@@ -9484,6 +9711,7 @@
             this.btnBookmarkUnlock.TabIndex = 227;
             this.btnBookmarkUnlock.Text = "🔒 unlock";
             this.btnBookmarkUnlock.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnBookmarkUnlock, "Unlock selected encrypted bookmark");
             this.btnBookmarkUnlock.UseVisualStyleBackColor = false;
             this.btnBookmarkUnlock.Click += new System.EventHandler(this.BtnBookmarkUnlock_Click);
             // 
@@ -9507,6 +9735,7 @@
             this.btnDeleteBookmark.TabIndex = 226;
             this.btnDeleteBookmark.Text = "✖️ delete";
             this.btnDeleteBookmark.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnDeleteBookmark, "Delete selected bookmark");
             this.btnDeleteBookmark.UseVisualStyleBackColor = false;
             this.btnDeleteBookmark.Click += new System.EventHandler(this.BtnDeleteBoookmark_Click);
             // 
@@ -9530,6 +9759,7 @@
             this.btnViewBookmark.TabIndex = 225;
             this.btnViewBookmark.Text = "▶ view";
             this.btnViewBookmark.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnViewBookmark, "View bookmarked address, block, transaction or xpub");
             this.btnViewBookmark.UseVisualStyleBackColor = false;
             this.btnViewBookmark.Click += new System.EventHandler(this.BtnViewBookmark_Click);
             // 
@@ -9816,6 +10046,7 @@
             this.btnDeleteAllBookmarks.TabIndex = 254;
             this.btnDeleteAllBookmarks.Text = "✖️ delete all";
             this.btnDeleteAllBookmarks.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnDeleteAllBookmarks, "Make sure you\'ve backed them up, if required");
             this.btnDeleteAllBookmarks.UseVisualStyleBackColor = false;
             this.btnDeleteAllBookmarks.Click += new System.EventHandler(this.BtnDeleteAllBookmarks_Click);
             // 
@@ -9831,6 +10062,7 @@
             this.lblBookmarkTotalCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkTotalCount.TabIndex = 214;
             this.lblBookmarkTotalCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBookmarkTotalCount, "Number of saved bookmarks");
             // 
             // label144
             // 
@@ -9867,6 +10099,7 @@
             this.lblBookmarkBlocksCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkBlocksCount.TabIndex = 213;
             this.lblBookmarkBlocksCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBookmarkBlocksCount, "Number of bookmarked blocks");
             // 
             // label151
             // 
@@ -9890,6 +10123,7 @@
             this.lblBookmarkTransactionsCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkTransactionsCount.TabIndex = 212;
             this.lblBookmarkTransactionsCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBookmarkTransactionsCount, "Number of bookmarked transactions");
             // 
             // label147
             // 
@@ -9913,6 +10147,7 @@
             this.lblBookmarkAddressCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkAddressCount.TabIndex = 211;
             this.lblBookmarkAddressCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBookmarkAddressCount, "Number of bookmarked addresses");
             // 
             // lblBookmarkXpubsCount
             // 
@@ -9924,6 +10159,7 @@
             this.lblBookmarkXpubsCount.Size = new System.Drawing.Size(13, 16);
             this.lblBookmarkXpubsCount.TabIndex = 202;
             this.lblBookmarkXpubsCount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBookmarkXpubsCount, "Number of bookmarked xpubs");
             // 
             // label142
             // 
@@ -11352,6 +11588,7 @@
             this.btnColorLabels.TabStop = false;
             this.btnColorLabels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorLabels.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorLabels, "Select colour");
             this.btnColorLabels.UseVisualStyleBackColor = false;
             this.btnColorLabels.Click += new System.EventHandler(this.BtnColorLabels_Click);
             // 
@@ -11390,6 +11627,7 @@
             this.btnColorDataFields.TabStop = false;
             this.btnColorDataFields.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorDataFields.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorDataFields, "Select colour");
             this.btnColorDataFields.UseVisualStyleBackColor = false;
             this.btnColorDataFields.Click += new System.EventHandler(this.BtnColorDataFields_Click);
             // 
@@ -11479,6 +11717,7 @@
             this.btnColorHeadings.TabStop = false;
             this.btnColorHeadings.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorHeadings.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorHeadings, "Select colour");
             this.btnColorHeadings.UseVisualStyleBackColor = false;
             this.btnColorHeadings.Click += new System.EventHandler(this.BtnColorHeadings_Click);
             // 
@@ -11532,6 +11771,7 @@
             this.btnColorProgressBars.TabStop = false;
             this.btnColorProgressBars.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorProgressBars.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorProgressBars, "Select colour");
             this.btnColorProgressBars.UseVisualStyleBackColor = false;
             this.btnColorProgressBars.Click += new System.EventHandler(this.BtnColorProgressBars_Click);
             // 
@@ -11560,6 +11800,7 @@
             this.btnColorButtons.TabStop = false;
             this.btnColorButtons.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorButtons.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorButtons, "Select colour");
             this.btnColorButtons.UseVisualStyleBackColor = false;
             this.btnColorButtons.Click += new System.EventHandler(this.BtnColorButtons_Click);
             // 
@@ -11588,6 +11829,7 @@
             this.btnColorButtonText.TabStop = false;
             this.btnColorButtonText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorButtonText.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorButtonText, "Select colour");
             this.btnColorButtonText.UseVisualStyleBackColor = false;
             this.btnColorButtonText.Click += new System.EventHandler(this.BtnColorButtonText_Click);
             // 
@@ -12143,6 +12385,7 @@
             this.pictureBoxCustomImage.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxCustomImage.TabIndex = 283;
             this.pictureBoxCustomImage.TabStop = false;
+            this.toolTipGeneralUse.SetToolTip(this.pictureBoxCustomImage, "Select custom image");
             this.pictureBoxCustomImage.Click += new System.EventHandler(this.PictureBoxCustomImage_Click);
             // 
             // label204
@@ -12383,6 +12626,7 @@
             this.pictureBoxCustomColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxCustomColor.TabIndex = 265;
             this.pictureBoxCustomColor.TabStop = false;
+            this.toolTipGeneralUse.SetToolTip(this.pictureBoxCustomColor, "Select colour");
             this.pictureBoxCustomColor.Click += new System.EventHandler(this.PictureBoxCustomColor_Click);
             // 
             // label177
@@ -12434,9 +12678,9 @@
             this.panel90.Controls.Add(this.btnColorTableTitleBar);
             this.panel90.Controls.Add(this.panel66);
             this.panel90.Controls.Add(this.panel67);
-            this.panel90.Location = new System.Drawing.Point(0, 461);
+            this.panel90.Location = new System.Drawing.Point(0, 479);
             this.panel90.Name = "panel90";
-            this.panel90.Size = new System.Drawing.Size(236, 85);
+            this.panel90.Size = new System.Drawing.Size(236, 67);
             this.panel90.TabIndex = 300;
             // 
             // panel65
@@ -12483,7 +12727,7 @@
             this.btnColorTableBackground.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnColorTableBackground.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnColorTableBackground.ForeColor = System.Drawing.Color.White;
-            this.btnColorTableBackground.Location = new System.Drawing.Point(11, 58);
+            this.btnColorTableBackground.Location = new System.Drawing.Point(123, 33);
             this.btnColorTableBackground.Margin = new System.Windows.Forms.Padding(0);
             this.btnColorTableBackground.Name = "btnColorTableBackground";
             this.btnColorTableBackground.Size = new System.Drawing.Size(18, 18);
@@ -12491,6 +12735,7 @@
             this.btnColorTableBackground.TabStop = false;
             this.btnColorTableBackground.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorTableBackground.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorTableBackground, "Select colour");
             this.btnColorTableBackground.UseVisualStyleBackColor = false;
             this.btnColorTableBackground.Click += new System.EventHandler(this.BtnColorTableBackground_Click);
             // 
@@ -12519,6 +12764,7 @@
             this.btnColorTableTitleBar.TabStop = false;
             this.btnColorTableTitleBar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorTableTitleBar.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorTableTitleBar, "Select colour");
             this.btnColorTableTitleBar.UseVisualStyleBackColor = false;
             this.btnColorTableTitleBar.Click += new System.EventHandler(this.BtnColorTableTitleBar_Click);
             // 
@@ -12526,9 +12772,9 @@
             // 
             this.panel66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel66.Controls.Add(this.label186);
-            this.panel66.Location = new System.Drawing.Point(44, 59);
+            this.panel66.Location = new System.Drawing.Point(156, 34);
             this.panel66.Name = "panel66";
-            this.panel66.Size = new System.Drawing.Size(100, 20);
+            this.panel66.Size = new System.Drawing.Size(70, 20);
             this.panel66.TabIndex = 280;
             // 
             // label186
@@ -12548,7 +12794,7 @@
             this.panel67.Controls.Add(this.label188);
             this.panel67.Location = new System.Drawing.Point(44, 34);
             this.panel67.Name = "panel67";
-            this.panel67.Size = new System.Drawing.Size(100, 20);
+            this.panel67.Size = new System.Drawing.Size(70, 20);
             this.panel67.TabIndex = 281;
             // 
             // label188
@@ -12565,6 +12811,10 @@
             // panel89
             // 
             this.panel89.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel89.Controls.Add(this.label222);
+            this.panel89.Controls.Add(this.label221);
+            this.panel89.Controls.Add(this.lblDashedProgressBars);
+            this.panel89.Controls.Add(this.lblSolidProgressBars);
             this.panel89.Controls.Add(this.panelAppearanceTextbox1Container);
             this.panel89.Controls.Add(this.panel60);
             this.panel89.Controls.Add(this.colorProgressBar1);
@@ -12580,8 +12830,54 @@
             this.panel89.Controls.Add(this.btnColorTextBox);
             this.panel89.Location = new System.Drawing.Point(0, 294);
             this.panel89.Name = "panel89";
-            this.panel89.Size = new System.Drawing.Size(236, 160);
+            this.panel89.Size = new System.Drawing.Size(236, 178);
             this.panel89.TabIndex = 299;
+            // 
+            // label222
+            // 
+            this.label222.AutoSize = true;
+            this.label222.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label222.ForeColor = System.Drawing.Color.Silver;
+            this.label222.Location = new System.Drawing.Point(152, 156);
+            this.label222.Name = "label222";
+            this.label222.Size = new System.Drawing.Size(53, 17);
+            this.label222.TabIndex = 308;
+            this.label222.Text = "Dashed";
+            // 
+            // label221
+            // 
+            this.label221.AutoSize = true;
+            this.label221.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label221.ForeColor = System.Drawing.Color.Silver;
+            this.label221.Location = new System.Drawing.Point(44, 156);
+            this.label221.Name = "label221";
+            this.label221.Size = new System.Drawing.Size(37, 17);
+            this.label221.TabIndex = 307;
+            this.label221.Text = "Solid";
+            // 
+            // lblDashedProgressBars
+            // 
+            this.lblDashedProgressBars.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblDashedProgressBars.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblDashedProgressBars.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblDashedProgressBars.Location = new System.Drawing.Point(119, 158);
+            this.lblDashedProgressBars.Name = "lblDashedProgressBars";
+            this.lblDashedProgressBars.Size = new System.Drawing.Size(19, 14);
+            this.lblDashedProgressBars.TabIndex = 306;
+            this.lblDashedProgressBars.Text = "❌";
+            this.lblDashedProgressBars.Click += new System.EventHandler(this.StyleProgressBars_Click);
+            // 
+            // lblSolidProgressBars
+            // 
+            this.lblSolidProgressBars.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblSolidProgressBars.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblSolidProgressBars.ForeColor = System.Drawing.Color.Green;
+            this.lblSolidProgressBars.Location = new System.Drawing.Point(11, 158);
+            this.lblSolidProgressBars.Name = "lblSolidProgressBars";
+            this.lblSolidProgressBars.Size = new System.Drawing.Size(19, 14);
+            this.lblSolidProgressBars.TabIndex = 304;
+            this.lblSolidProgressBars.Text = "✔️";
+            this.lblSolidProgressBars.Click += new System.EventHandler(this.StyleProgressBars_Click);
             // 
             // panelAppearanceTextbox1Container
             // 
@@ -12700,6 +12996,7 @@
             this.btnColorPanels.TabStop = false;
             this.btnColorPanels.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorPanels.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorPanels, "Select colour");
             this.btnColorPanels.UseVisualStyleBackColor = false;
             this.btnColorPanels.Click += new System.EventHandler(this.BtnColorPanels_Click);
             // 
@@ -12747,6 +13044,7 @@
             this.btnColorLines.TabStop = false;
             this.btnColorLines.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorLines.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorLines, "Select colour");
             this.btnColorLines.UseVisualStyleBackColor = false;
             this.btnColorLines.Click += new System.EventHandler(this.BtnColorLines_Click);
             // 
@@ -12775,6 +13073,7 @@
             this.btnColorTextBox.TabStop = false;
             this.btnColorTextBox.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorTextBox.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorTextBox, "Select colour");
             this.btnColorTextBox.UseVisualStyleBackColor = false;
             this.btnColorTextBox.Click += new System.EventHandler(this.BtnColorTextBox_Click);
             // 
@@ -12842,6 +13141,7 @@
             this.btnColorFiatConversionText.TabStop = false;
             this.btnColorFiatConversionText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorFiatConversionText.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorFiatConversionText, "Select colour");
             this.btnColorFiatConversionText.UseVisualStyleBackColor = false;
             this.btnColorFiatConversionText.Click += new System.EventHandler(this.BtnColorFiatConversionText_Click);
             // 
@@ -12870,6 +13170,7 @@
             this.btnColorStatusError.TabStop = false;
             this.btnColorStatusError.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorStatusError.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorStatusError, "Select colour");
             this.btnColorStatusError.UseVisualStyleBackColor = false;
             this.btnColorStatusError.Click += new System.EventHandler(this.BtnColorStatusError_Click);
             // 
@@ -12908,6 +13209,7 @@
             this.btnColorPriceBlock.TabStop = false;
             this.btnColorPriceBlock.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorPriceBlock.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorPriceBlock, "Select colour");
             this.btnColorPriceBlock.UseVisualStyleBackColor = false;
             this.btnColorPriceBlock.Click += new System.EventHandler(this.BtnColorPriceBlock_Click);
             // 
@@ -12936,6 +13238,7 @@
             this.btnListViewHeadingColor.TabStop = false;
             this.btnListViewHeadingColor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnListViewHeadingColor.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnListViewHeadingColor, "Select colour");
             this.btnListViewHeadingColor.UseVisualStyleBackColor = false;
             this.btnListViewHeadingColor.Click += new System.EventHandler(this.BtnListViewHeadingColor_Click);
             // 
@@ -12994,6 +13297,7 @@
             this.btnColorOtherText.TabStop = false;
             this.btnColorOtherText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorOtherText.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorOtherText, "Select colour");
             this.btnColorOtherText.UseVisualStyleBackColor = false;
             this.btnColorOtherText.Click += new System.EventHandler(this.BtnColorOtherText_Click);
             // 
@@ -13032,6 +13336,7 @@
             this.btnColorTableText.TabStop = false;
             this.btnColorTableText.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorTableText.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorTableText, "Select colour");
             this.btnColorTableText.UseVisualStyleBackColor = false;
             this.btnColorTableText.Click += new System.EventHandler(this.BtnColorTableText_Click);
             // 
@@ -13202,6 +13507,7 @@
             this.btnColorTitleBackgrounds.TabStop = false;
             this.btnColorTitleBackgrounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnColorTitleBackgrounds.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnColorTitleBackgrounds, "Select colour");
             this.btnColorTitleBackgrounds.UseVisualStyleBackColor = false;
             this.btnColorTitleBackgrounds.Click += new System.EventHandler(this.BtnColorTitleBackgrounds_Click);
             // 
@@ -13383,6 +13689,7 @@
             // 
             // label195
             // 
+            this.label195.AutoSize = true;
             this.label195.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label195.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label195.ForeColor = System.Drawing.Color.Gray;
@@ -13390,9 +13697,9 @@
             this.label195.Location = new System.Drawing.Point(5, 2);
             this.label195.Margin = new System.Windows.Forms.Padding(0);
             this.label195.Name = "label195";
-            this.label195.Size = new System.Drawing.Size(185, 17);
+            this.label195.Size = new System.Drawing.Size(378, 17);
             this.label195.TabIndex = 153;
-            this.label195.Text = "Load or delete custom theme";
+            this.label195.Text = "Load or delete custom theme (select presets from main menu)";
             this.label195.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblThemeDeleted
@@ -13439,7 +13746,7 @@
             this.btnLoadTheme.Size = new System.Drawing.Size(91, 24);
             this.btnLoadTheme.TabIndex = 161;
             this.btnLoadTheme.TabStop = false;
-            this.btnLoadTheme.Text = "open";
+            this.btnLoadTheme.Text = "apply";
             this.btnLoadTheme.TextColor = System.Drawing.Color.White;
             this.btnLoadTheme.UseVisualStyleBackColor = false;
             this.btnLoadTheme.Click += new System.EventHandler(this.BtnLoadTheme_Click);
@@ -13686,6 +13993,7 @@
             this.btnChartDifficultyLog.TabStop = false;
             this.btnChartDifficultyLog.Text = "log";
             this.btnChartDifficultyLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLog, "Logarithmic scale chart");
             this.btnChartDifficultyLog.UseVisualStyleBackColor = false;
             this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_Click);
             // 
@@ -13710,6 +14018,7 @@
             this.btnChartDifficultyLinear.TabStop = false;
             this.btnChartDifficultyLinear.Text = "lin";
             this.btnChartDifficultyLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLinear, "Linear scale chart");
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
             this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
             // 
@@ -13744,6 +14053,7 @@
             this.btnHashrateScaleLog.TabStop = false;
             this.btnHashrateScaleLog.Text = "log";
             this.btnHashrateScaleLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLog, "Logarithmic scale chart");
             this.btnHashrateScaleLog.UseVisualStyleBackColor = false;
             this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_Click);
             // 
@@ -13768,6 +14078,7 @@
             this.btnHashrateScaleLinear.TabStop = false;
             this.btnHashrateScaleLinear.Text = "lin";
             this.btnHashrateScaleLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLinear, "Linear scale chart");
             this.btnHashrateScaleLinear.UseVisualStyleBackColor = false;
             this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
@@ -13803,6 +14114,7 @@
             this.btnChartMarketCapScaleLog.TabStop = false;
             this.btnChartMarketCapScaleLog.Text = "log";
             this.btnChartMarketCapScaleLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLog, "Logarithmic scale chart");
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
             this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_Click);
             // 
@@ -13827,6 +14139,7 @@
             this.btnChartMarketCapScaleLinear.TabStop = false;
             this.btnChartMarketCapScaleLinear.Text = "lin";
             this.btnChartMarketCapScaleLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLinear, "Linear scale chart");
             this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
             this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
             // 
@@ -13851,6 +14164,9 @@
             this.btnChartMarketCap.TabStop = false;
             this.btnChartMarketCap.Text = "market cap.";
             this.btnChartMarketCap.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCap, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartMarketCap.UseVisualStyleBackColor = false;
             this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
             // 
@@ -13923,6 +14239,9 @@
             this.btnChartLightningChannels.TabStop = false;
             this.btnChartLightningChannels.Text = "channels";
             this.btnChartLightningChannels.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningChannels, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartLightningChannels.UseVisualStyleBackColor = false;
             this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_Click);
             // 
@@ -13947,6 +14266,9 @@
             this.btnChartLightningCapacity.TabStop = false;
             this.btnChartLightningCapacity.Text = "capacity";
             this.btnChartLightningCapacity.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningCapacity, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
             this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_Click);
             // 
@@ -14057,6 +14379,7 @@
             this.btnPriceChartScaleLog.TabStop = false;
             this.btnPriceChartScaleLog.Text = "log";
             this.btnPriceChartScaleLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLog, "Logarithmic scale chart");
             this.btnPriceChartScaleLog.UseVisualStyleBackColor = false;
             this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnChartPriceLog_Click);
             // 
@@ -14081,6 +14404,7 @@
             this.btnPriceChartScaleLinear.TabStop = false;
             this.btnPriceChartScaleLinear.Text = "lin";
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLinear, "Linear scale chart");
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
             this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_Click);
             // 
@@ -14131,6 +14455,9 @@
             this.btnChartNodesByNetwork.TabStop = false;
             this.btnChartNodesByNetwork.Text = "networks";
             this.btnChartNodesByNetwork.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartNodesByNetwork, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
             this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_Click);
             // 
@@ -14189,6 +14516,7 @@
             this.btnChartUTXOScaleLog.TabStop = false;
             this.btnChartUTXOScaleLog.Text = "log";
             this.btnChartUTXOScaleLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLog, "Logarithmic scale chart");
             this.btnChartUTXOScaleLog.UseVisualStyleBackColor = false;
             this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_Click);
             // 
@@ -14213,6 +14541,7 @@
             this.btnChartUTXOScaleLinear.TabStop = false;
             this.btnChartUTXOScaleLinear.Text = "lin";
             this.btnChartUTXOScaleLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLinear, "Linear scale chart");
             this.btnChartUTXOScaleLinear.UseVisualStyleBackColor = false;
             this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXO_Click);
             // 
@@ -14237,6 +14566,9 @@
             this.btnChartUTXO.TabStop = false;
             this.btnChartUTXO.Text = "UTXO\'s";
             this.btnChartUTXO.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXO, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartUTXO.UseVisualStyleBackColor = false;
             this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_Click);
             // 
@@ -14272,6 +14604,7 @@
             this.btnChartAddressScaleLog.Text = "log";
             this.btnChartAddressScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartAddressScaleLog.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLog, "Logarithmic scale chart");
             this.btnChartAddressScaleLog.UseVisualStyleBackColor = false;
             this.btnChartAddressScaleLog.Click += new System.EventHandler(this.BtnChartUniqueAddressesLog_Click);
             // 
@@ -14297,6 +14630,7 @@
             this.btnChartAddressScaleLinear.Text = "lin";
             this.btnChartAddressScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartAddressScaleLinear.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLinear, "Linear scale chart");
             this.btnChartAddressScaleLinear.UseVisualStyleBackColor = false;
             this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
             // 
@@ -14321,6 +14655,9 @@
             this.btnChartUniqueAddresses.TabStop = false;
             this.btnChartUniqueAddresses.Text = "addresses";
             this.btnChartUniqueAddresses.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUniqueAddresses, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
             this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
             // 
@@ -14372,6 +14709,9 @@
             this.btnChartBlockSize.TabStop = false;
             this.btnChartBlockSize.Text = "block size";
             this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockSize, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartBlockSize.UseVisualStyleBackColor = false;
             this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_Click);
             // 
@@ -14396,6 +14736,9 @@
             this.btnChartCirculation.TabStop = false;
             this.btnChartCirculation.Text = "circulation";
             this.btnChartCirculation.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartCirculation, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartCirculation.UseVisualStyleBackColor = false;
             this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_Click);
             // 
@@ -14420,6 +14763,9 @@
             this.btnChartFeeRates.TabStop = false;
             this.btnChartFeeRates.Text = "fee rates";
             this.btnChartFeeRates.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartFeeRates, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartFeeRates.UseVisualStyleBackColor = false;
             this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_Click);
             // 
@@ -14444,6 +14790,7 @@
             this.btnChartPeriodAll.TabStop = false;
             this.btnChartPeriodAll.Text = "all";
             this.btnChartPeriodAll.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriodAll, "All available history");
             this.btnChartPeriodAll.UseVisualStyleBackColor = false;
             this.btnChartPeriodAll.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14468,6 +14815,7 @@
             this.btnChartPeriod3y.TabStop = false;
             this.btnChartPeriod3y.Text = "3y";
             this.btnChartPeriod3y.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3y, "3 years");
             this.btnChartPeriod3y.UseVisualStyleBackColor = false;
             this.btnChartPeriod3y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14492,6 +14840,7 @@
             this.btnChartPeriod2y.TabStop = false;
             this.btnChartPeriod2y.Text = "2y";
             this.btnChartPeriod2y.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod2y, "2 years");
             this.btnChartPeriod2y.UseVisualStyleBackColor = false;
             this.btnChartPeriod2y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14516,6 +14865,7 @@
             this.btnChartPeriod1y.TabStop = false;
             this.btnChartPeriod1y.Text = "1y";
             this.btnChartPeriod1y.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1y, "1 year");
             this.btnChartPeriod1y.UseVisualStyleBackColor = false;
             this.btnChartPeriod1y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14540,6 +14890,7 @@
             this.btnChartPeriod6m.TabStop = false;
             this.btnChartPeriod6m.Text = "6m";
             this.btnChartPeriod6m.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod6m, "6 months");
             this.btnChartPeriod6m.UseVisualStyleBackColor = false;
             this.btnChartPeriod6m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14564,6 +14915,7 @@
             this.btnChartPeriod3m.TabStop = false;
             this.btnChartPeriod3m.Text = "3m";
             this.btnChartPeriod3m.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3m, "3 months");
             this.btnChartPeriod3m.UseVisualStyleBackColor = false;
             this.btnChartPeriod3m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14588,6 +14940,7 @@
             this.btnChartPeriod1m.TabStop = false;
             this.btnChartPeriod1m.Text = "1m";
             this.btnChartPeriod1m.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1m, "1 month");
             this.btnChartPeriod1m.UseVisualStyleBackColor = false;
             this.btnChartPeriod1m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14612,6 +14965,7 @@
             this.btnChartPeriod1w.TabStop = false;
             this.btnChartPeriod1w.Text = "1w";
             this.btnChartPeriod1w.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1w, "1 week");
             this.btnChartPeriod1w.UseVisualStyleBackColor = false;
             this.btnChartPeriod1w.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14636,6 +14990,7 @@
             this.btnChartPeriod3d.TabStop = false;
             this.btnChartPeriod3d.Text = "3d";
             this.btnChartPeriod3d.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3d, "3 days");
             this.btnChartPeriod3d.UseVisualStyleBackColor = false;
             this.btnChartPeriod3d.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14660,6 +15015,7 @@
             this.btnChartPeriod24h.TabStop = false;
             this.btnChartPeriod24h.Text = "24h";
             this.btnChartPeriod24h.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod24h, "24 hours");
             this.btnChartPeriod24h.UseVisualStyleBackColor = false;
             this.btnChartPeriod24h.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
@@ -14684,6 +15040,9 @@
             this.btnChartBlockFees.TabStop = false;
             this.btnChartBlockFees.Text = "block fees";
             this.btnChartBlockFees.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockFees, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartBlockFees.UseVisualStyleBackColor = false;
             this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_Click);
             // 
@@ -14708,6 +15067,9 @@
             this.btnChartReward.TabStop = false;
             this.btnChartReward.Text = "block reward";
             this.btnChartReward.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartReward, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartReward.UseVisualStyleBackColor = false;
             this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_Click);
             // 
@@ -14732,6 +15094,9 @@
             this.btnChartPrice.TabStop = false;
             this.btnChartPrice.Text = "price";
             this.btnChartPrice.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPrice, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartPrice.UseVisualStyleBackColor = false;
             this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_Click);
             // 
@@ -14756,6 +15121,9 @@
             this.btnChartDifficulty.TabStop = false;
             this.btnChartDifficulty.Text = "difficulty";
             this.btnChartDifficulty.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficulty, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartDifficulty.UseVisualStyleBackColor = false;
             this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
             // 
@@ -14780,6 +15148,9 @@
             this.btnChartHashrate.TabStop = false;
             this.btnChartHashrate.Text = "hashrate";
             this.btnChartHashrate.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnChartHashrate, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.");
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
@@ -14864,6 +15235,7 @@
             this.textBoxConvertXAUtoBTC.TabIndex = 312;
             this.textBoxConvertXAUtoBTC.TabStop = false;
             this.textBoxConvertXAUtoBTC.Text = "1.00";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxConvertXAUtoBTC, "Amount of XAU to value in bitcoin");
             this.textBoxConvertXAUtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
             this.textBoxConvertXAUtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertXAUtoBTC.Leave += new System.EventHandler(this.TextBoxConvertXAUtoBTC_Leave);
@@ -14917,6 +15289,7 @@
             this.textBoxConvertGBPtoBTC.TabIndex = 311;
             this.textBoxConvertGBPtoBTC.TabStop = false;
             this.textBoxConvertGBPtoBTC.Text = "1.00";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxConvertGBPtoBTC, "Amount of GBP to value in bitcoin");
             this.textBoxConvertGBPtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
             this.textBoxConvertGBPtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertGBPtoBTC.Leave += new System.EventHandler(this.TextBoxConvertGBPtoBTC_Leave);
@@ -14957,6 +15330,7 @@
             this.textBoxConvertEURtoBTC.TabIndex = 310;
             this.textBoxConvertEURtoBTC.TabStop = false;
             this.textBoxConvertEURtoBTC.Text = "1.00";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxConvertEURtoBTC, "Amount of EUR to value in bitcoin");
             this.textBoxConvertEURtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
             this.textBoxConvertEURtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertEURtoBTC.Leave += new System.EventHandler(this.TextBoxConvertEURtoBTC_Leave);
@@ -14997,6 +15371,7 @@
             this.textBoxConvertUSDtoBTC.TabIndex = 309;
             this.textBoxConvertUSDtoBTC.TabStop = false;
             this.textBoxConvertUSDtoBTC.Text = "1.00";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxConvertUSDtoBTC, "Amount of USD to value in bitcoin");
             this.textBoxConvertUSDtoBTC.TextChanged += new System.EventHandler(this.FiatAmountTextBoxes_TextChanged);
             this.textBoxConvertUSDtoBTC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxConvertUSDtoBTC.Leave += new System.EventHandler(this.TextBoxConvertUSDtoBTC_Leave);
@@ -15039,6 +15414,7 @@
             this.lblCalculatedUSDFromBTCAmount.Size = new System.Drawing.Size(74, 17);
             this.lblCalculatedUSDFromBTCAmount.TabIndex = 319;
             this.lblCalculatedUSDFromBTCAmount.Text = "0.00000000";
+            this.toolTipGeneralUse.SetToolTip(this.lblCalculatedUSDFromBTCAmount, "Bitcoin value");
             // 
             // lblCalculatedEURFromBTCAmount
             // 
@@ -15052,6 +15428,7 @@
             this.lblCalculatedEURFromBTCAmount.Size = new System.Drawing.Size(74, 17);
             this.lblCalculatedEURFromBTCAmount.TabIndex = 317;
             this.lblCalculatedEURFromBTCAmount.Text = "0.00000000";
+            this.toolTipGeneralUse.SetToolTip(this.lblCalculatedEURFromBTCAmount, "Bitcoin value");
             // 
             // lblCalculatedGBPFromBTCAmount
             // 
@@ -15065,6 +15442,7 @@
             this.lblCalculatedGBPFromBTCAmount.Size = new System.Drawing.Size(74, 17);
             this.lblCalculatedGBPFromBTCAmount.TabIndex = 315;
             this.lblCalculatedGBPFromBTCAmount.Text = "0.00000000";
+            this.toolTipGeneralUse.SetToolTip(this.lblCalculatedGBPFromBTCAmount, "Bitcoin value");
             // 
             // lblCalculatedXAUFromBTCAmount
             // 
@@ -15078,6 +15456,7 @@
             this.lblCalculatedXAUFromBTCAmount.Size = new System.Drawing.Size(15, 17);
             this.lblCalculatedXAUFromBTCAmount.TabIndex = 313;
             this.lblCalculatedXAUFromBTCAmount.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblCalculatedXAUFromBTCAmount, "Bitcoin value");
             // 
             // label280
             // 
@@ -15605,6 +15984,7 @@
             this.labelPCXAUcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAUcustom.TabIndex = 299;
             this.labelPCXAUcustom.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAUcustom, "XAU value");
             // 
             // labelPCGBPcustom
             // 
@@ -15618,6 +15998,7 @@
             this.labelPCGBPcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBPcustom.TabIndex = 298;
             this.labelPCGBPcustom.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBPcustom, "GBP value");
             // 
             // labelPCEURcustom
             // 
@@ -15631,6 +16012,7 @@
             this.labelPCEURcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCEURcustom.TabIndex = 297;
             this.labelPCEURcustom.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEURcustom, "EUR value");
             // 
             // labelPCUSDcustom
             // 
@@ -15644,6 +16026,7 @@
             this.labelPCUSDcustom.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSDcustom.TabIndex = 296;
             this.labelPCUSDcustom.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSDcustom, "USD value");
             // 
             // labelPCXAU13
             // 
@@ -15657,6 +16040,7 @@
             this.labelPCXAU13.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU13.TabIndex = 294;
             this.labelPCXAU13.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU13, "XAU value");
             // 
             // labelPCXAU14
             // 
@@ -15670,6 +16054,7 @@
             this.labelPCXAU14.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU14.TabIndex = 293;
             this.labelPCXAU14.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU14, "XAU value");
             // 
             // labelPCXAU15
             // 
@@ -15683,6 +16068,7 @@
             this.labelPCXAU15.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU15.TabIndex = 292;
             this.labelPCXAU15.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU15, "XAU value");
             // 
             // labelPCXAU16
             // 
@@ -15696,6 +16082,7 @@
             this.labelPCXAU16.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU16.TabIndex = 291;
             this.labelPCXAU16.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU16, "XAU value");
             // 
             // labelPCXAU17
             // 
@@ -15709,6 +16096,7 @@
             this.labelPCXAU17.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU17.TabIndex = 290;
             this.labelPCXAU17.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU17, "XAU value");
             // 
             // labelPCXAU4
             // 
@@ -15722,6 +16110,7 @@
             this.labelPCXAU4.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU4.TabIndex = 289;
             this.labelPCXAU4.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU4, "XAU value");
             // 
             // labelPCXAU5
             // 
@@ -15735,6 +16124,7 @@
             this.labelPCXAU5.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU5.TabIndex = 288;
             this.labelPCXAU5.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU5, "XAU value");
             // 
             // labelPCXAU6
             // 
@@ -15748,6 +16138,7 @@
             this.labelPCXAU6.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU6.TabIndex = 287;
             this.labelPCXAU6.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU6, "XAU value");
             // 
             // labelPCXAU7
             // 
@@ -15761,6 +16152,7 @@
             this.labelPCXAU7.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU7.TabIndex = 286;
             this.labelPCXAU7.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU7, "XAU value");
             // 
             // labelPCXAU8
             // 
@@ -15774,6 +16166,7 @@
             this.labelPCXAU8.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU8.TabIndex = 285;
             this.labelPCXAU8.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU8, "XAU value");
             // 
             // labelPCXAU9
             // 
@@ -15787,6 +16180,7 @@
             this.labelPCXAU9.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU9.TabIndex = 284;
             this.labelPCXAU9.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU9, "XAU value");
             // 
             // labelPCXAU10
             // 
@@ -15800,6 +16194,7 @@
             this.labelPCXAU10.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU10.TabIndex = 283;
             this.labelPCXAU10.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU10, "XAU value");
             // 
             // labelPCXAU11
             // 
@@ -15813,6 +16208,7 @@
             this.labelPCXAU11.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU11.TabIndex = 282;
             this.labelPCXAU11.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU11, "XAU value");
             // 
             // labelPCXAU12
             // 
@@ -15826,6 +16222,7 @@
             this.labelPCXAU12.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU12.TabIndex = 281;
             this.labelPCXAU12.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU12, "XAU value");
             // 
             // labelPCXAU1
             // 
@@ -15839,6 +16236,7 @@
             this.labelPCXAU1.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU1.TabIndex = 280;
             this.labelPCXAU1.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU1, "XAU value");
             // 
             // labelPCXAU2
             // 
@@ -15852,6 +16250,7 @@
             this.labelPCXAU2.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU2.TabIndex = 279;
             this.labelPCXAU2.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU2, "XAU value");
             // 
             // labelPCXAU3
             // 
@@ -15865,6 +16264,7 @@
             this.labelPCXAU3.Size = new System.Drawing.Size(15, 17);
             this.labelPCXAU3.TabIndex = 278;
             this.labelPCXAU3.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCXAU3, "XAU value");
             // 
             // labelPCGBP13
             // 
@@ -15878,6 +16278,7 @@
             this.labelPCGBP13.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP13.TabIndex = 277;
             this.labelPCGBP13.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP13, "GBP value");
             // 
             // labelPCGBP14
             // 
@@ -15891,6 +16292,7 @@
             this.labelPCGBP14.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP14.TabIndex = 276;
             this.labelPCGBP14.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP14, "GBP value");
             // 
             // labelPCGBP15
             // 
@@ -15904,6 +16306,7 @@
             this.labelPCGBP15.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP15.TabIndex = 275;
             this.labelPCGBP15.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP15, "GBP value");
             // 
             // labelPCGBP16
             // 
@@ -15917,6 +16320,7 @@
             this.labelPCGBP16.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP16.TabIndex = 274;
             this.labelPCGBP16.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP16, "GBP value");
             // 
             // labelPCGBP17
             // 
@@ -15930,6 +16334,7 @@
             this.labelPCGBP17.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP17.TabIndex = 273;
             this.labelPCGBP17.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP17, "GBP value");
             // 
             // labelPCGBP4
             // 
@@ -15943,6 +16348,7 @@
             this.labelPCGBP4.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP4.TabIndex = 272;
             this.labelPCGBP4.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP4, "GBP value");
             // 
             // labelPCGBP5
             // 
@@ -15956,6 +16362,7 @@
             this.labelPCGBP5.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP5.TabIndex = 271;
             this.labelPCGBP5.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP5, "GBP value");
             // 
             // labelPCGBP6
             // 
@@ -15969,6 +16376,7 @@
             this.labelPCGBP6.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP6.TabIndex = 270;
             this.labelPCGBP6.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP6, "GBP value");
             // 
             // labelPCGBP7
             // 
@@ -15982,6 +16390,7 @@
             this.labelPCGBP7.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP7.TabIndex = 269;
             this.labelPCGBP7.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP7, "GBP value");
             // 
             // labelPCGBP8
             // 
@@ -15995,6 +16404,7 @@
             this.labelPCGBP8.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP8.TabIndex = 268;
             this.labelPCGBP8.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP8, "GBP value");
             // 
             // labelPCGBP9
             // 
@@ -16008,6 +16418,7 @@
             this.labelPCGBP9.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP9.TabIndex = 267;
             this.labelPCGBP9.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP9, "GBP value");
             // 
             // labelPCGBP10
             // 
@@ -16021,6 +16432,7 @@
             this.labelPCGBP10.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP10.TabIndex = 266;
             this.labelPCGBP10.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP10, "GBP value");
             // 
             // labelPCGBP11
             // 
@@ -16034,6 +16446,7 @@
             this.labelPCGBP11.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP11.TabIndex = 265;
             this.labelPCGBP11.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP11, "GBP value");
             // 
             // labelPCGBP12
             // 
@@ -16047,6 +16460,7 @@
             this.labelPCGBP12.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP12.TabIndex = 264;
             this.labelPCGBP12.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP12, "GBP value");
             // 
             // labelPCGBP1
             // 
@@ -16060,6 +16474,7 @@
             this.labelPCGBP1.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP1.TabIndex = 263;
             this.labelPCGBP1.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP1, "GBP value");
             // 
             // labelPCGBP2
             // 
@@ -16073,6 +16488,7 @@
             this.labelPCGBP2.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP2.TabIndex = 262;
             this.labelPCGBP2.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP2, "GBP value");
             // 
             // labelPCGBP3
             // 
@@ -16086,6 +16502,7 @@
             this.labelPCGBP3.Size = new System.Drawing.Size(15, 17);
             this.labelPCGBP3.TabIndex = 261;
             this.labelPCGBP3.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCGBP3, "GBP value");
             // 
             // labelPCEUR13
             // 
@@ -16099,6 +16516,7 @@
             this.labelPCEUR13.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR13.TabIndex = 260;
             this.labelPCEUR13.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR13, "EUR value");
             // 
             // labelPCEUR14
             // 
@@ -16112,6 +16530,7 @@
             this.labelPCEUR14.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR14.TabIndex = 259;
             this.labelPCEUR14.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR14, "EUR value");
             // 
             // labelPCEUR15
             // 
@@ -16125,6 +16544,7 @@
             this.labelPCEUR15.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR15.TabIndex = 258;
             this.labelPCEUR15.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR15, "EUR value");
             // 
             // labelPCEUR16
             // 
@@ -16138,6 +16558,7 @@
             this.labelPCEUR16.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR16.TabIndex = 257;
             this.labelPCEUR16.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR16, "EUR value");
             // 
             // labelPCEUR17
             // 
@@ -16151,6 +16572,7 @@
             this.labelPCEUR17.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR17.TabIndex = 256;
             this.labelPCEUR17.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR17, "EUR value");
             // 
             // labelPCEUR4
             // 
@@ -16164,6 +16586,7 @@
             this.labelPCEUR4.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR4.TabIndex = 255;
             this.labelPCEUR4.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR4, "EUR value");
             // 
             // labelPCEUR5
             // 
@@ -16177,6 +16600,7 @@
             this.labelPCEUR5.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR5.TabIndex = 254;
             this.labelPCEUR5.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR5, "EUR value");
             // 
             // labelPCEUR6
             // 
@@ -16190,6 +16614,7 @@
             this.labelPCEUR6.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR6.TabIndex = 253;
             this.labelPCEUR6.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR6, "EUR value");
             // 
             // labelPCEUR7
             // 
@@ -16203,6 +16628,7 @@
             this.labelPCEUR7.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR7.TabIndex = 252;
             this.labelPCEUR7.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR7, "EUR value");
             // 
             // labelPCEUR8
             // 
@@ -16216,6 +16642,7 @@
             this.labelPCEUR8.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR8.TabIndex = 251;
             this.labelPCEUR8.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR8, "EUR value");
             // 
             // labelPCEUR9
             // 
@@ -16229,6 +16656,7 @@
             this.labelPCEUR9.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR9.TabIndex = 250;
             this.labelPCEUR9.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR9, "EUR value");
             // 
             // labelPCEUR10
             // 
@@ -16242,6 +16670,7 @@
             this.labelPCEUR10.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR10.TabIndex = 249;
             this.labelPCEUR10.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR10, "EUR value");
             // 
             // labelPCEUR11
             // 
@@ -16255,6 +16684,7 @@
             this.labelPCEUR11.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR11.TabIndex = 248;
             this.labelPCEUR11.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR11, "EUR value");
             // 
             // labelPCEUR12
             // 
@@ -16268,6 +16698,7 @@
             this.labelPCEUR12.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR12.TabIndex = 247;
             this.labelPCEUR12.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR12, "EUR value");
             // 
             // labelPCEUR1
             // 
@@ -16281,6 +16712,7 @@
             this.labelPCEUR1.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR1.TabIndex = 246;
             this.labelPCEUR1.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR1, "EUR value");
             // 
             // labelPCEUR2
             // 
@@ -16294,6 +16726,7 @@
             this.labelPCEUR2.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR2.TabIndex = 245;
             this.labelPCEUR2.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR2, "EUR value");
             // 
             // labelPCEUR3
             // 
@@ -16307,6 +16740,7 @@
             this.labelPCEUR3.Size = new System.Drawing.Size(15, 17);
             this.labelPCEUR3.TabIndex = 244;
             this.labelPCEUR3.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCEUR3, "EUR value");
             // 
             // labelPCUSD13
             // 
@@ -16320,6 +16754,7 @@
             this.labelPCUSD13.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD13.TabIndex = 243;
             this.labelPCUSD13.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD13, "USD value");
             // 
             // labelPCUSD14
             // 
@@ -16333,6 +16768,7 @@
             this.labelPCUSD14.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD14.TabIndex = 242;
             this.labelPCUSD14.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD14, "USD value");
             // 
             // labelPCUSD15
             // 
@@ -16346,6 +16782,7 @@
             this.labelPCUSD15.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD15.TabIndex = 241;
             this.labelPCUSD15.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD15, "USD value");
             // 
             // labelPCUSD16
             // 
@@ -16359,6 +16796,7 @@
             this.labelPCUSD16.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD16.TabIndex = 240;
             this.labelPCUSD16.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD16, "USD value");
             // 
             // labelPCUSD17
             // 
@@ -16372,6 +16810,7 @@
             this.labelPCUSD17.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD17.TabIndex = 239;
             this.labelPCUSD17.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD17, "USD value");
             // 
             // labelPCUSD4
             // 
@@ -16385,6 +16824,7 @@
             this.labelPCUSD4.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD4.TabIndex = 238;
             this.labelPCUSD4.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD4, "USD value");
             // 
             // labelPCUSD5
             // 
@@ -16398,6 +16838,7 @@
             this.labelPCUSD5.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD5.TabIndex = 237;
             this.labelPCUSD5.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD5, "USD value");
             // 
             // labelPCUSD6
             // 
@@ -16411,6 +16852,7 @@
             this.labelPCUSD6.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD6.TabIndex = 236;
             this.labelPCUSD6.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD6, "USD value");
             // 
             // labelPCUSD7
             // 
@@ -16424,6 +16866,7 @@
             this.labelPCUSD7.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD7.TabIndex = 235;
             this.labelPCUSD7.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD7, "USD value");
             // 
             // labelPCUSD8
             // 
@@ -16437,6 +16880,7 @@
             this.labelPCUSD8.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD8.TabIndex = 234;
             this.labelPCUSD8.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD8, "USD value");
             // 
             // labelPCUSD9
             // 
@@ -16450,6 +16894,7 @@
             this.labelPCUSD9.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD9.TabIndex = 233;
             this.labelPCUSD9.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD9, "USD value");
             // 
             // labelPCUSD10
             // 
@@ -16463,6 +16908,7 @@
             this.labelPCUSD10.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD10.TabIndex = 232;
             this.labelPCUSD10.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD10, "USD value");
             // 
             // labelPCUSD11
             // 
@@ -16476,6 +16922,7 @@
             this.labelPCUSD11.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD11.TabIndex = 231;
             this.labelPCUSD11.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD11, "USD value");
             // 
             // labelPCUSD12
             // 
@@ -16489,6 +16936,7 @@
             this.labelPCUSD12.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD12.TabIndex = 230;
             this.labelPCUSD12.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD12, "USD value");
             // 
             // labelPCUSD1
             // 
@@ -16502,6 +16950,7 @@
             this.labelPCUSD1.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD1.TabIndex = 229;
             this.labelPCUSD1.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD1, "USD value");
             // 
             // labelPCUSD2
             // 
@@ -16515,6 +16964,7 @@
             this.labelPCUSD2.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD2.TabIndex = 228;
             this.labelPCUSD2.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD2, "USD value");
             // 
             // labelPCUSD3
             // 
@@ -16528,6 +16978,7 @@
             this.labelPCUSD3.Size = new System.Drawing.Size(15, 17);
             this.labelPCUSD3.TabIndex = 227;
             this.labelPCUSD3.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.labelPCUSD3, "USD value");
             // 
             // label251
             // 
@@ -17916,6 +18367,8 @@
             this.lblDCAPercentageChange.Size = new System.Drawing.Size(55, 17);
             this.lblDCAPercentageChange.TabIndex = 288;
             this.lblDCAPercentageChange.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblDCAPercentageChange, "Percentage difference between amount of fiat spent and fiat value of purchased bi" +
+        "tcoin");
             // 
             // lblDCACurrentValue
             // 
@@ -17929,6 +18382,7 @@
             this.lblDCACurrentValue.Size = new System.Drawing.Size(55, 17);
             this.lblDCACurrentValue.TabIndex = 287;
             this.lblDCACurrentValue.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblDCACurrentValue, "Current value of purchased bitcoin");
             // 
             // lblDCABTCPurchased
             // 
@@ -17942,6 +18396,7 @@
             this.lblDCABTCPurchased.Size = new System.Drawing.Size(55, 17);
             this.lblDCABTCPurchased.TabIndex = 286;
             this.lblDCABTCPurchased.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblDCABTCPurchased, "Amount of bitcoin purchased");
             // 
             // lblDCAAmountSpent
             // 
@@ -17955,6 +18410,7 @@
             this.lblDCAAmountSpent.Size = new System.Drawing.Size(55, 17);
             this.lblDCAAmountSpent.TabIndex = 285;
             this.lblDCAAmountSpent.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblDCAAmountSpent, "Amount of selected fiat currency spent");
             // 
             // lblDCABTCPurchases
             // 
@@ -17968,6 +18424,7 @@
             this.lblDCABTCPurchases.Size = new System.Drawing.Size(55, 17);
             this.lblDCABTCPurchases.TabIndex = 284;
             this.lblDCABTCPurchases.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblDCABTCPurchases, "Number of purchases made");
             // 
             // label207
             // 
@@ -18101,6 +18558,7 @@
             this.textBoxDCAAmountInput.TabIndex = 310;
             this.textBoxDCAAmountInput.TabStop = false;
             this.textBoxDCAAmountInput.Text = "100.00";
+            this.toolTipGeneralUse.SetToolTip(this.textBoxDCAAmountInput, "Amount to periodically use to buy bitcoin");
             this.textBoxDCAAmountInput.TextChanged += new System.EventHandler(this.TextBoxDCAAmountInput_TextChanged);
             this.textBoxDCAAmountInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CurrencyTextBoxes_KeyPress);
             this.textBoxDCAAmountInput.Leave += new System.EventHandler(this.TextBoxDCAAmountInput_Leave);
@@ -18138,6 +18596,9 @@
             this.btnCalculateDCA.TabStop = false;
             this.btnCalculateDCA.Text = "calculate";
             this.btnCalculateDCA.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnCalculateDCA, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
+        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
+        "cally.\r\n");
             this.btnCalculateDCA.UseVisualStyleBackColor = false;
             this.btnCalculateDCA.Click += new System.EventHandler(this.BtnCalculateDCA_Click);
             // 
@@ -18176,6 +18637,7 @@
             this.rjDatePickerDCAEndDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAEndDate.TabIndex = 286;
             this.rjDatePickerDCAEndDate.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjDatePickerDCAEndDate, "End date of DCA strategy");
             this.rjDatePickerDCAEndDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAEndDate_ValueChanged);
             // 
             // label306
@@ -18214,6 +18676,7 @@
             this.rjDatePickerDCAStartDate.SkinColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rjDatePickerDCAStartDate.TabIndex = 287;
             this.rjDatePickerDCAStartDate.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjDatePickerDCAStartDate, "Start date of DCA strategy");
             this.rjDatePickerDCAStartDate.ValueChanged += new System.EventHandler(this.RjDatePickerDCAStartDate_ValueChanged);
             // 
             // label307
@@ -18263,6 +18726,7 @@
             this.comboBoxDCAFrequency.Size = new System.Drawing.Size(90, 20);
             this.comboBoxDCAFrequency.TabIndex = 254;
             this.comboBoxDCAFrequency.Texts = "monthly";
+            this.toolTipGeneralUse.SetToolTip(this.comboBoxDCAFrequency, "Frequency of bitcoin purchases");
             this.comboBoxDCAFrequency.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxDCAFrequency_OnSelectedIndexChanged);
             // 
             // panelDCAChartContainer
@@ -18449,20 +18913,20 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.progressBarRefreshData);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
             this.Controls.Add(this.lblHeaderHashRateChart);
@@ -18700,6 +19164,7 @@
             this.panel66.ResumeLayout(false);
             this.panel67.ResumeLayout(false);
             this.panel89.ResumeLayout(false);
+            this.panel89.PerformLayout();
             this.panelAppearanceTextbox1Container.ResumeLayout(false);
             this.panelAppearanceTextbox1Container.PerformLayout();
             this.panel60.ResumeLayout(false);
@@ -19973,6 +20438,10 @@
         private System.Windows.Forms.Panel panel132;
         private ColorProgressBar.ColorProgressBar progressBarRefreshData;
         private System.Windows.Forms.Timer timer50thSec;
+        private System.Windows.Forms.Label lblSolidProgressBars;
+        private System.Windows.Forms.Label lblDashedProgressBars;
+        private System.Windows.Forms.Label label222;
+        private System.Windows.Forms.Label label221;
     }
 }
 

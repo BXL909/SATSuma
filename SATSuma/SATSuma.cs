@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * more testing! 
 * reduce reliance on external API's where possible
-* market data from mempool.space if bitcoinexplorer.org and coingecko both disabled or both fail
+* incorporate mempoolspace price into calculation in getmarketdata(), flash source indicators after getting data and checking it, and construct a tooltip with sources and calculation on it
 */
 
 #region Using
@@ -172,6 +172,7 @@ namespace SATSuma
         string alwaysOnTop = "0"; // for settings record in bookmarks file
         string selectedNetwork = "M"; // for settings record in bookmarks file
         string coingeckoAPISelected = "1";
+        string mempoolSpacePriceAPISelected = "1";
         string blockchairComJSONSelected = "1"; // for settings record in bookmarks file
         string bitcoinExplorerEnpointsSelected = "1"; // for settings record in bookmarks file
         string blockchainInfoEndpointsSelected = "1"; // for settings record in bookmarks file
@@ -200,10 +201,10 @@ namespace SATSuma
         #region api use flag variables
         private bool RunBitcoinExplorerEndpointAPI = true; // enable/disable API
         private bool RunBlockchainInfoEndpointAPI = true; // enable/disable API
-        private bool RunBitcoinExplorerOrgJSONAPI = true; // enable/disable API
         private bool RunBlockchairComJSONAPI = true; // enable/disable API
         private bool RunMempoolSpaceLightningAPI = true; // enable/disable API
         private bool RunCoingeckoAPI = true; // enable/disable API
+        private bool RunMempoolSpacePriceAPI = true;
         #endregion
         #region variables to hold button states
         bool dontDisableButtons = true; // ignore button disables during initial setup
@@ -408,7 +409,7 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
-                panel122, panel123, panel124, panel125, panel101, panel27, panel132 };
+                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -907,10 +908,8 @@ namespace SATSuma
                         {
                             var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
                             UpdateLabelValue(lblTransInNextBlock, txInNextBlock);
-                            lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListTXInNextBlock.Text = txInNextBlock;
-                            });
+                            UpdateLabelValue(lblBlockListTXInNextBlock, txInNextBlock);
+                            
                             lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                             {
                                 lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
@@ -1256,7 +1255,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                #region bitcoinexplorer.org api
+                #region bitcoinexplorer.org / mempool.space (price) / coingecko.com api for price
                 Task task1 = Task.Run(() =>  // bitcoinexplorer.org JSON for market data
                 {
                     if (!offlineMode)
@@ -1265,7 +1264,7 @@ namespace SATSuma
                         {
                             if (!testNet)
                             {
-                                if (RunBitcoinExplorerEndpointAPI || RunCoingeckoAPI)
+                                if (RunBitcoinExplorerEndpointAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                                 {
                                     GetMarketData();
                                 }
@@ -1304,9 +1303,23 @@ namespace SATSuma
                             {
                                 lblConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width, lblConverterChart.Location.Y);
                             });
-                            lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            if (lblHeaderPriceChange.Visible)
                             {
-                                lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
+                                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPriceChart.Location = new Point(lblHeaderPriceChange.Location.X + lblHeaderPriceChange.Width, lblHeaderPriceChart.Location.Y);
+                                });
+                            }
+                            else
+                            {
+                                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPriceChart.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChart.Location.Y);
+                                });
+                            }
+                            panelPriceSourceIndicators.Invoke((MethodInvoker)delegate
+                            {
+                                panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
                             });
                             lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                             {
@@ -1872,6 +1885,28 @@ namespace SATSuma
                 string cgPriceEUR = data["bitcoin"]["eur"] != null ? data["bitcoin"]["eur"].ToString() : "0";
                 string cgPriceXAU = data["bitcoin"]["xau"] != null ? data["bitcoin"]["xau"].ToString() : "0";
                 return (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "CoingeckoGetPrice");
+            }
+            return ("0", "0", "0", "0");
+        }
+
+        private (string mpPriceUSD, string mpPriceGBP, string mpPriceEUR, string mpPriceXAU) MempoolSpaceGetPrice()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://mempool.space/api/v1/prices");
+                var data = JObject.Parse(response);
+
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string mpPriceUSD = data.ContainsKey("USD") ? Convert.ToString(data["USD"]) : "0";
+                string mpPriceGBP = data.ContainsKey("GBP") ? Convert.ToString(data["GBP"]) : "0";
+                string mpPriceEUR = data.ContainsKey("EUR") ? Convert.ToString(data["EUR"]) : "0";
+                string mpPriceXAU = "0";
+                return (mpPriceUSD, mpPriceGBP, mpPriceEUR, mpPriceXAU);
             }
             catch (Exception ex)
             {
@@ -7070,7 +7105,7 @@ namespace SATSuma
                         });
                         label174.Invoke((MethodInvoker)delegate
                         {
-                            label174.Text = hostname;
+                            label174.Text = "your node (" + hostname + ")";
                         });
                         MoveNodeSelections();
                         lblXpubScreenOwnNodeStatus.Invoke((MethodInvoker)delegate
@@ -15202,9 +15237,7 @@ namespace SATSuma
                         lblBitcoinExplorerEndpoints.Text = "❌";
                     });
                     RunBitcoinExplorerEndpointAPI = false;
-                    RunBitcoinExplorerOrgJSONAPI = false;
                     bitcoinExplorerEnpointsSelected = "0";
-                    btnMenuPriceConverter.Enabled = false;
 
                     // don't show a value for price change
                     readyToShowPriceChangeLabelYet = false;
@@ -15214,9 +15247,10 @@ namespace SATSuma
                         lblHeaderPriceChange.Visible = false;
                     });
 
-                    if (!RunCoingeckoAPI)
+                    if (!RunCoingeckoAPI && !RunMempoolSpacePriceAPI)
                     {
                         HideAllFiatConversionFields();
+                        btnMenuPriceConverter.Enabled = false;
                     }
                 }
                 else
@@ -15227,7 +15261,6 @@ namespace SATSuma
                         lblBitcoinExplorerEndpoints.Text = "✔️";
                     });
                     RunBitcoinExplorerEndpointAPI = true;
-                    RunBitcoinExplorerOrgJSONAPI = true;
                     btnMenuPriceConverter.Enabled = true;
                     bitcoinExplorerEnpointsSelected = "1";
                     ShowAllFiatConversionFields();
@@ -15254,8 +15287,7 @@ namespace SATSuma
                     });
                     RunCoingeckoAPI = false;
                     coingeckoAPISelected = "0";
-                    btnMenuPriceConverter.Enabled = false;
-
+                    
                     // don't show a value for price change
                     readyToShowPriceChangeLabelYet = false;
                     readyToShowRedAndGreenLabelsYet = false;
@@ -15263,11 +15295,11 @@ namespace SATSuma
                     {
                         lblHeaderPriceChange.Visible = false;
                     });
-                    
 
-                    if (!RunBitcoinExplorerEndpointAPI)
+                    if (!RunBitcoinExplorerEndpointAPI && !RunMempoolSpacePriceAPI)
                     {
                         HideAllFiatConversionFields();
+                        btnMenuPriceConverter.Enabled = false;
                     }
                 }
                 else
@@ -15288,6 +15320,55 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "LblCoingeckoComJSON_Click");
+            }
+        }
+
+        private void LblMempoolSpacePriceAPI_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lblMempoolSpacePriceAPI.Text == "✔️")
+                {
+                    lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                    {
+                        lblMempoolSpacePriceAPI.ForeColor = Color.IndianRed;
+                        lblMempoolSpacePriceAPI.Text = "❌";
+                    });
+                    RunMempoolSpacePriceAPI = false;
+                    mempoolSpacePriceAPISelected = "0";
+                    
+                    // don't show a value for price change
+                    readyToShowPriceChangeLabelYet = false;
+                    readyToShowRedAndGreenLabelsYet = false;
+                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderPriceChange.Visible = false;
+                    });
+
+                    if (!RunBitcoinExplorerEndpointAPI && !RunCoingeckoAPI)
+                    {
+                        HideAllFiatConversionFields();
+                        btnMenuPriceConverter.Enabled = false;
+                    }
+                }
+                else
+                {
+                    lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                    {
+                        lblMempoolSpacePriceAPI.ForeColor = Color.Green;
+                        lblMempoolSpacePriceAPI.Text = "✔️";
+                    });
+                    RunMempoolSpacePriceAPI = true;
+                    btnMenuPriceConverter.Enabled = true;
+                    mempoolSpacePriceAPISelected = "1";
+                    ShowAllFiatConversionFields();
+                }
+                SaveSettingsToBookmarksFile();
+                RefreshScreens();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "LblMempoolSpacePriceAPI_Click");
             }
         }
 
@@ -15428,6 +15509,13 @@ namespace SATSuma
                     lblCoingeckoComJSON.Enabled = true;
                 });
                 RunCoingeckoAPI = false;
+                lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolSpacePriceAPI.ForeColor = Color.IndianRed;
+                    lblMempoolSpacePriceAPI.Text = "❌";
+                    lblMempoolSpacePriceAPI.Enabled = true;
+                });
+                RunMempoolSpacePriceAPI = false;
                 lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                 {
                     lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
@@ -15435,7 +15523,6 @@ namespace SATSuma
                     lblBitcoinExplorerEndpoints.Enabled = true;
                 });
                 RunBitcoinExplorerEndpointAPI = false;
-                RunBitcoinExplorerOrgJSONAPI = false;
                 lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
                 {
                     lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
@@ -15517,6 +15604,13 @@ namespace SATSuma
                     lblCoingeckoComJSON.Enabled = false;
                 });
                 RunCoingeckoAPI = false;
+                lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                {
+                    lblMempoolSpacePriceAPI.ForeColor = Color.Gray;
+                    lblMempoolSpacePriceAPI.Text = "❌";
+                    lblMempoolSpacePriceAPI.Enabled = false;
+                });
+                RunMempoolSpacePriceAPI = false;
                 lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                 {
                     lblBitcoinExplorerEndpoints.ForeColor = Color.Gray;
@@ -15524,7 +15618,6 @@ namespace SATSuma
                     lblBitcoinExplorerEndpoints.Enabled = false;
                 });
                 RunBitcoinExplorerEndpointAPI = false;
-                RunBitcoinExplorerOrgJSONAPI = false;
                 lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
                 {
                     lblBlockchainInfoEndpoints.ForeColor = Color.Gray;
@@ -15799,6 +15892,7 @@ namespace SATSuma
             // xxxxxxxxxx = startup screen,
             // n = UIScale (1 = 100%, 2 = 125%, 3 = 150%, 4 = 175%, 5 = 200%).
             // bool = CoingeckoJSON
+            // bool = mempool.space price API
             try
             {
                 if (btnUSD.Enabled == false)
@@ -15925,9 +16019,17 @@ namespace SATSuma
                 {
                     coingeckoAPISelected = "0";
                 }
+                if (RunMempoolSpacePriceAPI)
+                {
+                    mempoolSpacePriceAPISelected = "1";
+                }
+                else
+                {
+                    mempoolSpacePriceAPISelected = "0";
+                }
                 // write the settings to the bookmarks file for auto retrieval next time
                 DateTime today = DateTime.Today;
-                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + OfflineModeSelected + directoryEnabled + alwaysOnTop + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0') + numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0') + numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0') + startupScreenToSave + Convert.ToString(UIScaleToBeSavedToSettings + coingeckoAPISelected);
+                string bookmarkData = currencySelected + selectedNetwork + blockchairComJSONSelected + bitcoinExplorerEnpointsSelected + blockchainInfoEndpointsSelected + OfflineModeSelected + directoryEnabled + alwaysOnTop + numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0') + numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0') + numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0') + startupScreenToSave + Convert.ToString(UIScaleToBeSavedToSettings + coingeckoAPISelected + mempoolSpacePriceAPISelected);
                 string keyCheck = "21m";
                 var newBookmark = new Bookmark { DateAdded = today, Type = "settings", Data = bookmarkData, Note = "", Encrypted = false, KeyCheck = keyCheck };
                 if (!settingsAlreadySavedInFile)
@@ -16188,6 +16290,7 @@ namespace SATSuma
                             lblBitcoinExplorerEndpoints.Enabled = true;
                             lblBlockchainInfoEndpoints.Enabled = true;
                             lblCoingeckoComJSON.Enabled = true;
+                            lblMempoolSpacePriceAPI.Enabled = true;
                             lblSettingsNodeMainnetSelected.Enabled = true;
                             lblSettingsNodeTestnetSelected.Enabled = true;
                             lblEnableDirectory.Enabled = true;
@@ -16294,7 +16397,6 @@ namespace SATSuma
                             if (Convert.ToString(bookmark.Data[3]) == "1")
                             {
                                 RunBitcoinExplorerEndpointAPI = true;
-                                RunBitcoinExplorerOrgJSONAPI = true;
                                 lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerEndpoints.Text = "✔️";
@@ -16304,7 +16406,6 @@ namespace SATSuma
                             else
                             {
                                 RunBitcoinExplorerEndpointAPI = false;
-                                RunBitcoinExplorerOrgJSONAPI = false;
                                 HideAllFiatConversionFields();
                                 lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                                 {
@@ -16331,24 +16432,44 @@ namespace SATSuma
                                 });
                             }
                             if (Convert.ToString(bookmark.Data[28]) == "1")
+                            {
+                                RunCoingeckoAPI = true;
+                                lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
                                 {
-                                    RunCoingeckoAPI = true;
-                                    lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblCoingeckoComJSON.Text = "✔️";
-                                        lblCoingeckoComJSON.ForeColor = Color.Green;
-                                    });
-                                }
-                                else
-                                {
-                                    RunCoingeckoAPI = false;
-                                    lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblCoingeckoComJSON.Text = "❌";
-                                        lblCoingeckoComJSON.ForeColor = Color.IndianRed;
-                                    });
-                                }
+                                    lblCoingeckoComJSON.Text = "✔️";
+                                    lblCoingeckoComJSON.ForeColor = Color.Green;
+                                });
                             }
+                            else
+                            {
+                                RunCoingeckoAPI = false;
+                                lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoComJSON.Text = "❌";
+                                    lblCoingeckoComJSON.ForeColor = Color.IndianRed;
+                                });
+                            }
+                            if (Convert.ToString(bookmark.Data[29]) == "1")
+                            {
+                                RunMempoolSpacePriceAPI = true;
+                                lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceAPI.Text = "✔️";
+                                    lblMempoolSpacePriceAPI.ForeColor = Color.Green;
+                                });
+                            }
+                            else
+                            {
+                                RunMempoolSpacePriceAPI = false;
+                                lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceAPI.Text = "❌";
+                                    lblMempoolSpacePriceAPI.ForeColor = Color.IndianRed;
+                                });
+                            }
+                        }
+
+
                         #endregion
                         #region restore directory settings
                         if (!offlineMode)
@@ -20322,7 +20443,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123, 
-                    panel124, panel125, panel101, panel132 };
+                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -20741,7 +20862,7 @@ namespace SATSuma
                     });
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { btnPreviewAnimations, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label225, btnPreviewAnimations, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21080,7 +21201,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency };
+                Control[] listOtherTextToColor = { label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21334,7 +21455,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21890,7 +22011,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart };
+                Control[] listPanelsToColor = { panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -22424,7 +22545,7 @@ namespace SATSuma
                 lblHeaderPriceChange.Invoke((MethodInvoker)delegate
                 {
                     lblHeaderPriceChange.Visible = true;
-                    lblHeaderPriceChange.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChange.Location.Y);
+                    lblHeaderPriceChange.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChange.Location.Y);
                 });
                 // Wait a moment
                 await Task.Delay(5000);
@@ -22610,7 +22731,7 @@ namespace SATSuma
             try
             {
                 if (!testNet && !offlineMode)
-                    if ((RunBitcoinExplorerEndpointAPI && RunBitcoinExplorerOrgJSONAPI) || RunCoingeckoAPI)
+                    if (RunBitcoinExplorerEndpointAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                     {
                         Control[] listFiatConversionsToShow = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
                         lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
@@ -23037,6 +23158,10 @@ namespace SATSuma
                 if (panel.Name == "panelLeftPanel")
                 {
                     cornerRadius = 12;
+                }
+                if (panel.Name == "panelPriceSourceIndicators") 
+                {
+                    cornerRadius = (int)(6 * UIScale);
                 }
                 cornerRadius *= 2;
                 path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
@@ -23572,7 +23697,7 @@ namespace SATSuma
                         });
                         label174.Invoke((MethodInvoker)delegate
                         {
-                            label174.Text = hostnameForDisplay;
+                            label174.Text = "your node (" + hostnameForDisplay + ")";
                         });
                         MoveNodeSelections();
                         lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
@@ -24837,7 +24962,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(24 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuSettings.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -25434,6 +25559,10 @@ namespace SATSuma
                     string GeckoPriceGBP = "0";
                     string GeckoPriceEUR = "0";
                     string GeckoPriceXAU = "0";
+                    string mempoPriceUSD = "0";
+                    string mempoPriceGBP = "0";
+                    string mempoPriceEUR = "0";
+                    string mempoPriceXAU = "0";
                     if (RunBitcoinExplorerEndpointAPI)
                     {
                         var (bePriceUSD, bePriceGBP, bePriceEUR, bePriceXAU) = BitcoinExplorerOrgGetPrice();
@@ -25449,6 +25578,14 @@ namespace SATSuma
                         GeckoPriceEUR = cgPriceEUR;
                         GeckoPriceGBP = cgPriceGBP;
                         GeckoPriceXAU = cgPriceXAU;
+                    }
+                    if (RunMempoolSpacePriceAPI)
+                    {
+                        var (mpPriceUSD, mpPriceGBP, mpPriceEUR, mpPriceXAU) = MempoolSpaceGetPrice();
+                        mempoPriceUSD = mpPriceUSD;
+                        mempoPriceEUR = mpPriceEUR;
+                        mempoPriceGBP = mpPriceGBP;
+                        mempoPriceXAU = mpPriceXAU;
                     }
                     string PriceUSD = "0";
                     string PriceEUR = "0";
@@ -27456,6 +27593,9 @@ namespace SATSuma
             }
         }
         #endregion
+
         #endregion
+
+
     }
 }

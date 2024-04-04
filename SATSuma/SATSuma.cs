@@ -26,13 +26,9 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* include marketcap from coingecko too?
 * more testing! 
 * reduce reliance on external API's where possible
 * market data from mempool.space if bitcoinexplorer.org and coingecko both disabled or both fail
-* vertically increase size of menu marker only when showing bottom buttons from each group
-* view transaction button on block screen slightly wrong size/place
-* address screen - line up address type with QR code
 */
 
 #region Using
@@ -318,7 +314,6 @@ namespace SATSuma
         private Panel panelToShrink = new Panel(); // panel animation horizontal
         #endregion
         #region misc
-        decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
         bool firstTimeLoadingScreen = true;
         bool firstTimeCustomThemeIndexChanged = true;
         double DCAFrequencyDays = 1; // for dca calculator screen
@@ -328,7 +323,20 @@ namespace SATSuma
         bool readyToShowRedAndGreenLabelsYet = false;
         bool readyToShowPriceChangeLabelYet = false;
         bool fullScreenLoadingScreenVisible = false; // if the full size loading screen is visible, the smaller one won't be shown on top of it
+        decimal calculatedBTCInCirculation = 0;
         #endregion
+        #region market variables
+        decimal OneBTCinSelectedCurrency = 0; // used to perform fiat conversions throughout SATSuma
+        string OneBTCInUSD = "0";
+        string OneBTCInEUR = "0";
+        string OneBTCInGBP = "0";
+        string OneBTCInXAU = "0";
+        string OneUSDInSats = "0";
+        string OneEURInSats = "0";
+        string OneGBPInSats = "0";
+        string OneXAUInSats = "0";
+        #endregion
+
         #endregion
 
         #region ⚡INITIALISE⚡
@@ -656,7 +664,7 @@ namespace SATSuma
             }
         }
 
-        private void timer50thSec_Tick(object sender, EventArgs e)
+        private void Timer50thSec_Tick(object sender, EventArgs e)
         {
             if (progressBarRefreshData.Value == (intDisplayCountdownToRefresh * 1000))
             {
@@ -780,7 +788,7 @@ namespace SATSuma
                     // fees
                     try
                     {
-                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = GetFees();
+                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = MemSpGetFees();
                         UpdateLabelValue(lblHeaderfeesHighPriority, fastestFee);
                         UpdateLabelValue(lblHeaderFeesMediumPriority, halfHourFee);
                         UpdateLabelValue(lblHeaderFeesLowPriority, hourFee);
@@ -799,7 +807,7 @@ namespace SATSuma
                     // hashrate
                     try
                     {
-                        var (currentHashrate, currentDifficulty) = GetHashrate();
+                        var (currentHashrate, currentDifficulty) = MemSpGetHashrate();
                         UpdateLabelValue(lblHeaderHashrate, currentHashrate);
                         lblHeaderHashRateChart.Invoke((MethodInvoker)delegate
                         {
@@ -826,7 +834,7 @@ namespace SATSuma
                     try
                     {
                         string truncatedPercent = "0%";
-                        var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = GetDifficultyAdjustment();
+                        var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, remainingTime, previousRetarget, nextRetargetHeight, timeAvg, timeOffset) = MemSpGetDifficultyAdjustment();
                         if (decimal.TryParse(progressPercent, out decimal progressValue2))
                         {
                             progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
@@ -891,10 +899,115 @@ namespace SATSuma
                         HandleException(ex, "UpdateDashboards(difficulty adjustment)");
                     }
 
+
+                    //fees and transactions in next block
+                    try
+                    {
+                        if (!testNet)
+                        {
+                            var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
+                            UpdateLabelValue(lblTransInNextBlock, txInNextBlock);
+                            lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListTXInNextBlock.Text = txInNextBlock;
+                            });
+                            lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                            {
+                                lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                            });
+                            lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                            });
+                            UpdateLabelValue(lblNextBlockTotalFees, nextBlockTotalFees);
+                            lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblNextBlockTotalFeesFiat.Visible = true;
+                                UpdateLabelValue(lblNextBlockTotalFeesFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
+                                lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
+                            });
+                            UpdateLabelValue(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
+                            lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
+                            });
+
+
+                            UpdateLabelValue(lblBlockListTotalFeesInNextBlockFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
+                            lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
+                            });
+                        }
+                        else
+                        {
+                            Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
+                            foreach (Control control in controlsToShowAsTestnet)
+                            {
+                                control.Invoke((MethodInvoker)delegate
+                                {
+                                    control.Text = "unavailable on TestNet";
+                                });
+                            }
+
+                            lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblNextBlockTotalFeesFiat.Visible = false;
+                            });
+                        }
+                        if (!testNet && lblNextBlockTotalFeesFiat.Text != "no data" && lblNextBlockTotalFeesFiat.Visible)
+                        {
+                            lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
+                            });
+                        }
+                        else
+                        {
+                            lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblBlockFeesChart.Location.Y);
+                            });
+                        }
+                        lblFeeRangeChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
+                        });
+                        lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
+                        });
+
+                        if (!testNet)
+                        {
+                            lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width, lblBlockListFeeChart2.Location.Y);
+                            });
+                        }
+                        else
+                        {
+                            lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                            {
+                                lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListFeeChart2.Location.Y);
+                            });
+                        }
+                        SetLightsMessagesAndResetTimers();
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "UpdateDashboards(Task3)");
+                    }
+
+
+
+
+
                     // transactions in mempool
                     try
                     {
-                        var (txCount, vSize, totalFees) = GetMempool();
+                        var (txCount, vSize, totalFees) = MemSpGetMempool();
                         string txInMempool = txCount;
                         UpdateLabelValue(lblTXInMempool, txInMempool);
                         UpdateLabelValue(lblBlockListTXInMempool, txInMempool);
@@ -1035,7 +1148,7 @@ namespace SATSuma
                             });
                             if (RunMempoolSpaceLightningAPI)
                             {
-                                var (clearnetCapacity, torCapacity, unknownCapacity) = MempoolSpaceCapacityBreakdownJSONRefresh();
+                                var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdownJSONRefresh();
                                 UpdateLabelValue(lblClearnetCapacity, clearnetCapacity);
                                 UpdateLabelValue(lblClearnetCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
@@ -1072,7 +1185,7 @@ namespace SATSuma
                             }
                             if (RunMempoolSpaceLightningAPI)
                             {
-                                var (aliases, capacities) = MempoolSpaceLiquidityRankingJSONRefresh();
+                                var (aliases, capacities) = MemSpLiquidityRankingJSONRefresh();
                                 for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
                                 {
                                     System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
@@ -1089,7 +1202,7 @@ namespace SATSuma
                                         capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
                                     });
                                 }
-                                var result7 = MempoolSpaceConnectivityRankingJSONRefresh();
+                                var result7 = MemSpConnectivityRankingJSONRefresh();
                                 if (result7.aliases.Count > 0)
                                 {
                                     for (int i = 0; i < result7.aliases.Count && i < 10; i++)
@@ -1212,129 +1325,6 @@ namespace SATSuma
                         }
                     }
                 });
-                Task task3 = Task.Run(() => // Bitcoinexplorer.org JSON
-                {
-                    if (!offlineMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunBitcoinExplorerOrgJSONAPI)
-                                {
-                                    var (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = BitcoinExplorerOrgJSONRefresh();
-                                    UpdateLabelValue(lblTransInNextBlock, txInNextBlock);
-                                    lblBlockListTXInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTXInNextBlock.Text = txInNextBlock;
-                                    });
-                                    lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                                    });
-                                    lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
-                                    });
-                                    UpdateLabelValue(lblNextBlockTotalFees, nextBlockTotalFees);
-                                    lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFeesFiat.Visible = true;
-                                        UpdateLabelValue(lblNextBlockTotalFeesFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
-                                        lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
-                                    });
-                                    UpdateLabelValue(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
-                                    lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
-                                    });
-
-
-                                    UpdateLabelValue(lblBlockListTotalFeesInNextBlockFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
-                                    lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
-                                    {
-                                        lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
-                                    });
-                                }
-                                else
-                                {
-                                    Control[] controlsToShowAsDisabled = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
-                                    foreach (Control control in controlsToShowAsDisabled)
-                                    {
-                                        control.Invoke((MethodInvoker)delegate
-                                        {
-                                            control.Text = "disabled";
-                                        });
-                                    }
-
-                                    lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblNextBlockTotalFeesFiat.Visible = false;
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
-                                foreach (Control control in controlsToShowAsTestnet)
-                                {
-                                    control.Invoke((MethodInvoker)delegate
-                                    {
-                                        control.Text = "unavailable on TestNet";
-                                    });
-                                }
-
-                                lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNextBlockTotalFeesFiat.Visible = false;
-                                });
-                            }
-                            if (!testNet && lblNextBlockTotalFeesFiat.Text != "no data" && lblNextBlockTotalFeesFiat.Visible)
-                            {
-                                lblBlockFeesChart.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
-                                });
-                            }
-                            else
-                            {
-                                lblBlockFeesChart.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblBlockFeesChart.Location.Y);
-                                });
-                            }
-                            lblFeeRangeChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
-                            });
-                            lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
-                            });
-
-                            if (!testNet)
-                            {
-                                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width, lblBlockListFeeChart2.Location.Y);
-                                });
-                            }
-                            else
-                            {
-                                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
-                                {
-                                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListFeeChart2.Location.Y);
-                                });
-                            }
-                            SetLightsMessagesAndResetTimers();
-                        }
-                        catch (Exception ex)
-                        {
-                            errorOccurred = true;
-                            HandleException(ex, "UpdateDashboards(Task3)");
-                        }
-                    }
-                });
                 #endregion
                 #region blockchain.info api
                 Task task2 = Task.Run(() => // blockchain.info endpoints 
@@ -1347,7 +1337,7 @@ namespace SATSuma
                             {
                                 if (RunBlockchainInfoEndpointAPI)
                                 {
-                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
+                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
                                     UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
                                     UpdateLabelValue(lblBlockReward, blockReward);
 
@@ -1410,21 +1400,20 @@ namespace SATSuma
                                             lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
                                         });
                                     }
-                                    UpdateLabelValue(lblBTCInCirc, btcInCirc + " / 21000000");
-                                    if (decimal.TryParse(btcInCirc, out decimal btcInCircDec))
+                                    UpdateLabelValue(lblBTCInCirc, calculatedBTCInCirculation + " / 21000000");
+                                    if (calculatedBTCInCirculation > 0)
                                     {
-                                        UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - btcInCircDec));
+                                        UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
                                     }
                                     else
                                     {
                                         lblBTCToBeIssued.Invoke((MethodInvoker)delegate
                                         {
-                                            btcInCircDec = 0;
                                             lblBTCToBeIssued.Text = "0";
                                         });
                                     }
                                     
-                                    decimal percentIssued = Math.Round((100m / 21000000) * btcInCircDec, 2);
+                                    decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
                                     UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
 
                                     progressBarPercentIssued.Invoke((MethodInvoker)delegate
@@ -1665,7 +1654,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                await Task.WhenAll(task0, task1, task2, task3, task4, task5, task6);
+                await Task.WhenAll(task0, task1, task2, task4, task5, task6);
 
                 if (errorOccurred)
                 {
@@ -1756,7 +1745,7 @@ namespace SATSuma
         }
         #endregion
         #region api calls for dashboards
-        private (string currentHashrate, string currentDifficulty) GetHashrate()
+        private (string currentHashrate, string currentDifficulty) MemSpGetHashrate()
         {
             try
             {
@@ -1784,7 +1773,7 @@ namespace SATSuma
             return ("error", "error");
         }
 
-        private (string fastestFee, string halfHourFee, string hourFee, string economyFee, string minimumFee) GetFees()
+        private (string fastestFee, string halfHourFee, string hourFee, string economyFee, string minimumFee) MemSpGetFees()
         {
             try
             {
@@ -1813,7 +1802,7 @@ namespace SATSuma
             return ("error", "error", "error", "error", "error");
         }
 
-        private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) GetDifficultyAdjustment()
+        private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) MemSpGetDifficultyAdjustment()
         {
             try
             {
@@ -1891,49 +1880,7 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
 
-        private (string mCapUSD, string mCapGBP, string mCapEUR, string mCapXAU) BitcoinExplorerOrgGetMarketCap()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString("https://bitcoinexplorer.org/api/price/marketcap");
-                var data = JObject.Parse(response);
-                // Check if each key exists and assign its value, otherwise set it to "0"
-                string mCapUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
-                string mCapGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
-                string mCapEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
-                string mCapXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
-                return (mCapUSD, mCapGBP, mCapEUR, mCapXAU);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BitcoinExplorerOrgGetMarketCap");
-            }
-            return ("0", "0", "0", "0");
-        }
-
-        private (string satsUSD, string satsGBP, string satsEUR, string satsXAU) BitcoinExplorerOrgGetMoscowTime()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString("https://bitcoinexplorer.org/api/price/sats");
-                var data = JObject.Parse(response);
-                // Check if each key exists and assign its value, otherwise set it to "0"
-                string satsUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
-                string satsGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
-                string satsEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
-                string satsXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
-                return (satsUSD, satsGBP, satsEUR, satsXAU);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BitcoinExplorerOrgGetMoscowTime");
-            }
-            return ("0", "0", "0", "0");
-        }
-
-        private (string txCount, string vSize, string totalFees) GetMempool()
+        private (string txCount, string vSize, string totalFees) MemSpGetMempool()
         {
             try
             {
@@ -1964,7 +1911,7 @@ namespace SATSuma
             return ("error", "error", "error");
         }
 
-        private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string btcInCirc, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoEndpointsRefresh()
+        private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoEndpointsRefresh()
         {
             try
             {
@@ -1997,21 +1944,20 @@ namespace SATSuma
                 string timeString = string.Format("{0:%m}m {0:%s}s", time);
                 string avgTimeBetweenBlocks = timeString;
                 string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
-                string btcInCirc = ConvertSatsToBitcoin(totalBTC).ToString();
                 string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
                 string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
                 string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
                 twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, btcInCirc, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
+                return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BlockchainInfoEndpointsRefresh");
             }
-            return ("0", "0", "0", "0", "0", "0", "0", "0", "0");
+            return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        private (List<string> aliases, List<string> capacities) MempoolSpaceLiquidityRankingJSONRefresh()
+        private (List<string> aliases, List<string> capacities) MemSpLiquidityRankingJSONRefresh()
         {
             try
             {
@@ -2062,7 +2008,7 @@ namespace SATSuma
             return (new List<string>(), new List<string>());
         }
 
-        private (List<string> aliases, List<string> channels) MempoolSpaceConnectivityRankingJSONRefresh()
+        private (List<string> aliases, List<string> channels) MemSpConnectivityRankingJSONRefresh()
         {
             try
             {
@@ -2107,7 +2053,7 @@ namespace SATSuma
             return (new List<string>(), new List<string>());
         }
 
-        private (string clearnetCapacity, string torCapacity, string unknownCapacity) MempoolSpaceCapacityBreakdownJSONRefresh()
+        private (string clearnetCapacity, string torCapacity, string unknownCapacity) MemSpCapacityBreakdownJSONRefresh()
         {
             try
             {
@@ -2214,79 +2160,36 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        string errorMess;
-
-        private (string nextBlockFee, string thirtyMinFee, string sixtyMinFee, string oneDayFee, string txInNextBlock, string nextBlockMinFee, string nextBlockMaxFee, string nextBlockTotalFees) BitcoinExplorerOrgJSONRefresh()
+        private (string txInNextBlock, string nextBlockMinFee, string nextBlockMaxFee, string nextBlockTotalFees) MemSpNextBlock()
         {
-            
+
             try
             {
-                // fees
-                errorMess = "fees";
-                var client = new HttpClient();
-                var response = client.GetAsync("https://bitcoinexplorer.org/api/mempool/fees").Result;
+                using var client = new HttpClient();
+                var response = client.GetAsync(NodeURL + "v1/fees/mempool-blocks").Result;
                 var json = response.Content.ReadAsStringAsync().Result;
-                var data = JObject.Parse(json);
-                var nextBlockFee = "0";
-                var thirtyMinFee = "0";
-                var sixtyMinFee = "0";
-                var oneDayFee = "0";
-                thirtyMinFee = data.ContainsKey("30min") ? (string)data["30min"] : "0";
-                sixtyMinFee = data.ContainsKey("60min") ? (string)data["60min"] : "0";
-                oneDayFee = data.ContainsKey("1day") ? (string)data["1day"] : "0";
+                var data = JArray.Parse(json).FirstOrDefault();
 
-                // next block
-                errorMess = "nextblock";
-                var response2 = client.GetAsync("https://bitcoinexplorer.org/api/mining/next-block").Result;
-                var json2 = response2.Content.ReadAsStringAsync().Result;
-                var data2 = JObject.Parse(json2);
-                if (data2["txCount"] != null && data2["minFeeRate"] != null && data2["maxFeeRate"] != null && data2["totalFees"] != null)
+                if (data != null)
                 {
-                    var txInNextBlock = (string)data2["txCount"];
-                    var nextBlockMinFee = (string)data2["minFeeRate"];
-                    double roundedValue;
-                    if (double.TryParse(nextBlockMinFee, out double valuetoround))
-                    {
-                        valuetoround = Convert.ToDouble(nextBlockMinFee);
-                        roundedValue = Math.Round(valuetoround, 2);
-                        nextBlockMinFee = Convert.ToString(roundedValue);
-                    }
-                    else
-                    {
-                        nextBlockMinFee = "0";
-                    }
-
-                    var nextBlockMaxFee = (string)data2["maxFeeRate"];
-                    if (double.TryParse(nextBlockMaxFee, out valuetoround))
-                    {
-                        valuetoround = Convert.ToDouble(nextBlockMaxFee);
-                        roundedValue = Math.Round(valuetoround, 2);
-                        nextBlockMaxFee = Convert.ToString(roundedValue);
-                    }
-                    else
-                    {
-                        nextBlockMaxFee = "0";
-                    }
-                    var nextBlockTotalFees = (string)data2["totalFees"];
-
-                    if (double.TryParse(nextBlockTotalFees, out valuetoround))
-                    {
-                        valuetoround = Convert.ToDouble(nextBlockTotalFees);
-                        roundedValue = Math.Round(valuetoround, 2);
-                        nextBlockTotalFees = Convert.ToString(roundedValue);
-                    }
-                    else
-                    {
-                        nextBlockTotalFees = "0";
-                    }
-                    return (nextBlockFee, thirtyMinFee, sixtyMinFee, oneDayFee, txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
+                    var txInNextBlock = data["nTx"].ToString();
+                    string nextBlockMinFeeSats = data["feeRange"].FirstOrDefault().ToString();
+                    decimal MinFee = Convert.ToDecimal(nextBlockMinFeeSats);
+                    string nextBlockMinFee = MinFee.ToString("0");
+                    var nextBlockMaxFeeSats = data["feeRange"].LastOrDefault().ToString();
+                    decimal MaxFee = Convert.ToDecimal(nextBlockMaxFeeSats);
+                    string nextBlockMaxFee = MaxFee.ToString("0");
+                    string nextBlockTotalFeesInSats = data["totalFees"].ToString();
+                    decimal nextBlockTotalFeesDecimal = ConvertSatsToBitcoin(nextBlockTotalFeesInSats);
+                    string nextBlockTotalFees = Convert.ToString(nextBlockTotalFeesDecimal);
+                    return (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BitcoinExplorerOrgJSONRefresh" + errorMess);
+                HandleException(ex, "MemSpNextBlock");
             }
-            return ("0", "0", "0", "0", "0", "0", "0", "0");
+            return ("0", "0", "0", "0");
         }
 
         private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
@@ -4120,7 +4023,7 @@ namespace SATSuma
                                 }
                                 btnViewTransactionFromBlock.Invoke((MethodInvoker)delegate
                                 {
-                                    btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width + (int)(8 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
+                                    btnViewTransactionFromBlock.Location = new Point(listViewBlockTransactions.Location.X - btnViewTransactionFromBlock.Width + (int)(12 * UIScale), item.Position.Y + listViewBlockTransactions.Location.Y);
                                     btnViewTransactionFromBlock.Height = item.Bounds.Height;
                                 });
                                 anySelected = true;
@@ -10396,8 +10299,10 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        string priceUSD = OneBTCInUSD;
+                        string priceEUR = OneBTCInEUR;
+                        string priceGBP = OneBTCInGBP;
+                        string priceXAU = OneBTCInXAU;
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10523,7 +10428,10 @@ namespace SATSuma
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
                         // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        string priceUSD = OneBTCInUSD;
+                        string priceEUR = OneBTCInEUR;
+                        string priceGBP = OneBTCInGBP;
+                        string priceXAU = OneBTCInXAU;
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10675,8 +10583,10 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        // get 
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        string priceUSD = OneBTCInUSD;
+                        string priceEUR = OneBTCInEUR;
+                        string priceGBP = OneBTCInGBP;
+                        string priceXAU = OneBTCInXAU;
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -10803,7 +10713,10 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
+                        string priceUSD = OneBTCInUSD;
+                        string priceEUR = OneBTCInEUR;
+                        string priceGBP = OneBTCInGBP;
+                        string priceXAU = OneBTCInXAU;
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -13560,8 +13473,10 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-                        //var (priceUSD, priceGBP, priceEUR) = BitcoinExplorerOrgGetPrice();
+                        string priceUSD = OneBTCInUSD;
+                        string priceEUR = OneBTCInEUR;
+                        string priceGBP = OneBTCInGBP;
+                        string priceXAU = OneBTCInXAU;
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
@@ -14063,8 +13978,11 @@ namespace SATSuma
             {
                 if (!offlineMode && !testNet)
                 {
-                    var (priceUSD, priceGBP, priceEUR, priceXAU) = BitcoinExplorerOrgGetPrice();
-
+                    string priceUSD = OneBTCInUSD;
+                    string priceEUR = OneBTCInEUR;
+                    string priceGBP = OneBTCInGBP;
+                    string priceXAU = OneBTCInXAU;
+                    
                     #region USD list
                     if (string.IsNullOrEmpty(priceUSD) || !double.TryParse(priceUSD, out _))
                     {
@@ -16186,7 +16104,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (GBP)  ▼";
+                            btnCurrency.Text = "   currency (GBP) ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "D")
                         {
@@ -16205,7 +16123,7 @@ namespace SATSuma
                             btnUSD.Enabled = false;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (USD)  ▼";
+                            btnCurrency.Text = "   currency (USD) ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "E")
                         {
@@ -16224,7 +16142,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = false;
                             btnXAU.Enabled = true;
-                            btnCurrency.Text = "   currency (EUR)  ▼";
+                            btnCurrency.Text = "   currency (EUR) ▼";
                         }
                         if (Convert.ToString(bookmark.Data[0]) == "G")
                         {
@@ -16243,7 +16161,7 @@ namespace SATSuma
                             btnUSD.Enabled = true;
                             btnEUR.Enabled = true;
                             btnXAU.Enabled = false;
-                            btnCurrency.Text = "   currency (XAU)  ▼";
+                            btnCurrency.Text = "   currency (XAU) ▼";
                         }
                         #endregion
                         #region restore offline mode settings
@@ -20248,7 +20166,7 @@ namespace SATSuma
                 }
 
                 // block
-                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnViewTransactionFromBlock };
+                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
                 foreach (RJButton button in blockButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -20256,6 +20174,7 @@ namespace SATSuma
                         button.BorderRadius = (int)(radius * UIScale);
                     });
                 }
+                btnViewTransactionFromBlock.BorderRadius = (int)((radius - 4) * UIScale);
                 btnNumericUpDownSubmittedBlockNumberUp.Invoke((MethodInvoker)delegate
                 {
                     btnNumericUpDownSubmittedBlockNumberUp.BorderRadius = 0;
@@ -23498,6 +23417,12 @@ namespace SATSuma
                 });
                 numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
                 numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
+
+
+                // calculate amount of btc issued
+                int blockHeight = Convert.ToInt32(BlockTip);
+                decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
+                calculatedBTCInCirculation = totalBitcoinsIssued;
             }
             catch (Exception ex)
             {
@@ -24115,8 +24040,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuBitcoinDashboard.Enabled = false;
@@ -24178,8 +24104,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(24 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuLightningDashboard.Enabled = false;
@@ -24241,8 +24168,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(24 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuCharts.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuCharts.Enabled = false;
@@ -24304,8 +24232,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddress.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuAddress.Enabled = false;
@@ -24368,8 +24297,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlock.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuBlock.Enabled = false;
@@ -24440,8 +24370,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuXpub.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuXpub.Enabled = false;
@@ -24504,8 +24435,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlockList.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 btnMenuBlockList.Enabled = false;
                 EnableAllMenuButtons();
@@ -24577,8 +24509,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuTransaction.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 btnMenuTransaction.Enabled = false;
                 EnableAllMenuButtons();
@@ -24642,8 +24575,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBookmarks.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuBookmarks.Enabled = false;
@@ -24707,8 +24641,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPriceConverter.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuPriceConverter.Enabled = false;
@@ -24772,8 +24707,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuDCACalculator.Enabled = false;
@@ -24835,8 +24771,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(24 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDirectory.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 this.DoubleBuffered = true;
@@ -24900,8 +24837,9 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Visible = true;
+                    lblMenuArrow.Height = (int)(20 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuSettings.Location.Y);
+                    lblMenuArrow.Visible = true;
                 });
                 EnableAllMenuButtons();
                 btnMenuSettings.Enabled = false;
@@ -25119,7 +25057,7 @@ namespace SATSuma
                 btnXAU.Enabled = true;
                 btnCurrency.Invoke((MethodInvoker)delegate
                 {
-                    btnCurrency.Text = "   currency (USD)  ▼";
+                    btnCurrency.Text = "   currency (USD) ▼";
                 });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -25177,7 +25115,7 @@ namespace SATSuma
                 btnXAU.Enabled = true;
                 btnCurrency.Invoke((MethodInvoker)delegate
                 {
-                    btnCurrency.Text = "   currency (EUR)  ▼";
+                    btnCurrency.Text = "   currency (EUR) ▼";
                 });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -25235,7 +25173,7 @@ namespace SATSuma
                 btnXAU.Enabled = true;
                 btnCurrency.Invoke((MethodInvoker)delegate
                 {
-                    btnCurrency.Text = "   currency (GBP)  ▼";
+                    btnCurrency.Text = "   currency (GBP) ▼";
                 });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -25293,7 +25231,7 @@ namespace SATSuma
                 btnXAU.Enabled = false;
                 btnCurrency.Invoke((MethodInvoker)delegate
                 {
-                    btnCurrency.Text = "   currency (XAU)  ▼";
+                    btnCurrency.Text = "   currency (XAU) ▼";
                 });
                 CloseCurrencyMenuGetMarketDataSaveCurrency();
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -25658,11 +25596,35 @@ namespace SATSuma
                         // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice);
                     }
-                    
 
-                    var (mCapUSD, mCapGBP, mCapEUR, mCapXAU) = BitcoinExplorerOrgGetMarketCap();
-                    var (satsUSD, satsGBP, satsEUR, satsXAU) = BitcoinExplorerOrgGetMoscowTime();
-/**/
+                    OneBTCInUSD = PriceUSD;
+                    OneBTCInEUR = PriceEUR;
+                    OneBTCInGBP = PriceGBP;
+                    OneBTCInXAU = PriceXAU;
+
+                    string mCapUSD = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInUSD));
+                    string mCapEUR = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInEUR));
+                    string mCapGBP = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInGBP));
+                    string mCapXAU = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInXAU));
+
+
+                    decimal unitOfFiat = 1;
+                    decimal priceToCalculateFrom = 0; 
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInUSD);
+                    string satsUSD = Convert.ToString( ((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInEUR);
+                    string satsEUR = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInGBP);
+                    string satsGBP = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInXAU);
+                    string satsXAU = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+
+
+                    OneUSDInSats = satsUSD;
+                    OneEURInSats = satsEUR;
+                    OneGBPInSats = satsGBP;
+                    OneXAUInSats = satsXAU;
+
                     string price = "";
                     string mCap = "";
                     string satsPerUnit = "";
@@ -26346,7 +26308,7 @@ namespace SATSuma
         }
 
         readonly TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
-        TextFormatFlags.LeftAndRightPadding | TextFormatFlags.HorizontalCenter | TextFormatFlags.NoClipping;
+        TextFormatFlags.LeftAndRightPadding | TextFormatFlags.Left | TextFormatFlags.NoClipping;
         readonly Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
 
         private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
@@ -27453,7 +27415,47 @@ namespace SATSuma
         #endregion
 
         #endregion
+        #region circulation
+        public class CirculationCalculator
+        {
+            // Initial block reward
+            private const decimal InitialBlockReward = 50M;
 
+            // Number of blocks per halving
+            private const int BlocksPerHalving = 210000;
+
+            public static decimal CalculateTotalBitcoinsIssued(int blockHeight)
+            {
+                // Determine the number of halvings
+                int numberOfHalvings = blockHeight / BlocksPerHalving;
+
+                // Initialize the total bitcoins issued
+                decimal totalBitcoinsIssued = 0;
+
+                // Calculate total bitcoins issued before the current halving
+                for (int i = 0; i < numberOfHalvings; i++)
+                {
+                    // Total bitcoins issued in each halving period
+                    decimal bitcoinsIssuedInHalving = BlocksPerHalving * InitialBlockReward / (decimal)Math.Pow(2, i);
+
+                    // Add to the total bitcoins issued
+                    totalBitcoinsIssued += bitcoinsIssuedInHalving;
+                }
+
+                // Calculate remaining bitcoins for the current halving period
+                int remainingBlocks = blockHeight % BlocksPerHalving;
+                totalBitcoinsIssued += remainingBlocks * GetBlockReward(numberOfHalvings);
+
+                return totalBitcoinsIssued;
+            }
+
+            private static decimal GetBlockReward(int halvings)
+            {
+                // Calculate the block reward for the given number of halvings
+                return InitialBlockReward / (decimal)Math.Pow(2, halvings);
+            }
+        }
+        #endregion
         #endregion
     }
 }

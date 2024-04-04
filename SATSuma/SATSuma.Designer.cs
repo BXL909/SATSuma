@@ -1596,7 +1596,7 @@
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(172, 17);
             this.label21.TabIndex = 113;
-            this.label21.Text = "Min / max fee in next block";
+            this.label21.Text = "Min / max fee in next block (sats)";
             this.toolTipGeneralUse.SetToolTip(this.label21, "Estimation. Actual min/max fee won\'t be known until the block is mined");
             // 
             // lblTransInNextBlock
@@ -2547,7 +2547,7 @@
             this.btnViewTransactionFromBlock.Location = new System.Drawing.Point(176, 229);
             this.btnViewTransactionFromBlock.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewTransactionFromBlock.Name = "btnViewTransactionFromBlock";
-            this.btnViewTransactionFromBlock.Size = new System.Drawing.Size(37, 15);
+            this.btnViewTransactionFromBlock.Size = new System.Drawing.Size(40, 15);
             this.btnViewTransactionFromBlock.TabIndex = 279;
             this.btnViewTransactionFromBlock.TabStop = false;
             this.btnViewTransactionFromBlock.Text = "view";
@@ -6306,7 +6306,7 @@
             // 
             this.lblAddressType.AutoSize = true;
             this.lblAddressType.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressType.Location = new System.Drawing.Point(10, 131);
+            this.lblAddressType.Location = new System.Drawing.Point(14, 133);
             this.lblAddressType.Name = "lblAddressType";
             this.lblAddressType.Size = new System.Drawing.Size(52, 16);
             this.lblAddressType.TabIndex = 3;
@@ -14164,9 +14164,7 @@
             this.btnChartMarketCap.TabStop = false;
             this.btnChartMarketCap.Text = "market cap.";
             this.btnChartMarketCap.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCap, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCap, resources.GetString("btnChartMarketCap.ToolTip"));
             this.btnChartMarketCap.UseVisualStyleBackColor = false;
             this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
             // 
@@ -14239,9 +14237,7 @@
             this.btnChartLightningChannels.TabStop = false;
             this.btnChartLightningChannels.Text = "channels";
             this.btnChartLightningChannels.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningChannels, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningChannels, resources.GetString("btnChartLightningChannels.ToolTip"));
             this.btnChartLightningChannels.UseVisualStyleBackColor = false;
             this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_Click);
             // 
@@ -14266,9 +14262,7 @@
             this.btnChartLightningCapacity.TabStop = false;
             this.btnChartLightningCapacity.Text = "capacity";
             this.btnChartLightningCapacity.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningCapacity, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningCapacity, resources.GetString("btnChartLightningCapacity.ToolTip"));
             this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
             this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_Click);
             // 
@@ -14455,9 +14449,7 @@
             this.btnChartNodesByNetwork.TabStop = false;
             this.btnChartNodesByNetwork.Text = "networks";
             this.btnChartNodesByNetwork.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartNodesByNetwork, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartNodesByNetwork, resources.GetString("btnChartNodesByNetwork.ToolTip"));
             this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
             this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_Click);
             // 
@@ -14566,9 +14558,7 @@
             this.btnChartUTXO.TabStop = false;
             this.btnChartUTXO.Text = "UTXO\'s";
             this.btnChartUTXO.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXO, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXO, resources.GetString("btnChartUTXO.ToolTip"));
             this.btnChartUTXO.UseVisualStyleBackColor = false;
             this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_Click);
             // 
@@ -14655,9 +14645,7 @@
             this.btnChartUniqueAddresses.TabStop = false;
             this.btnChartUniqueAddresses.Text = "addresses";
             this.btnChartUniqueAddresses.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartUniqueAddresses, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartUniqueAddresses, resources.GetString("btnChartUniqueAddresses.ToolTip"));
             this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
             this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
             // 
@@ -14709,9 +14697,7 @@
             this.btnChartBlockSize.TabStop = false;
             this.btnChartBlockSize.Text = "block size";
             this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockSize, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockSize, resources.GetString("btnChartBlockSize.ToolTip"));
             this.btnChartBlockSize.UseVisualStyleBackColor = false;
             this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_Click);
             // 
@@ -14736,9 +14722,7 @@
             this.btnChartCirculation.TabStop = false;
             this.btnChartCirculation.Text = "circulation";
             this.btnChartCirculation.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartCirculation, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartCirculation, resources.GetString("btnChartCirculation.ToolTip"));
             this.btnChartCirculation.UseVisualStyleBackColor = false;
             this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_Click);
             // 
@@ -14763,9 +14747,7 @@
             this.btnChartFeeRates.TabStop = false;
             this.btnChartFeeRates.Text = "fee rates";
             this.btnChartFeeRates.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartFeeRates, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartFeeRates, resources.GetString("btnChartFeeRates.ToolTip"));
             this.btnChartFeeRates.UseVisualStyleBackColor = false;
             this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_Click);
             // 
@@ -15040,9 +15022,7 @@
             this.btnChartBlockFees.TabStop = false;
             this.btnChartBlockFees.Text = "block fees";
             this.btnChartBlockFees.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockFees, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockFees, resources.GetString("btnChartBlockFees.ToolTip"));
             this.btnChartBlockFees.UseVisualStyleBackColor = false;
             this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_Click);
             // 
@@ -15067,9 +15047,7 @@
             this.btnChartReward.TabStop = false;
             this.btnChartReward.Text = "block reward";
             this.btnChartReward.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartReward, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartReward, resources.GetString("btnChartReward.ToolTip"));
             this.btnChartReward.UseVisualStyleBackColor = false;
             this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_Click);
             // 
@@ -15094,9 +15072,7 @@
             this.btnChartPrice.TabStop = false;
             this.btnChartPrice.Text = "price";
             this.btnChartPrice.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPrice, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartPrice, resources.GetString("btnChartPrice.ToolTip"));
             this.btnChartPrice.UseVisualStyleBackColor = false;
             this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_Click);
             // 
@@ -15121,9 +15097,7 @@
             this.btnChartDifficulty.TabStop = false;
             this.btnChartDifficulty.Text = "difficulty";
             this.btnChartDifficulty.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficulty, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficulty, resources.GetString("btnChartDifficulty.ToolTip"));
             this.btnChartDifficulty.UseVisualStyleBackColor = false;
             this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
             // 
@@ -15148,9 +15122,7 @@
             this.btnChartHashrate.TabStop = false;
             this.btnChartHashrate.Text = "hashrate";
             this.btnChartHashrate.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartHashrate, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.");
+            this.toolTipGeneralUse.SetToolTip(this.btnChartHashrate, resources.GetString("btnChartHashrate.ToolTip"));
             this.btnChartHashrate.UseVisualStyleBackColor = false;
             this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
             // 
@@ -18596,9 +18568,7 @@
             this.btnCalculateDCA.TabStop = false;
             this.btnCalculateDCA.Text = "calculate";
             this.btnCalculateDCA.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnCalculateDCA, "Mouse-wheel to zoom in and out.\r\nRight-click & hold, drag horizontally to stretch" +
-        " scale horizontally.\r\nRight-click & hold, drag vertically to stretch scale verti" +
-        "cally.\r\n");
+            this.toolTipGeneralUse.SetToolTip(this.btnCalculateDCA, resources.GetString("btnCalculateDCA.ToolTip"));
             this.btnCalculateDCA.UseVisualStyleBackColor = false;
             this.btnCalculateDCA.Click += new System.EventHandler(this.BtnCalculateDCA_Click);
             // 
@@ -18901,7 +18871,7 @@
             // timer50thSec
             // 
             this.timer50thSec.Interval = 50;
-            this.timer50thSec.Tick += new System.EventHandler(this.timer50thSec_Tick);
+            this.timer50thSec.Tick += new System.EventHandler(this.Timer50thSec_Tick);
             // 
             // SATSuma
             // 
@@ -18912,18 +18882,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelPriceConverter);
-            this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);

@@ -645,9 +645,9 @@
             this.panel38 = new System.Windows.Forms.Panel();
             this.label26 = new System.Windows.Forms.Label();
             this.panelPriceSourceIndicators = new System.Windows.Forms.Panel();
-            this.label230 = new System.Windows.Forms.Label();
-            this.label229 = new System.Windows.Forms.Label();
-            this.label227 = new System.Windows.Forms.Label();
+            this.lblCoingeckoPriceIndicator = new System.Windows.Forms.Label();
+            this.lblMempoolSpacePriceIndicator = new System.Windows.Forms.Label();
+            this.lblBitcoinExplorerPriceIndicator = new System.Windows.Forms.Label();
             this.label226 = new System.Windows.Forms.Label();
             this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
             this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
@@ -1213,6 +1213,9 @@
             this.toolTipGeneralUse = new System.Windows.Forms.ToolTip(this.components);
             this.progressBarRefreshData = new ColorProgressBar.ColorProgressBar();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
+            this.timerCoingeckoPriceIndicator = new System.Windows.Forms.Timer(this.components);
+            this.timerBitcoinExplorerPriceIndicator = new System.Windows.Forms.Timer(this.components);
+            this.timerMempoolSpacePriceIndicator = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -10280,50 +10283,50 @@
             // 
             // panelPriceSourceIndicators
             // 
-            this.panelPriceSourceIndicators.Controls.Add(this.label230);
-            this.panelPriceSourceIndicators.Controls.Add(this.label229);
-            this.panelPriceSourceIndicators.Controls.Add(this.label227);
+            this.panelPriceSourceIndicators.Controls.Add(this.lblCoingeckoPriceIndicator);
+            this.panelPriceSourceIndicators.Controls.Add(this.lblMempoolSpacePriceIndicator);
+            this.panelPriceSourceIndicators.Controls.Add(this.lblBitcoinExplorerPriceIndicator);
             this.panelPriceSourceIndicators.Controls.Add(this.label226);
             this.panelPriceSourceIndicators.Location = new System.Drawing.Point(307, 93);
             this.panelPriceSourceIndicators.Name = "panelPriceSourceIndicators";
             this.panelPriceSourceIndicators.Size = new System.Drawing.Size(64, 11);
             this.panelPriceSourceIndicators.TabIndex = 284;
             // 
-            // label230
+            // lblCoingeckoPriceIndicator
             // 
-            this.label230.AutoSize = true;
-            this.label230.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label230.Font = new System.Drawing.Font("Consolas", 5F);
-            this.label230.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label230.Location = new System.Drawing.Point(36, 2);
-            this.label230.Name = "label230";
-            this.label230.Size = new System.Drawing.Size(11, 8);
-            this.label230.TabIndex = 286;
-            this.label230.Text = "🟢";
+            this.lblCoingeckoPriceIndicator.AutoSize = true;
+            this.lblCoingeckoPriceIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblCoingeckoPriceIndicator.Font = new System.Drawing.Font("Consolas", 5F);
+            this.lblCoingeckoPriceIndicator.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblCoingeckoPriceIndicator.Location = new System.Drawing.Point(36, 2);
+            this.lblCoingeckoPriceIndicator.Name = "lblCoingeckoPriceIndicator";
+            this.lblCoingeckoPriceIndicator.Size = new System.Drawing.Size(11, 8);
+            this.lblCoingeckoPriceIndicator.TabIndex = 286;
+            this.lblCoingeckoPriceIndicator.Text = "🟢";
             // 
-            // label229
+            // lblMempoolSpacePriceIndicator
             // 
-            this.label229.AutoSize = true;
-            this.label229.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label229.Font = new System.Drawing.Font("Consolas", 5F);
-            this.label229.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label229.Location = new System.Drawing.Point(45, 2);
-            this.label229.Name = "label229";
-            this.label229.Size = new System.Drawing.Size(11, 8);
-            this.label229.TabIndex = 285;
-            this.label229.Text = "🟢";
+            this.lblMempoolSpacePriceIndicator.AutoSize = true;
+            this.lblMempoolSpacePriceIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblMempoolSpacePriceIndicator.Font = new System.Drawing.Font("Consolas", 5F);
+            this.lblMempoolSpacePriceIndicator.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblMempoolSpacePriceIndicator.Location = new System.Drawing.Point(45, 2);
+            this.lblMempoolSpacePriceIndicator.Name = "lblMempoolSpacePriceIndicator";
+            this.lblMempoolSpacePriceIndicator.Size = new System.Drawing.Size(11, 8);
+            this.lblMempoolSpacePriceIndicator.TabIndex = 285;
+            this.lblMempoolSpacePriceIndicator.Text = "🟢";
             // 
-            // label227
+            // lblBitcoinExplorerPriceIndicator
             // 
-            this.label227.AutoSize = true;
-            this.label227.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label227.Font = new System.Drawing.Font("Consolas", 5F);
-            this.label227.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label227.Location = new System.Drawing.Point(54, 2);
-            this.label227.Name = "label227";
-            this.label227.Size = new System.Drawing.Size(11, 8);
-            this.label227.TabIndex = 284;
-            this.label227.Text = "🟢";
+            this.lblBitcoinExplorerPriceIndicator.AutoSize = true;
+            this.lblBitcoinExplorerPriceIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBitcoinExplorerPriceIndicator.Font = new System.Drawing.Font("Consolas", 5F);
+            this.lblBitcoinExplorerPriceIndicator.ForeColor = System.Drawing.Color.OliveDrab;
+            this.lblBitcoinExplorerPriceIndicator.Location = new System.Drawing.Point(54, 2);
+            this.lblBitcoinExplorerPriceIndicator.Name = "lblBitcoinExplorerPriceIndicator";
+            this.lblBitcoinExplorerPriceIndicator.Size = new System.Drawing.Size(11, 8);
+            this.lblBitcoinExplorerPriceIndicator.TabIndex = 284;
+            this.lblBitcoinExplorerPriceIndicator.Text = "🟢";
             // 
             // label226
             // 
@@ -19004,6 +19007,21 @@
             this.timer50thSec.Interval = 50;
             this.timer50thSec.Tick += new System.EventHandler(this.Timer50thSec_Tick);
             // 
+            // timerCoingeckoPriceIndicator
+            // 
+            this.timerCoingeckoPriceIndicator.Enabled = true;
+            this.timerCoingeckoPriceIndicator.Interval = 4000;
+            // 
+            // timerBitcoinExplorerPriceIndicator
+            // 
+            this.timerBitcoinExplorerPriceIndicator.Enabled = true;
+            this.timerBitcoinExplorerPriceIndicator.Interval = 1000;
+            // 
+            // timerMempoolSpacePriceIndicator
+            // 
+            this.timerMempoolSpacePriceIndicator.Enabled = true;
+            this.timerMempoolSpacePriceIndicator.Interval = 1000;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -19013,6 +19031,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.panelSettings);
@@ -19022,7 +19041,6 @@
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
@@ -20552,10 +20570,13 @@
         private System.Windows.Forms.Label lblMempoolSpacePriceAPI;
         private System.Windows.Forms.Label label226;
         private System.Windows.Forms.Panel panelPriceSourceIndicators;
-        private System.Windows.Forms.Label label230;
-        private System.Windows.Forms.Label label229;
-        private System.Windows.Forms.Label label227;
+        private System.Windows.Forms.Label lblCoingeckoPriceIndicator;
+        private System.Windows.Forms.Label lblMempoolSpacePriceIndicator;
+        private System.Windows.Forms.Label lblBitcoinExplorerPriceIndicator;
         private System.Windows.Forms.Label label236;
+        private System.Windows.Forms.Timer timerCoingeckoPriceIndicator;
+        private System.Windows.Forms.Timer timerBitcoinExplorerPriceIndicator;
+        private System.Windows.Forms.Timer timerMempoolSpacePriceIndicator;
     }
 }
 

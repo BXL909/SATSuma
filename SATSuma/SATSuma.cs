@@ -28,8 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * more testing! 
 * reduce reliance on external API's where possible
-* current method of dimming price api indicators isn't great. They should have their own timer
-* got an 'attempted to divide by 0' error from dca calculator screen when XAU was selected as default currency
+* check conditions that check for api flags to make sure they account for mempoolspace price too (better to just check onebtcinselectedcurrency > 0)
 */
 
 #region Using
@@ -338,7 +337,21 @@ namespace SATSuma
         string OneGBPInSats = "0";
         string OneXAUInSats = "0";
         #endregion
+        #region counters used as variables in DoTimerBasedStuff()
+        int intNodeStatusLightTimeLightLit = 0;
+        int intCoingeckoTimeLightLit = 0;
+        int intMempoolspaceTimeLightLit = 0;
+        int intBitcoinexplorerTimeLightLit = 0;
+        int intSavingSettingsTimeLightLit = 0;
+        int intAddToBookmarksMessageTimeLightLit = 0;
+        int intTimeUntilXpubProgressBarsHidden = 0;
+        int intHideAddToBookmarksTimeShown = 0;
+        int intExternalLinkClickedFlagToFalse = 0;
+        int intThemeNameInUseMessageTimeShown = 0;
+        int intThemeDeletedMessageTimeShown = 0;
+        int intThemeSavedMessageTimeShown = 0;
 
+        #endregion
         #endregion
 
         #region ⚡INITIALISE⚡
@@ -529,7 +542,7 @@ namespace SATSuma
                 // add an extra Y axis to the chart to show the daily BTC amount bought
                 yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color: btnMenuDirectory.ForeColor);
                 // populate dca chart if the api is enabled
-                if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
+                if (OneBTCinSelectedCurrency > 0)
                 {
                     PopulateDCACalculator();
                 }
@@ -625,12 +638,8 @@ namespace SATSuma
                     readyToShowPriceChangeLabelYet = true;
                     ClearAlertAndErrorMessage();
                 }
-
-                if (intDisplayCountdownToRefresh == 57)
-                {
-
-                    ResetPriceAPIIndicators();
-                }
+                // anything timer based - hiding controls, messages, dim lights that have been flashed, reset flags, etc
+                DoTimerBasedStuff();
 
                 // time since last block mined on header
                 totalSecondsSinceLastBlock++;
@@ -8383,7 +8392,7 @@ namespace SATSuma
                 });
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxXpubScreenOwnNodeURL.Enabled = true;
-                timerHideProgressBars.Start();
+                intTimeUntilXpubProgressBarsHidden = 0;
                 #endregion
             }
             catch (Exception ex)
@@ -8581,29 +8590,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "listViewXpubAddresses_ItemSelectionChanged");
-            }
-        }
-        #endregion
-        #region reposition & hide elements
-        //-------------------- HIDE PROGRESS BARS, ETC AFTER A PERIOD ----------------------------------
-        private void TimerHideProgressBars_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
-                foreach (Control control in controlsToHide)
-                {
-                    control.Invoke((MethodInvoker)delegate
-                    {
-                        control.Visible = false;
-                    });
-                }
-
-                timerHideProgressBars.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TimerHideProgressBars_Tick");
             }
         }
         #endregion
@@ -12186,7 +12172,7 @@ namespace SATSuma
                 lblBookmarkSavedSuccess.Visible = true;
                 btnCommitToBookmarks.Enabled = false;
                 btnCancelAddToBookmarks.Enabled = false;
-                hideAddToBookmarksTimer.Start();
+                intHideAddToBookmarksTimeShown = 0;
 
                 textBoxBookmarkProposedNote.Text = "";
             }
@@ -12391,35 +12377,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "TextBoxBookmarkEncryptionKey_KeyPress");
-            }
-        }
-        #endregion
-        #region timer to hide add bookmark panel after adding
-        private void HideAddToBookmarks_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                panelAddToBookmarks.Visible = false;
-                panelAddToBookmarksBorder.Visible = false;
-                //panelFees.Visible = true;
-                hideAddToBookmarksTimer.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "HideAddToBookmarks_Tick");
-            }
-        }
-
-        private void HideDeletedBookmarkMessageTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                lblBookmarkStatusMessage.Visible = false;
-                hideBookmarkStatusMessageTimer.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "HideDeletedBookmarkMessageTimer_Tick");
             }
         }
         #endregion
@@ -12886,9 +12843,12 @@ namespace SATSuma
                 }
                 DeleteBookmarkFromJsonFile(bookmarkDataToDelete);
                 lblBookmarkStatusMessage.ForeColor = Color.IndianRed;
-                lblBookmarkStatusMessage.Text = "bookmark deleted";
+                lblBookmarkStatusMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblBookmarkStatusMessage.Text = "bookmark deleted";
+                });
+                intAddToBookmarksMessageTimeLightLit = 0;
                 lblBookmarkStatusMessage.Visible = true;
-                hideBookmarkStatusMessageTimer.Start();
                 SetupBookmarksScreen();
                 lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
@@ -12990,7 +12950,7 @@ namespace SATSuma
                     lblBookmarkStatusMessage.Text = "bookmarks deleted";
                     lblBookmarkStatusMessage.Visible = true;
                 });
-                hideBookmarkStatusMessageTimer.Start();
+                intAddToBookmarksMessageTimeLightLit = 0;
                 SetupBookmarksScreen();
                 lblBookmarkDataInFull.Invoke((MethodInvoker)delegate
                 {
@@ -13193,7 +13153,7 @@ namespace SATSuma
                         lblBookmarkStatusMessage.Text = "bookmark unlocked";
                         lblBookmarkStatusMessage.Visible = true;
                     });
-                    hideBookmarkStatusMessageTimer.Start();
+                    intAddToBookmarksMessageTimeLightLit = 0;
                     btnViewBookmark.Enabled = true;
                 }
                 else // wrong key
@@ -13204,7 +13164,7 @@ namespace SATSuma
                         lblBookmarkStatusMessage.Text = "incorrect key";
                         lblBookmarkStatusMessage.Visible = true;
                     });
-                    hideBookmarkStatusMessageTimer.Start();
+                    intAddToBookmarksMessageTimeLightLit = 0;
                     btnViewBookmark.Enabled = false;
                 }
             }
@@ -14800,7 +14760,7 @@ namespace SATSuma
 
                     // Set the linkClicked flag to true to avoid multiple tabs for a single click
                     linkClicked = true;
-                    externalLinksTimer.Start();
+                    intExternalLinkClickedFlagToFalse = 0;
 
                     // Cancel the default behavior for the link click to stop IE opening
                     e.ReturnValue = false;
@@ -14812,18 +14772,6 @@ namespace SATSuma
             }
         }
 
-        private void ExternalLinksTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                linkClicked = false;
-                externalLinksTimer.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ExternalLinksTimer_Tick");
-            }
-        }
         #endregion
         #endregion
 
@@ -16073,6 +16021,7 @@ namespace SATSuma
                     WriteBookmarksToJsonFile(bookmarks);
                     settingsAlreadySavedInFile = true;
                     settingsInFile = bookmarkData;
+                    intSavingSettingsTimeLightLit = 0;
                     labelSettingsSaved.Invoke((MethodInvoker)delegate
                     {
                         labelSettingsSaved.Text = "Saving settings";
@@ -16081,7 +16030,6 @@ namespace SATSuma
                     {
                         lblSaveSettingsLight.ForeColor = Color.Lime;
                     });
-                    timerHideSettingsSaved.Start();
                 }
                 else
                 {
@@ -16095,6 +16043,7 @@ namespace SATSuma
                     WriteBookmarksToJsonFile(bookmarks);
                     settingsAlreadySavedInFile = true;
                     settingsInFile = bookmarkData;
+                    intSavingSettingsTimeLightLit = 0;
                     labelSettingsSaved.Invoke((MethodInvoker)delegate
                     {
                         labelSettingsSaved.Text = "Saving settings";
@@ -16103,32 +16052,11 @@ namespace SATSuma
                     {
                         lblSaveSettingsLight.ForeColor = Color.Lime;
                     });
-                    timerHideSettingsSaved.Start();
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "SaveSettingsToBookmarksFile");
-            }
-        }
-
-        private void TimerHideSettingsSaved_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                labelSettingsSaved.Invoke((MethodInvoker)delegate
-                {
-                    labelSettingsSaved.Text = "Settings saved";
-                });
-                lblSaveSettingsLight.Invoke((MethodInvoker)delegate
-                {
-                    lblSaveSettingsLight.ForeColor = Color.OliveDrab;
-                });
-                timerHideSettingsSaved.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TimerHideSettingsSaved_Tick");
             }
         }
         #endregion
@@ -17202,6 +17130,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17210,7 +17139,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17255,6 +17183,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17263,7 +17192,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17308,6 +17236,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17316,7 +17245,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17361,6 +17289,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17369,7 +17298,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17414,6 +17342,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17422,7 +17351,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17467,6 +17395,7 @@ namespace SATSuma
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
                         ReloadScreensWithListviews();
+                        intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
                         {
                             labelSettingsSaved.Text = "Saving settings";
@@ -17475,7 +17404,6 @@ namespace SATSuma
                         {
                             lblSaveSettingsLight.ForeColor = Color.Lime;
                         });
-                        timerHideSettingsSaved.Start();
                     }
                 }
             }
@@ -17609,6 +17537,7 @@ namespace SATSuma
                             RestoreTheme(theme);
                             SaveThemeAsDefault(theme.ThemeName);
                             ReloadScreensWithListviews();
+                            intSavingSettingsTimeLightLit = 0;
                             labelSettingsSaved.Invoke((MethodInvoker)delegate
                             {
                                 labelSettingsSaved.Text = "Saving settings";
@@ -17617,7 +17546,6 @@ namespace SATSuma
                             {
                                 lblSaveSettingsLight.ForeColor = Color.Lime;
                             });
-                            timerHideSettingsSaved.Start();
                         }
                     }
                 }
@@ -19479,8 +19407,8 @@ namespace SATSuma
                 {
                     if (theme.ThemeName == newTheme.ThemeName)
                     {
+                        intThemeNameInUseMessageTimeShown = 0;
                         lblThemeNameInUse.Visible = true;
-                        timerHideThemeNameInUse.Start();
                         return;
                     }
                 }
@@ -19494,8 +19422,8 @@ namespace SATSuma
                 SaveThemeAsDefault(textBoxThemeName.Text);
                 currentlyActiveTheme = newTheme.ThemeName;
                 PopulateThemeComboboxes();
+                intThemeSavedMessageTimeShown = 0;
                 lblThemeSaved.Visible = true;
-                hideThemeSavedTimer.Start();
                 textBoxThemeName.Invoke((MethodInvoker)delegate
                 {
                     textBoxThemeName.Text = "";
@@ -19574,6 +19502,7 @@ namespace SATSuma
                                     LookupBlockList();
                                     LookupBlock();
                                     SetupBookmarksScreen();
+                                    intSavingSettingsTimeLightLit = 0;
                                     labelSettingsSaved.Invoke((MethodInvoker)delegate
                                     {
                                         labelSettingsSaved.Text = "Saving settings";
@@ -19582,7 +19511,6 @@ namespace SATSuma
                                     {
                                         lblSaveSettingsLight.ForeColor = Color.Lime;
                                     });
-                                    timerHideSettingsSaved.Start();
                                 }
                             }
                             catch (Exception ex)
@@ -22360,12 +22288,12 @@ namespace SATSuma
                 if (comboBoxCustomizeScreenThemeList.Texts == currentlyActiveTheme)
                 {
                     lblThemeDeleted.Text = "unable to delete active theme   ";
+                    intThemeDeletedMessageTimeShown = 0;
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
                         lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
-                    hideThemeDeletedTimer.Start();
                     return;
                 }
                 // Read the existing thenes from the JSON file
@@ -22384,22 +22312,22 @@ namespace SATSuma
                     WriteThemeToJsonFile(themes);
                     PopulateThemeComboboxes();
                     lblThemeDeleted.Text = "theme deleted   ";
+                    intThemeDeletedMessageTimeShown = 0;
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
                         lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
-                    hideThemeDeletedTimer.Start();
                 }
                 else
                 {
                     lblThemeDeleted.Text = "no theme selected   ";
+                    intThemeDeletedMessageTimeShown = 0;
                     lblThemeDeleted.Invoke((MethodInvoker)delegate
                     {
                         lblThemeDeleted.Location = new Point(panel72.Width - lblThemeDeleted.Width, 0);
                     });
                     lblThemeDeleted.Visible = true;
-                    hideThemeDeletedTimer.Start();
                 }
             }
             catch (Exception ex)
@@ -22408,59 +22336,798 @@ namespace SATSuma
             }
         }
         #endregion region
-        #region timers to hide saved/deleted/nameInUse messages after display
-        private void HideThemeSavedTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                lblThemeSaved.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeSaved.Visible = false;
-                });
-                hideThemeSavedTimer.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "HideThemeSavedTimer_Tick");
-            }
-        }
-
-        private void HideThemeDeletedTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                lblThemeDeleted.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeDeleted.Visible = false;
-                });
-                hideThemeDeletedTimer.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "HideThemeDeletedTimer_Tick");
-            }
-        }
-
-        private void TimerHideThemeNameInUse_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                lblThemeNameInUse.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeNameInUse.Visible = false;
-                });
-                timerHideThemeNameInUse.Stop();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "timerHideThemeNameInUse_Tick");
-            }
-        }
-        #endregion
         #endregion
 
         #region ⚡COMMON CODE⚡
 
+        #region get market data
+        private void GetMarketData()
+        {
+            string sourceOfCurrentPrice = "";
+
+            try
+            {
+                if (!offlineMode && !testNet)
+                {
+                    string BitExPriceUSD = "0";
+                    string BitExPriceGBP = "0";
+                    string BitExPriceEUR = "0";
+                    string BitExPriceXAU = "0";
+                    string GeckoPriceUSD = "0";
+                    string GeckoPriceGBP = "0";
+                    string GeckoPriceEUR = "0";
+                    string GeckoPriceXAU = "0";
+                    string mempoPriceUSD = "0";
+                    string mempoPriceGBP = "0";
+                    string mempoPriceEUR = "0";
+                    string mempoPriceXAU = "0";
+                    decimal priceUSDTotalForAverageCalculation = 0;
+                    decimal priceGBPTotalForAverageCalculation = 0;
+                    decimal priceEURTotalForAverageCalculation = 0;
+                    decimal priceXAUTotalForAverageCalculation = 0;
+                    decimal denominatorUSDForAverageCalculation = 0;
+                    decimal denominatorGBPForAverageCalculation = 0;
+                    decimal denominatorEURForAverageCalculation = 0;
+                    decimal denominatorXAUForAverageCalculation = 0;
+                    string bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: This price API is disabled";
+                    string geckoTooltipForSelectedCurrency = "coingecko.com: This price API is disabled";
+                    string mempoTooltipForSelectedCurrency = "mempool.space: This price API is disabled";
+
+                    #region get price from bitcoinexplorer.org
+                    if (RunBitcoinExplorerAPI)
+                    {
+                        var (bePriceUSD, bePriceGBP, bePriceEUR, bePriceXAU) = BitcoinExplorerOrgGetPrice();
+                        BitExPriceUSD = bePriceUSD;
+                        BitExPriceEUR = bePriceEUR;
+                        BitExPriceGBP = bePriceGBP;
+                        BitExPriceXAU = bePriceXAU;
+
+                        //USD
+                        if (Convert.ToDecimal(BitExPriceUSD) > 0)
+                        {
+                            // update values to calculate average
+                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(BitExPriceUSD);
+                            denominatorUSDForAverageCalculation++;
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: $" + BitExPriceUSD;
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no USD price returned";
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //GBP
+                        if (Convert.ToDecimal(BitExPriceGBP) > 0)
+                        {
+                            // update values to calculate average
+                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(BitExPriceGBP);
+                            denominatorGBPForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: £" + BitExPriceGBP;
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no GBP price returned";
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //EUR
+                        if (Convert.ToDecimal(BitExPriceEUR) > 0)
+                        {
+                            // update values to calculate average
+                            priceEURTotalForAverageCalculation += Convert.ToDecimal(BitExPriceEUR);
+                            denominatorEURForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: €" + BitExPriceEUR;
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no EUR price returned";
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //XAU
+                        if (Convert.ToDecimal(BitExPriceXAU) > 0)
+                        {
+                            // update values to calculate average
+                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(BitExPriceXAU);
+                            denominatorXAUForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: 🪙" + BitExPriceXAU;
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no XAU price returned";
+                                lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intBitcoinexplorerTimeLightLit = 0;
+                            }
+
+                        }
+                    }
+                    #endregion
+
+                    #region get price from coingecko.com
+                    if (RunCoingeckoAPI)
+                    {
+                        var (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU) = CoingeckoGetPrice();
+                        GeckoPriceUSD = cgPriceUSD;
+                        GeckoPriceEUR = cgPriceEUR;
+                        GeckoPriceGBP = cgPriceGBP;
+                        GeckoPriceXAU = cgPriceXAU;
+
+                        //USD
+                        if (Convert.ToDecimal(GeckoPriceUSD) > 0)
+                        {
+                            // update values to calculate average
+                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceUSD);
+                            denominatorUSDForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: $" + GeckoPriceUSD;
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: no USD price returned";
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //GBP
+                        if (Convert.ToDecimal(GeckoPriceGBP) > 0)
+                        {
+                            // update values to calculate average
+                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceGBP);
+                            denominatorGBPForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: £" + GeckoPriceGBP;
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: no GBP price returned";
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //EUR
+                        if (Convert.ToDecimal(GeckoPriceEUR) > 0)
+                        {
+                            // update values to calculate average
+                            priceEURTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceEUR);
+                            denominatorEURForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: €" + GeckoPriceEUR;
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: no EUR price returned";
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //XAU
+                        if (Convert.ToDecimal(GeckoPriceXAU) > 0)
+                        {
+                            // update values to calculate average
+                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceXAU);
+                            denominatorXAUForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: 🪙" + GeckoPriceXAU;
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                geckoTooltipForSelectedCurrency = "coingecko.com: no XAU price returned";
+                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblCoingeckoPriceIndicator.ForeColor = Color.Red;
+                                });
+                                intCoingeckoTimeLightLit = 0;
+                            }
+
+                        }
+                    }
+                    #endregion
+
+                    #region get price from mempool.space
+                    if (RunMempoolSpacePriceAPI)
+                    {
+                        var (mpPriceUSD, mpPriceGBP, mpPriceEUR, mpPriceXAU) = MempoolSpaceGetPrice();
+                        mempoPriceUSD = mpPriceUSD;
+                        mempoPriceEUR = mpPriceEUR;
+                        mempoPriceGBP = mpPriceGBP;
+                        mempoPriceXAU = mpPriceXAU;
+
+                        //USD
+                        if (Convert.ToDecimal(mempoPriceUSD) > 0)
+                        {
+                            // update values to calculate average
+                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(mempoPriceUSD);
+                            denominatorUSDForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: $" + mempoPriceUSD;
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnUSD.Enabled) // if default currency is USD
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: no USD price returned";
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //GBP
+                        if (Convert.ToDecimal(mempoPriceGBP) > 0)
+                        {
+                            // update values to calculate average
+                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(mempoPriceGBP);
+                            denominatorGBPForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: £" + mempoPriceGBP;
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnGBP.Enabled) // if default currency is GBP
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: no GBP price returned";
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //EUR
+                        if (Convert.ToDecimal(mempoPriceEUR) > 0)
+                        {
+                            // update values to calculate average
+                            priceEURTotalForAverageCalculation += Convert.ToDecimal(mempoPriceEUR);
+                            denominatorEURForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: €" + mempoPriceEUR;
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnEUR.Enabled) // if default currency is EUR
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: no EUR price returned";
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+
+                        }
+
+                        //XAU
+                        if (Convert.ToDecimal(mempoPriceXAU) > 0)
+                        {
+                            // update values to calculate average
+                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(mempoPriceXAU);
+                            denominatorXAUForAverageCalculation++;
+
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: 🪙" + mempoPriceXAU;
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+                        }
+                        else
+                        {
+                            // update tooltip message and colour indicator
+                            if (!btnXAU.Enabled) // if default currency is XAU
+                            {
+                                mempoTooltipForSelectedCurrency = "mempool.space: no XAU price returned";
+                                lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                                {
+                                    lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
+                                });
+                                intMempoolspaceTimeLightLit = 0;
+                            }
+                        }
+                    }
+                    #endregion
+
+                    string PriceUSD = "0";
+                    string PriceEUR = "0";
+                    string PriceGBP = "0";
+                    string PriceXAU = "0";
+
+                    //calculate average current price for each currency
+                    if (denominatorUSDForAverageCalculation > 0)
+                    {
+                        PriceUSD = (priceUSDTotalForAverageCalculation / denominatorUSDForAverageCalculation).ToString("0.00");
+                    }
+                    if (denominatorGBPForAverageCalculation > 0)
+                    {
+                        PriceGBP = (priceGBPTotalForAverageCalculation / denominatorGBPForAverageCalculation).ToString("0.00");
+                    }
+                    if (denominatorEURForAverageCalculation > 0)
+                    {
+                        PriceEUR = (priceEURTotalForAverageCalculation / denominatorEURForAverageCalculation).ToString("0.00");
+                    }
+                    if (denominatorXAUForAverageCalculation > 0)
+                    {
+                        PriceXAU = (priceXAUTotalForAverageCalculation / denominatorXAUForAverageCalculation).ToString("0.00");
+                    }
+
+                    //construct tooltip text
+                    if (!btnUSD.Enabled)
+                    {
+                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = $" + PriceUSD;
+                    }
+                    if (!btnGBP.Enabled)
+                    {
+                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = £" + PriceGBP;
+                    }
+                    if (!btnEUR.Enabled)
+                    {
+                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = €" + PriceEUR;
+                    }
+                    if (!btnXAU.Enabled)
+                    {
+                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = 🪙" + PriceXAU;
+                    }
+
+                    //assign tooltip to controls
+                    if (lblHeaderPrice.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        lblHeaderPrice.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice);
+                    }
+
+                    if (panelPriceSourceIndicators.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        panelPriceSourceIndicators.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice);
+                    }
+
+                    if (label226.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        label226.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice);
+                    }
+
+                    if (lblBitcoinExplorerPriceIndicator.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        lblBitcoinExplorerPriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblBitcoinExplorerPriceIndicator, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(lblBitcoinExplorerPriceIndicator, sourceOfCurrentPrice);
+                    }
+
+                    if (lblCoingeckoPriceIndicator.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        lblCoingeckoPriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice);
+                    }
+
+                    if (lblMempoolSpacePriceIndicator.InvokeRequired)
+                    {
+                        // Invoke the method on the UI thread
+                        lblMempoolSpacePriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice)));
+                    }
+                    else
+                    {
+                        // Set the tooltip directly (already on the UI thread)
+                        toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice);
+                    }
+
+                    OneBTCInUSD = PriceUSD;
+                    OneBTCInEUR = PriceEUR;
+                    OneBTCInGBP = PriceGBP;
+                    OneBTCInXAU = PriceXAU;
+
+                    string mCapUSD = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInUSD));
+                    string mCapEUR = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInEUR));
+                    string mCapGBP = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInGBP));
+                    string mCapXAU = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInXAU));
+
+
+                    decimal unitOfFiat = 1;
+                    decimal priceToCalculateFrom = 0;
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInUSD);
+                    string satsUSD = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInEUR);
+                    string satsEUR = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInGBP);
+                    string satsGBP = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInXAU);
+                    string satsXAU = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+
+
+                    OneUSDInSats = satsUSD;
+                    OneEURInSats = satsEUR;
+                    OneGBPInSats = satsGBP;
+                    OneXAUInSats = satsXAU;
+
+                    string price = "";
+                    string mCap = "";
+                    string satsPerUnit = "";
+                    if (!btnUSD.Enabled)
+                    {
+                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceUSD);
+                        price = "$" + PriceUSD;
+                        mCap = "$" + Convert.ToDecimal(mCapUSD).ToString("F2");
+                        satsPerUnit = satsUSD;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 USD / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / USD";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (USD)";
+                        });
+                    }
+                    if (!btnEUR.Enabled)
+                    {
+                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceEUR);
+                        price = "€" + PriceEUR;
+                        mCap = "€" + Convert.ToDecimal(mCapEUR).ToString("F2");
+                        satsPerUnit = satsEUR;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 EUR / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / EUR";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (EUR)";
+                        });
+                    }
+                    if (!btnGBP.Enabled)
+                    {
+                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceGBP);
+                        price = "£" + PriceGBP;
+                        mCap = "£" + Convert.ToDecimal(mCapGBP).ToString("F2");
+                        satsPerUnit = satsGBP;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 GBP / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / GBP";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (GBP)";
+                        });
+                    }
+                    if (!btnXAU.Enabled)
+                    {
+                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceXAU);
+                        price = "🪙" + PriceXAU;
+                        mCap = "🪙" + Convert.ToDecimal(mCapXAU).ToString("F2");
+                        satsPerUnit = satsXAU;
+                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
+                        });
+                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMoscowTimeLabel.Text = "1 XAU / sats";
+                        });
+                        lblPriceLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceLabel.Text = "1 BTC / XAU";
+                        });
+                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapLabel.Text = "Market cap (XAU)";
+                        });
+                    }
+
+                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
+                    });
+                    UpdateLabelValue(lblPriceUSD, price);
+                    if (readyToShowPriceChangeLabelYet)
+                    {
+                        // calculate and assign difference here.
+                        if (decimal.TryParse(lblHeaderPrice.Text.Substring(1), out decimal oldPrice))
+                        {
+                            if (decimal.TryParse(price.Substring(1), out decimal newPrice))
+                            {
+                                decimal priceChange = newPrice - oldPrice;
+                                string priceChangeDisp = Convert.ToString(priceChange);
+                                if (priceChange == newPrice) // first time getting price
+                                {
+                                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderPriceChange.Visible = false;
+                                    });
+                                    UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                                }
+                                else
+                                {
+                                    if (priceChange == 0 || newPrice == 0) // price hasn't changed or we failed to get a new price
+                                    {
+                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblHeaderPriceChange.Visible = false;
+                                        });
+                                        UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                                    }
+                                    else // price has changed since previous update
+                                    {
+                                        UpdateHeaderPriceChangeValue(lblHeaderPriceChange, priceChangeDisp);
+                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblHeaderPriceChange.Visible = true;
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderPriceChange.Visible = false;
+                                });
+                                UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                            }
+                        }
+                        else
+                        {
+                            lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderPriceChange.Visible = false;
+                            });
+                            UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
+                        }
+                    }
+
+                    if (OneBTCinSelectedCurrency > 0)
+                    {
+                        UpdateLabelValue(lblHeaderPrice, price);
+                    }
+                    panelPriceSourceIndicators.Invoke((MethodInvoker)delegate
+                    {
+                        panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
+                    });
+                    lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
+                    });
+
+                    UpdateLabelValue(lblMarketCapUSD, mCap);
+                    UpdateLabelValue(lblHeaderMarketCap, mCap);
+                    lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
+                    });
+                    UpdateLabelValue(lblMoscowTime, satsPerUnit);
+                    UpdateLabelValue(lblHeaderMoscowTime, satsPerUnit);
+                    lblHeaderConverterChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
+                    });
+
+                }
+            }
+            catch (WebException ex)
+            {
+                HandleException(ex, "getting market data");
+            }
+        }
+        #endregion
         #region colour change data if it's gone up or down since previous change
         private async void UpdateLabelValue(Label label, string newValue)
         {
@@ -23514,16 +24181,9 @@ namespace SATSuma
             {
                 headerSelectedNodeStatusLight.ForeColor = Color.Lime;
             });
-            timerNodeStatusLight.Start();
+            intNodeStatusLightTimeLightLit = 0;
         }
 
-        private void TimerNodeStatusLight_Tick(object sender, EventArgs e)
-        {
-            headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-            {
-                headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
-            });
-        }
         #endregion
         #region create data services
         private void CreateDataServices()
@@ -24129,6 +24789,223 @@ namespace SATSuma
         private async Task BriefPause(int pauselength)
         {
             await Task.Delay(pauselength);
+        }
+        #endregion
+        #region disable, hide, reset, etc stuff based on time
+        private void TurnOffCoingeckoPriceIndicator()
+        {
+            try
+            {
+                if (lblCoingeckoPriceIndicator.ForeColor != Color.IndianRed && lblCoingeckoPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                {
+                    if (lblCoingeckoPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
+                    {
+                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblCoingeckoPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                    else // an error must have just occured
+                    {
+                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblCoingeckoPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ResetPriceAPIIndicators");
+            }
+        }
+
+        private void TurnOffMempoolspacePriceIndicator()
+        {
+            try
+            {
+                if (lblMempoolSpacePriceIndicator.ForeColor != Color.IndianRed && lblMempoolSpacePriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                {
+                    if (lblMempoolSpacePriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
+                    {
+                        lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblMempoolSpacePriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                    else // an error must have just occured
+                    {
+                        lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblMempoolSpacePriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ResetPriceAPIIndicators");
+            }
+        }
+
+        private void TurnOffBitcoinexplorerPriceIndicator()
+        {
+            try
+            {
+                if (lblBitcoinExplorerPriceIndicator.ForeColor != Color.IndianRed && lblBitcoinExplorerPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                {
+                    if (lblBitcoinExplorerPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
+                    {
+                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                    else // an error must have just occured
+                    {
+                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ResetPriceAPIIndicators");
+            }
+        }
+
+        private void DoTimerBasedStuff()
+        {
+            //increment timers for status lights and messages
+            intMempoolspaceTimeLightLit++;
+            intBitcoinexplorerTimeLightLit++;
+            intCoingeckoTimeLightLit++;
+            intNodeStatusLightTimeLightLit++;
+            intSavingSettingsTimeLightLit++;
+            intThemeNameInUseMessageTimeShown++;
+            intThemeDeletedMessageTimeShown++;
+            intThemeSavedMessageTimeShown++;
+            intAddToBookmarksMessageTimeLightLit++;
+            intHideAddToBookmarksTimeShown++;
+            intTimeUntilXpubProgressBarsHidden++;
+            intExternalLinkClickedFlagToFalse++;
+
+            // check whether price API indicators need turning off
+            if (intMempoolspaceTimeLightLit >= 2)
+            {
+                intMempoolspaceTimeLightLit = 0;
+                TurnOffMempoolspacePriceIndicator();
+            }
+            if (intBitcoinexplorerTimeLightLit >= 2)
+            {
+                intBitcoinexplorerTimeLightLit = 0;
+                TurnOffBitcoinexplorerPriceIndicator();
+            }
+            if (intCoingeckoTimeLightLit >= 2)
+            {
+                intCoingeckoTimeLightLit = 0;
+                TurnOffCoingeckoPriceIndicator();
+            }
+
+            //check whether node status light needs turning off
+            if (intNodeStatusLightTimeLightLit >= 2)
+            {
+                intNodeStatusLightTimeLightLit = 0;
+                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
+                });
+            }
+
+            //check whether 'saving settings' light needs turning off
+            if (intSavingSettingsTimeLightLit >= 2)
+            {
+                intSavingSettingsTimeLightLit = 0;
+                labelSettingsSaved.Invoke((MethodInvoker)delegate
+                {
+                    labelSettingsSaved.Text = "Settings saved";
+                });
+                lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                {
+                    lblSaveSettingsLight.ForeColor = Color.OliveDrab;
+                });
+            }
+
+            //check whether 'theme name in use' message needs removing
+            if (intThemeNameInUseMessageTimeShown >= 5)
+            {
+                intThemeNameInUseMessageTimeShown = 0;
+                lblThemeNameInUse.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeNameInUse.Visible = false;
+                });
+            }
+
+            //check whether 'theme deleted' message needs removing
+            if (intThemeDeletedMessageTimeShown >= 5)
+            {
+                intThemeDeletedMessageTimeShown = 0;
+                lblThemeDeleted.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeDeleted.Visible = false;
+                });
+            }
+
+            //check whether 'theme saved' message needs removing
+            if (intThemeSavedMessageTimeShown >= 5)
+            {
+                intThemeSavedMessageTimeShown = 0;
+                lblThemeSaved.Invoke((MethodInvoker)delegate
+                {
+                    lblThemeSaved.Visible = false;
+                });
+            }
+
+            //check whether bookmark message needs removing
+            if (intAddToBookmarksMessageTimeLightLit >= 5)
+            {
+                intAddToBookmarksMessageTimeLightLit = 0;
+                lblBookmarkStatusMessage.Invoke((MethodInvoker)delegate
+                {
+                    lblBookmarkStatusMessage.Visible = false;
+                });
+            }
+
+            //check whether 'add to bookmarks' panel needs hiding
+            if (intHideAddToBookmarksTimeShown >= 5)
+            {
+                panelAddToBookmarks.Invoke((MethodInvoker)delegate
+                {
+                    panelAddToBookmarks.Visible = false;
+
+                });
+                panelAddToBookmarksBorder.Invoke((MethodInvoker)delegate
+                {
+                    panelAddToBookmarksBorder.Visible = false;
+                });
+            }
+
+            //check whether xpub progrss bars need hiding
+            if (intTimeUntilXpubProgressBarsHidden >= 8)
+            {
+                intTimeUntilXpubProgressBarsHidden = 0;
+                Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+            }
+
+            //check whether external link clicked flag needs resetting to false
+            if (intExternalLinkClickedFlagToFalse >= 1)
+            {
+                linkClicked = false;
+            }
         }
         #endregion
 
@@ -25179,7 +26056,7 @@ namespace SATSuma
         }
 
         #endregion
-        #region currency menu & get market data
+        #region currency menu
         private void BtnCurrency_Click(object sender, EventArgs e)
         {
             try
@@ -25574,701 +26451,6 @@ namespace SATSuma
             }
         }
 
-        private void GetMarketData()
-        {
-            string sourceOfCurrentPrice = "";
-
-            try
-            {
-                if (!offlineMode && !testNet)
-                {
-                    string BitExPriceUSD = "0";
-                    string BitExPriceGBP = "0";
-                    string BitExPriceEUR = "0";
-                    string BitExPriceXAU = "0";
-                    string GeckoPriceUSD = "0";
-                    string GeckoPriceGBP = "0";
-                    string GeckoPriceEUR = "0";
-                    string GeckoPriceXAU = "0";
-                    string mempoPriceUSD = "0";
-                    string mempoPriceGBP = "0";
-                    string mempoPriceEUR = "0";
-                    string mempoPriceXAU = "0";
-                    decimal priceUSDTotalForAverageCalculation = 0;
-                    decimal priceGBPTotalForAverageCalculation = 0;
-                    decimal priceEURTotalForAverageCalculation = 0;
-                    decimal priceXAUTotalForAverageCalculation = 0;
-                    decimal denominatorUSDForAverageCalculation = 0;
-                    decimal denominatorGBPForAverageCalculation = 0;
-                    decimal denominatorEURForAverageCalculation = 0;
-                    decimal denominatorXAUForAverageCalculation = 0;
-                    string bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: This price API is disabled";
-                    string geckoTooltipForSelectedCurrency = "coingecko.com: This price API is disabled";
-                    string mempoTooltipForSelectedCurrency = "mempool.space: This price API is disabled";
-
-                    #region get price from bitcoinexplorer.org
-                    if (RunBitcoinExplorerAPI)
-                    {
-                        var (bePriceUSD, bePriceGBP, bePriceEUR, bePriceXAU) = BitcoinExplorerOrgGetPrice();
-                        BitExPriceUSD = bePriceUSD;
-                        BitExPriceEUR = bePriceEUR;
-                        BitExPriceGBP = bePriceGBP;
-                        BitExPriceXAU = bePriceXAU;
-
-                        //USD
-                        if (Convert.ToDecimal(BitExPriceUSD) > 0)
-                        {
-                            // update values to calculate average
-                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(BitExPriceUSD);
-                            denominatorUSDForAverageCalculation++;
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: $" + BitExPriceUSD;
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no USD price returned";
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //GBP
-                        if (Convert.ToDecimal(BitExPriceGBP) > 0)
-                        {
-                            // update values to calculate average
-                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(BitExPriceGBP);
-                            denominatorGBPForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: £" + BitExPriceGBP;
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no GBP price returned";
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //EUR
-                        if (Convert.ToDecimal(BitExPriceEUR) > 0)
-                        {
-                            // update values to calculate average
-                            priceEURTotalForAverageCalculation += Convert.ToDecimal(BitExPriceEUR);
-                            denominatorEURForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: €" + BitExPriceEUR;
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no EUR price returned";
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //XAU
-                        if (Convert.ToDecimal(BitExPriceXAU) > 0)
-                        {
-                            // update values to calculate average
-                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(BitExPriceXAU);
-                            denominatorXAUForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is EUR
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: 🪙" + BitExPriceXAU;
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is XAU
-                            {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no XAU price returned";
-                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-                    }
-                    #endregion
-
-                    #region get price from coingecko.com
-                    if (RunCoingeckoAPI)
-                    {
-                        var (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU) = CoingeckoGetPrice();
-                        GeckoPriceUSD = cgPriceUSD;
-                        GeckoPriceEUR = cgPriceEUR;
-                        GeckoPriceGBP = cgPriceGBP;
-                        GeckoPriceXAU = cgPriceXAU;
-
-                        //USD
-                        if (Convert.ToDecimal(GeckoPriceUSD) > 0)
-                        {
-                            // update values to calculate average
-                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceUSD);
-                            denominatorUSDForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: $" + GeckoPriceUSD;
-                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
-                                {
-                                    lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
-                                });
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no USD price returned";
-                                lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
-                                {
-                                    lblCoingeckoPriceIndicator.ForeColor = Color.Red;
-                                });
-                            }
-
-                        }
-
-                        //GBP
-                        if (Convert.ToDecimal(GeckoPriceGBP) > 0)
-                        {
-                            // update values to calculate average
-                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceGBP);
-                            denominatorGBPForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: £" + GeckoPriceGBP;
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
-                                
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no GBP price returned";
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //EUR
-                        if (Convert.ToDecimal(GeckoPriceEUR) > 0)
-                        {
-                            // update values to calculate average
-                            priceEURTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceEUR);
-                            denominatorEURForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: €" + GeckoPriceEUR;
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no EUR price returned";
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //XAU
-                        if (Convert.ToDecimal(GeckoPriceXAU) > 0)
-                        {
-                            // update values to calculate average
-                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(GeckoPriceXAU);
-                            denominatorXAUForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is EUR
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: 🪙" + GeckoPriceXAU;
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is XAU
-                            {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no XAU price returned";
-                                lblCoingeckoPriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-                    }
-                    #endregion
-
-                    #region get price from mempool.space
-                    if (RunMempoolSpacePriceAPI)
-                    {
-                        var (mpPriceUSD, mpPriceGBP, mpPriceEUR, mpPriceXAU) = MempoolSpaceGetPrice();
-                        mempoPriceUSD = mpPriceUSD;
-                        mempoPriceEUR = mpPriceEUR;
-                        mempoPriceGBP = mpPriceGBP;
-                        mempoPriceXAU = mpPriceXAU;
-
-                        //USD
-                        if (Convert.ToDecimal(mempoPriceUSD) > 0)
-                        {
-                            // update values to calculate average
-                            priceUSDTotalForAverageCalculation += Convert.ToDecimal(mempoPriceUSD);
-                            denominatorUSDForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: $" + mempoPriceUSD;
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnUSD.Enabled) // if default currency is USD
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no USD price returned";
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //GBP
-                        if (Convert.ToDecimal(mempoPriceGBP) > 0)
-                        {
-                            // update values to calculate average
-                            priceGBPTotalForAverageCalculation += Convert.ToDecimal(mempoPriceGBP);
-                            denominatorGBPForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: £" + mempoPriceGBP;
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnGBP.Enabled) // if default currency is GBP
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no GBP price returned";
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //EUR
-                        if (Convert.ToDecimal(mempoPriceEUR) > 0)
-                        {
-                            // update values to calculate average
-                            priceEURTotalForAverageCalculation += Convert.ToDecimal(mempoPriceEUR);
-                            denominatorEURForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: €" + mempoPriceEUR;
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnEUR.Enabled) // if default currency is EUR
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no EUR price returned";
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
-                            }
-
-                        }
-
-                        //XAU
-                        if (Convert.ToDecimal(mempoPriceXAU) > 0)
-                        {
-                            // update values to calculate average
-                            priceXAUTotalForAverageCalculation += Convert.ToDecimal(mempoPriceXAU);
-                            denominatorXAUForAverageCalculation++;
-
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is EUR
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: 🪙" + mempoPriceXAU;
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
-                            }
-                        }
-                        else
-                        {
-                            // update tooltip message and colour indicator
-                            if (!btnXAU.Enabled) // if default currency is XAU
-                            {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no XAU price returned";
-                                lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
-                            }
-                        }
-                    }
-                    #endregion
-
-                    string PriceUSD = "0";
-                    string PriceEUR = "0";
-                    string PriceGBP = "0";
-                    string PriceXAU = "0";
-
-                    //calculate average current price for each currency
-                    if (denominatorUSDForAverageCalculation > 0)
-                    {
-                        PriceUSD = (priceUSDTotalForAverageCalculation / denominatorUSDForAverageCalculation).ToString("0.00");
-                    }
-                    if (denominatorGBPForAverageCalculation > 0)
-                    {
-                        PriceGBP = (priceGBPTotalForAverageCalculation / denominatorGBPForAverageCalculation).ToString("0.00");
-                    }
-                    if (denominatorEURForAverageCalculation > 0)
-                    {
-                        PriceEUR = (priceEURTotalForAverageCalculation / denominatorEURForAverageCalculation).ToString("0.00");
-                    }
-                    if (denominatorXAUForAverageCalculation > 0)
-                    {
-                        PriceXAU = (priceXAUTotalForAverageCalculation / denominatorXAUForAverageCalculation).ToString("0.00");
-                    }
-
-                    //construct tooltip text
-                    if (!btnUSD.Enabled)
-                    {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price is $" + PriceUSD;
-                    }
-                    if (!btnGBP.Enabled)
-                    {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price is £" + PriceGBP;
-                    }
-                    if (!btnEUR.Enabled)
-                    {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price is €" + PriceEUR;
-                    }
-                    if (!btnXAU.Enabled)
-                    {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price is 🪙" + PriceXAU;
-                    }
-
-                    //assign tooltip to controls
-                    if (lblHeaderPrice.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        lblHeaderPrice.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice);
-                    }
-
-                    if (panelPriceSourceIndicators.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        panelPriceSourceIndicators.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice);
-                    }
-
-                    if (label226.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        label226.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice);
-                    }
-
-                    if (lblBitcoinExplorerPriceIndicator.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        lblBitcoinExplorerPriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblBitcoinExplorerPriceIndicator, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(lblBitcoinExplorerPriceIndicator, sourceOfCurrentPrice);
-                    }
-
-                    if (lblCoingeckoPriceIndicator.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        lblCoingeckoPriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice);
-                    }
-
-                    if (lblMempoolSpacePriceIndicator.InvokeRequired)
-                    {
-                        // Invoke the method on the UI thread
-                        lblMempoolSpacePriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice)));
-                    }
-                    else
-                    {
-                        // Set the tooltip directly (already on the UI thread)
-                        toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice);
-                    }
-
-                    OneBTCInUSD = PriceUSD;
-                    OneBTCInEUR = PriceEUR;
-                    OneBTCInGBP = PriceGBP;
-                    OneBTCInXAU = PriceXAU;
-
-                    string mCapUSD = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInUSD));
-                    string mCapEUR = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInEUR));
-                    string mCapGBP = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInGBP));
-                    string mCapXAU = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInXAU));
-
-
-                    decimal unitOfFiat = 1;
-                    decimal priceToCalculateFrom = 0; 
-                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInUSD);
-                    string satsUSD = Convert.ToString( ((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
-                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInEUR);
-                    string satsEUR = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
-                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInGBP);
-                    string satsGBP = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
-                    priceToCalculateFrom = Convert.ToDecimal(OneBTCInXAU);
-                    string satsXAU = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
-
-
-                    OneUSDInSats = satsUSD;
-                    OneEURInSats = satsEUR;
-                    OneGBPInSats = satsGBP;
-                    OneXAUInSats = satsXAU;
-
-                    string price = "";
-                    string mCap = "";
-                    string satsPerUnit = "";
-                    if (!btnUSD.Enabled)
-                    {
-                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceUSD);
-                        price = "$" + PriceUSD;
-                        mCap = "$" + Convert.ToDecimal(mCapUSD).ToString("F2");
-                        satsPerUnit = satsUSD;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1$ (USD) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 USD / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / USD";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (USD)";
-                        });
-                    }
-                    if (!btnEUR.Enabled)
-                    {
-                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceEUR);
-                        price = "€" + PriceEUR;
-                        mCap = "€" + Convert.ToDecimal(mCapEUR).ToString("F2");
-                        satsPerUnit = satsEUR;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1€ (EUR) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 EUR / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / EUR";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (EUR)";
-                        });
-                    }
-                    if (!btnGBP.Enabled)
-                    {
-                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceGBP);
-                        price = "£" + PriceGBP;
-                        mCap = "£" + Convert.ToDecimal(mCapGBP).ToString("F2");
-                        satsPerUnit = satsGBP;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1£ (GBP) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 GBP / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / GBP";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (GBP)";
-                        });
-                    }
-                    if (!btnXAU.Enabled)
-                    {
-                        OneBTCinSelectedCurrency = Convert.ToDecimal(PriceXAU);
-                        price = "🪙" + PriceXAU;
-                        mCap = "🪙" + Convert.ToDecimal(mCapXAU).ToString("F2");
-                        satsPerUnit = satsXAU;
-                        lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderMoscowTimeLabel.Text = "1🪙 (XAU) / sats";
-                        });
-                        lblMoscowTimeLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMoscowTimeLabel.Text = "1 XAU / sats";
-                        });
-                        lblPriceLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblPriceLabel.Text = "1 BTC / XAU";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (XAU)";
-                        });
-                    }
-
-                    lblHeaderMoscowTime.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
-                    });
-                    UpdateLabelValue(lblPriceUSD, price);
-                    if (readyToShowPriceChangeLabelYet)
-                    {
-                        // calculate and assign difference here.
-                        if (decimal.TryParse(lblHeaderPrice.Text.Substring(1), out decimal oldPrice))
-                        {
-                            if (decimal.TryParse(price.Substring(1), out decimal newPrice))
-                            {
-                                decimal priceChange = newPrice - oldPrice;
-                                string priceChangeDisp = Convert.ToString(priceChange);
-                                if (priceChange == newPrice) // first time getting price
-                                {
-                                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderPriceChange.Visible = false;
-                                    });
-                                    UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
-                                }
-                                else
-                                {
-                                    if (priceChange == 0 || newPrice == 0) // price hasn't changed or we failed to get a new price
-                                    {
-                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblHeaderPriceChange.Visible = false;
-                                        });
-                                        UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
-                                    }
-                                    else // price has changed since previous update
-                                    {
-                                        UpdateHeaderPriceChangeValue(lblHeaderPriceChange, priceChangeDisp);
-                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblHeaderPriceChange.Visible = true;
-                                        });
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderPriceChange.Visible = false;
-                                });
-                                UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
-                            }
-                        }
-                        else
-                        {
-                            lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderPriceChange.Visible = false;
-                            });
-                            UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
-                        }
-                    }
-
-                    if (OneBTCinSelectedCurrency > 0)
-                    {
-                        UpdateLabelValue(lblHeaderPrice, price);
-                    }
-                    panelPriceSourceIndicators.Invoke((MethodInvoker)delegate
-                    {
-                        panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
-                    });
-                    lblHeaderPriceChart.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
-                    });
-                    
-                    UpdateLabelValue(lblMarketCapUSD, mCap);
-                    UpdateLabelValue(lblHeaderMarketCap, mCap);
-                    lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
-                    });
-                    UpdateLabelValue(lblMoscowTime, satsPerUnit);
-                    UpdateLabelValue(lblHeaderMoscowTime, satsPerUnit);
-                    lblHeaderConverterChart.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
-                    });
-                    
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "getting market data");
-            }
-        }
         #endregion
         #region minimise/exit window
         private async void BtnExit_Click(object sender, EventArgs e) // exit
@@ -27916,73 +28098,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        
-
-
-
-        private void ResetPriceAPIIndicators()
-        {
-            try
-            {
-                if (lblCoingeckoPriceIndicator.ForeColor != Color.IndianRed && lblCoingeckoPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
-                {
-                    if (lblCoingeckoPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
-                    {
-                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblCoingeckoPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                    else // an error must have just occured
-                    {
-                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblCoingeckoPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                }
-
-                if (lblMempoolSpacePriceIndicator.ForeColor != Color.IndianRed && lblMempoolSpacePriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
-                {
-                    if (lblMempoolSpacePriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
-                    {
-                        lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblMempoolSpacePriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                    else // an error must have just occured
-                    {
-                        lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblMempoolSpacePriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                }
-
-                if (lblBitcoinExplorerPriceIndicator.ForeColor != Color.IndianRed && lblBitcoinExplorerPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
-                {
-                    if (lblBitcoinExplorerPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
-                    {
-                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                    else // an error must have just occured
-                    {
-                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
-                        {
-                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "ResetPriceAPIIndicators");
-            }
-        }
     }
 }

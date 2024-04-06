@@ -188,7 +188,6 @@
             this.lblTXInMempool = new System.Windows.Forms.Label();
             this.panelBlockList = new System.Windows.Forms.Panel();
             this.listViewBlockList = new System.Windows.Forms.ListView();
-            this.imageListUpDownArrows = new System.Windows.Forms.ImageList(this.components);
             this.panel120 = new System.Windows.Forms.Panel();
             this.panel117 = new System.Windows.Forms.Panel();
             this.lblBlockListTotalFeesInNextBlockFiat = new System.Windows.Forms.Label();
@@ -569,7 +568,6 @@
             this.lblXpubScreenOwnNodeStatus = new System.Windows.Forms.Label();
             this.label139 = new System.Windows.Forms.Label();
             this.panel101 = new System.Windows.Forms.Panel();
-            this.timerHideProgressBars = new System.Windows.Forms.Timer(this.components);
             this.XpubScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarks = new System.Windows.Forms.Panel();
             this.panelEncryptionKeyContainer = new System.Windows.Forms.Panel();
@@ -649,8 +647,6 @@
             this.lblMempoolSpacePriceIndicator = new System.Windows.Forms.Label();
             this.lblBitcoinExplorerPriceIndicator = new System.Windows.Forms.Label();
             this.label226 = new System.Windows.Forms.Label();
-            this.hideAddToBookmarksTimer = new System.Windows.Forms.Timer(this.components);
-            this.hideBookmarkStatusMessageTimer = new System.Windows.Forms.Timer(this.components);
             this.lblNowViewing = new System.Windows.Forms.Label();
             this.lblHeaderBlockAge = new System.Windows.Forms.Label();
             this.label148 = new System.Windows.Forms.Label();
@@ -900,8 +896,6 @@
             this.btnSaveTheme = new CustomControls.RJControls.RJButton();
             this.label194 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.hideThemeSavedTimer = new System.Windows.Forms.Timer(this.components);
-            this.hideThemeDeletedTimer = new System.Windows.Forms.Timer(this.components);
             this.panelCharts = new System.Windows.Forms.Panel();
             this.panelChartDifficultyScaleButtons = new System.Windows.Forms.Panel();
             this.btnChartDifficultyLog = new CustomControls.RJControls.RJButton();
@@ -1118,11 +1112,8 @@
             this.btnDirectoryScrollDown = new CustomControls.RJControls.RJButton();
             this.webBrowserDirectory = new System.Windows.Forms.WebBrowser();
             this.label286 = new System.Windows.Forms.Label();
-            this.externalLinksTimer = new System.Windows.Forms.Timer(this.components);
             this.labelSettingsSaved = new System.Windows.Forms.Label();
-            this.timerHideSettingsSaved = new System.Windows.Forms.Timer(this.components);
             this.timerNumUpDownContinuous = new System.Windows.Forms.Timer(this.components);
-            this.timerHideThemeNameInUse = new System.Windows.Forms.Timer(this.components);
             this.panelUniversalSearchContainer = new System.Windows.Forms.Panel();
             this.textBoxUniversalSearch = new System.Windows.Forms.TextBox();
             this.btnUniversalSearch = new CustomControls.RJControls.RJButton();
@@ -1165,7 +1156,6 @@
             this.panelErrorMessage = new System.Windows.Forms.Panel();
             this.btnCopyErrorMessage = new CustomControls.RJControls.RJButton();
             this.btnHideErrorMessage = new CustomControls.RJControls.RJButton();
-            this.timerNodeStatusLight = new System.Windows.Forms.Timer(this.components);
             this.panelAddToBookmarksBorder = new System.Windows.Forms.Panel();
             this.panelDCACalculator = new System.Windows.Forms.Panel();
             this.panelDCASummary = new System.Windows.Forms.Panel();
@@ -1213,9 +1203,6 @@
             this.toolTipGeneralUse = new System.Windows.Forms.ToolTip(this.components);
             this.progressBarRefreshData = new ColorProgressBar.ColorProgressBar();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
-            this.timerCoingeckoPriceIndicator = new System.Windows.Forms.Timer(this.components);
-            this.timerBitcoinExplorerPriceIndicator = new System.Windows.Forms.Timer(this.components);
-            this.timerMempoolSpacePriceIndicator = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -3756,7 +3743,6 @@
             this.listViewBlockList.Scrollable = false;
             this.listViewBlockList.ShowGroups = false;
             this.listViewBlockList.Size = new System.Drawing.Size(499, 287);
-            this.listViewBlockList.SmallImageList = this.imageListUpDownArrows;
             this.listViewBlockList.TabIndex = 164;
             this.listViewBlockList.TabStop = false;
             this.listViewBlockList.UseCompatibleStateImageBehavior = false;
@@ -3766,13 +3752,6 @@
             this.listViewBlockList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlockList_DrawSubItem);
             this.listViewBlockList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockList_ItemSelectionChanged);
             this.listViewBlockList.SelectedIndexChanged += new System.EventHandler(this.ListViewBlockList_SelectedIndexChanged);
-            // 
-            // imageListUpDownArrows
-            // 
-            this.imageListUpDownArrows.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListUpDownArrows.ImageStream")));
-            this.imageListUpDownArrows.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListUpDownArrows.Images.SetKeyName(0, "greentriangle.png");
-            this.imageListUpDownArrows.Images.SetKeyName(1, "redtriangle.png");
             // 
             // panel120
             // 
@@ -6346,7 +6325,6 @@
             this.listViewAddressTransactions.Scrollable = false;
             this.listViewAddressTransactions.ShowGroups = false;
             this.listViewAddressTransactions.Size = new System.Drawing.Size(499, 452);
-            this.listViewAddressTransactions.SmallImageList = this.imageListUpDownArrows;
             this.listViewAddressTransactions.TabIndex = 139;
             this.listViewAddressTransactions.TabStop = false;
             this.listViewAddressTransactions.UseCompatibleStateImageBehavior = false;
@@ -6893,7 +6871,6 @@
             this.listViewBlockTransactions.Scrollable = false;
             this.listViewBlockTransactions.ShowGroups = false;
             this.listViewBlockTransactions.Size = new System.Drawing.Size(499, 476);
-            this.listViewBlockTransactions.SmallImageList = this.imageListUpDownArrows;
             this.listViewBlockTransactions.TabIndex = 164;
             this.listViewBlockTransactions.TabStop = false;
             this.listViewBlockTransactions.UseCompatibleStateImageBehavior = false;
@@ -7798,7 +7775,6 @@
             this.listViewTransactionInputs.Scrollable = false;
             this.listViewTransactionInputs.ShowGroups = false;
             this.listViewTransactionInputs.Size = new System.Drawing.Size(315, 88);
-            this.listViewTransactionInputs.SmallImageList = this.imageListUpDownArrows;
             this.listViewTransactionInputs.TabIndex = 165;
             this.listViewTransactionInputs.TabStop = false;
             this.listViewTransactionInputs.UseCompatibleStateImageBehavior = false;
@@ -7890,7 +7866,6 @@
             this.listViewTransactionOutputs.Scrollable = false;
             this.listViewTransactionOutputs.ShowGroups = false;
             this.listViewTransactionOutputs.Size = new System.Drawing.Size(315, 88);
-            this.listViewTransactionOutputs.SmallImageList = this.imageListUpDownArrows;
             this.listViewTransactionOutputs.TabIndex = 165;
             this.listViewTransactionOutputs.TabStop = false;
             this.listViewTransactionOutputs.UseCompatibleStateImageBehavior = false;
@@ -8421,7 +8396,6 @@
             this.listViewXpubAddresses.Scrollable = false;
             this.listViewXpubAddresses.ShowGroups = false;
             this.listViewXpubAddresses.Size = new System.Drawing.Size(465, 438);
-            this.listViewXpubAddresses.SmallImageList = this.imageListUpDownArrows;
             this.listViewXpubAddresses.TabIndex = 164;
             this.listViewXpubAddresses.TabStop = false;
             this.listViewXpubAddresses.UseCompatibleStateImageBehavior = false;
@@ -9211,11 +9185,6 @@
             this.panel101.TabIndex = 239;
             this.panel101.Visible = false;
             // 
-            // timerHideProgressBars
-            // 
-            this.timerHideProgressBars.Interval = 5000;
-            this.timerHideProgressBars.Tick += new System.EventHandler(this.TimerHideProgressBars_Tick);
-            // 
             // XpubScrollTimer
             // 
             this.XpubScrollTimer.Interval = 50;
@@ -9910,7 +9879,6 @@
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
             this.listViewBookmarks.Size = new System.Drawing.Size(667, 385);
-            this.listViewBookmarks.SmallImageList = this.imageListUpDownArrows;
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
             this.listViewBookmarks.UseCompatibleStateImageBehavior = false;
@@ -10338,16 +10306,6 @@
             this.label226.Size = new System.Drawing.Size(37, 13);
             this.label226.TabIndex = 283;
             this.label226.Text = "source";
-            // 
-            // hideAddToBookmarksTimer
-            // 
-            this.hideAddToBookmarksTimer.Interval = 3000;
-            this.hideAddToBookmarksTimer.Tick += new System.EventHandler(this.HideAddToBookmarks_Tick);
-            // 
-            // hideBookmarkStatusMessageTimer
-            // 
-            this.hideBookmarkStatusMessageTimer.Interval = 2000;
-            this.hideBookmarkStatusMessageTimer.Tick += new System.EventHandler(this.HideDeletedBookmarkMessageTimer_Tick);
             // 
             // lblNowViewing
             // 
@@ -14036,16 +13994,6 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Text files (*.txt)|*.txt";
             // 
-            // hideThemeSavedTimer
-            // 
-            this.hideThemeSavedTimer.Interval = 3000;
-            this.hideThemeSavedTimer.Tick += new System.EventHandler(this.HideThemeSavedTimer_Tick);
-            // 
-            // hideThemeDeletedTimer
-            // 
-            this.hideThemeDeletedTimer.Interval = 3000;
-            this.hideThemeDeletedTimer.Tick += new System.EventHandler(this.HideThemeDeletedTimer_Tick);
-            // 
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
@@ -17641,11 +17589,6 @@
             this.label286.Text = "The directory is not available because it is either disabled in settings or becau" +
     "se Privacy Mode is enabled.";
             // 
-            // externalLinksTimer
-            // 
-            this.externalLinksTimer.Interval = 1000;
-            this.externalLinksTimer.Tick += new System.EventHandler(this.ExternalLinksTimer_Tick);
-            // 
             // labelSettingsSaved
             // 
             this.labelSettingsSaved.AutoSize = true;
@@ -17657,19 +17600,9 @@
             this.labelSettingsSaved.TabIndex = 253;
             this.labelSettingsSaved.Text = "settings saved";
             // 
-            // timerHideSettingsSaved
-            // 
-            this.timerHideSettingsSaved.Interval = 3000;
-            this.timerHideSettingsSaved.Tick += new System.EventHandler(this.TimerHideSettingsSaved_Tick);
-            // 
             // timerNumUpDownContinuous
             // 
             this.timerNumUpDownContinuous.Tick += new System.EventHandler(this.TimerNumUpDownContinuous_Tick);
-            // 
-            // timerHideThemeNameInUse
-            // 
-            this.timerHideThemeNameInUse.Interval = 3000;
-            this.timerHideThemeNameInUse.Tick += new System.EventHandler(this.TimerHideThemeNameInUse_Tick);
             // 
             // panelUniversalSearchContainer
             // 
@@ -18388,11 +18321,6 @@
             this.btnHideErrorMessage.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnHideErrorMessage.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // timerNodeStatusLight
-            // 
-            this.timerNodeStatusLight.Interval = 1000;
-            this.timerNodeStatusLight.Tick += new System.EventHandler(this.TimerNodeStatusLight_Tick);
-            // 
             // panelAddToBookmarksBorder
             // 
             this.panelAddToBookmarksBorder.BackColor = System.Drawing.Color.Transparent;
@@ -19007,21 +18935,6 @@
             this.timer50thSec.Interval = 50;
             this.timer50thSec.Tick += new System.EventHandler(this.Timer50thSec_Tick);
             // 
-            // timerCoingeckoPriceIndicator
-            // 
-            this.timerCoingeckoPriceIndicator.Enabled = true;
-            this.timerCoingeckoPriceIndicator.Interval = 4000;
-            // 
-            // timerBitcoinExplorerPriceIndicator
-            // 
-            this.timerBitcoinExplorerPriceIndicator.Enabled = true;
-            this.timerBitcoinExplorerPriceIndicator.Interval = 1000;
-            // 
-            // timerMempoolSpacePriceIndicator
-            // 
-            this.timerMempoolSpacePriceIndicator.Enabled = true;
-            this.timerMempoolSpacePriceIndicator.Interval = 1000;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -19031,6 +18944,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelPriceSourceIndicators);
@@ -19041,7 +18955,6 @@
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelLightningDashboard);
@@ -19503,7 +19416,6 @@
         private System.Windows.Forms.Label lblAddressConfirmedReceivedOutputs;
         private System.Windows.Forms.ListView listViewAddressTransactions;
         private System.Windows.Forms.Label lblAddressTXPositionInList;
-        private System.Windows.Forms.ImageList imageListUpDownArrows;
         private System.Windows.Forms.Button BtnViewBlockFromAddress;
         private System.Windows.Forms.PictureBox pictureBoxLoadingAnimation;
         private System.Windows.Forms.Panel panelBlock;
@@ -19658,7 +19570,6 @@
         private System.Windows.Forms.TextBox textBoxSubmittedXpub;
         private System.Windows.Forms.Label label146;
         private System.Windows.Forms.Label label114;
-        private System.Windows.Forms.Timer timerHideProgressBars;
         public System.Windows.Forms.Panel panelXpubContainer;
         private System.Windows.Forms.Button btnXpubAddressesUp;
         private System.Windows.Forms.Button btnXpubAddressesDown;
@@ -19705,9 +19616,7 @@
         private System.Windows.Forms.ListView listViewBookmarks;
         private System.Windows.Forms.TextBox textBoxBookmarkKey;
         private System.Windows.Forms.Label lblBookmarkSavedSuccess;
-        private System.Windows.Forms.Timer hideAddToBookmarksTimer;
         private System.Windows.Forms.Label lblBookmarkStatusMessage;
-        private System.Windows.Forms.Timer hideBookmarkStatusMessageTimer;
         private System.Windows.Forms.Panel panel35;
         private System.Windows.Forms.Label lblTransactionConfirmations;
         private System.Windows.Forms.Label label125;
@@ -19853,8 +19762,6 @@
         private System.Windows.Forms.Label headerSelectedNodeStatusLight;
         private System.Windows.Forms.Label lblThemeDeleted;
         private System.Windows.Forms.Label lblThemeSaved;
-        private System.Windows.Forms.Timer hideThemeSavedTimer;
-        private System.Windows.Forms.Timer hideThemeDeletedTimer;
         private System.Windows.Forms.Label label198;
         private System.Windows.Forms.Panel panel74;
         private System.Windows.Forms.Panel panel76;
@@ -20223,7 +20130,6 @@
         private System.Windows.Forms.Label lblNextBlockTotalFeesFiat;
         private CustomControls.RJControls.RJButton btnColorFiatConversionText;
         private System.Windows.Forms.Label label288;
-        private System.Windows.Forms.Timer externalLinksTimer;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Panel panel37;
         private System.Windows.Forms.Label label155;
@@ -20247,7 +20153,6 @@
         private System.Windows.Forms.Panel panelComboBoxStartupScreenContainer;
         private System.Windows.Forms.Panel panelCustomizeThemeListContainer;
         private System.Windows.Forms.Label labelSettingsSaved;
-        private System.Windows.Forms.Timer timerHideSettingsSaved;
         private CustomControls.RJControls.RJButton btnDataRefreshPeriodUp;
         private CustomControls.RJControls.RJButton btnDataRefreshPeriodDown;
         private CustomControls.RJControls.RJButton btnNonZeroBalancesUp;
@@ -20284,7 +20189,6 @@
         private System.Windows.Forms.Button btnMenuThemeHoneyBadger;
         private System.Windows.Forms.Label lblThemeImage;
         private System.Windows.Forms.Label lblThemeNameInUse;
-        private System.Windows.Forms.Timer timerHideThemeNameInUse;
         private System.Windows.Forms.Panel panel96;
         private System.Windows.Forms.Panel panel97;
         private System.Windows.Forms.Label label295;
@@ -20342,7 +20246,6 @@
         private CustomControls.RJControls.RJButton btnSmallerScale;
         private System.Windows.Forms.Label label298;
         private CustomControls.RJControls.RJButton btnThemeMenu;
-        private System.Windows.Forms.Timer timerNodeStatusLight;
         private System.Windows.Forms.Panel panelSettingsUIScaleContainer;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label53;
@@ -20574,9 +20477,6 @@
         private System.Windows.Forms.Label lblMempoolSpacePriceIndicator;
         private System.Windows.Forms.Label lblBitcoinExplorerPriceIndicator;
         private System.Windows.Forms.Label label236;
-        private System.Windows.Forms.Timer timerCoingeckoPriceIndicator;
-        private System.Windows.Forms.Timer timerBitcoinExplorerPriceIndicator;
-        private System.Windows.Forms.Timer timerMempoolSpacePriceIndicator;
     }
 }
 

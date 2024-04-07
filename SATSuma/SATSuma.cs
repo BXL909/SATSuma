@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen
 * more testing! 
 * reduce reliance on external API's where possible
-* check conditions that check for api flags to make sure they account for mempoolspace price too (better to just check onebtcinselectedcurrency > 0)
+* more testing of offline mode and testnet
 */
 
 #region Using
@@ -600,7 +600,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region ⚡CLOCK TICK EVENTS (1 sec for everything except progress bar for API refresh, which is 50th sec)⚡
+        #region ⚡CLOCK TICK EVENTS⚡
         private void StartTheClocksTicking()
         {
             try
@@ -916,7 +916,6 @@ namespace SATSuma
                         HandleException(ex, "UpdateDashboards(difficulty adjustment)");
                     }
 
-
                     //fees and transactions in next block
                     try
                     {
@@ -1015,10 +1014,6 @@ namespace SATSuma
                         HandleException(ex, "UpdateDashboards(Task3)");
                     }
 
-
-
-
-
                     // transactions in mempool
                     try
                     {
@@ -1034,7 +1029,7 @@ namespace SATSuma
                     }
 
                 });
-                Task task4 = Task.Run(() => // mempool.space lightning JSON
+                Task task3 = Task.Run(() => // mempool.space lightning JSON
                 {
                     try
                     {
@@ -1042,7 +1037,7 @@ namespace SATSuma
                         {
                             if (RunMempoolSpaceLightningAPI)
                             {
-                                var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightningJSONRefresh();
+                                var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightning();
                                 UpdateLabelValue(lblChannelCount, channelCount);
                                 UpdateLabelValue(lblNodeCount, nodeCount);
                                 UpdateLabelValue(lblTotalCapacity, totalCapacity);
@@ -1163,7 +1158,7 @@ namespace SATSuma
                             });
                             if (RunMempoolSpaceLightningAPI)
                             {
-                                var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdownJSONRefresh();
+                                var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdown();
                                 UpdateLabelValue(lblClearnetCapacity, clearnetCapacity);
                                 UpdateLabelValue(lblClearnetCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
@@ -1200,7 +1195,7 @@ namespace SATSuma
                             }
                             if (RunMempoolSpaceLightningAPI)
                             {
-                                var (aliases, capacities) = MemSpLiquidityRankingJSONRefresh();
+                                var (aliases, capacities) = MemSpLiquidityRanking();
                                 for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
                                 {
                                     System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
@@ -1217,7 +1212,7 @@ namespace SATSuma
                                         capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
                                     });
                                 }
-                                var result7 = MemSpConnectivityRankingJSONRefresh();
+                                var result7 = MemSpConnectivityRanking();
                                 if (result7.aliases.Count > 0)
                                 {
                                     for (int i = 0; i < result7.aliases.Count && i < 10; i++)
@@ -1366,7 +1361,7 @@ namespace SATSuma
                             {
                                 if (RunBlockchainInfoAPI)
                                 {
-                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoEndpointsRefresh();
+                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
                                     UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
                                     UpdateLabelValue(lblBlockReward, blockReward);
 
@@ -1510,7 +1505,7 @@ namespace SATSuma
                 });
                 #endregion
                 #region blockchair.com api
-                Task task5 = Task.Run(() =>  // blockchair.com JSON for chain stats
+                Task task4 = Task.Run(() =>  // blockchair.com JSON for chain stats
                 {
                     try
                     {
@@ -1518,7 +1513,6 @@ namespace SATSuma
                         {
                             if (RunBlockchairComAPI)
                             {
-                                
                                 var result7 = BlockchairComChainStatsJSONRefresh();
                                 int hodling_addresses = int.Parse(result7.hodling_addresses);
                                 if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
@@ -1585,7 +1579,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task5)");
                     }
                 });
-                Task task6 = Task.Run(() =>  // blockchair.com JSON for halving stats
+                Task task5 = Task.Run(() =>  // blockchair.com JSON for halving stats
                 {
                     try
                     {
@@ -1683,7 +1677,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                await Task.WhenAll(task0, task1, task2, task4, task5, task6);
+                await Task.WhenAll(task0, task1, task2, task3, task4, task5);
 
                 if (errorOccurred)
                 {
@@ -1962,7 +1956,7 @@ namespace SATSuma
             return ("error", "error", "error");
         }
 
-        private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoEndpointsRefresh()
+        private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
         {
             try
             {
@@ -2008,7 +2002,7 @@ namespace SATSuma
             return ("0", "0", "0", "0", "0", "0", "0", "0");
         }
 
-        private (List<string> aliases, List<string> capacities) MemSpLiquidityRankingJSONRefresh()
+        private (List<string> aliases, List<string> capacities) MemSpLiquidityRanking()
         {
             try
             {
@@ -2059,7 +2053,7 @@ namespace SATSuma
             return (new List<string>(), new List<string>());
         }
 
-        private (List<string> aliases, List<string> channels) MemSpConnectivityRankingJSONRefresh()
+        private (List<string> aliases, List<string> channels) MemSpConnectivityRanking()
         {
             try
             {
@@ -2104,7 +2098,7 @@ namespace SATSuma
             return (new List<string>(), new List<string>());
         }
 
-        private (string clearnetCapacity, string torCapacity, string unknownCapacity) MemSpCapacityBreakdownJSONRefresh()
+        private (string clearnetCapacity, string torCapacity, string unknownCapacity) MemSpCapacityBreakdown()
         {
             try
             {
@@ -2162,7 +2156,7 @@ namespace SATSuma
             return ("0", "0", "0");
         }
 
-        private (string channelCount, string nodeCount, string totalCapacity, string torNodes, string clearnetNodes, string unannouncedNodes, string avgCapacity, string avgFeeRate, string avgBaseeFeeMtokens, string medCapacity, string medFeeRate, string medBaseeFeeMtokens, string clearnetTorNodes) MempoolSpaceLightningJSONRefresh()
+        private (string channelCount, string nodeCount, string totalCapacity, string torNodes, string clearnetNodes, string unannouncedNodes, string avgCapacity, string avgFeeRate, string avgBaseeFeeMtokens, string medCapacity, string medFeeRate, string medBaseeFeeMtokens, string clearnetTorNodes) MempoolSpaceLightning()
         {
             try
             {
@@ -11693,7 +11687,7 @@ namespace SATSuma
                 // disable charts where corresponding API is disabled
                 if (RunBlockchainInfoAPI == false)
                 {
-                    DisableChartsThatDontUseMempoolSpace();
+                    DisableChartsThatUseBlockchainInfoAPI();
                 }
             }
             catch (Exception ex)
@@ -11702,7 +11696,7 @@ namespace SATSuma
             }
         }
 
-        private void DisableChartsThatDontUseMempoolSpace()
+        private void DisableChartsThatUseBlockchainInfoAPI()
         {
             try
             {
@@ -11722,7 +11716,7 @@ namespace SATSuma
 
         }
 
-        private void EnableChartsThatDontUseMempoolSpace()
+        private void EnableChartsThatUseBlockchainInfoAPI()
         {
             try
             {
@@ -11774,16 +11768,16 @@ namespace SATSuma
             {
                 Control[] chartPeriodButtons = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll };
 
-                System.Windows.Forms.Button clickedButton = (System.Windows.Forms.Button)sender;
+                Button clickedButton = (Button)sender;
                 clickedButton.Enabled = false;
 
                 foreach (Control control in chartPeriodButtons)
                 {
-                    if (control is System.Windows.Forms.Button && control == clickedButton)
+                    if (control is Button && control == clickedButton)
                     {
                         chartPeriod = clickedButton.Text;
                     }
-                    if (control is System.Windows.Forms.Button && control != clickedButton)
+                    if (control is Button && control != clickedButton)
                     {
                         control.Enabled = true;
                     }
@@ -13399,335 +13393,338 @@ namespace SATSuma
         {
             try
             {
-                ShowDCAChartLoadingPanel();
-
-                panelRefreshChart.Visible = false;
-
-                ToggleLoadingAnimation("enable");
-
-                // clear any previous graph
-                ClearAllDCAChartData();
-
-                formsPlotDCA.Visible = true;
-
-                formsPlotDCA.Plot.Title("", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
-                formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
-                PrepareLinearScaleDCAChart();
-
-                // nb the api doesn't return items for every single date so we fill in all missing dates and prices (using average of the price either side of the missing date)
-                // get a series of historic price data
-                var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
-                var HistoricPriceDataJsonForDCA = HistoricPriceDataJson;
-                if (!string.IsNullOrEmpty(HistoricPriceDataJson))
+                if (!offlineMode && !testNet && OneBTCinSelectedCurrency > 0)
                 {
-                    JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
+                    ShowDCAChartLoadingPanel();
 
-                    List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
-                    
-                    long minUnixTime = long.MaxValue;
-                    long maxUnixTime = long.MinValue;
+                    panelRefreshChart.Visible = false;
 
-                    // Find start and end dates in Unix timestamp format
-                    foreach (var item in PriceList)
-                    {
-                        long unixTime = long.Parse(item.X);
-                        if (unixTime < minUnixTime)
-                            minUnixTime = unixTime;
-                        if (unixTime > maxUnixTime)
-                            maxUnixTime = unixTime;
-                    }
+                    ToggleLoadingAnimation("enable");
 
-                    // Insert missing dates with specified Y value in Unix timestamp format
-                    DateTime startDate = DateTimeOffset.FromUnixTimeSeconds(minUnixTime).DateTime;
-                    DateTime endDate = DateTimeOffset.FromUnixTimeSeconds(maxUnixTime).DateTime;
+                    // clear any previous graph
+                    ClearAllDCAChartData();
 
-                    DateTime currentDate = startDate;
-                    List<PriceCoordinatesList> updatedList = new List<PriceCoordinatesList>();
-
-                    while (currentDate <= endDate)
-                    {
-                        long currentDateUnix = ((DateTimeOffset)currentDate).ToUnixTimeSeconds();
-                        var existingItem = PriceList.Find(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.X)).DateTime.Date == currentDate.Date);
-                        if (existingItem != null)
-                        {
-                            updatedList.Add(existingItem);
-                        }
-                        else
-                        {
-                            if (currentDateUnix < 1282089600)
-                            {
-                                updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 0 });
-                            }
-                            else
-                            {
-                                updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 999999912345 });
-                            }
-                        }
-                        currentDate = currentDate.AddDays(1);
-                    }
-                    // Update PriceList with the updated list
-                    PriceList = updatedList;
-
-                    ProcessPriceList(PriceList);
-
-                    // convert data to GBP, EUR, XAU if needed
-                    decimal selectedCurrency = 0;
-                    decimal exchangeRate = 1;
-                    if (btnUSD.Enabled) // user has selected a currency other than USD
-                    {
-                        string priceUSD = OneBTCInUSD;
-                        string priceEUR = OneBTCInEUR;
-                        string priceGBP = OneBTCInGBP;
-                        string priceXAU = OneBTCInXAU;
-                        if (!btnGBP.Enabled) //GBP is selected
-                        {
-                            selectedCurrency = Convert.ToDecimal(priceGBP);
-                            formsPlotDCA.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
-                        }
-                        if (!btnEUR.Enabled) //EUR is selected
-                        {
-                            selectedCurrency = Convert.ToDecimal(priceEUR);
-                            formsPlotDCA.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
-                        }
-                        if (!btnXAU.Enabled) //XAU is selected
-                        {
-                            selectedCurrency = Convert.ToDecimal(priceXAU);
-                            formsPlotDCA.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
-                        }
-                        exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
-
-                        foreach (var item in PriceList)
-                        {
-                            item.Y *= exchangeRate;
-                        }
-                    }
-                    // set the number of points on the graph
-                    int pointCount = PriceList.Count;
-
-                    //create the arrays for the price scatter graph
-                    double[] yPriceChartPrices = PriceList.Select(h => (double)(h.Y)).ToArray(); // create array of doubles of the prices
-                    List<DateTime> dateList = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList(); // create a new list of the dates, this time in DateTime format
-                    double[] xPriceChartDates = dateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
-
-                    #region set up variables used for DCA calculation
-                    double DCAAmount = Convert.ToDouble(textBoxDCAAmountInput.Text);
-
-                    Dictionary<int, double> screenMap = new Dictionary<int, double>
-                    {
-                        { 0, 1 },
-                        { 1, 7 },
-                        { 2, 30 },
-                        { 3, 365 }
-                    };
-                    if (screenMap.ContainsKey(comboBoxDCAFrequency.SelectedIndex))
-                    {
-                        DCAFrequencyDays = screenMap[comboBoxDCAFrequency.SelectedIndex];
-                    }
-                    DateTime DCAStartDate = rjDatePickerDCAStartDate.Value;
-                    DateTime DCAEndDate = rjDatePickerDCAEndDate.Value;
-                    #endregion
-
-                    #region create list of dates that DCA purchases occurred
-                    List<DateTime> DCADateList = new List<DateTime>
-                    {
-                        // Add the start date
-                        DCAStartDate
-                    };
-
-                    // Add the dates in between
-                    DateTime nextDCADate = DCAStartDate;
-                    while (nextDCADate < DCAEndDate)
-                    {
-                        nextDCADate = nextDCADate.AddDays(DCAFrequencyDays);
-                        DCADateList.Add(nextDCADate);
-                    }
-
-                    if (!DCADateList.Contains(DCAEndDate))
-                    {
-                        DCADateList.Add(DCAEndDate);
-                    }
-                    #endregion
-
-                    #region create arrays for the DCA graph
-                    double[] xDCAChartDates = DCADateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
-                    #endregion
-
-                    #region create list of prices for the corresponding dca dates
-                    List<double> DCABitcoinAmountList = new List<double>();
-                    List<double> DCABitcoinAmountRunningTotalList = new List<double>();
-                    double bitcoinBoughtRunningTotal = 0;
-                    double lastAmountBought = 0;
-
-                    foreach (double xDCADate in xDCAChartDates)
-                    {
-                        // Cast both values to integers to compare only the whole number part
-                        int xDCADateWhole = (int)xDCADate;
-
-                        // Find the index of xDCAValue in xValues
-                        int index = Array.FindIndex(xPriceChartDates, x => (int)x == xDCADateWhole);
-
-                        if (index != -1)
-                        {
-                            // Corresponding price found
-                            DCABitcoinAmountList.Add(DCAAmount / yPriceChartPrices[index]);
-                            lastAmountBought = DCAAmount / yPriceChartPrices[index]; // store this value in case we don't have a price available to calculate with for the next date
-                        }
-                        else
-                        {
-                            // Date not found in the original data
-                            DCABitcoinAmountList.Add(lastAmountBought);
-                        }
-                        bitcoinBoughtRunningTotal += lastAmountBought;
-                        DCABitcoinAmountRunningTotalList.Add(bitcoinBoughtRunningTotal);
-                    }
-                    #endregion
-
-                    double[] yDCAChartBitcoinAmounts = DCABitcoinAmountList.ToArray();
-                    double[] yDCAChartBitcoinRunningTotal = DCABitcoinAmountRunningTotalList.ToArray();
-
-                    // set axis limits
-                    formsPlotDCA.Plot.SetAxisLimits(xMin: xPriceChartDates.Min(), xMax: xPriceChartDates.Max()); // date
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.1, yAxisIndex: 0); // price
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.1, yAxisIndex: 1);  // bitcoin acquired
-
-                    formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.1, yAxisIndex: 2); 
-
-                    scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.Orange, label: "Market price of 1 BTC");
-
-                    // plot another set of data to show amount bought per purchase using the additional axis
-                    var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.IndianRed, lineWidth: 1, label: "BTC purchased per transaction");
-                    BTCscatter.YAxisIndex = 2;
-
-                    formsPlotDCA.Plot.YAxis2.Label("", color: btnMenuDirectory.ForeColor);
-
-                    // plot another set of data to show running total bought using the additional axis
-                    var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
-                    yAxis3.Label("", color: btnMenuDirectory.ForeColor);
-                    yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.1);
-                    BTCRunningTotalscatter.YAxisIndex = 1;
-
-                    formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
-
-                    formsPlotDCA.Plot.XAxis.Color(color: label77.ForeColor);
-                    formsPlotDCA.Plot.YAxis.Color(color: label77.ForeColor);
-                    formsPlotDCA.Plot.YAxis2.Color(color: label77.ForeColor);
-                    yAxis3.Color(color: btnMenuDirectory.ForeColor);
-
-                    formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
-                    formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.Orange);
-                    formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.OliveDrab);
-                    yAxis3.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.IndianRed);
-
-                    formsPlotDCA.Plot.XAxis.Ticks(true);
-                    formsPlotDCA.Plot.XAxis.Label("");
-
-                    Color legendOutlineColour = Color.FromArgb(50, 50, 50);
-                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
-                    {
-                        legendOutlineColour = Color.FromArgb(50, 50, 50);
-                    }
-                    else
-                    {
-                        legendOutlineColour = Color.FromArgb(220, 220, 200);
-                    }
-                    var legend = formsPlotDCA.Plot.Legend();
-                    legend.Location = Alignment.UpperLeft;
-                    legend.FillColor = Color.Transparent;
-                    legend.FontColor = label77.ForeColor;
-                    legend.OutlineColor = legendOutlineColour;
-                    legend.ShadowColor = chartsBackgroundColor;
-                    
-                    // prevent navigating beyond the data
-                    formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.1);
-                    formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
-                    formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.1);
-
-                    formsPlotDCA.Plot.XAxis.Ticks(true);
-                    formsPlotDCA.Plot.YAxis.Ticks(true);
-                    formsPlotDCA.Plot.YAxis2.Ticks(true);
-                    formsPlotDCA.Plot.XAxis.MajorGrid(true);
-                    formsPlotDCA.Plot.YAxis.MajorGrid(true);
-
-
-                    double minX2 = xDCAChartDates.Min();
-                    double maxX2 = xDCAChartDates.Max();
-                    double rangeX2 = maxX2 - minX2;
-
-                    // Set the initial visible range of the x-axis to focus on the DCA data
-                    formsPlotDCA.Plot.SetAxisLimits(xMin: minX2, xMax: maxX2);
-
-                    // refresh the graph
-                    formsPlotDCA.Refresh();
                     formsPlotDCA.Visible = true;
 
-                    string currencyName = "D";
-                    string currencySymbol = "$";
-                    if (currencySelected == "D")
+                    formsPlotDCA.Plot.Title("", size: (int)(12 * UIScale), bold: false, color: label77.ForeColor);
+                    formsPlotDCA.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
+                    PrepareLinearScaleDCAChart();
+
+                    // nb the api doesn't return items for every single date so we fill in all missing dates and prices (using average of the price either side of the missing date)
+                    // get a series of historic price data
+                    var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
+                    var HistoricPriceDataJsonForDCA = HistoricPriceDataJson;
+                    if (!string.IsNullOrEmpty(HistoricPriceDataJson))
                     {
-                        currencyName = "USD";
-                        currencySymbol = "$";
-                    }
-                    else
-                    {
-                        if (currencySelected == "P")
+                        JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
+
+                        List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+
+                        long minUnixTime = long.MaxValue;
+                        long maxUnixTime = long.MinValue;
+
+                        // Find start and end dates in Unix timestamp format
+                        foreach (var item in PriceList)
                         {
-                            currencyName = "GBP";
-                            currencySymbol = "£";
+                            long unixTime = long.Parse(item.X);
+                            if (unixTime < minUnixTime)
+                                minUnixTime = unixTime;
+                            if (unixTime > maxUnixTime)
+                                maxUnixTime = unixTime;
                         }
-                        else
+
+                        // Insert missing dates with specified Y value in Unix timestamp format
+                        DateTime startDate = DateTimeOffset.FromUnixTimeSeconds(minUnixTime).DateTime;
+                        DateTime endDate = DateTimeOffset.FromUnixTimeSeconds(maxUnixTime).DateTime;
+
+                        DateTime currentDate = startDate;
+                        List<PriceCoordinatesList> updatedList = new List<PriceCoordinatesList>();
+
+                        while (currentDate <= endDate)
                         {
-                            if (currencySelected == "E")
+                            long currentDateUnix = ((DateTimeOffset)currentDate).ToUnixTimeSeconds();
+                            var existingItem = PriceList.Find(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.X)).DateTime.Date == currentDate.Date);
+                            if (existingItem != null)
                             {
-                                currencyName = "EUR";
-                                currencySymbol = "€";
+                                updatedList.Add(existingItem);
                             }
                             else
                             {
-                                if (currencySelected == "G")
+                                if (currentDateUnix < 1282089600)
                                 {
-                                    currencyName = "XAU";
-                                    currencySymbol = "\U0001fa99";
+                                    updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 0 });
+                                }
+                                else
+                                {
+                                    updatedList.Add(new PriceCoordinatesList { X = currentDateUnix.ToString(), Y = 999999912345 });
+                                }
+                            }
+                            currentDate = currentDate.AddDays(1);
+                        }
+                        // Update PriceList with the updated list
+                        PriceList = updatedList;
+
+                        ProcessPriceList(PriceList);
+
+                        // convert data to GBP, EUR, XAU if needed
+                        decimal selectedCurrency = 0;
+                        decimal exchangeRate = 1;
+                        if (btnUSD.Enabled) // user has selected a currency other than USD
+                        {
+                            string priceUSD = OneBTCInUSD;
+                            string priceEUR = OneBTCInEUR;
+                            string priceGBP = OneBTCInGBP;
+                            string priceXAU = OneBTCInXAU;
+                            if (!btnGBP.Enabled) //GBP is selected
+                            {
+                                selectedCurrency = Convert.ToDecimal(priceGBP);
+                                formsPlotDCA.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
+                            }
+                            if (!btnEUR.Enabled) //EUR is selected
+                            {
+                                selectedCurrency = Convert.ToDecimal(priceEUR);
+                                formsPlotDCA.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
+                            }
+                            if (!btnXAU.Enabled) //XAU is selected
+                            {
+                                selectedCurrency = Convert.ToDecimal(priceXAU);
+                                formsPlotDCA.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
+                            }
+                            exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
+
+                            foreach (var item in PriceList)
+                            {
+                                item.Y *= exchangeRate;
+                            }
+                        }
+                        // set the number of points on the graph
+                        int pointCount = PriceList.Count;
+
+                        //create the arrays for the price scatter graph
+                        double[] yPriceChartPrices = PriceList.Select(h => (double)(h.Y)).ToArray(); // create array of doubles of the prices
+                        List<DateTime> dateList = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList(); // create a new list of the dates, this time in DateTime format
+                        double[] xPriceChartDates = dateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
+
+                        #region set up variables used for DCA calculation
+                        double DCAAmount = Convert.ToDouble(textBoxDCAAmountInput.Text);
+
+                        Dictionary<int, double> screenMap = new Dictionary<int, double>
+                        {
+                            { 0, 1 },
+                            { 1, 7 },
+                            { 2, 30 },
+                            { 3, 365 }
+                        };
+                        if (screenMap.ContainsKey(comboBoxDCAFrequency.SelectedIndex))
+                        {
+                            DCAFrequencyDays = screenMap[comboBoxDCAFrequency.SelectedIndex];
+                        }
+                        DateTime DCAStartDate = rjDatePickerDCAStartDate.Value;
+                        DateTime DCAEndDate = rjDatePickerDCAEndDate.Value;
+                        #endregion
+
+                        #region create list of dates that DCA purchases occurred
+                        List<DateTime> DCADateList = new List<DateTime>
+                        {
+                            // Add the start date
+                            DCAStartDate
+                        };
+
+                        // Add the dates in between
+                        DateTime nextDCADate = DCAStartDate;
+                        while (nextDCADate < DCAEndDate)
+                        {
+                            nextDCADate = nextDCADate.AddDays(DCAFrequencyDays);
+                            DCADateList.Add(nextDCADate);
+                        }
+
+                        if (!DCADateList.Contains(DCAEndDate))
+                        {
+                            DCADateList.Add(DCAEndDate);
+                        }
+                        #endregion
+
+                        #region create arrays for the DCA graph
+                        double[] xDCAChartDates = DCADateList.Select(x => x.ToOADate()).ToArray(); // create array doubles of the dates
+                        #endregion
+
+                        #region create list of prices for the corresponding dca dates
+                        List<double> DCABitcoinAmountList = new List<double>();
+                        List<double> DCABitcoinAmountRunningTotalList = new List<double>();
+                        double bitcoinBoughtRunningTotal = 0;
+                        double lastAmountBought = 0;
+
+                        foreach (double xDCADate in xDCAChartDates)
+                        {
+                            // Cast both values to integers to compare only the whole number part
+                            int xDCADateWhole = (int)xDCADate;
+
+                            // Find the index of xDCAValue in xValues
+                            int index = Array.FindIndex(xPriceChartDates, x => (int)x == xDCADateWhole);
+
+                            if (index != -1)
+                            {
+                                // Corresponding price found
+                                DCABitcoinAmountList.Add(DCAAmount / yPriceChartPrices[index]);
+                                lastAmountBought = DCAAmount / yPriceChartPrices[index]; // store this value in case we don't have a price available to calculate with for the next date
+                            }
+                            else
+                            {
+                                // Date not found in the original data
+                                DCABitcoinAmountList.Add(lastAmountBought);
+                            }
+                            bitcoinBoughtRunningTotal += lastAmountBought;
+                            DCABitcoinAmountRunningTotalList.Add(bitcoinBoughtRunningTotal);
+                        }
+                        #endregion
+
+                        double[] yDCAChartBitcoinAmounts = DCABitcoinAmountList.ToArray();
+                        double[] yDCAChartBitcoinRunningTotal = DCABitcoinAmountRunningTotalList.ToArray();
+
+                        // set axis limits
+                        formsPlotDCA.Plot.SetAxisLimits(xMin: xPriceChartDates.Min(), xMax: xPriceChartDates.Max()); // date
+                        formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yPriceChartPrices.Max() * 1.1, yAxisIndex: 0); // price
+                        formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinRunningTotal.Max() * 1.1, yAxisIndex: 1);  // bitcoin acquired
+
+                        formsPlotDCA.Plot.SetAxisLimits(yMin: 0, yMax: yDCAChartBitcoinAmounts.Max() * 1.1, yAxisIndex: 2);
+
+                        scatter = formsPlotDCA.Plot.AddScatter(xPriceChartDates, yPriceChartPrices, lineWidth: 1, markerSize: 1, color: Color.Orange, label: "Market price of 1 BTC");
+
+                        // plot another set of data to show amount bought per purchase using the additional axis
+                        var BTCscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinAmounts, color: Color.IndianRed, lineWidth: 1, label: "BTC purchased per transaction");
+                        BTCscatter.YAxisIndex = 2;
+
+                        formsPlotDCA.Plot.YAxis2.Label("", color: btnMenuDirectory.ForeColor);
+
+                        // plot another set of data to show running total bought using the additional axis
+                        var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
+                        yAxis3.Label("", color: btnMenuDirectory.ForeColor);
+                        yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.1);
+                        BTCRunningTotalscatter.YAxisIndex = 1;
+
+                        formsPlotDCA.Plot.XAxis.DateTimeFormat(true);
+
+                        formsPlotDCA.Plot.XAxis.Color(color: label77.ForeColor);
+                        formsPlotDCA.Plot.YAxis.Color(color: label77.ForeColor);
+                        formsPlotDCA.Plot.YAxis2.Color(color: label77.ForeColor);
+                        yAxis3.Color(color: btnMenuDirectory.ForeColor);
+
+                        formsPlotDCA.Plot.XAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
+                        formsPlotDCA.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.Orange);
+                        formsPlotDCA.Plot.YAxis2.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.OliveDrab);
+                        yAxis3.TickLabelStyle(fontSize: (int)(10 * UIScale), color: Color.IndianRed);
+
+                        formsPlotDCA.Plot.XAxis.Ticks(true);
+                        formsPlotDCA.Plot.XAxis.Label("");
+
+                        Color legendOutlineColour = Color.FromArgb(50, 50, 50);
+                        if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                        {
+                            legendOutlineColour = Color.FromArgb(50, 50, 50);
+                        }
+                        else
+                        {
+                            legendOutlineColour = Color.FromArgb(220, 220, 200);
+                        }
+                        var legend = formsPlotDCA.Plot.Legend();
+                        legend.Location = Alignment.UpperLeft;
+                        legend.FillColor = Color.Transparent;
+                        legend.FontColor = label77.ForeColor;
+                        legend.OutlineColor = legendOutlineColour;
+                        legend.ShadowColor = chartsBackgroundColor;
+
+                        // prevent navigating beyond the data
+                        formsPlotDCA.Plot.YAxis.SetBoundary(0, yPriceChartPrices.Max() * 1.1);
+                        formsPlotDCA.Plot.XAxis.SetBoundary(xPriceChartDates.Min(), xPriceChartDates.Max());
+                        formsPlotDCA.Plot.YAxis2.SetBoundary(0, yDCAChartBitcoinRunningTotal.Max() * 1.1);
+
+                        formsPlotDCA.Plot.XAxis.Ticks(true);
+                        formsPlotDCA.Plot.YAxis.Ticks(true);
+                        formsPlotDCA.Plot.YAxis2.Ticks(true);
+                        formsPlotDCA.Plot.XAxis.MajorGrid(true);
+                        formsPlotDCA.Plot.YAxis.MajorGrid(true);
+
+
+                        double minX2 = xDCAChartDates.Min();
+                        double maxX2 = xDCAChartDates.Max();
+                        double rangeX2 = maxX2 - minX2;
+
+                        // Set the initial visible range of the x-axis to focus on the DCA data
+                        formsPlotDCA.Plot.SetAxisLimits(xMin: minX2, xMax: maxX2);
+
+                        // refresh the graph
+                        formsPlotDCA.Refresh();
+                        formsPlotDCA.Visible = true;
+
+                        string currencyName = "D";
+                        string currencySymbol = "$";
+                        if (currencySelected == "D")
+                        {
+                            currencyName = "USD";
+                            currencySymbol = "$";
+                        }
+                        else
+                        {
+                            if (currencySelected == "P")
+                            {
+                                currencyName = "GBP";
+                                currencySymbol = "£";
+                            }
+                            else
+                            {
+                                if (currencySelected == "E")
+                                {
+                                    currencyName = "EUR";
+                                    currencySymbol = "€";
+                                }
+                                else
+                                {
+                                    if (currencySelected == "G")
+                                    {
+                                        currencyName = "XAU";
+                                        currencySymbol = "\U0001fa99";
+                                    }
                                 }
                             }
                         }
+
+                        double xDCAChartDatesCount = xDCAChartDates.Count();
+                        double percentageChange = (bitcoinBoughtRunningTotal * Convert.ToDouble(OneBTCinSelectedCurrency)) / (xDCAChartDatesCount * DCAAmount) * 100;
+
+                        lblDCABTCPurchases.Invoke((MethodInvoker)delegate
+                        {
+                            lblDCABTCPurchases.Text = Convert.ToString(xDCAChartDates.Count());
+                        });
+                        label206.Invoke((MethodInvoker)delegate
+                        {
+                            label206.Text = currencyName + " spent";
+                        });
+                        lblDCAAmountSpent.Invoke((MethodInvoker)delegate
+                        {
+                            lblDCAAmountSpent.Text = currencySymbol + Convert.ToString(xDCAChartDates.Count() * DCAAmount);
+                        });
+                        lblDCABTCPurchased.Invoke((MethodInvoker)delegate
+                        {
+                            lblDCABTCPurchased.Text = bitcoinBoughtRunningTotal.ToString("0.00000000");
+                        });
+                        lblDCACurrentValue.Invoke((MethodInvoker)delegate
+                        {
+                            lblDCACurrentValue.Text = currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2");
+                        });
+                        lblDCAPercentageChange.Invoke((MethodInvoker)delegate
+                        {
+                            lblDCAPercentageChange.Text = percentageChange.ToString("0.00") + "%";
+                        });
+                        panelDCASummary.Visible = true;
+
+                        ToggleLoadingAnimation("disable");
+                        HideDCAChartLoadingPanel();
                     }
-
-                    double xDCAChartDatesCount = xDCAChartDates.Count();
-                    double percentageChange = (bitcoinBoughtRunningTotal * Convert.ToDouble(OneBTCinSelectedCurrency)) / (xDCAChartDatesCount * DCAAmount) * 100;
-
-                    lblDCABTCPurchases.Invoke((MethodInvoker)delegate
+                    else
                     {
-                        lblDCABTCPurchases.Text = Convert.ToString(xDCAChartDates.Count());
-                    });
-                    label206.Invoke((MethodInvoker)delegate
-                    {
-                        label206.Text = currencyName + " spent";
-                    });
-                    lblDCAAmountSpent.Invoke((MethodInvoker)delegate
-                    {
-                        lblDCAAmountSpent.Text = currencySymbol + Convert.ToString(xDCAChartDates.Count() * DCAAmount);
-                    });
-                    lblDCABTCPurchased.Invoke((MethodInvoker)delegate
-                    {
-                        lblDCABTCPurchased.Text = bitcoinBoughtRunningTotal.ToString("0.00000000");
-                    });
-                    lblDCACurrentValue.Invoke((MethodInvoker)delegate
-                    {
-                        lblDCACurrentValue.Text = currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2");
-                    });
-                    lblDCAPercentageChange.Invoke((MethodInvoker)delegate
-                    {
-                        lblDCAPercentageChange.Text = percentageChange.ToString("0.00") + "%";
-                    });
-                    panelDCASummary.Visible = true;
-
-                    ToggleLoadingAnimation("disable");
-                    HideDCAChartLoadingPanel();
-                }
-                else
-                {
-                    ToggleLoadingAnimation("disable");
-                    HideDCAChartLoadingPanel();
+                        ToggleLoadingAnimation("disable");
+                        HideDCAChartLoadingPanel();
+                    }
                 }
             }
             catch (Exception ex)
@@ -14940,7 +14937,7 @@ namespace SATSuma
                     SaveSettingsToBookmarksFile();
                     if (RunBlockchainInfoAPI)
                     {
-                        EnableChartsThatDontUseMempoolSpace();
+                        EnableChartsThatUseBlockchainInfoAPI();
                     }
                     GetBlockTip();
                     LookupBlockList();
@@ -15365,7 +15362,7 @@ namespace SATSuma
                     RunBlockchainInfoAPI = false;
                     blockchainInfoEndpointsSelected = "0";
                     btnMenuDCACalculator.Enabled = false;
-                    DisableChartsThatDontUseMempoolSpace();
+                    DisableChartsThatUseBlockchainInfoAPI();
                 }
                 else
                 {
@@ -15377,7 +15374,7 @@ namespace SATSuma
                     RunBlockchainInfoAPI = true;
                     blockchainInfoEndpointsSelected = "1";
                     btnMenuDCACalculator.Enabled = true;
-                    EnableChartsThatDontUseMempoolSpace();
+                    EnableChartsThatUseBlockchainInfoAPI();
                 }
                 SaveSettingsToBookmarksFile();
                 RefreshScreens();
@@ -15653,7 +15650,7 @@ namespace SATSuma
                     lblSettingsNodeMainnetSelected.Text = "❌";
                     lblSettingsNodeMainnetSelected.Enabled = false;
                 });
-                DisableChartsThatDontUseMempoolSpace();
+                DisableChartsThatUseBlockchainInfoAPI();
                 HideAllFiatConversionFields();
             }
             catch (Exception ex)
@@ -15796,7 +15793,7 @@ namespace SATSuma
                 btnMenuCharts.Enabled = true;
                 if (RunBlockchainInfoAPI == true && offlineMode == false)
                 {
-                    EnableChartsThatDontUseMempoolSpace();
+                    EnableChartsThatUseBlockchainInfoAPI();
                 }
                 Control[] EnableThisStuffForMainnet = { lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
                     lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };

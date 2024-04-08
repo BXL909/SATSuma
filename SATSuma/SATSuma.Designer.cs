@@ -122,6 +122,8 @@
             this.lblHeaderBlockSize = new System.Windows.Forms.Label();
             this.lblElapsedSinceUpdate = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard = new System.Windows.Forms.Panel();
+            this.label229 = new System.Windows.Forms.Label();
+            this.lblPrevDiffAdjustment = new System.Windows.Forms.Label();
             this.panel109 = new System.Windows.Forms.Panel();
             this.label299 = new System.Windows.Forms.Label();
             this.lblNetworkAge = new System.Windows.Forms.Label();
@@ -177,7 +179,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.lblProgressToHalving = new System.Windows.Forms.Label();
-            this.lblBlockReward = new System.Windows.Forms.Label();
+            this.lblBlockSubsidy = new System.Windows.Forms.Label();
             this.lblMarketCapUSD = new System.Windows.Forms.Label();
             this.lblMoscowTimeLabel = new System.Windows.Forms.Label();
             this.lblMarketCapLabel = new System.Windows.Forms.Label();
@@ -2777,6 +2779,8 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.label229);
+            this.panelBitcoinDashboard.Controls.Add(this.lblPrevDiffAdjustment);
             this.panelBitcoinDashboard.Controls.Add(this.lblDifficultyChart);
             this.panelBitcoinDashboard.Controls.Add(this.lblHashrateChart);
             this.panelBitcoinDashboard.Controls.Add(this.lblFeeRangeChart);
@@ -2852,7 +2856,7 @@
             this.panelBitcoinDashboard.Controls.Add(this.label2);
             this.panelBitcoinDashboard.Controls.Add(this.label31);
             this.panelBitcoinDashboard.Controls.Add(this.lblProgressToHalving);
-            this.panelBitcoinDashboard.Controls.Add(this.lblBlockReward);
+            this.panelBitcoinDashboard.Controls.Add(this.lblBlockSubsidy);
             this.panelBitcoinDashboard.Controls.Add(this.lblMarketCapUSD);
             this.panelBitcoinDashboard.Controls.Add(this.lblMoscowTimeLabel);
             this.panelBitcoinDashboard.Controls.Add(this.lblMarketCapLabel);
@@ -2874,13 +2878,39 @@
             this.panelBitcoinDashboard.Visible = false;
             this.panelBitcoinDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // label229
+            // 
+            this.label229.AutoSize = true;
+            this.label229.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label229.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label229.ForeColor = System.Drawing.Color.Silver;
+            this.label229.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label229.Location = new System.Drawing.Point(525, 367);
+            this.label229.Name = "label229";
+            this.label229.Size = new System.Drawing.Size(182, 17);
+            this.label229.TabIndex = 283;
+            this.label229.Text = "Previous difficulty adjustment";
+            this.toolTipGeneralUse.SetToolTip(this.label229, "Estimate, increasing in accuracy the nearer the next adjustment is");
+            // 
+            // lblPrevDiffAdjustment
+            // 
+            this.lblPrevDiffAdjustment.AutoSize = true;
+            this.lblPrevDiffAdjustment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrevDiffAdjustment.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPrevDiffAdjustment.Location = new System.Drawing.Point(525, 382);
+            this.lblPrevDiffAdjustment.Name = "lblPrevDiffAdjustment";
+            this.lblPrevDiffAdjustment.Size = new System.Drawing.Size(61, 17);
+            this.lblPrevDiffAdjustment.TabIndex = 282;
+            this.lblPrevDiffAdjustment.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblPrevDiffAdjustment, "Estimate, increasing in accuracy the nearer the next adjustment is");
+            // 
             // panel109
             // 
             this.panel109.BackColor = System.Drawing.Color.Transparent;
             this.panel109.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel109.BackgroundImage")));
             this.panel109.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel109.Controls.Add(this.label299);
-            this.panel109.Location = new System.Drawing.Point(522, 380);
+            this.panel109.Location = new System.Drawing.Point(522, 418);
             this.panel109.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel109.Name = "panel109";
             this.panel109.Size = new System.Drawing.Size(220, 23);
@@ -2902,7 +2932,7 @@
             this.lblNetworkAge.AutoSize = true;
             this.lblNetworkAge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblNetworkAge.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNetworkAge.Location = new System.Drawing.Point(525, 420);
+            this.lblNetworkAge.Location = new System.Drawing.Point(525, 458);
             this.lblNetworkAge.Name = "lblNetworkAge";
             this.lblNetworkAge.Size = new System.Drawing.Size(61, 17);
             this.lblNetworkAge.TabIndex = 240;
@@ -2928,7 +2958,7 @@
             this.label301.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label301.ForeColor = System.Drawing.Color.Silver;
             this.label301.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label301.Location = new System.Drawing.Point(525, 405);
+            this.label301.Location = new System.Drawing.Point(525, 443);
             this.label301.Name = "label301";
             this.label301.Size = new System.Drawing.Size(240, 17);
             this.label301.TabIndex = 241;
@@ -3558,17 +3588,17 @@
             this.lblProgressToHalving.TabIndex = 136;
             this.lblProgressToHalving.Text = "no data";
             // 
-            // lblBlockReward
+            // lblBlockSubsidy
             // 
-            this.lblBlockReward.AutoSize = true;
-            this.lblBlockReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockReward.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockReward.Location = new System.Drawing.Point(265, 268);
-            this.lblBlockReward.Name = "lblBlockReward";
-            this.lblBlockReward.Size = new System.Drawing.Size(15, 17);
-            this.lblBlockReward.TabIndex = 202;
-            this.lblBlockReward.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblBlockReward, "The amount of bitcoin issued for each mined block this subsidy epoch");
+            this.lblBlockSubsidy.AutoSize = true;
+            this.lblBlockSubsidy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblBlockSubsidy.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockSubsidy.Location = new System.Drawing.Point(265, 268);
+            this.lblBlockSubsidy.Name = "lblBlockSubsidy";
+            this.lblBlockSubsidy.Size = new System.Drawing.Size(15, 17);
+            this.lblBlockSubsidy.TabIndex = 202;
+            this.lblBlockSubsidy.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblBlockSubsidy, "The amount of bitcoin issued for each mined block this subsidy epoch");
             // 
             // lblMarketCapUSD
             // 
@@ -19476,7 +19506,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblDifficultyAdjEst;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblBlockReward;
+        private System.Windows.Forms.Label lblBlockSubsidy;
         private System.Windows.Forms.Panel panelBlockList;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label lblBlockListNonce;
@@ -20477,6 +20507,8 @@
         private System.Windows.Forms.Label lblMempoolSpacePriceIndicator;
         private System.Windows.Forms.Label lblBitcoinExplorerPriceIndicator;
         private System.Windows.Forms.Label label236;
+        private System.Windows.Forms.Label label229;
+        private System.Windows.Forms.Label lblPrevDiffAdjustment;
     }
 }
 

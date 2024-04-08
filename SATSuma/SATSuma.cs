@@ -27,8 +27,6 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * more testing! 
-* reduce reliance on external API's where possible
-* more testing of offline mode and testnet
 */
 
 #region Using
@@ -352,6 +350,7 @@ namespace SATSuma
         int intThemeSavedMessageTimeShown = 0;
 
         #endregion
+        bool gotMarketDataInLastFewSecs = true; 
         #endregion
 
         #region ⚡INITIALISE⚡
@@ -518,12 +517,14 @@ namespace SATSuma
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
                 GetBlockTip();
+                GetMarketData();
                 _ = UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
                 numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                 {
                     numericUpDownBlockHeightToStartListFrom.Text = lblBlockNumber.Text; //setup block list screen
                 });
+
                 LookupBlockList(); // fetch the first 15 blocks automatically for the block list initial view.
                 this.Visible = true;
                 AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
@@ -859,7 +860,14 @@ namespace SATSuma
                         }
                         UpdateLabelValue(lblProgressNextDiffAdjPercentage, truncatedPercent);
                         UpdateLabelValue(lblBlockListProgressNextDiffAdjPercentage, truncatedPercent);
+                        if (double.TryParse(previousRetarget, out double retargetValue))
+                        {
+                            // Format the double with two decimal places
+                            string formattedRetarget = retargetValue.ToString("0.00");
 
+                            // Update the label value
+                            UpdateLabelValue(lblPrevDiffAdjustment, formattedRetarget + "%");
+                        }
                         if (decimal.TryParse(progressPercent, out decimal progressValue))
                         {
                             progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
@@ -1277,7 +1285,11 @@ namespace SATSuma
                             {
                                 if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                                 {
-                                    GetMarketData();
+                                    if (!gotMarketDataInLastFewSecs) // this was performed during SATSuma_Load. No point in running it again at startup, but we want to run it every time after that
+                                    {
+                                        GetMarketData();
+                                    }
+                                    gotMarketDataInLastFewSecs = false;
                                 }
                                 else
                                 {
@@ -1359,15 +1371,18 @@ namespace SATSuma
                         {
                             if (!testNet)
                             {
+                                // determine current block subsidy by calculating it from most recent block
+                                string blockSubsidy = MemSpGetRewardStats();
+                                UpdateLabelValue(lblBlockSubsidy, blockSubsidy);
+
                                 if (RunBlockchainInfoAPI)
                                 {
-                                    var (avgNoTransactions, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
+                                    var (avgNoTransactions, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
                                     UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
-                                    UpdateLabelValue(lblBlockReward, blockReward);
-
-                                    if (decimal.TryParse(blockReward, out decimal epoch))
+                                    
+                                    if (decimal.TryParse(blockSubsidy, out decimal epoch))
                                     {
-                                        epoch = (int)(Math.Log(Convert.ToDouble(blockReward) / 50) / Math.Log(0.5)) + 1;
+                                        epoch = (int)(Math.Log(Convert.ToDouble(blockSubsidy) / 50) / Math.Log(0.5)) + 1;
                                     }
                                     else
                                     {
@@ -1375,12 +1390,12 @@ namespace SATSuma
                                     }
                                     UpdateLabelValue(lblSubsidyEpoch, Convert.ToString(epoch));
 
-                                    if (decimal.TryParse(blockReward, out decimal decimalBlockReward))
+                                    if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
                                     {
-                                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2"));
+                                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
                                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                                         {
-                                            lblBlockRewardFiat.Location = new Point(lblBlockReward.Location.X + lblBlockReward.Width, lblBlockRewardFiat.Location.Y);
+                                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
                                         });
                                     }
                                     else
@@ -1388,29 +1403,29 @@ namespace SATSuma
                                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                                         {
                                             lblBlockRewardFiat.Text = "0";
-                                            lblBlockRewardFiat.Location = new Point(lblBlockReward.Location.X + lblBlockReward.Width, lblBlockRewardFiat.Location.Y);
+                                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
                                         });
                                     }
 
-                                    if (decimal.TryParse(blockReward, out decimal DecBlockReward))
+                                    if (decimal.TryParse(blockSubsidy, out decimal DecBlockSubsidy))
                                     {
-                                        DecBlockReward = Convert.ToDecimal(blockReward);
+                                        DecBlockSubsidy = Convert.ToDecimal(blockSubsidy);
                                     }
                                     else
                                     {
-                                        DecBlockReward = 0;
+                                        DecBlockSubsidy = 0;
                                     }
-                                    decimal NextBlockReward = DecBlockReward / 2;
-                                    UpdateLabelValue(lblBlockRewardAfterHalving, Convert.ToString(NextBlockReward));
-                                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockReward) * OneBTCinSelectedCurrency).ToString("N2"));
+                                    decimal NextBlockSubsidy = DecBlockSubsidy / 2;
+                                    UpdateLabelValue(lblBlockRewardAfterHalving, Convert.ToString(NextBlockSubsidy));
+                                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
                                     lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                                     {
                                         lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockRewardAfterHalving.Location.X + lblBlockRewardAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
                                     });
-                                    UpdateLabelValue(lblBlockListBlockReward, blockReward);
-                                    if (decimal.TryParse(blockReward, out decimal blockReward2))
+                                    UpdateLabelValue(lblBlockListBlockReward, blockSubsidy);
+                                    if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
                                     {
-                                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockReward) * OneBTCinSelectedCurrency).ToString("N2"));
+                                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
                                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
                                         {
                                             lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
@@ -1459,7 +1474,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblBlockReward, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
+                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblBlockSubsidy, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
                                     foreach (Control control in controlsToShowAsDisabled)
                                     {
                                         control.Invoke((MethodInvoker)delegate
@@ -1476,7 +1491,7 @@ namespace SATSuma
                             }
                             else
                             {
-                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblBlockReward, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
+                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblBlockSubsidy, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
                                 foreach (Control control in controlsToShowAsTestnet)
                                 {
                                     control.Invoke((MethodInvoker)delegate
@@ -1484,6 +1499,10 @@ namespace SATSuma
                                         control.Text = "unavailable on TestNet";
                                     });
                                 }
+                                lblPercentIssued.Invoke((MethodInvoker)delegate
+                                {
+                                    lblPercentIssued.Text = "unavailable";
+                                });
 
                                 progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                 {
@@ -1677,7 +1696,8 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                await Task.WhenAll(task0, task1, task2, task3, task4, task5);
+                await Task.WhenAll(task0, task1);
+                await Task.WhenAll(task3, task2, task4, task5);
 
                 if (errorOccurred)
                 {
@@ -1768,6 +1788,38 @@ namespace SATSuma
         }
         #endregion
         #region api calls for dashboards
+
+        private string MemSpGetRewardStats()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                LightUpNodeLight();
+                var response = client.DownloadString(NodeURL + "v1/mining/reward-stats/1");
+                var data = JObject.Parse(response);
+
+                if (data["totalReward"] != null && data["totalFee"] != null)
+                {
+                    decimal rewardDec = Convert.ToDecimal(data["totalReward"]);
+                    decimal feesDec = Convert.ToDecimal(data["totalFee"]);
+                    decimal subsidy = rewardDec - feesDec;
+                    string blockSubsidyStr = Convert.ToString(subsidy);
+                    decimal blockSubsidyBTC = ConvertSatsToBitcoin(blockSubsidyStr);
+                    string blockSubsidy = blockSubsidyBTC.ToString();
+                    return blockSubsidy;
+                }
+                else
+                {
+                    return "error";
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetReward");
+            }
+            return "error";
+        }
+
         private (string currentHashrate, string currentDifficulty) MemSpGetHashrate()
         {
             try
@@ -1956,7 +2008,7 @@ namespace SATSuma
             return ("error", "error", "error");
         }
 
-        private (string avgNoTransactions, string blockNumber, string blockReward, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
+        private (string avgNoTransactions, string blockNumber, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
         {
             try
             {
@@ -1974,7 +2026,6 @@ namespace SATSuma
                     avgNoTransactionsText = "0";
                 }
                 string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
-                string blockReward = client.DownloadString("https://blockchain.info/q/bcperblock"); // current block reward
                 string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
                 string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
                 if (double.TryParse(secondsBetweenBlocks, out double dblSecondsBetweenBlocks))
@@ -1993,13 +2044,13 @@ namespace SATSuma
                 string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
                 string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
                 twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                return (avgNoTransactionsText, blockNumber, blockReward, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
+                return (avgNoTransactionsText, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BlockchainInfoEndpointsRefresh");
             }
-            return ("0", "0", "0", "0", "0", "0", "0", "0");
+            return ("0", "0", "0", "0", "0", "0", "0");
         }
 
         private (List<string> aliases, List<string> capacities) MemSpLiquidityRanking()
@@ -15769,7 +15820,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] DisableThisStuffForTestnet = { lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderHashRateChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, 
+                Control[] DisableThisStuffForTestnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter ,lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderHashRateChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, 
                     lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPriceChart, lblMarketCapChart, lblChartCirculation, lblUniqueAddressesChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in DisableThisStuffForTestnet)
                 {
@@ -15795,7 +15846,7 @@ namespace SATSuma
                 {
                     EnableChartsThatUseBlockchainInfoAPI();
                 }
-                Control[] EnableThisStuffForMainnet = { lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
+                Control[] EnableThisStuffForMainnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter, lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListPoolRanking, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
                     lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in EnableThisStuffForMainnet)
                 {
@@ -20697,7 +20748,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockReward, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23993,7 +24044,10 @@ namespace SATSuma
                         lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
                     });
                 }
-                PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
+                if (!testNet)
+                {
+                    PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
+                }
                 // block screen fiat values
                 if (decimal.TryParse(lblTotalFees.Text, out decimal totalBlockFeesDec))
                 {
@@ -26323,7 +26377,7 @@ namespace SATSuma
                         });
                     lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
                     });
                     lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                     {
@@ -26439,7 +26493,7 @@ namespace SATSuma
             try
             {
                 CloseCurrencyMenu();
-                GetMarketData();
+                _ = UpdateBitcoinAndLightningDashboards();
                 SaveSettingsToBookmarksFile();
             }
             catch (Exception ex)

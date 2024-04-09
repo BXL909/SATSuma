@@ -516,7 +516,7 @@ namespace SATSuma
 
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 CheckNetworkStatus();
-                GetBlockTip();
+                GetBlockTipAndCirculation();
                 GetMarketData();
                 _ = UpdateBitcoinAndLightningDashboards(); // setting them now avoids waiting a whole minute for the first refresh
                 StartTheClocksTicking(); // start all the timers
@@ -682,7 +682,7 @@ namespace SATSuma
             }
         }
 
-        private void Timer50thSec_Tick(object sender, EventArgs e)
+        private void Timer50thSec_Tick(object sender, EventArgs e) // used for the long refresh countdown progress bar
         {
             if (progressBarRefreshData.Value == (intDisplayCountdownToRefresh * 1000))
             {
@@ -706,40 +706,40 @@ namespace SATSuma
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
-                #region mempool.space api's
+
+                #region determine network age
+                DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
+                DateTime currentDate = DateTime.Now; // Current date and time
+
+                TimeSpan elapsedTime = currentDate - startDate;
+
+                // Calculate years, months, days, hours, minutes, and seconds
+                int years = currentDate.Year - startDate.Year;
+                int months = currentDate.Month - startDate.Month;
+                int days = currentDate.Day - startDate.Day;
+                int hours = elapsedTime.Hours;
+                int minutes = elapsedTime.Minutes;
+                int seconds = elapsedTime.Seconds;
+
+                // Adjust negative months and days
+                if (days < 0)
+                {
+                    months--;
+                    days += DateTime.DaysInMonth(startDate.Year, startDate.Month);
+                }
+                if (months < 0)
+                {
+                    years--;
+                    months += 12;
+                }
+                UpdateLabelValue(lblNetworkAge, $"{years} years, {months} months, {days} days");
+                #endregion
+                #region task 0 & 3- mempool.space api's
                 Task task0 = Task.Run(async () => // mempool.space api's
                 {
-                    // current block height, size and transaction count
+                    #region block height, no. of tx in block, time since block, block size
                     try
                     {
-                        #region determine network age
-                        DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
-                        DateTime currentDate = DateTime.Now; // Current date and time
-
-                        TimeSpan elapsedTime = currentDate - startDate;
-
-                        // Calculate years, months, days, hours, minutes, and seconds
-                        int years = currentDate.Year - startDate.Year;
-                        int months = currentDate.Month - startDate.Month;
-                        int days = currentDate.Day - startDate.Day;
-                        int hours = elapsedTime.Hours;
-                        int minutes = elapsedTime.Minutes;
-                        int seconds = elapsedTime.Seconds;
-
-                        // Adjust negative months and days
-                        if (days < 0)
-                        {
-                            months--;
-                            days += DateTime.DaysInMonth(startDate.Year, startDate.Month);
-                        }
-                        if (months < 0)
-                        {
-                            years--;
-                            months += 12;
-                        }
-                        UpdateLabelValue(lblNetworkAge, $"{years} years, {months} months, {days} days");
-                        #endregion
-
                         var blocksJson = await _blockService.GetBlockDataAsync("000000");  // don't pass a block to start from - we want the tip
                         var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
@@ -802,8 +802,9 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateDashboards(block size & tx count)");
                     }
+                    #endregion
 
-                    // fees
+                    #region fees
                     try
                     {
                         var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = MemSpGetFees();
@@ -821,8 +822,9 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateDashboards(fees)");
                     }
+                    #endregion
 
-                    // hashrate
+                    #region hashrate
                     try
                     {
                         var (currentHashrate, currentDifficulty) = MemSpGetHashrate();
@@ -847,8 +849,76 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateDashboards(hashrate)");
                     }
+                    #endregion
 
-                    // difficulty adjustment
+                    #region determine block subsidy, subsidy after halving and fiat values of both
+                    // determine current block subsidy by calculating it from most recent block
+                    string blockSubsidy = MemSpGetRewardStats();
+                    UpdateLabelValue(lblBlockSubsidy, blockSubsidy);
+
+                    if (decimal.TryParse(blockSubsidy, out decimal epoch))
+                    {
+                        epoch = (int)(Math.Log(Convert.ToDouble(blockSubsidy) / 50) / Math.Log(0.5)) + 1;
+                    }
+                    else
+                    {
+                        epoch = 0;
+                    }
+                    UpdateLabelValue(lblSubsidyEpoch, Convert.ToString(epoch));
+
+                    if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
+                    {
+                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
+                        });
+                    }
+                    else
+                    {
+                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockRewardFiat.Text = "0";
+                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
+                        });
+                    }
+
+                    if (decimal.TryParse(blockSubsidy, out decimal DecBlockSubsidy))
+                    {
+                        DecBlockSubsidy = Convert.ToDecimal(blockSubsidy);
+                    }
+                    else
+                    {
+                        DecBlockSubsidy = 0;
+                    }
+                    decimal NextBlockSubsidy = DecBlockSubsidy / 2;
+                    UpdateLabelValue(lblBlockSubsidyAfterHalving, Convert.ToString(NextBlockSubsidy));
+                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                    lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockSubsidyAfterHalving.Location.X + lblBlockSubsidyAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
+                    });
+                    UpdateLabelValue(lblBlockListBlockSubsidy, blockSubsidy);
+                    if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
+                    {
+                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
+                        {
+                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
+                        });
+                    }
+                    else
+                    {
+                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
+                        {
+                            lblBlockListBlockRewardFiat.Text = "0";
+                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
+                        });
+                    }
+
+                    #endregion
+
+                    #region difficulty adjustment
                     try
                     {
                         string truncatedPercent = "0%";
@@ -923,8 +993,9 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateDashboards(difficulty adjustment)");
                     }
+                    #endregion
 
-                    //fees and transactions in next block
+                    #region fees and transactions in next block
                     try
                     {
                         if (!testNet)
@@ -1021,8 +1092,9 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateDashboards(Task3)");
                     }
+                    #endregion
 
-                    // transactions in mempool
+                    #region transactions in mempool
                     try
                     {
                         var (txCount, vSize, totalFees) = MemSpGetMempool();
@@ -1035,6 +1107,7 @@ namespace SATSuma
                         errorOccurred = true;
                         HandleException(ex, "UpdateAPIGroup1DataFields(GetMempool)");
                     }
+                    #endregion
 
                 });
                 Task task3 = Task.Run(() => // mempool.space lightning JSON
@@ -1045,6 +1118,7 @@ namespace SATSuma
                         {
                             if (RunMempoolSpaceLightningAPI)
                             {
+                                #region lightning stats
                                 var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightning();
                                 UpdateLabelValue(lblChannelCount, channelCount);
                                 UpdateLabelValue(lblNodeCount, nodeCount);
@@ -1096,9 +1170,11 @@ namespace SATSuma
                                     lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblClearnetTorNodes, clearnetTorNodes);
+                                #endregion
                             }
                             else
                             {
+                                #region mark it all as disabled
                                 lblChannelCount.Invoke((MethodInvoker)delegate
                                 {
                                     lblChannelCount.Text = "Disabled";
@@ -1151,7 +1227,9 @@ namespace SATSuma
                                 {
                                     lblClearnetTorNodes.Text = "Disabled";
                                 });
+                                #endregion
                             }
+                            #region shuffle charts in to place
                             lblLightningNodesChart.Invoke((MethodInvoker)delegate
                             {
                                 lblLightningNodesChart.Location = new Point(label40.Location.X + label40.Width, lblLightningNodesChart.Location.Y);
@@ -1164,8 +1242,10 @@ namespace SATSuma
                             {
                                 lblLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width, lblLightningCapacityChart.Location.Y);
                             });
+                            #endregion
                             if (RunMempoolSpaceLightningAPI)
                             {
+                                #region capacity
                                 var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdown();
                                 UpdateLabelValue(lblClearnetCapacity, clearnetCapacity);
                                 UpdateLabelValue(lblClearnetCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
@@ -1185,9 +1265,11 @@ namespace SATSuma
                                 {
                                     lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
                                 });
+                                #endregion
                             }
                             else
                             {
+                                #region mark as disabled
                                 lblClearnetCapacity.Invoke((MethodInvoker)delegate
                                 {
                                     lblClearnetCapacity.Text = "Disabled";
@@ -1200,9 +1282,11 @@ namespace SATSuma
                                 {
                                     lblUnknownCapacity.Text = "Disabled";
                                 });
+                                #endregion
                             }
                             if (RunMempoolSpaceLightningAPI)
                             {
+                                #region liquidity & connectivity rankings
                                 var (aliases, capacities) = MemSpLiquidityRanking();
                                 for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
                                 {
@@ -1234,9 +1318,11 @@ namespace SATSuma
                                         UpdateLabelValue(channelLabel, result7.channels[i]);
                                     }
                                 }
+                                #endregion
                             }
                             else
                             {
+                                #region mark it all as disabled
                                 for (int i = 0; i < 10; i++)
                                 {
                                     System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
@@ -1263,6 +1349,7 @@ namespace SATSuma
                                         channelLabel.Text = "disabled";
                                     });
                                 }
+                                #endregion
                             }
                         }
                         SetLightsMessagesAndResetTimers();
@@ -1274,7 +1361,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                #region bitcoinexplorer.org / mempool.space (price) / coingecko.com api for price
+                #region task 1 - bitcoinexplorer.org / mempool.space (price) / coingecko.com api (price)
                 Task task1 = Task.Run(() =>  
                 {
                     if (!offlineMode)
@@ -1285,7 +1372,7 @@ namespace SATSuma
                             {
                                 if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                                 {
-                                    if (!gotMarketDataInLastFewSecs) // this was performed during SATSuma_Load. No point in running it again at startup, but we want to run it every time after that
+                                    if (!gotMarketDataInLastFewSecs) // getmarketdata was performed during SATSuma_Load. No point in running it during first data refresh, but we want to run it every time after that
                                     {
                                         GetMarketData();
                                     }
@@ -1293,7 +1380,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    Control[] controlsToShowAsDisabled = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
+                                    Control[] controlsToShowAsDisabled = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
                                     foreach (Control control in controlsToShowAsDisabled)
                                     {
                                         control.Invoke((MethodInvoker)delegate
@@ -1305,7 +1392,7 @@ namespace SATSuma
                             }
                             else
                             {
-                                Control[] controlsToShowAsTestnet = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
+                                Control[] controlsToShowAsTestnet = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
                                 foreach (Control control in controlsToShowAsTestnet)
                                 {
                                     control.Invoke((MethodInvoker)delegate
@@ -1314,13 +1401,14 @@ namespace SATSuma
                                     });
                                 }
                             }
+                            #region shuffle stuff in to place
                             lblMarketCapChart.Invoke((MethodInvoker)delegate
                             {
                                 lblMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width, lblMarketCapChart.Location.Y);
                             });
                             lblPriceChart.Invoke((MethodInvoker)delegate
                             {
-                                lblPriceChart.Location = new Point(lblPriceUSD.Location.X + lblPriceUSD.Width, lblPriceChart.Location.Y);
+                                lblPriceChart.Location = new Point(lblPrice.Location.X + lblPrice.Width, lblPriceChart.Location.Y);
                             });
                             lblConverterChart.Invoke((MethodInvoker)delegate
                             {
@@ -1352,6 +1440,7 @@ namespace SATSuma
                             {
                                 lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
                             });
+                            #endregion
                             SetLightsMessagesAndResetTimers();
                         }
                         catch (Exception ex)
@@ -1362,7 +1451,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                #region blockchain.info api
+                #region task 2 - blockchain.info api
                 Task task2 = Task.Run(() => // blockchain.info endpoints 
                 {
                     if (!offlineMode)
@@ -1371,94 +1460,10 @@ namespace SATSuma
                         {
                             if (!testNet)
                             {
-                                // determine current block subsidy by calculating it from most recent block
-                                string blockSubsidy = MemSpGetRewardStats();
-                                UpdateLabelValue(lblBlockSubsidy, blockSubsidy);
-
                                 if (RunBlockchainInfoAPI)
                                 {
                                     var (avgNoTransactions, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
                                     UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
-                                    
-                                    if (decimal.TryParse(blockSubsidy, out decimal epoch))
-                                    {
-                                        epoch = (int)(Math.Log(Convert.ToDouble(blockSubsidy) / 50) / Math.Log(0.5)) + 1;
-                                    }
-                                    else
-                                    {
-                                        epoch = 0;
-                                    }
-                                    UpdateLabelValue(lblSubsidyEpoch, Convert.ToString(epoch));
-
-                                    if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
-                                    {
-                                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
-                                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
-                                        });
-                                    }
-                                    else
-                                    {
-                                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblBlockRewardFiat.Text = "0";
-                                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
-                                        });
-                                    }
-
-                                    if (decimal.TryParse(blockSubsidy, out decimal DecBlockSubsidy))
-                                    {
-                                        DecBlockSubsidy = Convert.ToDecimal(blockSubsidy);
-                                    }
-                                    else
-                                    {
-                                        DecBlockSubsidy = 0;
-                                    }
-                                    decimal NextBlockSubsidy = DecBlockSubsidy / 2;
-                                    UpdateLabelValue(lblBlockRewardAfterHalving, Convert.ToString(NextBlockSubsidy));
-                                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
-                                    lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockRewardAfterHalving.Location.X + lblBlockRewardAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
-                                    });
-                                    UpdateLabelValue(lblBlockListBlockReward, blockSubsidy);
-                                    if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
-                                    {
-                                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
-                                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
-                                        {
-                                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
-                                        });
-                                    }
-                                    else
-                                    {
-                                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
-                                        {
-                                            lblBlockListBlockRewardFiat.Text = "0";
-                                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockReward.Location.X + lblBlockListBlockReward.Width, lblBlockListBlockRewardFiat.Location.Y);
-                                        });
-                                    }
-                                    UpdateLabelValue(lblBTCInCirc, calculatedBTCInCirculation + " / 21000000");
-                                    if (calculatedBTCInCirculation > 0)
-                                    {
-                                        UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
-                                    }
-                                    else
-                                    {
-                                        lblBTCToBeIssued.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblBTCToBeIssued.Text = "0";
-                                        });
-                                    }
-                                    
-                                    decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
-                                    UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
-
-                                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
-                                    {
-                                        progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
-                                    });
                                     UpdateLabelValue(lblHashesToSolve, hashesToSolve);
                                     UpdateLabelValue(lblBlockListAttemptsToSolveBlock, hashesToSolve);
                                     UpdateLabelValue(lbl24HourTransCount, twentyFourHourTransCount);
@@ -1474,7 +1479,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblBlockSubsidy, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent, lblPercentIssued };
+                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
                                     foreach (Control control in controlsToShowAsDisabled)
                                     {
                                         control.Invoke((MethodInvoker)delegate
@@ -1482,16 +1487,11 @@ namespace SATSuma
                                             control.Text = "disabled";
                                         });
                                     }
-
-                                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
-                                    {
-                                        progressBarPercentIssued.Value = 0;
-                                    });
                                 }
                             }
                             else
                             {
-                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblBlockSubsidy, lblBlockListBlockReward, lblBlockRewardAfterHalving, lblBTCInCirc, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
+                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
                                 foreach (Control control in controlsToShowAsTestnet)
                                 {
                                     control.Invoke((MethodInvoker)delegate
@@ -1499,20 +1499,8 @@ namespace SATSuma
                                         control.Text = "unavailable on TestNet";
                                     });
                                 }
-                                lblPercentIssued.Invoke((MethodInvoker)delegate
-                                {
-                                    lblPercentIssued.Text = "unavailable";
-                                });
-
-                                progressBarPercentIssued.Invoke((MethodInvoker)delegate
-                                {
-                                    progressBarPercentIssued.Value = 0;
-                                });
                             }
-                            lblChartCirculation.Invoke((MethodInvoker)delegate
-                            {
-                                lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
-                            });
+                            
                             SetLightsMessagesAndResetTimers();
                         }
                         catch (Exception ex)
@@ -1523,8 +1511,8 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                #region blockchair.com api
-                Task task4 = Task.Run(() =>  // blockchair.com JSON for chain stats
+                #region task 4 and 5 - blockchair.com api
+                Task task4 = Task.Run(() =>  // blockchair.com for chain stats
                 {
                     try
                     {
@@ -1532,7 +1520,7 @@ namespace SATSuma
                         {
                             if (RunBlockchairComAPI)
                             {
-                                var result7 = BlockchairComChainStatsJSONRefresh();
+                                var result7 = BlockchairComChainStatsRefresh();
                                 int hodling_addresses = int.Parse(result7.hodling_addresses);
                                 if (hodling_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                                 {
@@ -1582,6 +1570,7 @@ namespace SATSuma
                                 });
                             }
                         }
+                        #region shuffle stuff in to place
                         lblPoolRankingChart.Invoke((MethodInvoker)delegate
                         {
                             lblPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width, lblPoolRankingChart.Location.Y);
@@ -1590,6 +1579,7 @@ namespace SATSuma
                         {
                             lblUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width, lblUniqueAddressesChart.Location.Y);
                         });
+                        #endregion
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
@@ -1598,7 +1588,7 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task5)");
                     }
                 });
-                Task task5 = Task.Run(() =>  // blockchair.com JSON for halving stats
+                Task task5 = Task.Run(() =>  // blockchair.com for halving stats
                 {
                     try
                     {
@@ -1789,7 +1779,8 @@ namespace SATSuma
         #endregion
         #region api calls for dashboards
 
-        private string MemSpGetRewardStats()
+        #region mempool.space api's
+        private string MemSpGetRewardStats() // determines the current block subsidy
         {
             try
             {
@@ -1911,50 +1902,6 @@ namespace SATSuma
             return ("error", "error", "error", "error", "error", "error", "error", "error", "error");
         }
 
-        private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
-                var data = JObject.Parse(response);
-
-                // Check if each key exists and assign its value, otherwise set it to "0"
-                string priceUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
-                string priceGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
-                string priceEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
-                string priceXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
-                return (priceUSD, priceGBP, priceEUR, priceXAU);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BitcoinExplorerOrgGetPrice");
-            }
-            return ("0", "0", "0", "0");
-        }
-
-        private (string cgPriceUSD, string cgPriceGBP, string cgPriceEUR, string cgPriceXAU) CoingeckoGetPrice()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd%2Ceur%2Cgbp%2Cxau&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&precision=2");
-                var data = JObject.Parse(response);
-
-                // Check if each key exists and assign its value, otherwise set it to "0"
-                string cgPriceUSD = data["bitcoin"]["usd"] != null ? data["bitcoin"]["usd"].ToString() : "0";
-                string cgPriceGBP = data["bitcoin"]["gbp"] != null ? data["bitcoin"]["gbp"].ToString() : "0";
-                string cgPriceEUR = data["bitcoin"]["eur"] != null ? data["bitcoin"]["eur"].ToString() : "0";
-                string cgPriceXAU = data["bitcoin"]["xau"] != null ? data["bitcoin"]["xau"].ToString() : "0";
-                return (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "CoingeckoGetPrice");
-            }
-            return ("0", "0", "0", "0");
-        }
-
         private (string mpPriceUSD, string mpPriceGBP, string mpPriceEUR, string mpPriceXAU) MempoolSpaceGetPrice()
         {
             try
@@ -2006,51 +1953,6 @@ namespace SATSuma
                 HandleException(ex, "GetMempool");
             }
             return ("error", "error", "error");
-        }
-
-        private (string avgNoTransactions, string blockNumber, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
-                string avgNoTransactionsText = "";
-                if (double.TryParse(avgNoTransactions, out double dblAvgNoTransactions))
-                {
-                    dblAvgNoTransactions = Math.Round(dblAvgNoTransactions);
-                    avgNoTransactionsText = dblAvgNoTransactions.ToString();
-                }
-                else
-                {
-                    dblAvgNoTransactions = 0;
-                    avgNoTransactionsText = "0";
-                }
-                string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
-                string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
-                string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
-                if (double.TryParse(secondsBetweenBlocks, out double dblSecondsBetweenBlocks))
-                {
-                    dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
-                }
-                else
-                {
-                    dblSecondsBetweenBlocks = 0;
-                }
-                TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
-                string timeString = string.Format("{0:%m}m {0:%s}s", time);
-                string avgTimeBetweenBlocks = timeString;
-                string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
-                string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
-                string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
-                string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
-                twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                return (avgNoTransactionsText, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BlockchainInfoEndpointsRefresh");
-            }
-            return ("0", "0", "0", "0", "0", "0", "0");
         }
 
         private (List<string> aliases, List<string> capacities) MemSpLiquidityRanking()
@@ -2288,6 +2190,100 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
 
+        #endregion
+        #region bitcoinexplorer.org api
+        private (string priceUSD, string priceGBP, string priceEUR, string priceXAU) BitcoinExplorerOrgGetPrice()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://bitcoinexplorer.org/api/price");
+                var data = JObject.Parse(response);
+
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string priceUSD = data.ContainsKey("usd") ? Convert.ToString(data["usd"]) : "0";
+                string priceGBP = data.ContainsKey("gbp") ? Convert.ToString(data["gbp"]) : "0";
+                string priceEUR = data.ContainsKey("eur") ? Convert.ToString(data["eur"]) : "0";
+                string priceXAU = data.ContainsKey("xau") ? Convert.ToString(data["xau"]) : "0";
+                return (priceUSD, priceGBP, priceEUR, priceXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BitcoinExplorerOrgGetPrice");
+            }
+            return ("0", "0", "0", "0");
+        }
+        #endregion
+        #region coingecko.com api
+        private (string cgPriceUSD, string cgPriceGBP, string cgPriceEUR, string cgPriceXAU) CoingeckoGetPrice()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                var response = client.DownloadString("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd%2Ceur%2Cgbp%2Cxau&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&precision=2");
+                var data = JObject.Parse(response);
+
+                // Check if each key exists and assign its value, otherwise set it to "0"
+                string cgPriceUSD = data["bitcoin"]["usd"] != null ? data["bitcoin"]["usd"].ToString() : "0";
+                string cgPriceGBP = data["bitcoin"]["gbp"] != null ? data["bitcoin"]["gbp"].ToString() : "0";
+                string cgPriceEUR = data["bitcoin"]["eur"] != null ? data["bitcoin"]["eur"].ToString() : "0";
+                string cgPriceXAU = data["bitcoin"]["xau"] != null ? data["bitcoin"]["xau"].ToString() : "0";
+                return (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "CoingeckoGetPrice");
+            }
+            return ("0", "0", "0", "0");
+        }
+        #endregion
+        #region blockchain.info api
+        private (string avgNoTransactions, string blockNumber, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
+        {
+            try
+            {
+                using WebClient client = new WebClient();
+                string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
+                string avgNoTransactionsText = "";
+                if (double.TryParse(avgNoTransactions, out double dblAvgNoTransactions))
+                {
+                    dblAvgNoTransactions = Math.Round(dblAvgNoTransactions);
+                    avgNoTransactionsText = dblAvgNoTransactions.ToString();
+                }
+                else
+                {
+                    dblAvgNoTransactions = 0;
+                    avgNoTransactionsText = "0";
+                }
+                string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
+                string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
+                string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
+                if (double.TryParse(secondsBetweenBlocks, out double dblSecondsBetweenBlocks))
+                {
+                    dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
+                }
+                else
+                {
+                    dblSecondsBetweenBlocks = 0;
+                }
+                TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
+                string timeString = string.Format("{0:%m}m {0:%s}s", time);
+                string avgTimeBetweenBlocks = timeString;
+                string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
+                string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
+                string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
+                string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
+                twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
+                return (avgNoTransactionsText, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BlockchainInfoEndpointsRefresh");
+            }
+            return ("0", "0", "0", "0", "0", "0", "0");
+        }
+        #endregion
+        #region blockchair.com api
         private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
         {
             try
@@ -2315,8 +2311,7 @@ namespace SATSuma
             }
             return ("0", "0", "0", "0", "0");
         }
-
-        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComChainStatsJSONRefresh()
+        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComChainStatsRefresh()
         {
             try
             {
@@ -2342,6 +2337,8 @@ namespace SATSuma
             }
             return ("0", "0", "0", "0");
         }
+        #endregion
+
         #endregion
         #region update seconds to halving
         private void UpdateSecondsToHalving()
@@ -14990,7 +14987,7 @@ namespace SATSuma
                     {
                         EnableChartsThatUseBlockchainInfoAPI();
                     }
-                    GetBlockTip();
+                    GetBlockTipAndCirculation();
                     LookupBlockList();
                     EnableFunctionalityForMainNet();
                     _ = UpdateBitcoinAndLightningDashboards();
@@ -15030,7 +15027,7 @@ namespace SATSuma
                     CreateDataServices();
                     SaveSettingsToBookmarksFile();
                     DisableFunctionalityForTestNet();
-                    GetBlockTip();
+                    GetBlockTipAndCirculation();
                     LookupBlockList();
                     _ = UpdateBitcoinAndLightningDashboards();
                 }
@@ -15083,7 +15080,7 @@ namespace SATSuma
                     {
                         CreateDataServices();
                         SaveSettingsToBookmarksFile();
-                        GetBlockTip();
+                        GetBlockTipAndCirculation();
                         LookupBlockList();
                         _ = UpdateBitcoinAndLightningDashboards();
 
@@ -15243,7 +15240,7 @@ namespace SATSuma
                     bitcoinExplorerEnpointsSelected = "0";
                     lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                     {
-                        lblBitcoinExplorerPriceIndicator.ForeColor = Color.Gray;
+                        lblBitcoinExplorerPriceIndicator.ForeColor = Color.LightGray;
                     });
 
                     // don't show a value for price change
@@ -15300,7 +15297,7 @@ namespace SATSuma
                     coingeckoAPISelected = "0";
                     lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                     {
-                        lblCoingeckoPriceIndicator.ForeColor = Color.Gray;
+                        lblCoingeckoPriceIndicator.ForeColor = Color.LightGray;
                     });
 
                     // don't show a value for price change
@@ -15357,7 +15354,7 @@ namespace SATSuma
                     mempoolSpacePriceAPISelected = "0";
                     lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                     {
-                        lblMempoolSpacePriceIndicator.ForeColor = Color.Gray;
+                        lblMempoolSpacePriceIndicator.ForeColor = Color.LightGray;
                     });
 
                     // don't show a value for price change
@@ -20748,7 +20745,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPriceUSD, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockRewardAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -20784,7 +20781,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlocklistDataFieldsToColor = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockReward, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
+                Control[] listBlocklistDataFieldsToColor = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockSubsidy, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
                 foreach (Control control in listBlocklistDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22417,9 +22414,9 @@ namespace SATSuma
                     decimal denominatorGBPForAverageCalculation = 0;
                     decimal denominatorEURForAverageCalculation = 0;
                     decimal denominatorXAUForAverageCalculation = 0;
-                    string bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: This price API is disabled";
-                    string geckoTooltipForSelectedCurrency = "coingecko.com: This price API is disabled";
-                    string mempoTooltipForSelectedCurrency = "mempool.space: This price API is disabled";
+                    string bitExTooltipForSelectedCurrency = "GREY bitcoinexplorer.org: disabled";
+                    string geckoTooltipForSelectedCurrency = "GREY coingecko.com: disabled";
+                    string mempoTooltipForSelectedCurrency = "GREY mempool.space: disabled";
 
                     #region get price from bitcoinexplorer.org
                     if (RunBitcoinExplorerAPI)
@@ -22438,7 +22435,7 @@ namespace SATSuma
                             denominatorUSDForAverageCalculation++;
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: $" + BitExPriceUSD;
+                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: $" + BitExPriceUSD; 
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22451,7 +22448,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no USD price returned";
+                                bitExTooltipForSelectedCurrency = "RED bitcoinexplorer.org: no USD price returned";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
@@ -22471,7 +22468,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: £" + BitExPriceGBP;
+                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: £" + BitExPriceGBP;
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22484,7 +22481,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no GBP price returned";
+                                bitExTooltipForSelectedCurrency = "RED bitcoinexplorer.org: no GBP price returned";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
@@ -22504,7 +22501,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: €" + BitExPriceEUR;
+                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: €" + BitExPriceEUR;
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22517,7 +22514,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no EUR price returned";
+                                bitExTooltipForSelectedCurrency = "RED bitcoinexplorer.org: no EUR price returned";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
@@ -22537,7 +22534,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: 🪙" + BitExPriceXAU;
+                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: 🪙" + BitExPriceXAU;
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22550,15 +22547,21 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                bitExTooltipForSelectedCurrency = "bitcoinexplorer.org: no XAU price returned";
+                                bitExTooltipForSelectedCurrency = "RED bitcoinexplorer.org: no XAU price returned";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Red;
                                 });
                                 intBitcoinexplorerTimeLightLit = 0;
                             }
-
                         }
+                    }
+                    else
+                    {
+                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.LightGray;
+                        });
                     }
                     #endregion
 
@@ -22581,7 +22584,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: $" + GeckoPriceUSD;
+                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: $" + GeckoPriceUSD;
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22594,7 +22597,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no USD price returned";
+                                geckoTooltipForSelectedCurrency = "RED coingecko.com: no USD price returned";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Red;
@@ -22614,7 +22617,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: £" + GeckoPriceGBP;
+                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: £" + GeckoPriceGBP;
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22628,7 +22631,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no GBP price returned";
+                                geckoTooltipForSelectedCurrency = "RED coingecko.com: no GBP price returned";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Red;
@@ -22648,7 +22651,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: €" + GeckoPriceEUR;
+                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: €" + GeckoPriceEUR;
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22662,7 +22665,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no EUR price returned";
+                                geckoTooltipForSelectedCurrency = "RED coingecko.com: no EUR price returned";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Red;
@@ -22682,7 +22685,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: 🪙" + GeckoPriceXAU;
+                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: 🪙" + GeckoPriceXAU;
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22695,7 +22698,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                geckoTooltipForSelectedCurrency = "coingecko.com: no XAU price returned";
+                                geckoTooltipForSelectedCurrency = "RED coingecko.com: no XAU price returned";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Red;
@@ -22704,6 +22707,13 @@ namespace SATSuma
                             }
 
                         }
+                    }
+                    else
+                    {
+                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblCoingeckoPriceIndicator.ForeColor = Color.LightGray;
+                        });
                     }
                     #endregion
 
@@ -22726,7 +22736,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: $" + mempoPriceUSD;
+                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: $" + mempoPriceUSD;
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22739,7 +22749,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no USD price returned";
+                                mempoTooltipForSelectedCurrency = "RED mempool.space: no USD price returned";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
@@ -22759,7 +22769,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: £" + mempoPriceGBP;
+                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: £" + mempoPriceGBP;
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22772,7 +22782,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no GBP price returned";
+                                mempoTooltipForSelectedCurrency = "RED mempool.space: no GBP price returned";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
@@ -22792,7 +22802,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: €" + mempoPriceEUR;
+                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: €" + mempoPriceEUR;
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22805,7 +22815,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no EUR price returned";
+                                mempoTooltipForSelectedCurrency = "RED mempool.space: no EUR price returned";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
@@ -22825,7 +22835,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: 🪙" + mempoPriceXAU;
+                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: 🪙" + mempoPriceXAU;
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22838,7 +22848,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                mempoTooltipForSelectedCurrency = "mempool.space: no XAU price returned";
+                                mempoTooltipForSelectedCurrency = "RED mempool.space: no XAU price returned";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Red;
@@ -22847,8 +22857,16 @@ namespace SATSuma
                             }
                         }
                     }
+                    else
+                    {
+                        lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
+                        {
+                            lblMempoolSpacePriceIndicator.ForeColor = Color.LightGray;
+                        });
+                    }
                     #endregion
 
+                    #region calculate average current price for each currency
                     string PriceUSD = "0";
                     string PriceEUR = "0";
                     string PriceGBP = "0";
@@ -22871,26 +22889,28 @@ namespace SATSuma
                     {
                         PriceXAU = (priceXAUTotalForAverageCalculation / denominatorXAUForAverageCalculation).ToString("0.00");
                     }
+                    #endregion
 
-                    //construct tooltip text
+                    #region construct tooltip text according to selected currency and selected price sources
                     if (!btnUSD.Enabled)
                     {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = $" + PriceUSD;
+                        sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = $" + PriceUSD;
                     }
                     if (!btnGBP.Enabled)
                     {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = £" + PriceGBP;
+                        sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = £" + PriceGBP;
                     }
                     if (!btnEUR.Enabled)
                     {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = €" + PriceEUR;
+                        sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = €" + PriceEUR;
                     }
                     if (!btnXAU.Enabled)
                     {
-                        sourceOfCurrentPrice = "price source(s):\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = 🪙" + PriceXAU;
+                        sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = 🪙" + PriceXAU;
                     }
+                    #endregion
 
-                    //assign tooltip to controls
+                    # region assign tooltip to controls
                     if (lblHeaderPrice.InvokeRequired)
                     {
                         // Invoke the method on the UI thread
@@ -22956,35 +22976,55 @@ namespace SATSuma
                         // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice);
                     }
+                    #endregion
 
                     OneBTCInUSD = PriceUSD;
                     OneBTCInEUR = PriceEUR;
                     OneBTCInGBP = PriceGBP;
                     OneBTCInXAU = PriceXAU;
 
+                    #region calculate market cap
                     string mCapUSD = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInUSD));
                     string mCapEUR = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInEUR));
                     string mCapGBP = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInGBP));
                     string mCapXAU = Convert.ToString(calculatedBTCInCirculation * Convert.ToDecimal(OneBTCInXAU));
+                    #endregion
 
-
+                    #region calculate 1 unit of fiat / sats (moscow time)
+                    string satsUSD = "";
+                    string satsEUR = "";
+                    string satsGBP = "";
+                    string satsXAU = "";
                     decimal unitOfFiat = 1;
                     decimal priceToCalculateFrom = 0;
                     priceToCalculateFrom = Convert.ToDecimal(OneBTCInUSD);
-                    string satsUSD = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    if (priceToCalculateFrom > 0)
+                    {
+                        satsUSD = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    }
                     priceToCalculateFrom = Convert.ToDecimal(OneBTCInEUR);
-                    string satsEUR = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    if (priceToCalculateFrom > 0)
+                    {
+                        satsEUR = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    }
                     priceToCalculateFrom = Convert.ToDecimal(OneBTCInGBP);
-                    string satsGBP = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    if (priceToCalculateFrom > 0)
+                    {
+                        satsGBP = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    }
                     priceToCalculateFrom = Convert.ToDecimal(OneBTCInXAU);
-                    string satsXAU = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
-
+                    if (priceToCalculateFrom > 0)
+                    {
+                        satsXAU = Convert.ToString(((int)((unitOfFiat / priceToCalculateFrom) * 100000000)));
+                    }
+                    #endregion
 
                     OneUSDInSats = satsUSD;
                     OneEURInSats = satsEUR;
                     OneGBPInSats = satsGBP;
                     OneXAUInSats = satsXAU;
 
+                    #region setup price, market cap and moscow time descriptive labels and prepare field values for display, according to selected currency
                     string price = "";
                     string mCap = "";
                     string satsPerUnit = "";
@@ -23085,7 +23125,9 @@ namespace SATSuma
                     {
                         lblHeaderMoscowTime.Location = new Point(lblHeaderMoscowTimeLabel.Location.X + lblHeaderMoscowTimeLabel.Width, lblHeaderMoscowTimeLabel.Location.Y);
                     });
-                    UpdateLabelValue(lblPriceUSD, price);
+                    #endregion
+
+                    #region display change in price since last update
                     if (readyToShowPriceChangeLabelYet)
                     {
                         // calculate and assign difference here.
@@ -23141,7 +23183,10 @@ namespace SATSuma
                             UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
                         }
                     }
+                    #endregion
 
+                    #region display market data
+                    UpdateLabelValue(lblPrice, price);
                     if (OneBTCinSelectedCurrency > 0)
                     {
                         UpdateLabelValue(lblHeaderPrice, price);
@@ -23167,7 +23212,7 @@ namespace SATSuma
                     {
                         lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
                     });
-
+                    #endregion
                 }
             }
             catch (WebException ex)
@@ -24263,7 +24308,7 @@ namespace SATSuma
         }
         #endregion
         #region get block tip
-        private void GetBlockTip()
+        private void GetBlockTipAndCirculation()
         {
             try
             {
@@ -24290,6 +24335,30 @@ namespace SATSuma
                 int blockHeight = Convert.ToInt32(BlockTip);
                 decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
                 calculatedBTCInCirculation = totalBitcoinsIssued;
+
+                UpdateLabelValue(lblBTCInCirc, calculatedBTCInCirculation + " / 21000000");
+                if (calculatedBTCInCirculation > 0)
+                {
+                    UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
+                }
+                else
+                {
+                    lblBTCToBeIssued.Invoke((MethodInvoker)delegate
+                    {
+                        lblBTCToBeIssued.Text = "0";
+                    });
+                }
+                lblChartCirculation.Invoke((MethodInvoker)delegate
+                {
+                    lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
+                });
+                decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
+                UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
+
+                progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                {
+                    progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
+                });
             }
             catch (Exception ex)
             {
@@ -24847,21 +24916,24 @@ namespace SATSuma
         {
             try
             {
-                if (lblCoingeckoPriceIndicator.ForeColor != Color.IndianRed && lblCoingeckoPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                if (RunCoingeckoAPI)
                 {
-                    if (lblCoingeckoPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
+                    if (lblCoingeckoPriceIndicator.ForeColor != Color.IndianRed && lblCoingeckoPriceIndicator.ForeColor != Color.OliveDrab && lblCoingeckoPriceIndicator.ForeColor != Color.LightGray) // check whether a data refresh has just occured to see if a status light flash needs dimming
                     {
-                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                        if (lblCoingeckoPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
                         {
-                            lblCoingeckoPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                    else // an error must have just occured
-                    {
-                        lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                            lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                            {
+                                lblCoingeckoPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                            });
+                        }
+                        else // an error must have just occured
                         {
-                            lblCoingeckoPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                        });
+                            lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
+                            {
+                                lblCoingeckoPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                            });
+                        }
                     }
                 }
             }
@@ -24875,7 +24947,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblMempoolSpacePriceIndicator.ForeColor != Color.IndianRed && lblMempoolSpacePriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                if (lblMempoolSpacePriceIndicator.ForeColor != Color.IndianRed && lblMempoolSpacePriceIndicator.ForeColor != Color.OliveDrab && lblMempoolSpacePriceIndicator.ForeColor != Color.LightGray) // check whether a data refresh has just occured to see if a status light flash needs dimming
                 {
                     if (lblMempoolSpacePriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
                     {
@@ -24903,21 +24975,24 @@ namespace SATSuma
         {
             try
             {
-                if (lblBitcoinExplorerPriceIndicator.ForeColor != Color.IndianRed && lblBitcoinExplorerPriceIndicator.ForeColor != Color.OliveDrab) // check whether a data refresh has just occured to see if a status light flash needs dimming
+                if (RunBitcoinExplorerAPI)
                 {
-                    if (lblBitcoinExplorerPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
+                    if (lblBitcoinExplorerPriceIndicator.ForeColor != Color.IndianRed && lblBitcoinExplorerPriceIndicator.ForeColor != Color.OliveDrab && lblBitcoinExplorerPriceIndicator.ForeColor != Color.LightGray) // check whether a data refresh has just occured to see if a status light flash needs dimming
                     {
-                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                        if (lblBitcoinExplorerPriceIndicator.ForeColor == Color.Lime) // successful data refresh has occured
                         {
-                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
-                        });
-                    }
-                    else // an error must have just occured
-                    {
-                        lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                            lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                            {
+                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.OliveDrab; // reset the colours to a duller version to give appearance of a flash
+                            });
+                        }
+                        else // an error must have just occured
                         {
-                            lblBitcoinExplorerPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
-                        });
+                            lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
+                            {
+                                lblBitcoinExplorerPriceIndicator.ForeColor = Color.IndianRed; // reset the colours to a duller version to give appearance of a flash
+                            });
+                        }
                     }
                 }
             }
@@ -25057,6 +25132,132 @@ namespace SATSuma
             {
                 linkClicked = false;
             }
+        }
+        #endregion
+        #region style tooltips
+        private void ToolTip_Draw(object sender, DrawToolTipEventArgs e) => DrawToolTip(e);
+
+        private void DrawToolTip(DrawToolTipEventArgs e)
+        {
+            //background
+            using (var linearGradientBrush = new LinearGradientBrush(e.Bounds, btnExit.BackColor, btnExit.BackColor, 45f))
+            {
+                e.Graphics.FillRectangle(linearGradientBrush, e.Bounds);
+            }
+
+            //border
+            using (var borderPen = new Pen(panelBlockHeightToStartFromContainer.BackColor, 1))
+            {
+                Rectangle borderRect = new Rectangle(e.Bounds.Location, new Size(e.Bounds.Width - 1, e.Bounds.Height - 1));
+                e.Graphics.DrawRectangle(borderPen, borderRect);
+            }
+
+            var r = e.Bounds;
+            // icon
+            e.Graphics.DrawImage(Resources.tinylogo1, new Rectangle(r.X + 6, r.Y + 4, 20, 21));
+
+            // Modify the tooltip text
+            string tipToShow = e.ToolTipText;
+            string[] lines = tipToShow.Split('\n');
+
+            int yOffset = 0; // Offset to keep track of vertical position
+            foreach (string line in lines)
+            {
+                // Handle GREEN
+                int index = line.IndexOf("GREEN");
+                if (index >= 0)
+                {
+                    // Get the bounds of the text before "GREEN" in this line
+                    string textBeforeGreen = line.Substring(0, index);
+                    Size textSize = TextRenderer.MeasureText(e.Graphics, textBeforeGreen, toolTipFont);
+
+                    // Determine the position to draw the green circle in this line
+                    int circleX = e.Bounds.Left + textSize.Width + 6; // Add 6 for padding
+                    int circleY = e.Bounds.Top + 8 + yOffset; // Add yOffset for multiline
+
+                    // Draw the green circle in olive drab color
+                    Rectangle circleRect = new Rectangle(circleX, circleY, 14, 14);
+                    using (var greenBrush = new SolidBrush(Color.OliveDrab))
+                    {
+                        e.Graphics.FillEllipse(greenBrush, circleRect);
+                    }
+
+                    // Remove "GREEN" from the line
+                    line.Remove(index, "GREEN".Length);
+                }
+
+                // Handle RED
+                index = line.IndexOf("RED");
+                if (index >= 0)
+                {
+                    // Get the bounds of the text before "RED" in this line
+                    string textBeforeRed = line.Substring(0, index);
+                    Size textSize = TextRenderer.MeasureText(e.Graphics, textBeforeRed, toolTipFont);
+
+                    // Determine the position to draw the red circle in this line
+                    int circleX = e.Bounds.Left + textSize.Width + 6; // Add 6 for padding
+                    int circleY = e.Bounds.Top + 8 + yOffset; // Add yOffset for multiline
+
+                    // Draw the red circle in red color
+                    Rectangle circleRect = new Rectangle(circleX, circleY, 14, 14);
+                    using (var redBrush = new SolidBrush(Color.IndianRed))
+                    {
+                        e.Graphics.FillEllipse(redBrush, circleRect);
+                    }
+
+                    // Remove "RED" from the line
+                    line.Remove(index, "RED".Length);
+                }
+
+                // Handle GRAY
+                index = line.IndexOf("GREY");
+                if (index >= 0)
+                {
+                    // Get the bounds of the text before "GRAY" in this line
+                    string textBeforeGray = line.Substring(0, index);
+                    Size textSize = TextRenderer.MeasureText(e.Graphics, textBeforeGray, toolTipFont);
+
+                    // Determine the position to draw the gray circle in this line
+                    int circleX = e.Bounds.Left + textSize.Width + 6; // Add 6 for padding
+                    int circleY = e.Bounds.Top + 8 + yOffset; // Add yOffset for multiline
+
+                    // Draw the gray circle in gray color
+                    Rectangle circleRect = new Rectangle(circleX, circleY, 14, 14);
+                    using (var grayBrush = new SolidBrush(Color.LightGray))
+                    {
+                        e.Graphics.FillEllipse(grayBrush, circleRect);
+                    }
+
+                    // Remove "GRAY" from the line
+                    line.Remove(index, "GREY".Length);
+                }
+
+                // Increment yOffset for the next line
+                yOffset += TextRenderer.MeasureText(e.Graphics, line, toolTipFont).Height;
+            }
+
+            // Draw the modified tooltip text
+            // add some space before the text to make way for the icon
+            tipToShow = "       " + tipToShow;
+
+            // Remove the color keywords from the tooltip text
+            tipToShow = tipToShow.Replace("GREEN", "     ").Replace("RED", "     ").Replace("GREY", "     ");
+
+            TextRenderer.DrawText(e.Graphics, tipToShow, toolTipFont, e.Bounds, btnExit.ForeColor, toolTipFlags);
+        }
+
+        readonly TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
+        TextFormatFlags.LeftAndRightPadding | TextFormatFlags.Left | TextFormatFlags.NoClipping;
+        readonly Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
+
+        private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
+        {
+            // add some space before the text to make way for the icon
+            string toolTipText = "       " + (sender as ToolTip).GetToolTip(e.AssociatedControl);
+            using var g = e.AssociatedControl.CreateGraphics();
+            var textSize = Size.Add(TextRenderer.MeasureText(
+                g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
+            e.ToolTipSize = textSize;
         }
         #endregion
 
@@ -26373,7 +26574,7 @@ namespace SATSuma
 
                     lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockRewardAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockSubsidyAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
                         });
                     lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                     {
@@ -26409,7 +26610,7 @@ namespace SATSuma
                     });
                     lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListBlockReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
                     });
                     #endregion
                     #region recalculate values on transaction screen
@@ -26970,46 +27171,6 @@ namespace SATSuma
         public Panel GetPanelDirectory() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelDirectory;
-        }
-        #endregion
-        #region style tooltips
-        private void ToolTip_Draw(object sender, DrawToolTipEventArgs e) => DrawToolTip(e);
-
-        private void DrawToolTip(DrawToolTipEventArgs e)
-        {
-            //background
-            using (var linearGradientBrush = new LinearGradientBrush(e.Bounds, btnExit.BackColor, btnExit.BackColor, 45f))
-            {
-                e.Graphics.FillRectangle(linearGradientBrush, e.Bounds);
-            }
-
-            //border
-            using (var borderPen = new Pen(panelBlockHeightToStartFromContainer.BackColor, 1))
-            {
-                Rectangle borderRect = new Rectangle(e.Bounds.Location, new Size(e.Bounds.Width - 1, e.Bounds.Height - 1));
-                e.Graphics.DrawRectangle(borderPen, borderRect);
-            }
-
-            var r = e.Bounds;
-            // icon
-            e.Graphics.DrawImage(Resources.tinylogo1, new Rectangle(r.X + 6, r.Y + 4, 20, 21));
-            // add some space before the text to make way for the icon
-            string tipToShow = "       " + e.ToolTipText;
-            TextRenderer.DrawText(e.Graphics, tipToShow, toolTipFont, e.Bounds, btnExit.ForeColor, toolTipFlags);
-        }
-
-        readonly TextFormatFlags toolTipFlags = TextFormatFlags.VerticalCenter |
-        TextFormatFlags.LeftAndRightPadding | TextFormatFlags.Left | TextFormatFlags.NoClipping;
-        readonly Font toolTipFont = new Font("Century Gothic", 11.0f, FontStyle.Regular);
-
-        private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
-        {
-            // add some space before the text to make way for the icon
-            string toolTipText = "       " + (sender as ToolTip).GetToolTip(e.AssociatedControl);
-            using var g = e.AssociatedControl.CreateGraphics();
-            var textSize = Size.Add(TextRenderer.MeasureText(
-                g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
-            e.ToolTipSize = textSize;
         }
         #endregion
         #region close menus

@@ -11312,11 +11312,11 @@
             this.label225.AutoSize = true;
             this.label225.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label225.ForeColor = System.Drawing.Color.Silver;
-            this.label225.Location = new System.Drawing.Point(351, 83);
+            this.label225.Location = new System.Drawing.Point(533, 83);
             this.label225.Name = "label225";
-            this.label225.Size = new System.Drawing.Size(210, 17);
+            this.label225.Size = new System.Drawing.Size(201, 17);
             this.label225.TabIndex = 237;
-            this.label225.Text = "mempool.space public API (price)";
+            this.label225.Text = "mempool.space public price API";
             // 
             // lblMempoolSpacePriceAPI
             // 
@@ -11324,7 +11324,7 @@
             this.lblMempoolSpacePriceAPI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblMempoolSpacePriceAPI.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblMempoolSpacePriceAPI.ForeColor = System.Drawing.Color.Green;
-            this.lblMempoolSpacePriceAPI.Location = new System.Drawing.Point(330, 84);
+            this.lblMempoolSpacePriceAPI.Location = new System.Drawing.Point(512, 84);
             this.lblMempoolSpacePriceAPI.Name = "lblMempoolSpacePriceAPI";
             this.lblMempoolSpacePriceAPI.Size = new System.Drawing.Size(19, 14);
             this.lblMempoolSpacePriceAPI.TabIndex = 238;
@@ -11349,16 +11349,16 @@
             this.label223.ForeColor = System.Drawing.Color.Gray;
             this.label223.Location = new System.Drawing.Point(5, 83);
             this.label223.Name = "label223";
-            this.label223.Size = new System.Drawing.Size(148, 17);
+            this.label223.Size = new System.Drawing.Size(194, 17);
             this.label223.TabIndex = 235;
-            this.label223.Text = "API\'s used only for price:";
+            this.label223.Text = "API\'s used only for current price:";
             // 
             // label289
             // 
             this.label289.AutoSize = true;
             this.label289.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label289.ForeColor = System.Drawing.Color.Silver;
-            this.label289.Location = new System.Drawing.Point(179, 102);
+            this.label289.Location = new System.Drawing.Point(229, 102);
             this.label289.Name = "label289";
             this.label289.Size = new System.Drawing.Size(269, 17);
             this.label289.TabIndex = 51;
@@ -11370,7 +11370,7 @@
             this.lblEnableDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblEnableDirectory.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblEnableDirectory.ForeColor = System.Drawing.Color.Green;
-            this.lblEnableDirectory.Location = new System.Drawing.Point(158, 103);
+            this.lblEnableDirectory.Location = new System.Drawing.Point(208, 103);
             this.lblEnableDirectory.Name = "lblEnableDirectory";
             this.lblEnableDirectory.Size = new System.Drawing.Size(19, 14);
             this.lblEnableDirectory.TabIndex = 229;
@@ -11393,11 +11393,11 @@
             this.label219.AutoSize = true;
             this.label219.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label219.ForeColor = System.Drawing.Color.Silver;
-            this.label219.Location = new System.Drawing.Point(179, 83);
+            this.label219.Location = new System.Drawing.Point(229, 83);
             this.label219.Name = "label219";
-            this.label219.Size = new System.Drawing.Size(145, 17);
+            this.label219.Size = new System.Drawing.Size(102, 17);
             this.label219.TabIndex = 232;
-            this.label219.Text = "coingecko.com (price)";
+            this.label219.Text = "coingecko.com";
             // 
             // lblCoingeckoComJSON
             // 
@@ -11405,7 +11405,7 @@
             this.lblCoingeckoComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblCoingeckoComJSON.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblCoingeckoComJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblCoingeckoComJSON.Location = new System.Drawing.Point(158, 84);
+            this.lblCoingeckoComJSON.Location = new System.Drawing.Point(208, 84);
             this.lblCoingeckoComJSON.Name = "lblCoingeckoComJSON";
             this.lblCoingeckoComJSON.Size = new System.Drawing.Size(19, 14);
             this.lblCoingeckoComJSON.TabIndex = 233;
@@ -11453,11 +11453,11 @@
             this.lblWhatever.AutoSize = true;
             this.lblWhatever.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWhatever.ForeColor = System.Drawing.Color.Silver;
-            this.lblWhatever.Location = new System.Drawing.Point(589, 83);
+            this.lblWhatever.Location = new System.Drawing.Point(371, 83);
             this.lblWhatever.Name = "lblWhatever";
-            this.lblWhatever.Size = new System.Drawing.Size(165, 17);
+            this.lblWhatever.Size = new System.Drawing.Size(122, 17);
             this.lblWhatever.TabIndex = 41;
-            this.lblWhatever.Text = "bitcoinexplorer.org (price)";
+            this.lblWhatever.Text = "bitcoinexplorer.org";
             // 
             // lblBitcoinExplorerEndpoints
             // 
@@ -11465,7 +11465,7 @@
             this.lblBitcoinExplorerEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBitcoinExplorerEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBitcoinExplorerEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(568, 84);
+            this.lblBitcoinExplorerEndpoints.Location = new System.Drawing.Point(350, 84);
             this.lblBitcoinExplorerEndpoints.Name = "lblBitcoinExplorerEndpoints";
             this.lblBitcoinExplorerEndpoints.Size = new System.Drawing.Size(19, 14);
             this.lblBitcoinExplorerEndpoints.TabIndex = 42;
@@ -11477,7 +11477,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(179, 64);
+            this.label4.Location = new System.Drawing.Point(229, 64);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(101, 17);
             this.label4.TabIndex = 51;
@@ -11488,7 +11488,7 @@
             this.label152.AutoSize = true;
             this.label152.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label152.ForeColor = System.Drawing.Color.Silver;
-            this.label152.Location = new System.Drawing.Point(351, 64);
+            this.label152.Location = new System.Drawing.Point(371, 64);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(99, 17);
             this.label152.TabIndex = 43;
@@ -11500,7 +11500,7 @@
             this.lblBlockchainInfoEndpoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBlockchainInfoEndpoints.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockchainInfoEndpoints.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(330, 65);
+            this.lblBlockchainInfoEndpoints.Location = new System.Drawing.Point(350, 65);
             this.lblBlockchainInfoEndpoints.Name = "lblBlockchainInfoEndpoints";
             this.lblBlockchainInfoEndpoints.Size = new System.Drawing.Size(19, 14);
             this.lblBlockchainInfoEndpoints.TabIndex = 44;
@@ -11513,7 +11513,7 @@
             this.lblBlockchairComJSON.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblBlockchairComJSON.Font = new System.Drawing.Font("Consolas", 9F);
             this.lblBlockchairComJSON.ForeColor = System.Drawing.Color.Green;
-            this.lblBlockchairComJSON.Location = new System.Drawing.Point(158, 65);
+            this.lblBlockchairComJSON.Location = new System.Drawing.Point(208, 65);
             this.lblBlockchairComJSON.Name = "lblBlockchairComJSON";
             this.lblBlockchairComJSON.Size = new System.Drawing.Size(19, 14);
             this.lblBlockchairComJSON.TabIndex = 52;
@@ -18974,8 +18974,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAppearance);

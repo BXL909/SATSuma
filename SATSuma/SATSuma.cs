@@ -27,6 +27,9 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen
 * more testing, especially testnet and offline mode.
+* dcacalculator chart legend sometimes shows twice, one above the other (Test - may already be fixed)
+* Error in Generating DCA chart: Cross-thread operation not valid: Control 'panelDCAChartContainer' accessed from a thread other tha... (test - may already be fixed)
+* check for instances of price api flags being tested for in isolation (not including the other price api flags)
 */
 
 #region Using
@@ -1047,20 +1050,6 @@ namespace SATSuma
                                 lblNextBlockTotalFeesFiat.Visible = false;
                             });
                         }
-                        if (!testNet && lblNextBlockTotalFeesFiat.Text != "no data" && lblNextBlockTotalFeesFiat.Visible)
-                        {
-                            lblBlockFeesChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
-                            });
-                        }
-                        else
-                        {
-                            lblBlockFeesChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblBlockFeesChart.Location.Y);
-                            });
-                        }
                         lblFeeRangeChart.Invoke((MethodInvoker)delegate
                         {
                             lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
@@ -1070,20 +1059,6 @@ namespace SATSuma
                             lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
                         });
 
-                        if (!testNet)
-                        {
-                            lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width, lblBlockListFeeChart2.Location.Y);
-                            });
-                        }
-                        else
-                        {
-                            lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
-                            {
-                                lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListFeeChart2.Location.Y);
-                            });
-                        }
                         SetLightsMessagesAndResetTimers();
                     }
                     catch (Exception ex)
@@ -2411,6 +2386,25 @@ namespace SATSuma
             catch (WebException ex)
             {
                 HandleException(ex, "Drawing connectors on lightning dashboard");
+            }
+        }
+        #endregion
+        #region event driven relocations
+        private void RelocateBlockFeesChartIcon(object sender, EventArgs e)
+        {
+            if (lblNextBlockTotalFeesFiat.Visible)
+            {
+                lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
+                });
+            }
+            else
+            {
+                lblBlockFeesChart.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockFeesChart.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblBlockFeesChart.Location.Y);
+                });
             }
         }
         #endregion
@@ -23037,7 +23031,6 @@ namespace SATSuma
                         OneBTCInXAU = PriceXAU;
                     }
 
-
                     #region calculate market cap
                     string mCapUSD;
                     string mCapEUR;
@@ -23306,10 +23299,6 @@ namespace SATSuma
                     {
                         panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
                     });
-                    lblHeaderPriceChart.Invoke((MethodInvoker)delegate
-                    {
-                        lblHeaderPriceChart.Location = new Point(lblHeaderPrice.Location.X + lblHeaderPrice.Width, lblHeaderPriceChart.Location.Y);
-                    });
 
                     UpdateLabelValue(lblMarketCapUSD, mCap);
                     UpdateLabelValue(lblHeaderMarketCap, mCap);
@@ -23323,6 +23312,7 @@ namespace SATSuma
                     {
                         lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
                     });
+                    RefreshFiatValuesEverywhere();
                     #endregion
                 }
                 if (offlineMode || testNet)
@@ -24215,11 +24205,18 @@ namespace SATSuma
         }
         #endregion
         #region panels paint - rounded corners
+
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             try
             {
                 Panel panel = (Panel)sender;
+
+                if (panelDCAChartContainer.InvokeRequired)
+                {
+                    panelDCAChartContainer.Invoke((MethodInvoker)(() => Panel_Paint(sender, e)));
+                    return;
+                }
 
                 // Create a GraphicsPath object with rounded corners
                 System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
@@ -24250,7 +24247,7 @@ namespace SATSuma
                 {
                     cornerRadius = 12;
                 }
-                if (panel.Name == "panelPriceSourceIndicators") 
+                if (panel.Name == "panelPriceSourceIndicators")
                 {
                     cornerRadius = (int)(6 * UIScale);
                 }
@@ -24269,6 +24266,7 @@ namespace SATSuma
                 HandleException(ex, "Panel_Paint");
             }
         }
+
         #endregion
         #region refresh screens/status message/alert at bottom of window
 
@@ -24298,12 +24296,18 @@ namespace SATSuma
                 if (enableOrDisableAnimation == "enable")
                 {
                     //start the loading animation
-                    pictureBoxLoadingAnimation.Enabled = true;
+                    pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxLoadingAnimation.Enabled = true;
+                    });
                 }
                 else
                 {
                     //stop the animation
-                    pictureBoxLoadingAnimation.Enabled = false;
+                    pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                    {
+                        pictureBoxLoadingAnimation.Enabled = false;
+                    });
                     //reset the image to return to the original frame in the animation
                     if (btnExit.BackColor == Color.FromArgb(20,20,20) || btnExit.BackColor == Color.FromArgb(40, 40, 40))
                     {
@@ -24382,13 +24386,7 @@ namespace SATSuma
                 }
                 
                 await UpdateBitcoinAndLightningDashboards(); // fetch data and populate fields for dashboards (+ a few for block list screen)
-                if (lblNextBlockTotalFeesFiat.Visible)
-                {
-                    lblBlockFeesChart.Invoke((MethodInvoker)delegate
-                    {
-                        lblBlockFeesChart.Location = new Point(lblNextBlockTotalFeesFiat.Location.X + lblNextBlockTotalFeesFiat.Width, lblBlockFeesChart.Location.Y);
-                    });
-                }
+
                 if (!testNet)
                 {
                     PopulateConverterScreen(); // refresh amounts on BTC/fiat converter screen
@@ -26873,7 +26871,7 @@ namespace SATSuma
         {
             try
             {
-                if (!offlineMode && !testNet && RunBitcoinExplorerAPI)
+                if (!offlineMode && !testNet && (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI))
                 {
                     #region recalculate fiat values on bitcoin dashboard
 
@@ -26893,6 +26891,7 @@ namespace SATSuma
                     {
                         lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
                     });
+
                     #endregion
                     #region recalculate fiat values on xpub screen 
                     lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
@@ -26978,12 +26977,6 @@ namespace SATSuma
                         {
                             lblTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
                         });
-                    }
-                    #endregion
-                    #region recalculate dca screen
-                    if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
-                    {
-                        PopulateDCACalculator();
                     }
                     #endregion
                 }
@@ -28612,8 +28605,45 @@ namespace SATSuma
                 return InitialBlockReward / (decimal)Math.Pow(2, halvings);
             }
         }
+
         #endregion
 
         #endregion
+
+        private void RelocatelblBlockListFeeChart2Icon(object sender, EventArgs e)
+        {
+            if (lblBlockListTotalFeesInNextBlockFiat.Visible)
+            {
+                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlockFiat.Location.X + lblBlockListTotalFeesInNextBlockFiat.Width, lblBlockListFeeChart2.Location.Y);
+                });
+            }
+            else
+            {
+                lblBlockListFeeChart2.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockListFeeChart2.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListFeeChart2.Location.Y);
+                });
+            }
+        }
+
+        private void RelocatelblHeaderPriceChangeIcon(object sender, EventArgs e)
+        {
+            if (lblHeaderPriceChange.Visible)
+            {
+                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChart.Location = new Point(lblHeaderPriceChange.Location.X + lblHeaderPriceChange.Width, lblHeaderPriceChart.Location.Y);
+                });
+            }
+            else
+            {
+                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChart.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChart.Location.Y);
+                });
+            }
+        }
     }
 }

@@ -1899,6 +1899,9 @@
             this.lblNextBlockTotalFeesFiat.Size = new System.Drawing.Size(42, 13);
             this.lblNextBlockTotalFeesFiat.TabIndex = 244;
             this.lblNextBlockTotalFeesFiat.Text = "no data";
+            this.lblNextBlockTotalFeesFiat.LocationChanged += new System.EventHandler(this.RelocateBlockFeesChartIcon);
+            this.lblNextBlockTotalFeesFiat.SizeChanged += new System.EventHandler(this.RelocateBlockFeesChartIcon);
+            this.lblNextBlockTotalFeesFiat.VisibleChanged += new System.EventHandler(this.RelocateBlockFeesChartIcon);
             // 
             // lblBlockRewardFiat
             // 
@@ -3810,6 +3813,9 @@
             this.lblBlockListTotalFeesInNextBlockFiat.Size = new System.Drawing.Size(48, 15);
             this.lblBlockListTotalFeesInNextBlockFiat.TabIndex = 245;
             this.lblBlockListTotalFeesInNextBlockFiat.Text = "no data";
+            this.lblBlockListTotalFeesInNextBlockFiat.LocationChanged += new System.EventHandler(this.RelocatelblBlockListFeeChart2Icon);
+            this.lblBlockListTotalFeesInNextBlockFiat.SizeChanged += new System.EventHandler(this.RelocatelblBlockListFeeChart2Icon);
+            this.lblBlockListTotalFeesInNextBlockFiat.VisibleChanged += new System.EventHandler(this.RelocatelblBlockListFeeChart2Icon);
             // 
             // lblBlockListBlockRewardFiat
             // 
@@ -18928,6 +18934,7 @@
             this.lblHeaderPriceChange.Text = "no data";
             this.toolTipGeneralUse.SetToolTip(this.lblHeaderPriceChange, "Change in value since the price was previously updated");
             this.lblHeaderPriceChange.Visible = false;
+            this.lblHeaderPriceChange.VisibleChanged += new System.EventHandler(this.RelocatelblHeaderPriceChangeIcon);
             // 
             // toolTipForLblHeaderPrice
             // 
@@ -18974,14 +18981,14 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelAddress);

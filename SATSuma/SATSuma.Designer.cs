@@ -684,12 +684,8 @@
             this.label171 = new System.Windows.Forms.Label();
             this.lblAlwaysOnTop = new System.Windows.Forms.Label();
             this.panel76 = new System.Windows.Forms.Panel();
-            this.panelSettingsOwnNodeURLContainer = new System.Windows.Forms.Panel();
-            this.textBoxSettingsOwnNodeURL = new System.Windows.Forms.TextBox();
             this.label201 = new System.Windows.Forms.Label();
             this.panel22 = new System.Windows.Forms.Panel();
-            this.lblSettingsOwnNodeStatusLight = new System.Windows.Forms.Label();
-            this.lblSettingsOwnNodeStatus = new System.Windows.Forms.Label();
             this.label162 = new System.Windows.Forms.Label();
             this.label159 = new System.Windows.Forms.Label();
             this.panel21 = new System.Windows.Forms.Panel();
@@ -1205,6 +1201,11 @@
             this.toolTipGeneralUse = new System.Windows.Forms.ToolTip(this.components);
             this.progressBarRefreshData = new ColorProgressBar.ColorProgressBar();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
+            this.lblSettingsOwnNodeStatusLight = new System.Windows.Forms.Label();
+            this.lblSettingsOwnNodeStatus = new System.Windows.Forms.Label();
+            this.textBoxSettingsOwnNodeURL = new System.Windows.Forms.TextBox();
+            this.panelSettingsOwnNodeURLContainer = new System.Windows.Forms.Panel();
+            this.label227 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1297,7 +1298,6 @@
             this.panel106.SuspendLayout();
             this.panel108.SuspendLayout();
             this.panel76.SuspendLayout();
-            this.panelSettingsOwnNodeURLContainer.SuspendLayout();
             this.panel22.SuspendLayout();
             this.panel21.SuspendLayout();
             this.panelComboBoxStartupScreenContainer.SuspendLayout();
@@ -1412,6 +1412,7 @@
             this.panelDCAChartLoadingPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCAMessages.SuspendLayout();
+            this.panelSettingsOwnNodeURLContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -8862,6 +8863,7 @@
             // panel99
             // 
             this.panel99.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel99.Controls.Add(this.label227);
             this.panel99.Controls.Add(this.panel93);
             this.panel99.Controls.Add(this.panel95);
             this.panel99.Controls.Add(this.label50);
@@ -8873,8 +8875,8 @@
             this.panel99.Controls.Add(this.panelSubmittedXpubContainer);
             this.panel99.Controls.Add(this.lblValidXpubIndicator);
             this.panel99.Controls.Add(this.lblXpubScreenOwnNodeStatusLight);
-            this.panel99.Controls.Add(this.lblXpubScreenOwnNodeStatus);
             this.panel99.Controls.Add(this.label139);
+            this.panel99.Controls.Add(this.lblXpubScreenOwnNodeStatus);
             this.panel99.Location = new System.Drawing.Point(0, 0);
             this.panel99.Name = "panel99";
             this.panel99.Size = new System.Drawing.Size(744, 79);
@@ -9104,21 +9106,23 @@
             this.label114.Size = new System.Drawing.Size(68, 17);
             this.label114.TabIndex = 168;
             this.label114.Text = "Your node";
-            this.toolTipGeneralUse.SetToolTip(this.label114, "Path to mempool.space on your own full node");
+            this.toolTipGeneralUse.SetToolTip(this.label114, "Status of your node (configure in settings)");
             // 
             // panelXpubScreenOwnNodeURLContainer
             // 
             this.panelXpubScreenOwnNodeURLContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelXpubScreenOwnNodeURLContainer.Controls.Add(this.textBoxXpubScreenOwnNodeURL);
-            this.panelXpubScreenOwnNodeURLContainer.Location = new System.Drawing.Point(85, 2);
+            this.panelXpubScreenOwnNodeURLContainer.Location = new System.Drawing.Point(712, 7);
             this.panelXpubScreenOwnNodeURLContainer.Name = "panelXpubScreenOwnNodeURLContainer";
             this.panelXpubScreenOwnNodeURLContainer.Size = new System.Drawing.Size(260, 22);
             this.panelXpubScreenOwnNodeURLContainer.TabIndex = 253;
+            this.panelXpubScreenOwnNodeURLContainer.Visible = false;
             // 
             // textBoxXpubScreenOwnNodeURL
             // 
             this.textBoxXpubScreenOwnNodeURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBoxXpubScreenOwnNodeURL.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxXpubScreenOwnNodeURL.Enabled = false;
             this.textBoxXpubScreenOwnNodeURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxXpubScreenOwnNodeURL.ForeColor = System.Drawing.Color.Gray;
             this.textBoxXpubScreenOwnNodeURL.Location = new System.Drawing.Point(6, 3);
@@ -9184,7 +9188,7 @@
             this.lblXpubScreenOwnNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblXpubScreenOwnNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubScreenOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblXpubScreenOwnNodeStatusLight.Location = new System.Drawing.Point(348, 5);
+            this.lblXpubScreenOwnNodeStatusLight.Location = new System.Drawing.Point(88, 5);
             this.lblXpubScreenOwnNodeStatusLight.Name = "lblXpubScreenOwnNodeStatusLight";
             this.lblXpubScreenOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
             this.lblXpubScreenOwnNodeStatusLight.TabIndex = 219;
@@ -9195,11 +9199,12 @@
             this.lblXpubScreenOwnNodeStatus.AutoSize = true;
             this.lblXpubScreenOwnNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblXpubScreenOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblXpubScreenOwnNodeStatus.Location = new System.Drawing.Point(367, 3);
+            this.lblXpubScreenOwnNodeStatus.Location = new System.Drawing.Point(107, 3);
             this.lblXpubScreenOwnNodeStatus.Name = "lblXpubScreenOwnNodeStatus";
             this.lblXpubScreenOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
             this.lblXpubScreenOwnNodeStatus.TabIndex = 220;
             this.lblXpubScreenOwnNodeStatus.Text = "invalid / node offline";
+            this.lblXpubScreenOwnNodeStatus.SizeChanged += new System.EventHandler(this.lblXpubScreenOwnNodeStatus_SizeChanged);
             // 
             // label139
             // 
@@ -10862,32 +10867,6 @@
             this.panel76.Size = new System.Drawing.Size(755, 93);
             this.panel76.TabIndex = 243;
             // 
-            // panelSettingsOwnNodeURLContainer
-            // 
-            this.panelSettingsOwnNodeURLContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.panelSettingsOwnNodeURLContainer.Controls.Add(this.textBoxSettingsOwnNodeURL);
-            this.panelSettingsOwnNodeURLContainer.Location = new System.Drawing.Point(265, 64);
-            this.panelSettingsOwnNodeURLContainer.Name = "panelSettingsOwnNodeURLContainer";
-            this.panelSettingsOwnNodeURLContainer.Size = new System.Drawing.Size(250, 22);
-            this.panelSettingsOwnNodeURLContainer.TabIndex = 254;
-            // 
-            // textBoxSettingsOwnNodeURL
-            // 
-            this.textBoxSettingsOwnNodeURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxSettingsOwnNodeURL.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxSettingsOwnNodeURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSettingsOwnNodeURL.ForeColor = System.Drawing.Color.Gray;
-            this.textBoxSettingsOwnNodeURL.Location = new System.Drawing.Point(6, 4);
-            this.textBoxSettingsOwnNodeURL.Name = "textBoxSettingsOwnNodeURL";
-            this.textBoxSettingsOwnNodeURL.Size = new System.Drawing.Size(239, 15);
-            this.textBoxSettingsOwnNodeURL.TabIndex = 202;
-            this.textBoxSettingsOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
-            this.textBoxSettingsOwnNodeURL.TextChanged += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_TextChanged);
-            this.textBoxSettingsOwnNodeURL.Enter += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_Enter);
-            this.textBoxSettingsOwnNodeURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsOwnNodeURL_KeyPress);
-            this.textBoxSettingsOwnNodeURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsOwnNodeURL_KeyUp);
-            this.textBoxSettingsOwnNodeURL.Leave += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_Leave);
-            // 
             // label201
             // 
             this.label201.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -10911,30 +10890,6 @@
             this.panel22.Name = "panel22";
             this.panel22.Size = new System.Drawing.Size(755, 23);
             this.panel22.TabIndex = 208;
-            // 
-            // lblSettingsOwnNodeStatusLight
-            // 
-            this.lblSettingsOwnNodeStatusLight.AutoSize = true;
-            this.lblSettingsOwnNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblSettingsOwnNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblSettingsOwnNodeStatusLight.Location = new System.Drawing.Point(140, 3);
-            this.lblSettingsOwnNodeStatusLight.Name = "lblSettingsOwnNodeStatusLight";
-            this.lblSettingsOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
-            this.lblSettingsOwnNodeStatusLight.TabIndex = 221;
-            this.lblSettingsOwnNodeStatusLight.Text = "🟢";
-            // 
-            // lblSettingsOwnNodeStatus
-            // 
-            this.lblSettingsOwnNodeStatus.AutoSize = true;
-            this.lblSettingsOwnNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
-            this.lblSettingsOwnNodeStatus.Location = new System.Drawing.Point(161, 2);
-            this.lblSettingsOwnNodeStatus.Name = "lblSettingsOwnNodeStatus";
-            this.lblSettingsOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
-            this.lblSettingsOwnNodeStatus.TabIndex = 222;
-            this.lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-            this.lblSettingsOwnNodeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label162
             // 
@@ -18938,9 +18893,12 @@
             // 
             // toolTipForLblHeaderPrice
             // 
+            this.toolTipForLblHeaderPrice.AutoPopDelay = 5000;
             this.toolTipForLblHeaderPrice.BackColor = System.Drawing.Color.DimGray;
             this.toolTipForLblHeaderPrice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.toolTipForLblHeaderPrice.InitialDelay = 0;
             this.toolTipForLblHeaderPrice.OwnerDraw = true;
+            this.toolTipForLblHeaderPrice.ReshowDelay = 0;
             this.toolTipForLblHeaderPrice.Draw += new System.Windows.Forms.DrawToolTipEventHandler(this.ToolTip_Draw);
             this.toolTipForLblHeaderPrice.Popup += new System.Windows.Forms.PopupEventHandler(this.ToolTip_Popup);
             // 
@@ -18972,6 +18930,67 @@
             this.timer50thSec.Interval = 50;
             this.timer50thSec.Tick += new System.EventHandler(this.Timer50thSec_Tick);
             // 
+            // lblSettingsOwnNodeStatusLight
+            // 
+            this.lblSettingsOwnNodeStatusLight.AutoSize = true;
+            this.lblSettingsOwnNodeStatusLight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblSettingsOwnNodeStatusLight.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsOwnNodeStatusLight.ForeColor = System.Drawing.Color.IndianRed;
+            this.lblSettingsOwnNodeStatusLight.Location = new System.Drawing.Point(140, 3);
+            this.lblSettingsOwnNodeStatusLight.Name = "lblSettingsOwnNodeStatusLight";
+            this.lblSettingsOwnNodeStatusLight.Size = new System.Drawing.Size(19, 14);
+            this.lblSettingsOwnNodeStatusLight.TabIndex = 221;
+            this.lblSettingsOwnNodeStatusLight.Text = "🟢";
+            // 
+            // lblSettingsOwnNodeStatus
+            // 
+            this.lblSettingsOwnNodeStatus.AutoSize = true;
+            this.lblSettingsOwnNodeStatus.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsOwnNodeStatus.ForeColor = System.Drawing.Color.Silver;
+            this.lblSettingsOwnNodeStatus.Location = new System.Drawing.Point(161, 2);
+            this.lblSettingsOwnNodeStatus.Name = "lblSettingsOwnNodeStatus";
+            this.lblSettingsOwnNodeStatus.Size = new System.Drawing.Size(130, 17);
+            this.lblSettingsOwnNodeStatus.TabIndex = 222;
+            this.lblSettingsOwnNodeStatus.Text = "invalid / node offline";
+            this.lblSettingsOwnNodeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxSettingsOwnNodeURL
+            // 
+            this.textBoxSettingsOwnNodeURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxSettingsOwnNodeURL.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSettingsOwnNodeURL.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSettingsOwnNodeURL.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxSettingsOwnNodeURL.Location = new System.Drawing.Point(6, 4);
+            this.textBoxSettingsOwnNodeURL.Name = "textBoxSettingsOwnNodeURL";
+            this.textBoxSettingsOwnNodeURL.Size = new System.Drawing.Size(239, 15);
+            this.textBoxSettingsOwnNodeURL.TabIndex = 202;
+            this.textBoxSettingsOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
+            this.textBoxSettingsOwnNodeURL.TextChanged += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_TextChanged);
+            this.textBoxSettingsOwnNodeURL.Enter += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_Enter);
+            this.textBoxSettingsOwnNodeURL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxSettingsOwnNodeURL_KeyPress);
+            this.textBoxSettingsOwnNodeURL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSettingsOwnNodeURL_KeyUp);
+            this.textBoxSettingsOwnNodeURL.Leave += new System.EventHandler(this.TextBoxSettingsOwnNodeURL_Leave);
+            // 
+            // panelSettingsOwnNodeURLContainer
+            // 
+            this.panelSettingsOwnNodeURLContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panelSettingsOwnNodeURLContainer.Controls.Add(this.textBoxSettingsOwnNodeURL);
+            this.panelSettingsOwnNodeURLContainer.Location = new System.Drawing.Point(265, 64);
+            this.panelSettingsOwnNodeURLContainer.Name = "panelSettingsOwnNodeURLContainer";
+            this.panelSettingsOwnNodeURLContainer.Size = new System.Drawing.Size(250, 22);
+            this.panelSettingsOwnNodeURLContainer.TabIndex = 254;
+            // 
+            // label227
+            // 
+            this.label227.AutoSize = true;
+            this.label227.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label227.ForeColor = System.Drawing.Color.Silver;
+            this.label227.Location = new System.Drawing.Point(256, 3);
+            this.label227.Name = "label227";
+            this.label227.Size = new System.Drawing.Size(442, 17);
+            this.label227.TabIndex = 259;
+            this.label227.Text = "(Xpub queries require connection to your own node. Configure in settings)";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -18981,18 +19000,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.progressBarRefreshData);
@@ -19180,8 +19199,6 @@
             this.panel106.PerformLayout();
             this.panel108.ResumeLayout(false);
             this.panel76.ResumeLayout(false);
-            this.panelSettingsOwnNodeURLContainer.ResumeLayout(false);
-            this.panelSettingsOwnNodeURLContainer.PerformLayout();
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
             this.panel21.ResumeLayout(false);
@@ -19334,6 +19351,8 @@
             this.panelDCAChartLoadingPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
             this.panelDCAMessages.ResumeLayout(false);
+            this.panelSettingsOwnNodeURLContainer.ResumeLayout(false);
+            this.panelSettingsOwnNodeURLContainer.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -19714,9 +19733,6 @@
         private System.Windows.Forms.Label label152;
         private System.Windows.Forms.Label lblBlockchainInfoEndpoints;
         private System.Windows.Forms.Label label159;
-        private System.Windows.Forms.TextBox textBoxSettingsOwnNodeURL;
-        private System.Windows.Forms.Label lblSettingsOwnNodeStatus;
-        private System.Windows.Forms.Label lblSettingsOwnNodeStatusLight;
         private System.Windows.Forms.Button btnMenuSettings;
         private System.Windows.Forms.Panel panel22;
         private System.Windows.Forms.Label label162;
@@ -20104,7 +20120,6 @@
         private System.Windows.Forms.Panel panelConvertEURToBTCContainer;
         private System.Windows.Forms.Panel panelConvertUSDToBTCContainer;
         private System.Windows.Forms.Panel panelConvertXAUToBTCContainer;
-        private System.Windows.Forms.Panel panelSettingsOwnNodeURLContainer;
         private System.Windows.Forms.Panel panelAppearanceTextbox1Container;
         private CustomControls.RJControls.RJButton btnRoundCorners;
         private CustomControls.RJControls.RJButton btnPartialCorners;
@@ -20516,6 +20531,11 @@
         private System.Windows.Forms.Label label236;
         private System.Windows.Forms.Label label229;
         private System.Windows.Forms.Label lblPrevDiffAdjustment;
+        private System.Windows.Forms.Panel panelSettingsOwnNodeURLContainer;
+        private System.Windows.Forms.TextBox textBoxSettingsOwnNodeURL;
+        private System.Windows.Forms.Label lblSettingsOwnNodeStatusLight;
+        private System.Windows.Forms.Label lblSettingsOwnNodeStatus;
+        private System.Windows.Forms.Label label227;
     }
 }
 

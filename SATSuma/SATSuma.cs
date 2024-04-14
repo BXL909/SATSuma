@@ -26,9 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen
-* more testing, especially testnet and offline mode.
-* node and network selection, messages, saving and restoring need looking at
-* scrollbar on xpub screen needs bringing to front
+* more testing, especially node settings, testnet and offline mode.
 */
 
 #region Using
@@ -66,6 +64,7 @@ using ScottPlot.Renderable;
 using ScottPlot.Plottable;
 using static QRCoder.PayloadGenerator;
 using System.Numerics;
+using ScottPlot.Palettes;
 #endregion
 
 namespace SATSuma
@@ -118,8 +117,8 @@ namespace SATSuma
         private readonly List<Point> linePoints = new List<Point>(); // used to store coordinates for all the lines on the transaction screen
         #endregion
         #region xpub screen variables
+        bool xpubScanComplete = false; // when true the progress bars will disappear after 10 secs
         private bool xpubValid = false;
-        private bool isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed = true;
         private bool isXpubButtonPressed = false;
         private bool XpubDownButtonPressed = false;
         private bool XpubUpButtonPressed = false;
@@ -779,7 +778,6 @@ namespace SATSuma
                                         lblHeaderBlockAge.Text = formattedTime;
                                     });
                                     UpdateLabelValue(lblBlockNumber, Convert.ToString(blocks[0].Height));
-                                    //////////////
 
                                     // calculate amount of btc issued
                                     int blockHeight = Convert.ToInt32(blocks[0].Height);
@@ -810,8 +808,6 @@ namespace SATSuma
                                         progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
                                     });
 
-
-//////////////
                                     lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                     {
                                         lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
@@ -2662,7 +2658,7 @@ namespace SATSuma
                     lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                        lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                        lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                     });
                     lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -6696,6 +6692,7 @@ namespace SATSuma
         {
             try
             {
+                xpubScanComplete = false;
                 xpubValid = false;
                 panelXpubResults.Invoke((MethodInvoker)delegate
                 {
@@ -6708,6 +6705,10 @@ namespace SATSuma
                 panelXpubContainer.Invoke((MethodInvoker)delegate
                 {
                     panelXpubContainer.Visible = false;
+                });
+                panelXpubScrollbar.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubScrollbar.Visible = false;
                 });
                 btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                 {
@@ -6773,118 +6774,6 @@ namespace SATSuma
             }
         }
 
-        //-------------------- VALIDATE NODE URL ENTRY ---------------------------------------------------------------------------
-        private void TextBoxXpubScreenOwnNodeURL_Enter(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubScreenOwnNodeURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxXpubScreenOwnNodeURL.Text = "";
-                        textBoxXpubScreenOwnNodeURL.ForeColor = Color.White;
-                    });
-                    isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxXpubScreenOwnNodeURL_Enter");
-            }
-        }
-
-        private void TextBoxXpubScreenOwnNodeURL_Leave(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(textBoxXpubScreenOwnNodeURL.Text))
-                {
-                    textBoxXpubScreenOwnNodeURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxXpubScreenOwnNodeURL.Text = "e.g http://umbrel.local:3006/api/";
-                        textBoxXpubScreenOwnNodeURL.ForeColor = Color.Gray;
-                    });
-                    isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxXpubScreenOwnNodeURL_Leave");
-            }
-        }
-
-        private void TextBoxXpubScreenOwnNodeURL_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubScreenOwnNodeURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxXpubScreenOwnNodeURL.ForeColor = Color.White;
-                    });
-                    isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxXpubScreenOwnNodeURL_TextChanged");
-            }
-        }
-
-        private void TextBoxXpubScreenOwnNodeURL_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            try
-            {
-                if (isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed)
-                {
-                    textBoxXpubScreenOwnNodeURL.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxXpubScreenOwnNodeURL.Text = "";
-                        textBoxXpubScreenOwnNodeURL.ForeColor = Color.White;
-                    });
-                    isTextBoxXpubScreenOwnNodeURLWatermarkTextDisplayed = false;
-                }
-                else
-                {
-                    previousXpubScreenOwnNodeURLStringToCompare = textBoxXpubScreenOwnNodeURL.Text;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxXpubScreenOwnNodeURL_KeyPress");
-            }
-        }
-
-        private void TextBoxXpubScreenOwnNodeURL_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (previousXpubScreenOwnNodeURLStringToCompare != textBoxXpubScreenOwnNodeURL.Text)
-                {
-                    lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubScreenOwnNodeStatusLight.ForeColor = Color.IndianRed;
-                    });
-                    lblXpubScreenOwnNodeStatus.Invoke((MethodInvoker)delegate
-                    {
-                        lblXpubScreenOwnNodeStatus.Text = "invalid / node offline";
-                    });
-                    lblXpubScreenOwnNodeStatus.Invoke((MethodInvoker)delegate
-                    {
-                        textBoxSubmittedXpub.Enabled = false;
-                        textBoxSubmittedXpub.Text = "";
-                    });
-                    previousXpubScreenOwnNodeURLStringToCompare = textBoxXpubScreenOwnNodeURL.Text;
-                    CheckNetworkStatus();
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "TextBoxXpubScreenOwnNodeURL_KeyUp");
-            }
-        }
 
         //-------------------- DERIVATION PATHS ---------------------------------------------------------------------------
         private void NumberUpDownDerivationPathsToCheck_Validating(object sender, CancelEventArgs e)
@@ -7160,7 +7049,7 @@ namespace SATSuma
                             lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsOwnNodeStatus.Text = hostname;
-                                lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                                lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                             });
                             lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7172,7 +7061,7 @@ namespace SATSuma
                                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                 {
                                     lblSettingsSelectedNodeStatus.Text = "node offline";
-                                    lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                    lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                                 });
                                 lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                                 {
@@ -7206,7 +7095,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7218,7 +7107,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7255,7 +7144,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = hostname;
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7275,7 +7164,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostname;
-                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -7310,7 +7199,7 @@ namespace SATSuma
                             lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                                lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                                lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                             });
                             lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7340,7 +7229,7 @@ namespace SATSuma
                 lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                    lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                    lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                 });
                 lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
@@ -7406,7 +7295,7 @@ namespace SATSuma
                     btnViewAddressFromXpub.Visible = false;
                 });
 
-                Control[] controlsToShow = { panelXpubResults, panel101, panelXpubContainer, listViewXpubAddresses, progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                Control[] controlsToShow = { panelXpubResults, panel101, panelXpubContainer, listViewXpubAddresses, progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141, panelXpubScrollbar };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -7506,7 +7395,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -7752,7 +7641,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8001,7 +7890,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8256,7 +8145,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -8508,12 +8397,21 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxXpubScreenOwnNodeURL.Enabled = true;
                 intTimeUntilXpubProgressBarsHidden = 0;
+                xpubScanComplete = true;
                 #endregion
             }
             catch (Exception ex)
             {
                 HandleException(ex, "LookupXpub");
             }
+        }
+
+        private void LblXpubScreenOwnNodeStatus_SizeChanged(object sender, EventArgs e)
+        {
+            label227.Invoke((MethodInvoker)delegate
+            {
+                label227.Location = new Point(lblXpubScreenOwnNodeStatus.Location.X + lblXpubScreenOwnNodeStatus.Width + 10, label227.Location.Y);
+            });
         }
         #endregion
         #region listview appearance
@@ -13167,26 +13065,6 @@ namespace SATSuma
             try
             {
                 var text = e.SubItem.Text;
-
-                if (e.ColumnIndex == 1)
-                {
-                    if (text == "address")
-                    {
-                        e.SubItem.ForeColor = Color.DarkSlateBlue;
-                    }
-                    if (text == "block")
-                    {
-                        e.SubItem.ForeColor = Color.PaleVioletRed;
-                    }
-                    if (text == "transaction")
-                    {
-                        e.SubItem.ForeColor = Color.OliveDrab;
-                    }
-                    if (text == "xpub")
-                    {
-                        e.SubItem.ForeColor = Color.Peru;
-                    }
-                }
                 if (e.ColumnIndex == 2)
                 {
                     if (text == "")
@@ -15003,7 +14881,7 @@ namespace SATSuma
                     lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsOwnNodeStatus.Text = "invalid / node offline";
-                        lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                        lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                     });
                     lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -15137,7 +15015,7 @@ namespace SATSuma
                     lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                        lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                        lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                     });
                     lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                     {
@@ -15735,7 +15613,7 @@ namespace SATSuma
                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                 {
                     lblSettingsSelectedNodeStatus.Text = "invalid / node offline";
-                    lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                    lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                 });
                 lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                 {
@@ -23302,22 +23180,11 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    if (priceChange == 0 || newPrice == 0) // price hasn't changed or we failed to get a new price
+                                    UpdateHeaderPriceChangeValue(lblHeaderPriceChange, priceChangeDisp);
+                                    lblHeaderPriceChange.Invoke((MethodInvoker)delegate
                                     {
-                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblHeaderPriceChange.Visible = false;
-                                        });
-                                        UpdateLabelValue(lblHeaderPriceChange, "0"); // don't show a value for price change
-                                    }
-                                    else // price has changed since previous update
-                                    {
-                                        UpdateHeaderPriceChangeValue(lblHeaderPriceChange, priceChangeDisp);
-                                        lblHeaderPriceChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblHeaderPriceChange.Visible = true;
-                                        });
-                                    }
+                                        lblHeaderPriceChange.Visible = true;
+                                    });
                                 }
                             }
                             else
@@ -23368,16 +23235,6 @@ namespace SATSuma
                 }
                 if (offlineMode || testNet)
                 {
-                    /*
-                    OneBTCInUSD = "0";
-                    OneBTCInEUR = "0";
-                    OneBTCInGBP = "0";
-                    OneBTCInXAU = "0";
-                    OneUSDInSats = "0";
-                    OneEURInSats = "0";
-                    OneGBPInSats = "0";
-                    OneXAUInSats = "0";
-                    */
                     OneBTCinSelectedCurrency = 0;
                     string bitExTooltipForSelectedCurrency;
                     string geckoTooltipForSelectedCurrency;
@@ -24866,7 +24723,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostnameForDisplay;
-                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -24907,7 +24764,7 @@ namespace SATSuma
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsOwnNodeStatus.Text = hostnameForDisplay;
-                            lblSettingsOwnNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
+                            lblSettingsOwnNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsOwnNodeStatus.Width, lblSettingsOwnNodeStatus.Location.Y);
                         });
                         lblSettingsOwnNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -24984,7 +24841,7 @@ namespace SATSuma
                                                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblSettingsSelectedNodeStatus.Text = "node offline";
-                                                    lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                                    lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                                                 });
                                                 lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                                                 {
@@ -24999,7 +24856,7 @@ namespace SATSuma
                                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                             {
                                                 lblSettingsSelectedNodeStatus.Text = "node offline";
-                                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                                             });
                                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                                             {
@@ -25038,7 +24895,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -25081,7 +24938,7 @@ namespace SATSuma
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
                                 lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                                lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                                lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                             });
                             lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                             {
@@ -25121,7 +24978,7 @@ namespace SATSuma
                         lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
                             lblSettingsSelectedNodeStatus.Text = displayNodeName;
-                            lblSettingsSelectedNodeStatus.Location = new Point((int)(755 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                            lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
                         });
                         lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
                         {
@@ -25376,6 +25233,11 @@ namespace SATSuma
 
         private void DoTimerBasedStuff()
         {
+            if (intDisplayCountdownToRefresh % 10 == 0)
+            {
+                CheckNetworkStatus();
+            }
+
             if (intDisplayCountdownToRefresh <= 56)
             {
                 gotMarketDataInLastFewSecs = false; // this flag prevented getting market data twice in quick succession during startup. Once false (after initial few secs), it stays false.
@@ -25392,7 +25254,10 @@ namespace SATSuma
             intThemeSavedMessageTimeShown++;
             intAddToBookmarksMessageTimeLightLit++;
             intHideAddToBookmarksTimeShown++;
-            intTimeUntilXpubProgressBarsHidden++;
+            if (xpubScanComplete)
+            {
+                intTimeUntilXpubProgressBarsHidden++;
+            }
             intExternalLinkClickedFlagToFalse++;
 
             // check whether price API indicators need turning off
@@ -25494,13 +25359,16 @@ namespace SATSuma
             if (intTimeUntilXpubProgressBarsHidden >= 8)
             {
                 intTimeUntilXpubProgressBarsHidden = 0;
-                Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
-                foreach (Control control in controlsToHide)
+                if (xpubScanComplete)
                 {
-                    control.Invoke((MethodInvoker)delegate
+                    Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                    foreach (Control control in controlsToHide)
                     {
-                        control.Visible = false;
-                    });
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
                 }
             }
 
@@ -27108,17 +26976,20 @@ namespace SATSuma
                     {
                         lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
                     });
-                    if (lbl24HourBTCSent.Text != "disabled")
+                    if (lbl24HourBTCSent.Text != "disabled" && lbl24HourBTCSent.Text != "unavailable on TestNet")
                     {
                         lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                         {
                             lbl24HourBTCSentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lbl24HourBTCSent.Text) * OneBTCinSelectedCurrency).ToString("N2");
                         });
                     }
-                    lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                    if (lblNextBlockTotalFees.Text != "disabled" && lblNextBlockTotalFees.Text != "unavailable on TestNet")
                     {
-                        lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
-                    });
+                        lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        });
+                    }
 
                     #endregion
                     #region recalculate fiat values on xpub screen 
@@ -27136,10 +27007,13 @@ namespace SATSuma
                     });
                     #endregion
                     #region recalculate fiat values on blocks screen 
-                    lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate
+                    if (lblBlockListTotalFeesInNextBlock.Text != "unavailable" && lblBlockListTotalFeesInNextBlock.Text != "unavailable on TestNet")
                     {
-                        lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency).ToString("N2");
-                    });
+                        lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        });
+                    }
                     lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate
                     {
                         lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
@@ -28871,13 +28745,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private void lblXpubScreenOwnNodeStatus_SizeChanged(object sender, EventArgs e)
-        {
-            label227.Invoke((MethodInvoker)delegate
-            {
-                label227.Location = new Point(lblXpubScreenOwnNodeStatus.Location.X + lblXpubScreenOwnNodeStatus.Width + 10, label227.Location.Y);
-            });
-        }
     }
 }

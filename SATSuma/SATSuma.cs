@@ -2505,7 +2505,6 @@ namespace SATSuma
                     QRCodeGenerator qrGenerator = new QRCodeGenerator();
                     QRCodeData qrCodeData = qrGenerator.CreateQrCode(addressString, QRCodeGenerator.ECCLevel.Q);
                     QRCode qrCode = new QRCode(qrCodeData);
-                    //var qrCodeImage = qrCode.GetGraphic(20, Color.Gray, Color.Black, false);
                     var qrCodeImage = qrCode.GetGraphic(20, label77.ForeColor, Color.Black, false);
                     qrCodeImage.MakeTransparent(Color.Black);
                     AddressQRCodePicturebox.Invoke((MethodInvoker)delegate
@@ -3388,7 +3387,6 @@ namespace SATSuma
                             }
                             BtnViewTransactionFromAddress.Invoke((MethodInvoker)delegate
                             {
-                                //rjButton1.Location = new Point(item.Position.X + listViewAddressTransactions.Location.X + listViewAddressTransactions.Columns[0].Width - BtnViewTransactionFromAddress.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
                                 BtnViewTransactionFromAddress.Location = new Point(listViewAddressTransactions.Location.X - BtnViewTransactionFromAddress.Width + (int)(12 * UIScale), item.Position.Y + listViewAddressTransactions.Location.Y);
                                 BtnViewTransactionFromAddress.Height = item.Bounds.Height;
                             });
@@ -5966,8 +5964,6 @@ namespace SATSuma
                             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
                             formattedDateTime = dateTime.ToString("yyyyMMdd-HH:mm");
                         }
-                        //ListViewItem item = new ListViewItem(formattedDateTime); // create new row
-                        //item.SubItems.Add(block.Height.ToString());
                         ListViewItem item = new ListViewItem(block.Height); // create new row
                         item.SubItems.Add(formattedDateTime.ToString());
                         item.SubItems.Add(block.Tx_count.ToString());
@@ -7079,8 +7075,6 @@ namespace SATSuma
                             lblXpubScreenOwnNodeStatusLight.ForeColor = Color.IndianRed;
                         });
                         lblSettingsOwnNodeSelected.Enabled = false;
-                        //Uri uri = new Uri(xpubNodeURL);
-                        //string hostname = uri.Host;
                         string hostname = textBoxXpubScreenOwnNodeURL.Text;
                         label174.Invoke((MethodInvoker)delegate
                         {
@@ -7089,7 +7083,6 @@ namespace SATSuma
                         MoveNodeSelections();
                         lblXpubScreenOwnNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            //lblXpubScreenOwnNodeStatus.Text = hostname;
                             lblXpubScreenOwnNodeStatus.Text = "invalid / node offline";
                         });
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
@@ -8039,7 +8032,7 @@ namespace SATSuma
                         else
                         {
                             usedSegwitP2SHAddresses++;
-                            consecutiveUnusedAddressesForType = 0;  //
+                            consecutiveUnusedAddressesForType = 0;  
                             totalUnusedAddresses = ((NumberOfDerivationPathsToCheck * 2) + DerivationPath) * (MaxNumberOfConsecutiveUnusedAddresses + 1);  // this is the third address type, so reset to account for that, rather than 0
                         }
 
@@ -10015,7 +10008,6 @@ namespace SATSuma
 
                     for (int i = 0; i < difficultyList.Count; i++)
                     {
-                        //double yValue = (double)hashratesList[i].AvgHashrate;
                         double yValue = (double)yValues[i];
                         if (yValue > 0)
                         {
@@ -10468,7 +10460,6 @@ namespace SATSuma
                     decimal exchangeRate = 1;
                     if (btnUSD.Enabled) // user has selected a currency other than USD
                     {
-                        // get 
                         string priceUSD = OneBTCInUSD;
                         string priceEUR = OneBTCInEUR;
                         string priceGBP = OneBTCInGBP;
@@ -12536,7 +12527,6 @@ namespace SATSuma
                 {
                     if (bookmark.Type == "block" || bookmark.Type == "address" || bookmark.Type == "transaction" || bookmark.Type == "xpub")
                     {
-                        //ListViewItem item = new ListViewItem(Convert.ToString(bookmark.DateAdded)); // create new row
                         ListViewItem item = new ListViewItem(bookmark.DateAdded.ToString("yyyy-MM-dd").Substring(0, 10));
                         item.SubItems.Add(bookmark.Type);
                         if (bookmark.Encrypted == true)
@@ -24264,7 +24254,6 @@ namespace SATSuma
                 {
                     lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
                 });
-                //progressBarRefreshData.Value = progressBarRefreshData.Maximum - intDisplayCountdownToRefresh;
                 intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
 
                 
@@ -25233,9 +25222,12 @@ namespace SATSuma
 
         private void DoTimerBasedStuff()
         {
-            if (intDisplayCountdownToRefresh % 10 == 0)
+            if (panelSettings.Visible && lblSettingsOwnNodeSelected.Text == "✔️")
             {
-                CheckNetworkStatus();
+                if (intDisplayCountdownToRefresh % 5 == 0)
+                {
+                    CheckNetworkStatus();
+                }
             }
 
             if (intDisplayCountdownToRefresh <= 56)

@@ -158,9 +158,6 @@ namespace SATSuma
         string UIScaleInFile = "3"; // the UIScale saved in the settingss file
         bool offlineMode = false; // disables all comms apart from to full node
         bool testNet = false; // testnet or mainnet
-        bool xpubNodeURLAlreadySavedInFile = false; // keeps track of whether an xpub node URL is already saved
-        bool settingsAlreadySavedInFile = false; // keeps track of whether settings are already saved
-        bool defaultThemeAlreadySavedInFile = false; // keeps track of whether a default theme is already saved
         bool isTextBoxSettingsOwnNodeURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private string xpubNodeURL = ""; // no default value. User must provide path to own node
@@ -523,7 +520,7 @@ namespace SATSuma
                 });
                 lblCurrentVersion.Invoke((MethodInvoker)delegate
                 {
-                    lblCurrentVersion.Text = "v" + CurrentVersion;
+                    lblCurrentVersion.Text = $"v{CurrentVersion}";
                     lblCurrentVersion.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width, lblCurrentVersion.Location.Y);
                 });
 
@@ -565,7 +562,7 @@ namespace SATSuma
                 PopulateThemeComboboxes();
                 LoadAndStyleDirectoryBrowser();
                 TextBoxSettingsOwnNodeURL_Leave(sender, e); // sets an intial value for path to node to an example url 
-                lblHeaderPriceChange.Text = "+" + lblHeaderPrice.Text[0] + "0"; // sets an initial value for pricechange. This value will only be seen if the price doesn't change after the first time it's been retrieved.
+                lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0"; // sets an initial value for pricechange. This value will only be seen if the price doesn't change after the first time it's been retrieved.
                 #region navigate to the saved startup screen
 
                 Dictionary<string, Action> buttonClickEvents = new Dictionary<string, Action>
@@ -784,7 +781,7 @@ namespace SATSuma
                                     decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
                                     calculatedBTCInCirculation = totalBitcoinsIssued;
 
-                                    UpdateLabelValue(lblBTCInCirc, calculatedBTCInCirculation.ToString("N2") + " / 21,000,000");
+                                    UpdateLabelValue(lblBTCInCirc, $"{calculatedBTCInCirculation:N2} / 21,000,000");
                                     if (calculatedBTCInCirculation > 0)
                                     {
                                         UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
@@ -801,7 +798,7 @@ namespace SATSuma
                                         lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
                                     });
                                     decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
-                                    UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
+                                    UpdateLabelValue(lblPercentIssued, $"{percentIssued}%");
 
                                     progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                     {
@@ -874,18 +871,20 @@ namespace SATSuma
                         var (currentHashrate, currentDifficulty) = MemSpGetHashrate();
                         BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
                         
-                        UpdateLabelValue(lblHeaderHashrate, String.Format("{0:n0}", currentHashrateFormatted));
-                        
+                        UpdateLabelValue(lblHeaderHashrate, $"{currentHashrateFormatted:n0}");
+
+
                         lblHeaderHashRateChart.Invoke((MethodInvoker)delegate
                         {
                             lblHeaderHashRateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width, lblHeaderHashRateChart.Location.Y);
                         });
-                        UpdateLabelValue(lblEstHashrate, String.Format("{0:n0}", currentHashrateFormatted));
+                        UpdateLabelValue(lblEstHashrate, $"{currentHashrateFormatted:n0}");
+
                         lblHashrateChart.Invoke((MethodInvoker)delegate
                         {
                             lblHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width, lblHashrateChart.Location.Y);
                         });
-                        UpdateLabelValue(lblBlockListEstHashRate, String.Format("{0:n0}", currentHashrateFormatted));
+                        UpdateLabelValue(lblBlockListEstHashRate, $"{currentHashrateFormatted:n0}");
                         lblBlockListHashrateChart.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width, lblBlockListHashrateChart.Location.Y);
@@ -915,7 +914,9 @@ namespace SATSuma
 
                     if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
                     {
-                        UpdateLabelValue(lblBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency):N2}");
+
+
                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
                             lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
@@ -940,7 +941,8 @@ namespace SATSuma
                     }
                     decimal NextBlockSubsidy = DecBlockSubsidy / 2;
                     UpdateLabelValue(lblBlockSubsidyAfterHalving, Convert.ToString(NextBlockSubsidy));
-                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                    UpdateLabelValue(lblBlockRewardAfterHalvingFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency):N2}");
+
                     lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                     {
                         lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockSubsidyAfterHalving.Location.X + lblBlockSubsidyAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
@@ -948,7 +950,8 @@ namespace SATSuma
                     UpdateLabelValue(lblBlockListBlockSubsidy, blockSubsidy);
                     if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
                     {
-                        UpdateLabelValue(lblBlockListBlockRewardFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblBlockListBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency):N2}");
+
                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
                         {
                             lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
@@ -973,7 +976,7 @@ namespace SATSuma
                         if (decimal.TryParse(progressPercent, out decimal progressValue2))
                         {
                             progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
-                            truncatedPercent = string.Format("{0:F2}%", progressValue2 * 100); // truncate to two decimal places
+                            truncatedPercent = $"{progressValue2 * 100:F2}%"; // truncate to two decimal places
                         }
                         UpdateLabelValue(lblProgressNextDiffAdjPercentage, truncatedPercent);
                         UpdateLabelValue(lblBlockListProgressNextDiffAdjPercentage, truncatedPercent);
@@ -983,7 +986,7 @@ namespace SATSuma
                             string formattedRetarget = retargetValue.ToString("0.00");
 
                             // Update the label value
-                            UpdateLabelValue(lblPrevDiffAdjustment, formattedRetarget + "%");
+                            UpdateLabelValue(lblPrevDiffAdjustment, $"{formattedRetarget}%");
                         }
                         if (decimal.TryParse(progressPercent, out decimal progressValue))
                         {
@@ -991,12 +994,12 @@ namespace SATSuma
                             progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
                             progressBarBlockListNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range - Block List
                         }
-                        UpdateLabelValue(lblDifficultyAdjEst, difficultyChange + "%");
+                        UpdateLabelValue(lblDifficultyAdjEst, $"{difficultyChange}%");
                         lblDifficultyChart.Invoke((MethodInvoker)delegate
                         {
                             lblDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width, lblDifficultyChart.Location.Y);
                         });
-                        UpdateLabelValue(lblBlockListNextDifficultyAdjustment, difficultyChange + "%");
+                        UpdateLabelValue(lblBlockListNextDifficultyAdjustment, $"{difficultyChange}%");
                         lblBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
                         {
                             lblBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width, lblBlockListDifficultyChart.Location.Y);
@@ -1053,16 +1056,16 @@ namespace SATSuma
                             
                             lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
                             {
-                                lblNextBlockMinMaxFee.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                lblNextBlockMinMaxFee.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
                             });
                             lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
-                                lblBlockListMinMaxInFeeNextBlock.Text = nextBlockMinFee + " / " + nextBlockMaxFee;
+                                lblBlockListMinMaxInFeeNextBlock.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
                             });
                             UpdateLabelValue(lblNextBlockTotalFees, nextBlockTotalFees);
+                            UpdateLabelValue(lblNextBlockTotalFeesFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
                             lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                             {
-                                UpdateLabelValue(lblNextBlockTotalFeesFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
                                 lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
                             });
                             UpdateLabelValue(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
@@ -1071,8 +1074,7 @@ namespace SATSuma
                                 lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
                             });
 
-
-                            UpdateLabelValue(lblBlockListTotalFeesInNextBlockFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency).ToString("N2"));
+                            UpdateLabelValue(lblBlockListTotalFeesInNextBlockFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
                             lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
                             {
                                 lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
@@ -1141,19 +1143,20 @@ namespace SATSuma
                                 UpdateLabelValue(lblChannelCount, channelCount);
                                 UpdateLabelValue(lblNodeCount, nodeCount);
                                 UpdateLabelValue(lblTotalCapacity, totalCapacity);
-                                UpdateLabelValue(lblTotalCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblTotalCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency):N2}");
+
                                 UpdateLabelValue(lblTorNodes, torNodes);
                                 UpdateLabelValue(lblClearnetNodes, clearnetNodes);
                                 UpdateLabelValue(lblAverageCapacity, avgCapacity);
                                 string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
-                                UpdateLabelValue(lblAverageCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblAverageCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency):N2}");
                                 lblAverageCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblAverageCapacityFiat.Location = new Point(lblAverageCapacity.Location.X + lblAverageCapacity.Width, lblAverageCapacityFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblAverageFeeRate, avgFeeRate);
                                 string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
-                                UpdateLabelValue(lblAverageFeeRateFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblAverageFeeRateFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency):N2}");
                                 lblAverageFeeRateFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblAverageFeeRateFiat.Location = new Point(lblAverageFeeRate.Location.X + lblAverageFeeRate.Width, lblAverageFeeRateFiat.Location.Y);
@@ -1161,28 +1164,28 @@ namespace SATSuma
                                 UpdateLabelValue(lblUnannouncedNodes, unannouncedNodes);
                                 UpdateLabelValue(lblAverageBaseFeeMtokens, avgBaseeFeeMtokens);
                                 string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
-                                UpdateLabelValue(lblAverageBaseFeeMtokensFiat, lblHeaderPrice.Text[0] + ((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4"));
+                                UpdateLabelValue(lblAverageBaseFeeMtokensFiat, $"{lblHeaderPrice.Text[0]}{((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
                                 lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblMedCapacity, medCapacity);
                                 string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
-                                UpdateLabelValue(lblMedCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblMedCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency):N2}");
                                 lblMedCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedCapacityFiat.Location = new Point(lblMedCapacity.Location.X + lblMedCapacity.Width, lblMedCapacityFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblMedFeeRate, medFeeRate);
                                 string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
-                                UpdateLabelValue(lblMedFeeRateFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblMedFeeRateFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency):N2}");
                                 lblMedFeeRateFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedFeeRateFiat.Location = new Point(lblMedFeeRate.Location.X + lblMedFeeRate.Width, lblMedFeeRateFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblMedBaseFeeTokens, medBaseeFeeMtokens);
                                 string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
-                                UpdateLabelValue(lblMedBaseFeeTokensFiat, lblHeaderPrice.Text[0] + ((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000).ToString("N4"));
+                                UpdateLabelValue(lblMedBaseFeeTokensFiat, $"{lblHeaderPrice.Text[0]}{((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
                                 lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
@@ -1266,19 +1269,19 @@ namespace SATSuma
                                 #region capacity
                                 var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdown();
                                 UpdateLabelValue(lblClearnetCapacity, clearnetCapacity);
-                                UpdateLabelValue(lblClearnetCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblClearnetCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency):N2}");
                                 lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblClearnetCapacityFiat.Location = new Point(lblClearnetCapacity.Location.X + lblClearnetCapacity.Width, lblClearnetCapacityFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblTorCapacity, torCapacity);
-                                UpdateLabelValue(lblTorCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblTorCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency):N2}");
                                 lblTorCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblTorCapacityFiat.Location = new Point(lblTorCapacity.Location.X + lblTorCapacity.Width, lblTorCapacityFiat.Location.Y);
                                 });
                                 UpdateLabelValue(lblUnknownCapacity, unknownCapacity);
-                                UpdateLabelValue(lblUnknownCapacityFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                UpdateLabelValue(lblUnknownCapacityFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency):N2}");
                                 lblUnknownCapacityFiat.Invoke((MethodInvoker)delegate
                                 {
                                     lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
@@ -1308,15 +1311,15 @@ namespace SATSuma
                                 var (aliases, capacities) = MemSpLiquidityRanking();
                                 for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
                                 {
-                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
+                                    Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
                                     aliasLabel.Invoke((MethodInvoker)delegate
                                     {
                                         aliasLabel.Text = aliases[i];
                                     });
-                                    System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
-                                    System.Windows.Forms.Label capacityLabelFiat = (System.Windows.Forms.Label)this.Controls.Find("capacityLabelFiat" + (i + 1), true)[0];
+                                    Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
+                                    Label capacityLabelFiat = (Label)this.Controls.Find($"capacityLabelFiat{i + 1}", true)[0];
                                     UpdateLabelValue(capacityLabel, capacities[i]);
-                                    UpdateLabelValue(capacityLabelFiat, lblHeaderPrice.Text[0] + (Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency).ToString("N2"));
+                                    UpdateLabelValue(capacityLabelFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency):N2}");
                                     capacityLabelFiat.Invoke((MethodInvoker)delegate
                                     {
                                         capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
@@ -1327,12 +1330,12 @@ namespace SATSuma
                                 {
                                     for (int i = 0; i < result7.aliases.Count && i < 10; i++)
                                     {
-                                        System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
+                                        Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
                                         aliasLabel.Invoke((MethodInvoker)delegate
                                         {
                                             aliasLabel.Text = result7.aliases[i];
                                         });
-                                        System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
+                                        Label channelLabel = (Label)this.Controls.Find($"channelLabel{i + 1}", true)[0];
                                         UpdateLabelValue(channelLabel, result7.channels[i]);
                                     }
                                 }
@@ -1343,12 +1346,12 @@ namespace SATSuma
                                 #region mark it all as disabled
                                 for (int i = 0; i < 10; i++)
                                 {
-                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasLabel" + (i + 1), true)[0];
+                                    Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
                                     aliasLabel.Invoke((MethodInvoker)delegate
                                     {
                                         aliasLabel.Text = "disabled";
                                     });
-                                    System.Windows.Forms.Label capacityLabel = (System.Windows.Forms.Label)this.Controls.Find("capacityLabel" + (i + 1), true)[0];
+                                    Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
                                     capacityLabel.Invoke((MethodInvoker)delegate
                                     {
                                         capacityLabel.Text = "disabled";
@@ -1356,12 +1359,12 @@ namespace SATSuma
                                 }
                                 for (int i = 0; i < 10; i++)
                                 {
-                                    System.Windows.Forms.Label aliasLabel = (System.Windows.Forms.Label)this.Controls.Find("aliasConnLabel" + (i + 1), true)[0];
+                                    Label aliasLabel = (Label)this.Controls.Find($"aliasConnLabel{i + 1}", true)[0];
                                     aliasLabel.Invoke((MethodInvoker)delegate
                                     {
                                         aliasLabel.Text = "disabled";
                                     });
-                                    System.Windows.Forms.Label channelLabel = (System.Windows.Forms.Label)this.Controls.Find("channelLabel" + (i + 1), true)[0];
+                                    Label channelLabel = (Label)this.Controls.Find($"channelLabel{i + 1}", true)[0];
                                     channelLabel.Invoke((MethodInvoker)delegate
                                     {
                                         channelLabel.Text = "disabled";
@@ -1488,13 +1491,13 @@ namespace SATSuma
                                     var (avgNoTransactions, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
                                     UpdateLabelValue(lblAvgNoTransactions, avgNoTransactions);
                                     BigInteger hashesToSolveFormatted = BigInteger.Parse(hashesToSolve);
-                                    UpdateLabelValue(lblHashesToSolve, String.Format("{0:n0}", hashesToSolveFormatted));
-                                    UpdateLabelValue(lblBlockListAttemptsToSolveBlock, String.Format("{0:n0}", hashesToSolveFormatted));
+                                    UpdateLabelValue(lblHashesToSolve, $"{hashesToSolveFormatted:n0}");
+                                    UpdateLabelValue(lblBlockListAttemptsToSolveBlock, $"{hashesToSolveFormatted:n0}");
                                     UpdateLabelValue(lbl24HourTransCount, twentyFourHourTransCount);
                                     if (decimal.TryParse(twentyFourHourBTCSent, out decimal twentyFourHourBTCSentDec))
                                     {
                                         UpdateLabelValue(lbl24HourBTCSent, twentyFourHourBTCSentDec.ToString("F2"));
-                                        UpdateLabelValue(lbl24HourBTCSentFiat, lblHeaderPrice.Text[0] + (twentyFourHourBTCSentDec * OneBTCinSelectedCurrency).ToString("N2"));
+                                        UpdateLabelValue(lbl24HourBTCSentFiat, $"{lblHeaderPrice.Text[0]}{(twentyFourHourBTCSentDec * OneBTCinSelectedCurrency):N2}");
                                         lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                                         {
                                             lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
@@ -1621,7 +1624,7 @@ namespace SATSuma
                             if (RunBlockchairComAPI)
                             {
                                 var (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
-                                UpdateLabelValue(lblProgressToHalving, halveningBlock + " / " + blocksLeft);
+                                UpdateLabelValue(lblProgressToHalving, $"{halveningBlock} / {blocksLeft}");
                                 int progressBarValue = 0;
                                 try
                                 {
@@ -1637,7 +1640,7 @@ namespace SATSuma
                                 }
                                 progressBarProgressToHalving.Value = progressBarValue;
                                 progressBarBlockListHalvingProgress.Value = progressBarValue;
-                                UpdateLabelValue(lblBlockListHalvingBlockAndRemaining, halveningBlock + " / " + blocksLeft);
+                                UpdateLabelValue(lblBlockListHalvingBlockAndRemaining, $"{halveningBlock} / {blocksLeft}");
                                 string halvening_time = halveningTime;
                                 string halveningDate = "";
                                 try
@@ -1652,7 +1655,7 @@ namespace SATSuma
 
                                 lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
                                 {
-                                    lblEstimatedHalvingDate.Text = halveningDate + " / ";
+                                    lblEstimatedHalvingDate.Text = $"{halveningDate} / ";
                                 });
                                 lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                                 {
@@ -1810,7 +1813,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/mining/reward-stats/1");
+                var response = client.DownloadString($"{NodeURL}v1/mining/reward-stats/1");
                 var data = JObject.Parse(response);
 
                 if (data["totalReward"] != null && data["totalFee"] != null)
@@ -1841,7 +1844,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/mining/hashrate/3d");
+                var response = client.DownloadString($"{NodeURL}v1/mining/hashrate/3d");
                 var data = JObject.Parse(response);
                 string currentHashrate = "";
                 string currentDifficulty = "";
@@ -1869,7 +1872,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/fees/recommended");
+                var response = client.DownloadString($"{NodeURL}v1/fees/recommended");
                 var data = JObject.Parse(response);
                 if (data["fastestFee"] != null && data["halfHourFee"] != null && data["hourFee"] != null && data["economyFee"] != null && data["minimumFee"] != null)
                 {
@@ -1898,7 +1901,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/difficulty-adjustment");
+                var response = client.DownloadString($"{NodeURL}v1/difficulty-adjustment");
                 var data = JObject.Parse(response);
                 if (data["progressPercent"] != null && data["difficultyChange"] != null && data["estimatedRetargetDate"] != null && data["remainingBlocks"] != null && data["remainingTime"] != null && data["previousRetarget"] != null && data["nextRetargetHeight"] != null && data["timeAvg"] != null && data["timeOffset"] != null)
                 {
@@ -1954,7 +1957,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "mempool");
+                var response = client.DownloadString($"{NodeURL}mempool");
                 if (testNet)
                 {
                     response = client.DownloadString("https://mempool.space/testnet/api/mempool");
@@ -1985,7 +1988,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/liquidity");
+                var response = client.DownloadString($"{NodeURL}v1/lightning/nodes/rankings/liquidity");
                 var data = JArray.Parse(response);
 
                 List<string> aliases = new List<string>();
@@ -2036,7 +2039,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/rankings/connectivity");
+                var response = client.DownloadString($"{NodeURL}v1/lightning/nodes/rankings/connectivity");
                 var data = JArray.Parse(response);
 
                 List<string> aliases = new List<string>();
@@ -2081,7 +2084,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/lightning/nodes/isp-ranking");
+                var response = client.DownloadString($"{NodeURL}v1/lightning/nodes/isp-ranking");
                 var data = JObject.Parse(response);
 
                 string clearnetCapacity = "0";
@@ -2139,7 +2142,7 @@ namespace SATSuma
             {
                 using WebClient client = new WebClient();
                 LightUpNodeLight();
-                var response = client.DownloadString(NodeURL + "v1/lightning/statistics/latest");
+                var response = client.DownloadString($"{NodeURL}v1/lightning/statistics/latest");
                 var data = JObject.Parse(response);
                 if (data["latest"]["channel_count"] != null && data["latest"]["node_count"] != null && data["latest"]["total_capacity"] != null && data["latest"]["tor_nodes"] != null && data["latest"]["clearnet_nodes"] != null && data["latest"]["unannounced_nodes"] != null && data["latest"]["avg_capacity"] != null && data["latest"]["avg_fee_rate"] != null && data["latest"]["avg_base_fee_mtokens"] != null && data["latest"]["med_capacity"] != null && data["latest"]["med_fee_rate"] != null && data["latest"]["med_base_fee_mtokens"] != null && data["latest"]["clearnet_tor_nodes"] != null)
                 {
@@ -2188,7 +2191,7 @@ namespace SATSuma
             try
             {
                 using var client = new HttpClient();
-                var response = client.GetAsync(NodeURL + "v1/fees/mempool-blocks").Result;
+                var response = client.GetAsync($"{NodeURL}v1/fees/mempool-blocks").Result;
                 var json = response.Content.ReadAsStringAsync().Result;
                 var data = JArray.Parse(json).FirstOrDefault();
 
@@ -2291,7 +2294,7 @@ namespace SATSuma
                     dblSecondsBetweenBlocks = 0;
                 }
                 TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
-                string timeString = string.Format("{0:%m}m {0:%s}s", time);
+                string timeString = $"{time:mm}m {time:ss}s";
                 string avgTimeBetweenBlocks = timeString;
                 string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
                 string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
@@ -2499,7 +2502,7 @@ namespace SATSuma
                     AddressValidShowControls();
                     lblAddressType.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressType.Text = addressType + " address";
+                        lblAddressType.Text = $"{addressType} address";
                     });
                     // generate QR code for address
                     QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -2647,8 +2650,8 @@ namespace SATSuma
         {
             try
             {
-                var request = "address/" + addressString;
-                var RequestURL = NodeURL + request;
+                var request = $"address/{addressString}";
+                var RequestURL = $"{NodeURL}{request}";
                 var client = new HttpClient();
                 LightUpNodeLight();
                 var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
@@ -2703,23 +2706,23 @@ namespace SATSuma
                         });
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["chain_stats"]["funded_txo_count"] + " outputs)";
+                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["chain_stats"]["funded_txo_count"]} outputs)";
                         });
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(Convert.ToDecimal(addressData["chain_stats"]["funded_txo_sum"]) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"])).ToString();
+                            lblAddressConfirmedSpent.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
                         });
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentOutputs.Text = "(" + addressData["chain_stats"]["spent_txo_count"] + " outputs)";
+                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["chain_stats"]["spent_txo_count"]} outputs)";
                         });
                         var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
                         var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
@@ -2733,11 +2736,11 @@ namespace SATSuma
                         });
                         lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                            lblAddressConfirmedUnspentOutputs.Text = $"({unSpentTxOutputs} outputs)";
                         });
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(confirmedUnspent / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                 }
@@ -2771,11 +2774,11 @@ namespace SATSuma
                         });
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedOutputs.Text = "(" + addressData["mempool_stats"]["funded_txo_count"] + " outputs)";
+                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["mempool_stats"]["funded_txo_count"]} outputs)";
                         });
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(Convert.ToDecimal(addressData["mempool_stats"]["funded_txo_sum"]) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
                         {
@@ -2783,11 +2786,11 @@ namespace SATSuma
                         });
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(Convert.ToDecimal(addressData["mempool_stats"]["spent_txo_sum"]) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentOutputs.Text = "(" + addressData["mempool_stats"]["spent_txo_count"] + " outputs)";
+                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["mempool_stats"]["spent_txo_count"]} outputs)";
                         });
                         var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
                         var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
@@ -2801,11 +2804,11 @@ namespace SATSuma
                         });
                         lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(unSpentTxOutputs) + " outputs)";
+                            lblAddressConfirmedUnspentOutputs.Text = $"({unSpentTxOutputs} outputs)";
                         });
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(confirmedUnspent / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                 }
@@ -2847,14 +2850,14 @@ namespace SATSuma
                         });
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(totalReceived / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalReceived) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
                         int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
                         int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedOutputs.Text = "(" + totalReceivedOutputs + " outputs)";
+                            lblAddressConfirmedReceivedOutputs.Text = $"({totalReceivedOutputs} outputs)";
                         });
 
                         long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
@@ -2867,14 +2870,14 @@ namespace SATSuma
                         });
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(totalSpent / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalSpent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
                         int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
                         int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentOutputs.Text = "(" + totalSpentOutputs + " outputs)";
+                            lblAddressConfirmedSpentOutputs.Text = $"({totalSpentOutputs} outputs)";
                         });
 
                         var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
@@ -2900,11 +2903,11 @@ namespace SATSuma
                         });
                         lblAddressConfirmedUnspentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentOutputs.Text = "(" + Convert.ToString(totalUnspentTXOutputs) + " outputs)";
+                            lblAddressConfirmedUnspentOutputs.Text = $"({totalUnspentTXOutputs} outputs)";
                         });
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(totalUnspent / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                 }
@@ -3028,7 +3031,7 @@ namespace SATSuma
                 // Add the items to the ListView
                 int counter = 0; // used to count rows in list as they're added
                 WebClient client2 = new WebClient();
-                string CurrentBlockHeightStringForCalc = client2.DownloadString(NodeURL + "blocks/tip/height");
+                string CurrentBlockHeightStringForCalc = client2.DownloadString($"{NodeURL}blocks/tip/height");
 
                 foreach (AddressTransactions transaction in transactions)
                 {
@@ -3046,11 +3049,11 @@ namespace SATSuma
                     balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
                     if (balanceChange >= 0)
                     {
-                        balanceChangeString = "+" + balanceChange.ToString("0.00000000"); // add a + for positive numbers
+                        balanceChangeString = $"+{balanceChange:0.00000000}"; // add a + for positive numbers
                     }
                     else
                     {
-                        balanceChangeString = balanceChange.ToString("0.00000000"); // - already there for negatives
+                        balanceChangeString = $"{balanceChange:0.00000000}"; // - already there for negatives
                     }
 
                     ListViewItem item = new ListViewItem(transaction.Txid); // create new row
@@ -3122,7 +3125,7 @@ namespace SATSuma
                 {
                     lblAddressTXPositionInList.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressTXPositionInList.Text = "Transactions " + (TotalAddressTransactionRowsAdded - counter + 1) + " - " + (TotalAddressTransactionRowsAdded) + " of " + lblAddressConfirmedTransactionCount.Text;
+                        lblAddressTXPositionInList.Text = $"Transactions {TotalAddressTransactionRowsAdded - counter + 1} - {TotalAddressTransactionRowsAdded} of {lblAddressConfirmedTransactionCount.Text}";
                     });
                 }
                 else
@@ -3437,8 +3440,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
-
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     if (e.Item.Selected)
                     {
@@ -3768,7 +3770,7 @@ namespace SATSuma
                     // display block hash
                     using (WebClient client = new WebClient())
                     {
-                        string BlockHashURL = NodeURL + "block-height/" + submittedBlockHeight;
+                        string BlockHashURL = $"{NodeURL}block-height/{submittedBlockHeight}";
                         LightUpNodeLight();
                         string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
                         lblBlockHash.Invoke((MethodInvoker)delegate
@@ -3778,7 +3780,7 @@ namespace SATSuma
                     }
                     lblBlockBlockHeight.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockBlockHeight.Text = "Block " + numericUpDownSubmittedBlockNumber.Text;
+                        lblBlockBlockHeight.Text = $"Block {numericUpDownSubmittedBlockNumber.Text}";
                         lblBlockBlockHeight.Location = new Point((panel105.Width / 2) - (lblBlockBlockHeight.Width / 2), lblBlockBlockHeight.Location.Y);
                     });
 
@@ -3857,7 +3859,7 @@ namespace SATSuma
                     {
                         lblTotalFeesFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (totalBlockFeesDec * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTotalFeesFiat.Text = $"{lblHeaderPrice.Text[0]}{(totalBlockFeesDec * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     lblBlockFeeChart.Invoke((MethodInvoker)delegate
@@ -3870,7 +3872,7 @@ namespace SATSuma
                     {
                         lblNonce.Invoke((MethodInvoker)delegate
                         {
-                            lblNonce.Text = "0x" + nonceLong.ToString("X");
+                            lblNonce.Text = $"0x{nonceLong:X}";
                         });
                     }
 
@@ -3884,7 +3886,7 @@ namespace SATSuma
                     {
                         lblRewardFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblRewardFiat.Text = lblHeaderPrice.Text[0] + ((RewardDec / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{((RewardDec / 100000000) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
 
@@ -3893,10 +3895,9 @@ namespace SATSuma
                         lblBlockScreenChartReward.Location = new Point(lblReward.Location.X + lblReward.Width, lblBlockScreenChartReward.Location.Y);
                     });
 
-
                     lblBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
+                        lblBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras.FeeRange[0])}-{Convert.ToInt32(blocks[0].Extras.FeeRange[6])} / {Convert.ToInt32(blocks[0].Extras.MedianFee)}";
                     });
                     lblBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
                     {
@@ -4052,7 +4053,7 @@ namespace SATSuma
                     {
                         lblBlockTXPositionInList.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockTXPositionInList.Text = "Transactions " + (TotalBlockTransactionRowsAdded - counter + 1) + " - " + (TotalBlockTransactionRowsAdded) + " of " + lblNumberOfTXInBlock.Text;
+                            lblBlockTXPositionInList.Text = $"Transactions {TotalBlockTransactionRowsAdded - counter + 1} - {TotalBlockTransactionRowsAdded} of {lblNumberOfTXInBlock.Text}";
                         });
                     }
                     else
@@ -4282,7 +4283,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -4572,7 +4573,7 @@ namespace SATSuma
         {
             ToggleLoadingAnimation("enable"); // start the loading animation
             DisableEnableTransactionButtons("disable"); // disable buttons during operation
-            string url = NodeURL + "tx/" + transactionId;
+            string url = $"{NodeURL}tx/{transactionId}";
             using HttpClient client = new HttpClient();
             LightUpNodeLight();
             HttpResponseMessage response = await client.GetAsync(url);
@@ -4701,11 +4702,11 @@ namespace SATSuma
 
                     lblTransactionSize.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionSize.Text = Convert.ToString(transaction.Size) + " bytes";
+                        lblTransactionSize.Text = $"{transaction.Size} bytes";
                     });
                     lblTransactionWeight.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionWeight.Text = Convert.ToString(transaction.Weight) + " MWU";
+                        lblTransactionWeight.Text = $"{transaction.Weight} MWU";
                     });
                     lblTransactionFee.Invoke((MethodInvoker)delegate
                     {
@@ -4716,36 +4717,35 @@ namespace SATSuma
                     {
                         lblTransactionFeeFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionFeeFiat.Text = lblHeaderPrice.Text[0] + (transactionFeeDec * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTransactionFeeFiat.Text = $"{lblHeaderPrice.Text[0]}{(transactionFeeDec * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-
                     if (transaction.Vin.Count() == 1)
                     {
                         lblTransactionInputCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionInputCount.Text = Convert.ToString(transaction.Vin.Count()) + " input";
+                            lblTransactionInputCount.Text = $"{transaction.Vin.Count()} input";
                         });
                     }
                     else
                     {
                         lblTransactionInputCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionInputCount.Text = Convert.ToString(transaction.Vin.Count()) + " inputs";
+                            lblTransactionInputCount.Text = $"{transaction.Vin.Count()} inputs";
                         });
                     }
                     if (transaction.Vout.Count() == 1)
                     {
                         lblTransactionOutputCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionOutputCount.Text = Convert.ToString(transaction.Vout.Count()) + " output";
+                            lblTransactionOutputCount.Text = $"{transaction.Vout.Count()} output";
                         });
                     }
                     else
                     {
                         lblTransactionOutputCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionOutputCount.Text = Convert.ToString(transaction.Vout.Count()) + " outputs";
+                            lblTransactionOutputCount.Text = $"{transaction.Vout.Count()} outputs";
                         });
                     }
                     // ----------------- central bit of diagram
@@ -4767,7 +4767,7 @@ namespace SATSuma
 
                     lblTotalInputValueFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblTotalInputValueFiat.Text = lblHeaderPrice.Text[0] + (decTotalBitcoinIn * OneBTCinSelectedCurrency).ToString("N2");
+                        lblTotalInputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(decTotalBitcoinIn * OneBTCinSelectedCurrency):N2}";
                         lblTotalInputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) - (lblTotalInputValueFiat.Width / 2) - (int)(95 * UIScale), lblTotalInputValue.Location.Y + (int)(14 * UIScale));
                     });
 
@@ -4786,7 +4786,7 @@ namespace SATSuma
 
                     lblTotalOutputValueFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblTotalOutputValueFiat.Text = lblHeaderPrice.Text[0] + (decTotalBitcoinOut * OneBTCinSelectedCurrency).ToString("N2");
+                        lblTotalOutputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(decTotalBitcoinOut * OneBTCinSelectedCurrency):N2}";
                         lblTotalOutputValueFiat.Location = new Point((panelTransactionDiagram.Size.Width / 2) + (int)(95 * UIScale) - (lblTotalOutputValueFiat.Width / 2), lblTotalOutputValue.Location.Y + (int)(14 * UIScale));
                     });
 
@@ -5044,7 +5044,7 @@ namespace SATSuma
                                 .Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
                                 .ToArray();
                             string ascii = Encoding.ASCII.GetString(bytes);
-                            OutputAddress = "OP_RETURN: " + ascii;
+                            OutputAddress = $"OP_RETURN: {ascii}";
                         }
 
                         ListViewItem item = new ListViewItem(OutputAddress); // create new row
@@ -5276,7 +5276,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -5323,7 +5323,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -5980,9 +5980,9 @@ namespace SATSuma
                         decimal sizeInMB = block.Size;
                         sizeInMB /= 1000000;
                         item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
-                        string feerange = Convert.ToString(Convert.ToInt32(block.Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(block.Extras.FeeRange[6]));
+                        string feerange = $"{Convert.ToInt32(block.Extras.FeeRange[0])}-{Convert.ToInt32(block.Extras.FeeRange[6])}";
                         item.SubItems.Add(feerange.ToString());
-                        string medFee = Convert.ToString("~" + Convert.ToInt32(block.Extras.MedianFee));
+                        string medFee = $"~{Convert.ToInt32(block.Extras.MedianFee)}";
                         item.SubItems.Add(medFee.ToString());
                         string RewardInSats = Convert.ToString(block.Extras.Reward);
                         decimal RewardInBTC = ConvertSatsToBitcoin(RewardInSats);
@@ -6033,11 +6033,11 @@ namespace SATSuma
                         }
                         lblBlockListPositionInList.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListPositionInList.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First() + " of " + lblBlockNumber.Text;
+                            lblBlockListPositionInList.Text = $"Blocks {blocklist.Last()} - {blocklist.First()} of {lblBlockNumber.Text}";
                         });
                         label6.Invoke((MethodInvoker)delegate
                         {
-                            label6.Text = "Blocks " + blocklist.Last() + " - " + blocklist.First();
+                            label6.Text = $"Blocks {blocklist.Last()} - {blocklist.First()}";
                         });
                     }
                     else
@@ -6212,7 +6212,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -6305,7 +6305,7 @@ namespace SATSuma
                             using (WebClient client = new WebClient())
                             {
                                 LightUpNodeLight();
-                                string BlockHashURL = NodeURL + "block-height/" + item.SubItems[0].Text;
+                                string BlockHashURL = $"{NodeURL}block-height/{item.SubItems[0].Text}";
                                 string BlockHash = client.DownloadString(BlockHashURL); // get hash of provided block
                                 if (!string.IsNullOrEmpty(BlockHash))
                                 {
@@ -6370,7 +6370,7 @@ namespace SATSuma
                                 {
                                     lblBlockListNonce.Invoke((MethodInvoker)delegate
                                     {
-                                        lblBlockListNonce.Text = "0x" + nonceLong.ToString("X");
+                                        lblBlockListNonce.Text = $"0x{nonceLong:X}";
                                         lblBlockListNonce.Location = new Point(label24.Location.X + label24.Width, lblBlockListNonce.Location.Y);
                                     });
                                 }
@@ -6399,7 +6399,7 @@ namespace SATSuma
                                 });
                                 lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListBlockFeeRangeAndMedianFee.Text = Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[0])) + "-" + Convert.ToString(Convert.ToInt32(blocks[0].Extras.FeeRange[6])) + " / " + Convert.ToString(Convert.ToInt32(blocks[0].Extras.MedianFee));
+                                    lblBlockListBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras.FeeRange[0])}-{Convert.ToInt32(blocks[0].Extras.FeeRange[6])} / {Convert.ToInt32(blocks[0].Extras.MedianFee)}";
                                     lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
                                 });
                                 lblBlockListAverageFee.Invoke((MethodInvoker)delegate
@@ -6432,7 +6432,7 @@ namespace SATSuma
                                 });
                                 lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListBlockHeight.Text = "Block height: " + Convert.ToString(blocks[0].Height);
+                                    lblBlockListBlockHeight.Text = $"Block height: {blocks[0].Height}";
                                 });
                                 lblBlockListPoolRanking.Invoke((MethodInvoker)delegate
                                 {
@@ -6736,9 +6736,9 @@ namespace SATSuma
                 listViewXpubAddresses.Clear();
                 lblP2SHSummary.Text = "";
                 lblP2SHUsedAddresses.Text = "0 used";
-                lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + "0.00";
-                lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + "0.00";
-                lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + "0.00";
+                lblXpubConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
+                lblXpubConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
+                lblXpubConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
                 if (textBoxSubmittedXpub.Text == "")
                 {
                     lblValidXpubIndicator.Invoke((MethodInvoker)delegate
@@ -7157,7 +7157,7 @@ namespace SATSuma
                         }
                         label174.Invoke((MethodInvoker)delegate
                         {
-                            label174.Text = "your node (" + hostname + ")";
+                            label174.Text = $"your node ({hostname})";
                         });
                         MoveNodeSelections();
                         lblXpubScreenOwnNodeStatus.Invoke((MethodInvoker)delegate
@@ -7377,19 +7377,19 @@ namespace SATSuma
 
                     label140.Invoke((MethodInvoker)delegate
                     {
-                        label140.Text = "P2WPKH path " + DerivationPath;
+                        label140.Text = $"P2WPKH path {DerivationPath}";
                     });
 
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in segwitAddresses) // (we break when we run out of used addresses)
                     {
-                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        string truncatedAddressForDisplay = $"{address.ToString().Substring(0, 10)}...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                            lblXpubStatus.Text = $"Deriving P2WPKH Bech32 addresses\r\nChecking address {checkingAddressCount} ({truncatedAddressForDisplay})\r\nConsecutive unused addresses: {consecutiveUnusedAddressesForType}";
                         });
-                        var request = "address/" + address;
-                        var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
+                        var request = $"address/{address}";
+                        var RequestURL = $"{textBoxXpubScreenOwnNodeURL.Text}{request}";
                         var client = new HttpClient();
                         LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
@@ -7515,7 +7515,7 @@ namespace SATSuma
                             }
                             lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                                lblCheckEachAddressTypeCount.Text = $"{consecutiveUnusedAddressesForType}/{MaxNumberOfConsecutiveUnusedAddresses + 1}";
                             });
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
@@ -7528,7 +7528,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
+                                lblCheckAllAddressTypesCount.Text = $"{totalUnusedAddresses}/{progressBarCheckAllAddressTypes.Maximum}";
                             });
                             // assume there are no more used addresses at this point
                             if (consecutiveUnusedAddressesForType > MaxNumberOfConsecutiveUnusedAddresses)
@@ -7568,7 +7568,7 @@ namespace SATSuma
                         checkingAddressCount++;
                         lblSegwitUsedAddresses.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitUsedAddresses.Text = Convert.ToString(usedSegwitAddresses) + " used";
+                            lblSegwitUsedAddresses.Text = $"{usedSegwitAddresses} used";
                         });
                         // format values before displaying them in the summary
                         if (segwitTotalConfirmedReceived > 0)
@@ -7599,7 +7599,7 @@ namespace SATSuma
                         }
                         lblSegwitSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitSummary.Text = segwitTotalConfirmedReceivedDisplay + ", " + segwitTotalConfirmedSpentDisplay + ", " + segwitAddressesConfirmedUnspentBalanceDisplay;
+                            lblSegwitSummary.Text = $"{segwitTotalConfirmedReceivedDisplay}, {segwitTotalConfirmedSpentDisplay}, {segwitAddressesConfirmedUnspentBalanceDisplay}";
                         });
                     }
                     consecutiveUnusedAddressesForType = 0;
@@ -7629,13 +7629,13 @@ namespace SATSuma
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in legacyAddresses) // (we break when we run out of addresses with a balance)
                     {
-                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        string truncatedAddressForDisplay = $"{address.ToString().Substring(0, 10)}...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblXpubStatus.Text = "Deriving P2PKH legacy addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                            lblXpubStatus.Text = $"Deriving P2PKH legacy addresses\r\nChecking address {checkingAddressCount} ({truncatedAddressForDisplay})\r\nConsecutive unused addresses: {consecutiveUnusedAddressesForType}";
                         });
-                        var request = "address/" + address;
-                        var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
+                        var request = $"address/{address}";
+                        var RequestURL = $"{textBoxXpubScreenOwnNodeURL.Text}{request}";
                         var client = new HttpClient();
                         LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
@@ -7746,7 +7746,7 @@ namespace SATSuma
 
                         label140.Invoke((MethodInvoker)delegate
                         {
-                            label140.Text = "P2PKH path " + DerivationPath;
+                            label140.Text = $"P2PKH path {DerivationPath}";
                         });
 
                         if (confirmedReceivedForCalc == 0)
@@ -7765,7 +7765,7 @@ namespace SATSuma
                             }
                             lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                                lblCheckEachAddressTypeCount.Text = $"{consecutiveUnusedAddressesForType}/{MaxNumberOfConsecutiveUnusedAddresses + 1}";
                             });
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
@@ -7778,7 +7778,8 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
+                                lblCheckAllAddressTypesCount.Text = $"{totalUnusedAddresses}/{progressBarCheckAllAddressTypes.Maximum}";
+
                             });
 
                             // assume there are no more used addresses at this point
@@ -7819,7 +7820,7 @@ namespace SATSuma
                         checkingAddressCount++;
                         lblLegacyUsedAddresses.Invoke((MethodInvoker)delegate
                         {
-                            lblLegacyUsedAddresses.Text = Convert.ToString(usedLegacyAddresses) + " used";
+                            lblLegacyUsedAddresses.Text = $"{usedLegacyAddresses} used";
                         });
                         // format values before displaying them in the summary
                         if (legacyTotalConfirmedReceived > 0)
@@ -7850,7 +7851,7 @@ namespace SATSuma
                         }
                         lblLegacySummary.Invoke((MethodInvoker)delegate
                         {
-                            lblLegacySummary.Text = legacyTotalConfirmedReceivedDisplay + ", " + legacyTotalConfirmedSpentDisplay + ", " + legacyAddressesConfirmedUnspentBalanceDisplay;
+                            lblLegacySummary.Text = $"{legacyTotalConfirmedReceivedDisplay}, {legacyTotalConfirmedSpentDisplay}, {legacyAddressesConfirmedUnspentBalanceDisplay}";
                         });
                     }
                     consecutiveUnusedAddressesForType = 0;
@@ -7878,13 +7879,13 @@ namespace SATSuma
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in segwitP2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
-                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        string truncatedAddressForDisplay = $"{address.ToString().Substring(0, 10)}...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                            lblXpubStatus.Text = $"Deriving P2SH-P2WPKH addresses\r\nChecking address {checkingAddressCount} ({truncatedAddressForDisplay})\r\nConsecutive unused addresses: {consecutiveUnusedAddressesForType}";
                         });
-                        var request = "address/" + address;
-                        var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
+                        var request = $"address/{address}";
+                        var RequestURL = $"{textBoxXpubScreenOwnNodeURL.Text}{request}";
                         var client = new HttpClient();
                         LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
@@ -7994,7 +7995,7 @@ namespace SATSuma
 
                         label140.Invoke((MethodInvoker)delegate
                         {
-                            label140.Text = "P2SH-P2WPKH path " + DerivationPath;
+                            label140.Text = $"P2SH-P2WPKH path {DerivationPath}";
                         });
 
                         string segwitP2SHTotalConfirmedReceivedDisplay = "";
@@ -8017,7 +8018,7 @@ namespace SATSuma
                             }
                             lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                                lblCheckEachAddressTypeCount.Text = $"{consecutiveUnusedAddressesForType}/{MaxNumberOfConsecutiveUnusedAddresses + 1}";
                             });
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
@@ -8030,7 +8031,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
+                                lblCheckAllAddressTypesCount.Text = $"{totalUnusedAddresses}/{progressBarCheckAllAddressTypes.Maximum}";
                             });
 
                             // assume there are no more used addresses at this point
@@ -8071,7 +8072,7 @@ namespace SATSuma
                         checkingAddressCount++;
                         lblSegwitP2SHUsedAddresses.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitP2SHUsedAddresses.Text = Convert.ToString(usedSegwitP2SHAddresses) + " used";
+                            lblSegwitP2SHUsedAddresses.Text = $"{usedSegwitP2SHAddresses} used";
                         });
                         // format values before displaying them in the summary
                         if (segwitP2SHTotalConfirmedReceived > 0)
@@ -8102,7 +8103,7 @@ namespace SATSuma
                         }
                         lblSegwitP2SHSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblSegwitP2SHSummary.Text = segwitP2SHTotalConfirmedReceivedDisplay + ", " + segwitP2SHTotalConfirmedSpentDisplay + ", " + segwitP2SHAddressesConfirmedUnspentBalanceDisplay;
+                            lblSegwitP2SHSummary.Text = $"{segwitP2SHTotalConfirmedReceivedDisplay}, {segwitP2SHTotalConfirmedSpentDisplay}, {segwitP2SHAddressesConfirmedUnspentBalanceDisplay}";
                         });
                     }
                     consecutiveUnusedAddressesForType = 0;
@@ -8133,13 +8134,13 @@ namespace SATSuma
                     // query the balance for each address
                     foreach (NBitcoin.BitcoinAddress address in P2SHAddresses) // (we break when we run out of addresses with a balance)
                     {
-                        string truncatedAddressForDisplay = address.ToString().Substring(0, 10) + "...";
+                        string truncatedAddressForDisplay = $"{address.ToString().Substring(0, 10)}...";
                         lblXpubStatus.Invoke((MethodInvoker)delegate
                         {
-                            lblXpubStatus.Text = "Deriving P2SH addresses\r\nChecking address " + checkingAddressCount + " (" + truncatedAddressForDisplay + ")\r\nConsecutive unused addresses: " + consecutiveUnusedAddressesForType;
+                            lblXpubStatus.Text = $"Deriving P2SH addresses\r\nChecking address {checkingAddressCount} ({truncatedAddressForDisplay})\r\nConsecutive unused addresses: {consecutiveUnusedAddressesForType}";
                         });
-                        var request = "address/" + address;
-                        var RequestURL = textBoxXpubScreenOwnNodeURL.Text + request;
+                        var request = $"address/{address}";
+                        var RequestURL = $"{textBoxXpubScreenOwnNodeURL.Text}{request}";
                         var client = new HttpClient();
                         LightUpNodeLight();
                         var response = await client.GetAsync($"{RequestURL}"); // get the JSON to get address balance and no of transactions etc
@@ -8246,7 +8247,7 @@ namespace SATSuma
 
                         label140.Invoke((MethodInvoker)delegate
                         {
-                            label140.Text = "P2SH path " + DerivationPath;
+                            label140.Text = $"P2SH path {DerivationPath}";
                         });
 
                         string P2SHTotalConfirmedReceivedDisplay = "";
@@ -8269,7 +8270,7 @@ namespace SATSuma
                             }
                             lblCheckEachAddressTypeCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckEachAddressTypeCount.Text = consecutiveUnusedAddressesForType.ToString() + "/" + (MaxNumberOfConsecutiveUnusedAddresses + 1).ToString();
+                                lblCheckEachAddressTypeCount.Text = $"{consecutiveUnusedAddressesForType}/{MaxNumberOfConsecutiveUnusedAddresses + 1}";
                             });
                             // progress bar for all address types
                             if (totalUnusedAddresses < progressBarCheckAllAddressTypes.Maximum)
@@ -8282,7 +8283,7 @@ namespace SATSuma
                             }
                             lblCheckAllAddressTypesCount.Invoke((MethodInvoker)delegate
                             {
-                                lblCheckAllAddressTypesCount.Text = totalUnusedAddresses.ToString() + "/" + progressBarCheckAllAddressTypes.Maximum.ToString();
+                                lblCheckAllAddressTypesCount.Text = $"{totalUnusedAddresses}/{progressBarCheckAllAddressTypes.Maximum}";
                             });
 
                             // assume there are no more used addresses at this point
@@ -8322,7 +8323,7 @@ namespace SATSuma
                         checkingAddressCount++;
                         lblP2SHUsedAddresses.Invoke((MethodInvoker)delegate
                         {
-                            lblP2SHUsedAddresses.Text = Convert.ToString(usedP2SHAddresses) + " used";
+                            lblP2SHUsedAddresses.Text = $"{usedP2SHAddresses} used";
                         });
                         // format values before displaying them in the summary
                         if (P2SHTotalConfirmedReceived > 0)
@@ -8353,7 +8354,7 @@ namespace SATSuma
                         }
                         lblP2SHSummary.Invoke((MethodInvoker)delegate
                         {
-                            lblP2SHSummary.Text = P2SHTotalConfirmedReceivedDisplay + ", " + P2SHTotalConfirmedSpentDisplay + ", " + P2SHAddressesConfirmedUnspentBalanceDisplay;
+                            lblP2SHSummary.Text = $"{P2SHTotalConfirmedReceivedDisplay}, {P2SHTotalConfirmedSpentDisplay}, {P2SHAddressesConfirmedUnspentBalanceDisplay}";
                         });
                     }
                     consecutiveUnusedAddressesForType = 0;
@@ -8371,7 +8372,7 @@ namespace SATSuma
                 #region totals after processing, hide progress bars, re-enable textboxes
                 lblXpubStatus.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubStatus.Text = "Scan complete\r\n" + numberOfAddressesChecked + " addresses checked";
+                    lblXpubStatus.Text = $"Scan complete\r\n{numberOfAddressesChecked} addresses checked";
                 });
                 lblXpubConfirmedReceived.Invoke((MethodInvoker)delegate
                 {
@@ -8379,23 +8380,23 @@ namespace SATSuma
                 });
                 lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(xpubTotalConfirmedReceived) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                    lblXpubConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(xpubTotalConfirmedReceived) / 100000000 * OneBTCinSelectedCurrency):N2}";
                 });
                 lblXpubConfirmedSpent.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedSpent)).ToString("0.00000000");
+                    lblXpubConfirmedSpent.Text = $"{ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedSpent)):0.00000000}";
                 });
                 lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(xpubTotalConfirmedSpent) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                    lblXpubConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(xpubTotalConfirmedSpent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                 });
                 lblXpubConfirmedUnspent.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubConfirmedUnspent.Text = ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)).ToString("0.00000000");
+                    lblXpubConfirmedUnspent.Text = $"{ConvertSatsToBitcoin(Convert.ToString(xpubTotalConfirmedUnspent)):0.00000000}";
                 });
                 lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                 {
-                    lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + ((Convert.ToDecimal(xpubTotalConfirmedUnspent) / 100000000) * OneBTCinSelectedCurrency).ToString("N2");
+                    lblXpubConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(xpubTotalConfirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                 });
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxXpubScreenOwnNodeURL.Enabled = true;
@@ -8453,7 +8454,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -8801,7 +8802,7 @@ namespace SATSuma
                 ClearAllChartData();
                 int desiredSpacing = 98; // spacing added to title to force left-align in
                 string spacing = new string('\u00A0', desiredSpacing);
-                string title = string.Format("Mining pool rankings - time period: {0}{1}", chartPeriod, spacing);
+                string title = $"Mining pool rankings - time period: {chartPeriod}{spacing}";
                 formsPlot2.Plot.Title(title, size: (int)(13 * UIScale), color: labelColor, bold: false);
 
                 ToggleLoadingAnimation("enable");
@@ -8843,7 +8844,7 @@ namespace SATSuma
                     string[] labelsAndValuesArray = new string[labelsArray.Length]; // this array is used to label the segments
                     for (int i = 0; i < labelsArray.Count(); i++)
                     {
-                        string labelAndValue = labelsArray[i] + " (" + valuesArray[i] + ")";
+                        string labelAndValue = $"{labelsArray[i]} ({valuesArray[i]})";
                         labelsAndValuesArray[i] = labelAndValue;
                     }
 
@@ -8895,7 +8896,7 @@ namespace SATSuma
                     // Create the pie chart 
                     var pie = formsPlot2.Plot.AddPie(valuesArray);
                     pie.DonutSize = .3;
-                    pie.DonutLabel = Convert.ToString(totalBlockCount - 1 + "\r\nblocks mined\r\n" + "period: " + chartPeriod);
+                    pie.DonutLabel = $"{totalBlockCount - 1}\r\nblocks mined\r\nperiod: {chartPeriod}";
                     pie.CenterFont.Color = Color.Orange;
                     pie.CenterFont.Size = (int)(13 * UIScale);
                     pie.CenterFont.Bold = false;
@@ -8956,7 +8957,7 @@ namespace SATSuma
                 DisableIrrelevantTimePeriods();
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block fee rates - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block fee rates - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -16097,8 +16098,6 @@ namespace SATSuma
 
                 };
 
-                    settingsAlreadySavedInFile = true;
-
                     if (screenMap.ContainsKey(settings.SettingsStartupScreen))
                     {
                         startupScreenToSave = settings.SettingsStartupScreen;
@@ -16117,7 +16116,6 @@ namespace SATSuma
                 });
                 CheckOwnNodeIsOnline();
                 xpubNodeURLInFile = settings.SettingsNode;
-                xpubNodeURLAlreadySavedInFile = true;
                         
                 #endregion
                 #region restore remainder of settings
@@ -16650,7 +16648,6 @@ namespace SATSuma
 
                         RestoreTheme(theme);
                         defaultThemeInFile = settings.SettingsDefaultTheme;
-                        defaultThemeAlreadySavedInFile = true;
                         return;
                     }
                 }
@@ -22742,7 +22739,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: £" + mempoPriceGBP;
+                                mempoTooltipForSelectedCurrency = $"GREEN mempool.space: £{mempoPriceGBP}";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22775,7 +22772,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: €" + mempoPriceEUR;
+                                mempoTooltipForSelectedCurrency = $"GREEN mempool.space: €{mempoPriceEUR}";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22808,7 +22805,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: 🪙" + mempoPriceXAU;
+                                mempoTooltipForSelectedCurrency = $"GREEN mempool.space: 🪙{mempoPriceXAU}";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -22867,25 +22864,25 @@ namespace SATSuma
                     #region construct tooltip text according to selected currency and selected price sources
                     if (!RunBitcoinExplorerAPI && !RunCoingeckoAPI && !RunMempoolSpacePriceAPI)
                     {
-                        sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price: disabled";
+                        sourceOfCurrentPrice = $"Price source(s):\nEnable/disable sources in settings\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price: disabled";
                     }
                     else
                     {
                         if (!btnUSD.Enabled)
                         {
-                            sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings" + "\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = $" + PriceUSD;
+                            sourceOfCurrentPrice = $"Price source(s):\nEnable/disable sources in settings\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price = ${PriceUSD}";
                         }
                         if (!btnGBP.Enabled)
                         {
-                            sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings" + "\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = £" + PriceGBP;
+                            sourceOfCurrentPrice = $"Price source(s):\nEnable/disable sources in settings\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price = £{PriceGBP}";
                         }
                         if (!btnEUR.Enabled)
                         {
-                            sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings" + "\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = €" + PriceEUR;
+                            sourceOfCurrentPrice = $"Price source(s):\nEnable/disable sources in settings\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price = €{PriceEUR}";
                         }
                         if (!btnXAU.Enabled)
                         {
-                            sourceOfCurrentPrice = "Price source(s):\nEnable/disable sources in settings" + "\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price = 🪙" + PriceXAU;
+                            sourceOfCurrentPrice = $"Price source(s):\nEnable/disable sources in settings\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price = 🪙{PriceXAU}";
                         }
                     }
                     
@@ -23049,8 +23046,8 @@ namespace SATSuma
                         if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                         {
                             OneBTCinSelectedCurrency = Convert.ToDecimal(PriceUSD);
-                            mCap = "$" + Convert.ToDecimal(mCapUSD).ToString("N2");
-                            price = "$" + PriceUSD;
+                            mCap = $"${mCapUSD:N2}";
+                            price = $"${PriceUSD}";
                             satsPerUnit = satsUSD;
                         }
                         else
@@ -23083,8 +23080,8 @@ namespace SATSuma
                         if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                         {
                             OneBTCinSelectedCurrency = Convert.ToDecimal(PriceEUR);
-                            mCap = "$" + Convert.ToDecimal(mCapEUR).ToString("N2");
-                            price = "$" + PriceEUR;
+                            mCap = $"${mCapEUR:N2}";
+                            price = $"${PriceEUR}";
                             satsPerUnit = satsEUR;
                         }
                         else
@@ -23116,8 +23113,8 @@ namespace SATSuma
                         if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                         {
                             OneBTCinSelectedCurrency = Convert.ToDecimal(PriceGBP);
-                            mCap = "$" + Convert.ToDecimal(mCapGBP).ToString("N2");
-                            price = "$" + PriceGBP;
+                            mCap = $"${mCapGBP:N2}";
+                            price = $"${PriceGBP}";
                             satsPerUnit = satsGBP;
                         }
                         else
@@ -24332,12 +24329,12 @@ namespace SATSuma
                 // block screen fiat values
                 if (decimal.TryParse(lblTotalFees.Text, out decimal totalBlockFeesDec))
                 {
-                    UpdateLabelValue(lblTotalFeesFiat, lblHeaderPrice.Text[0] + (totalBlockFeesDec * OneBTCinSelectedCurrency).ToString("N2"));
+                    UpdateLabelValue(lblTotalFeesFiat, $"{lblHeaderPrice.Text[0]}{(totalBlockFeesDec * OneBTCinSelectedCurrency):N2}");
                 }
 
                 if (decimal.TryParse(lblReward.Text, out decimal RewardDec))
                 {
-                    UpdateLabelValue(lblRewardFiat, lblHeaderPrice.Text[0] + (RewardDec * OneBTCinSelectedCurrency).ToString("N2"));
+                    UpdateLabelValue(lblRewardFiat, $"{lblHeaderPrice.Text[0]}{(RewardDec * OneBTCinSelectedCurrency):N2}");
                 }
 
                 // address screen
@@ -24345,15 +24342,15 @@ namespace SATSuma
                 {
                     if (decimal.TryParse(lblAddressConfirmedUnspent.Text, out decimal confirmedUnspent))
                     {
-                        UpdateLabelValue(lblAddressConfirmedUnspentFiat, lblHeaderPrice.Text[0] + (confirmedUnspent * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblAddressConfirmedUnspentFiat, $"{lblHeaderPrice.Text[0]}{(confirmedUnspent * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblAddressConfirmedReceived.Text, out decimal confirmedReceived))
                     {
-                        UpdateLabelValue(lblAddressConfirmedReceivedFiat, lblHeaderPrice.Text[0] + (confirmedReceived * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblAddressConfirmedReceivedFiat, $"{lblHeaderPrice.Text[0]}{(confirmedReceived * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblAddressConfirmedSpent.Text, out decimal confirmedSpent))
                     {
-                        UpdateLabelValue(lblAddressConfirmedSpentFiat, lblHeaderPrice.Text[0] + (confirmedSpent * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblAddressConfirmedSpentFiat, $"{lblHeaderPrice.Text[0]}{(confirmedSpent * OneBTCinSelectedCurrency):N2}");
                     }
                 }
 
@@ -24362,15 +24359,15 @@ namespace SATSuma
                 {
                     if (decimal.TryParse(lblTotalOutputValue.Text, out decimal outputValue))
                     {
-                        UpdateLabelValue(lblTotalOutputValueFiat, lblHeaderPrice.Text[0] + (outputValue * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblTotalOutputValueFiat, $"{lblHeaderPrice.Text[0]}{(outputValue * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblTotalInputValue.Text, out decimal inputValue))
                     {
-                        UpdateLabelValue(lblTotalInputValueFiat, lblHeaderPrice.Text[0] + (inputValue * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblTotalInputValueFiat, $"{lblHeaderPrice.Text[0]}{(inputValue * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblTransactionFee.Text, out decimal TXFeeValue))
                     {
-                        UpdateLabelValue(lblTransactionFeeFiat, lblHeaderPrice.Text[0] + (TXFeeValue * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblTransactionFeeFiat, $"{lblHeaderPrice.Text[0]}{(TXFeeValue * OneBTCinSelectedCurrency):N2}");
                     }
                 }
 
@@ -24379,15 +24376,15 @@ namespace SATSuma
                 {
                     if (decimal.TryParse(lblXpubConfirmedReceived.Text, out decimal xpubConfReceived))
                     {
-                        UpdateLabelValue(lblXpubConfirmedReceivedFiat, lblHeaderPrice.Text[0] + (xpubConfReceived * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblXpubConfirmedReceivedFiat, $"{lblHeaderPrice.Text[0]}{(xpubConfReceived * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblXpubConfirmedSpent.Text, out decimal xpubConfSpent))
                     {
-                        UpdateLabelValue(lblXpubConfirmedSpentFiat, lblHeaderPrice.Text[0] + (xpubConfSpent * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblXpubConfirmedSpentFiat, $"{lblHeaderPrice.Text[0]}{(xpubConfSpent * OneBTCinSelectedCurrency):N2}");
                     }
                     if (decimal.TryParse(lblXpubConfirmedUnspent.Text, out decimal xpubConfUnspent))
                     {
-                        UpdateLabelValue(lblXpubConfirmedUnspentFiat, lblHeaderPrice.Text[0] + (xpubConfUnspent * OneBTCinSelectedCurrency).ToString("N2"));
+                        UpdateLabelValue(lblXpubConfirmedUnspentFiat, $"{lblHeaderPrice.Text[0]}{(xpubConfUnspent * OneBTCinSelectedCurrency):N2}");
                     }
                 }
             }
@@ -24549,7 +24546,7 @@ namespace SATSuma
             try
             {
                 using WebClient client = new WebClient();
-                string BlockTipURL = NodeURL + "blocks/tip/height";
+                string BlockTipURL = $"{NodeURL}blocks/tip/height";
                 string BlockTip = client.DownloadString(BlockTipURL);
                 lblBlockNumber.Invoke((MethodInvoker)delegate
                 {
@@ -24572,7 +24569,7 @@ namespace SATSuma
                 decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
                 calculatedBTCInCirculation = totalBitcoinsIssued;
 
-                UpdateLabelValue(lblBTCInCirc, calculatedBTCInCirculation.ToString("N2") + " / 21,000,000");
+                UpdateLabelValue(lblBTCInCirc, $"{calculatedBTCInCirculation:N2} / 21,000,000");
                 if (calculatedBTCInCirculation > 0)
                 {
                     UpdateLabelValue(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
@@ -24589,7 +24586,7 @@ namespace SATSuma
                     lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
                 });
                 decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
-                UpdateLabelValue(lblPercentIssued, Convert.ToString(percentIssued) + "%");
+                UpdateLabelValue(lblPercentIssued, $"{percentIssued}%");
 
                 progressBarPercentIssued.Invoke((MethodInvoker)delegate
                 {
@@ -24663,7 +24660,7 @@ namespace SATSuma
 
             if (errorMessage.Length > MaxErrorMessageLength)
             {
-                errorMessage = errorMessage.Substring(0, MaxErrorMessageLength) + "...";
+                errorMessage = $"{errorMessage.Substring(0, MaxErrorMessageLength)}...";
             }
 
             lblErrorMessage.Invoke((MethodInvoker)delegate
@@ -24730,7 +24727,7 @@ namespace SATSuma
                         });
                         headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub query)";
+                            headerSelectedNodeStatus.Text = $"{hostnameForDisplay} (Xpub query)";
                         });
                         lblSettingsOwnNodeSelected.Enabled = true;
                         lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
@@ -24750,7 +24747,7 @@ namespace SATSuma
                         });
                         label174.Invoke((MethodInvoker)delegate
                         {
-                            label174.Text = "your node (" + hostnameForDisplay + ")";
+                            label174.Text = $"your node ({hostnameForDisplay})";
                         });
                         MoveNodeSelections();
                         lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
@@ -24766,7 +24763,7 @@ namespace SATSuma
                         });
                         headerSelectedNodeStatus.Invoke((MethodInvoker)delegate
                         {
-                            headerSelectedNodeStatus.Text = hostnameForDisplay + " (Xpub query)";
+                            headerSelectedNodeStatus.Text = $"{hostnameForDisplay} (Xpub query)";
                         });
                         label174.Invoke((MethodInvoker)delegate
                         {
@@ -25012,7 +25009,7 @@ namespace SATSuma
                     {
                         lblErrorMessage.Invoke((MethodInvoker)delegate
                         {
-                            lblErrorMessage.Text = "CheckNetworkStatus: " + ex.Message;
+                            lblErrorMessage.Text = $"CheckNetworkStatus: {ex.Message}";
                         });
                     }
                 }
@@ -25511,7 +25508,7 @@ namespace SATSuma
 
             // Draw the modified tooltip text
             // add some space before the text to make way for the icon
-            tipToShow = "       " + tipToShow;
+            tipToShow = $"       {tipToShow}";
 
             // Remove the color keywords from the tooltip text
             tipToShow = tipToShow.Replace("GREEN", "     ").Replace("RED", "     ").Replace("GREY", "     ").Replace("XX", "       ");
@@ -25526,7 +25523,7 @@ namespace SATSuma
         private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
         {
             // add some space before the text to make way for the icon
-            string toolTipText = "       " + (sender as ToolTip).GetToolTip(e.AssociatedControl);
+            string toolTipText = $"       {(sender as ToolTip).GetToolTip(e.AssociatedControl)}";
             using var g = e.AssociatedControl.CreateGraphics();
             var textSize = Size.Add(TextRenderer.MeasureText(
                 g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
@@ -27023,28 +27020,28 @@ namespace SATSuma
                     {
                         lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                             {
-                                lblBlockRewardAfterHalvingFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockSubsidyAfterHalving.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                                lblBlockRewardAfterHalvingFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockSubsidyAfterHalving.Text) * OneBTCinSelectedCurrency):N2}";
                             });
                     }
                     if (lblBlockSubsidy.Text != "no data" && lblBlockSubsidy.Text != "")
                     {
                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblBlockRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockSubsidy.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lbl24HourBTCSent.Text != "disabled" && lbl24HourBTCSent.Text != "unavailable on TestNet" && lbl24HourBTCSent.Text != "")
                     {
                         lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lbl24HourBTCSentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lbl24HourBTCSent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lbl24HourBTCSentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lbl24HourBTCSent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblNextBlockTotalFees.Text != "disabled" && lblNextBlockTotalFees.Text != "unavailable on TestNet" && lblNextBlockTotalFees.Text != "")
                     {
                         lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblNextBlockTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblNextBlockTotalFeesFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblNextBlockTotalFees.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
 
@@ -27052,15 +27049,15 @@ namespace SATSuma
                     #region recalculate fiat values on xpub screen 
                     lblXpubConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        lblXpubConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblXpubConfirmedReceived.Text) * OneBTCinSelectedCurrency):N2}";
                     });
                     lblXpubConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        lblXpubConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblXpubConfirmedSpent.Text) * OneBTCinSelectedCurrency):N2}";
                     });
                     lblXpubConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblXpubConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                        lblXpubConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblXpubConfirmedUnspent.Text) * OneBTCinSelectedCurrency):N2}";
                     });
                     #endregion
                     #region recalculate fiat values on blocks screen 
@@ -27068,14 +27065,14 @@ namespace SATSuma
                     {
                         lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListTotalFeesInNextBlockFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblBlockListTotalFeesInNextBlockFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblBlockListBlockSubsidy.Text != "" && lblBlockListBlockSubsidy.Text != "no data")
                     {
                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListBlockRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblBlockListBlockSubsidy.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblBlockListBlockRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockListBlockSubsidy.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     #endregion
@@ -27084,21 +27081,21 @@ namespace SATSuma
                     {
                         lblTotalOutputValueFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTotalOutputValueFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalOutputValue.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTotalOutputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalOutputValue.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblTotalInputValue.Text != "totalInputValue" && lblTotalInputValue.Text != "")
                     {
                         lblTotalInputValueFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTotalInputValueFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalInputValue.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTotalInputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalInputValue.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblTransactionFee.Text != "no data" && lblTransactionFee.Text != "")
                     {
                         lblTransactionFeeFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTransactionFeeFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTransactionFee.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTransactionFeeFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTransactionFee.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     #endregion
@@ -27107,21 +27104,21 @@ namespace SATSuma
                     {
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedUnspentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedUnspent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedUnspent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblAddressConfirmedSpent.Text != "no data" && lblAddressConfirmedSpent.Text != "")
                     {
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedSpent.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedSpent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblAddressConfirmedReceived.Text != "no data" && lblAddressConfirmedReceived.Text != "")
                     {
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblAddressConfirmedReceived.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedReceived.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     #endregion
@@ -27130,14 +27127,14 @@ namespace SATSuma
                     {
                         lblRewardFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblRewardFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblReward.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblReward.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     if (lblTotalFees.Text != "no data" && lblTotalFees.Text != "")
                     {
                         lblTotalFeesFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblTotalFeesFiat.Text = lblHeaderPrice.Text[0] + (Convert.ToDecimal(lblTotalFees.Text) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblTotalFeesFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalFees.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     #endregion
@@ -28190,7 +28187,7 @@ namespace SATSuma
                         {
                             blockChainInfoPeriod = "all";
                         }
-                        var response = await client.GetAsync($"charts/market-price?timespan=" + blockChainInfoPeriod + "&format=json");
+                        var response = await client.GetAsync($"charts/market-price?timespan={blockChainInfoPeriod}&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28251,7 +28248,7 @@ namespace SATSuma
                         {
                             blockChainInfoPeriod = "all";
                         }
-                        var response = await client.GetAsync($"charts/market-cap?timespan=" + blockChainInfoPeriod + "&format=json");
+                        var response = await client.GetAsync($"charts/market-cap?timespan={blockChainInfoPeriod}&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28318,7 +28315,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/hashrate/" + chartPeriod);
+                        var response = await client.GetAsync($"v1/mining/hashrate/{chartPeriod}");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28366,7 +28363,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/blocks/fee-rates/" + chartPeriod);
+                        var response = await client.GetAsync($"v1/mining/blocks/fee-rates/{chartPeriod}");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28427,7 +28424,7 @@ namespace SATSuma
                         {
                             blockChainInfoPeriod = "all";
                         }
-                        var response = await client.GetAsync($"charts/total-bitcoins?timespan=" + blockChainInfoPeriod + "&format=json");
+                        var response = await client.GetAsync($"charts/total-bitcoins?timespan={blockChainInfoPeriod}&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28476,7 +28473,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/blocks/sizes-weights/" + chartPeriod);
+                        var response = await client.GetAsync($"v1/mining/blocks/sizes-weights/{chartPeriod}");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28537,7 +28534,7 @@ namespace SATSuma
                         {
                             blockChainInfoPeriod = "all";
                         }
-                        var response = await client.GetAsync($"charts/n-unique-addresses?timespan=" + blockChainInfoPeriod + "&format=json");
+                        var response = await client.GetAsync($"charts/n-unique-addresses?timespan={blockChainInfoPeriod}&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28598,7 +28595,7 @@ namespace SATSuma
                         {
                             blockChainInfoPeriod = "all";
                         }
-                        var response = await client.GetAsync($"charts/utxo-count?timespan=" + blockChainInfoPeriod + "&format=json");
+                        var response = await client.GetAsync($"charts/utxo-count?timespan={blockChainInfoPeriod}&format=json");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28645,7 +28642,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/pools/" + chartPeriod);
+                        var response = await client.GetAsync($"v1/mining/pools/{chartPeriod}");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();
@@ -28691,7 +28688,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/lightning/statistics/" + chartPeriod);
+                        var response = await client.GetAsync($"v1/lightning/statistics/{chartPeriod}");
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync();

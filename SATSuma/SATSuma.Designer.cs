@@ -3788,7 +3788,7 @@
             this.listViewBlockList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewBlockList_ColumnWidthChanging);
             this.listViewBlockList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBlockList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlockList_DrawSubItem);
-            this.listViewBlockList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockList_ItemSelectionChanged);
+            this.listViewBlockList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlockList_ItemSelectionChangedAsync);
             this.listViewBlockList.SelectedIndexChanged += new System.EventHandler(this.ListViewBlockList_SelectedIndexChanged);
             // 
             // panel120
@@ -4303,7 +4303,7 @@
             this.btnNewer15Blocks.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnNewer15Blocks, "View more recent blocks");
             this.btnNewer15Blocks.UseVisualStyleBackColor = false;
-            this.btnNewer15Blocks.Click += new System.EventHandler(this.BtnNewer15Blocks_Click);
+            this.btnNewer15Blocks.Click += new System.EventHandler(this.BtnNewer15Blocks_ClickAsync);
             // 
             // btnOlder15Blocks
             // 
@@ -4327,7 +4327,7 @@
             this.btnOlder15Blocks.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnOlder15Blocks, "View older blocks");
             this.btnOlder15Blocks.UseVisualStyleBackColor = false;
-            this.btnOlder15Blocks.Click += new System.EventHandler(this.BtnOlder15Blocks_Click);
+            this.btnOlder15Blocks.Click += new System.EventHandler(this.BtnOlder15Blocks_ClickAsync);
             // 
             // panel20
             // 
@@ -6591,7 +6591,7 @@
             this.textboxSubmittedAddress.Name = "textboxSubmittedAddress";
             this.textboxSubmittedAddress.Size = new System.Drawing.Size(445, 15);
             this.textboxSubmittedAddress.TabIndex = 2;
-            this.textboxSubmittedAddress.TextChanged += new System.EventHandler(this.TboxSubmittedAddress_TextChanged);
+            this.textboxSubmittedAddress.TextChanged += new System.EventHandler(this.TboxSubmittedAddress_TextChangedAsync);
             // 
             // lblInvalidAddressIndicator
             // 
@@ -6722,7 +6722,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnFirstAddressTransaction, "view most recent transactions");
             this.btnFirstAddressTransaction.UseVisualStyleBackColor = false;
             this.btnFirstAddressTransaction.Visible = false;
-            this.btnFirstAddressTransaction.Click += new System.EventHandler(this.BtnFirstTransactionForAddress_Click);
+            this.btnFirstAddressTransaction.Click += new System.EventHandler(this.BtnFirstTransactionForAddress_ClickAsync);
             // 
             // btnNextAddressTransactions
             // 
@@ -6746,7 +6746,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnNextAddressTransactions, "view next set of transactions");
             this.btnNextAddressTransactions.UseVisualStyleBackColor = false;
             this.btnNextAddressTransactions.Visible = false;
-            this.btnNextAddressTransactions.Click += new System.EventHandler(this.BtnGetNextTransactionsForAddress);
+            this.btnNextAddressTransactions.Click += new System.EventHandler(this.BtnGetNextTransactionsForAddressAsync);
             // 
             // lblAddressConfirmedUnspentOutputs
             // 
@@ -7215,7 +7215,7 @@
             this.btnPreviousBlockTransactions.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPreviousBlockTransactions, "Previous transactions in this block");
             this.btnPreviousBlockTransactions.UseVisualStyleBackColor = false;
-            this.btnPreviousBlockTransactions.Click += new System.EventHandler(this.BtnPreviousBlockTransactions_Click);
+            this.btnPreviousBlockTransactions.Click += new System.EventHandler(this.BtnPreviousBlockTransactions_ClickAsync);
             // 
             // label62
             // 
@@ -7252,7 +7252,7 @@
             this.btnNextBlockTransactions.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnNextBlockTransactions, "Next transactions in this block");
             this.btnNextBlockTransactions.UseVisualStyleBackColor = false;
-            this.btnNextBlockTransactions.Click += new System.EventHandler(this.BtnNextBlockTransactions_Click);
+            this.btnNextBlockTransactions.Click += new System.EventHandler(this.BtnNextBlockTransactions_ClickAsync);
             // 
             // label65
             // 
@@ -7953,7 +7953,7 @@
             this.textBoxTransactionID.Name = "textBoxTransactionID";
             this.textBoxTransactionID.Size = new System.Drawing.Size(503, 15);
             this.textBoxTransactionID.TabIndex = 7;
-            this.textBoxTransactionID.TextChanged += new System.EventHandler(this.TextBoxTransactionID_TextChanged);
+            this.textBoxTransactionID.TextChanged += new System.EventHandler(this.TextBoxTransactionID_TextChangedAsync);
             this.textBoxTransactionID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxTransactionID_KeyPress);
             // 
             // lblInvalidTransaction

@@ -87,7 +87,7 @@ namespace SATSuma
 
         #region ⚡VARIABLE DECLARATION⚡
         #region timers
-        private int intDisplayCountdownToRefresh = 0; // countdown in seconds to next refresh, for display only
+        private int intDisplayCountdownToRefresh; // countdown in seconds to next refresh, for display only
         private int intAPIGroup1TimerIntervalMillisecsConstant = 60000; // milliseconds, used to reset the interval of the timer for api refreshes
         private int APIGroup1DisplayTimerIntervalSecsConstant = 60; // seconds, used to reset the countdown display to its original number
         private int APIRefreshFrequency = 1; // mins. Default value 1. Initial value only
@@ -484,7 +484,7 @@ namespace SATSuma
                     { "4", "big" },
                     { "5", "biggest" }
                 };
-                if (UIScaleInFile == "1")
+                if (String.Compare(UIScaleInFile, "1") == 0)
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
@@ -502,7 +502,7 @@ namespace SATSuma
                         lblScaleAmount.Text = scaleTextMap[UIScaleInFile];
                     });
 
-                    if (UIScaleInFile == "5")
+                    if (String.Compare(UIScaleInFile, "5") == 0)
                     {
                         btnBiggerScale.Invoke((MethodInvoker)delegate
                         {
@@ -722,16 +722,11 @@ namespace SATSuma
                 DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
                 DateTime currentDate = DateTime.Now; // Current date and time
 
-                TimeSpan elapsedTime = currentDate - startDate;
-
                 // Calculate years, months, days, hours, minutes, and seconds
                 int years = currentDate.Year - startDate.Year;
                 int months = currentDate.Month - startDate.Month;
                 int days = currentDate.Day - startDate.Day;
-                int hours = elapsedTime.Hours;
-                int minutes = elapsedTime.Minutes;
-                int seconds = elapsedTime.Seconds;
-
+                
                 // Adjust negative months and days
                 if (days < 0)
                 {
@@ -761,7 +756,7 @@ namespace SATSuma
                                 UpdateLabelValue(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
                                 string newBlockHeight = blocks[0].Height;
                                 string oldBlockHeight = lblBlockNumber.Text;
-                                if ((newBlockHeight != oldBlockHeight) || (firstTimeGettingBlockTip == true))
+                                if (String.Compare(newBlockHeight, oldBlockHeight) != 0 || firstTimeGettingBlockTip)
                                 {
                                     long timestamp = long.Parse(blocks[0].Timestamp);
                                     DateTimeOffset blockTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
@@ -848,7 +843,7 @@ namespace SATSuma
                     #region fees
                     try
                     {
-                        var (fastestFee, halfHourFee, hourFee, economyFee, minimumFee) = MemSpGetFees();
+                        var (fastestFee, halfHourFee, hourFee, economyFee ) = MemSpGetFees();
                         UpdateLabelValue(lblHeaderfeesHighPriority, fastestFee);
                         UpdateLabelValue(lblHeaderFeesMediumPriority, halfHourFee);
                         UpdateLabelValue(lblHeaderFeesLowPriority, hourFee);
@@ -868,7 +863,7 @@ namespace SATSuma
                     #region hashrate
                     try
                     {
-                        var (currentHashrate, currentDifficulty) = MemSpGetHashrate();
+                        var currentHashrate = MemSpGetHashrate();
                         BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
                         
                         UpdateLabelValue(lblHeaderHashrate, $"{currentHashrateFormatted:n0}");
@@ -914,8 +909,7 @@ namespace SATSuma
 
                     if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
                     {
-                        UpdateLabelValue(lblBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency):N2}");
-
+                        UpdateLabelValue(lblBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(decimalBlockSubsidy * OneBTCinSelectedCurrency):N2}");
 
                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
@@ -950,7 +944,7 @@ namespace SATSuma
                     UpdateLabelValue(lblBlockListBlockSubsidy, blockSubsidy);
                     if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
                     {
-                        UpdateLabelValue(lblBlockListBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(blockSubsidy) * OneBTCinSelectedCurrency):N2}");
+                        UpdateLabelValue(lblBlockListBlockRewardFiat, $"{lblHeaderPrice.Text[0]}{(blockSubsidy2 * OneBTCinSelectedCurrency):N2}");
 
                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
                         {
@@ -1006,7 +1000,7 @@ namespace SATSuma
                         });
                         UpdateLabelValue(lblBlocksUntilDiffAdj, remainingBlocks.ToString());
                         string formattedDate;
-                        if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                        if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                         {
                             long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
                             DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
@@ -1564,9 +1558,9 @@ namespace SATSuma
                                 UpdateLabelValue(lblNodes, result7.nodes);
                                 dynamic blockchainSize = result7.blockchain_size;
                                 double blockchainSizeGB = 0;
-                                if (decimal.TryParse(blockchainSize, out decimal blockchainSizeGBtemp))
+                                if (double.TryParse(blockchainSize, out double blockchainSizeGBDouble))
                                 {
-                                    blockchainSizeGB = Math.Round(Convert.ToDouble(blockchainSize) / 1073741824.0, 2);
+                                    blockchainSizeGB = Math.Round(blockchainSizeGBDouble / 1073741824.0, 2);
                                 }
                                 else
                                 {
@@ -1838,7 +1832,7 @@ namespace SATSuma
             return "error";
         }
 
-        private (string currentHashrate, string currentDifficulty) MemSpGetHashrate()
+        private string MemSpGetHashrate()
         {
             try
             {
@@ -1847,26 +1841,24 @@ namespace SATSuma
                 var response = client.DownloadString($"{NodeURL}v1/mining/hashrate/3d");
                 var data = JObject.Parse(response);
                 string currentHashrate = "";
-                string currentDifficulty = "";
                 if (data["currentHashrate"] != null && data["currentDifficulty"] != null)
                 {
                     currentHashrate = Convert.ToString(data["currentHashrate"]);
-                    currentDifficulty = Convert.ToString(data["currentDifficulty"]);
-                    return (currentHashrate, currentDifficulty);
+                    return (currentHashrate);
                 }
                 else
                 {
-                    return ("error", "error");
+                    return ("error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "GetHashrate");
             }
-            return ("error", "error");
+            return ("error");
         }
 
-        private (string fastestFee, string halfHourFee, string hourFee, string economyFee, string minimumFee) MemSpGetFees()
+        private (string fastestFee, string halfHourFee, string hourFee, string economyFee ) MemSpGetFees()
         {
             try
             {
@@ -1874,25 +1866,24 @@ namespace SATSuma
                 LightUpNodeLight();
                 var response = client.DownloadString($"{NodeURL}v1/fees/recommended");
                 var data = JObject.Parse(response);
-                if (data["fastestFee"] != null && data["halfHourFee"] != null && data["hourFee"] != null && data["economyFee"] != null && data["minimumFee"] != null)
+                if (data["fastestFee"] != null && data["halfHourFee"] != null && data["hourFee"] != null && data["economyFee"] != null )
                 {
                     string fastestFee = Convert.ToString(data["fastestFee"]);
                     string halfHourFee = Convert.ToString(data["halfHourFee"]);
                     string hourFee = Convert.ToString(data["hourFee"]);
                     string economyFee = Convert.ToString(data["economyFee"]);
-                    string minimumFee = Convert.ToString(data["minimumFee"]);
-                    return (fastestFee, halfHourFee, hourFee, economyFee, minimumFee);
+                    return (fastestFee, halfHourFee, hourFee, economyFee );
                 }
                 else
                 {
-                    return ("error", "error", "error", "error", "error");
+                    return ("error", "error", "error", "error");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "GetFees");
             }
-            return ("error", "error", "error", "error", "error");
+            return ("error", "error", "error", "error");
         }
 
         private (string progressPercent, string difficultyChange, string estimatedRetargetDate, string remainingBlocks, string remainingTime, string previousRetarget, string nextRetargetHeight, string timeAvg, string timeOffset) MemSpGetDifficultyAdjustment()
@@ -2296,7 +2287,6 @@ namespace SATSuma
                 TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
                 string timeString = $"{time:mm}m {time:ss}s";
                 string avgTimeBetweenBlocks = timeString;
-                string totalBTC = client.DownloadString("https://blockchain.info/q/totalbc"); // total sats in circulation
                 string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
                 string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
                 string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
@@ -2490,7 +2480,12 @@ namespace SATSuma
                 string addressString = textboxSubmittedAddress.Text; // supplied address
 
                 string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
-                if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
+                if (String.Compare(addressType, "P2PKH (legacy)") == 0 ||
+                String.Compare(addressType, "P2SH") == 0 ||
+                String.Compare(addressType, "P2WPKH (segwit)") == 0 ||
+                String.Compare(addressType, "P2WSH") == 0 ||
+                String.Compare(addressType, "P2TT (taproot)") == 0 ||
+                String.Compare(addressType, "unknown") == 0) // if any of these, address is valid
                 {
                     ToggleLoadingAnimation("enable"); // start the loading animation
                     DisableEnableAddressButtons("disable"); // disable buttons during operation
@@ -2586,13 +2581,13 @@ namespace SATSuma
             try
             {
                 NBitcoin.BitcoinAddress bitcoinAddress;
-                if (NodeURL == "https://mempool.space/api/") //mempool.space mainnet
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0) //mempool.space mainnet
                 {
                     bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
                 }
                 else
                 {
-                    if (NodeURL == "https://mempool.space/testnet/api/") //mempool.space testnet
+                    if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0) //mempool.space testnet
                     {
                         bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
                     }
@@ -2676,7 +2671,7 @@ namespace SATSuma
                 var jsonData = await response.Content.ReadAsStringAsync();
                 var addressData = JObject.Parse(jsonData);
 
-                if (addressScreenConfUnconfOrAllTx == "chain" && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+                if (String.Compare(addressScreenConfUnconfOrAllTx, "chain") == 0 && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
                 {
                     if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
                     {
@@ -2744,7 +2739,7 @@ namespace SATSuma
                         });
                     }
                 }
-                if (addressScreenConfUnconfOrAllTx == "mempool") //mempool stats only
+                if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //mempool stats only
                 {
                     if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
                     {
@@ -2812,7 +2807,7 @@ namespace SATSuma
                         });
                     }
                 }
-                if (addressScreenConfUnconfOrAllTx == "all" || (addressScreenConfUnconfOrAllTx == "chain" && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+                if (String.Compare(addressScreenConfUnconfOrAllTx, "all") == 0 || (String.Compare(addressScreenConfUnconfOrAllTx, "chain") == 0 && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
                 {
                     if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null && addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
                     {
@@ -2928,7 +2923,7 @@ namespace SATSuma
         {
             try
             {
-                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
                     panelOwnNodeAddressTXInfo.Visible = false;
@@ -2941,12 +2936,11 @@ namespace SATSuma
                 LightUpNodeLight();
                 var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId);
                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                List<string> txIds = transactions.Select(t => t.Txid).ToList();
 
                 // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
                 if (transactions.Count > 0)
                 {
-                    if (transactions.Last().Status.Confirmed == "true") // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
+                    if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
                     {
                         lastSeenTxId = transactions.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
                     }
@@ -2968,7 +2962,7 @@ namespace SATSuma
                 if (listViewAddressTransactions.Columns.Count == 0)
                 {
                     // If not, add the column header
-                    if (addressScreenConfUnconfOrAllTx == "chain")
+                    if (String.Compare(addressScreenConfUnconfOrAllTx, "chain") == 0)
                     {
                         if (PartOfAnAllAddressTransactionsRequest)
                         {
@@ -2985,14 +2979,14 @@ namespace SATSuma
                             });
                         }
                     }
-                    if (addressScreenConfUnconfOrAllTx == "mempool")
+                    if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0)
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
                             listViewAddressTransactions.Columns.Add(" Transaction ID (unconfirmed)", (int)(260 * UIScale));
                         });
                     }
-                    if (addressScreenConfUnconfOrAllTx == "all")
+                    if (String.Compare(addressScreenConfUnconfOrAllTx, "all") == 0)
                     {
                         listViewAddressTransactions.Invoke((MethodInvoker)delegate
                         {
@@ -3057,7 +3051,7 @@ namespace SATSuma
                     }
 
                     ListViewItem item = new ListViewItem(transaction.Txid); // create new row
-                    if (transaction.Status.Confirmed == "true")
+                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
                     {
                         item.SubItems.Add(transaction.Status.Block_height.ToString()); // add block height
                     }
@@ -3068,7 +3062,7 @@ namespace SATSuma
 
                     item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
 
-                    if (transaction.Status.Confirmed == "true")
+                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
                     {
                         decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
                         decimal TransactionBlockForCalc = transaction.Status.Block_height;
@@ -3094,19 +3088,19 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (addressScreenConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                        if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
                         {
                             btnFirstAddressTransaction.Visible = true;
                         }
                     }
 
-                    if (Convert.ToString(TotalAddressTransactionRowsAdded) == lblAddressConfirmedTransactionCount.Text) // we've shown all the TXs
+                    if (String.Compare(Convert.ToString(TotalAddressTransactionRowsAdded), lblAddressConfirmedTransactionCount.Text) == 0) // we've shown all the TXs
                     {
                         btnNextAddressTransactions.Visible = false; // so we won't need this
                     }
                     else
                     {
-                        if (addressScreenConfUnconfOrAllTx != "mempool") //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                        if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
                         {
                             btnNextAddressTransactions.Visible = true;
                         }
@@ -3135,7 +3129,7 @@ namespace SATSuma
                         lblAddressTXPositionInList.Text = "No transactions to display";
                     });
                 }
-                if (addressScreenConfUnconfOrAllTx == "all") // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
+                if (String.Compare(addressScreenConfUnconfOrAllTx, "all") == 0) // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
                 {
                     addressScreenConfUnconfOrAllTx = "chain";
                 }
@@ -3162,7 +3156,7 @@ namespace SATSuma
                 var address = textboxSubmittedAddress.Text; // Get the address from the address text box
                                                             // Get the last seen transaction ID from the list view
                 string lastSeenTxId;
-                if (listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].SubItems[1].Text == "------")
+                if (String.Compare(listViewAddressTransactions.Items[listViewAddressTransactions.Items.Count - 1].SubItems[1].Text, "------") == 0)
                 {
                     lastSeenTxId = ""; // last seen transaction was unconfirmed, so next call will be for confirmed TXs, starting from the first
                 }
@@ -3535,7 +3529,7 @@ namespace SATSuma
         {
             try
             {
-                if (addressScreenConfUnconfOrAllTx == "mempool")//only one page of unconfirmed tx regardless how many tx there are
+                if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //only one page of unconfirmed tx regardless how many tx there are
                 {
                     btnNextAddressTransactions.Visible = false;
                     btnFirstAddressTransaction.Visible = false;
@@ -3550,7 +3544,7 @@ namespace SATSuma
                         control.Visible = true;
                     });
                 }
-                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
                     panelOwnNodeAddressTXInfo.Visible = false;
@@ -3598,7 +3592,7 @@ namespace SATSuma
         {
             try
             {
-                if (enableOrDisableAddressButtons == "disable")
+                if (String.Compare(enableOrDisableAddressButtons, "disable") == 0)
                 {
                     // get current state of buttons before disabling them
                     btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
@@ -4034,7 +4028,7 @@ namespace SATSuma
                             btnPreviousBlockTransactions.Enabled = true;
                         }
 
-                        if (Convert.ToString(TotalBlockTransactionRowsAdded) == lblNumberOfTXInBlock.Text) // we've shown all the TXs
+                        if (String.Compare(Convert.ToString(TotalBlockTransactionRowsAdded), lblNumberOfTXInBlock.Text) == 0) // we've shown all the TXs
                         {
                             btnNextBlockTransactions.Enabled = false; // so we won't need this
                         }
@@ -4348,7 +4342,7 @@ namespace SATSuma
         {
             try
             {
-                if (enableOrDisableBlockButtons == "disable")
+                if (String.Compare(enableOrDisableBlockButtons, "disable") == 0)
                 {
                     // get current state of buttons before disabling them
                     btnPreviousBlockTransactionsWasEnabled = btnPreviousBlockTransactions.Enabled;
@@ -5109,10 +5103,10 @@ namespace SATSuma
                             {
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
                             }
-                            if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
+                            if (String.Compare(item.SubItems[0].Text, "N/A") != 0 && String.Compare(item.SubItems[0].Text, "") != 0)
                             {
                                 string addresstype = DetermineAddressType(item.SubItems[0].Text);
-                                if (addresstype != "unknown" && addresstype != "Invalid address format")
+                                if (String.Compare(addresstype, "unknown") != 0 && String.Compare(addresstype, "Invalid address format") != 0)
                                 {
                                     btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                     {
@@ -5162,10 +5156,10 @@ namespace SATSuma
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
                             }
 
-                            if (item.SubItems[0].Text != "N/A" && item.SubItems[0].Text != "")
+                            if (String.Compare(item.SubItems[0].Text, "N/A") != 0 && String.Compare(item.SubItems[0].Text, "") != 0)
                             {
                                 string addresstype = DetermineAddressType(item.SubItems[0].Text);
-                                if (addresstype != "unknown" && addresstype != "Invalid address format")
+                                if (String.Compare(addresstype, "unknown") != 0 && String.Compare(addresstype, "Invalid address format") != 0)
                                 {
                                     btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                     {
@@ -5720,7 +5714,7 @@ namespace SATSuma
         {
             try
             {
-                if (enableOrDisableTransactionButtons == "disable")
+                if (String.Compare(enableOrDisableTransactionButtons, "disable") == 0)
                 {
                     // get current state of buttons before disabling them
                     btnTransactionInputsUpWasEnabled = btnTransactionInputsUp.Enabled;
@@ -5995,7 +5989,7 @@ namespace SATSuma
                         counter++; // increment rows for this batch
 
 
-                        if (blocklist.First() == lblBlockNumber.Text) // We're looking at the most recent blocks 
+                        if (String.Compare(blocklist.First(), lblBlockNumber.Text) == 0) // We're looking at the most recent blocks 
                         {
                             btnNewer15Blocks.Enabled = false;
                         }
@@ -6005,7 +5999,7 @@ namespace SATSuma
 
                         }
 
-                        if (counter > 1 && blocklist.Last() == "0") // we've reached the Genesis Block (bottom of the list)
+                        if (counter > 1 && String.Compare(blocklist.Last(), "0") == 0) // we've reached the Genesis Block (bottom of the list)
                         {
                             btnOlder15Blocks.Enabled = false; // so we won't need this
                         }
@@ -6326,7 +6320,6 @@ namespace SATSuma
                                 ToggleLoadingAnimation("disable"); // stop the loading animation
                                 DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
                                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-                                List<string> blocklist = blocks.Select(t => t.Height).ToList();
                                 lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
@@ -6604,7 +6597,7 @@ namespace SATSuma
             {
                 if (!dontDisableButtons)
                 {
-                    if (enableOrDisableBlockListButtons == "disable")
+                    if (String.Compare(enableOrDisableBlockListButtons, "disable") == 0)
                     {
                         // get current state of buttons before disabling them
                         btnViewBlockFromBlockListWasEnabled = btnViewBlockFromBlockList.Enabled;
@@ -7062,7 +7055,7 @@ namespace SATSuma
                                 lblSettingsOwnNodeStatusLight.ForeColor = Color.IndianRed;
                                 lblSettingsOwnNodeStatusLight.Location = new Point(lblSettingsOwnNodeStatus.Location.X - lblSettingsOwnNodeStatusLight.Width, lblSettingsOwnNodeStatusLight.Location.Y);
                             });
-                            if (lblSettingsOwnNodeSelected.Text == "✔️")
+                            if (String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
                             {
                                 lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                                 {
@@ -7105,7 +7098,7 @@ namespace SATSuma
                             lblSettingsOwnNodeStatusLight.ForeColor = Color.IndianRed;
                             lblSettingsOwnNodeStatusLight.Location = new Point(lblSettingsOwnNodeStatus.Location.X - lblSettingsOwnNodeStatusLight.Width, lblSettingsOwnNodeStatusLight.Location.Y);
                         });
-                        if (lblSettingsOwnNodeSelected.Text == "✔️")
+                        if (String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
                         {
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
@@ -7142,7 +7135,7 @@ namespace SATSuma
                         {
                             headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
                         });
-                        if (lblSettingsOwnNodeSelected.Text == "✔️")
+                        if (String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
                         {
                             lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
                             {
@@ -7197,7 +7190,7 @@ namespace SATSuma
                         {
                             lblXpubScreenOwnNodeStatus.Text = "invalid / node offline";
                         });
-                        if (lblSettingsOwnNodeSelected.Text == "✔️")
+                        if (String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
                         {
                             lblSettingsOwnNodeStatus.Invoke((MethodInvoker)delegate
                             {
@@ -7429,7 +7422,6 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                List<string> txIds = transactions.Select(t => t.Txid).ToList();
                                 foreach (AddressTransactions transaction in transactions)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
@@ -7444,7 +7436,7 @@ namespace SATSuma
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
                                     lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
                                 }
@@ -7675,7 +7667,6 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                List<string> txIds = transactions.Select(t => t.Txid).ToList();
                                 foreach (AddressTransactions transaction in transactions)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
@@ -7690,7 +7681,7 @@ namespace SATSuma
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0)// there might be more transactions to get. 
                                 {
                                     lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
                                 }
@@ -7925,7 +7916,6 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                List<string> txIds = transactions.Select(t => t.Txid).ToList();
                                 foreach (AddressTransactions transaction in transactions)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
@@ -7940,7 +7930,7 @@ namespace SATSuma
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
                                     lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
                                 }
@@ -8180,7 +8170,6 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                List<string> txIds = transactions.Select(t => t.Txid).ToList();
                                 foreach (AddressTransactions transaction in transactions)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
@@ -8195,7 +8184,7 @@ namespace SATSuma
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (transactions.Last().Status.Confirmed == "true") // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
                                     lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
                                 }
@@ -8428,21 +8417,21 @@ namespace SATSuma
 
                 if (e.ColumnIndex == 2)
                 {
-                    if (text != "0.00000000") // received
+                    if (String.Compare(text, "0.00000000") != 0) // received
                     {
                         e.SubItem.ForeColor = Color.OliveDrab; // make it green
                     }
                 }
                 if (e.ColumnIndex == 3)
                 {
-                    if (text != "0.00000000") // spent
+                    if (String.Compare(text, "0.00000000") != 0) // spent
                     {
                         e.SubItem.ForeColor = Color.IndianRed; // make it red
                     }
                 }
                 if (e.ColumnIndex == 4)
                 {
-                    if (text != "0.00000000") // unspent
+                    if (String.Compare(text, "0.00000000") != 0) // unspent
                     {
                         e.SubItem.ForeColor = Color.OliveDrab; // make it green if non-zero
                     }
@@ -8580,7 +8569,7 @@ namespace SATSuma
                             {
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
                             }
-                            if (item.SubItems[1].Text == "0")
+                            if (String.Compare(item.SubItems[1].Text, "0") == 0)
                             {
                                 btnViewAddressFromXpub.Enabled = false;
                             }
@@ -8966,15 +8955,12 @@ namespace SATSuma
                 // Create an instance of HttpClient
                 HttpClient client = new HttpClient();
 
-                string url = NodeURL + "v1/mining/blocks/fee-rates/" + chartPeriod;
+                string url = $"{NodeURL}v1/mining/blocks/fee-rates/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     List<BlockFeeRates> feeRatesList = JsonConvert.DeserializeObject<List<BlockFeeRates>>(json.ToString());
-
-                    // set the number of points on the graph to the number of hashrates to display
-                    int pointCount = feeRatesList.Count;
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues1 = feeRatesList.Select(h => (double)(h.AvgFee_100)).ToArray();
@@ -9021,7 +9007,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     Color legendOutlineColour = Color.FromArgb(50,50,50);
-                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                     {
                         legendOutlineColour = Color.FromArgb(50, 50, 50);
                     }
@@ -9077,7 +9063,7 @@ namespace SATSuma
                 chartType = "lightningnodesbynetwork";
 
                 // if chart period too short for this chart, set it to max instead
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
+                if (String.Compare(chartPeriod, "24h") == 0 || String.Compare(chartPeriod, "3d") == 0 || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9089,7 +9075,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Number of Lightning nodes by network - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Number of Lightning nodes by network - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -9099,15 +9085,12 @@ namespace SATSuma
                 // Create an instance of HttpClient
                 HttpClient client = new HttpClient();
 
-                string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                string url = $"{NodeURL}v1/lightning/statistics/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     List<NodesPerNetworkAndCapacity> lightningNodesPerNetworkList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = lightningNodesPerNetworkList.Count;
 
                     // create arrays of doubles
                     double[] yValues1 = lightningNodesPerNetworkList.Select(h => (double)(h.Tor_nodes)).ToArray();
@@ -9136,7 +9119,7 @@ namespace SATSuma
                     formsPlot1.Plot.XAxis.Label("");
 
                     Color legendOutlineColour = Color.FromArgb(50, 50, 50);
-                    if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                    if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                     {
                         legendOutlineColour = Color.FromArgb(50, 50, 50);
                     }
@@ -9192,7 +9175,10 @@ namespace SATSuma
                 btnHashrateScaleLog.Enabled = true;
                 chartType = "hashrate";
                 // if chart period too short for this chart, set it to max instead
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
+                if (String.Compare(chartPeriod, "24h") == 0
+                || String.Compare(chartPeriod, "3d") == 0 
+                || String.Compare(chartPeriod, "1w") == 0
+                || String.Compare(chartPeriod, "1m") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9203,7 +9189,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Hashrate (exahash per second) - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Hashrate (exahash per second) - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -9218,10 +9204,6 @@ namespace SATSuma
 
                     //split the data into two lists
                     List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
-                    List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
-
-                    // set the number of points on the graph to the number of hashrates to display
-                    int pointCount = hashratesList.Count;
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
@@ -9292,7 +9274,10 @@ namespace SATSuma
                 btnHashrateScaleLog.Enabled = false;
                 chartType = "hashratelog";
 
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+                if (String.Compare(chartPeriod, "24h") == 0
+                || String.Compare(chartPeriod, "3d") == 0
+                || String.Compare(chartPeriod, "1w") == 0
+                || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9307,7 +9292,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Hashrate (terrahash per second) - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Hashrate (terrahash per second) - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
@@ -9317,10 +9302,6 @@ namespace SATSuma
 
                     //split the data into two lists
                     List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
-                    List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = hashratesList.Count;
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E12)).ToArray(); // divide by 1E12 to get terrahash
@@ -9412,7 +9393,9 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 chartType = "lightningcapacity";
                 // if chart period too short for this chart, set it to max instead
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
+                if (String.Compare(chartPeriod, "24h") == 0 
+                || String.Compare(chartPeriod, "3d") == 0
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9424,7 +9407,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Lightning network capacity - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Lightning network capacity - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9433,15 +9416,12 @@ namespace SATSuma
                 // Create an instance of HttpClient
                 HttpClient client = new HttpClient();
 
-                string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                string url = $"{NodeURL}v1/lightning/statistics/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     List<NodesPerNetworkAndCapacity> lightningCapacityList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = lightningCapacityList.Count;
 
                     // create arrays of doubles
                     double[] yValuesCapacity = lightningCapacityList.Select(h => (double)(h.Total_capacity / 100000000)).ToArray();
@@ -9510,7 +9490,9 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 chartType = "lightningchannels";
                 // if chart period too short for this chart, set it to max instead
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w")
+                if (String.Compare(chartPeriod, "24h") == 0
+                || String.Compare(chartPeriod, "3d") == 0
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9522,7 +9504,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Lightning network channels - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Lightning network channels - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -9531,15 +9513,12 @@ namespace SATSuma
                 // Create an instance of HttpClient
                 HttpClient client = new HttpClient();
 
-                string url = NodeURL + "v1/lightning/statistics/" + chartPeriod;
+                string url = $"{NodeURL}v1/lightning/statistics/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     List<NodesPerNetworkAndCapacity> lightningChannelsList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = lightningChannelsList.Count;
 
                     // create arrays of doubles
                     double[] yValuesChannels = lightningChannelsList.Select(h => (double)(h.Channel_count)).ToArray();
@@ -9631,7 +9610,7 @@ namespace SATSuma
                 DisableEnableChartButtons("disable");
 
                 // Fetch data from the API
-                string url = NodeURL + "v1/lightning/nodes/countries";
+                string url = $"{NodeURL}v1/lightning/nodes/countries";
                 HttpClient client = new HttpClient();
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
@@ -9710,20 +9689,17 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block rewards (block subsidy plus fees) - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block rewards (block subsidy plus fees) - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
-                string url = NodeURL + "v1/mining/blocks/rewards/" + chartPeriod;
+                string url = $"{NodeURL}v1/mining/blocks/rewards/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
                     List<HistoricRewardsAndPrice> rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
-
-                    // set the number of points on the graph to the number of hashrates to display
-                    int pointCount = rewardsAndPriceList.Count;
 
                     // create arrays of doubles of the rewards and the dates
                     double[] yValues = rewardsAndPriceList.Select(h => (double)(h.AvgRewards / 100000000)).ToArray();
@@ -9799,20 +9775,17 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average total fees per block - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average total fees per block - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
-                string url = NodeURL + "v1/mining/blocks/fees/" + chartPeriod;
+                string url = $"{NodeURL}v1/mining/blocks/fees/{chartPeriod}";
                 LightUpNodeLight();
                 string json = await client.GetStringAsync(url);
                 if (!string.IsNullOrEmpty(json))
                 {
                     // Deserialize JSON array into a list of HistoricFeesAndPrice objects
                     List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
-
-                    // set the number of points on the graph to the number of hashrates to display
-                    int pointCount = feesAndPriceList.Count;
 
                     // create arrays of doubles of the rewards and the dates
                     double[] yValues = feesAndPriceList.Select(h => (double)(h.AvgFees / 100000000)).ToArray();
@@ -9880,7 +9853,10 @@ namespace SATSuma
                 chartType = "difficulty";
 
                 // if chart period too short for this chart, set it to max instead
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "1m")
+                if (String.Compare(chartPeriod, "24h") == 0
+                || String.Compare(chartPeriod, "3d") == 0
+                || String.Compare(chartPeriod, "1w") == 0
+                || String.Compare(chartPeriod, "1m") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9895,7 +9871,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Difficulty - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Difficulty - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates/hashrates/difficulties
@@ -9906,11 +9882,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
                     List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
-
-                    // set the number of points on the graph to the number of hashrates to display
-                    int pointCount = difficultyList.Count;
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
@@ -9978,7 +9950,10 @@ namespace SATSuma
                 btnChartDifficultyLog.Enabled = false;
                 chartType = "difficultylog";
 
-                if (chartPeriod == "24h" || chartPeriod == "3d" || chartPeriod == "1w" || chartPeriod == "2y")
+                if (String.Compare(chartPeriod, "24h") == 0
+                || String.Compare(chartPeriod, "3d") == 0
+                || String.Compare(chartPeriod, "1w") == 0
+                || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
@@ -9993,7 +9968,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Difficulty - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Difficulty - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod);
@@ -10002,11 +9977,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
                     List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = difficultyList.Count;
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
@@ -10114,7 +10085,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Unique addresses - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -10123,9 +10094,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
 
                     List<UniqueAddressesList> AddressesList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = AddressesList.Count;
 
                     // create arrays of doubles of the amounts and the dates
                     double[] yValues = AddressesList.Select(h => (double)(h.Y)).ToArray();
@@ -10208,7 +10176,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Unique addresses - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Unique addresses - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod);
@@ -10217,9 +10185,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
 
                     List<UniqueAddressesList> AddressList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = AddressList.Count;
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = AddressList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -10327,7 +10292,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
@@ -10351,19 +10316,19 @@ namespace SATSuma
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
-                            formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average GBP market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
                         }
                         if (!btnEUR.Enabled) //EUR is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceEUR);
-                            formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average EUR market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
-                            formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average XAU market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
@@ -10373,9 +10338,6 @@ namespace SATSuma
                             item.Y *= exchangeRate;
                         }
                     }
-
-                    // set the number of points on the graph
-                    int pointCount = PriceList.Count;
 
                     // create arrays of doubles of the prices and the dates
                     double[] yValues = PriceList.Select(h => (double)(h.Y)).ToArray();
@@ -10457,7 +10419,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Average USD market price across major bitcoin exchanges - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
@@ -10479,19 +10441,19 @@ namespace SATSuma
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
-                            formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average GBP market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (GBP)", size: 12, bold: false);
                         }
                         if (!btnEUR.Enabled) //EUR is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceEUR);
-                            formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average EUR market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (EUR)", size: 12, bold: false);
                         }
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
-                            formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average XAU market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Price (XAU)", size: 12, bold: false);
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
@@ -10501,9 +10463,6 @@ namespace SATSuma
                             item.Y *= exchangeRate;
                         }
                     }
-
-                    // set the number of points on the graph
-                    int pointCount = PriceList.Count;
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = PriceList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -10610,7 +10569,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Market capitalization in USD - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
@@ -10634,19 +10593,19 @@ namespace SATSuma
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
-                            formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average GBP market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 12, bold: false);
                         }
                         if (!btnEUR.Enabled) //EUR is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceEUR);
-                            formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average EUR market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
-                            formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average XAU market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
@@ -10656,9 +10615,6 @@ namespace SATSuma
                             item.Y *= exchangeRate;
                         }
                     }
-
-                    // set the number of points on the graph
-                    int pointCount = MarketCapList.Count;
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = MarketCapList.Select(h => (double)(h.Y)).ToArray();
@@ -10742,7 +10698,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Market capitalization in USD - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Market capitalization in USD - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of market cap data
                 var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod);
@@ -10764,19 +10720,19 @@ namespace SATSuma
                         if (!btnGBP.Enabled) //GBP is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceGBP);
-                            formsPlot1.Plot.Title("Average GBP market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average GBP market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (GBP)", size: 12, bold: false);
                         }
                         if (!btnEUR.Enabled) //EUR is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceEUR);
-                            formsPlot1.Plot.Title("Average EUR market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average EUR market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (EUR)", size: 12, bold: false);
                         }
                         if (!btnXAU.Enabled) //XAU is selected
                         {
                             selectedCurrency = Convert.ToDecimal(priceXAU);
-                            formsPlot1.Plot.Title("Average XAU market price across major bitcoin exchanges - " + chartPeriod, size: 13, bold: true);
+                            formsPlot1.Plot.Title($"Average XAU market price across major bitcoin exchanges - {chartPeriod}", size: 13, bold: true);
                             formsPlot1.Plot.YAxis.Label("Market Capitalization (XAU)", size: 12, bold: false);
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
@@ -10786,9 +10742,6 @@ namespace SATSuma
                             item.Y *= exchangeRate;
                         }
                     }
-
-                    // set the number of points on the graph
-                    int pointCount = MarketCapList.Count;
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = MarketCapList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -10894,7 +10847,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -10904,9 +10857,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(UTXODataJson);
 
                     List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = UTXOList.Count;
 
                     // create arrays of doubles
                     double[] yValues = UTXOList.Select(h => (double)(h.Y)).ToArray();
@@ -10989,7 +10939,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Total number of valid unspent transaction outputs - " + chartPeriod + " (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod);
@@ -10998,9 +10948,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(UTXODataJson);
 
                     List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = UTXOList.Count;
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = UTXOList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -11096,7 +11043,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Block size - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block size - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -11110,13 +11057,8 @@ namespace SATSuma
 
                     //split the data into two lists
                     List<Sizes> blockSizeList = JsonConvert.DeserializeObject<List<Sizes>>(jsonObj["sizes"].ToString());
-                    List<Weights> blockWeightList = JsonConvert.DeserializeObject<List<Weights>>(jsonObj["weights"].ToString());
-
-                    // set the number of points on the graph to the number of records to display
-                    int pointCount = blockSizeList.Count;
 
                     // create arrays of doubles of the hashrates and the dates
-
                     double[] yValues = blockSizeList.Select(h => (double)h.AvgSize / (1000 * 1000)).ToArray();
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = blockSizeList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.Timestamp)).LocalDateTime).ToList();
@@ -11196,7 +11138,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title("Bitcoin circulation - " + chartPeriod, size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Bitcoin circulation - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates and amounts of btc in circulation
@@ -11206,9 +11148,6 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(CirculationJson);
 
                     List<BTCInCircChartCoordinates> CirculationList = JsonConvert.DeserializeObject<List<BTCInCircChartCoordinates>>(jsonObj["values"].ToString());
-
-                    // set the number of points on the graph
-                    int pointCount = CirculationList.Count;
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = CirculationList.Select(h => (double)(h.Y)).ToArray();
@@ -13084,7 +13023,7 @@ namespace SATSuma
                 if (textWidth > columnWidth)
                 {
                     // Truncate the text
-                    var maxText = text.Substring(0, text.Length * columnWidth / textWidth - 3) + "...";
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
                     var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
                     // Clear the background
                     if (e.Item.Selected)
@@ -13414,7 +13353,6 @@ namespace SATSuma
                     // nb the api doesn't return items for every single date so we fill in all missing dates and prices (using average of the price either side of the missing date)
                     // get a series of historic price data
                     var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod);
-                    var HistoricPriceDataJsonForDCA = HistoricPriceDataJson;
                     if (!string.IsNullOrEmpty(HistoricPriceDataJson))
                     {
                         JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
@@ -13498,8 +13436,6 @@ namespace SATSuma
                                 item.Y *= exchangeRate;
                             }
                         }
-                        // set the number of points on the graph
-                        int pointCount = PriceList.Count;
 
                         //create the arrays for the price scatter graph
                         double[] yPriceChartPrices = PriceList.Select(h => (double)(h.Y)).ToArray(); // create array of doubles of the prices
@@ -13648,7 +13584,6 @@ namespace SATSuma
 
                         double minX2 = xDCAChartDates.Min();
                         double maxX2 = xDCAChartDates.Max();
-                        double rangeX2 = maxX2 - minX2;
 
                         // Set the initial visible range of the x-axis to focus on the DCA data
                         formsPlotDCA.Plot.SetAxisLimits(xMin: minX2, xMax: maxX2);
@@ -13659,28 +13594,28 @@ namespace SATSuma
 
                         string currencyName = "D";
                         string currencySymbol = "$";
-                        if (currencySelected == "D")
+                        if (String.Compare(currencySelected, "D") == 0)
                         {
                             currencyName = "USD";
                             currencySymbol = "$";
                         }
                         else
                         {
-                            if (currencySelected == "P")
+                            if (String.Compare(currencySelected, "P") == 0)
                             {
                                 currencyName = "GBP";
                                 currencySymbol = "£";
                             }
                             else
                             {
-                                if (currencySelected == "E")
+                                if (String.Compare(currencySelected, "E") == 0)
                                 {
                                     currencyName = "EUR";
                                     currencySymbol = "€";
                                 }
                                 else
                                 {
-                                    if (currencySelected == "G")
+                                    if (String.Compare(currencySelected, "G") == 0)
                                     {
                                         currencyName = "XAU";
                                         currencySymbol = "\U0001fa99";
@@ -13698,11 +13633,11 @@ namespace SATSuma
                         });
                         label206.Invoke((MethodInvoker)delegate
                         {
-                            label206.Text = currencyName + " spent";
+                            label206.Text = $"{currencyName} spent";
                         });
                         lblDCAAmountSpent.Invoke((MethodInvoker)delegate
                         {
-                            lblDCAAmountSpent.Text = currencySymbol + Convert.ToString(xDCAChartDates.Count() * DCAAmount);
+                            lblDCAAmountSpent.Text = $"{currencySymbol}{xDCAChartDates.Count() * DCAAmount}";
                         });
                         lblDCABTCPurchased.Invoke((MethodInvoker)delegate
                         {
@@ -13710,11 +13645,11 @@ namespace SATSuma
                         });
                         lblDCACurrentValue.Invoke((MethodInvoker)delegate
                         {
-                            lblDCACurrentValue.Text = currencySymbol + (Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency).ToString("N2");
+                            lblDCACurrentValue.Text = $"{currencySymbol}{(Convert.ToDecimal(bitcoinBoughtRunningTotal) * OneBTCinSelectedCurrency):N2}";
                         });
                         lblDCAPercentageChange.Invoke((MethodInvoker)delegate
                         {
-                            lblDCAPercentageChange.Text = percentageChange.ToString("0.00") + "%";
+                            lblDCAPercentageChange.Text = $"{percentageChange:0.00}%";
                         });
                         panelDCASummary.Visible = true;
 
@@ -13878,7 +13813,7 @@ namespace SATSuma
 
         private void BtnCalculateDCA_Click(object sender, EventArgs e)
         {
-            if (lblBlockchainInfoEndpoints.Text == "✔️" && lblBitcoinExplorerEndpoints.Text == "✔️")
+            if (String.Compare(lblBlockchainInfoEndpoints.Text, "✔️") == 0 && String.Compare(lblBitcoinExplorerEndpoints.Text, "✔️") == 0)
             {
                 PopulateDCACalculator();
             }
@@ -13951,7 +13886,7 @@ namespace SATSuma
                 panelDCAMessages.Visible = true;
                 lblDCAMessage.Invoke((MethodInvoker)delegate
                 {
-                    lblDCAMessage.Text = "There should be at least " + DCACalcMinimumPeriod + " days between the start date and the end date for the selected DCA frequency";
+                    lblDCAMessage.Text = $"There should be at least {DCACalcMinimumPeriod} days between the start date and the end date for the selected DCA frequency";
                 });
                 return;
             }
@@ -14220,7 +14155,7 @@ namespace SATSuma
                 }
 
                 // Combine the current text with the newly typed character
-                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+                string newText = $"{text.Substring(0, caretPos)}{e.KeyChar}{text.Substring(caretPos)}";
 
                 // Remove any commas in the text
                 string strippedText = newText.Replace(",", "");
@@ -14278,7 +14213,7 @@ namespace SATSuma
                 }
 
                 // Combine the current text with the newly typed character
-                string newText = text.Substring(0, caretPos) + e.KeyChar + text.Substring(caretPos);
+                string newText = $"{text.Substring(0, caretPos)}{e.KeyChar}{text.Substring(caretPos)}";
 
                 // Remove any commas in the text
                 string strippedText = newText.Replace(",", "");
@@ -14364,12 +14299,12 @@ namespace SATSuma
             {
                 if (decimal.TryParse(labelPCUSD9.Text, out decimal pcusd9text) && decimal.TryParse(textBoxConvertUSDtoBTC.Text, out decimal usdtobtctext))
                 {
-                    if (labelPCUSD9.Text != "USD" && pcusd9text > 0)
+                    if (String.Compare(labelPCUSD9.Text, "USD") != 0 && pcusd9text > 0)
                     {
                         UpdateLabelValue(lblCalculatedUSDFromBTCAmount, (usdtobtctext / pcusd9text).ToString("0.00000000"));
                         label267.Invoke((MethodInvoker)delegate
                         {
-                            label267.Text = "$" + textBoxConvertUSDtoBTC.Text + " USD (US dollar) =";
+                            label267.Text = $"${textBoxConvertUSDtoBTC.Text} USD (US dollar) =";
                         });
                         lblCalculatedUSDFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
@@ -14393,12 +14328,12 @@ namespace SATSuma
             {
                 if (decimal.TryParse(labelPCEUR9.Text, out decimal pceur9text) && decimal.TryParse(textBoxConvertEURtoBTC.Text, out decimal eurtobtctext))
                 {
-                    if (labelPCEUR9.Text != "EUR" && pceur9text > 0)
+                    if (String.Compare(labelPCEUR9.Text, "EUR") != 0 && pceur9text > 0)
                     {
                         UpdateLabelValue(lblCalculatedEURFromBTCAmount, (eurtobtctext / pceur9text).ToString("0.00000000"));
                         label270.Invoke((MethodInvoker)delegate
                         {
-                            label270.Text = "€" + textBoxConvertEURtoBTC.Text + " EUR (European euro) =";
+                            label270.Text = $"€{textBoxConvertEURtoBTC.Text} EUR (European euro) =";
                         });
                         lblCalculatedEURFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
@@ -14422,12 +14357,12 @@ namespace SATSuma
             {
                 if (decimal.TryParse(labelPCGBP9.Text, out decimal pcgbp9text) && decimal.TryParse(textBoxConvertGBPtoBTC.Text, out decimal gbptobtctext))
                 {
-                    if (labelPCGBP9.Text != "GBP" && pcgbp9text > 0)
+                    if (String.Compare(labelPCGBP9.Text, "GBP") != 0 && pcgbp9text > 0)
                     {
                         UpdateLabelValue(lblCalculatedGBPFromBTCAmount, (gbptobtctext / pcgbp9text).ToString("0.00000000"));
                         label269.Invoke((MethodInvoker)delegate
                         {
-                            label269.Text = "£" + textBoxConvertGBPtoBTC.Text + " GBP (British pound sterling) =";
+                            label269.Text = $"£{textBoxConvertGBPtoBTC.Text} GBP (British pound sterling) =";
                         });
                         lblCalculatedGBPFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
@@ -14451,12 +14386,12 @@ namespace SATSuma
             {
                 if (decimal.TryParse(labelPCXAU9.Text, out decimal pcxau9text) && decimal.TryParse(textBoxConvertXAUtoBTC.Text, out decimal xautobtctext))
                 {
-                    if (labelPCXAU9.Text != "XAU" && pcxau9text > 0)
+                    if (String.Compare(labelPCXAU9.Text, "XAU") != 0 && pcxau9text > 0)
                     {
                         UpdateLabelValue(lblCalculatedXAUFromBTCAmount, (xautobtctext / pcxau9text).ToString("0.00000000"));
                         label268.Invoke((MethodInvoker)delegate
                         {
-                            label268.Text = "🪙" + textBoxConvertXAUtoBTC.Text + " XAU (ounce of gold) =";
+                            label268.Text = $"🪙{textBoxConvertXAUtoBTC.Text} XAU (ounce of gold) =";
                         });
                         lblCalculatedXAUFromBTCAmount.Invoke((MethodInvoker)delegate
                         {
@@ -14514,7 +14449,7 @@ namespace SATSuma
                     // set width of category column
                     foreach (HtmlElement navElement in navElements)
                     {
-                        if (navElement.GetAttribute("className") == "floating-menu")
+                        if (String.Compare(navElement.GetAttribute("className"), "floating-menu") == 0)
                         {
                             navElement.Style = $"width: {categoryWidth}px;";
                         }
@@ -14525,13 +14460,13 @@ namespace SATSuma
                     foreach (HtmlElement spanElement in spanElements2)
                     {
                         // set font
-                        if (spanElement.GetAttribute("className") == "site-content")
+                        if (String.Compare(spanElement.GetAttribute("className"), "site-content") == 0)
                         {
                             spanElement.Style = "font-family: Century Gothic;";
                         }
 
                         // set width of links column
-                        if (spanElement.GetAttribute("className") == "linklist")
+                        if (String.Compare(spanElement.GetAttribute("className"), "linklist") == 0)
                         {
                             spanElement.Style = $"padding-left: {linksPadding}px; width: 98%;";
                         }
@@ -14546,7 +14481,6 @@ namespace SATSuma
                     var linkColor = lblHeaderMarketCap.ForeColor;
                     var linkColorString = ColorTranslator.ToHtml(linkColor);
 
-                    var AdjfontSize = 0.76 * UIScale;
                     document.InvokeScript("execScript", new object[] { $"var links = document.getElementsByTagName('a');" +
                                 $"for (var i = 0; i < links.length; i++) {{" +
                                     $"links[i].style.color = '{linkColorString}';" +
@@ -14564,7 +14498,7 @@ namespace SATSuma
                     var adjustedFontSize = 11 * UIScale;
                     foreach (HtmlElement spanElement in spanElements)
                     {
-                        if (spanElement.GetAttribute("className") == "linklistcatclass")
+                        if (String.Compare(spanElement.GetAttribute("className"), "linklistcatclass") == 0)
                         {
                             spanElement.Style = $"color: {spanColorString}; font-weight: bold; font-size: {adjustedFontSize}pt;";
                         }
@@ -14573,14 +14507,13 @@ namespace SATSuma
                     var titleDivBGColor = btnTransactionOutputsUp.BackColor;
                     var titleDivBGColorString = ColorTranslator.ToHtml(titleDivBGColor);
                     var titleDivBGColorElements = document.GetElementsByTagName("div");
-                    var adjustedFontSize2 = 10 * UIScale;
                     foreach (HtmlElement titleDivBGColorElement in titleDivBGColorElements)
                     {
-                        if (titleDivBGColorElement.GetAttribute("className") == "linklistcatname")
+                        if (String.Compare(titleDivBGColorElement.GetAttribute("className"), "linklistcatname") == 0)
                         {
                             titleDivBGColorElement.Style = $"background: {titleDivBGColorString};";
                         }
-                        if (titleDivBGColorElement.GetAttribute("className") == "linklistindex")
+                        if (String.Compare(titleDivBGColorElement.GetAttribute("className"), "linklistindex") == 0)
                         {
                             var backgroundColor2 = panel16.BackColor;
                             var lighterBackgroundColor = MakeColorLighter(backgroundColor2, 10);
@@ -14596,7 +14529,7 @@ namespace SATSuma
                     var adjustedFontSize3 = 0.76 * UIScale;
                     foreach (HtmlElement textElement in textElements)
                     {
-                        if (textElement.GetAttribute("className") == "linklistdesc")
+                        if (String.Compare(textElement.GetAttribute("className"), "linklistdesc") == 0)
                         {
                             textElement.Style = $"color: {textColorString}; font-size: {adjustedFontSize3}em";
                         }
@@ -14754,7 +14687,7 @@ namespace SATSuma
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error opening link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Error opening link: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     // Set the linkClicked flag to true to avoid multiple tabs for a single click
@@ -14876,7 +14809,7 @@ namespace SATSuma
         {
             try
             {
-                if (previousXpubScreenOwnNodeURLStringToCompare != textBoxSettingsOwnNodeURL.Text)
+                if (String.Compare(previousXpubScreenOwnNodeURLStringToCompare, textBoxSettingsOwnNodeURL.Text) != 0)
                 {
                     textBoxSubmittedXpub.Enabled = false;
                     lblXpubScreenOwnNodeStatusLight.Invoke((MethodInvoker)delegate
@@ -14927,7 +14860,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblSettingsNodeMainnetSelected.Text == "❌")
+                if (String.Compare(lblSettingsNodeMainnetSelected.Text, "❌") == 0)
                 {
                     lblSettingsNodeMainnetSelected.Invoke((MethodInvoker)delegate
                     {
@@ -14970,7 +14903,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblSettingsNodeTestnetSelected.Text == "❌")
+                if (String.Compare(lblSettingsNodeTestnetSelected.Text, "❌") == 0)
                 {
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
@@ -15009,7 +14942,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblSettingsOwnNodeSelected.Text == "❌")
+                if (String.Compare(lblSettingsOwnNodeSelected.Text, "❌") == 0)
                 {
                     lblSettingsOwnNodeSelected.Invoke((MethodInvoker)delegate
                     {
@@ -15096,7 +15029,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblEnableDirectory.Text == "✔️")
+                if (String.Compare(lblEnableDirectory.Text, "✔️") == 0)
                 {
                     lblEnableDirectory.Invoke((MethodInvoker)delegate
                     {
@@ -15131,7 +15064,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblBlockchairComJSON.Text == "✔️")
+                if (String.Compare(lblBlockchairComJSON.Text, "✔️") == 0)
                 {
                     lblBlockchairComJSON.Invoke((MethodInvoker)delegate
                     {
@@ -15164,7 +15097,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblBitcoinExplorerEndpoints.Text == "✔️")
+                if (String.Compare(lblBitcoinExplorerEndpoints.Text, "✔️") == 0)
                 {
                     lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
                     {
@@ -15223,7 +15156,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblCoingeckoComJSON.Text == "✔️")
+                if (String.Compare(lblCoingeckoComJSON.Text, "✔️") == 0)
                 {
                     lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
                     {
@@ -15282,7 +15215,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblMempoolSpacePriceAPI.Text == "✔️")
+                if (String.Compare(lblMempoolSpacePriceAPI.Text, "✔️") == 0)
                 {
                     lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
                     {
@@ -15341,7 +15274,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblBlockchainInfoEndpoints.Text == "✔️")
+                if (String.Compare(lblBlockchainInfoEndpoints.Text, "✔️") == 0)
                 {
                     lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
                     {
@@ -15380,7 +15313,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblAlwaysOnTop.Text == "✔️")
+                if (String.Compare(lblAlwaysOnTop.Text, "✔️") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
                     {
@@ -15411,7 +15344,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblOfflineMode.Text == "❌")
+                if (String.Compare(lblOfflineMode.Text, "❌") == 0)
                 {
                     EnableOfflineMode();
                 }
@@ -15890,7 +15823,7 @@ namespace SATSuma
                 {
                     selectedNetwork = "C";
                 }
-                if (lblOfflineMode.Text == "✔️")
+                if (String.Compare(lblOfflineMode.Text, "✔️") == 0)
                 {
                     OfflineModeSelected = "1";
                 }
@@ -15930,7 +15863,7 @@ namespace SATSuma
                 {
                     directoryEnabled = "0";
                 }
-                if (lblAlwaysOnTop.Text == "✔️")
+                if (String.Compare(lblAlwaysOnTop.Text, "✔️") == 0)
                 {
                     alwaysOnTop = "1";
                 }
@@ -15938,35 +15871,35 @@ namespace SATSuma
                 {
                     alwaysOnTop = "0";
                 }
-                if (startupScreenToSave == "")
+                if (String.Compare(startupScreenToSave, "") == 0)
                 {
                     startupScreenToSave = "blocks----";
                 }
-                if (lblScaleAmount.Text == "smallest")
+                if (String.Compare(lblScaleAmount.Text, "smallest") == 0)
                 {
                     UIScaleToBeSavedToSettings = 1;
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "small")
+                    if (String.Compare(lblScaleAmount.Text, "small") == 0)
                     {
                         UIScaleToBeSavedToSettings = 2;
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "normal")
+                        if (String.Compare(lblScaleAmount.Text, "normal") == 0)
                         {
                             UIScaleToBeSavedToSettings = 3;
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "big")
+                            if (String.Compare(lblScaleAmount.Text, "big") == 0)
                             {
                                 UIScaleToBeSavedToSettings = 4;
                             }
                             else
                             {
-                                if (lblScaleAmount.Text == "biggest")
+                                if (String.Compare(lblScaleAmount.Text, "biggest") == 0)
                                 {
                                     UIScaleToBeSavedToSettings = 5;
                                 }
@@ -16121,7 +16054,7 @@ namespace SATSuma
                 #region restore remainder of settings
                 // check if settings are already saved in the file and either restore them or use defaults
                 #region restore default fiat currency
-                if (Convert.ToString(settings.SettingsCurrencySelected) == "P")
+                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "P") == 0)
                 {
                     //GBP
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -16140,7 +16073,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (GBP) ▼";
                 }
-                if (Convert.ToString(settings.SettingsCurrencySelected) == "D")
+                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "D") == 0)
                 {
                     //USD
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -16159,7 +16092,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (USD) ▼";
                 }
-                if (Convert.ToString(settings.SettingsCurrencySelected) == "E")
+                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "E") == 0)
                 {
                     //EUR
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -16178,7 +16111,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (EUR) ▼";
                 }
-                if (Convert.ToString(settings.SettingsCurrencySelected) == "G")
+                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "G") == 0)
                 {
                     //XAU
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -16199,7 +16132,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore offline mode settings
-                if (Convert.ToString(settings.SettingsOfflineModeSelected) == "1")
+                if (String.Compare(Convert.ToString(settings.SettingsOfflineModeSelected), "1") == 0)
                 {
                     lblOfflineMode.Invoke((MethodInvoker)delegate
                     {
@@ -16235,7 +16168,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore network
-                if (Convert.ToString(settings.SettingsSelectedNetwork) == "M")
+                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "M") == 0)
                 {
                     //mainnet
                     testNet = false;
@@ -16258,7 +16191,7 @@ namespace SATSuma
                         lblSettingsOwnNodeSelected.ForeColor = Color.IndianRed;
                     });
                 }
-                if (Convert.ToString(settings.SettingsSelectedNetwork) == "T")
+                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "T") == 0)
                 {
                     //testnet
                     testNet = true;
@@ -16282,7 +16215,7 @@ namespace SATSuma
                         lblSettingsOwnNodeSelected.ForeColor = Color.IndianRed;
                     });
                 }
-                if (Convert.ToString(settings.SettingsSelectedNetwork) == "C")
+                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "C") == 0)
                 {
                     //custom
                     RunMempoolSpaceLightningAPI = false;
@@ -16308,7 +16241,7 @@ namespace SATSuma
                 #region restore API settings
                 if (!offlineMode)
                 {
-                    if (Convert.ToString(settings.SettingsBlockchairComJSONSelected) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsBlockchairComJSONSelected), "1") == 0)
                     {
                         RunBlockchairComAPI = true;
                         lblBlockchairComJSON.Invoke((MethodInvoker)delegate
@@ -16326,7 +16259,7 @@ namespace SATSuma
                             lblBlockchairComJSON.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (Convert.ToString(settings.SettingsBitcoinExplorerEnpointsSelected) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsBitcoinExplorerEnpointsSelected), "1") == 0)
                     {
                         RunBitcoinExplorerAPI = true;
                         lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
@@ -16344,7 +16277,7 @@ namespace SATSuma
                             lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (Convert.ToString(settings.SettingsBlockchainInfoEndpointsSelected) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsBlockchainInfoEndpointsSelected), "1") == 0)
                     {
                         RunBlockchainInfoAPI = true;
                         lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
@@ -16362,7 +16295,7 @@ namespace SATSuma
                             lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (Convert.ToString(settings.SettingsCoingeckoAPISelected) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsCoingeckoAPISelected), "1") == 0)
                     {
                         RunCoingeckoAPI = true;
                         lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
@@ -16380,7 +16313,7 @@ namespace SATSuma
                             lblCoingeckoComJSON.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (Convert.ToString(settings.SettingsMempoolSpacePriceAPISelected) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsMempoolSpacePriceAPISelected), "1") == 0)
                     {
                         RunMempoolSpacePriceAPI = true;
                         lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
@@ -16417,7 +16350,7 @@ namespace SATSuma
                 #region restore directory settings
                 if (!offlineMode)
                 {
-                    if (Convert.ToString(settings.SettingsDirectoryEnabled) == "1")
+                    if (String.Compare(Convert.ToString(settings.SettingsDirectoryEnabled), "1") == 0)
                     {
                         lblEnableDirectory.Invoke((MethodInvoker)delegate
                         {
@@ -16440,7 +16373,7 @@ namespace SATSuma
                 }
                         #endregion
                 #region restore always on top setting
-                if (Convert.ToString(settings.SettingsAlwaysOnTop) == "1")
+                if (String.Compare(Convert.ToString(settings.SettingsAlwaysOnTop), "1") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
                     {
@@ -16469,9 +16402,9 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == settings.SettingsDefaultTheme)
+                    if (String.Compare(theme.ThemeName, settings.SettingsDefaultTheme) == 0)
                     {
-                        if (theme.ThemeName == "Genesis (preset)")
+                        if (String.Compare(theme.ThemeName, "Genesis (preset)") == 0)
                         {
                             BtnMenuThemeGenesis.Enabled = false;
                             btnMenuThemeFranklin.Enabled = true;
@@ -16496,7 +16429,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (theme.ThemeName == "Franklin (preset)")
+                            if (String.Compare(theme.ThemeName, "Franklin (preset)") == 0)
                             {
                                 BtnMenuThemeGenesis.Enabled = true;
                                 btnMenuThemeFranklin.Enabled = false;
@@ -16521,7 +16454,7 @@ namespace SATSuma
                             }
                             else
                             {
-                                if (theme.ThemeName == "Satsuma (preset)")
+                                if (String.Compare(theme.ThemeName, "Satsuma (preset)") == 0)
                                 {
                                     BtnMenuThemeGenesis.Enabled = true;
                                     btnMenuThemeFranklin.Enabled = true;
@@ -16546,7 +16479,7 @@ namespace SATSuma
                                 }
                                 else
                                 {
-                                    if (theme.ThemeName == "StackSats (preset)")
+                                    if (String.Compare(theme.ThemeName, "StackSats (preset)") == 0)
                                     {
                                         BtnMenuThemeGenesis.Enabled = true;
                                         btnMenuThemeFranklin.Enabled = true;
@@ -16571,7 +16504,7 @@ namespace SATSuma
                                     }
                                     else
                                     {
-                                        if (theme.ThemeName == "HoneyBadger (preset)")
+                                        if (String.Compare(theme.ThemeName, "HoneyBadger (preset)") == 0)
                                         {
                                             BtnMenuThemeGenesis.Enabled = true;
                                             btnMenuThemeFranklin.Enabled = true;
@@ -16596,7 +16529,7 @@ namespace SATSuma
                                         }
                                         else
                                         {
-                                            if (theme.ThemeName == "Symbol (preset)")
+                                            if (String.Compare(theme.ThemeName, "Symbol (preset)") == 0)
                                             {
                                                 BtnMenuThemeGenesis.Enabled = true;
                                                 btnMenuThemeFranklin.Enabled = true;
@@ -16624,7 +16557,7 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblThemeMenuHighlightedButtonText.Visible = false;
-                                                    lblThemeMenuHighlightedButtonText.Text = theme.ThemeName + "!";
+                                                    lblThemeMenuHighlightedButtonText.Text = $"{theme.ThemeName}!";
                                                     lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
                                                 });
                                                 ClearThemeMenuMarkers();
@@ -16767,7 +16700,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblScaleAmount.Text == "smallest")
+                if (String.Compare(lblScaleAmount.Text, "smallest") == 0)
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
@@ -16784,7 +16717,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "small")
+                    if (String.Compare(lblScaleAmount.Text, "small") == 0)
                     {
                         lblScaleAmount.Invoke((MethodInvoker)delegate
                         {
@@ -16795,7 +16728,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "normal")
+                        if (String.Compare(lblScaleAmount.Text, "normal") == 0)
                         {
                             lblScaleAmount.Invoke((MethodInvoker)delegate
                             {
@@ -16806,7 +16739,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "big")
+                            if (String.Compare(lblScaleAmount.Text, "big") == 0)
                             {
                                 lblScaleAmount.Invoke((MethodInvoker)delegate
                                 {
@@ -16839,7 +16772,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblScaleAmount.Text == "biggest")
+                if (String.Compare(lblScaleAmount.Text, "biggest") == 0)
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
@@ -16856,7 +16789,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    if (lblScaleAmount.Text == "big")
+                    if (String.Compare(lblScaleAmount.Text, "big") == 0)
                     {
                         lblScaleAmount.Invoke((MethodInvoker)delegate
                         {
@@ -16867,7 +16800,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (lblScaleAmount.Text == "normal")
+                        if (String.Compare(lblScaleAmount.Text, "normal") == 0)
                         {
                             lblScaleAmount.Invoke((MethodInvoker)delegate
                             {
@@ -16878,7 +16811,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (lblScaleAmount.Text == "small")
+                            if (String.Compare(lblScaleAmount.Text, "small") == 0)
                             {
                                 lblScaleAmount.Invoke((MethodInvoker)delegate
                                 {
@@ -16911,7 +16844,7 @@ namespace SATSuma
         #region reset all settings (restore original json files)
         private void LblConfirmReset_Click(object sender, EventArgs e)
         {
-            if (lblConfirmReset.Text == "❌")
+            if (String.Compare(lblConfirmReset.Text, "❌") == 0)
             {
                 lblConfirmReset.Invoke((MethodInvoker)delegate
                 {
@@ -17068,7 +17001,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Genesis (preset)")
+                    if (String.Compare(theme.ThemeName, "Genesis (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17121,7 +17054,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Franklin (preset)")
+                    if (String.Compare(theme.ThemeName, "Franklin (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17174,7 +17107,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Satsuma (preset)")
+                    if (String.Compare(theme.ThemeName, "Satsuma (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17227,7 +17160,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "HoneyBadger (preset)")
+                    if (String.Compare(theme.ThemeName, "HoneyBadger (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17280,7 +17213,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "StackSats (preset)")
+                    if (String.Compare(theme.ThemeName, "StackSats (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17333,7 +17266,7 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == "Symbol (preset)")
+                    if (String.Compare(theme.ThemeName, "Symbol (preset)") == 0)
                     {
                         RestoreTheme(theme);
                         SaveThemeAsDefault(theme.ThemeName);
@@ -17449,14 +17382,14 @@ namespace SATSuma
         {
             try
             {
-                if (comboBoxHeaderCustomThemes.Texts != "   select theme ▼")
+                if (String.Compare(comboBoxHeaderCustomThemes.Texts, "   select theme ▼") != 0)
                 {
 
                     CloseThemeMenu();
                     var themes = ReadThemesFromJsonFile();
                     foreach (Theme theme in themes)
                     {
-                        if (theme.ThemeName == comboBoxHeaderCustomThemes.Texts)
+                        if (String.Compare(theme.ThemeName, comboBoxHeaderCustomThemes.Texts) == 0)
                         {
                             BtnMenuThemeGenesis.Enabled = true;
                             btnMenuThemeFranklin.Enabled = true;
@@ -17912,7 +17845,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblSolidProgressBars.Text == "❌")
+                if (String.Compare(lblSolidProgressBars.Text, "❌") == 0)
                 {
                     lblSolidProgressBars.Invoke((MethodInvoker)delegate
                     {
@@ -17952,7 +17885,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblShowClock.Text == "✔️")
+                if (String.Compare(lblShowClock.Text, "✔️") == 0)
                 {
                     lblShowClock.Invoke((MethodInvoker)delegate
                     {
@@ -18018,7 +17951,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblInfinity1.Text == "❌")
+                if (String.Compare(lblInfinity1.Text, "❌") == 0)
                 {
                     lblInfinity1.Invoke((MethodInvoker)delegate
                     {
@@ -18056,7 +17989,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblInfinity2.Text == "❌")
+                if (String.Compare(lblInfinity2.Text, "❌") == 0)
                 {
                     lblInfinity2.Invoke((MethodInvoker)delegate
                     {
@@ -18094,7 +18027,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblInfinity3.Text == "❌")
+                if (String.Compare(lblInfinity3.Text, "❌") == 0)
                 {
                     lblInfinity3.Invoke((MethodInvoker)delegate
                     {
@@ -18191,7 +18124,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblChartsLightBackground.Text == "❌")
+                if (String.Compare(lblChartsLightBackground.Text, "❌") == 0)
                 {
                     lblChartsLightBackground.Invoke((MethodInvoker)delegate
                     {
@@ -18237,7 +18170,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblChartsMediumBackground.Text == "❌")
+                if (String.Compare(lblChartsMediumBackground.Text, "❌") == 0)
                 {
                     lblChartsMediumBackground.Invoke((MethodInvoker)delegate
                     {
@@ -18284,7 +18217,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblChartsDarkBackground.Text == "❌")
+                if (String.Compare(lblChartsDarkBackground.Text, "❌") == 0)
                 {
                     lblChartsDarkBackground.Invoke((MethodInvoker)delegate
                     {
@@ -18382,7 +18315,7 @@ namespace SATSuma
             btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
 
             Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-            if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+            if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
             {
                 //header
 
@@ -19083,7 +19016,7 @@ namespace SATSuma
         #region title backgrounds
         private void ComboBoxSelectHeadingBackground_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lblTitlesBackgroundImage.Text == "✔️")
+            if (String.Compare(lblTitlesBackgroundImage.Text, "✔️") == 0)
             {
                 HeadingBackgroundsToImage();
             }
@@ -19094,7 +19027,7 @@ namespace SATSuma
             try
             {
                 comboBoxTitlesBackgroundImage.Enabled = false;
-                if (lblTitleBackgroundNone.Text != "✔️")
+                if (String.Compare(lblTitleBackgroundNone.Text, "✔️") != 0)
                 {
                     HeadingBackgroundsToNone();
                 }
@@ -19124,7 +19057,7 @@ namespace SATSuma
                     lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
                     lblTitleBackgroundCustom.Text = "❌";
                 });
-                if (lblTitlesBackgroundImage.Text == "✔️")
+                if (String.Compare(lblTitlesBackgroundImage.Text, "✔️") == 0)
                 {
                     comboBoxTitlesBackgroundImage.Enabled = true;
                 }
@@ -19181,7 +19114,7 @@ namespace SATSuma
         {
             try
             {
-                if (lblTitleBackgroundCustom.Text != "✔️")
+                if (String.Compare(lblTitleBackgroundCustom.Text, "✔️") != 0)
                 {
                     comboBoxTitlesBackgroundImage.Enabled = false;
                     lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
@@ -19289,31 +19222,31 @@ namespace SATSuma
                 Color tabletitlebars = panel67.BackColor;
                 Color panels = panel73.BackColor;
                 string chartsDark = "D";
-                if (lblChartsDarkBackground.Text == "✔️")
+                if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0)
                 {
                     chartsDark = "D";
                 }
-                if (lblChartsMediumBackground.Text == "✔️")
+                if (String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     chartsDark = "M";
                 }
-                if (lblChartsLightBackground.Text == "✔️")
+                if (String.Compare(lblChartsLightBackground.Text, "✔️") == 0)
                 {
                     chartsDark = "L";
                 }
                 bool showtime = lblTime.Visible;
                 bool headingbgdefault = false;
-                if (lblTitlesBackgroundImage.Text == "✔️")
+                if (String.Compare(lblTitlesBackgroundImage.Text, "✔️") == 0)
                 {
                     headingbgdefault = true;
                 }
                 bool headingbgnone = false;
-                if (lblTitleBackgroundNone.Text == "✔️")
+                if (String.Compare(lblTitleBackgroundNone.Text, "✔️") == 0)
                 {
                     headingbgnone = true;
                 }
                 bool headingbgcustom = false;
-                if (lblTitleBackgroundCustom.Text == "✔️")
+                if (String.Compare(lblTitleBackgroundCustom.Text, "✔️") == 0)
                 {
                     headingbgcustom = true;
                 }
@@ -19390,15 +19323,15 @@ namespace SATSuma
                     }
                 }
                 int orangeinfinity = 1;
-                if (lblInfinity1.Text == "✔️")
+                if (String.Compare(lblInfinity1.Text, "✔️") == 0)
                 {
                     orangeinfinity = 1;
                 }
-                if (lblInfinity2.Text == "✔️")
+                if (String.Compare(lblInfinity2.Text, "✔️") == 0)
                 {
                     orangeinfinity = 2;
                 }
-                if (lblInfinity3.Text == "✔️")
+                if (String.Compare(lblInfinity3.Text, "✔️") == 0)
                 {
                     orangeinfinity = 3;
                 }
@@ -19428,7 +19361,7 @@ namespace SATSuma
                 int titlesBackgroundImage = comboBoxTitlesBackgroundImage.SelectedIndex;
 
                 string progBarStyle;
-                if (lblSolidProgressBars.Text == "❌")
+                if (String.Compare(lblSolidProgressBars.Text, "❌") == 0)
                 {
                     progBarStyle = "dashed";
                 }
@@ -19445,7 +19378,7 @@ namespace SATSuma
                 // check here for duplicate themename
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == newTheme.ThemeName)
+                    if (String.Compare(theme.ThemeName, newTheme.ThemeName) == 0)
                     {
                         intThemeNameInUseMessageTimeShown = 0;
                         lblThemeNameInUse.Visible = true;
@@ -19501,13 +19434,13 @@ namespace SATSuma
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (theme.ThemeName == comboBoxCustomizeScreenThemeList.Texts)
+                    if (String.Compare(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts) == 0)
                     {
-                        if (comboBoxCustomizeScreenThemeList.Texts != "select theme")
+                        if (String.Compare(comboBoxCustomizeScreenThemeList.Texts, "select theme") != 0)
                         {
                             try
                             {
-                                if (theme.ThemeName == comboBoxCustomizeScreenThemeList.Texts)
+                                if (String.Compare(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts) == 0)
                                 {
                                     BtnMenuThemeGenesis.Enabled = true;
                                     btnMenuThemeFranklin.Enabled = true;
@@ -19624,7 +19557,7 @@ namespace SATSuma
                 }
                 try
                 {
-                    if (theme.ChartsDark == "D")
+                    if (String.Compare(theme.ChartsDark, "D") == 0)
                     {
                         chartsBackgroundColor = Color.FromArgb(20, 20, 20);
 
@@ -19659,7 +19592,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        if (theme.ChartsDark == "M")
+                        if (String.Compare(theme.ChartsDark, "M") == 0)
                         {
                             chartsBackgroundColor = Color.FromArgb(40, 40, 40);
                             panelLoadingAnimationContainer.BackColor = Color.FromArgb(40, 40, 40);
@@ -19693,7 +19626,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (theme.ChartsDark == "L")
+                            if (String.Compare(theme.ChartsDark, "L") == 0)
                             {
                                 chartsBackgroundColor = Color.FromArgb(244, 244, 244);
                                 panelLoadingAnimationContainer.BackColor = Color.FromArgb(244, 244, 244);
@@ -20087,7 +20020,7 @@ namespace SATSuma
             PopulateDCACalculator();
 
             // check the rest of the charts and refresh whichever is active (even if not visible at the time theme was changed)
-            if (ActiveChart == "FeeRates")
+            if (String.Compare(ActiveChart, "FeeRates") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartFeeRates;
@@ -20095,7 +20028,7 @@ namespace SATSuma
                 BtnChartFeeRates_Click(sender, e);
             }
 
-            if (ActiveChart == "BlockFees")
+            if (String.Compare(ActiveChart, "BlockFees") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartBlockFees;
@@ -20103,7 +20036,7 @@ namespace SATSuma
                 BtnChartBlockFees_Click(sender, e);
             }
 
-            if (ActiveChart == "Reward")
+            if (String.Compare(ActiveChart, "Reward") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartReward;
@@ -20111,7 +20044,7 @@ namespace SATSuma
                 BtnChartReward_Click(sender, e);
             }
 
-            if (ActiveChart == "BlockSize")
+            if (String.Compare(ActiveChart, "BlockSize") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartBlockSize;
@@ -20119,7 +20052,7 @@ namespace SATSuma
                 BtnChartBlockSize_Click(sender, e);
             }
 
-            if (ActiveChart == "Hashrate")
+            if (String.Compare(ActiveChart, "Hashrate") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartHashrate;
@@ -20127,7 +20060,7 @@ namespace SATSuma
                 BtnChartHashrate_Click(sender, e);
             }
 
-            if (ActiveChart == "HashrateLog")
+            if (String.Compare(ActiveChart, "HashrateLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartHashrate;
@@ -20135,7 +20068,7 @@ namespace SATSuma
                 BtnChartHashrate_Click(sender, e);
             }
 
-            if (ActiveChart == "Difficulty")
+            if (String.Compare(ActiveChart, "Difficulty") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartDifficulty;
@@ -20143,7 +20076,7 @@ namespace SATSuma
                 BtnChartDifficulty_Click(sender, e);
             }
 
-            if (ActiveChart == "DifficultyLog")
+            if (String.Compare(ActiveChart, "DifficultyLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartDifficulty;
@@ -20151,7 +20084,7 @@ namespace SATSuma
                 BtnChartDifficulty_Click(sender, e);
             }
 
-            if (ActiveChart == "Circulation")
+            if (String.Compare(ActiveChart, "Circulation") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartCirculation;
@@ -20159,7 +20092,7 @@ namespace SATSuma
                 BtnChartCirculation_Click(sender, e);
             }
 
-            if (ActiveChart == "UniqueAddresses")
+            if (String.Compare(ActiveChart, "UniqueAddresses") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartUniqueAddresses;
@@ -20167,7 +20100,7 @@ namespace SATSuma
                 BtnChartUniqueAddresses_Click(sender, e);
             }
 
-            if (ActiveChart == "UniqueAddressesLog")
+            if (String.Compare(ActiveChart, "UniqueAddressesLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartUniqueAddresses;
@@ -20175,7 +20108,7 @@ namespace SATSuma
                 BtnChartUniqueAddresses_Click(sender, e);
             }
 
-            if (ActiveChart == "UTXO")
+            if (String.Compare(ActiveChart, "UTXO") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartUTXO;
@@ -20183,7 +20116,7 @@ namespace SATSuma
                 BtnChartUTXO_Click(sender, e);
             }
 
-            if (ActiveChart == "UTXOLog")
+            if (String.Compare(ActiveChart, "UTXOLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartUTXO;
@@ -20191,7 +20124,7 @@ namespace SATSuma
                 BtnChartUTXO_Click(sender, e);
             }
 
-            if (ActiveChart == "PoolsRanking")
+            if (String.Compare(ActiveChart, "PoolsRanking") == 0)
             {
                 formsPlot2.Plot.Clear();
                 object sender = btnChartPoolsRanking;
@@ -20199,7 +20132,7 @@ namespace SATSuma
                 BtnChartPoolsRanking_Click(sender, e);
             }
 
-            if (ActiveChart == "NodesByNetwork")
+            if (String.Compare(ActiveChart, "NodesByNetwork") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartNodesByNetwork;
@@ -20207,7 +20140,7 @@ namespace SATSuma
                 BtnChartNodesByNetwork_Click(sender, e);
             }
 
-            if (ActiveChart == "NodesByCountry")
+            if (String.Compare(ActiveChart, "NodesByCountry") == 0)
             {
                 formsPlot3.Plot.Clear();
                 object sender = btnChartNodesByCountry;
@@ -20215,7 +20148,7 @@ namespace SATSuma
                 BtnChartNodesByCountry_Click(sender, e);
             }
 
-            if (ActiveChart == "LightningCapacity")
+            if (String.Compare(ActiveChart, "LightningCapacity") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartLightningCapacity;
@@ -20223,7 +20156,7 @@ namespace SATSuma
                 BtnChartLightningCapacity_Click(sender, e);
             }
 
-            if (ActiveChart == "LightningChannels")
+            if (String.Compare(ActiveChart, "LightningChannels") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartLightningChannels;
@@ -20231,7 +20164,7 @@ namespace SATSuma
                 BtnChartLightningChannels_Click(sender, e);
             }
 
-            if (ActiveChart == "Price")
+            if (String.Compare(ActiveChart, "Price") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartPrice;
@@ -20239,7 +20172,7 @@ namespace SATSuma
                 BtnChartPrice_Click(sender, e);
             }
 
-            if (ActiveChart == "PriceLog")
+            if (String.Compare(ActiveChart, "PriceLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartPrice;
@@ -20247,7 +20180,7 @@ namespace SATSuma
                 BtnChartPrice_Click(sender, e);
             }
 
-            if (ActiveChart == "MarketCap")
+            if (String.Compare(ActiveChart, "MarketCap") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartMarketCap;
@@ -20255,7 +20188,7 @@ namespace SATSuma
                 BtnChartMarketCap_Click(sender, e);
             }
 
-            if (ActiveChart == "MarketCapLog")
+            if (String.Compare(ActiveChart, "MarketCapLog") == 0)
             {
                 formsPlot1.Plot.Clear();
                 object sender = btnChartMarketCap;
@@ -20494,7 +20427,7 @@ namespace SATSuma
             try
             {
                 Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
-                if (lblChartsDarkBackground.Text == "✔️" || lblChartsMediumBackground.Text == "✔️")
+                if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
 
@@ -20704,7 +20637,7 @@ namespace SATSuma
                 }
                 
                 Color newGridlineColor = Color.FromArgb(50, 50, 50);
-                if (lblChartsLightBackground.Text == "✔️")
+                if (String.Compare(lblChartsLightBackground.Text, "✔️") == 0)
                 {
                     newGridlineColor = Color.FromArgb(220, 220, 220);
                 }
@@ -21165,11 +21098,11 @@ namespace SATSuma
                 {
                     LookupBlock();
                 }
-                if (lblInvalidTransaction.Text == "✔️ valid transaction ID")
+                if (String.Compare(lblInvalidTransaction.Text, "✔️ valid transaction ID") == 0)
                 {
                     LookupTransaction();
                 }
-                if (lblInvalidAddressIndicator.Text == "✔️ valid address")
+                if (String.Compare(lblInvalidAddressIndicator.Text, "✔️ valid address") == 0)
                 {
                     string addressString = textboxSubmittedAddress.Text;
                     textboxSubmittedAddress.Text = "";
@@ -22041,7 +21974,7 @@ namespace SATSuma
         {
             try
             {
-                if (style == "solid")
+                if (String.Compare(style, "solid") == 0)
                 {
                     //header
                     progressBarRefreshData.Invoke((MethodInvoker)delegate
@@ -22300,7 +22233,7 @@ namespace SATSuma
         {
             try
             {
-                if (comboBoxCustomizeScreenThemeList.Texts == currentlyActiveTheme)
+                if (String.Compare(comboBoxCustomizeScreenThemeList.Texts, currentlyActiveTheme) == 0)
                 {
                     lblThemeDeleted.Text = "unable to delete active theme   ";
                     intThemeDeletedMessageTimeShown = 0;
@@ -22405,7 +22338,7 @@ namespace SATSuma
                             denominatorUSDForAverageCalculation++;
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: $" + BitExPriceUSD; 
+                                bitExTooltipForSelectedCurrency = $"GREEN bitcoinexplorer.org: ${BitExPriceUSD}"; 
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22438,7 +22371,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: £" + BitExPriceGBP;
+                                bitExTooltipForSelectedCurrency = $"GREEN bitcoinexplorer.org: £{BitExPriceGBP}";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22471,7 +22404,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: €" + BitExPriceEUR;
+                                bitExTooltipForSelectedCurrency = $"GREEN bitcoinexplorer.org: €{BitExPriceEUR}";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22504,7 +22437,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                bitExTooltipForSelectedCurrency = "GREEN bitcoinexplorer.org: 🪙" + BitExPriceXAU;
+                                bitExTooltipForSelectedCurrency = $"GREEN bitcoinexplorer.org: 🪙{BitExPriceXAU}";
                                 lblBitcoinExplorerPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblBitcoinExplorerPriceIndicator.ForeColor = Color.Lime;
@@ -22554,7 +22487,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: $" + GeckoPriceUSD;
+                                geckoTooltipForSelectedCurrency = $"GREEN coingecko.com: ${GeckoPriceUSD}";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22587,7 +22520,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnGBP.Enabled) // if default currency is GBP
                             {
-                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: £" + GeckoPriceGBP;
+                                geckoTooltipForSelectedCurrency = $"GREEN coingecko.com: £{GeckoPriceGBP}";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22621,7 +22554,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnEUR.Enabled) // if default currency is EUR
                             {
-                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: €" + GeckoPriceEUR;
+                                geckoTooltipForSelectedCurrency = $"GREEN coingecko.com: €{GeckoPriceEUR}";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22655,7 +22588,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnXAU.Enabled) // if default currency is XAU
                             {
-                                geckoTooltipForSelectedCurrency = "GREEN coingecko.com: 🪙" + GeckoPriceXAU;
+                                geckoTooltipForSelectedCurrency = $"GREEN coingecko.com: 🪙{GeckoPriceXAU}";
                                 lblCoingeckoPriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblCoingeckoPriceIndicator.ForeColor = Color.Lime;
@@ -22706,7 +22639,7 @@ namespace SATSuma
                             // update tooltip message and colour indicator
                             if (!btnUSD.Enabled) // if default currency is USD
                             {
-                                mempoTooltipForSelectedCurrency = "GREEN mempool.space: $" + mempoPriceUSD;
+                                mempoTooltipForSelectedCurrency = $"GREEN mempool.space: ${mempoPriceUSD}";
                                 lblMempoolSpacePriceIndicator.Invoke((MethodInvoker)delegate
                                 {
                                     lblMempoolSpacePriceIndicator.ForeColor = Color.Lime;
@@ -23144,8 +23077,8 @@ namespace SATSuma
                     if (!btnXAU.Enabled)
                     {
                         OneBTCinSelectedCurrency = Convert.ToDecimal(PriceXAU);
-                        price = "🪙" + PriceXAU;
-                        mCap = "🪙" + Convert.ToDecimal(mCapXAU).ToString("N2");
+                        price = $"🪙{PriceXAU}";
+                        mCap = $"🪙{Convert.ToDecimal(mCapXAU).ToString("N2")}";
                         satsPerUnit = satsXAU;
                         lblHeaderMoscowTimeLabel.Invoke((MethodInvoker)delegate
                         {
@@ -23261,8 +23194,8 @@ namespace SATSuma
                         bitExTooltipForSelectedCurrency = "GREY bitcoinexplorer.org: disabled (testnet)";
                         geckoTooltipForSelectedCurrency = "GREY coingecko.com: disabled (testnet)";
                         mempoTooltipForSelectedCurrency = "GREY mempool.space: disabled (testnet)";
-                    }    
-                    sourceOfCurrentPrice = "Price data is unavailable in offline mode\nand on TestNet (TestNet coins have no value)\n" + geckoTooltipForSelectedCurrency + "\n" + bitExTooltipForSelectedCurrency + "\n" + mempoTooltipForSelectedCurrency + "\nAverage current price: disabled";
+                    }
+                    sourceOfCurrentPrice = $"Price data is unavailable in offline mode\nand on TestNet (TestNet coins have no value)\n{geckoTooltipForSelectedCurrency}\n{bitExTooltipForSelectedCurrency}\n{mempoTooltipForSelectedCurrency}\nAverage current price: disabled";
                     # region assign tooltip to controls
                     if (lblHeaderPrice.InvokeRequired)
                     {
@@ -23454,7 +23387,10 @@ namespace SATSuma
                 }
 
                 // Get the current value from the label so we know if it's gone up or down
-                if (label.Text == "no data" || label.Text == "disabled" || label.Text == "0 (TestNet)" || label.Text == "")
+                if (String.Compare(label.Text, "no data") == 0 
+                || String.Compare(label.Text, "disabled") == 0
+                || String.Compare(label.Text, "0 (TestNet)") == 0
+                || String.Compare(label.Text, "") == 0)
                 {
                     currentValueDouble = 0;
                 }
@@ -23519,7 +23455,7 @@ namespace SATSuma
                         label.Invoke((MethodInvoker)delegate
                         {
                             label.ForeColor = Color.OliveDrab;
-                            label.Text = "+" + lblHeaderPrice.Text[0] + priceChange;
+                            label.Text = $"+{lblHeaderPrice.Text[0]}{priceChange}";
                         });
                     }
                     else
@@ -23530,7 +23466,7 @@ namespace SATSuma
                             {
                                 string cleanedPriceChange = Regex.Replace(priceChange, @"[^0-9.]", "");
                                 label.ForeColor = Color.IndianRed;
-                                label.Text = "-" + lblHeaderPrice.Text[0] + cleanedPriceChange;
+                                label.Text = $"-{lblHeaderPrice.Text[0]}{cleanedPriceChange}";
                             });
                         }
                         else
@@ -23836,7 +23772,7 @@ namespace SATSuma
                     using WebClient client = new WebClient();
                     string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";
                     string LatestVersion = client.DownloadString(VersionURL);
-                    if (LatestVersion != CurrentVersion)
+                    if (String.Compare(LatestVersion, CurrentVersion) != 0)
                     {
                         lblUpdaterLight.Invoke((MethodInvoker)delegate
                         {
@@ -23946,7 +23882,7 @@ namespace SATSuma
                 #region 'Now Viewing' title text and set state of 'add bookmark' button
                 if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
                 {
-                    if (panelAddress.Visible && lblAddressType.Text != "Invalid address format" && lblAddressType.Text != "no data")
+                    if (panelAddress.Visible && String.Compare(lblAddressType.Text, "Invalid address format") != 0 && String.Compare(lblAddressType.Text, "no data") != 0)
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -23958,7 +23894,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Address";
                         });
                     }
-                    if (panelAddress.Visible && (lblAddressType.Text == "Invalid address format" || lblAddressType.Text == "no data"))
+                    if (panelAddress.Visible && (String.Compare(lblAddressType.Text, "Invalid address format") == 0 || String.Compare(lblAddressType.Text, "no data") == 0))
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -23994,7 +23930,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Block";
                         });
                     }
-                    if (panelTransaction.Visible && lblInvalidTransaction.Text == "✔️ valid transaction ID")
+                    if (panelTransaction.Visible && String.Compare(lblInvalidTransaction.Text, "✔️ valid transaction ID") == 0)
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -24006,7 +23942,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Transaction";
                         });
                     }
-                    if (panelTransaction.Visible && lblInvalidTransaction.Text != "✔️ valid transaction ID")
+                    if (panelTransaction.Visible && String.Compare(lblInvalidTransaction.Text, "✔️ valid transaction ID") != 0)
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -24018,7 +23954,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Transaction";
                         });
                     }
-                    if (panelXpub.Visible && lblValidXpubIndicator.Text != "✔️ valid Xpub")
+                    if (panelXpub.Visible && String.Compare(lblValidXpubIndicator.Text, "✔️ valid Xpub") == 0)
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -24030,7 +23966,7 @@ namespace SATSuma
                             lblNowViewing.Text = "Xpub";
                         });
                     }
-                    if (panelXpub.Visible && lblValidXpubIndicator.Text == "✔️ valid Xpub")
+                    if (panelXpub.Visible && String.Compare(lblValidXpubIndicator.Text, "✔️ valid Xpub") == 0)
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
@@ -24175,15 +24111,15 @@ namespace SATSuma
                         }
                     }
                 }
-                if (panel.Name == "panelLoadingAnimationContainer")
+                if (String.Compare(panel.Name, "panelLoadingAnimationContainer") == 0)
                 {
                     cornerRadius = (int)(12 * UIScale);
                 }
-                if (panel.Name == "panelLeftPanel")
+                if (String.Compare(panel.Name, "panelLeftPanel") == 0)
                 {
                     cornerRadius = 12;
                 }
-                if (panel.Name == "panelPriceSourceIndicators")
+                if (String.Compare(panel.Name, "panelPriceSourceIndicators") == 0)
                 {
                     cornerRadius = (int)(6 * UIScale);
                 }
@@ -24229,7 +24165,7 @@ namespace SATSuma
         {
             try
             {
-                if (enableOrDisableAnimation == "enable")
+                if (String.Compare(enableOrDisableAnimation, "enable") == 0)
                 {
                     //start the loading animation
                     pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
@@ -24273,7 +24209,7 @@ namespace SATSuma
             {
                 lblElapsedSinceUpdate.Invoke((MethodInvoker)delegate
                 {
-                    lblElapsedSinceUpdate.Text = "Refreshing data in " + Convert.ToString(intDisplayCountdownToRefresh);
+                    lblElapsedSinceUpdate.Text = $"Refreshing data in {Convert.ToString(intDisplayCountdownToRefresh)}";
                 });
                 intDisplayCountdownToRefresh--; // reduce the countdown of the 1 minute timer by 1 second
 
@@ -24306,12 +24242,12 @@ namespace SATSuma
                 {
                     try
                     {
-                        string BlockTipURL = NodeURL + "blocks/tip/height";
+                        string BlockTipURL = $"{NodeURL}blocks/tip/height";
                         string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
                         if (decimal.TryParse(BlockTip, out decimal blockTipValue))
                         {
-                            numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
-                            numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
+                            numericUpDownSubmittedBlockNumber.Maximum = blockTipValue;
+                            numericUpDownBlockHeightToStartListFrom.Maximum = blockTipValue;
                         }
                     }
                     catch (Exception ex)
@@ -24801,13 +24737,13 @@ namespace SATSuma
                     {
                         Ping pingSender = new Ping();
                         string pingAddress = null;
-                        if (NodeURL == "https://mempool.space/api/")
+                        if (String.Compare(NodeURL, "https://mempool.space/api/") == 0)
                         {
                             pingAddress = "mempool.space";
                         }
                         else
                         {
-                            if (NodeURL == "https://mempool.space/testnet/api/")
+                            if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                             {
                                 pingAddress = "mempool.space";
                             }
@@ -24887,13 +24823,13 @@ namespace SATSuma
                                 headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
                             });
                             var displayNodeName = "";
-                            if (NodeURL == "https://mempool.space/api/")
+                            if (String.Compare(NodeURL, "https://mempool.space/api/") == 0)
                             {
                                 displayNodeName = "mempool.space (mainnet)";
                             }
                             else
                             {
-                                if (NodeURL == "https://mempool.space/testnet/api/")
+                                if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                                 {
                                     displayNodeName = "mempool.space (testnet)";
                                 }
@@ -24917,7 +24853,7 @@ namespace SATSuma
                                 headerSelectedNodeStatus.Text = displayNodeName;
                             });
 
-                            if (lblErrorMessage.Text == "Node disconnected/offline")
+                            if (String.Compare(lblErrorMessage.Text, "Node disconnected/offline") == 0)
                             {
                                 ClearAlertAndErrorMessage();
                             }
@@ -24930,13 +24866,13 @@ namespace SATSuma
                                 headerSelectedNodeStatusLight.ForeColor = Color.IndianRed;
                             });
                             var displayNodeName = "";
-                            if (NodeURL == "https://mempool.space/api/")
+                            if (String.Compare(NodeURL, "https://mempool.space/api/") == 0)
                             {
                                 displayNodeName = "mempool.space (mainnet)";
                             }
                             else
                             {
-                                if (NodeURL == "https://mempool.space/testnet/api/")
+                                if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                                 {
                                     displayNodeName = "mempool.space (testnet)";
                                 }
@@ -24970,13 +24906,13 @@ namespace SATSuma
                     {
                         // API is not online
                         var displayNodeName = "";
-                        if (NodeURL == "https://mempool.space/api/")
+                        if (String.Compare(NodeURL, "https://mempool.space/api/") == 0)
                         {
                             displayNodeName = "mempool.space (mainnet)";
                         }
                         else
                         {
-                            if (NodeURL == "https://mempool.space/testnet/api/")
+                            if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                             {
                                 displayNodeName = "mempool.space (testnet)";
                             }
@@ -25243,7 +25179,7 @@ namespace SATSuma
 
         private void DoTimerBasedStuff()
         {
-            if (panelSettings.Visible && lblSettingsOwnNodeSelected.Text == "✔️")
+            if (panelSettings.Visible && String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
             {
                 if (intDisplayCountdownToRefresh % 5 == 0)
                 {
@@ -25496,7 +25432,6 @@ namespace SATSuma
                 {
                     // Get the bounds of the text before "GRAY" in this line
                     string textBeforeGray = line.Substring(0, index);
-                    Size textSize = TextRenderer.MeasureText(e.Graphics, textBeforeGray, toolTipFont);
 
                     // Remove "GRAY" from the line
                     line.Remove(index, "XX".Length);
@@ -25866,7 +25801,7 @@ namespace SATSuma
                 }
                 HideAllScreens();
                 panelAddress.Visible = true;
-                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
                     panelOwnNodeAddressTXInfo.Visible = false;
@@ -25954,7 +25889,7 @@ namespace SATSuma
                     #endregion
                 }
                 HideAllScreens();
-                if (numericUpDownSubmittedBlockNumber.Text == "673298")
+                if (String.Compare(numericUpDownSubmittedBlockNumber.Text, "673298") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
                     {
@@ -25963,7 +25898,7 @@ namespace SATSuma
                     LookupBlock(); // fetch all the block data automatically for the initial view. 
                 }
                 panelBlock.Visible = true;
-                if (NodeURL == "https://mempool.space/api/" || NodeURL == "https://mempool.space/testnet/api/")
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByBlockTransactionsAPI = 25;
                     panelOwnNodeBlockTXInfo.Visible = false;
@@ -26125,7 +26060,7 @@ namespace SATSuma
                     #endregion
                 }
                 HideAllScreens();
-                if (numericUpDownBlockHeightToStartListFrom.Text == "673298")
+                if (String.Compare(numericUpDownBlockHeightToStartListFrom.Text, "673298") == 0)
                 {
                     numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                     {
@@ -27016,28 +26951,28 @@ namespace SATSuma
                 {
                     #region recalculate fiat values on bitcoin dashboard
 
-                    if (lblBlockSubsidyAfterHalving.Text != "no data" && lblBlockSubsidyAfterHalving.Text != "")
+                    if (String.Compare(lblBlockSubsidyAfterHalving.Text, "no data") != 0 && String.Compare(lblBlockSubsidyAfterHalving.Text, "") != 0)
                     {
                         lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
                             {
                                 lblBlockRewardAfterHalvingFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockSubsidyAfterHalving.Text) * OneBTCinSelectedCurrency):N2}";
                             });
                     }
-                    if (lblBlockSubsidy.Text != "no data" && lblBlockSubsidy.Text != "")
+                    if (String.Compare(lblBlockSubsidy.Text, "no data") != 0 && String.Compare(lblBlockSubsidy.Text, "") != 0)
                     {
                         lblBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
                             lblBlockRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockSubsidy.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lbl24HourBTCSent.Text != "disabled" && lbl24HourBTCSent.Text != "unavailable on TestNet" && lbl24HourBTCSent.Text != "")
+                    if (String.Compare(lbl24HourBTCSent.Text, "disabled") != 0 && String.Compare(lbl24HourBTCSent.Text, "unavailable on TestNet") != 0 && String.Compare(lbl24HourBTCSent.Text, "") != 0)
                     {
                         lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
                         {
                             lbl24HourBTCSentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lbl24HourBTCSent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblNextBlockTotalFees.Text != "disabled" && lblNextBlockTotalFees.Text != "unavailable on TestNet" && lblNextBlockTotalFees.Text != "")
+                    if (String.Compare(lblNextBlockTotalFees.Text, "disabled") != 0 && String.Compare(lblNextBlockTotalFees.Text, "unavailable on TestNet") != 0 && String.Compare(lblNextBlockTotalFees.Text, "") != 0)
                     {
                         lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                         {
@@ -27061,14 +26996,14 @@ namespace SATSuma
                     });
                     #endregion
                     #region recalculate fiat values on blocks screen 
-                    if (lblBlockListTotalFeesInNextBlock.Text != "unavailable" && lblBlockListTotalFeesInNextBlock.Text != "unavailable on TestNet" && lblBlockListTotalFeesInNextBlock.Text != "")
+                    if (String.Compare(lblBlockListTotalFeesInNextBlock.Text,"unavailable") != 0 && String.Compare(lblBlockListTotalFeesInNextBlock.Text, "unavailable on TestNet") != 0 && String.Compare(lblBlockListTotalFeesInNextBlock.Text, "") != 0)
                     {
                         lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate
                         {
                             lblBlockListTotalFeesInNextBlockFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblBlockListTotalFeesInNextBlock.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblBlockListBlockSubsidy.Text != "" && lblBlockListBlockSubsidy.Text != "no data")
+                    if (String.Compare(lblBlockListBlockSubsidy.Text, "") != 0 && String.Compare(lblBlockListBlockSubsidy.Text, "no data") != 0)
                     {
                         lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate
                         {
@@ -27077,21 +27012,21 @@ namespace SATSuma
                     }
                     #endregion
                     #region recalculate values on transaction screen
-                    if (lblTotalOutputValue.Text != "totalOutputValue" && lblTotalOutputValue.Text != "")
+                    if (String.Compare(lblTotalOutputValue.Text, "totalOutputValue") != 0 && String.Compare(lblTotalOutputValue.Text, "") != 0)
                     {
                         lblTotalOutputValueFiat.Invoke((MethodInvoker)delegate
                         {
                             lblTotalOutputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalOutputValue.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblTotalInputValue.Text != "totalInputValue" && lblTotalInputValue.Text != "")
+                    if (String.Compare(lblTotalInputValue.Text, "totalInputValue") != 0 && String.Compare(lblTotalInputValue.Text, "") != 0)
                     {
                         lblTotalInputValueFiat.Invoke((MethodInvoker)delegate
                         {
                             lblTotalInputValueFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblTotalInputValue.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblTransactionFee.Text != "no data" && lblTransactionFee.Text != "")
+                    if (String.Compare(lblTransactionFee.Text, "no data") != 0 && String.Compare(lblTransactionFee.Text, "") != 0)
                     {
                         lblTransactionFeeFiat.Invoke((MethodInvoker)delegate
                         {
@@ -27100,21 +27035,21 @@ namespace SATSuma
                     }
                     #endregion
                     #region recalculate fiat values on address screen
-                    if (lblAddressConfirmedUnspent.Text != "no data" && lblAddressConfirmedUnspent.Text != "")
+                    if (String.Compare(lblAddressConfirmedUnspent.Text, "no data") != 0 && String.Compare(lblAddressConfirmedUnspent.Text, "") != 0)
                     {
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedUnspent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblAddressConfirmedSpent.Text != "no data" && lblAddressConfirmedSpent.Text != "")
+                    if (String.Compare(lblAddressConfirmedSpent.Text, "no data") != 0 && String.Compare(lblAddressConfirmedSpent.Text, "") != 0)
                     {
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedSpent.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblAddressConfirmedReceived.Text != "no data" && lblAddressConfirmedReceived.Text != "")
+                    if (String.Compare(lblAddressConfirmedReceived.Text, "no data") != 0 && String.Compare(lblAddressConfirmedReceived.Text, "") != 0)
                     {
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
@@ -27123,14 +27058,14 @@ namespace SATSuma
                     }
                     #endregion
                     #region recalculate fiat values on block screen
-                    if (lblReward.Text != "no data" && lblReward.Text != "")
+                    if (String.Compare(lblReward.Text, "no data") != 0 && String.Compare(lblReward.Text, "") != 0)
                     {
                         lblRewardFiat.Invoke((MethodInvoker)delegate
                         {
                             lblRewardFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblReward.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
-                    if (lblTotalFees.Text != "no data" && lblTotalFees.Text != "")
+                    if (String.Compare(lblTotalFees.Text, "no data") != 0 && String.Compare(lblTotalFees.Text, "") != 0)
                     {
                         lblTotalFeesFiat.Invoke((MethodInvoker)delegate
                         {
@@ -27374,7 +27309,12 @@ namespace SATSuma
                     {
                         //check if its an address
                         string addressType = DetermineAddressType(textBoxUniversalSearch.Text); // check address is valid and what type of address
-                        if (addressType == "P2PKH (legacy)" || addressType == "P2SH" || addressType == "P2WPKH (segwit)" || addressType == "P2WSH" || addressType == "P2TT (taproot)" || addressType == "unknown") // address is valid
+                        if (String.Compare(addressType, "P2PKH (legacy)") == 0 ||
+                        String.Compare(addressType, "P2SH") == 0 ||
+                        String.Compare(addressType, "P2WPKH (segwit)") == 0 ||
+                        String.Compare(addressType, "P2WSH") == 0 ||
+                        String.Compare(addressType, "P2TT (taproot)") == 0 ||
+                        String.Compare(addressType, "unknown") == 0) // address is valid
                         {
                             searchTarget = "address";
                             btnUniversalSearch.Enabled = true;
@@ -27418,7 +27358,7 @@ namespace SATSuma
             try
             {
                 // search for block
-                if (searchTarget == "block")
+                if (String.Compare(searchTarget, "block") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
                     {
@@ -27430,7 +27370,7 @@ namespace SATSuma
                 }
 
                 //search for address
-                if (searchTarget == "address")
+                if (String.Compare(searchTarget, "address") == 0)
                 {
                     textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                     {
@@ -27441,7 +27381,7 @@ namespace SATSuma
                 }
 
                 //search for transaction
-                if (searchTarget == "transaction")
+                if (String.Compare(searchTarget, "transaction") == 0)
                 {
                     // copy transaction ID to transaction screen
                     textBoxTransactionID.Invoke((MethodInvoker)delegate
@@ -27453,7 +27393,7 @@ namespace SATSuma
                 }
 
                 //search for xpub
-                if (searchTarget == "xpub")
+                if (String.Compare(searchTarget, "xpub") == 0)
                 {
                     textBoxSubmittedXpub.Invoke((MethodInvoker)delegate
                     {
@@ -27775,7 +27715,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        if (mempoolConfOrAllTx == "chain")
+                        if (String.Compare(mempoolConfOrAllTx, "chain") == 0)
                         {
                             var response = await client.GetAsync($"address/{address}/txs/chain/{lastSeenTxId}");
                             if (response.IsSuccessStatusCode)
@@ -27783,7 +27723,7 @@ namespace SATSuma
                                 return await response.Content.ReadAsStringAsync();
                             }
                         }
-                        if (mempoolConfOrAllTx == "mempool")
+                        if (String.Compare(mempoolConfOrAllTx, "mempool") == 0)
                         {
                             var response = await client.GetAsync($"address/{address}/txs/mempool");
                             if (response.IsSuccessStatusCode)
@@ -27791,7 +27731,7 @@ namespace SATSuma
                                 return await response.Content.ReadAsStringAsync();
                             }
                         }
-                        if (mempoolConfOrAllTx == "all")
+                        if (String.Compare(mempoolConfOrAllTx, "all") == 0)
                         {
                             var response = await client.GetAsync($"address/{address}/txs");
                             if (response.IsSuccessStatusCode)
@@ -27832,7 +27772,7 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        if (mempoolConfOrAllTx == "chain")
+                        if (String.Compare(mempoolConfOrAllTx, "chain") == 0)
                         {
                             if (lastSeenTxId == "")
                             {
@@ -27916,7 +27856,7 @@ namespace SATSuma
                     using var client = new HttpClient();
                     try
                     {
-                        if (blockHeight == "000000")
+                        if (String.Compare(blockHeight, "000000") == 0)
                         {
                             blockHeight = "";
                         }
@@ -28163,27 +28103,27 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
                         string blockChainInfoPeriod = "";
-                        if (chartPeriod == "1m")
+                        if (String.Compare(chartPeriod, "1m") == 0)
                         {
                             blockChainInfoPeriod = "1months";
                         }
-                        if (chartPeriod == "3m")
+                        if (String.Compare(chartPeriod, "3m") == 0)
                         {
                             blockChainInfoPeriod = "3months";
                         }
-                        if (chartPeriod == "6m")
+                        if (String.Compare(chartPeriod, "6m") == 0)
                         {
                             blockChainInfoPeriod = "6months";
                         }
-                        if (chartPeriod == "1y")
+                        if (String.Compare(chartPeriod, "1y") == 0)
                         {
                             blockChainInfoPeriod = "1years";
                         }
-                        if (chartPeriod == "3y")
+                        if (String.Compare(chartPeriod, "3y") == 0)
                         {
                             blockChainInfoPeriod = "3years";
                         }
-                        if (chartPeriod == "all")
+                        if (String.Compare(chartPeriod, "all") == 0)
                         {
                             blockChainInfoPeriod = "all";
                         }
@@ -28224,27 +28164,27 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
                         string blockChainInfoPeriod = "";
-                        if (chartPeriod == "1m")
+                        if (String.Compare(chartPeriod, "1m") == 0)
                         {
                             blockChainInfoPeriod = "1months";
                         }
-                        if (chartPeriod == "3m")
+                        if (String.Compare(chartPeriod, "3m") == 0)
                         {
                             blockChainInfoPeriod = "3months";
                         }
-                        if (chartPeriod == "6m")
+                        if (String.Compare(chartPeriod, "6m") == 0)
                         {
                             blockChainInfoPeriod = "6months";
                         }
-                        if (chartPeriod == "1y")
+                        if (String.Compare(chartPeriod, "1y") == 0)
                         {
                             blockChainInfoPeriod = "1years";
                         }
-                        if (chartPeriod == "3y")
+                        if (String.Compare(chartPeriod, "3y") == 0)
                         {
                             blockChainInfoPeriod = "3years";
                         }
-                        if (chartPeriod == "all")
+                        if (String.Compare(chartPeriod, "all") == 0)
                         {
                             blockChainInfoPeriod = "all";
                         }
@@ -28400,27 +28340,27 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
                         string blockChainInfoPeriod = "";
-                        if (chartPeriod == "1m")
+                        if (String.Compare(chartPeriod, "1m") == 0)
                         {
                             blockChainInfoPeriod = "1months";
                         }
-                        if (chartPeriod == "3m")
+                        if (String.Compare(chartPeriod, "3m") == 0)
                         {
                             blockChainInfoPeriod = "3months";
                         }
-                        if (chartPeriod == "6m")
+                        if (String.Compare(chartPeriod, "6m") == 0)
                         {
                             blockChainInfoPeriod = "6months";
                         }
-                        if (chartPeriod == "1y")
+                        if (String.Compare(chartPeriod, "1y") == 0)
                         {
                             blockChainInfoPeriod = "1years";
                         }
-                        if (chartPeriod == "3y")
+                        if (String.Compare(chartPeriod, "3y") == 0)
                         {
                             blockChainInfoPeriod = "3years";
                         }
-                        if (chartPeriod == "all")
+                        if (String.Compare(chartPeriod, "all") == 0)
                         {
                             blockChainInfoPeriod = "all";
                         }
@@ -28510,27 +28450,27 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
                         string blockChainInfoPeriod = "";
-                        if (chartPeriod == "1m")
+                        if (String.Compare(chartPeriod, "1m") == 0)
                         {
                             blockChainInfoPeriod = "1months";
                         }
-                        if (chartPeriod == "3m")
+                        if (String.Compare(chartPeriod, "3m") == 0)
                         {
                             blockChainInfoPeriod = "3months";
                         }
-                        if (chartPeriod == "6m")
+                        if (String.Compare(chartPeriod, "6m") == 0)
                         {
                             blockChainInfoPeriod = "6months";
                         }
-                        if (chartPeriod == "1y")
+                        if (String.Compare(chartPeriod, "1y") == 0)
                         {
                             blockChainInfoPeriod = "1years";
                         }
-                        if (chartPeriod == "3y")
+                        if (String.Compare(chartPeriod, "3y") == 0)
                         {
                             blockChainInfoPeriod = "3years";
                         }
-                        if (chartPeriod == "all")
+                        if (String.Compare(chartPeriod, "all") == 0)
                         {
                             blockChainInfoPeriod = "all";
                         }
@@ -28571,27 +28511,27 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri("https://api.blockchain.info/");
                         string blockChainInfoPeriod = "";
-                        if (chartPeriod == "1m")
+                        if (String.Compare(chartPeriod, "1m") == 0)
                         {
                             blockChainInfoPeriod = "1months";
                         }
-                        if (chartPeriod == "3m")
+                        if (String.Compare(chartPeriod, "3m") == 0)
                         {
                             blockChainInfoPeriod = "3months";
                         }
-                        if (chartPeriod == "6m")
+                        if (String.Compare(chartPeriod, "6m") == 0)
                         {
                             blockChainInfoPeriod = "6months";
                         }
-                        if (chartPeriod == "1y")
+                        if (String.Compare(chartPeriod, "1y") == 0)
                         {
                             blockChainInfoPeriod = "1years";
                         }
-                        if (chartPeriod == "3y")
+                        if (String.Compare(chartPeriod, "3y") == 0)
                         {
                             blockChainInfoPeriod = "3years";
                         }
-                        if (chartPeriod == "all")
+                        if (String.Compare(chartPeriod, "all") == 0)
                         {
                             blockChainInfoPeriod = "all";
                         }

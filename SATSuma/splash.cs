@@ -150,7 +150,7 @@ namespace SATSuma
             linkLabelSourceCode.ForeColor = LinksColor;
             btnExit.BackColor = ButtonBackColor;
             btnExit.ForeColor = ButtonTextColor;
-            lblVersion.Text = "SATSuma v" + CurrentVersion;
+            lblVersion.Text = $"SATSuma v{CurrentVersion}";
             btnExit.BorderRadius = ButtonRadius;
             btnExit.BorderSize = ButtonBorderSize;
             btnExit.BorderColor = ButtonBorderColor;
@@ -167,12 +167,12 @@ namespace SATSuma
                     string VersionURL = "https://satsuma.btcdir.org/SATSumaVersion.txt";
                     string LatestVersion = client.DownloadString(VersionURL);
 
-                    if (LatestVersion != CurrentVersion)
+                    if (String.Compare(LatestVersion, CurrentVersion) != 0)
                     {
                         lblUpToDate.Visible = false;
                         lblVersionAvailable.Invoke((MethodInvoker)delegate
                         {
-                            lblVersionAvailable.Text = "v" + LatestVersion + " available";
+                            lblVersionAvailable.Text = $"v{LatestVersion} available";
                             lblVersionAvailable.Visible = true;
                         });
                         linkLabelDownloadUpdate.Invoke((MethodInvoker)delegate

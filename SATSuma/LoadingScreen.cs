@@ -38,13 +38,6 @@ namespace SATSuma
             // Set the form's appearance
             this.FormBorderStyle = FormBorderStyle.None;
             this.Padding = new Padding(1);
-            // Retrieve the current DPI scale factor
-            float scale = this.CreateGraphics().DpiX / 96.0f;
-
-            //UIScaleForOverlay = UIScale;
-
-            //this.Width = (int)(940 * scale * UIScale);
-            //this.Height = (int)(754 * scale * UIScale);
             this.Width = (int)(787 * UIScale);
             this.Height = (int)(749 * UIScale);
 

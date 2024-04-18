@@ -495,7 +495,7 @@ namespace SATSuma
             foreach (HtmlElement spanElement in spanElements)
             {
                 spanElement.Style = $"color: {spanColorString}";
-                if (spanElement.GetAttribute("className") == "breaklongword")
+                if (String.Compare(spanElement.GetAttribute("className"), "breaklongword") == 0)
                 {
                     spanElement.Style = $"word-wrap: break-word;";
                     
@@ -508,7 +508,7 @@ namespace SATSuma
             var titleElements = document.GetElementsByTagName("h5");
             foreach (HtmlElement titleElement in titleElements)
             {
-                if (titleElement.GetAttribute("className") == "wp-block-heading")
+                if (String.Compare(titleElement.GetAttribute("className"), "wp-block-heading") == 0)
                 {
                     titleElement.Style = $"color: {titleColorString}";
                 }
@@ -518,7 +518,7 @@ namespace SATSuma
             var divElements = document.GetElementsByTagName("div");
             foreach (HtmlElement divElement in divElements)
             {
-                if (divElement.GetAttribute("className") == "content-area")
+                if (String.Compare(divElement.GetAttribute("className"), "content-area") == 0)
                 {
                     divElement.Style = "padding-left: 10px; padding-bottom: 40px;";
                     
@@ -539,7 +539,7 @@ namespace SATSuma
             var figureElements = document.GetElementsByTagName("figure");
             foreach (HtmlElement figureElement in figureElements)
             {
-                if (figureElement.GetAttribute("className") == "supportproject")
+                if (String.Compare(figureElement.GetAttribute("className"), "supportproject") == 0)
                 {
                     figureElement.Style = $"font-size: 10px";
                 }
@@ -597,7 +597,7 @@ namespace SATSuma
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show("Error opening link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Windows.Forms.MessageBox.Show($"Error opening link: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 // Set the linkClicked flag to true to avoid multiple tabs for a single click

@@ -361,11 +361,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="helpScreen.cs">
+    <Compile Include="HelpScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="helpScreen.Designer.cs">
-      <DependentUpon>helpScreen.cs</DependentUpon>
+    <Compile Include="HelpScreen.Designer.cs">
+      <DependentUpon>HelpScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="LoadingTheme.cs">
       <SubType>Form</SubType>
@@ -413,8 +413,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="helpScreen.resx">
-      <DependentUpon>helpScreen.cs</DependentUpon>
+    <EmbeddedResource Include="HelpScreen.resx">
+      <DependentUpon>HelpScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadingTheme.resx">
       <DependentUpon>LoadingTheme.cs</DependentUpon>

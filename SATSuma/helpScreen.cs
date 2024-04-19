@@ -43,7 +43,7 @@ namespace SATSuma
         public Color DataFieldColor { get; set; }
         
 
-        private bool linkClicked = false; // used to supress multiple events (and multiple browser tabs) when opening external link in default browser
+        private bool linkClicked; // used to supress multiple events (and multiple browser tabs) when opening external link in default browser
         #endregion
         #region initialize
         public HelpScreen(double UIScale)
@@ -534,8 +534,6 @@ namespace SATSuma
                tableElement.Style = $"background-color: {tableColorString}";
             }
 
-            var figureColor = MakeColorLighter(WindowBackgroundColor, 10);
-            var figureColorString = ColorTranslator.ToHtml(figureColor);
             var figureElements = document.GetElementsByTagName("figure");
             foreach (HtmlElement figureElement in figureElements)
             {

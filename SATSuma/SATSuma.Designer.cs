@@ -7587,7 +7587,7 @@
             this.btnMenuSettings.Text = "   settings";
             this.btnMenuSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuSettings.UseVisualStyleBackColor = false;
-            this.btnMenuSettings.Click += new System.EventHandler(this.BtnMenuSettings_Click);
+            this.btnMenuSettings.Click += new System.EventHandler(this.BtnMenuSettings_ClickAsync);
             this.btnMenuSettings.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuSettings.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -7651,7 +7651,7 @@
             this.btnMenuCreateTheme.Text = "create/delete";
             this.btnMenuCreateTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuCreateTheme.UseVisualStyleBackColor = false;
-            this.btnMenuCreateTheme.Click += new System.EventHandler(this.BtnAppearance_Click);
+            this.btnMenuCreateTheme.Click += new System.EventHandler(this.BtnAppearance_ClickAsync);
             this.btnMenuCreateTheme.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuCreateTheme.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -12565,7 +12565,7 @@
             this.pictureBoxCustomImage.TabIndex = 283;
             this.pictureBoxCustomImage.TabStop = false;
             this.toolTipGeneralUse.SetToolTip(this.pictureBoxCustomImage, "Select custom image");
-            this.pictureBoxCustomImage.Click += new System.EventHandler(this.PictureBoxCustomImage_Click);
+            this.pictureBoxCustomImage.Click += new System.EventHandler(this.PictureBoxCustomImage_ClickAsync);
             // 
             // label204
             // 
@@ -12600,7 +12600,7 @@
             this.pictureBoxStackSats.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxStackSats.TabIndex = 301;
             this.pictureBoxStackSats.TabStop = false;
-            this.pictureBoxStackSats.Click += new System.EventHandler(this.PictureBoxStackSats_Click);
+            this.pictureBoxStackSats.Click += new System.EventHandler(this.PictureBoxStackSats_ClickAsync);
             // 
             // lblBackgroundSymbolSelected
             // 
@@ -12625,7 +12625,7 @@
             this.pictureBoxSymbol.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxSymbol.TabIndex = 298;
             this.pictureBoxSymbol.TabStop = false;
-            this.pictureBoxSymbol.Click += new System.EventHandler(this.PictureBoxSymbol_Click);
+            this.pictureBoxSymbol.Click += new System.EventHandler(this.PictureBoxSymbol_ClickAsync);
             // 
             // label290
             // 
@@ -12660,7 +12660,7 @@
             this.pictureBoxHoneyBadger.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxHoneyBadger.TabIndex = 295;
             this.pictureBoxHoneyBadger.TabStop = false;
-            this.pictureBoxHoneyBadger.Click += new System.EventHandler(this.PictureBoxHoneyBadger_Click);
+            this.pictureBoxHoneyBadger.Click += new System.EventHandler(this.PictureBoxHoneyBadger_ClickAsync);
             // 
             // label287
             // 
@@ -12705,7 +12705,7 @@
             this.pictureBoxSatsuma.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxSatsuma.TabIndex = 292;
             this.pictureBoxSatsuma.TabStop = false;
-            this.pictureBoxSatsuma.Click += new System.EventHandler(this.PictureBoxSatsuma_Click);
+            this.pictureBoxSatsuma.Click += new System.EventHandler(this.PictureBoxSatsuma_ClickAsync);
             // 
             // lblBackgroundFranklinSelected
             // 
@@ -12780,7 +12780,7 @@
             this.pictureBoxGenesis.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxGenesis.TabIndex = 263;
             this.pictureBoxGenesis.TabStop = false;
-            this.pictureBoxGenesis.Click += new System.EventHandler(this.PictureBoxGenesis_Click);
+            this.pictureBoxGenesis.Click += new System.EventHandler(this.PictureBoxGenesis_ClickAsync);
             // 
             // pictureBoxFranklin
             // 
@@ -12792,7 +12792,7 @@
             this.pictureBoxFranklin.Size = new System.Drawing.Size(56, 56);
             this.pictureBoxFranklin.TabIndex = 264;
             this.pictureBoxFranklin.TabStop = false;
-            this.pictureBoxFranklin.Click += new System.EventHandler(this.PictureBoxFranklin_Click);
+            this.pictureBoxFranklin.Click += new System.EventHandler(this.PictureBoxFranklin_ClickAsync);
             // 
             // pictureBoxCustomColor
             // 
@@ -12806,7 +12806,7 @@
             this.pictureBoxCustomColor.TabIndex = 265;
             this.pictureBoxCustomColor.TabStop = false;
             this.toolTipGeneralUse.SetToolTip(this.pictureBoxCustomColor, "Select colour");
-            this.pictureBoxCustomColor.Click += new System.EventHandler(this.PictureBoxCustomColor_Click);
+            this.pictureBoxCustomColor.Click += new System.EventHandler(this.PictureBoxCustomColor_ClickAsync);
             // 
             // label177
             // 
@@ -14176,7 +14176,7 @@
             this.btnChartDifficultyLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLog, "Logarithmic scale chart");
             this.btnChartDifficultyLog.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_Click);
+            this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_ClickAsync);
             // 
             // btnChartDifficultyLinear
             // 
@@ -14201,7 +14201,7 @@
             this.btnChartDifficultyLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLinear, "Linear scale chart");
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
+            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficulty_ClickAsync);
             // 
             // panelHashrateScaleButtons
             // 
@@ -14236,7 +14236,7 @@
             this.btnHashrateScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLog, "Logarithmic scale chart");
             this.btnHashrateScaleLog.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_Click);
+            this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_ClickAsync);
             // 
             // btnHashrateScaleLinear
             // 
@@ -14261,7 +14261,7 @@
             this.btnHashrateScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLinear, "Linear scale chart");
             this.btnHashrateScaleLinear.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnChartHashrate_Click);
+            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnChartHashrate_ClickAsync);
             // 
             // panelChartMarketCapScaleButtons
             // 
@@ -14297,7 +14297,7 @@
             this.btnChartMarketCapScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLog, "Logarithmic scale chart");
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_Click);
+            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_ClickAsync);
             // 
             // btnChartMarketCapScaleLinear
             // 
@@ -14322,7 +14322,7 @@
             this.btnChartMarketCapScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLinear, "Linear scale chart");
             this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
+            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_ClickAsync);
             // 
             // btnChartMarketCap
             // 
@@ -14347,7 +14347,7 @@
             this.btnChartMarketCap.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCap, resources.GetString("btnChartMarketCap.ToolTip"));
             this.btnChartMarketCap.UseVisualStyleBackColor = false;
-            this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_Click);
+            this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_ClickAsync);
             // 
             // panelChartLoading
             // 
@@ -14420,7 +14420,7 @@
             this.btnChartLightningChannels.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartLightningChannels, resources.GetString("btnChartLightningChannels.ToolTip"));
             this.btnChartLightningChannels.UseVisualStyleBackColor = false;
-            this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_Click);
+            this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_ClickAsync);
             // 
             // btnChartLightningCapacity
             // 
@@ -14445,7 +14445,7 @@
             this.btnChartLightningCapacity.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartLightningCapacity, resources.GetString("btnChartLightningCapacity.ToolTip"));
             this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
-            this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_Click);
+            this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_ClickAsync);
             // 
             // panel81
             // 
@@ -14521,7 +14521,7 @@
             this.btnChartNodesByCountry.Text = "countries";
             this.btnChartNodesByCountry.TextColor = System.Drawing.Color.White;
             this.btnChartNodesByCountry.UseVisualStyleBackColor = false;
-            this.btnChartNodesByCountry.Click += new System.EventHandler(this.BtnChartNodesByCountry_Click);
+            this.btnChartNodesByCountry.Click += new System.EventHandler(this.BtnChartNodesByCountry_ClickAsync);
             // 
             // panelPriceScaleButtons
             // 
@@ -14556,7 +14556,7 @@
             this.btnPriceChartScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLog, "Logarithmic scale chart");
             this.btnPriceChartScaleLog.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnChartPriceLog_Click);
+            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnChartPriceLog_ClickAsync);
             // 
             // btnPriceChartScaleLinear
             // 
@@ -14581,7 +14581,7 @@
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLinear, "Linear scale chart");
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_Click);
+            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_ClickAsync);
             // 
             // panel79
             // 
@@ -14632,7 +14632,7 @@
             this.btnChartNodesByNetwork.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartNodesByNetwork, resources.GetString("btnChartNodesByNetwork.ToolTip"));
             this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
-            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_Click);
+            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_ClickAsync);
             // 
             // btnChartPoolsRanking
             // 
@@ -14656,7 +14656,7 @@
             this.btnChartPoolsRanking.Text = "pool rankings";
             this.btnChartPoolsRanking.TextColor = System.Drawing.Color.White;
             this.btnChartPoolsRanking.UseVisualStyleBackColor = false;
-            this.btnChartPoolsRanking.Click += new System.EventHandler(this.BtnChartPoolsRanking_Click);
+            this.btnChartPoolsRanking.Click += new System.EventHandler(this.BtnChartPoolsRanking_ClickAsync);
             // 
             // panelChartUTXOScaleButtons
             // 
@@ -14691,7 +14691,7 @@
             this.btnChartUTXOScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLog, "Logarithmic scale chart");
             this.btnChartUTXOScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_Click);
+            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_ClickAsync);
             // 
             // btnChartUTXOScaleLinear
             // 
@@ -14716,7 +14716,7 @@
             this.btnChartUTXOScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLinear, "Linear scale chart");
             this.btnChartUTXOScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXO_Click);
+            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXO_ClickAsync);
             // 
             // btnChartUTXO
             // 
@@ -14741,7 +14741,7 @@
             this.btnChartUTXO.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXO, resources.GetString("btnChartUTXO.ToolTip"));
             this.btnChartUTXO.UseVisualStyleBackColor = false;
-            this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_Click);
+            this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_ClickAsync);
             // 
             // panelUniqueAddressesScaleButtons
             // 
@@ -14777,7 +14777,7 @@
             this.btnChartAddressScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLog, "Logarithmic scale chart");
             this.btnChartAddressScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.BtnChartUniqueAddressesLog_Click);
+            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.BtnChartUniqueAddressesLog_ClickAsync);
             // 
             // btnChartAddressScaleLinear
             // 
@@ -14803,7 +14803,7 @@
             this.btnChartAddressScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLinear, "Linear scale chart");
             this.btnChartAddressScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
+            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.BtnChartUniqueAddresses_ClickAsync);
             // 
             // btnChartUniqueAddresses
             // 
@@ -14828,7 +14828,7 @@
             this.btnChartUniqueAddresses.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUniqueAddresses, resources.GetString("btnChartUniqueAddresses.ToolTip"));
             this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
-            this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_Click);
+            this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_ClickAsync);
             // 
             // panel78
             // 
@@ -14880,7 +14880,7 @@
             this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartBlockSize, resources.GetString("btnChartBlockSize.ToolTip"));
             this.btnChartBlockSize.UseVisualStyleBackColor = false;
-            this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_Click);
+            this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_ClickAsync);
             // 
             // btnChartCirculation
             // 
@@ -14905,7 +14905,7 @@
             this.btnChartCirculation.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartCirculation, resources.GetString("btnChartCirculation.ToolTip"));
             this.btnChartCirculation.UseVisualStyleBackColor = false;
-            this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_Click);
+            this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_ClickAsync);
             // 
             // btnChartFeeRates
             // 
@@ -14930,7 +14930,7 @@
             this.btnChartFeeRates.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartFeeRates, resources.GetString("btnChartFeeRates.ToolTip"));
             this.btnChartFeeRates.UseVisualStyleBackColor = false;
-            this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_Click);
+            this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_ClickAsync);
             // 
             // btnChartPeriodAll
             // 
@@ -15205,7 +15205,7 @@
             this.btnChartBlockFees.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartBlockFees, resources.GetString("btnChartBlockFees.ToolTip"));
             this.btnChartBlockFees.UseVisualStyleBackColor = false;
-            this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_Click);
+            this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_ClickAsync);
             // 
             // btnChartReward
             // 
@@ -15230,7 +15230,7 @@
             this.btnChartReward.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartReward, resources.GetString("btnChartReward.ToolTip"));
             this.btnChartReward.UseVisualStyleBackColor = false;
-            this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_Click);
+            this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_ClickAsync);
             // 
             // btnChartPrice
             // 
@@ -15255,7 +15255,7 @@
             this.btnChartPrice.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartPrice, resources.GetString("btnChartPrice.ToolTip"));
             this.btnChartPrice.UseVisualStyleBackColor = false;
-            this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_Click);
+            this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_ClickAsync);
             // 
             // btnChartDifficulty
             // 
@@ -15280,7 +15280,7 @@
             this.btnChartDifficulty.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficulty, resources.GetString("btnChartDifficulty.ToolTip"));
             this.btnChartDifficulty.UseVisualStyleBackColor = false;
-            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_Click);
+            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_ClickAsync);
             // 
             // btnChartHashrate
             // 
@@ -15305,7 +15305,7 @@
             this.btnChartHashrate.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartHashrate, resources.GetString("btnChartHashrate.ToolTip"));
             this.btnChartHashrate.UseVisualStyleBackColor = false;
-            this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_Click);
+            this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_ClickAsync);
             // 
             // formsPlot3
             // 
@@ -17475,7 +17475,7 @@
             this.btnExit.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnExit, "exit");
             this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.BtnExit_Click);
+            this.btnExit.Click += new System.EventHandler(this.BtnExit_ClickAsync);
             this.btnExit.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnExit.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -17916,7 +17916,7 @@
             this.btnMenuDirectory.Text = "   directory";
             this.btnMenuDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuDirectory.UseVisualStyleBackColor = false;
-            this.btnMenuDirectory.Click += new System.EventHandler(this.BtnMenuDirectory_Click);
+            this.btnMenuDirectory.Click += new System.EventHandler(this.BtnMenuDirectory_ClickAsync);
             this.btnMenuDirectory.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuDirectory.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -17937,7 +17937,7 @@
             this.btnMenuPriceConverter.Text = "   convert btc/fiat";
             this.btnMenuPriceConverter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuPriceConverter.UseVisualStyleBackColor = false;
-            this.btnMenuPriceConverter.Click += new System.EventHandler(this.BtnMenuPriceConverter_Click);
+            this.btnMenuPriceConverter.Click += new System.EventHandler(this.BtnMenuPriceConverter_ClickAsync);
             this.btnMenuPriceConverter.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuPriceConverter.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -17958,7 +17958,7 @@
             this.btnMenuDCACalculator.Text = "   dca calculator";
             this.btnMenuDCACalculator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuDCACalculator.UseVisualStyleBackColor = false;
-            this.btnMenuDCACalculator.Click += new System.EventHandler(this.BtnMenuDCACalculator_Click);
+            this.btnMenuDCACalculator.Click += new System.EventHandler(this.BtnMenuDCACalculator_ClickAsync);
             this.btnMenuDCACalculator.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuDCACalculator.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -17979,7 +17979,7 @@
             this.btnMenuBookmarks.Text = "   bookmarks";
             this.btnMenuBookmarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuBookmarks.UseVisualStyleBackColor = false;
-            this.btnMenuBookmarks.Click += new System.EventHandler(this.BtnMenuBookmarks_Click);
+            this.btnMenuBookmarks.Click += new System.EventHandler(this.BtnMenuBookmarks_ClickAsync);
             this.btnMenuBookmarks.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuBookmarks.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18000,7 +18000,7 @@
             this.btnMenuCharts.Text = "   charts";
             this.btnMenuCharts.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuCharts.UseVisualStyleBackColor = false;
-            this.btnMenuCharts.Click += new System.EventHandler(this.BtnMenuCharts_Click);
+            this.btnMenuCharts.Click += new System.EventHandler(this.BtnMenuCharts_ClickAsync);
             this.btnMenuCharts.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuCharts.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18023,7 +18023,7 @@
             this.btnMenuXpub.Text = "   xpub";
             this.btnMenuXpub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuXpub.UseVisualStyleBackColor = false;
-            this.btnMenuXpub.Click += new System.EventHandler(this.BtnMenuXpub_Click);
+            this.btnMenuXpub.Click += new System.EventHandler(this.BtnMenuXpub_ClickAsync);
             this.btnMenuXpub.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuXpub.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18046,7 +18046,7 @@
             this.btnMenuTransaction.Text = "   transaction";
             this.btnMenuTransaction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuTransaction.UseVisualStyleBackColor = false;
-            this.btnMenuTransaction.Click += new System.EventHandler(this.BtnMenuTransaction_Click);
+            this.btnMenuTransaction.Click += new System.EventHandler(this.BtnMenuTransaction_ClickAsync);
             this.btnMenuTransaction.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuTransaction.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18070,7 +18070,7 @@
             this.btnMenuAddress.Text = "   address";
             this.btnMenuAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuAddress.UseVisualStyleBackColor = false;
-            this.btnMenuAddress.Click += new System.EventHandler(this.BtnMenuAddress_Click);
+            this.btnMenuAddress.Click += new System.EventHandler(this.BtnMenuAddress_ClickAsync);
             this.btnMenuAddress.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuAddress.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18094,7 +18094,7 @@
             this.btnMenuBlock.Text = "   block";
             this.btnMenuBlock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuBlock.UseVisualStyleBackColor = false;
-            this.btnMenuBlock.Click += new System.EventHandler(this.BtnMenuBlock_Click);
+            this.btnMenuBlock.Click += new System.EventHandler(this.BtnMenuBlock_ClickAsync);
             this.btnMenuBlock.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuBlock.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18131,7 +18131,7 @@
             this.btnMenuBlockList.Text = "   blocks";
             this.btnMenuBlockList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuBlockList.UseVisualStyleBackColor = false;
-            this.btnMenuBlockList.Click += new System.EventHandler(this.BtnMenuBlockList_Click);
+            this.btnMenuBlockList.Click += new System.EventHandler(this.BtnMenuBlockList_ClickAsync);
             this.btnMenuBlockList.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuBlockList.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18154,7 +18154,7 @@
             this.btnMenuBitcoinDashboard.Text = "   ₿ dashboard";
             this.btnMenuBitcoinDashboard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuBitcoinDashboard.UseVisualStyleBackColor = false;
-            this.btnMenuBitcoinDashboard.Click += new System.EventHandler(this.BtnMenuBitcoinDashboard_Click);
+            this.btnMenuBitcoinDashboard.Click += new System.EventHandler(this.BtnMenuBitcoinDashboard_ClickAsync);
             this.btnMenuBitcoinDashboard.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuBitcoinDashboard.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -18229,7 +18229,7 @@
             this.btnMenuLightningDashboard.Text = "  ⚡dashboard";
             this.btnMenuLightningDashboard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuLightningDashboard.UseVisualStyleBackColor = false;
-            this.btnMenuLightningDashboard.Click += new System.EventHandler(this.BtnMenuLightningDashboard_Click);
+            this.btnMenuLightningDashboard.Click += new System.EventHandler(this.BtnMenuLightningDashboard_ClickAsync);
             this.btnMenuLightningDashboard.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuLightningDashboard.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 

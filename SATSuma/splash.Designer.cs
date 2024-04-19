@@ -1,6 +1,6 @@
 ﻿namespace SATSuma
 {
-    partial class Splash
+    partial class splash
     {
         /// <summary>
         /// Required designer variable.

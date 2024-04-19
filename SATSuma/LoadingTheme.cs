@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace SATSuma
 {
-    public partial class loadingTheme : Form
+    public partial class LoadingTheme : Form
     {
 
 
@@ -33,7 +33,7 @@ namespace SATSuma
 
        // public double UIScaleForOverlay { get; set; }
 
-        public loadingTheme(double UIScale)
+        public LoadingTheme(double UIScale)
         {
             InitializeComponent();
             // Set the form's appearance

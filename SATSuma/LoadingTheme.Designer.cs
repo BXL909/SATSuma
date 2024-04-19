@@ -1,6 +1,6 @@
 ﻿namespace SATSuma
 {
-    partial class loadingTheme
+    partial class LoadingTheme
     {
         /// <summary>
         /// Required designer variable.

@@ -1,6 +1,6 @@
 ﻿namespace SATSuma
 {
-    partial class loadingScreen
+    partial class LoadingScreen
     {
         /// <summary>
         /// Required designer variable.

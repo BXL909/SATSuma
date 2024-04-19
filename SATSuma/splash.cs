@@ -18,7 +18,7 @@ using System.Windows.Forms;
  
 namespace SATSuma
 {
-    public partial class Splash : Form
+    public partial class splash : Form
     {
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -45,7 +45,7 @@ namespace SATSuma
         public Color ButtonBorderColor { get; set; }
         #endregion
         #region initialize
-        public Splash(double UIScale)
+        public splash(double UIScale)
         {
             InitializeComponent();
 

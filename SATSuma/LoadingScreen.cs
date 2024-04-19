@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace SATSuma
 {
-    public partial class loadingScreen : Form
+    public partial class LoadingScreen : Form
     {
 
         #region rounded form
@@ -32,7 +32,7 @@ namespace SATSuma
 
        // public double UIScaleForOverlay { get; set; }
 
-        public loadingScreen(double UIScale)
+        public LoadingScreen(double UIScale)
         {
             InitializeComponent();
             // Set the form's appearance

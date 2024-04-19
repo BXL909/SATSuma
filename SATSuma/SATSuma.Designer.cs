@@ -18426,7 +18426,7 @@
             this.panelAddToBookmarksBorder.BackColor = System.Drawing.Color.Transparent;
             this.panelAddToBookmarksBorder.Location = new System.Drawing.Point(637, 38);
             this.panelAddToBookmarksBorder.Name = "panelAddToBookmarksBorder";
-            this.panelAddToBookmarksBorder.Size = new System.Drawing.Size(263, 116);
+            this.panelAddToBookmarksBorder.Size = new System.Drawing.Size(264, 117);
             this.panelAddToBookmarksBorder.TabIndex = 272;
             this.panelAddToBookmarksBorder.Visible = false;
             // 

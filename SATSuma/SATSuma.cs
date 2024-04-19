@@ -25,7 +25,7 @@ https://satsuma.btcdir.org/version-history/
 https://satsuma.btcdir.org/download/
 
 * Stuff to do:
-* Taproot support on xpub screen
+* Taproot support on xpub screen 
 */
 
 #region Using
@@ -12005,8 +12005,11 @@ namespace SATSuma
             {
                 if (!panelAddToBookmarks.Visible)
                 {
-                    panelAddToBookmarks.Visible = true;
+                    
                     panelAddToBookmarksBorder.Visible = true;
+                    panelAddToBookmarksBorder.BringToFront();
+                    panelAddToBookmarks.Visible = true;
+                    panelAddToBookmarks.BringToFront();
                     lblBookmarkSavedSuccess.Visible = false;
                     btnCommitToBookmarks.Enabled = true;
                     btnCancelAddToBookmarks.Enabled = true;
@@ -12175,7 +12178,7 @@ namespace SATSuma
                 btnCommitToBookmarks.Enabled = false;
                 btnCancelAddToBookmarks.Enabled = false;
                 intHideAddToBookmarksTimeShown = 0;
-
+                bookmarkHasBeenAdded = true;
                 textBoxBookmarkProposedNote.Text = "";
             }
             catch (Exception ex)
@@ -12183,6 +12186,8 @@ namespace SATSuma
                 HandleException(ex, "BtnCommitToBookmarks_Click");
             }
         }
+
+        bool bookmarkHasBeenAdded;
         #endregion
         #region read bookmarks from file
         private static List<Bookmark> ReadBookmarksFromJsonFile()
@@ -21415,7 +21420,7 @@ namespace SATSuma
                 //add to bookmarks panel (uses button colour)
                 panelAddToBookmarksBorder.Invoke((MethodInvoker)delegate
                 {
-                    panelAddToBookmarksBorder.BackColor = thiscolor;
+                    panelAddToBookmarksBorder.BackColor = chartsBackgroundColor;
                 });
                 //main menu drop-down panels
                 panelThemeMenu.Invoke((MethodInvoker)delegate
@@ -25279,7 +25284,10 @@ namespace SATSuma
             intThemeDeletedMessageTimeShown++;
             intThemeSavedMessageTimeShown++;
             intAddToBookmarksMessageTimeLightLit++;
-            intHideAddToBookmarksTimeShown++;
+            if (bookmarkHasBeenAdded)
+            {
+                intHideAddToBookmarksTimeShown++;
+            }
             if (xpubScanComplete)
             {
                 intTimeUntilXpubProgressBarsHidden++;
@@ -25379,6 +25387,8 @@ namespace SATSuma
                 {
                     panelAddToBookmarksBorder.Visible = false;
                 });
+                intHideAddToBookmarksTimeShown = 0;
+                bookmarkHasBeenAdded = false;
             }
 
             //check whether xpub progrss bars need hiding

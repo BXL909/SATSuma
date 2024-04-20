@@ -27972,7 +27972,7 @@ namespace SATSuma
             public string Reward { get; set; }
             public decimal MedianFee { get; set; }
             public decimal[] FeeRange { get; set; }
-            public int TotalFees { get; set; }
+            public double TotalFees { get; set; }
             public string AvgFee { get; set; }
             //  public string AvgFeeRate { get; set; }
             public string AvgTxSize { get; set; }

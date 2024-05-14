@@ -3091,6 +3091,10 @@ namespace SATSuma
                     {
                         if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
                         {
+                            btnFirstAddressTransaction.Visible = false;
+                        }
+                        else
+                        {
                             btnFirstAddressTransaction.Visible = true;
                         }
                     }
@@ -3103,7 +3107,7 @@ namespace SATSuma
                     {
                         if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
                         {
-                            btnNextAddressTransactions.Visible = true;
+                            btnNextAddressTransactions.Visible = false;
                         }
                     }
 
@@ -3534,6 +3538,11 @@ namespace SATSuma
                 {
                     btnNextAddressTransactions.Visible = false;
                     btnFirstAddressTransaction.Visible = false;
+                }
+                else
+                {
+                    btnNextAddressTransactions.Visible = true;
+                    btnFirstAddressTransaction.Visible = true;
                 }
 
                 Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, panel123, panel124, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, 

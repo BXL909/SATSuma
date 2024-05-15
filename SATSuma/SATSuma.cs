@@ -26,6 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
+* finish duplicating address tx screen then turn it into address utxo screen. Lines 3169 - 3333 of address screen still to be reproduced for utxo screen
 */
 
 #region Using
@@ -103,6 +104,12 @@ namespace SATSuma
         int rowsReturnedByAddressTransactionsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
         private string addressScreenConfUnconfOrAllTx = "chain"; // used to keep track of whether we're doing transactions requests for conf, unconf, or all transactions
         bool PartOfAnAllAddressTransactionsRequest; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
+        #endregion
+        #region address UTXO screen variables
+        private int TotalAddressUTXORowsAdded; // keeps track of how many rows of Address UTXOs have been added to the listview
+        private string addressScreenConfUnconfOrAllUTXO = "chain"; // used to keep track of whether we're doing UTXO requests for conf, unconf, or all UTXOs
+        int rowsReturnedByAddressUTXOsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
+        bool PartOfAnAllAddressUTXOsRequest; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         #endregion
         #region transaction screen variables
         private int TransactionOutputsScrollPosition; // used to remember position in scrollable panel to return to that position after paint event
@@ -206,6 +213,16 @@ namespace SATSuma
         #endregion
         #region variables to hold button states
         bool dontDisableButtons = true; // ignore button disables during initial setup
+
+        bool btnShowAllAddressUTXOWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+        bool btnShowConfirmedAddressUTXOWasEnabled; // Address screen - store button state during queries to return to that state afterwards
+        bool btnShowUnconfirmedAddressUTXOWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+        bool btnFirstAddressUTXOsWasEnabled; // Address screen - store button state during queries to return to that state afterwards
+        bool btnNextAddressUTXOsWasEnabled; // Address screen - store button state during queries to return to that state afterwards
+        bool BtnViewTransactionFromAddressUTXOWasEnabled; // Address screen - store button state during queries to return to that state afterwards
+        bool BtnViewBlockFromAddressUTXOWasEnabled; // Address screen - store button state during queries to return to that state afterwards
+        bool textBoxSubmittedAddressUTXOWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
+
         bool btnShowAllAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowConfirmedAddressTXWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
@@ -3640,6 +3657,954 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "DisableEnableAddressButtons");
+            }
+        }
+
+        #endregion
+        #endregion
+
+        #region ⚡ADDRESS (UTXO's) SCREEN⚡
+        #region setup address utxo screen
+        private async void textboxSubmittedAddressUTXO_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                btnViewBlockFromAddressUTXO.Visible = false;
+                btnViewTransactionFromAddressUTXO.Visible = false;
+                listViewAddressUTXOs.Items.Clear(); // wipe any data in the transaction listview
+                TotalAddressUTXORowsAdded = 0;
+
+                string addressString = textboxSubmittedAddressUTXO.Text; // supplied address
+
+                string addressType = DetermineAddressType(addressString); // check address is valid and what type of address
+                if (String.Compare(addressType, "P2PKH (legacy)") == 0 ||
+                String.Compare(addressType, "P2SH") == 0 ||
+                String.Compare(addressType, "P2WPKH (segwit)") == 0 ||
+                String.Compare(addressType, "P2WSH") == 0 ||
+                String.Compare(addressType, "P2TT (taproot)") == 0 ||
+                String.Compare(addressType, "unknown") == 0) // if any of these, address is valid
+                {
+                    ToggleLoadingAnimation("enable"); // start the loading animation
+
+                    DisableEnableAddressUTXOButtons("disable"); // disable buttons during operation
+                    lblInvalidAddressIndicatorUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        lblInvalidAddressIndicatorUTXO.ForeColor = Color.OliveDrab;
+                        lblInvalidAddressIndicatorUTXO.Text = "✔️ valid address";
+                    });
+
+                    AddressValidShowControlsUTXO();
+                    lblAddressTypeUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressTypeUTXO.Text = $"{addressType} address";
+                    });
+                    // generate QR code for address
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(addressString, QRCodeGenerator.ECCLevel.Q);
+                    QRCode qrCode = new QRCode(qrCodeData);
+                    var qrCodeImage = qrCode.GetGraphic(20, label77.ForeColor, Color.Black, false);
+                    qrCodeImage.MakeTransparent(Color.Black);
+                    AddressQRCodePictureboxUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        AddressQRCodePictureboxUTXO.Image = qrCodeImage;
+                    });
+                    try
+                    {
+                        await GetAddressBalanceAsyncUTXO(addressString).ConfigureAwait(true); // make sure we get these results before processing transactions
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "TboxSubmittedAddressUTXO_TextChanged (Error getting address balance)");
+                        return;
+                    }
+                    string lastSeenTxId = "0"; // start from the top of the JSON (most recent tx)
+                    try
+                    {
+                        await GetTransactionsForAddressAsyncUTXO(addressString, lastSeenTxId).ConfigureAwait(true); // get first batch of transactions
+                    }
+                    catch (Exception ex)
+                    {
+                        HandleException(ex, "TboxSubmittedAddressUTXO_TextChanged (Error getting first batch of transactions for address)");
+                        return;
+                    }
+                    DisableEnableAddressUTXOButtons("enable"); // enable the buttons that were previously enabled again
+                    ToggleLoadingAnimation("disable"); // stop the loading animation
+                }
+                else
+                {
+                    if (addressString == "")
+                    {
+                        lblInvalidAddressIndicatorUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidAddressIndicatorUTXO.Text = "";
+                        });
+                    }
+                    else
+                    {
+                        lblInvalidAddressIndicatorUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblInvalidAddressIndicatorUTXO.ForeColor = Color.IndianRed;
+                            lblInvalidAddressIndicatorUTXO.Text = "✖️ invalid address";
+                        });
+                    }
+                    lblAddressTypeUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressTypeUTXO.Text = "Invalid address format";
+                    });
+                    AddressQRCodePictureboxUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        AddressQRCodePictureboxUTXO.Image = null;
+                    });
+
+                    Control[] controlsToSetEmpty = { lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUTXOCount, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO };
+                    foreach (Control control in controlsToSetEmpty)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Text = string.Empty;
+                        });
+                    }
+
+                    AddressInvalidHideControlsUTXO();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "TboxSubmittedAddressUTXO_TextChanged");
+            }
+        }
+
+        //------------------------------------------ GET ADDRESS BALANCE-----------------------------------------------
+        private async Task GetAddressBalance2AsyncUTXO(string addressString)
+        {
+            try
+            {
+                var request = $"address/{addressString}";
+                var RequestURL = $"{NodeURL}{request}";
+                var client = new HttpClient();
+                LightUpNodeLight();
+                var response = await client.GetAsync($"{RequestURL}").ConfigureAwait(true); // get the JSON to get address balance and no of transactions etc
+                if (!response.IsSuccessStatusCode)
+                {
+                    lblSettingsSelectedNodeStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblSettingsSelectedNodeStatus.Text = "Disconnected/error";
+                        lblSettingsSelectedNodeStatus.Location = new Point((int)(750 * UIScale) - lblSettingsSelectedNodeStatus.Width, lblSettingsSelectedNodeStatus.Location.Y);
+                    });
+                    lblSettingsSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblSettingsSelectedNodeStatusLight.ForeColor = Color.Red;
+                        lblSettingsSelectedNodeStatusLight.Location = new Point(lblSettingsSelectedNodeStatus.Location.X - lblSettingsSelectedNodeStatusLight.Width, lblSettingsSelectedNodeStatusLight.Location.Y);
+                    });
+                    lblErrorMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblErrorMessage.Text = "Node offline/disconnected: ";
+                    });
+                    return;
+                }
+                var jsonData = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+                var addressData = JObject.Parse(jsonData);
+
+                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0 && !PartOfAnAllAddressUTXOsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+                {
+                    if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    {
+                        label314.Invoke((MethodInvoker)delegate
+                        {
+                            label314.Text = "Confirmed unspent (balance)";
+                        });
+                        label313.Invoke((MethodInvoker)delegate
+                        {
+                            label313.Text = "Confirmed transaction count";
+                        });
+                        label312.Invoke((MethodInvoker)delegate
+                        {
+                            label312.Text = "Confirmed received";
+                        });
+                        label311.Invoke((MethodInvoker)delegate
+                        {
+                            label311.Text = "Confirmed spent";
+                        });
+                        lblAddressConfirmedUTXOCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUTXOCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        });
+                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                        });
+                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"({addressData["chain_stats"]["funded_txo_count"]} outputs)";
+                        });
+                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
+                        });
+                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentOutputsUTXO.Text = $"({addressData["chain_stats"]["spent_txo_count"]} outputs)";
+                        });
+                        var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
+                        var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
+                        var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var confirmedUnspent = confirmedReceived - confirmedSpent;
+                        var unSpentTxOutputs = fundedTx - spentTx;
+                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                        });
+                        lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentOutputsUTXO.Text = $"({unSpentTxOutputs} outputs)";
+                        });
+                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                    }
+                }
+                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0) //mempool stats only
+                {
+                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    {
+                        label314.Invoke((MethodInvoker)delegate
+                        {
+                            label314.Text = "Unconfirmed unspent (balance)";
+                        });
+                        label313.Invoke((MethodInvoker)delegate
+                        {
+                            label313.Text = "Unconfirmed transaction count";
+                        });
+                        label312.Invoke((MethodInvoker)delegate
+                        {
+                            label312.Text = "Unconfirmed received";
+                        });
+                        label311.Invoke((MethodInvoker)delegate
+                        {
+                            label311.Text = "Unconfirmed spent";
+                        });
+                        lblAddressConfirmedUTXOCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUTXOCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
+                        });
+                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
+                        });
+                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"({addressData["mempool_stats"]["funded_txo_count"]} outputs)";
+                        });
+                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
+                        });
+                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentOutputsUTXO.Text = $"({addressData["mempool_stats"]["spent_txo_count"]} outputs)";
+                        });
+                        var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
+                        var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
+                        var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
+                        var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+                        var confirmedUnspent = confirmedReceived - confirmedSpent;
+                        var unSpentTxOutputs = fundedTx - spentTx;
+                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                        });
+                        lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentOutputsUTXO.Text = $"({unSpentTxOutputs} outputs)";
+                        });
+                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                    }
+                }
+                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0 || (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0 && PartOfAnAllAddressUTXOsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
+                {
+                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null && addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    {
+                        label314.Invoke((MethodInvoker)delegate
+                        {
+                            label314.Text = "Total unspent (balance)";
+                        });
+                        label313.Invoke((MethodInvoker)delegate
+                        {
+                            label313.Text = "Total transaction count";
+                        });
+                        label312.Invoke((MethodInvoker)delegate
+                        {
+                            label312.Text = "Total received";
+                        });
+                        label311.Invoke((MethodInvoker)delegate
+                        {
+                            label311.Text = "Total spent";
+                        });
+                        int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
+                        int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
+                        lblAddressConfirmedUTXOCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUTXOCount.Text = Convert.ToString(totalTransactionCount);
+                        });
+
+                        long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
+                        long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
+                        long totalReceived = chainReceived + mempoolReceived;
+                        decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
+                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXO.Text = Convert.ToString(BTCtotalReceived);
+                        });
+                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalReceived) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
+                        int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
+                        int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
+                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"({totalReceivedOutputs} outputs)";
+                        });
+
+                        long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
+                        long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
+                        long totalSpent = chainSpent + mempoolSpent;
+                        decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
+                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXO.Text = Convert.ToString(BTCtotalSpent);
+                        });
+                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalSpent) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                        int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
+                        int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
+                        int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
+                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentOutputsUTXO.Text = $"({totalSpentOutputs} outputs)";
+                        });
+
+                        var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
+                        var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
+                        var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                        var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
+                        var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
+                        var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
+                        var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+
+                        var chainUnspent = chainReceived2 - chainSpent2;
+                        var chainUnspentTxOutputs = chainFundedTx - chainSpentTx;
+                        var mempoolUnspent = mempoolReceived2 - mempoolSpent2;
+                        var mempoolUnspentTxOutputs = mempoolFundedTx - mempoolSpentTx;
+
+                        var totalUnspent = chainUnspent + mempoolUnspent;
+                        var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
+
+                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
+                        });
+                        lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentOutputsUTXO.Text = $"({totalUnspentTXOutputs} outputs)";
+                        });
+                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetAddressBalanceUTXO");
+            }
+        }
+
+        private async Task GetAddressBalanceAsyncUTXO(string addressString)
+        {
+            await GetAddressBalance2AsyncUTXO(addressString).ConfigureAwait(true);
+        }
+
+        //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
+        private async Task GetTransactionsForAddressAsyncUTXO(string addressString, string lastSeenTxId)
+        {
+            try
+            {
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
+                {
+                    rowsReturnedByAddressUTXOsAPI = 25;
+                    panelOwnNodeAddressUTXOInfo.Visible = false;
+                }
+                else
+                {
+                    rowsReturnedByAddressUTXOsAPI = 10;
+                    panelOwnNodeAddressUTXOInfo.Visible = true;
+                }
+                LightUpNodeLight();
+                var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId).ConfigureAwait(true);
+                var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+
+                // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
+                if (transactions.Count > 0)
+                {
+                    if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
+                    {
+                        lastSeenTxId = transactions.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
+                    }
+                    else
+                    {
+                        lastSeenTxId = ""; // If it was a mempool record then the next call (to confirmed tx's) will need a null txid to start from the beginning
+                    }
+                    lastSeenTxId = transactions.Last().Txid;
+                }
+
+                //LIST VIEW
+                listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                {
+                    listViewAddressUTXOs.Items.Clear(); // remove any data that may be there already
+                });
+                listViewAddressUTXOs.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewAddressUTXOs, new object[] { true });
+
+                // Check if the column header already exists
+                if (listViewAddressUTXOs.Columns.Count == 0)
+                {
+                    // If not, add the column header
+                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0)
+                    {
+                        if (PartOfAnAllAddressUTXOsRequest)
+                        {
+                            listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                            {
+                                listViewAddressUTXOs.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
+                            });
+                        }
+                        else
+                        {
+                            listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                            {
+                                listViewAddressUTXOs.Columns.Add(" Transaction ID (confirmed)", (int)(260 * UIScale));
+                            });
+                        }
+                    }
+                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0)
+                    {
+                        listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                        {
+                            listViewAddressUTXOs.Columns.Add(" Transaction ID (unconfirmed)", (int)(260 * UIScale));
+                        });
+                    }
+                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0)
+                    {
+                        listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                        {
+                            listViewAddressUTXOs.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
+                        });
+                    }
+                }
+
+                // Add the block height column header
+                if (listViewAddressUTXOs.Columns.Count == 1)
+                {
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Columns.Add("Block", (int)(65 * UIScale));
+                    });
+                }
+
+                // Add the balance change column header
+                if (listViewAddressUTXOs.Columns.Count == 2)
+                {
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Columns.Add("Amount", (int)(110 * UIScale));
+                    });
+                }
+
+                // Add the status column header
+                if (listViewAddressUTXOs.Columns.Count == 3)
+                {
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Columns.Add("Confs", (int)(70 * UIScale));
+                    });
+                }
+
+                // Add the items to the ListView
+                int counter = 0; // used to count rows in list as they're added
+                WebClient client2 = new WebClient();
+                string CurrentBlockHeightStringForCalc = client2.DownloadString($"{NodeURL}blocks/tip/height");
+
+                foreach (AddressTransactions transaction in transactions)
+                {
+                    decimal balanceChange = 0; // will hold net result of transaction to this address
+                    decimal balanceChangeVin = 0; // will hold net result of inputs to this address
+                    decimal balanceChangeVout = 0; // will hold net result of outputs to this address
+                    balanceChangeVout = (decimal)transaction.Vout // value of all outputs where address is the provided address
+                        .Where(v => String.Compare(v.Scriptpubkey_address, addressString) == 0)
+                        .Sum(v => v.Value);
+                    balanceChangeVin = (decimal)transaction.Vin
+                        .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, addressString) == 0)
+                        .Sum(v => v.Prevout.Value);
+
+                    balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
+                    string balanceChangeString = balanceChange.ToString();
+                    balanceChange = ConvertSatsToBitcoin(balanceChangeString); // convert it to bitcoin
+                    if (balanceChange >= 0)
+                    {
+                        balanceChangeString = $"+{balanceChange:0.00000000}"; // add a + for positive numbers
+                    }
+                    else
+                    {
+                        balanceChangeString = $"{balanceChange:0.00000000}"; // - already there for negatives
+                    }
+
+                    ListViewItem item = new ListViewItem(transaction.Txid); // create new row
+                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
+                    {
+                        item.SubItems.Add(transaction.Status.Block_height.ToString()); // add block height
+                    }
+                    else
+                    {
+                        item.SubItems.Add("------".ToString()); // unconfirmed, so no block height
+                    }
+
+                    item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
+
+                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
+                    {
+                        decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
+                        decimal TransactionBlockForCalc = transaction.Status.Block_height;
+                        decimal Confirmations = (CurrentBlockForCalc - TransactionBlockForCalc) + 1;
+                        item.SubItems.Add(Confirmations.ToString()); // and confirmed status
+                    }
+                    else
+                    {
+                        item.SubItems.Add("---".ToString()); // unconfirmed, so no confirmations
+                    }
+
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Items.Add(item); // add row
+                    });
+
+                    counter++; // increment rows for this batch
+                    TotalAddressUTXORowsAdded++; // increment all rows
+
+                    if (TotalAddressUTXORowsAdded <= rowsReturnedByAddressUTXOsAPI) // less than 25 transactions in all
+                    {
+                        btnFirstAddressUTXOs.Visible = false; // so this won't be needed
+                    }
+                    else
+                    {
+                        if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                        {
+                            btnFirstAddressUTXOs.Visible = false;
+                        }
+                        else
+                        {
+                            btnFirstAddressUTXOs.Visible = true;
+                        }
+                    }
+
+                    if (String.Compare(Convert.ToString(TotalAddressUTXORowsAdded), lblAddressConfirmedUTXOCount.Text) == 0) // we've shown all the TXs
+                    {
+                        btnNextAddressUTXOs.Visible = false; // so we won't need this
+                    }
+                    else
+                    {
+                        if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                        {
+                            btnNextAddressUTXOs.Visible = false;
+                        }
+                    }
+
+                    if (counter == rowsReturnedByAddressUTXOsAPI) // ListView is full. stop adding rows at this point and pick up from here next time.
+                    {
+                        break;
+                    }
+                }
+                if (listViewAddressUTXOs.Items.Count > 0)
+                {
+                    listViewAddressUTXOs.Items[0].Selected = true;
+                }
+                if (counter > 0)
+                {
+                    lblAddressUTXOPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressUTXOPositionInList.Text = $"Transactions {TotalAddressUTXORowsAdded - counter + 1} - {TotalAddressUTXORowsAdded} of {lblAddressConfirmedUTXOCount.Text}";
+                    });
+                }
+                else
+                {
+                    lblAddressUTXOPositionInList.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressUTXOPositionInList.Text = "No transactions to display";
+                    });
+                }
+                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0) // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
+                {
+                    addressScreenConfUnconfOrAllUTXO = "chain";
+                }
+                // set focus
+                if (btnNextAddressUTXOs.Visible && btnNextAddressUTXOs.Enabled)
+                {
+                    btnNextAddressUTXOs.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetTransactionsForAddressUTXO");
+            }
+        }
+        #endregion
+        #region navigate from utxo row to other screen
+        private void btnViewTransactionFromAddressUTXO_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckNetworkStatusAsync();
+                // Get the selected item
+                ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
+                // Get the first subitem in the selected item 
+                string TransactionIDFromRow = selectedItem.SubItems[0].Text;
+                // copy transaction ID to transaction screen
+                textBoxTransactionID.Invoke((MethodInvoker)delegate
+                {
+                    textBoxTransactionID.Text = TransactionIDFromRow;
+                });
+                //show the transaction screen
+                BtnMenuTransaction_ClickAsync(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewTransactionFromAddressUTXO_Click");
+            }
+        }
+
+        private void btnViewBlockFromAddressUTXO_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckNetworkStatusAsync();
+                // Get the selected item
+                ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
+                // Get the second subitem in the selected item 
+                string submittedBlockNumber = selectedItem.SubItems[1].Text;
+                // copy block number to the block screen
+                numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    numericUpDownSubmittedBlockNumber.Text = submittedBlockNumber;
+                });
+                try
+                {
+                    LookupBlockAsync();
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex, "BtnViewBlockFromAddressUTXO_Click");
+                }
+                //show the block screen
+                BtnMenuBlock_ClickAsync(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewBlockFromAddressUTXO_Click");
+            }
+        }
+        #endregion
+        #region listview appearance
+        //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
+        private void listViewAddressUTXOs_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                foreach (ListViewItem item in listViewAddressUTXOs.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewTransactionFromAddressUTXO.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewTransactionFromAddressUTXO.Location = new Point(listViewAddressUTXOs.Location.X - btnViewTransactionFromAddressUTXO.Width + (int)(12 * UIScale), item.Position.Y + listViewAddressUTXOs.Location.Y);
+                                btnViewTransactionFromAddressUTXO.Height = item.Bounds.Height;
+                            });
+                            btnViewBlockFromAddressUTXO.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewBlockFromAddressUTXO.Location = new Point(item.Position.X + listViewAddressUTXOs.Location.X + listViewAddressUTXOs.Columns[0].Width + listViewAddressUTXOs.Columns[1].Width - btnViewBlockFromAddressUTXO.Width - (int)(3 * UIScale), item.Position.Y + listViewAddressUTXOs.Location.Y);
+                                btnViewBlockFromAddressUTXO.Height = item.Bounds.Height;
+                            });
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewTransactionFromAddressUTXO.Visible = listViewAddressUTXOs.SelectedItems.Count > 0;
+                btnViewBlockFromAddressUTXO.Visible = listViewAddressUTXOs.SelectedItems.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewAddressTransactionsUTXOs_ItemSelectionChanged");
+            }
+        }
+        //-----DRAW AN ELLIPSIS WHEN STRINGS DONT FIT IN LISTVIEW COLUMN (ALSO COLOUR BALANCE DIFFERENCE RED/GREEN)----
+        private void listViewAddressUTXOs_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+                if (text[0] == '+') // if the string is a change to an amount and positive
+                {
+                    e.SubItem.ForeColor = Color.OliveDrab; // make it green
+                }
+                else
+                if (text[0] == '-') // if the string is a change to an amount and negative
+                {
+                    e.SubItem.ForeColor = Color.IndianRed; // make it red
+                }
+
+                var font = listViewAddressUTXOs.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewAddressUTXOs.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewAddressUTXOs.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewAddressUTXOs_DrawSubItem");
+            }
+        }
+        //------------------ LIMIT MINIMUM WIDTH OF ADDRESS LISTVIEW COLUMNS ------------------------------------------
+        private void listViewAddressUTXOs_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == 0)
+                {
+                    if (listViewAddressUTXOs.Columns[e.ColumnIndex].Width < (int)(260 * UIScale)) // min width
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = (int)(260 * UIScale);
+                    }
+                    if (listViewAddressUTXOs.Columns[e.ColumnIndex].Width > (int)(460 * UIScale)) // max width
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = (int)(460 * UIScale);
+                    }
+
+                    btnViewBlockFromAddressUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        btnViewBlockFromAddressUTXO.Location = new Point(listViewAddressUTXOs.Columns[0].Width + listViewAddressUTXOs.Columns[1].Width + listViewAddressUTXOs.Location.X - btnViewBlockFromAddressUTXO.Width + (int)(2 * UIScale), btnViewBlockFromAddressUTXO.Location.Y);
+                    });
+                }
+
+                if (e.ColumnIndex == 1)
+                {
+                    if (listViewAddressUTXOs.Columns[e.ColumnIndex].Width != (int)(65 * UIScale)) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = (int)(65 * UIScale);
+                    }
+                }
+                if (e.ColumnIndex == 2)
+                {
+                    if (listViewAddressUTXOs.Columns[e.ColumnIndex].Width != (int)(110 * UIScale)) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = (int)(110 * UIScale);
+                    }
+                }
+                if (e.ColumnIndex == 3)
+                {
+                    if (listViewAddressUTXOs.Columns[e.ColumnIndex].Width != (int)(70 * UIScale)) // don't allow this one to change
+                    {
+                        e.Cancel = true;
+                        e.NewWidth = (int)(70 * UIScale);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "ListViewAddressTransactionsUTXO_ColumnWidthChanging");
+            }
+        }
+        #endregion
+        #region configure controls
+        private void AddressInvalidHideControlsUTXO() // hide all address related controls
+        {
+            try
+            {
+                if (lblAddressTypeUTXO.Visible)
+                {
+                    Control[] controlsToHide = { btnNextAddressUTXOs, btnFirstAddressUTXOs, lblAddressUTXOPositionInList, label311, label312, label313, label314, panel136, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUTXOCount, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO,
+                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, lblAddressTypeUTXO, panel135, panel138, panel139, panel140, panel141, listViewAddressUTXOs, panelOwnNodeAddressUTXOInfo };
+                    foreach (Control control in controlsToHide)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "AddressInvalidHideControlsUTXO");
+            }
+        }
+
+        private void AddressValidShowControlsUTXO() // show all address related controls
+        {
+            try
+            {
+                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0) //only one page of unconfirmed tx regardless how many tx there are
+                {
+                    btnNextAddressUTXOs.Visible = false;
+                    btnFirstAddressUTXOs.Visible = false;
+                }
+                else
+                {
+                    btnNextAddressUTXOs.Visible = true;
+                    btnFirstAddressUTXOs.Visible = true;
+                }
+                
+                Control[] controlsToShow = { lblAddressUTXOPositionInList, label311, label312, label313, label314, panel137, panel136, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUnspentUTXOFiat, lblAddressConfirmedUTXOCount, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
+                     lblAddressConfirmedSpentUTXOFiat, btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, lblAddressTypeUTXO, panel135, panel138, panel139, panel140, panel141, listViewAddressUTXOs };
+                foreach (Control control in controlsToShow)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = true;
+                    });
+                }
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
+                {
+                    rowsReturnedByAddressUTXOsAPI = 25;
+                    panelOwnNodeAddressUTXOInfo.Visible = false;
+                }
+                else
+                {
+                    rowsReturnedByAddressUTXOsAPI = 10;
+                    panelOwnNodeAddressUTXOInfo.Visible = true;
+                }
+                listViewAddressUTXOs.BringToFront();
+                btnViewBlockFromAddressUTXO.BringToFront();
+                panelOwnNodeAddressUTXOInfo.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "AddressValidShowControlsUTXO");
+            }
+        }
+
+        private void DisableEnableAddressUTXOButtons(string enableOrDisableAddressButtons)
+        {
+            try
+            {
+                if (String.Compare(enableOrDisableAddressButtons, "disable") == 0)
+                {
+                    // get current state of buttons before disabling them
+                    btnShowAllAddressUTXOWasEnabled = btnShowAllUTXO.Enabled;
+                    btnShowConfirmedAddressUTXOWasEnabled = btnShowConfirmedUTXO.Enabled;
+                    btnShowUnconfirmedAddressUTXOWasEnabled = btnShowUnconfirmedUTXO.Enabled;
+                    btnFirstAddressUTXOsWasEnabled = btnFirstAddressUTXOs.Enabled;
+                    btnNextAddressUTXOsWasEnabled = btnNextAddressUTXOs.Enabled;
+                    BtnViewTransactionFromAddressUTXOWasEnabled = btnViewTransactionFromAddressUTXO.Enabled;
+                    BtnViewBlockFromAddressUTXOWasEnabled = btnViewBlockFromAddressUTXO.Enabled;
+                    textBoxSubmittedAddressUTXOWasEnabled = textboxSubmittedAddressUTXO.Enabled;
+
+                    //disable them all
+                    Control[] controlsToDisable = { btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, btnFirstAddressUTXOs, btnNextAddressUTXOs, btnViewTransactionFromAddressUTXO, btnViewBlockFromAddressUTXO, textboxSubmittedAddressUTXO };
+                    foreach (Control control in controlsToDisable)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Enabled = false;
+                        });
+                    }
+                }
+                else
+                {
+                    //zz
+                    // use previously saved states to reinstate buttons
+                    btnShowAllUTXO.Enabled = btnShowAllAddressUTXOWasEnabled;
+                    btnShowConfirmedUTXO.Enabled = btnShowConfirmedAddressUTXOWasEnabled;
+                    btnShowUnconfirmedUTXO.Enabled = btnShowUnconfirmedAddressUTXOWasEnabled;
+                    btnFirstAddressUTXOs.Enabled = btnFirstAddressUTXOsWasEnabled;
+                    btnNextAddressUTXOs.Enabled = btnNextAddressUTXOsWasEnabled;
+                    btnViewTransactionFromAddressUTXO.Enabled = BtnViewTransactionFromAddressUTXOWasEnabled;
+                    btnViewBlockFromAddressUTXO.Enabled = BtnViewBlockFromAddressUTXOWasEnabled;
+                    textboxSubmittedAddressUTXO.Enabled = textBoxSubmittedAddressUTXOWasEnabled;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "DisableEnableAddressUTXOButtons");
             }
         }
         #endregion
@@ -23997,6 +24962,30 @@ namespace SATSuma
                             lblNowViewing.Text = "Address";
                         });
                     }
+                    if (panelAddressUTXO.Visible && String.Compare(lblAddressTypeUTXO.Text, "Invalid address format") != 0 && String.Compare(lblAddressTypeUTXO.Text, "no data") != 0)
+                    {
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Enabled = true;
+                            btnAddToBookmarks.Text = "🖤";
+                        });
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Address - UTXO's";
+                        });
+                    }
+                    if (panelAddressUTXO.Visible && (String.Compare(lblAddressTypeUTXO.Text, "Invalid address format") == 0 || String.Compare(lblAddressTypeUTXO.Text, "no data") == 0))
+                    {
+                        btnAddToBookmarks.Invoke((MethodInvoker)delegate
+                        {
+                            btnAddToBookmarks.Enabled = false;
+                            btnAddToBookmarks.Text = "🤍";
+                        });
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Address - UTXO's";
+                        });
+                    }
                     if (panelBlock.Visible && lblBlockHash.Text != "")
                     {
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
@@ -25547,7 +26536,7 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock, btnMenuAddressUTXO };
             foreach (Control control in buttonsToEnable)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -25575,7 +26564,7 @@ namespace SATSuma
 
         private void HideAllScreens()
         {
-            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard };
+            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard, panelAddressUTXO };
             foreach (Control control in screensToHide)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -25904,6 +26893,97 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "BtnMenuAddress_Click");
+            }
+        }
+
+        private async void btnMenuAddressUTXO_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "address utxo's";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuAddressUTXO.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddressUTXO.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuAddressUTXO.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
+                Form loadingScreen = null;
+                bool wasOnTop = false;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    #region display loading screen
+
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                    #endregion
+                }
+                HideAllScreens();
+                panelAddressUTXO.Visible = true;
+                /*
+                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
+                {
+                    rowsReturnedByAddressTransactionsAPI = 25;
+                    panelOwnNodeAddressTXInfo.Visible = false;
+                }
+                else
+                {
+                    if (AddressQRCodePicturebox.Visible)
+                    {
+                        rowsReturnedByAddressTransactionsAPI = 10;
+                        panelOwnNodeAddressTXInfo.Visible = true;
+                    }
+                }
+                */
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPauseAsync(400).ConfigureAwait(true);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    if (wasOnTop)
+                    {
+                        this.TopMost = true;
+                    }
+                    #endregion
+                }
+                ResumeLayout();
+                ToggleLoadingAnimation("disable");
+                CheckNetworkStatusAsync();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuAddressUTXO_Click");
             }
         }
 
@@ -28816,8 +29896,16 @@ namespace SATSuma
             }
         }
 
+
+
+
+
+
+
         #endregion
 
         #endregion
+
+        
     }
 }

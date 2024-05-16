@@ -187,6 +187,7 @@ namespace SATSuma
         string defaultTheme = "Genesis (preset)";
         #endregion
         #region data services
+        private UTXOsForAddressService _UTXOsForAddressService;
         private TransactionsForAddressService _transactionsForAddressService;
         private TransactionsForXpubAddressService _transactionsForXpubAddressService;
         private BlockDataService _blockService;
@@ -449,7 +450,7 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
-                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators };
+                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panel136, panel137 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -458,7 +459,7 @@ namespace SATSuma
             #region rounded panels (textbox containers)
             Control[] panelContainersToRound = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, 
                 panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, 
-                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115 };
+                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO };
             foreach (Control control in panelContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -466,7 +467,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78, panel79, panel80, panel81, 
-                panel94, panel105, panel109, panelLoadingAnimationContainer };
+                panel94, panel105, panel109, panelLoadingAnimationContainer, panel138, panel139, panel140, panel141 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -3720,7 +3721,7 @@ namespace SATSuma
                     string lastSeenTxId = "0"; // start from the top of the JSON (most recent tx)
                     try
                     {
-                        await GetTransactionsForAddressAsyncUTXO(addressString, lastSeenTxId).ConfigureAwait(true); // get first batch of transactions
+                        await GetUTXOsForAddressAsyncUTXO(addressString).ConfigureAwait(true); 
                     }
                     catch (Exception ex)
                     {
@@ -4053,10 +4054,11 @@ namespace SATSuma
         }
 
         //-------------------------------- GET TRANSACTIONS FOR ADDRESS -----------------------------------------------
-        private async Task GetTransactionsForAddressAsyncUTXO(string addressString, string lastSeenTxId)
+        private async Task GetUTXOsForAddressAsyncUTXO(string addressString)
         {
             try
             {
+                /*
                 if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressUTXOsAPI = 25;
@@ -4067,23 +4069,26 @@ namespace SATSuma
                     rowsReturnedByAddressUTXOsAPI = 10;
                     panelOwnNodeAddressUTXOInfo.Visible = true;
                 }
+                */
                 LightUpNodeLight();
-                var transactionsJson = await _transactionsForAddressService.GetTransactionsForAddressAsync(addressString, addressScreenConfUnconfOrAllTx, lastSeenTxId).ConfigureAwait(true);
-                var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
+                var UTXOsJson = await _UTXOsForAddressService.GetUTXOsForAddressAsync(addressString).ConfigureAwait(true);
+                var utxos = JsonConvert.DeserializeObject<List<AddressUTXOs>>(UTXOsJson);
 
                 // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-                if (transactions.Count > 0)
+                /*
+                if (utxos.Count > 0)
                 {
-                    if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
+                    if (String.Compare(utxos.Last().Status.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
                     {
-                        lastSeenTxId = transactions.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
+                        lastSeenTxId = utxos.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
                     }
                     else
                     {
                         lastSeenTxId = ""; // If it was a mempool record then the next call (to confirmed tx's) will need a null txid to start from the beginning
                     }
-                    lastSeenTxId = transactions.Last().Txid;
+                    lastSeenTxId = utxos.Last().Txid;
                 }
+                */
 
                 //LIST VIEW
                 listViewAddressUTXOs.Invoke((MethodInvoker)delegate
@@ -4095,64 +4100,35 @@ namespace SATSuma
                 // Check if the column header already exists
                 if (listViewAddressUTXOs.Columns.Count == 0)
                 {
-                    // If not, add the column header
-                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0)
-                    {
-                        if (PartOfAnAllAddressUTXOsRequest)
-                        {
-                            listViewAddressUTXOs.Invoke((MethodInvoker)delegate
-                            {
-                                listViewAddressUTXOs.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
-                            });
-                        }
-                        else
-                        {
-                            listViewAddressUTXOs.Invoke((MethodInvoker)delegate
-                            {
-                                listViewAddressUTXOs.Columns.Add(" Transaction ID (confirmed)", (int)(260 * UIScale));
-                            });
-                        }
-                    }
-                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0)
-                    {
-                        listViewAddressUTXOs.Invoke((MethodInvoker)delegate
-                        {
-                            listViewAddressUTXOs.Columns.Add(" Transaction ID (unconfirmed)", (int)(260 * UIScale));
-                        });
-                    }
-                    if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0)
-                    {
-                        listViewAddressUTXOs.Invoke((MethodInvoker)delegate
-                        {
-                            listViewAddressUTXOs.Columns.Add(" Transaction ID (all transactions)", (int)(260 * UIScale));
-                        });
-                    }
-                }
-
-                // Add the block height column header
-                if (listViewAddressUTXOs.Columns.Count == 1)
-                {
-                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
-                    {
-                        listViewAddressUTXOs.Columns.Add("Block", (int)(65 * UIScale));
-                    });
-                }
-
-                // Add the balance change column header
-                if (listViewAddressUTXOs.Columns.Count == 2)
-                {
                     listViewAddressUTXOs.Invoke((MethodInvoker)delegate
                     {
                         listViewAddressUTXOs.Columns.Add("Amount", (int)(110 * UIScale));
                     });
                 }
 
-                // Add the status column header
+                if (listViewAddressUTXOs.Columns.Count == 1)
+                {
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Columns.Add("Block", (int)(60 * UIScale));
+                    });
+                }
+
+                if (listViewAddressUTXOs.Columns.Count == 2)
+                {
+                    listViewAddressUTXOs.Invoke((MethodInvoker)delegate
+                    {
+                        listViewAddressUTXOs.Columns.Add(" Transaction ID", (int)(260 * UIScale));
+                    });
+                }
+
+
+
                 if (listViewAddressUTXOs.Columns.Count == 3)
                 {
                     listViewAddressUTXOs.Invoke((MethodInvoker)delegate
                     {
-                        listViewAddressUTXOs.Columns.Add("Confs", (int)(70 * UIScale));
+                        listViewAddressUTXOs.Columns.Add("Confirmationss", (int)(50 * UIScale));
                     });
                 }
 
@@ -4161,8 +4137,9 @@ namespace SATSuma
                 WebClient client2 = new WebClient();
                 string CurrentBlockHeightStringForCalc = client2.DownloadString($"{NodeURL}blocks/tip/height");
 
-                foreach (AddressTransactions transaction in transactions)
+                foreach (AddressUTXOs utxo in utxos)
                 {
+                    /*
                     decimal balanceChange = 0; // will hold net result of transaction to this address
                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
                     decimal balanceChangeVout = 0; // will hold net result of outputs to this address
@@ -4184,30 +4161,13 @@ namespace SATSuma
                     {
                         balanceChangeString = $"{balanceChange:0.00000000}"; // - already there for negatives
                     }
-
-                    ListViewItem item = new ListViewItem(transaction.Txid); // create new row
-                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
-                    {
-                        item.SubItems.Add(transaction.Status.Block_height.ToString()); // add block height
-                    }
-                    else
-                    {
-                        item.SubItems.Add("------".ToString()); // unconfirmed, so no block height
-                    }
-
-                    item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
-
-                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
-                    {
-                        decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
-                        decimal TransactionBlockForCalc = transaction.Status.Block_height;
-                        decimal Confirmations = (CurrentBlockForCalc - TransactionBlockForCalc) + 1;
-                        item.SubItems.Add(Confirmations.ToString()); // and confirmed status
-                    }
-                    else
-                    {
-                        item.SubItems.Add("---".ToString()); // unconfirmed, so no confirmations
-                    }
+                    */
+                    decimal amountInBTC = ConvertSatsToBitcoin(utxo.value); // convert it to bitcoin
+                    ListViewItem item = new ListViewItem(Convert.ToString(amountInBTC)); // create new row
+                    item.SubItems.Add(Convert.ToString(utxo.Status.block_height));
+                    item.SubItems.Add(utxo.Txid);
+                    int confirmations = Convert.ToInt32(CurrentBlockHeightStringForCalc) - Convert.ToInt32(utxo.Status.block_height);
+                    item.SubItems.Add(Convert.ToString(confirmations));
 
                     listViewAddressUTXOs.Invoke((MethodInvoker)delegate
                     {
@@ -4217,6 +4177,7 @@ namespace SATSuma
                     counter++; // increment rows for this batch
                     TotalAddressUTXORowsAdded++; // increment all rows
 
+                    /*
                     if (TotalAddressUTXORowsAdded <= rowsReturnedByAddressUTXOsAPI) // less than 25 transactions in all
                     {
                         btnFirstAddressUTXOs.Visible = false; // so this won't be needed
@@ -4244,11 +4205,12 @@ namespace SATSuma
                             btnNextAddressUTXOs.Visible = false;
                         }
                     }
-
+                    
                     if (counter == rowsReturnedByAddressUTXOsAPI) // ListView is full. stop adding rows at this point and pick up from here next time.
                     {
                         break;
                     }
+                    */
                 }
                 if (listViewAddressUTXOs.Items.Count > 0)
                 {
@@ -4258,20 +4220,22 @@ namespace SATSuma
                 {
                     lblAddressUTXOPositionInList.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressUTXOPositionInList.Text = $"Transactions {TotalAddressUTXORowsAdded - counter + 1} - {TotalAddressUTXORowsAdded} of {lblAddressConfirmedUTXOCount.Text}";
+                        lblAddressUTXOPositionInList.Text = $"UTXOs {TotalAddressUTXORowsAdded - counter + 1} - {TotalAddressUTXORowsAdded} of {lblAddressConfirmedUTXOCount.Text}";
                     });
                 }
                 else
                 {
                     lblAddressUTXOPositionInList.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressUTXOPositionInList.Text = "No transactions to display";
+                        lblAddressUTXOPositionInList.Text = "No UTXO's to display";
                     });
                 }
+                /*
                 if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0) // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
                 {
                     addressScreenConfUnconfOrAllUTXO = "chain";
                 }
+                */
                 // set focus
                 if (btnNextAddressUTXOs.Visible && btnNextAddressUTXOs.Enabled)
                 {
@@ -21317,6 +21281,17 @@ namespace SATSuma
                 }
                 BtnViewTransactionFromAddress.BorderRadius = (int)((radius - 4) * UIScale);
 
+                // address UTXO
+                RJButton[] addressUTXOButtonBorders = { btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, btnFirstAddressUTXOs, btnNextAddressUTXOs };
+                foreach (RJButton button in addressUTXOButtonBorders)
+                {
+                    button.Invoke((MethodInvoker)delegate
+                    {
+                        button.BorderRadius = (int)(radius * UIScale);
+                    });
+                }
+                btnViewTransactionFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
+
                 // appearance & settings
                 RJButton[] appearanceButtonBorders = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
                 foreach (RJButton button in appearanceButtonBorders)
@@ -21424,7 +21399,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123, 
-                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators };
+                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panel136, panel137 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21436,7 +21411,7 @@ namespace SATSuma
                 #region panels (textbox containers)
                 Control[] textboxPanelsToInvalidate = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, 
                     panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelSettingsUIScaleContainer, panelAppearanceTextbox1Container, 
-                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27 };
+                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO };
                 foreach (Control control in textboxPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21447,7 +21422,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, 
-                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109 };
+                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel138, panel139, panel140, panel141 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21467,7 +21442,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAddressUTXO, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
                 if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
@@ -21519,6 +21494,15 @@ namespace SATSuma
                 //address
                 Control[] listAddressButtonTextToColor = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress };
                 foreach (Control control in listAddressButtonTextToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
+                //address utxo
+                Control[] listAddressUTXOButtonTextToColor = { btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, btnFirstAddressUTXOs, btnNextAddressUTXOs, btnViewTransactionFromAddressUTXO, btnViewBlockFromAddressUTXO };
+                foreach (Control control in listAddressUTXOButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
                     {
@@ -21748,6 +21732,15 @@ namespace SATSuma
                         control.ForeColor = thisColor;
                     });
                 }
+                //address utxo
+                Control[] listAddressUTXODataFieldsToColor = { lblAddressTypeUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUTXOCount, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO };
+                foreach (Control control in listAddressUTXODataFieldsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thisColor;
+                    });
+                }
                 //block
                 Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner, lblBlockBlockHeight };
                 foreach (Control control in listBlockDataFieldsToColor)
@@ -21878,6 +21871,15 @@ namespace SATSuma
                         control.ForeColor = thiscolor;
                     });
                 }
+                //address utxo
+                Control[] listAddressUTXOLabelsToColor = { label316, lblAddressUTXOPositionInList };
+                foreach (Control control in listAddressUTXOLabelsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
                 //block
                 Control[] listBlockLabelsToColor = { label64, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblBlockScreenPoolRankingChart };
                 foreach (Control control in listBlockLabelsToColor)
@@ -21964,7 +21966,7 @@ namespace SATSuma
             try
             {
                 Control[] listFiatConversionsToColor = { label288, lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
-                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
+                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat};
                 foreach (Control control in listFiatConversionsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22022,6 +22024,15 @@ namespace SATSuma
                 //address
                 Control[] listAddressHeadingsToColor = { label61, label59, label67, label63 };
                 foreach (Control control in listAddressHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.ForeColor = thiscolor;
+                    });
+                }
+                //address utxo
+                Control[] listAddressUTXOHeadingsToColor = { label311, label312, label313, label314 };
+                foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
                     {
@@ -22121,7 +22132,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186 };
+                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186, listViewAddressUTXOs };
                 foreach (Control control in listTableTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22148,6 +22159,12 @@ namespace SATSuma
                     string addressString = textboxSubmittedAddress.Text;
                     textboxSubmittedAddress.Text = "";
                     textboxSubmittedAddress.Text = addressString;
+                }
+                if (String.Compare(lblInvalidAddressIndicatorUTXO.Text, "✔️ valid address") == 0)
+                {
+                    string addressString = textboxSubmittedAddressUTXO.Text;
+                    textboxSubmittedAddressUTXO.Text = "";
+                    textboxSubmittedAddressUTXO.Text = addressString;
                 }
                 SetupBookmarksScreen();
                 #endregion
@@ -22322,6 +22339,15 @@ namespace SATSuma
                         control.BackColor = thiscolor;
                     });
                 }
+                //address utxo
+                Control[] listAddressUTXOButtonsToColor = { btnShowAllUTXO, btnShowConfirmedUTXO, btnShowUnconfirmedUTXO, btnFirstAddressUTXOs, btnNextAddressUTXOs, btnViewTransactionFromAddressUTXO, btnViewBlockFromAddressUTXO };
+                foreach (Control control in listAddressUTXOButtonsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
+                    });
+                }
                 //block
                 Control[] listBlockButtonsToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
                 foreach (Control control in listBlockButtonsToColor)
@@ -22436,7 +22462,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22515,7 +22541,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22663,6 +22689,16 @@ namespace SATSuma
                         control.BackgroundImage = ImageFile;
                     });
                 }
+                //address utxo
+                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel140, panel141 };
+                foreach (Control control in listAddressUTXOHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = ImageFile;
+                    });
+                }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
@@ -22800,6 +22836,16 @@ namespace SATSuma
                         control.BackgroundImage = null;
                     });
                 }
+                //address utxo
+                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel140, panel141 };
+                foreach (Control control in listAddressUTXOHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = Color.Transparent;
+                        control.BackgroundImage = null;
+                    });
+                }
                 //block
                 Control[] listBlockHeadingsToColor = { panel105, panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
@@ -22914,6 +22960,16 @@ namespace SATSuma
                 //address
                 Control[] listAddressHeadingsToColor = { panel41, panel42, panel43, panel44 };
                 foreach (Control control in listAddressHeadingsToColor)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackgroundImage = null;
+                        control.BackColor = titleBackgroundColor;
+                    });
+                }
+                //address utxo
+                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel140, panel141 };
+                foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
                     {
@@ -23117,7 +23173,7 @@ namespace SATSuma
             {
                 System.Windows.Forms.Button[] buttonsToUpdateBackColor =
                 {
-                    btnMenuApplyCustomTheme, btnMenuBitcoinDashboard, btnThemeMenu, btnMenuAddress,
+                    btnMenuApplyCustomTheme, btnMenuBitcoinDashboard, btnThemeMenu, btnMenuAddress, btnMenuAddressUTXO,
                     btnMenuCreateTheme, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuCharts,
                     btnMenuDirectory, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings,
                     btnMenuTransaction, btnMenuDCACalculator, btnMenuPriceConverter, btnMenuXpub, btnMenuSplash, btnMenuThemeFranklin,
@@ -23177,7 +23233,7 @@ namespace SATSuma
 
                 System.Windows.Forms.Button[] buttonstoMakeTransparent =
                 {
-                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash
+                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuAddressUTXO
                 };
                 if (buttonstoMakeTransparent.Contains((System.Windows.Forms.Button)sender))
                 {
@@ -24936,7 +24992,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region 'Now Viewing' title text and set state of 'add bookmark' button
-                if (panelAddress.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
+                if (panelAddress.Visible || panelAddressUTXO.Visible || panelBlock.Visible || panelTransaction.Visible || panelXpub.Visible)
                 {
                     if (panelAddress.Visible && String.Compare(lblAddressType.Text, "Invalid address format") != 0 && String.Compare(lblAddressType.Text, "no data") != 0)
                     {
@@ -25535,6 +25591,7 @@ namespace SATSuma
         {
             try
             {
+                _UTXOsForAddressService = new UTXOsForAddressService(NodeURL);
                 _transactionsForAddressService = new TransactionsForAddressService(NodeURL);
                 _blockService = new BlockDataService(NodeURL);
                 _transactionsForBlockService = new TransactionsForBlockService(NodeURL);
@@ -28997,6 +29054,62 @@ namespace SATSuma
             public string Confirmed { get; set; }
         }
         #endregion
+
+        #region address UTXOs
+        // ------------------------------------- Address Transactions -----------------------------------
+        public class UTXOsForAddressService
+        {
+            private readonly string _nodeUrl;
+
+            public UTXOsForAddressService(string nodeUrl)
+            {
+                _nodeUrl = nodeUrl;
+            }
+
+            public async Task<string> GetUTXOsForAddressAsync(string address)
+            {
+                int retryCount = 3;
+                while (retryCount > 0)
+                {
+                    using var client = new HttpClient();
+                    try
+                    {
+                        client.BaseAddress = new Uri(_nodeUrl);
+                        var response = await client.GetAsync($"address/{address}/utxo").ConfigureAwait(true);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+                        }
+
+                        retryCount--;
+                        await Task.Delay(3000).ConfigureAwait(true);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retryCount--;
+                        await Task.Delay(3000).ConfigureAwait(true);
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
+        public class AddressUTXOs
+        {
+            public string Txid { get; set; }
+            public string vout { get; set; }
+            public Status_AddressUTXOs Status { get; set; }
+            public string value { get; set; }
+        }
+
+
+        public class Status_AddressUTXOs
+        {
+            public string confirmed { get; set; }
+            public int block_height { get; set; }
+        }
+        #endregion
+
         #region blocks
         public class BlockDataService
         {
@@ -29905,7 +30018,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        
     }
 }

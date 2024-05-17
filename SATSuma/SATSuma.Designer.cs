@@ -1206,14 +1206,9 @@
             this.toolTipForLblHeaderPrice = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipGeneralUse = new System.Windows.Forms.ToolTip(this.components);
             this.progressBarRefreshData = new ColorProgressBar.ColorProgressBar();
-            this.btnFirstAddressUTXOs = new CustomControls.RJControls.RJButton();
             this.lblAddressTypeUTXO = new System.Windows.Forms.Label();
             this.btnViewBlockFromAddressUTXO = new System.Windows.Forms.Button();
             this.btnViewTransactionFromAddressUTXO = new CustomControls.RJControls.RJButton();
-            this.btnShowAllUTXO = new CustomControls.RJControls.RJButton();
-            this.btnShowConfirmedUTXO = new CustomControls.RJControls.RJButton();
-            this.btnShowUnconfirmedUTXO = new CustomControls.RJControls.RJButton();
-            this.btnNextAddressUTXOs = new CustomControls.RJControls.RJButton();
             this.lblAddressConfirmedUnspentOutputsUTXO = new System.Windows.Forms.Label();
             this.lblAddressConfirmedSpentOutputsUTXO = new System.Windows.Forms.Label();
             this.lblAddressConfirmedReceivedOutputsUTXO = new System.Windows.Forms.Label();
@@ -1223,13 +1218,8 @@
             this.lblAddressConfirmedUTXOCount = new System.Windows.Forms.Label();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
-            this.panelOwnNodeAddressUTXOInfo = new System.Windows.Forms.Panel();
-            this.label230 = new System.Windows.Forms.Label();
             this.panel135 = new System.Windows.Forms.Panel();
             this.AddressQRCodePictureboxUTXO = new System.Windows.Forms.PictureBox();
-            this.listViewAddressUTXOs = new System.Windows.Forms.ListView();
-            this.panel136 = new System.Windows.Forms.Panel();
-            this.panel137 = new System.Windows.Forms.Panel();
             this.lblAddressConfirmedSpentUTXOFiat = new System.Windows.Forms.Label();
             this.lblAddressConfirmedReceivedUTXOFiat = new System.Windows.Forms.Label();
             this.lblAddressConfirmedUnspentUTXOFiat = new System.Windows.Forms.Label();
@@ -1247,6 +1237,13 @@
             this.lblInvalidAddressIndicatorUTXO = new System.Windows.Forms.Label();
             this.label316 = new System.Windows.Forms.Label();
             this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
+            this.panel134 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.panel136 = new System.Windows.Forms.Panel();
+            this.listViewAddressUTXOs = new System.Windows.Forms.ListView();
+            this.panel137 = new System.Windows.Forms.Panel();
+            this.panel143 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1455,7 +1452,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCAMessages.SuspendLayout();
             this.panelAddressUTXO.SuspendLayout();
-            this.panelOwnNodeAddressUTXOInfo.SuspendLayout();
             this.panel135.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
             this.panel138.SuspendLayout();
@@ -1464,6 +1460,8 @@
             this.panel141.SuspendLayout();
             this.panel142.SuspendLayout();
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
+            this.panel134.SuspendLayout();
+            this.panel136.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -7630,7 +7628,7 @@
             this.btnMenuSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSettings.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSettings.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSettings.Location = new System.Drawing.Point(8, 382);
+            this.btnMenuSettings.Location = new System.Drawing.Point(8, 402);
             this.btnMenuSettings.Name = "btnMenuSettings";
             this.btnMenuSettings.Size = new System.Drawing.Size(122, 22);
             this.btnMenuSettings.TabIndex = 159;
@@ -7651,7 +7649,7 @@
             this.btnMenuHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuHelp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuHelp.ForeColor = System.Drawing.Color.White;
-            this.btnMenuHelp.Location = new System.Drawing.Point(8, 466);
+            this.btnMenuHelp.Location = new System.Drawing.Point(8, 486);
             this.btnMenuHelp.Name = "btnMenuHelp";
             this.btnMenuHelp.Size = new System.Drawing.Size(122, 22);
             this.btnMenuHelp.TabIndex = 158;
@@ -7672,7 +7670,7 @@
             this.btnMenuSplash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSplash.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuSplash.ForeColor = System.Drawing.Color.White;
-            this.btnMenuSplash.Location = new System.Drawing.Point(8, 486);
+            this.btnMenuSplash.Location = new System.Drawing.Point(8, 506);
             this.btnMenuSplash.Name = "btnMenuSplash";
             this.btnMenuSplash.Size = new System.Drawing.Size(122, 22);
             this.btnMenuSplash.TabIndex = 151;
@@ -10506,7 +10504,7 @@
             this.panelCurrency.Controls.Add(this.btnUSD);
             this.panelCurrency.Controls.Add(this.btnEUR);
             this.panelCurrency.Controls.Add(this.btnGBP);
-            this.panelCurrency.Location = new System.Drawing.Point(8, 433);
+            this.panelCurrency.Location = new System.Drawing.Point(8, 453);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
             this.panelCurrency.TabIndex = 159;
@@ -17214,7 +17212,7 @@
             this.panelThemeMenu.Controls.Add(this.BtnMenuThemeGenesis);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeFranklin);
             this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
-            this.panelThemeMenu.Location = new System.Drawing.Point(8, 413);
+            this.panelThemeMenu.Location = new System.Drawing.Point(8, 433);
             this.panelThemeMenu.Name = "panelThemeMenu";
             this.panelThemeMenu.Size = new System.Drawing.Size(122, 0);
             this.panelThemeMenu.TabIndex = 160;
@@ -17544,7 +17542,7 @@
             this.btnCurrency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCurrency.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCurrency.ForeColor = System.Drawing.Color.White;
-            this.btnCurrency.Location = new System.Drawing.Point(8, 422);
+            this.btnCurrency.Location = new System.Drawing.Point(8, 442);
             this.btnCurrency.Margin = new System.Windows.Forms.Padding(0);
             this.btnCurrency.Name = "btnCurrency";
             this.btnCurrency.Size = new System.Drawing.Size(122, 22);
@@ -17922,7 +17920,7 @@
             this.btnMenuAddressUTXO.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuAddressUTXO.ForeColor = System.Drawing.Color.White;
             this.btnMenuAddressUTXO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuAddressUTXO.Location = new System.Drawing.Point(24, 541);
+            this.btnMenuAddressUTXO.Location = new System.Drawing.Point(8, 150);
             this.btnMenuAddressUTXO.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuAddressUTXO.Name = "btnMenuAddressUTXO";
             this.btnMenuAddressUTXO.Size = new System.Drawing.Size(122, 22);
@@ -17931,7 +17929,7 @@
             this.btnMenuAddressUTXO.Text = "   address - utxo\'s";
             this.btnMenuAddressUTXO.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuAddressUTXO.UseVisualStyleBackColor = false;
-            this.btnMenuAddressUTXO.Click += new System.EventHandler(this.btnMenuAddressUTXO_Click);
+            this.btnMenuAddressUTXO.Click += new System.EventHandler(this.BtnMenuAddressUTXO_Click);
             this.btnMenuAddressUTXO.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuAddressUTXO.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -17949,7 +17947,7 @@
             this.btnThemeMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThemeMenu.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThemeMenu.ForeColor = System.Drawing.Color.White;
-            this.btnThemeMenu.Location = new System.Drawing.Point(8, 402);
+            this.btnThemeMenu.Location = new System.Drawing.Point(8, 422);
             this.btnThemeMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnThemeMenu.Name = "btnThemeMenu";
             this.btnThemeMenu.Size = new System.Drawing.Size(122, 22);
@@ -17984,7 +17982,7 @@
             this.btnMenuDirectory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDirectory.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuDirectory.ForeColor = System.Drawing.Color.White;
-            this.btnMenuDirectory.Location = new System.Drawing.Point(8, 338);
+            this.btnMenuDirectory.Location = new System.Drawing.Point(8, 358);
             this.btnMenuDirectory.Name = "btnMenuDirectory";
             this.btnMenuDirectory.Size = new System.Drawing.Size(122, 22);
             this.btnMenuDirectory.TabIndex = 278;
@@ -18005,7 +18003,7 @@
             this.btnMenuPriceConverter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuPriceConverter.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuPriceConverter.ForeColor = System.Drawing.Color.White;
-            this.btnMenuPriceConverter.Location = new System.Drawing.Point(8, 318);
+            this.btnMenuPriceConverter.Location = new System.Drawing.Point(8, 338);
             this.btnMenuPriceConverter.Name = "btnMenuPriceConverter";
             this.btnMenuPriceConverter.Size = new System.Drawing.Size(122, 22);
             this.btnMenuPriceConverter.TabIndex = 282;
@@ -18026,7 +18024,7 @@
             this.btnMenuDCACalculator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDCACalculator.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuDCACalculator.ForeColor = System.Drawing.Color.White;
-            this.btnMenuDCACalculator.Location = new System.Drawing.Point(8, 298);
+            this.btnMenuDCACalculator.Location = new System.Drawing.Point(8, 318);
             this.btnMenuDCACalculator.Name = "btnMenuDCACalculator";
             this.btnMenuDCACalculator.Size = new System.Drawing.Size(122, 22);
             this.btnMenuDCACalculator.TabIndex = 281;
@@ -18047,7 +18045,7 @@
             this.btnMenuBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuBookmarks.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuBookmarks.ForeColor = System.Drawing.Color.White;
-            this.btnMenuBookmarks.Location = new System.Drawing.Point(8, 278);
+            this.btnMenuBookmarks.Location = new System.Drawing.Point(8, 298);
             this.btnMenuBookmarks.Name = "btnMenuBookmarks";
             this.btnMenuBookmarks.Size = new System.Drawing.Size(122, 22);
             this.btnMenuBookmarks.TabIndex = 275;
@@ -18068,7 +18066,7 @@
             this.btnMenuCharts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuCharts.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuCharts.ForeColor = System.Drawing.Color.White;
-            this.btnMenuCharts.Location = new System.Drawing.Point(8, 190);
+            this.btnMenuCharts.Location = new System.Drawing.Point(8, 210);
             this.btnMenuCharts.Name = "btnMenuCharts";
             this.btnMenuCharts.Size = new System.Drawing.Size(122, 22);
             this.btnMenuCharts.TabIndex = 276;
@@ -18090,7 +18088,7 @@
             this.btnMenuXpub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuXpub.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuXpub.ForeColor = System.Drawing.Color.White;
-            this.btnMenuXpub.Location = new System.Drawing.Point(8, 170);
+            this.btnMenuXpub.Location = new System.Drawing.Point(8, 190);
             this.btnMenuXpub.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuXpub.Name = "btnMenuXpub";
             this.btnMenuXpub.Size = new System.Drawing.Size(122, 22);
@@ -18113,7 +18111,7 @@
             this.btnMenuTransaction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuTransaction.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuTransaction.ForeColor = System.Drawing.Color.White;
-            this.btnMenuTransaction.Location = new System.Drawing.Point(8, 150);
+            this.btnMenuTransaction.Location = new System.Drawing.Point(8, 170);
             this.btnMenuTransaction.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuTransaction.Name = "btnMenuTransaction";
             this.btnMenuTransaction.Size = new System.Drawing.Size(122, 22);
@@ -18143,7 +18141,7 @@
             this.btnMenuAddress.Size = new System.Drawing.Size(122, 22);
             this.btnMenuAddress.TabIndex = 270;
             this.btnMenuAddress.TabStop = false;
-            this.btnMenuAddress.Text = "   address";
+            this.btnMenuAddress.Text = "   address - tx\'s";
             this.btnMenuAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuAddress.UseVisualStyleBackColor = false;
             this.btnMenuAddress.Click += new System.EventHandler(this.BtnMenuAddress_ClickAsync);
@@ -18266,7 +18264,7 @@
             this.panel130.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
             this.panel130.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel130.Controls.Add(this.label215);
-            this.panel130.Location = new System.Drawing.Point(21, 212);
+            this.panel130.Location = new System.Drawing.Point(21, 232);
             this.panel130.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel130.Name = "panel130";
             this.panel130.Size = new System.Drawing.Size(121, 22);
@@ -18296,7 +18294,7 @@
             this.btnMenuLightningDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuLightningDashboard.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenuLightningDashboard.ForeColor = System.Drawing.Color.White;
-            this.btnMenuLightningDashboard.Location = new System.Drawing.Point(8, 234);
+            this.btnMenuLightningDashboard.Location = new System.Drawing.Point(8, 254);
             this.btnMenuLightningDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuLightningDashboard.Name = "btnMenuLightningDashboard";
             this.btnMenuLightningDashboard.Size = new System.Drawing.Size(122, 22);
@@ -18315,7 +18313,7 @@
             this.panel129.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
             this.panel129.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel129.Controls.Add(this.label214);
-            this.panel129.Location = new System.Drawing.Point(21, 256);
+            this.panel129.Location = new System.Drawing.Point(21, 276);
             this.panel129.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel129.Name = "panel129";
             this.panel129.Size = new System.Drawing.Size(121, 22);
@@ -18341,7 +18339,7 @@
             this.panel128.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
             this.panel128.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel128.Controls.Add(this.label213);
-            this.panel128.Location = new System.Drawing.Point(21, 360);
+            this.panel128.Location = new System.Drawing.Point(21, 380);
             this.panel128.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel128.Name = "panel128";
             this.panel128.Size = new System.Drawing.Size(121, 22);
@@ -18367,7 +18365,7 @@
             this.panel30.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
             this.panel30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel30.Controls.Add(this.label210);
-            this.panel30.Location = new System.Drawing.Point(21, 444);
+            this.panel30.Location = new System.Drawing.Point(21, 464);
             this.panel30.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel30.Name = "panel30";
             this.panel30.Size = new System.Drawing.Size(121, 22);
@@ -19110,29 +19108,6 @@
             this.toolTipGeneralUse.SetToolTip(this.progressBarRefreshData, "Progress towards next data refresh");
             this.progressBarRefreshData.Value = 60;
             // 
-            // btnFirstAddressUTXOs
-            // 
-            this.btnFirstAddressUTXOs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnFirstAddressUTXOs.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnFirstAddressUTXOs.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnFirstAddressUTXOs.BorderRadius = 7;
-            this.btnFirstAddressUTXOs.BorderSize = 0;
-            this.btnFirstAddressUTXOs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnFirstAddressUTXOs.FlatAppearance.BorderSize = 0;
-            this.btnFirstAddressUTXOs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFirstAddressUTXOs.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFirstAddressUTXOs.ForeColor = System.Drawing.Color.White;
-            this.btnFirstAddressUTXOs.Location = new System.Drawing.Point(614, 524);
-            this.btnFirstAddressUTXOs.Margin = new System.Windows.Forms.Padding(1);
-            this.btnFirstAddressUTXOs.Name = "btnFirstAddressUTXOs";
-            this.btnFirstAddressUTXOs.Size = new System.Drawing.Size(68, 22);
-            this.btnFirstAddressUTXOs.TabIndex = 141;
-            this.btnFirstAddressUTXOs.Text = "◀ newest";
-            this.btnFirstAddressUTXOs.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnFirstAddressUTXOs, "view most recent transactions");
-            this.btnFirstAddressUTXOs.UseVisualStyleBackColor = false;
-            this.btnFirstAddressUTXOs.Visible = false;
-            // 
             // lblAddressTypeUTXO
             // 
             this.lblAddressTypeUTXO.AutoSize = true;
@@ -19153,7 +19128,7 @@
             this.btnViewBlockFromAddressUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewBlockFromAddressUTXO.Font = new System.Drawing.Font("Consolas", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewBlockFromAddressUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnViewBlockFromAddressUTXO.Location = new System.Drawing.Point(497, 85);
+            this.btnViewBlockFromAddressUTXO.Location = new System.Drawing.Point(487, 86);
             this.btnViewBlockFromAddressUTXO.Margin = new System.Windows.Forms.Padding(0, 1, 0, 1);
             this.btnViewBlockFromAddressUTXO.Name = "btnViewBlockFromAddressUTXO";
             this.btnViewBlockFromAddressUTXO.Size = new System.Drawing.Size(20, 15);
@@ -19162,7 +19137,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnViewBlockFromAddressUTXO, "view block");
             this.btnViewBlockFromAddressUTXO.UseVisualStyleBackColor = false;
             this.btnViewBlockFromAddressUTXO.Visible = false;
-            this.btnViewBlockFromAddressUTXO.Click += new System.EventHandler(this.btnViewBlockFromAddressUTXO_Click);
+            this.btnViewBlockFromAddressUTXO.Click += new System.EventHandler(this.BtnViewBlockFromAddressUTXO_Click);
             // 
             // btnViewTransactionFromAddressUTXO
             // 
@@ -19176,7 +19151,7 @@
             this.btnViewTransactionFromAddressUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewTransactionFromAddressUTXO.Font = new System.Drawing.Font("Consolas", 7F);
             this.btnViewTransactionFromAddressUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnViewTransactionFromAddressUTXO.Location = new System.Drawing.Point(219, 144);
+            this.btnViewTransactionFromAddressUTXO.Location = new System.Drawing.Point(209, 145);
             this.btnViewTransactionFromAddressUTXO.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewTransactionFromAddressUTXO.Name = "btnViewTransactionFromAddressUTXO";
             this.btnViewTransactionFromAddressUTXO.Size = new System.Drawing.Size(40, 15);
@@ -19188,100 +19163,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnViewTransactionFromAddressUTXO, "view transaction");
             this.btnViewTransactionFromAddressUTXO.UseVisualStyleBackColor = false;
             this.btnViewTransactionFromAddressUTXO.Visible = false;
-            this.btnViewTransactionFromAddressUTXO.Click += new System.EventHandler(this.btnViewTransactionFromAddressUTXO_Click);
-            // 
-            // btnShowAllUTXO
-            // 
-            this.btnShowAllUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowAllUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowAllUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowAllUTXO.BorderRadius = 7;
-            this.btnShowAllUTXO.BorderSize = 0;
-            this.btnShowAllUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowAllUTXO.FlatAppearance.BorderSize = 0;
-            this.btnShowAllUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAllUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowAllUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnShowAllUTXO.Location = new System.Drawing.Point(251, 524);
-            this.btnShowAllUTXO.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowAllUTXO.Name = "btnShowAllUTXO";
-            this.btnShowAllUTXO.Size = new System.Drawing.Size(88, 22);
-            this.btnShowAllUTXO.TabIndex = 147;
-            this.btnShowAllUTXO.Text = "all";
-            this.btnShowAllUTXO.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowAllUTXO, "View confirmed and \r\nXXunconfirmed transactions");
-            this.btnShowAllUTXO.UseVisualStyleBackColor = false;
-            this.btnShowAllUTXO.Visible = false;
-            // 
-            // btnShowConfirmedUTXO
-            // 
-            this.btnShowConfirmedUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowConfirmedUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowConfirmedUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowConfirmedUTXO.BorderRadius = 7;
-            this.btnShowConfirmedUTXO.BorderSize = 0;
-            this.btnShowConfirmedUTXO.Enabled = false;
-            this.btnShowConfirmedUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowConfirmedUTXO.FlatAppearance.BorderSize = 0;
-            this.btnShowConfirmedUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowConfirmedUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowConfirmedUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnShowConfirmedUTXO.Location = new System.Drawing.Point(346, 524);
-            this.btnShowConfirmedUTXO.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowConfirmedUTXO.Name = "btnShowConfirmedUTXO";
-            this.btnShowConfirmedUTXO.Size = new System.Drawing.Size(88, 22);
-            this.btnShowConfirmedUTXO.TabIndex = 146;
-            this.btnShowConfirmedUTXO.Text = "confirmed";
-            this.btnShowConfirmedUTXO.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowConfirmedUTXO, "View confirmed \r\nXXtransactions only");
-            this.btnShowConfirmedUTXO.UseVisualStyleBackColor = false;
-            this.btnShowConfirmedUTXO.Visible = false;
-            // 
-            // btnShowUnconfirmedUTXO
-            // 
-            this.btnShowUnconfirmedUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowUnconfirmedUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowUnconfirmedUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowUnconfirmedUTXO.BorderRadius = 7;
-            this.btnShowUnconfirmedUTXO.BorderSize = 0;
-            this.btnShowUnconfirmedUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowUnconfirmedUTXO.FlatAppearance.BorderSize = 0;
-            this.btnShowUnconfirmedUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowUnconfirmedUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowUnconfirmedUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnShowUnconfirmedUTXO.Location = new System.Drawing.Point(441, 524);
-            this.btnShowUnconfirmedUTXO.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowUnconfirmedUTXO.Name = "btnShowUnconfirmedUTXO";
-            this.btnShowUnconfirmedUTXO.Size = new System.Drawing.Size(88, 22);
-            this.btnShowUnconfirmedUTXO.TabIndex = 145;
-            this.btnShowUnconfirmedUTXO.Text = "unconfirmed";
-            this.btnShowUnconfirmedUTXO.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowUnconfirmedUTXO, "View unconfirmed \r\nXXtransactions only");
-            this.btnShowUnconfirmedUTXO.UseVisualStyleBackColor = false;
-            this.btnShowUnconfirmedUTXO.Visible = false;
-            // 
-            // btnNextAddressUTXOs
-            // 
-            this.btnNextAddressUTXOs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnNextAddressUTXOs.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnNextAddressUTXOs.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnNextAddressUTXOs.BorderRadius = 7;
-            this.btnNextAddressUTXOs.BorderSize = 0;
-            this.btnNextAddressUTXOs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnNextAddressUTXOs.FlatAppearance.BorderSize = 0;
-            this.btnNextAddressUTXOs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextAddressUTXOs.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextAddressUTXOs.ForeColor = System.Drawing.Color.White;
-            this.btnNextAddressUTXOs.Location = new System.Drawing.Point(689, 524);
-            this.btnNextAddressUTXOs.Margin = new System.Windows.Forms.Padding(1);
-            this.btnNextAddressUTXOs.Name = "btnNextAddressUTXOs";
-            this.btnNextAddressUTXOs.Size = new System.Drawing.Size(60, 22);
-            this.btnNextAddressUTXOs.TabIndex = 140;
-            this.btnNextAddressUTXOs.Text = "▷ next";
-            this.btnNextAddressUTXOs.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnNextAddressUTXOs, "view next set of transactions");
-            this.btnNextAddressUTXOs.UseVisualStyleBackColor = false;
-            this.btnNextAddressUTXOs.Visible = false;
+            this.btnViewTransactionFromAddressUTXO.Click += new System.EventHandler(this.BtnViewTransactionFromAddressUTXO_Click);
             // 
             // lblAddressConfirmedUnspentOutputsUTXO
             // 
@@ -19379,14 +19261,12 @@
             // panelAddressUTXO
             // 
             this.panelAddressUTXO.BackColor = System.Drawing.Color.Transparent;
-            this.panelAddressUTXO.Controls.Add(this.btnFirstAddressUTXOs);
-            this.panelAddressUTXO.Controls.Add(this.panelOwnNodeAddressUTXOInfo);
-            this.panelAddressUTXO.Controls.Add(this.panel135);
             this.panelAddressUTXO.Controls.Add(this.btnViewBlockFromAddressUTXO);
-            this.panelAddressUTXO.Controls.Add(this.listViewAddressUTXOs);
-            this.panelAddressUTXO.Controls.Add(this.btnViewTransactionFromAddressUTXO);
+            this.panelAddressUTXO.Controls.Add(this.panel134);
             this.panelAddressUTXO.Controls.Add(this.panel136);
-            this.panelAddressUTXO.Controls.Add(this.panel137);
+            this.panelAddressUTXO.Controls.Add(this.panel143);
+            this.panelAddressUTXO.Controls.Add(this.panel135);
+            this.panelAddressUTXO.Controls.Add(this.btnViewTransactionFromAddressUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentUTXOFiat);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedReceivedUTXOFiat);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentUTXOFiat);
@@ -19395,11 +19275,7 @@
             this.panelAddressUTXO.Controls.Add(this.panel140);
             this.panelAddressUTXO.Controls.Add(this.panel141);
             this.panelAddressUTXO.Controls.Add(this.panel142);
-            this.panelAddressUTXO.Controls.Add(this.btnShowAllUTXO);
-            this.panelAddressUTXO.Controls.Add(this.btnShowConfirmedUTXO);
-            this.panelAddressUTXO.Controls.Add(this.btnShowUnconfirmedUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressUTXOPositionInList);
-            this.panelAddressUTXO.Controls.Add(this.btnNextAddressUTXOs);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentOutputsUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentOutputsUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedReceivedOutputsUTXO);
@@ -19412,27 +19288,6 @@
             this.panelAddressUTXO.Size = new System.Drawing.Size(773, 556);
             this.panelAddressUTXO.TabIndex = 285;
             this.panelAddressUTXO.Visible = false;
-            // 
-            // panelOwnNodeAddressUTXOInfo
-            // 
-            this.panelOwnNodeAddressUTXOInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panelOwnNodeAddressUTXOInfo.Controls.Add(this.label230);
-            this.panelOwnNodeAddressUTXOInfo.Location = new System.Drawing.Point(251, 452);
-            this.panelOwnNodeAddressUTXOInfo.Name = "panelOwnNodeAddressUTXOInfo";
-            this.panelOwnNodeAddressUTXOInfo.Size = new System.Drawing.Size(499, 41);
-            this.panelOwnNodeAddressUTXOInfo.TabIndex = 213;
-            this.panelOwnNodeAddressUTXOInfo.Visible = false;
-            // 
-            // label230
-            // 
-            this.label230.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label230.ForeColor = System.Drawing.Color.Gray;
-            this.label230.Location = new System.Drawing.Point(9, 3);
-            this.label230.Name = "label230";
-            this.label230.Size = new System.Drawing.Size(482, 51);
-            this.label230.TabIndex = 144;
-            this.label230.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
-    "at a time.";
             // 
             // panel135
             // 
@@ -19453,52 +19308,6 @@
             this.AddressQRCodePictureboxUTXO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.AddressQRCodePictureboxUTXO.TabIndex = 131;
             this.AddressQRCodePictureboxUTXO.TabStop = false;
-            // 
-            // listViewAddressUTXOs
-            // 
-            this.listViewAddressUTXOs.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listViewAddressUTXOs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listViewAddressUTXOs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewAddressUTXOs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewAddressUTXOs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listViewAddressUTXOs.FullRowSelect = true;
-            this.listViewAddressUTXOs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewAddressUTXOs.HideSelection = false;
-            this.listViewAddressUTXOs.LabelWrap = false;
-            this.listViewAddressUTXOs.Location = new System.Drawing.Point(250, 44);
-            this.listViewAddressUTXOs.MultiSelect = false;
-            this.listViewAddressUTXOs.Name = "listViewAddressUTXOs";
-            this.listViewAddressUTXOs.OwnerDraw = true;
-            this.listViewAddressUTXOs.Scrollable = false;
-            this.listViewAddressUTXOs.ShowGroups = false;
-            this.listViewAddressUTXOs.Size = new System.Drawing.Size(499, 452);
-            this.listViewAddressUTXOs.TabIndex = 139;
-            this.listViewAddressUTXOs.TabStop = false;
-            this.listViewAddressUTXOs.UseCompatibleStateImageBehavior = false;
-            this.listViewAddressUTXOs.View = System.Windows.Forms.View.Details;
-            this.listViewAddressUTXOs.Visible = false;
-            this.listViewAddressUTXOs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewAddressUTXOs_ColumnWidthChanging);
-            this.listViewAddressUTXOs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
-            this.listViewAddressUTXOs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewAddressUTXOs_DrawSubItem);
-            this.listViewAddressUTXOs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewAddressUTXOs_ItemSelectionChanged);
-            // 
-            // panel136
-            // 
-            this.panel136.BackColor = System.Drawing.Color.White;
-            this.panel136.Location = new System.Drawing.Point(250, 484);
-            this.panel136.Name = "panel136";
-            this.panel136.Size = new System.Drawing.Size(499, 20);
-            this.panel136.TabIndex = 218;
-            this.panel136.Visible = false;
-            // 
-            // panel137
-            // 
-            this.panel137.BackColor = System.Drawing.Color.White;
-            this.panel137.Location = new System.Drawing.Point(250, 36);
-            this.panel137.Name = "panel137";
-            this.panel137.Size = new System.Drawing.Size(499, 20);
-            this.panel137.TabIndex = 217;
-            this.panel137.Visible = false;
             // 
             // lblAddressConfirmedSpentUTXOFiat
             // 
@@ -19632,15 +19441,16 @@
             // 
             // label314
             // 
+            this.label314.AutoSize = true;
             this.label314.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label314.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label314.ForeColor = System.Drawing.Color.Gray;
             this.label314.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label314.Location = new System.Drawing.Point(5, 2);
             this.label314.Name = "label314";
-            this.label314.Size = new System.Drawing.Size(182, 17);
+            this.label314.Size = new System.Drawing.Size(175, 17);
             this.label314.TabIndex = 130;
-            this.label314.Text = "Confirmed unspent (balance)";
+            this.label314.Text = "Unspent transaction outputs";
             this.label314.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label314.Visible = false;
             // 
@@ -19674,7 +19484,7 @@
             this.textboxSubmittedAddressUTXO.Name = "textboxSubmittedAddressUTXO";
             this.textboxSubmittedAddressUTXO.Size = new System.Drawing.Size(445, 15);
             this.textboxSubmittedAddressUTXO.TabIndex = 2;
-            this.textboxSubmittedAddressUTXO.TextChanged += new System.EventHandler(this.textboxSubmittedAddressUTXO_TextChanged);
+            this.textboxSubmittedAddressUTXO.TextChanged += new System.EventHandler(this.TextboxSubmittedAddressUTXO_TextChanged);
             // 
             // lblInvalidAddressIndicatorUTXO
             // 
@@ -19703,12 +19513,111 @@
             this.lblAddressUTXOPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressUTXOPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblAddressUTXOPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblAddressUTXOPositionInList.Location = new System.Drawing.Point(248, 508);
+            this.lblAddressUTXOPositionInList.Location = new System.Drawing.Point(245, 510);
             this.lblAddressUTXOPositionInList.Name = "lblAddressUTXOPositionInList";
             this.lblAddressUTXOPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblAddressUTXOPositionInList.TabIndex = 142;
             this.lblAddressUTXOPositionInList.Text = "Transactions n-n of n";
             this.lblAddressUTXOPositionInList.Visible = false;
+            // 
+            // panel134
+            // 
+            this.panel134.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel134.Controls.Add(this.button3);
+            this.panel134.Controls.Add(this.button4);
+            this.panel134.Location = new System.Drawing.Point(733, 46);
+            this.panel134.Name = "panel134";
+            this.panel134.Size = new System.Drawing.Size(31, 393);
+            this.panel134.TabIndex = 284;
+            this.panel134.Visible = false;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(5, 368);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(24, 24);
+            this.button3.TabIndex = 212;
+            this.button3.TabStop = false;
+            this.button3.Text = "▼";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.Color.White;
+            this.button4.Location = new System.Drawing.Point(5, 0);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(24, 24);
+            this.button4.TabIndex = 214;
+            this.button4.TabStop = false;
+            this.button4.Text = "▲";
+            this.button4.UseVisualStyleBackColor = false;
+            // 
+            // panel136
+            // 
+            this.panel136.AutoScroll = true;
+            this.panel136.Controls.Add(this.listViewAddressUTXOs);
+            this.panel136.Controls.Add(this.panel137);
+            this.panel136.Location = new System.Drawing.Point(238, 46);
+            this.panel136.Name = "panel136";
+            this.panel136.Size = new System.Drawing.Size(525, 390);
+            this.panel136.TabIndex = 283;
+            // 
+            // listViewAddressUTXOs
+            // 
+            this.listViewAddressUTXOs.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewAddressUTXOs.AutoArrange = false;
+            this.listViewAddressUTXOs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewAddressUTXOs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewAddressUTXOs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewAddressUTXOs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewAddressUTXOs.FullRowSelect = true;
+            this.listViewAddressUTXOs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewAddressUTXOs.HideSelection = false;
+            this.listViewAddressUTXOs.LabelWrap = false;
+            this.listViewAddressUTXOs.Location = new System.Drawing.Point(0, 0);
+            this.listViewAddressUTXOs.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewAddressUTXOs.MultiSelect = false;
+            this.listViewAddressUTXOs.Name = "listViewAddressUTXOs";
+            this.listViewAddressUTXOs.OwnerDraw = true;
+            this.listViewAddressUTXOs.Scrollable = false;
+            this.listViewAddressUTXOs.ShowGroups = false;
+            this.listViewAddressUTXOs.Size = new System.Drawing.Size(497, 385);
+            this.listViewAddressUTXOs.TabIndex = 164;
+            this.listViewAddressUTXOs.TabStop = false;
+            this.listViewAddressUTXOs.UseCompatibleStateImageBehavior = false;
+            this.listViewAddressUTXOs.View = System.Windows.Forms.View.Details;
+            this.listViewAddressUTXOs.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewAddressUTXOs_ColumnWidthChanging);
+            this.listViewAddressUTXOs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewAddressUTXOs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressUTXOs_DrawSubItem);
+            this.listViewAddressUTXOs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressUTXOs_ItemSelectionChanged);
+            // 
+            // panel137
+            // 
+            this.panel137.BackColor = System.Drawing.Color.IndianRed;
+            this.panel137.Location = new System.Drawing.Point(1, -2);
+            this.panel137.Name = "panel137";
+            this.panel137.Size = new System.Drawing.Size(505, 380);
+            this.panel137.TabIndex = 165;
+            // 
+            // panel143
+            // 
+            this.panel143.BackColor = System.Drawing.Color.White;
+            this.panel143.Location = new System.Drawing.Point(236, 38);
+            this.panel143.Name = "panel143";
+            this.panel143.Size = new System.Drawing.Size(527, 408);
+            this.panel143.TabIndex = 285;
+            this.panel143.Visible = false;
             // 
             // SATSuma
             // 
@@ -19719,13 +19628,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
@@ -20075,7 +19984,6 @@
             this.panelDCAMessages.ResumeLayout(false);
             this.panelAddressUTXO.ResumeLayout(false);
             this.panelAddressUTXO.PerformLayout();
-            this.panelOwnNodeAddressUTXOInfo.ResumeLayout(false);
             this.panel135.ResumeLayout(false);
             this.panel135.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).EndInit();
@@ -20083,10 +19991,13 @@
             this.panel139.ResumeLayout(false);
             this.panel140.ResumeLayout(false);
             this.panel141.ResumeLayout(false);
+            this.panel141.PerformLayout();
             this.panel142.ResumeLayout(false);
             this.panel142.PerformLayout();
             this.panelSubmittedAddressContainerUTXO.ResumeLayout(false);
             this.panelSubmittedAddressContainerUTXO.PerformLayout();
+            this.panel134.ResumeLayout(false);
+            this.panel136.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -21272,17 +21183,11 @@
         private System.Windows.Forms.Label label227;
         private System.Windows.Forms.Button btnMenuAddressUTXO;
         private System.Windows.Forms.Panel panelAddressUTXO;
-        private CustomControls.RJControls.RJButton btnFirstAddressUTXOs;
-        private System.Windows.Forms.Panel panelOwnNodeAddressUTXOInfo;
-        private System.Windows.Forms.Label label230;
         private System.Windows.Forms.Panel panel135;
         private System.Windows.Forms.PictureBox AddressQRCodePictureboxUTXO;
         private System.Windows.Forms.Label lblAddressTypeUTXO;
         private System.Windows.Forms.Button btnViewBlockFromAddressUTXO;
-        private System.Windows.Forms.ListView listViewAddressUTXOs;
         private CustomControls.RJControls.RJButton btnViewTransactionFromAddressUTXO;
-        private System.Windows.Forms.Panel panel136;
-        private System.Windows.Forms.Panel panel137;
         private System.Windows.Forms.Label lblAddressConfirmedSpentUTXOFiat;
         private System.Windows.Forms.Label lblAddressConfirmedReceivedUTXOFiat;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentUTXOFiat;
@@ -21299,11 +21204,7 @@
         private System.Windows.Forms.TextBox textboxSubmittedAddressUTXO;
         private System.Windows.Forms.Label lblInvalidAddressIndicatorUTXO;
         private System.Windows.Forms.Label label316;
-        private CustomControls.RJControls.RJButton btnShowAllUTXO;
-        private CustomControls.RJControls.RJButton btnShowConfirmedUTXO;
-        private CustomControls.RJControls.RJButton btnShowUnconfirmedUTXO;
         private System.Windows.Forms.Label lblAddressUTXOPositionInList;
-        private CustomControls.RJControls.RJButton btnNextAddressUTXOs;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentOutputsUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedSpentOutputsUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedReceivedOutputsUTXO;
@@ -21311,6 +21212,13 @@
         private System.Windows.Forms.Label lblAddressConfirmedSpentUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedReceivedUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedUTXOCount;
+        private System.Windows.Forms.Panel panel134;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        public System.Windows.Forms.Panel panel136;
+        private System.Windows.Forms.ListView listViewAddressUTXOs;
+        private System.Windows.Forms.Panel panel137;
+        private System.Windows.Forms.Panel panel143;
     }
 }
 

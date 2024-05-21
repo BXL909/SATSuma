@@ -599,9 +599,9 @@
             this.lblHeaderfeesHighPriority = new System.Windows.Forms.Label();
             this.lblHeaderFeesMediumPriority = new System.Windows.Forms.Label();
             this.panelBookmarks = new System.Windows.Forms.Panel();
-            this.panel28 = new System.Windows.Forms.Panel();
-            this.panel126 = new System.Windows.Forms.Panel();
-            this.panel127 = new System.Windows.Forms.Panel();
+            this.panelVertConnector = new System.Windows.Forms.Panel();
+            this.panelBottomHorizConnector = new System.Windows.Forms.Panel();
+            this.panelTopHorizConnector = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
             this.panelBookmarkKeyContainer = new System.Windows.Forms.Panel();
             this.textBoxBookmarkKey = new System.Windows.Forms.TextBox();
@@ -9762,9 +9762,9 @@
             // panelBookmarks
             // 
             this.panelBookmarks.BackColor = System.Drawing.Color.Transparent;
-            this.panelBookmarks.Controls.Add(this.panel28);
-            this.panelBookmarks.Controls.Add(this.panel126);
-            this.panelBookmarks.Controls.Add(this.panel127);
+            this.panelBookmarks.Controls.Add(this.panelVertConnector);
+            this.panelBookmarks.Controls.Add(this.panelBottomHorizConnector);
+            this.panelBookmarks.Controls.Add(this.panelTopHorizConnector);
             this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panel33);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
@@ -9776,32 +9776,32 @@
             this.panelBookmarks.TabIndex = 215;
             this.panelBookmarks.Visible = false;
             // 
-            // panel28
+            // panelVertConnector
             // 
-            this.panel28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel28.Location = new System.Drawing.Point(15, 285);
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(1, 176);
-            this.panel28.TabIndex = 219;
+            this.panelVertConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelVertConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelVertConnector.Location = new System.Drawing.Point(15, 285);
+            this.panelVertConnector.Name = "panelVertConnector";
+            this.panelVertConnector.Size = new System.Drawing.Size(1, 176);
+            this.panelVertConnector.TabIndex = 219;
             // 
-            // panel126
+            // panelBottomHorizConnector
             // 
-            this.panel126.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel126.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel126.Location = new System.Drawing.Point(15, 487);
-            this.panel126.Name = "panel126";
-            this.panel126.Size = new System.Drawing.Size(35, 1);
-            this.panel126.TabIndex = 218;
+            this.panelBottomHorizConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelBottomHorizConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelBottomHorizConnector.Location = new System.Drawing.Point(15, 487);
+            this.panelBottomHorizConnector.Name = "panelBottomHorizConnector";
+            this.panelBottomHorizConnector.Size = new System.Drawing.Size(35, 1);
+            this.panelBottomHorizConnector.TabIndex = 218;
             // 
-            // panel127
+            // panelTopHorizConnector
             // 
-            this.panel127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel127.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel127.Location = new System.Drawing.Point(15, 207);
-            this.panel127.Name = "panel127";
-            this.panel127.Size = new System.Drawing.Size(35, 1);
-            this.panel127.TabIndex = 217;
+            this.panelTopHorizConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelTopHorizConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panelTopHorizConnector.Location = new System.Drawing.Point(15, 207);
+            this.panelTopHorizConnector.Name = "panelTopHorizConnector";
+            this.panelTopHorizConnector.Size = new System.Drawing.Size(35, 1);
+            this.panelTopHorizConnector.TabIndex = 217;
             // 
             // panel32
             // 
@@ -10017,9 +10017,9 @@
             this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panel33.Controls.Add(this.btnBookmarksListDown);
             this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Location = new System.Drawing.Point(717, 45);
+            this.panel33.Location = new System.Drawing.Point(717, 37);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(31, 393);
+            this.panel33.Size = new System.Drawing.Size(31, 401);
             this.panel33.TabIndex = 214;
             // 
             // btnBookmarksListDown
@@ -10059,7 +10059,7 @@
             this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.Location = new System.Drawing.Point(5, 0);
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(5, 24);
             this.btnBookmarksListUp.Margin = new System.Windows.Forms.Padding(1);
             this.btnBookmarksListUp.Name = "btnBookmarksListUp";
             this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
@@ -10077,7 +10077,7 @@
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
             this.panelBookmarksContainer.Controls.Add(this.panel100);
-            this.panelBookmarksContainer.Location = new System.Drawing.Point(52, 45);
+            this.panelBookmarksContainer.Location = new System.Drawing.Point(52, 37);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
             this.panelBookmarksContainer.Size = new System.Drawing.Size(695, 390);
             this.panelBookmarksContainer.TabIndex = 213;
@@ -10095,14 +10095,14 @@
             this.listViewBookmarks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBookmarks.HideSelection = false;
             this.listViewBookmarks.LabelWrap = false;
-            this.listViewBookmarks.Location = new System.Drawing.Point(0, 0);
+            this.listViewBookmarks.Location = new System.Drawing.Point(0, 8);
             this.listViewBookmarks.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBookmarks.MultiSelect = false;
             this.listViewBookmarks.Name = "listViewBookmarks";
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(667, 385);
+            this.listViewBookmarks.Size = new System.Drawing.Size(667, 377);
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
             this.listViewBookmarks.UseCompatibleStateImageBehavior = false;
@@ -21384,9 +21384,9 @@
         private CustomControls.RJControls.RJButton btnViewAddressFromTXInput;
         private CustomControls.RJControls.RJButton btnViewAddressFromTXOutput;
         private CustomControls.RJControls.RJButton btnViewAddressFromXpub;
-        private System.Windows.Forms.Panel panel28;
-        private System.Windows.Forms.Panel panel126;
-        private System.Windows.Forms.Panel panel127;
+        private System.Windows.Forms.Panel panelVertConnector;
+        private System.Windows.Forms.Panel panelBottomHorizConnector;
+        private System.Windows.Forms.Panel panelTopHorizConnector;
         private System.Windows.Forms.Panel panelXpubResults;
         private ColorProgressBar.ColorProgressBar progressBarCheckEachAddressType;
         private ColorProgressBar.ColorProgressBar progressBarCheckAllAddressTypes;

@@ -453,7 +453,7 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
-                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134 };
+                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -4298,6 +4298,7 @@ namespace SATSuma
         {
             try
             {
+             
                 foreach (ListViewItem item in listViewAddressUTXOs.Items)
                 {
                     if (item != null)
@@ -13692,28 +13693,10 @@ namespace SATSuma
         {
             try
             {
-                if (listViewBookmarks.SelectedItems.Count > 0)
-                {
-                    panel127.Visible = true;
-                    panel126.Visible = true;
-                    panel28.Visible = true;
-                    Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
-                    panel127.Invoke((MethodInvoker)delegate
-                    {
-                        panel127.Top = itemRect.Top + panel27.Top + (int)(16 * UIScale);
-                    });
-                    panel28.Invoke((MethodInvoker)delegate
-                    {
-                        panel28.Height = panel126.Top - panel127.Top;
-                        panel28.Top = panel127.Top;
-                    });
-                }
-                else
-                {
-                    panel127.Visible = false;
-                    panel126.Visible = false;
-                    panel28.Visible = false;
-                }
+
+                panelTopHorizConnector.Visible = false;
+                panelBottomHorizConnector.Visible = false;
+                panelVertConnector.Visible = false;
 
 
                 textBoxBookmarkKey.Visible = false;
@@ -13789,6 +13772,13 @@ namespace SATSuma
                         }
                     }
                 }
+
+                DrawConnector();
+                
+                lblHeaderBlockAge.Focus();
+                
+                panelBookmarksContainer.Invalidate();
+                
             }
             catch (Exception ex)
             {
@@ -14210,6 +14200,9 @@ namespace SATSuma
                 if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum)
                 {
                     panelBookmarksContainer.VerticalScroll.Value++;
+                    panelTopHorizConnector.Visible = false;
+                    panelBottomHorizConnector.Visible = false;
+                    panelVertConnector.Visible = false;
                 }
             }
             catch (Exception ex)
@@ -14225,6 +14218,9 @@ namespace SATSuma
                 isBookmarksButtonPressed = true;
                 bookmarksDownButtonPressed = true;
                 BookmarksScrollTimer.Start();
+                panelTopHorizConnector.Visible = false;
+                panelBottomHorizConnector.Visible = false;
+                panelVertConnector.Visible = false;
             }
             catch (Exception ex)
             {
@@ -14240,6 +14236,7 @@ namespace SATSuma
                 bookmarksDownButtonPressed = false;
                 BookmarksScrollTimer.Stop();
                 BookmarksScrollTimer.Interval = 50; // reset the interval to its original value
+                DrawConnector();
             }
             catch (Exception ex)
             {
@@ -14254,6 +14251,9 @@ namespace SATSuma
                 if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum)
                 {
                     panelBookmarksContainer.VerticalScroll.Value--;
+                    panelTopHorizConnector.Visible = false;
+                    panelBottomHorizConnector.Visible = false;
+                    panelVertConnector.Visible = false;
                 }
             }
             catch (Exception ex)
@@ -14269,6 +14269,9 @@ namespace SATSuma
                 isBookmarksButtonPressed = true;
                 bookmarksUpButtonPressed = true;
                 BookmarksScrollTimer.Start();
+                panelTopHorizConnector.Visible = false;
+                panelBottomHorizConnector.Visible = false;
+                panelVertConnector.Visible = false;
             }
             catch (Exception ex)
             {
@@ -14284,6 +14287,7 @@ namespace SATSuma
                 bookmarksUpButtonPressed = false;
                 BookmarksScrollTimer.Stop();
                 BookmarksScrollTimer.Interval = 50; // reset the interval to its original value
+                DrawConnector();
             }
             catch (Exception ex)
             {
@@ -14299,18 +14303,20 @@ namespace SATSuma
                 {
                     if (bookmarksDownButtonPressed)
                     {
-                        if (panelBookmarksContainer.VerticalScroll.Value < panelBookmarksContainer.VerticalScroll.Maximum - 5)
+                        if (bookmarksScrollPosition < panelBookmarksContainer.VerticalScroll.Maximum - 5)
                         {
-                            panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value + 5;
-                            bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                            bookmarksScrollPosition += 5;
+                            panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                            //panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition + 5;
+                            //bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
                         BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                     else if (bookmarksUpButtonPressed)
                     {
-                        if (panelBookmarksContainer.VerticalScroll.Value > panelBookmarksContainer.VerticalScroll.Minimum + 5)
+                        if (bookmarksScrollPosition > panelBookmarksContainer.VerticalScroll.Minimum + 5)
                         {
-                            panelBookmarksContainer.VerticalScroll.Value = panelBookmarksContainer.VerticalScroll.Value - 5;
+                            panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition - 5;
                             bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
                         BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
@@ -14327,13 +14333,64 @@ namespace SATSuma
             }
         }
 
+        private void DrawConnector()
+        {
+            if (listViewBookmarks.SelectedItems.Count > 0)
+            {
+                Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
+                panelTopHorizConnector.Invoke((MethodInvoker)delegate
+                {
+                    panelTopHorizConnector.Top = itemRect.Top + panel27.Top + (int)(16 * UIScale) - bookmarksScrollPosition;
+                });
+                if (panelTopHorizConnector.Top < panelBookmarksContainer.Top)
+                {
+                    panelTopHorizConnector.Top = panel33.Top;
+                    panelTopHorizConnector.Visible = false;
+                }
+                else
+                {
+                    panelTopHorizConnector.Visible = true;
+                }
+                if (panelTopHorizConnector.Top > panelBookmarksContainer.Bottom)
+                {
+                    panelTopHorizConnector.Top = panelBookmarksContainer.Bottom;
+                    panelTopHorizConnector.Visible = false;
+                    panelBottomHorizConnector.Visible = false;
+                    panelVertConnector.Visible = false;
+                    return;
+                }
+                panelVertConnector.Invoke((MethodInvoker)delegate
+                {
+                    panelVertConnector.Height = panelBottomHorizConnector.Top - panelTopHorizConnector.Top;
+                    panelVertConnector.Top = panelTopHorizConnector.Top;
+                });
+
+                if (panelVertConnector.Top < panel33.Top)
+                {
+                    panelVertConnector.Top = panel33.Top;
+                }
+                panelBottomHorizConnector.Visible = true;
+                panelVertConnector.Visible = true;
+            }
+            else
+            {
+                panelTopHorizConnector.Visible = false;
+                panelBottomHorizConnector.Visible = false;
+                panelVertConnector.Visible = false;
+            }
+        }
+
         private void PanelBookmarksContainer_Paint(object sender, PaintEventArgs e)
         {
             try
             {
-                if (btnViewBookmark.Enabled)
+                if (bookmarksScrollPosition - 5 > 0)
                 {
-                    panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                    panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition - 5;
+                }
+                else
+                {
+                    panelBookmarksContainer.VerticalScroll.Value = 0;
                 }
             }
             catch (Exception ex)
@@ -21508,7 +21565,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123, 
-                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134 };
+                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22551,7 +22608,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel127, panel126, panel28 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panelTopHorizConnector, panelBottomHorizConnector, panelVertConnector };
                 foreach (Control control in listLinesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22650,7 +22707,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel133, panel134, panelUTXOsContainer, panelUTXOError,  panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel100, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panel133, panel134, panelUTXOsContainer, panelUTXOError,  panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22671,7 +22728,7 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                Control[] tableTitleBarsToColor = { panel143, panel67, panel68, panel117, panel121, panel123 };
+                Control[] tableTitleBarsToColor = { panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer };
                 foreach (Control control in tableTitleBarsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23157,7 +23214,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panelBookmarksContainer };
+                Control[] listPanelsToColor = { panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -27115,21 +27172,7 @@ namespace SATSuma
                 }
                 HideAllScreens();
                 panelAddressUTXO.Visible = true;
-                /*
-                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
-                {
-                    rowsReturnedByAddressTransactionsAPI = 25;
-                    panelOwnNodeAddressTXInfo.Visible = false;
-                }
-                else
-                {
-                    if (AddressQRCodePicturebox.Visible)
-                    {
-                        rowsReturnedByAddressTransactionsAPI = 10;
-                        panelOwnNodeAddressTXInfo.Visible = true;
-                    }
-                }
-                */
+                
                 if (textboxSubmittedAddressUTXO.Text == "" || textboxSubmittedAddress.Text == null)
                 {
                     AddressValidShowControlsUTXO();

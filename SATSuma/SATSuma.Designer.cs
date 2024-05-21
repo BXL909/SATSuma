@@ -369,15 +369,15 @@
             this.label38 = new System.Windows.Forms.Label();
             this.lblTotalCapacity = new System.Windows.Forms.Label();
             this.panelAddress = new System.Windows.Forms.Panel();
+            this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
+            this.label164 = new System.Windows.Forms.Label();
+            this.listViewAddressTransactions = new System.Windows.Forms.ListView();
             this.BtnViewBlockFromAddress = new CustomControls.RJControls.RJButton();
             this.btnViewUTXOsFromAddressTX = new CustomControls.RJControls.RJButton();
             this.btnFirstAddressTransaction = new CustomControls.RJControls.RJButton();
-            this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
-            this.label164 = new System.Windows.Forms.Label();
             this.panel132 = new System.Windows.Forms.Panel();
             this.AddressQRCodePicturebox = new System.Windows.Forms.PictureBox();
             this.lblAddressType = new System.Windows.Forms.Label();
-            this.listViewAddressTransactions = new System.Windows.Forms.ListView();
             this.panel124 = new System.Windows.Forms.Panel();
             this.panel123 = new System.Windows.Forms.Panel();
             this.lblAddressConfirmedSpentFiat = new System.Windows.Forms.Label();
@@ -6379,6 +6379,55 @@
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // panelOwnNodeAddressTXInfo
+            // 
+            this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panelOwnNodeAddressTXInfo.Controls.Add(this.label164);
+            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 452);
+            this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
+            this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(460, 41);
+            this.panelOwnNodeAddressTXInfo.TabIndex = 213;
+            this.panelOwnNodeAddressTXInfo.Visible = false;
+            // 
+            // label164
+            // 
+            this.label164.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label164.ForeColor = System.Drawing.Color.Gray;
+            this.label164.Location = new System.Drawing.Point(9, 3);
+            this.label164.Name = "label164";
+            this.label164.Size = new System.Drawing.Size(446, 51);
+            this.label164.TabIndex = 144;
+            this.label164.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
+    "at a time.";
+            // 
+            // listViewAddressTransactions
+            // 
+            this.listViewAddressTransactions.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewAddressTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewAddressTransactions.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewAddressTransactions.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewAddressTransactions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewAddressTransactions.FullRowSelect = true;
+            this.listViewAddressTransactions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewAddressTransactions.HideSelection = false;
+            this.listViewAddressTransactions.LabelWrap = false;
+            this.listViewAddressTransactions.Location = new System.Drawing.Point(250, 44);
+            this.listViewAddressTransactions.MultiSelect = false;
+            this.listViewAddressTransactions.Name = "listViewAddressTransactions";
+            this.listViewAddressTransactions.OwnerDraw = true;
+            this.listViewAddressTransactions.Scrollable = false;
+            this.listViewAddressTransactions.ShowGroups = false;
+            this.listViewAddressTransactions.Size = new System.Drawing.Size(464, 452);
+            this.listViewAddressTransactions.TabIndex = 139;
+            this.listViewAddressTransactions.TabStop = false;
+            this.listViewAddressTransactions.UseCompatibleStateImageBehavior = false;
+            this.listViewAddressTransactions.View = System.Windows.Forms.View.Details;
+            this.listViewAddressTransactions.Visible = false;
+            this.listViewAddressTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewAddressTransactions_ColumnWidthChanging);
+            this.listViewAddressTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewAddressTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressTransactions_DrawSubItem);
+            this.listViewAddressTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressTransactions_ItemSelectionChanged);
+            // 
             // BtnViewBlockFromAddress
             // 
             this.BtnViewBlockFromAddress.AutoSize = true;
@@ -6454,27 +6503,6 @@
             this.btnFirstAddressTransaction.Visible = false;
             this.btnFirstAddressTransaction.Click += new System.EventHandler(this.BtnFirstTransactionForAddress_ClickAsync);
             // 
-            // panelOwnNodeAddressTXInfo
-            // 
-            this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panelOwnNodeAddressTXInfo.Controls.Add(this.label164);
-            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 452);
-            this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
-            this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(460, 41);
-            this.panelOwnNodeAddressTXInfo.TabIndex = 213;
-            this.panelOwnNodeAddressTXInfo.Visible = false;
-            // 
-            // label164
-            // 
-            this.label164.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label164.ForeColor = System.Drawing.Color.Gray;
-            this.label164.Location = new System.Drawing.Point(9, 3);
-            this.label164.Name = "label164";
-            this.label164.Size = new System.Drawing.Size(446, 51);
-            this.label164.TabIndex = 144;
-            this.label164.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
-    "at a time.";
-            // 
             // panel132
             // 
             this.panel132.Controls.Add(this.AddressQRCodePicturebox);
@@ -6506,34 +6534,6 @@
             this.lblAddressType.Text = "no data";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressType, "Address type");
             this.lblAddressType.Visible = false;
-            // 
-            // listViewAddressTransactions
-            // 
-            this.listViewAddressTransactions.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listViewAddressTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listViewAddressTransactions.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewAddressTransactions.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewAddressTransactions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listViewAddressTransactions.FullRowSelect = true;
-            this.listViewAddressTransactions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewAddressTransactions.HideSelection = false;
-            this.listViewAddressTransactions.LabelWrap = false;
-            this.listViewAddressTransactions.Location = new System.Drawing.Point(250, 44);
-            this.listViewAddressTransactions.MultiSelect = false;
-            this.listViewAddressTransactions.Name = "listViewAddressTransactions";
-            this.listViewAddressTransactions.OwnerDraw = true;
-            this.listViewAddressTransactions.Scrollable = false;
-            this.listViewAddressTransactions.ShowGroups = false;
-            this.listViewAddressTransactions.Size = new System.Drawing.Size(464, 452);
-            this.listViewAddressTransactions.TabIndex = 139;
-            this.listViewAddressTransactions.TabStop = false;
-            this.listViewAddressTransactions.UseCompatibleStateImageBehavior = false;
-            this.listViewAddressTransactions.View = System.Windows.Forms.View.Details;
-            this.listViewAddressTransactions.Visible = false;
-            this.listViewAddressTransactions.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewAddressTransactions_ColumnWidthChanging);
-            this.listViewAddressTransactions.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
-            this.listViewAddressTransactions.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressTransactions_DrawSubItem);
-            this.listViewAddressTransactions.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressTransactions_ItemSelectionChanged);
             // 
             // panel124
             // 
@@ -7954,6 +7954,9 @@
             this.listViewTransactionInputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewTransactionInputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionInputs_DrawSubItem);
             this.listViewTransactionInputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionInputs_ItemSelectionChanged);
+            this.listViewTransactionInputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionInputs_KeyDown);
+            this.listViewTransactionInputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewTransactionInputs_KeyPress);
+            this.listViewTransactionInputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionInputs_KeyUp);
             // 
             // panel25
             // 
@@ -8055,6 +8058,9 @@
             this.listViewTransactionOutputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
             this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
+            this.listViewTransactionOutputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionOutputs_KeyDown);
+            this.listViewTransactionOutputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewTransactionOutputs_KeyPress);
+            this.listViewTransactionOutputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionOutputs_KeyUp);
             // 
             // panel125
             // 
@@ -8596,6 +8602,9 @@
             this.listViewXpubAddresses.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewXpubAddresses.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewXpubAddresses_DrawSubItem);
             this.listViewXpubAddresses.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewXpubAddresses_ItemSelectionChanged);
+            this.listViewXpubAddresses.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyDown);
+            this.listViewXpubAddresses.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewXpubAddresses_KeyPress);
+            this.listViewXpubAddresses.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyUp);
             // 
             // panelXpubResults
             // 
@@ -10102,6 +10111,9 @@
             this.listViewBookmarks.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBookmarks.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBookmarks_DrawSubItem);
             this.listViewBookmarks.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBookmarks_ItemSelectionChanged);
+            this.listViewBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewBookmarks_KeyDown);
+            this.listViewBookmarks.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewBookmarks_KeyPress);
+            this.listViewBookmarks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewBookmarks_KeyUp);
             // 
             // panel100
             // 
@@ -19914,13 +19926,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelPriceConverter);

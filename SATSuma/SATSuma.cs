@@ -28,7 +28,6 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
 * fix select/scroll bug on bookmark and xpub listviews, 
-* disable keys on xpub, tx and bookmarks lists)
 * right-align fields on left side of utxo screen 
 * check new controls all have themes applied
 * check new stuff renders properly at different UI scales
@@ -30164,6 +30163,66 @@ namespace SATSuma
         {
             textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
             BtnMenuAddressUTXO_Click(sender, e);
+        }
+
+        private void listViewTransactionInputs_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionInputs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionInputs_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewXpubAddresses_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewXpubAddresses_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewXpubAddresses_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewBookmarks_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewBookmarks_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewBookmarks_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

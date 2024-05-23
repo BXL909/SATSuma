@@ -599,9 +599,10 @@
             this.lblHeaderfeesHighPriority = new System.Windows.Forms.Label();
             this.lblHeaderFeesMediumPriority = new System.Windows.Forms.Label();
             this.panelBookmarks = new System.Windows.Forms.Panel();
-            this.panelVertConnector = new System.Windows.Forms.Panel();
-            this.panelBottomHorizConnector = new System.Windows.Forms.Panel();
-            this.panelTopHorizConnector = new System.Windows.Forms.Panel();
+            this.panel33 = new System.Windows.Forms.Panel();
+            this.btnBookmarksListUp = new CustomControls.RJControls.RJButton();
+            this.btnBookmarksListDown = new CustomControls.RJControls.RJButton();
+            this.panel28 = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
             this.panelBookmarkKeyContainer = new System.Windows.Forms.Panel();
             this.textBoxBookmarkKey = new System.Windows.Forms.TextBox();
@@ -614,9 +615,6 @@
             this.lblBookmarkNoteInFull = new System.Windows.Forms.Label();
             this.lblSelectedBookmarkType = new System.Windows.Forms.Label();
             this.lblBookmarkDataInFull = new System.Windows.Forms.Label();
-            this.panel33 = new System.Windows.Forms.Panel();
-            this.btnBookmarksListDown = new CustomControls.RJControls.RJButton();
-            this.btnBookmarksListUp = new CustomControls.RJControls.RJButton();
             this.panelBookmarksContainer = new System.Windows.Forms.Panel();
             this.listViewBookmarks = new System.Windows.Forms.ListView();
             this.panel100 = new System.Windows.Forms.Panel();
@@ -1328,9 +1326,9 @@
             this.panel57.SuspendLayout();
             this.panel40.SuspendLayout();
             this.panelBookmarks.SuspendLayout();
+            this.panel33.SuspendLayout();
             this.panel32.SuspendLayout();
             this.panelBookmarkKeyContainer.SuspendLayout();
-            this.panel33.SuspendLayout();
             this.panelBookmarksContainer.SuspendLayout();
             this.panel36.SuspendLayout();
             this.panelDeleteAllBookmarksConfirm.SuspendLayout();
@@ -9762,11 +9760,9 @@
             // panelBookmarks
             // 
             this.panelBookmarks.BackColor = System.Drawing.Color.Transparent;
-            this.panelBookmarks.Controls.Add(this.panelVertConnector);
-            this.panelBookmarks.Controls.Add(this.panelBottomHorizConnector);
-            this.panelBookmarks.Controls.Add(this.panelTopHorizConnector);
-            this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panel33);
+            this.panelBookmarks.Controls.Add(this.panel28);
+            this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
             this.panelBookmarks.Controls.Add(this.panel36);
             this.panelBookmarks.Controls.Add(this.panel27);
@@ -9776,32 +9772,72 @@
             this.panelBookmarks.TabIndex = 215;
             this.panelBookmarks.Visible = false;
             // 
-            // panelVertConnector
+            // panel33
             // 
-            this.panelVertConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelVertConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelVertConnector.Location = new System.Drawing.Point(15, 285);
-            this.panelVertConnector.Name = "panelVertConnector";
-            this.panelVertConnector.Size = new System.Drawing.Size(1, 176);
-            this.panelVertConnector.TabIndex = 219;
+            this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panel33.Controls.Add(this.btnBookmarksListUp);
+            this.panel33.Controls.Add(this.btnBookmarksListDown);
+            this.panel33.Location = new System.Drawing.Point(717, 37);
+            this.panel33.Name = "panel33";
+            this.panel33.Size = new System.Drawing.Size(31, 401);
+            this.panel33.TabIndex = 214;
             // 
-            // panelBottomHorizConnector
+            // btnBookmarksListUp
             // 
-            this.panelBottomHorizConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelBottomHorizConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelBottomHorizConnector.Location = new System.Drawing.Point(15, 487);
-            this.panelBottomHorizConnector.Name = "panelBottomHorizConnector";
-            this.panelBottomHorizConnector.Size = new System.Drawing.Size(35, 1);
-            this.panelBottomHorizConnector.TabIndex = 218;
+            this.btnBookmarksListUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListUp.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnBookmarksListUp.BorderRadius = 7;
+            this.btnBookmarksListUp.BorderSize = 0;
+            this.btnBookmarksListUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBookmarksListUp.FlatAppearance.BorderSize = 0;
+            this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
+            this.btnBookmarksListUp.Location = new System.Drawing.Point(3, 4);
+            this.btnBookmarksListUp.Margin = new System.Windows.Forms.Padding(1);
+            this.btnBookmarksListUp.Name = "btnBookmarksListUp";
+            this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListUp.TabIndex = 298;
+            this.btnBookmarksListUp.TabStop = false;
+            this.btnBookmarksListUp.Text = "▲";
+            this.btnBookmarksListUp.TextColor = System.Drawing.Color.White;
+            this.btnBookmarksListUp.UseVisualStyleBackColor = false;
+            this.btnBookmarksListUp.Click += new System.EventHandler(this.BtnBookmarksListUp_Click);
+            this.btnBookmarksListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseDown);
+            this.btnBookmarksListUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseUp);
             // 
-            // panelTopHorizConnector
+            // btnBookmarksListDown
             // 
-            this.panelTopHorizConnector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelTopHorizConnector.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panelTopHorizConnector.Location = new System.Drawing.Point(15, 207);
-            this.panelTopHorizConnector.Name = "panelTopHorizConnector";
-            this.panelTopHorizConnector.Size = new System.Drawing.Size(35, 1);
-            this.panelTopHorizConnector.TabIndex = 217;
+            this.btnBookmarksListDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnBookmarksListDown.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnBookmarksListDown.BorderRadius = 7;
+            this.btnBookmarksListDown.BorderSize = 0;
+            this.btnBookmarksListDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnBookmarksListDown.FlatAppearance.BorderSize = 0;
+            this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
+            this.btnBookmarksListDown.Location = new System.Drawing.Point(3, 375);
+            this.btnBookmarksListDown.Margin = new System.Windows.Forms.Padding(1);
+            this.btnBookmarksListDown.Name = "btnBookmarksListDown";
+            this.btnBookmarksListDown.Size = new System.Drawing.Size(24, 24);
+            this.btnBookmarksListDown.TabIndex = 299;
+            this.btnBookmarksListDown.TabStop = false;
+            this.btnBookmarksListDown.Text = "▼";
+            this.btnBookmarksListDown.TextColor = System.Drawing.Color.White;
+            this.btnBookmarksListDown.UseVisualStyleBackColor = false;
+            this.btnBookmarksListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
+            this.btnBookmarksListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
+            this.btnBookmarksListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseUp);
+            // 
+            // panel28
+            // 
+            this.panel28.Location = new System.Drawing.Point(717, 37);
+            this.panel28.Name = "panel28";
+            this.panel28.Size = new System.Drawing.Size(12, 34);
+            this.panel28.TabIndex = 220;
             // 
             // panel32
             // 
@@ -9816,9 +9852,9 @@
             this.panel32.Controls.Add(this.lblBookmarkNoteInFull);
             this.panel32.Controls.Add(this.lblSelectedBookmarkType);
             this.panel32.Controls.Add(this.lblBookmarkDataInFull);
-            this.panel32.Location = new System.Drawing.Point(50, 450);
+            this.panel32.Location = new System.Drawing.Point(0, 450);
             this.panel32.Name = "panel32";
-            this.panel32.Size = new System.Drawing.Size(698, 100);
+            this.panel32.Size = new System.Drawing.Size(748, 100);
             this.panel32.TabIndex = 215;
             // 
             // panelBookmarkKeyContainer
@@ -9879,7 +9915,7 @@
             this.lblBookmarkStatusMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblBookmarkStatusMessage.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookmarkStatusMessage.ForeColor = System.Drawing.Color.IndianRed;
-            this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(374, 73);
+            this.lblBookmarkStatusMessage.Location = new System.Drawing.Point(424, 73);
             this.lblBookmarkStatusMessage.Name = "lblBookmarkStatusMessage";
             this.lblBookmarkStatusMessage.Size = new System.Drawing.Size(118, 17);
             this.lblBookmarkStatusMessage.TabIndex = 217;
@@ -9923,7 +9959,7 @@
             this.btnDeleteBookmark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteBookmark.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteBookmark.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteBookmark.Location = new System.Drawing.Point(507, 69);
+            this.btnDeleteBookmark.Location = new System.Drawing.Point(557, 69);
             this.btnDeleteBookmark.Margin = new System.Windows.Forms.Padding(1);
             this.btnDeleteBookmark.Name = "btnDeleteBookmark";
             this.btnDeleteBookmark.Size = new System.Drawing.Size(88, 24);
@@ -9947,7 +9983,7 @@
             this.btnViewBookmark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewBookmark.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewBookmark.ForeColor = System.Drawing.Color.White;
-            this.btnViewBookmark.Location = new System.Drawing.Point(601, 69);
+            this.btnViewBookmark.Location = new System.Drawing.Point(651, 69);
             this.btnViewBookmark.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewBookmark.Name = "btnViewBookmark";
             this.btnViewBookmark.Size = new System.Drawing.Size(88, 24);
@@ -10012,74 +10048,14 @@
             this.lblBookmarkDataInFull.TabIndex = 222;
             this.lblBookmarkDataInFull.Text = "0";
             // 
-            // panel33
-            // 
-            this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel33.Controls.Add(this.btnBookmarksListDown);
-            this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Location = new System.Drawing.Point(717, 37);
-            this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(31, 401);
-            this.panel33.TabIndex = 214;
-            // 
-            // btnBookmarksListDown
-            // 
-            this.btnBookmarksListDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBookmarksListDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBookmarksListDown.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnBookmarksListDown.BorderRadius = 7;
-            this.btnBookmarksListDown.BorderSize = 0;
-            this.btnBookmarksListDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnBookmarksListDown.FlatAppearance.BorderSize = 0;
-            this.btnBookmarksListDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBookmarksListDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBookmarksListDown.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListDown.Location = new System.Drawing.Point(5, 368);
-            this.btnBookmarksListDown.Margin = new System.Windows.Forms.Padding(1);
-            this.btnBookmarksListDown.Name = "btnBookmarksListDown";
-            this.btnBookmarksListDown.Size = new System.Drawing.Size(24, 24);
-            this.btnBookmarksListDown.TabIndex = 299;
-            this.btnBookmarksListDown.TabStop = false;
-            this.btnBookmarksListDown.Text = "▼";
-            this.btnBookmarksListDown.TextColor = System.Drawing.Color.White;
-            this.btnBookmarksListDown.UseVisualStyleBackColor = false;
-            this.btnBookmarksListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
-            this.btnBookmarksListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
-            this.btnBookmarksListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseUp);
-            // 
-            // btnBookmarksListUp
-            // 
-            this.btnBookmarksListUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBookmarksListUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnBookmarksListUp.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnBookmarksListUp.BorderRadius = 7;
-            this.btnBookmarksListUp.BorderSize = 0;
-            this.btnBookmarksListUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnBookmarksListUp.FlatAppearance.BorderSize = 0;
-            this.btnBookmarksListUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBookmarksListUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBookmarksListUp.ForeColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.Location = new System.Drawing.Point(5, 24);
-            this.btnBookmarksListUp.Margin = new System.Windows.Forms.Padding(1);
-            this.btnBookmarksListUp.Name = "btnBookmarksListUp";
-            this.btnBookmarksListUp.Size = new System.Drawing.Size(24, 24);
-            this.btnBookmarksListUp.TabIndex = 298;
-            this.btnBookmarksListUp.TabStop = false;
-            this.btnBookmarksListUp.Text = "▲";
-            this.btnBookmarksListUp.TextColor = System.Drawing.Color.White;
-            this.btnBookmarksListUp.UseVisualStyleBackColor = false;
-            this.btnBookmarksListUp.Click += new System.EventHandler(this.BtnBookmarksListUp_Click);
-            this.btnBookmarksListUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseDown);
-            this.btnBookmarksListUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListUp_MouseUp);
-            // 
             // panelBookmarksContainer
             // 
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
             this.panelBookmarksContainer.Controls.Add(this.panel100);
-            this.panelBookmarksContainer.Location = new System.Drawing.Point(52, 37);
+            this.panelBookmarksContainer.Location = new System.Drawing.Point(2, 37);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
-            this.panelBookmarksContainer.Size = new System.Drawing.Size(695, 390);
+            this.panelBookmarksContainer.Size = new System.Drawing.Size(745, 400);
             this.panelBookmarksContainer.TabIndex = 213;
             this.panelBookmarksContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelBookmarksContainer_Paint);
             // 
@@ -10102,7 +10078,7 @@
             this.listViewBookmarks.OwnerDraw = true;
             this.listViewBookmarks.Scrollable = false;
             this.listViewBookmarks.ShowGroups = false;
-            this.listViewBookmarks.Size = new System.Drawing.Size(667, 377);
+            this.listViewBookmarks.Size = new System.Drawing.Size(717, 387);
             this.listViewBookmarks.TabIndex = 164;
             this.listViewBookmarks.TabStop = false;
             this.listViewBookmarks.UseCompatibleStateImageBehavior = false;
@@ -10120,7 +10096,7 @@
             this.panel100.BackColor = System.Drawing.Color.IndianRed;
             this.panel100.Location = new System.Drawing.Point(1, -2);
             this.panel100.Name = "panel100";
-            this.panel100.Size = new System.Drawing.Size(675, 380);
+            this.panel100.Size = new System.Drawing.Size(725, 380);
             this.panel100.TabIndex = 165;
             // 
             // panel36
@@ -10385,9 +10361,9 @@
             // panel27
             // 
             this.panel27.BackColor = System.Drawing.Color.White;
-            this.panel27.Location = new System.Drawing.Point(50, 37);
+            this.panel27.Location = new System.Drawing.Point(0, 37);
             this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(697, 408);
+            this.panel27.Size = new System.Drawing.Size(747, 408);
             this.panel27.TabIndex = 216;
             // 
             // BookmarksScrollTimer
@@ -20098,11 +20074,11 @@
             this.panel40.ResumeLayout(false);
             this.panel40.PerformLayout();
             this.panelBookmarks.ResumeLayout(false);
+            this.panel33.ResumeLayout(false);
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
             this.panelBookmarkKeyContainer.ResumeLayout(false);
             this.panelBookmarkKeyContainer.PerformLayout();
-            this.panel33.ResumeLayout(false);
             this.panelBookmarksContainer.ResumeLayout(false);
             this.panel36.ResumeLayout(false);
             this.panel36.PerformLayout();
@@ -21384,9 +21360,6 @@
         private CustomControls.RJControls.RJButton btnViewAddressFromTXInput;
         private CustomControls.RJControls.RJButton btnViewAddressFromTXOutput;
         private CustomControls.RJControls.RJButton btnViewAddressFromXpub;
-        private System.Windows.Forms.Panel panelVertConnector;
-        private System.Windows.Forms.Panel panelBottomHorizConnector;
-        private System.Windows.Forms.Panel panelTopHorizConnector;
         private System.Windows.Forms.Panel panelXpubResults;
         private ColorProgressBar.ColorProgressBar progressBarCheckEachAddressType;
         private ColorProgressBar.ColorProgressBar progressBarCheckAllAddressTypes;
@@ -21535,6 +21508,7 @@
         private CustomControls.RJControls.RJButton btnTransactionOutputsDown;
         private System.Windows.Forms.Panel panel133;
         private CustomControls.RJControls.RJButton BtnViewBlockFromAddress;
+        private System.Windows.Forms.Panel panel28;
     }
 }
 

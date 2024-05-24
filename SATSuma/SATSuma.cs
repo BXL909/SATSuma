@@ -28,7 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
 * fix select/scroll bug on xpub listviews, 
-* change intervals and scroll amounts on scrollable listviews as per bookmarks screen (tx outputs and xpub left to do)
+* change intervals and scroll amounts on scrollable listviews as per bookmarks screen (xpub left to do)
 * right-align fields on left side of utxo screen 
 * check new controls all have themes applied
 * check new stuff renders properly at different UI scales
@@ -453,7 +453,7 @@ namespace SATSuma
             }
             #endregion
             #region rounded panels
-            Control[] panelsToRound = { panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
+            Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
                 panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33 };
             foreach (Control control in panelsToRound)
@@ -4322,6 +4322,14 @@ namespace SATSuma
                                 btnViewBlockFromAddressUTXO.Location = new Point(listViewAddressUTXOs.Location.X + listViewAddressUTXOs.Width - (int)(13 * UIScale), item.Position.Y);
                                 btnViewBlockFromAddressUTXO.Height = item.Bounds.Height;
                             });
+                            if (item.SubItems[3].Text == "-")
+                            {
+                                btnViewBlockFromAddressUTXO.Enabled = false;
+                            }
+                            else
+                            {
+                                btnViewBlockFromAddressUTXO.Enabled = true;
+                            }
                         }
                         else
                         {
@@ -6419,7 +6427,6 @@ namespace SATSuma
         {
             try
             {
-                
                 if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum)
                 {
                     int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
@@ -6442,7 +6449,12 @@ namespace SATSuma
             {
                 if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum)
                 {
-                    panelTransactionOutputs.VerticalScroll.Value++;
+                    int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
+                    TransactionOutputsScrollPosition += rowHeight;
+                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                    lblHeaderBlockAge.Focus();
+
+                    //panelTransactionOutputs.VerticalScroll.Value++;
                 }
             }
             catch (Exception ex)
@@ -6529,16 +6541,6 @@ namespace SATSuma
                             }
                             panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
                         }
-
-
-
-
-                        //if (panelTransactionInputs.VerticalScroll.Value < panelTransactionInputs.VerticalScroll.Maximum - 5)
-                        //{
-                        //    panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value + 5;
-                        //    TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
-                       // }
-                        //TXInScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                     else if (InputUpButtonPressed)
                     {
@@ -6548,14 +6550,6 @@ namespace SATSuma
                             TransactionInputsScrollPosition -= rowHeight;
                             panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
                         }
-
-
-                        //if (panelTransactionInputs.VerticalScroll.Value > panelTransactionInputs.VerticalScroll.Minimum + 5)
-                        //{
-                        //    panelTransactionInputs.VerticalScroll.Value = panelTransactionInputs.VerticalScroll.Value - 5;
-                        //    TransactionInputsScrollPosition = panelTransactionInputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
-                        //}
-                        //TXInScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                 }
                 else
@@ -6577,21 +6571,24 @@ namespace SATSuma
                 {
                     if (OutputDownButtonPressed)
                     {
-                        if (panelTransactionOutputs.VerticalScroll.Value < panelTransactionOutputs.VerticalScroll.Maximum - 5)
+                        int rowHeight = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                        if (TransactionOutputsScrollPosition < (panelTransactionOutputs.VerticalScroll.Maximum - panelTransactionOutputs.Height) - rowHeight)
                         {
-                            panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value + 5;
-                            TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                            if (TransactionOutputsScrollPosition < panelTransactionOutputs.VerticalScroll.Maximum + rowHeight)
+                            {
+                                TransactionOutputsScrollPosition += rowHeight;
+                            }
+                            panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
                         }
-                        TXOutScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                     else if (OutputUpButtonPressed)
                     {
-                        if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum + 5)
+                        int rowHeight = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                        if (TransactionOutputsScrollPosition > panelTransactionOutputs.VerticalScroll.Minimum + rowHeight)
                         {
-                            panelTransactionOutputs.VerticalScroll.Value = panelTransactionOutputs.VerticalScroll.Value - 5;
-                            TransactionOutputsScrollPosition = panelTransactionOutputs.VerticalScroll.Value; // store the scroll position to reposition on the paint event
+                            TransactionOutputsScrollPosition -= rowHeight;
+                            panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
                         }
-                        TXOutScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                 }
                 else
@@ -6632,7 +6629,11 @@ namespace SATSuma
             {
                 if (panelTransactionOutputs.VerticalScroll.Value > panelTransactionOutputs.VerticalScroll.Minimum)
                 {
-                    panelTransactionOutputs.VerticalScroll.Value--;
+                    int rowHeight = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                    TransactionOutputsScrollPosition -= rowHeight;
+                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                    lblHeaderBlockAge.Focus();
+                    //panelTransactionOutputs.VerticalScroll.Value--;
                 }
             }
             catch (Exception ex)
@@ -6734,10 +6735,22 @@ namespace SATSuma
         {
             try
             {
-                if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
+                int rowHeight = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                if (TransactionOutputsScrollPosition - rowHeight > 0)
                 {
-                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+                    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
                 }
+                else
+                {
+                    panelTransactionOutputs.VerticalScroll.Value = 0;
+                    TransactionOutputsScrollPosition = 0;
+                }
+
+
+                //if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
+               // {
+                //    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
+               // }
             }
             catch (Exception ex)
             {
@@ -8422,7 +8435,7 @@ namespace SATSuma
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add(" Address", (int)(130 * UIScale));
+                        listViewXpubAddresses.Columns.Add("Address", (int)(140 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 1)
@@ -9697,6 +9710,7 @@ namespace SATSuma
                         }
                     }
                 }
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -9710,10 +9724,20 @@ namespace SATSuma
         {
             try
             {
+                int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                if (XpubAddressesScrollPosition < (panelXpubContainer.VerticalScroll.Maximum - panelXpubContainer.Height) - rowHeight)
+                {
+
+                    XpubAddressesScrollPosition += rowHeight;
+                    panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                    lblHeaderBlockAge.Focus();
+                }
+                /*
                 if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum)
                 {
                     panelXpubContainer.VerticalScroll.Value++;
                 }
+                */
             }
             catch (Exception ex)
             {
@@ -9743,6 +9767,7 @@ namespace SATSuma
                 XpubDownButtonPressed = false;
                 XpubScrollTimer.Stop();
                 XpubScrollTimer.Interval = 50; // reset the interval to its original value
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -9757,8 +9782,17 @@ namespace SATSuma
             {
                 if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum)
                 {
+                    int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                    XpubAddressesScrollPosition -= rowHeight;
+                    panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                    lblHeaderBlockAge.Focus();
+                }
+                /*
+                if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum)
+                {
                     panelXpubContainer.VerticalScroll.Value--;
                 }
+                */
             }
             catch (Exception ex)
             {
@@ -9788,6 +9822,7 @@ namespace SATSuma
                 XpubUpButtonPressed = false;
                 XpubScrollTimer.Stop();
                 XpubScrollTimer.Interval = 50; // reset the interval to its original value
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -9804,21 +9839,40 @@ namespace SATSuma
                 {
                     if (XpubDownButtonPressed)
                     {
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        if (XpubAddressesScrollPosition < (panelXpubContainer.VerticalScroll.Maximum - panelXpubContainer.Height) - rowHeight)
+                        {
+                            if (XpubAddressesScrollPosition < panelXpubContainer.VerticalScroll.Maximum + rowHeight)
+                            {
+                                XpubAddressesScrollPosition += rowHeight;
+                            }
+                            panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                        }
+                        /*
                         if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum - 5)
                         {
                             panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 5;
                             XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
                         XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
+                        */
                     }
                     else if (XpubUpButtonPressed)
                     {
+                        int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                        if (XpubAddressesScrollPosition > panelXpubContainer.VerticalScroll.Minimum + rowHeight)
+                        {
+                            XpubAddressesScrollPosition -= rowHeight;
+                            panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                        }
+                        /*
                         if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum + 5)
                         {
                             panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 5;
                             XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
                         XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
+                        */
                     }
                 }
                 else
@@ -9836,10 +9890,22 @@ namespace SATSuma
         {
             try
             {
+                int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                if (XpubAddressesScrollPosition - rowHeight > 0)
+                {
+                    panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                }
+                else
+                {
+                    panelXpubContainer.VerticalScroll.Value = 0;
+                    XpubAddressesScrollPosition = 0;
+                }
+                /*
                 if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
                 {
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
                 }
+                */
             }
             catch (Exception ex)
             {
@@ -14359,16 +14425,12 @@ namespace SATSuma
                         int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
                         if (bookmarksScrollPosition < (panelBookmarksContainer.VerticalScroll.Maximum - panelBookmarksContainer.Height) - rowHeight)
                         {
-                            //bookmarksScrollPosition += 5;
                             if (bookmarksScrollPosition < panelBookmarksContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 bookmarksScrollPosition += rowHeight;
                             }
                             panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
-                            //panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition + 5;
-                            //bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
-                        //BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                     else if (bookmarksUpButtonPressed)
                     {
@@ -14377,10 +14439,7 @@ namespace SATSuma
                         {
                             bookmarksScrollPosition -= rowHeight;
                             panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
-                            //panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition - 5;
-                            //bookmarksScrollPosition = panelBookmarksContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
                         }
-                        //BookmarksScrollTimer.Interval = 1; // set a faster interval while the button is held down
                     }
                 }
                 else
@@ -21579,7 +21638,7 @@ namespace SATSuma
             try
             {
                 #region rounded panels
-                Control[] panelsToInvalidate = { panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
+                Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks, 
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123, 
                     panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33 };
                 foreach (Control control in panelsToInvalidate)
@@ -22723,7 +22782,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel28, panel133, panel134, panelUTXOsContainer, panelUTXOError,  panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer };
+                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panelUTXOsContainer, panelUTXOError,  panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22744,7 +22803,7 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                Control[] tableTitleBarsToColor = { panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer };
+                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer };
                 foreach (Control control in tableTitleBarsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate

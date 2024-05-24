@@ -1254,6 +1254,8 @@
             this.label316 = new System.Windows.Forms.Label();
             this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.UTXOsScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.panel126 = new System.Windows.Forms.Panel();
+            this.panel127 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -8504,9 +8506,9 @@
             this.panelXpubScrollbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
             this.panelXpubScrollbar.Controls.Add(this.btnXpubAddressesDown);
             this.panelXpubScrollbar.Controls.Add(this.btnXpubAddressesUp);
-            this.panelXpubScrollbar.Location = new System.Drawing.Point(711, 93);
+            this.panelXpubScrollbar.Location = new System.Drawing.Point(712, 85);
             this.panelXpubScrollbar.Name = "panelXpubScrollbar";
-            this.panelXpubScrollbar.Size = new System.Drawing.Size(32, 446);
+            this.panelXpubScrollbar.Size = new System.Drawing.Size(32, 454);
             this.panelXpubScrollbar.TabIndex = 214;
             this.panelXpubScrollbar.Visible = false;
             // 
@@ -8522,7 +8524,7 @@
             this.btnXpubAddressesDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXpubAddressesDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXpubAddressesDown.ForeColor = System.Drawing.Color.White;
-            this.btnXpubAddressesDown.Location = new System.Drawing.Point(3, 422);
+            this.btnXpubAddressesDown.Location = new System.Drawing.Point(3, 430);
             this.btnXpubAddressesDown.Margin = new System.Windows.Forms.Padding(1);
             this.btnXpubAddressesDown.Name = "btnXpubAddressesDown";
             this.btnXpubAddressesDown.Size = new System.Drawing.Size(24, 24);
@@ -8533,7 +8535,7 @@
             this.btnXpubAddressesDown.UseVisualStyleBackColor = false;
             this.btnXpubAddressesDown.Click += new System.EventHandler(this.BtnXpubAddressesDown_Click);
             this.btnXpubAddressesDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressesDown_MouseDown);
-            this.btnXpubAddressesDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressUp_MouseUp);
+            this.btnXpubAddressesDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnXpubAddressesDown_MouseUp);
             // 
             // btnXpubAddressesUp
             // 
@@ -8563,11 +8565,13 @@
             // panelXpubContainer
             // 
             this.panelXpubContainer.AutoScroll = true;
+            this.panelXpubContainer.Controls.Add(this.panel127);
             this.panelXpubContainer.Controls.Add(this.listViewXpubAddresses);
+            this.panelXpubContainer.Controls.Add(this.panel126);
             this.panelXpubContainer.Controls.Add(this.btnViewAddressFromXpub);
-            this.panelXpubContainer.Location = new System.Drawing.Point(233, 93);
+            this.panelXpubContainer.Location = new System.Drawing.Point(223, 85);
             this.panelXpubContainer.Name = "panelXpubContainer";
-            this.panelXpubContainer.Size = new System.Drawing.Size(510, 446);
+            this.panelXpubContainer.Size = new System.Drawing.Size(520, 454);
             this.panelXpubContainer.TabIndex = 213;
             this.panelXpubContainer.Visible = false;
             this.panelXpubContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpubContainer_Paint);
@@ -8590,7 +8594,7 @@
             this.listViewXpubAddresses.OwnerDraw = true;
             this.listViewXpubAddresses.Scrollable = false;
             this.listViewXpubAddresses.ShowGroups = false;
-            this.listViewXpubAddresses.Size = new System.Drawing.Size(465, 438);
+            this.listViewXpubAddresses.Size = new System.Drawing.Size(475, 446);
             this.listViewXpubAddresses.TabIndex = 164;
             this.listViewXpubAddresses.TabStop = false;
             this.listViewXpubAddresses.UseCompatibleStateImageBehavior = false;
@@ -19893,6 +19897,22 @@
             this.UTXOsScrollTimer.Interval = 50;
             this.UTXOsScrollTimer.Tick += new System.EventHandler(this.UTXOsScrollTimer_Tick);
             // 
+            // panel126
+            // 
+            this.panel126.BackColor = System.Drawing.Color.White;
+            this.panel126.Location = new System.Drawing.Point(0, 0);
+            this.panel126.Name = "panel126";
+            this.panel126.Size = new System.Drawing.Size(490, 16);
+            this.panel126.TabIndex = 286;
+            // 
+            // panel127
+            // 
+            this.panel127.BackColor = System.Drawing.Color.White;
+            this.panel127.Location = new System.Drawing.Point(490, 0);
+            this.panel127.Name = "panel127";
+            this.panel127.Size = new System.Drawing.Size(12, 16);
+            this.panel127.TabIndex = 287;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -19902,10 +19922,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
@@ -21509,6 +21529,8 @@
         private System.Windows.Forms.Panel panel133;
         private CustomControls.RJControls.RJButton BtnViewBlockFromAddress;
         private System.Windows.Forms.Panel panel28;
+        private System.Windows.Forms.Panel panel126;
+        private System.Windows.Forms.Panel panel127;
     }
 }
 

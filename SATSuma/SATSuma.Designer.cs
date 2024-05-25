@@ -516,7 +516,9 @@
             this.btnXpubAddressesDown = new CustomControls.RJControls.RJButton();
             this.btnXpubAddressesUp = new CustomControls.RJControls.RJButton();
             this.panelXpubContainer = new System.Windows.Forms.Panel();
+            this.panel127 = new System.Windows.Forms.Panel();
             this.listViewXpubAddresses = new System.Windows.Forms.ListView();
+            this.panel126 = new System.Windows.Forms.Panel();
             this.panelXpubResults = new System.Windows.Forms.Panel();
             this.progressBarCheckEachAddressType = new ColorProgressBar.ColorProgressBar();
             this.progressBarCheckAllAddressTypes = new ColorProgressBar.ColorProgressBar();
@@ -1209,21 +1211,19 @@
             this.btnViewTransactionFromAddressUTXO = new CustomControls.RJControls.RJButton();
             this.lblAddressConfirmedUnspentOutputsUTXO = new System.Windows.Forms.Label();
             this.lblAddressConfirmedSpentOutputsUTXO = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedReceivedOutputsUTXO = new System.Windows.Forms.Label();
             this.lblAddressConfirmedUnspentUTXO = new System.Windows.Forms.Label();
             this.lblAddressConfirmedSpentUTXO = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedReceivedUTXO = new System.Windows.Forms.Label();
             this.btnViewBlockFromAddressUTXO = new CustomControls.RJControls.RJButton();
             this.lblLargestUTXO = new System.Windows.Forms.Label();
             this.lblSmallestUTXO = new System.Windows.Forms.Label();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
+            this.panel136 = new System.Windows.Forms.Panel();
+            this.label309 = new System.Windows.Forms.Label();
             this.panelUTXOError = new System.Windows.Forms.Panel();
             this.label317 = new System.Windows.Forms.Label();
             this.label315 = new System.Windows.Forms.Label();
             this.label313 = new System.Windows.Forms.Label();
-            this.label310 = new System.Windows.Forms.Label();
-            this.label309 = new System.Windows.Forms.Label();
             this.panel134 = new System.Windows.Forms.Panel();
             this.btnAddressUTXOScrollDown = new CustomControls.RJControls.RJButton();
             this.btnAddressUTXOScrollUp = new CustomControls.RJControls.RJButton();
@@ -1239,12 +1239,7 @@
             this.panel135 = new System.Windows.Forms.Panel();
             this.AddressQRCodePictureboxUTXO = new System.Windows.Forms.PictureBox();
             this.lblAddressConfirmedSpentUTXOFiat = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedReceivedUTXOFiat = new System.Windows.Forms.Label();
             this.lblAddressConfirmedUnspentUTXOFiat = new System.Windows.Forms.Label();
-            this.panel138 = new System.Windows.Forms.Panel();
-            this.label311 = new System.Windows.Forms.Label();
-            this.panel139 = new System.Windows.Forms.Panel();
-            this.label312 = new System.Windows.Forms.Label();
             this.panel141 = new System.Windows.Forms.Panel();
             this.label314 = new System.Windows.Forms.Label();
             this.panel142 = new System.Windows.Forms.Panel();
@@ -1254,8 +1249,6 @@
             this.label316 = new System.Windows.Forms.Label();
             this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.UTXOsScrollTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel126 = new System.Windows.Forms.Panel();
-            this.panel127 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1464,14 +1457,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCAMessages.SuspendLayout();
             this.panelAddressUTXO.SuspendLayout();
+            this.panel136.SuspendLayout();
             this.panelUTXOError.SuspendLayout();
             this.panel134.SuspendLayout();
             this.panelUTXOsContainer.SuspendLayout();
             this.panel143.SuspendLayout();
             this.panel135.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
-            this.panel138.SuspendLayout();
-            this.panel139.SuspendLayout();
             this.panel141.SuspendLayout();
             this.panel142.SuspendLayout();
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
@@ -6558,7 +6550,7 @@
             this.lblAddressConfirmedSpentFiat.AutoSize = true;
             this.lblAddressConfirmedSpentFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedSpentFiat.Location = new System.Drawing.Point(0, 449);
+            this.lblAddressConfirmedSpentFiat.Location = new System.Drawing.Point(0, 447);
             this.lblAddressConfirmedSpentFiat.Name = "lblAddressConfirmedSpentFiat";
             this.lblAddressConfirmedSpentFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedSpentFiat.TabIndex = 216;
@@ -6570,7 +6562,7 @@
             this.lblAddressConfirmedReceivedFiat.AutoSize = true;
             this.lblAddressConfirmedReceivedFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceivedFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedReceivedFiat.Location = new System.Drawing.Point(0, 370);
+            this.lblAddressConfirmedReceivedFiat.Location = new System.Drawing.Point(0, 368);
             this.lblAddressConfirmedReceivedFiat.Name = "lblAddressConfirmedReceivedFiat";
             this.lblAddressConfirmedReceivedFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedReceivedFiat.TabIndex = 215;
@@ -6582,7 +6574,7 @@
             this.lblAddressConfirmedUnspentFiat.AutoSize = true;
             this.lblAddressConfirmedUnspentFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspentFiat.Location = new System.Drawing.Point(0, 242);
+            this.lblAddressConfirmedUnspentFiat.Location = new System.Drawing.Point(0, 238);
             this.lblAddressConfirmedUnspentFiat.Name = "lblAddressConfirmedUnspentFiat";
             this.lblAddressConfirmedUnspentFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedUnspentFiat.TabIndex = 214;
@@ -6863,10 +6855,10 @@
             // lblAddressConfirmedUnspentOutputs
             // 
             this.lblAddressConfirmedUnspentOutputs.AutoSize = true;
-            this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.lblAddressConfirmedUnspentOutputs.Location = new System.Drawing.Point(0, 256);
             this.lblAddressConfirmedUnspentOutputs.Name = "lblAddressConfirmedUnspentOutputs";
-            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(60, 16);
+            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputs, "Number of confirmed \r\nXXunspent outputs");
@@ -6875,10 +6867,10 @@
             // lblAddressConfirmedSpentOutputs
             // 
             this.lblAddressConfirmedSpentOutputs.AutoSize = true;
-            this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.lblAddressConfirmedSpentOutputs.Location = new System.Drawing.Point(0, 463);
             this.lblAddressConfirmedSpentOutputs.Name = "lblAddressConfirmedSpentOutputs";
-            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(60, 16);
+            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputs, "Number of confirmed \r\nXXspent outputs");
@@ -6887,10 +6879,10 @@
             // lblAddressConfirmedReceivedOutputs
             // 
             this.lblAddressConfirmedReceivedOutputs.AutoSize = true;
-            this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.lblAddressConfirmedReceivedOutputs.Location = new System.Drawing.Point(0, 383);
             this.lblAddressConfirmedReceivedOutputs.Name = "lblAddressConfirmedReceivedOutputs";
-            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(60, 16);
+            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
             this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedOutputs, "Number of confirmed \r\nXXreceived outputs");
@@ -8576,6 +8568,14 @@
             this.panelXpubContainer.Visible = false;
             this.panelXpubContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelXpubContainer_Paint);
             // 
+            // panel127
+            // 
+            this.panel127.BackColor = System.Drawing.Color.White;
+            this.panel127.Location = new System.Drawing.Point(490, 0);
+            this.panel127.Name = "panel127";
+            this.panel127.Size = new System.Drawing.Size(12, 16);
+            this.panel127.TabIndex = 287;
+            // 
             // listViewXpubAddresses
             // 
             this.listViewXpubAddresses.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -8607,6 +8607,14 @@
             this.listViewXpubAddresses.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyDown);
             this.listViewXpubAddresses.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewXpubAddresses_KeyPress);
             this.listViewXpubAddresses.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyUp);
+            // 
+            // panel126
+            // 
+            this.panel126.BackColor = System.Drawing.Color.White;
+            this.panel126.Location = new System.Drawing.Point(0, 0);
+            this.panel126.Name = "panel126";
+            this.panel126.Size = new System.Drawing.Size(490, 16);
+            this.panel126.TabIndex = 286;
             // 
             // panelXpubResults
             // 
@@ -19246,10 +19254,10 @@
             // lblAddressConfirmedUnspentOutputsUTXO
             // 
             this.lblAddressConfirmedUnspentOutputsUTXO.AutoSize = true;
-            this.lblAddressConfirmedUnspentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedUnspentOutputsUTXO.Location = new System.Drawing.Point(129, 221);
+            this.lblAddressConfirmedUnspentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedUnspentOutputsUTXO.Location = new System.Drawing.Point(0, 238);
             this.lblAddressConfirmedUnspentOutputsUTXO.Name = "lblAddressConfirmedUnspentOutputsUTXO";
-            this.lblAddressConfirmedUnspentOutputsUTXO.Size = new System.Drawing.Size(60, 16);
+            this.lblAddressConfirmedUnspentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedUnspentOutputsUTXO.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputsUTXO.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputsUTXO, "Number of confirmed \r\nXXunspent outputs");
@@ -19258,33 +19266,21 @@
             // lblAddressConfirmedSpentOutputsUTXO
             // 
             this.lblAddressConfirmedSpentOutputsUTXO.AutoSize = true;
-            this.lblAddressConfirmedSpentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpentOutputsUTXO.Location = new System.Drawing.Point(156, 415);
+            this.lblAddressConfirmedSpentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedSpentOutputsUTXO.Location = new System.Drawing.Point(0, 445);
             this.lblAddressConfirmedSpentOutputsUTXO.Name = "lblAddressConfirmedSpentOutputsUTXO";
-            this.lblAddressConfirmedSpentOutputsUTXO.Size = new System.Drawing.Size(60, 16);
+            this.lblAddressConfirmedSpentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedSpentOutputsUTXO.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputsUTXO.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputsUTXO, "Number of confirmed \r\nXXspent outputs");
             this.lblAddressConfirmedSpentOutputsUTXO.Visible = false;
             // 
-            // lblAddressConfirmedReceivedOutputsUTXO
-            // 
-            this.lblAddressConfirmedReceivedOutputsUTXO.AutoSize = true;
-            this.lblAddressConfirmedReceivedOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedReceivedOutputsUTXO.Location = new System.Drawing.Point(149, 335);
-            this.lblAddressConfirmedReceivedOutputsUTXO.Name = "lblAddressConfirmedReceivedOutputsUTXO";
-            this.lblAddressConfirmedReceivedOutputsUTXO.Size = new System.Drawing.Size(60, 16);
-            this.lblAddressConfirmedReceivedOutputsUTXO.TabIndex = 133;
-            this.lblAddressConfirmedReceivedOutputsUTXO.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedOutputsUTXO, "Number of confirmed \r\nXXreceived outputs");
-            this.lblAddressConfirmedReceivedOutputsUTXO.Visible = false;
-            // 
             // lblAddressConfirmedUnspentUTXO
             // 
             this.lblAddressConfirmedUnspentUTXO.AutoSize = true;
             this.lblAddressConfirmedUnspentUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspentUTXO.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.lblAddressConfirmedUnspentUTXO.Location = new System.Drawing.Point(43, 272);
+            this.lblAddressConfirmedUnspentUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedUnspentUTXO.Location = new System.Drawing.Point(0, 355);
             this.lblAddressConfirmedUnspentUTXO.Name = "lblAddressConfirmedUnspentUTXO";
             this.lblAddressConfirmedUnspentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedUnspentUTXO.TabIndex = 129;
@@ -19297,26 +19293,13 @@
             this.lblAddressConfirmedSpentUTXO.AutoSize = true;
             this.lblAddressConfirmedSpentUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedSpentUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpentUTXO.Location = new System.Drawing.Point(43, 432);
+            this.lblAddressConfirmedSpentUTXO.Location = new System.Drawing.Point(0, 484);
             this.lblAddressConfirmedSpentUTXO.Name = "lblAddressConfirmedSpentUTXO";
             this.lblAddressConfirmedSpentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedSpentUTXO.TabIndex = 127;
             this.lblAddressConfirmedSpentUTXO.Text = "0";
             this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentUTXO, "Confirmed amount of \r\nXXspent bitcoin");
             this.lblAddressConfirmedSpentUTXO.Visible = false;
-            // 
-            // lblAddressConfirmedReceivedUTXO
-            // 
-            this.lblAddressConfirmedReceivedUTXO.AutoSize = true;
-            this.lblAddressConfirmedReceivedUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedReceivedUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedReceivedUTXO.Location = new System.Drawing.Point(43, 352);
-            this.lblAddressConfirmedReceivedUTXO.Name = "lblAddressConfirmedReceivedUTXO";
-            this.lblAddressConfirmedReceivedUTXO.Size = new System.Drawing.Size(15, 17);
-            this.lblAddressConfirmedReceivedUTXO.TabIndex = 125;
-            this.lblAddressConfirmedReceivedUTXO.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedUTXO, "Confirmed amount of \r\nXXreceived bitcoin");
-            this.lblAddressConfirmedReceivedUTXO.Visible = false;
             // 
             // btnViewBlockFromAddressUTXO
             // 
@@ -19348,10 +19331,10 @@
             // lblLargestUTXO
             // 
             this.lblLargestUTXO.AutoSize = true;
-            this.lblLargestUTXO.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLargestUTXO.Location = new System.Drawing.Point(85, 238);
+            this.lblLargestUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLargestUTXO.Location = new System.Drawing.Point(0, 277);
             this.lblLargestUTXO.Name = "lblLargestUTXO";
-            this.lblLargestUTXO.Size = new System.Drawing.Size(60, 16);
+            this.lblLargestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblLargestUTXO.TabIndex = 286;
             this.lblLargestUTXO.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblLargestUTXO, "Number of confirmed \r\nXXunspent outputs");
@@ -19360,10 +19343,10 @@
             // lblSmallestUTXO
             // 
             this.lblSmallestUTXO.AutoSize = true;
-            this.lblSmallestUTXO.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSmallestUTXO.Location = new System.Drawing.Point(91, 255);
+            this.lblSmallestUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSmallestUTXO.Location = new System.Drawing.Point(0, 316);
             this.lblSmallestUTXO.Name = "lblSmallestUTXO";
-            this.lblSmallestUTXO.Size = new System.Drawing.Size(60, 16);
+            this.lblSmallestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblSmallestUTXO.TabIndex = 288;
             this.lblSmallestUTXO.Text = "(no data)";
             this.toolTipGeneralUse.SetToolTip(this.lblSmallestUTXO, "Number of confirmed \r\nXXunspent outputs");
@@ -19377,11 +19360,10 @@
             // panelAddressUTXO
             // 
             this.panelAddressUTXO.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddressUTXO.Controls.Add(this.panel136);
             this.panelAddressUTXO.Controls.Add(this.panelUTXOError);
             this.panelAddressUTXO.Controls.Add(this.label315);
             this.panelAddressUTXO.Controls.Add(this.label313);
-            this.panelAddressUTXO.Controls.Add(this.label310);
-            this.panelAddressUTXO.Controls.Add(this.label309);
             this.panelAddressUTXO.Controls.Add(this.panel134);
             this.panelAddressUTXO.Controls.Add(this.btnViewAddressTXFromUTXO);
             this.panelAddressUTXO.Controls.Add(this.label303);
@@ -19392,24 +19374,47 @@
             this.panelAddressUTXO.Controls.Add(this.panelUTXOsContainer);
             this.panelAddressUTXO.Controls.Add(this.panel135);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentUTXOFiat);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedReceivedUTXOFiat);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentUTXOFiat);
-            this.panelAddressUTXO.Controls.Add(this.panel138);
-            this.panelAddressUTXO.Controls.Add(this.panel139);
             this.panelAddressUTXO.Controls.Add(this.panel141);
             this.panelAddressUTXO.Controls.Add(this.panel142);
             this.panelAddressUTXO.Controls.Add(this.lblAddressUTXOPositionInList);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentOutputsUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentOutputsUTXO);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedReceivedOutputsUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentUTXO);
             this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentUTXO);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedReceivedUTXO);
             this.panelAddressUTXO.Location = new System.Drawing.Point(162, 187);
             this.panelAddressUTXO.Name = "panelAddressUTXO";
             this.panelAddressUTXO.Size = new System.Drawing.Size(773, 556);
             this.panelAddressUTXO.TabIndex = 285;
             this.panelAddressUTXO.Visible = false;
+            // 
+            // panel136
+            // 
+            this.panel136.BackColor = System.Drawing.Color.Transparent;
+            this.panel136.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel136.BackgroundImage")));
+            this.panel136.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel136.Controls.Add(this.label309);
+            this.panel136.Location = new System.Drawing.Point(0, 403);
+            this.panel136.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel136.Name = "panel136";
+            this.panel136.Size = new System.Drawing.Size(209, 23);
+            this.panel136.TabIndex = 209;
+            this.panel136.Visible = false;
+            // 
+            // label309
+            // 
+            this.label309.AutoSize = true;
+            this.label309.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label309.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label309.ForeColor = System.Drawing.Color.Gray;
+            this.label309.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label309.Location = new System.Drawing.Point(5, 2);
+            this.label309.Name = "label309";
+            this.label309.Size = new System.Drawing.Size(151, 17);
+            this.label309.TabIndex = 130;
+            this.label309.Text = "Previously spent outputs";
+            this.label309.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label309.Visible = false;
             // 
             // panelUTXOError
             // 
@@ -19439,7 +19444,7 @@
             this.label315.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label315.ForeColor = System.Drawing.Color.Silver;
             this.label315.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label315.Location = new System.Drawing.Point(0, 432);
+            this.label315.Location = new System.Drawing.Point(0, 467);
             this.label315.Name = "label315";
             this.label315.Size = new System.Drawing.Size(43, 17);
             this.label315.TabIndex = 295;
@@ -19453,47 +19458,19 @@
             this.label313.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label313.ForeColor = System.Drawing.Color.Silver;
             this.label313.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label313.Location = new System.Drawing.Point(0, 415);
+            this.label313.Location = new System.Drawing.Point(0, 428);
             this.label313.Name = "label313";
-            this.label313.Size = new System.Drawing.Size(156, 17);
+            this.label313.Size = new System.Drawing.Size(83, 17);
             this.label313.TabIndex = 294;
-            this.label313.Text = "Historically spent outputs";
+            this.label313.Text = "Spent UTXO\'s";
             this.label313.Visible = false;
-            // 
-            // label310
-            // 
-            this.label310.AutoSize = true;
-            this.label310.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label310.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label310.ForeColor = System.Drawing.Color.Silver;
-            this.label310.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label310.Location = new System.Drawing.Point(0, 352);
-            this.label310.Name = "label310";
-            this.label310.Size = new System.Drawing.Size(43, 17);
-            this.label310.TabIndex = 293;
-            this.label310.Text = "Value";
-            this.label310.Visible = false;
-            // 
-            // label309
-            // 
-            this.label309.AutoSize = true;
-            this.label309.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label309.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label309.ForeColor = System.Drawing.Color.Silver;
-            this.label309.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label309.Location = new System.Drawing.Point(0, 335);
-            this.label309.Name = "label309";
-            this.label309.Size = new System.Drawing.Size(149, 17);
-            this.label309.TabIndex = 292;
-            this.label309.Text = "Historically held outputs";
-            this.label309.Visible = false;
             // 
             // panel134
             // 
             this.panel134.BackColor = System.Drawing.Color.Transparent;
             this.panel134.Controls.Add(this.btnAddressUTXOScrollDown);
             this.panel134.Controls.Add(this.btnAddressUTXOScrollUp);
-            this.panel134.Location = new System.Drawing.Point(728, 45);
+            this.panel134.Location = new System.Drawing.Point(730, 45);
             this.panel134.Name = "panel134";
             this.panel134.Size = new System.Drawing.Size(31, 490);
             this.panel134.TabIndex = 284;
@@ -19511,7 +19488,7 @@
             this.btnAddressUTXOScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddressUTXOScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddressUTXOScrollDown.ForeColor = System.Drawing.Color.White;
-            this.btnAddressUTXOScrollDown.Location = new System.Drawing.Point(5, 464);
+            this.btnAddressUTXOScrollDown.Location = new System.Drawing.Point(2, 464);
             this.btnAddressUTXOScrollDown.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddressUTXOScrollDown.Name = "btnAddressUTXOScrollDown";
             this.btnAddressUTXOScrollDown.Size = new System.Drawing.Size(24, 24);
@@ -19536,7 +19513,7 @@
             this.btnAddressUTXOScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddressUTXOScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddressUTXOScrollUp.ForeColor = System.Drawing.Color.White;
-            this.btnAddressUTXOScrollUp.Location = new System.Drawing.Point(5, 2);
+            this.btnAddressUTXOScrollUp.Location = new System.Drawing.Point(2, 2);
             this.btnAddressUTXOScrollUp.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddressUTXOScrollUp.Name = "btnAddressUTXOScrollUp";
             this.btnAddressUTXOScrollUp.Size = new System.Drawing.Size(24, 24);
@@ -19561,7 +19538,7 @@
             this.btnViewAddressTXFromUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewAddressTXFromUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewAddressTXFromUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressTXFromUTXO.Location = new System.Drawing.Point(87, 470);
+            this.btnViewAddressTXFromUTXO.Location = new System.Drawing.Point(0, 524);
             this.btnViewAddressTXFromUTXO.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewAddressTXFromUTXO.Name = "btnViewAddressTXFromUTXO";
             this.btnViewAddressTXFromUTXO.Size = new System.Drawing.Size(120, 22);
@@ -19579,7 +19556,7 @@
             this.label303.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label303.ForeColor = System.Drawing.Color.Silver;
             this.label303.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label303.Location = new System.Drawing.Point(0, 272);
+            this.label303.Location = new System.Drawing.Point(0, 338);
             this.label303.Name = "label303";
             this.label303.Size = new System.Drawing.Size(43, 17);
             this.label303.TabIndex = 290;
@@ -19593,7 +19570,7 @@
             this.label308.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label308.ForeColor = System.Drawing.Color.Silver;
             this.label308.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label308.Location = new System.Drawing.Point(0, 255);
+            this.label308.Location = new System.Drawing.Point(0, 299);
             this.label308.Name = "label308";
             this.label308.Size = new System.Drawing.Size(91, 17);
             this.label308.TabIndex = 289;
@@ -19607,7 +19584,7 @@
             this.label230.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label230.ForeColor = System.Drawing.Color.Silver;
             this.label230.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label230.Location = new System.Drawing.Point(0, 238);
+            this.label230.Location = new System.Drawing.Point(0, 260);
             this.label230.Name = "label230";
             this.label230.Size = new System.Drawing.Size(85, 17);
             this.label230.TabIndex = 287;
@@ -19711,92 +19688,24 @@
             this.lblAddressConfirmedSpentUTXOFiat.AutoSize = true;
             this.lblAddressConfirmedSpentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedSpentUTXOFiat.Location = new System.Drawing.Point(43, 449);
+            this.lblAddressConfirmedSpentUTXOFiat.Location = new System.Drawing.Point(0, 498);
             this.lblAddressConfirmedSpentUTXOFiat.Name = "lblAddressConfirmedSpentUTXOFiat";
             this.lblAddressConfirmedSpentUTXOFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedSpentUTXOFiat.TabIndex = 216;
             this.lblAddressConfirmedSpentUTXOFiat.Text = "(no data)";
             this.lblAddressConfirmedSpentUTXOFiat.Visible = false;
             // 
-            // lblAddressConfirmedReceivedUTXOFiat
-            // 
-            this.lblAddressConfirmedReceivedUTXOFiat.AutoSize = true;
-            this.lblAddressConfirmedReceivedUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedReceivedUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedReceivedUTXOFiat.Location = new System.Drawing.Point(43, 369);
-            this.lblAddressConfirmedReceivedUTXOFiat.Name = "lblAddressConfirmedReceivedUTXOFiat";
-            this.lblAddressConfirmedReceivedUTXOFiat.Size = new System.Drawing.Size(50, 13);
-            this.lblAddressConfirmedReceivedUTXOFiat.TabIndex = 215;
-            this.lblAddressConfirmedReceivedUTXOFiat.Text = "(no data)";
-            this.lblAddressConfirmedReceivedUTXOFiat.Visible = false;
-            // 
             // lblAddressConfirmedUnspentUTXOFiat
             // 
             this.lblAddressConfirmedUnspentUTXOFiat.AutoSize = true;
             this.lblAddressConfirmedUnspentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspentUTXOFiat.Location = new System.Drawing.Point(43, 289);
+            this.lblAddressConfirmedUnspentUTXOFiat.Location = new System.Drawing.Point(0, 372);
             this.lblAddressConfirmedUnspentUTXOFiat.Name = "lblAddressConfirmedUnspentUTXOFiat";
             this.lblAddressConfirmedUnspentUTXOFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedUnspentUTXOFiat.TabIndex = 214;
             this.lblAddressConfirmedUnspentUTXOFiat.Text = "(no data)";
             this.lblAddressConfirmedUnspentUTXOFiat.Visible = false;
-            // 
-            // panel138
-            // 
-            this.panel138.BackColor = System.Drawing.Color.Transparent;
-            this.panel138.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel138.BackgroundImage")));
-            this.panel138.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel138.Controls.Add(this.label311);
-            this.panel138.Location = new System.Drawing.Point(1, 390);
-            this.panel138.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel138.Name = "panel138";
-            this.panel138.Size = new System.Drawing.Size(209, 23);
-            this.panel138.TabIndex = 211;
-            this.panel138.Visible = false;
-            // 
-            // label311
-            // 
-            this.label311.AutoSize = true;
-            this.label311.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label311.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label311.ForeColor = System.Drawing.Color.Gray;
-            this.label311.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label311.Location = new System.Drawing.Point(5, 2);
-            this.label311.Name = "label311";
-            this.label311.Size = new System.Drawing.Size(156, 17);
-            this.label311.TabIndex = 128;
-            this.label311.Text = "Historically spent outputs";
-            this.label311.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label311.Visible = false;
-            // 
-            // panel139
-            // 
-            this.panel139.BackColor = System.Drawing.Color.Transparent;
-            this.panel139.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel139.BackgroundImage")));
-            this.panel139.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel139.Controls.Add(this.label312);
-            this.panel139.Location = new System.Drawing.Point(1, 310);
-            this.panel139.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel139.Name = "panel139";
-            this.panel139.Size = new System.Drawing.Size(209, 23);
-            this.panel139.TabIndex = 210;
-            this.panel139.Visible = false;
-            // 
-            // label312
-            // 
-            this.label312.AutoSize = true;
-            this.label312.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label312.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label312.ForeColor = System.Drawing.Color.Gray;
-            this.label312.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label312.Location = new System.Drawing.Point(5, 2);
-            this.label312.Name = "label312";
-            this.label312.Size = new System.Drawing.Size(178, 17);
-            this.label312.TabIndex = 126;
-            this.label312.Text = "Historically received outputs";
-            this.label312.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label312.Visible = false;
             // 
             // panel141
             // 
@@ -19897,22 +19806,6 @@
             this.UTXOsScrollTimer.Interval = 50;
             this.UTXOsScrollTimer.Tick += new System.EventHandler(this.UTXOsScrollTimer_Tick);
             // 
-            // panel126
-            // 
-            this.panel126.BackColor = System.Drawing.Color.White;
-            this.panel126.Location = new System.Drawing.Point(0, 0);
-            this.panel126.Name = "panel126";
-            this.panel126.Size = new System.Drawing.Size(490, 16);
-            this.panel126.TabIndex = 286;
-            // 
-            // panel127
-            // 
-            this.panel127.BackColor = System.Drawing.Color.White;
-            this.panel127.Location = new System.Drawing.Point(490, 0);
-            this.panel127.Name = "panel127";
-            this.panel127.Size = new System.Drawing.Size(12, 16);
-            this.panel127.TabIndex = 287;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -19922,12 +19815,13 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelAddress);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
@@ -19935,7 +19829,6 @@
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
@@ -20280,6 +20173,8 @@
             this.panelDCAMessages.ResumeLayout(false);
             this.panelAddressUTXO.ResumeLayout(false);
             this.panelAddressUTXO.PerformLayout();
+            this.panel136.ResumeLayout(false);
+            this.panel136.PerformLayout();
             this.panelUTXOError.ResumeLayout(false);
             this.panel134.ResumeLayout(false);
             this.panelUTXOsContainer.ResumeLayout(false);
@@ -20288,10 +20183,6 @@
             this.panel135.ResumeLayout(false);
             this.panel135.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).EndInit();
-            this.panel138.ResumeLayout(false);
-            this.panel138.PerformLayout();
-            this.panel139.ResumeLayout(false);
-            this.panel139.PerformLayout();
             this.panel141.ResumeLayout(false);
             this.panel141.PerformLayout();
             this.panel142.ResumeLayout(false);
@@ -21476,12 +21367,7 @@
         private System.Windows.Forms.Label lblAddressTypeUTXO;
         private CustomControls.RJControls.RJButton btnViewTransactionFromAddressUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedSpentUTXOFiat;
-        private System.Windows.Forms.Label lblAddressConfirmedReceivedUTXOFiat;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentUTXOFiat;
-        private System.Windows.Forms.Panel panel138;
-        private System.Windows.Forms.Label label311;
-        private System.Windows.Forms.Panel panel139;
-        private System.Windows.Forms.Label label312;
         private System.Windows.Forms.Panel panel141;
         private System.Windows.Forms.Label label314;
         private System.Windows.Forms.Panel panel142;
@@ -21492,10 +21378,8 @@
         private System.Windows.Forms.Label lblAddressUTXOPositionInList;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentOutputsUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedSpentOutputsUTXO;
-        private System.Windows.Forms.Label lblAddressConfirmedReceivedOutputsUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedSpentUTXO;
-        private System.Windows.Forms.Label lblAddressConfirmedReceivedUTXO;
         private System.Windows.Forms.Panel panel134;
         public System.Windows.Forms.Panel panelUTXOsContainer;
         private System.Windows.Forms.ListView listViewAddressUTXOs;
@@ -21510,8 +21394,6 @@
         private System.Windows.Forms.Label label303;
         private CustomControls.RJControls.RJButton btnViewAddressTXFromUTXO;
         private CustomControls.RJControls.RJButton btnViewUTXOsFromAddressTX;
-        private System.Windows.Forms.Label label310;
-        private System.Windows.Forms.Label label309;
         private System.Windows.Forms.Label label315;
         private System.Windows.Forms.Label label313;
         private System.Windows.Forms.Panel panelUTXOError;
@@ -21531,6 +21413,8 @@
         private System.Windows.Forms.Panel panel28;
         private System.Windows.Forms.Panel panel126;
         private System.Windows.Forms.Panel panel127;
+        private System.Windows.Forms.Panel panel136;
+        private System.Windows.Forms.Label label309;
     }
 }
 

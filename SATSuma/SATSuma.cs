@@ -27,11 +27,6 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
-* fix select/scroll bug on xpub listviews, 
-* change intervals and scroll amounts on scrollable listviews as per bookmarks screen (xpub left to do)
-* right-align fields on left side of utxo screen 
-* check new controls all have themes applied
-* check new stuff renders properly at different UI scales
 * check for errors/duplicates in sample bookmarks file (and add a few more)
 */
 
@@ -472,7 +467,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78, panel79, panel80, panel81, 
-                panel94, panel105, panel109, panelLoadingAnimationContainer, panel138, panel139, panel141 };
+                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -3679,7 +3674,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] controlsToSetEmpty2 = { lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblLargestUTXO, lblSmallestUTXO, lblAddressTypeUTXO };
+                Control[] controlsToSetEmpty2 = { lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXOFiat, lblLargestUTXO, lblSmallestUTXO, lblAddressTypeUTXO };
                 foreach (Control control in controlsToSetEmpty2)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -3774,7 +3769,7 @@ namespace SATSuma
                         AddressQRCodePictureboxUTXO.Image = null;
                     });
 
-                    Control[] controlsToSetEmpty = { lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO };
+                    Control[] controlsToSetEmpty = { lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO };
                     foreach (Control control in controlsToSetEmpty)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -3831,26 +3826,6 @@ namespace SATSuma
                         {
                             label314.Text = "Unspent transaction outputs";
                         });
-                        label312.Invoke((MethodInvoker)delegate
-                        {
-                            label312.Text = "Historically received outputs";
-                        });
-                        label311.Invoke((MethodInvoker)delegate
-                        {
-                            label311.Text = "Historically spent outputs";
-                        });
-                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
-                        });
-                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"{addressData["chain_stats"]["funded_txo_count"]}";
-                        });
-                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
                         lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
@@ -3887,26 +3862,6 @@ namespace SATSuma
                         label314.Invoke((MethodInvoker)delegate
                         {
                             label314.Text = "Unconfirmed unspent (balance)";
-                        });
-                        label312.Invoke((MethodInvoker)delegate
-                        {
-                            label312.Text = "Historically received outputs";
-                        });
-                        label311.Invoke((MethodInvoker)delegate
-                        {
-                            label311.Text = "Historically spent outputs";
-                        });
-                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
-                        });
-                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"({addressData["mempool_stats"]["funded_txo_count"]} outputs)";
-                        });
-                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
                         {
@@ -3948,14 +3903,6 @@ namespace SATSuma
                         {
                             label314.Text = "Total unspent (balance)";
                         });
-                        label312.Invoke((MethodInvoker)delegate
-                        {
-                            label312.Text = "Historically received outputs";
-                        });
-                        label311.Invoke((MethodInvoker)delegate
-                        {
-                            label311.Text = "Historically spent outputs";
-                        });
                         int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
                         int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
                         int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
@@ -3963,21 +3910,9 @@ namespace SATSuma
                         long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
                         long totalReceived = chainReceived + mempoolReceived;
                         decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
-                        lblAddressConfirmedReceivedUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXO.Text = Convert.ToString(BTCtotalReceived);
-                        });
-                        lblAddressConfirmedReceivedUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalReceived) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
                         int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
                         int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
                         int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
-                        lblAddressConfirmedReceivedOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedReceivedOutputsUTXO.Text = $"({totalReceivedOutputs} outputs)";
-                        });
 
                         long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
                         long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
@@ -4065,6 +4000,8 @@ namespace SATSuma
 
                 if (utxos != null)
                 {
+                    utxos = utxos.OrderByDescending(utxo => ConvertSatsToBitcoin(utxo.Value)).ToList();
+
                     if (utxos.Count == 0)
                     {
                         label317.Invoke((MethodInvoker)delegate
@@ -4217,7 +4154,7 @@ namespace SATSuma
                     });
                     lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressConfirmedUnspentOutputsUTXO.Text = Convert.ToString(Convert.ToInt32(lblAddressConfirmedReceivedOutputsUTXO.Text) - Convert.ToInt32(lblAddressConfirmedSpentOutputsUTXO.Text));
+                        lblAddressConfirmedUnspentOutputsUTXO.Text = "";
                     });
                     lblLargestUTXO.Invoke((MethodInvoker)delegate
                     {
@@ -4465,8 +4402,8 @@ namespace SATSuma
             {
                 if (lblAddressTypeUTXO.Visible)
                 {
-                    Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label311, label312, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO,
-                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, lblAddressTypeUTXO, panel135, panel138, panel139, panel141, btnViewAddressTXFromUTXO, label303, label309, label310, label313, label315 };
+                    Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, 
+                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309 };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -4486,8 +4423,8 @@ namespace SATSuma
         {
             try
             {
-                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label311, label312, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUnspentUTXOFiat, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
-                     lblAddressConfirmedSpentUTXOFiat, lblAddressTypeUTXO, panel135, panel138, panel139, panel141, btnViewAddressTXFromUTXO, label303, label309, label310, label313, label315  };
+                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUnspentUTXOFiat, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
+                     lblAddressConfirmedSpentUTXOFiat, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309  };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -4643,10 +4580,13 @@ namespace SATSuma
         {
             try
             {
-                int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
-                if (addressUTXOsScrollPosition - rowHeight > 0)
+                if (listViewAddressUTXOs.Items.Count > 0)
                 {
-                    panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                    int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
+                    if (addressUTXOsScrollPosition - rowHeight > 0)
+                    {
+                        panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                    }
                 }
                 else
                 {
@@ -16118,6 +16058,7 @@ namespace SATSuma
                     LookupBlockListAsync();
                     EnableFunctionalityForMainNet();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
+                    btnMenuAddressUTXO.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -16157,6 +16098,7 @@ namespace SATSuma
                     GetBlockTipAndCirculation();
                     LookupBlockListAsync();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
+                    btnMenuAddressUTXO.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -16215,6 +16157,7 @@ namespace SATSuma
                         ownNode = textBoxSettingsOwnNodeURL.Text;
                         SaveSettings();
                     }
+                    btnMenuAddressUTXO.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -17417,6 +17360,7 @@ namespace SATSuma
                         lblSettingsOwnNodeSelected.Text = "❌";
                         lblSettingsOwnNodeSelected.ForeColor = Color.IndianRed;
                     });
+                    btnMenuAddressUTXO.Enabled = true;
                 }
                 if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "T") == 0)
                 {
@@ -17441,6 +17385,7 @@ namespace SATSuma
                         lblSettingsOwnNodeSelected.Text = "❌";
                         lblSettingsOwnNodeSelected.ForeColor = Color.IndianRed;
                     });
+                    btnMenuAddressUTXO.Enabled = true;
                 }
                 if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "C") == 0)
                 {
@@ -17463,6 +17408,7 @@ namespace SATSuma
                         lblSettingsOwnNodeSelected.Text = "✔️";
                         lblSettingsOwnNodeSelected.ForeColor = Color.Green;
                     });
+                    btnMenuAddressUTXO.Enabled = false;
                 }
                 #endregion
                 #region restore API settings
@@ -21521,6 +21467,7 @@ namespace SATSuma
                     });
                 }
                 btnViewTransactionFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
+                btnViewBlockFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
 
 
                 // appearance & settings
@@ -21663,7 +21610,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, 
-                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel138, panel139, panel141 };
+                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21974,7 +21921,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXODataFieldsToColor = { lblAddressTypeUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedReceivedUTXO, lblAddressConfirmedReceivedOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblLargestUTXO, lblSmallestUTXO };
+                Control[] listAddressUTXODataFieldsToColor = { lblAddressTypeUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblLargestUTXO, lblSmallestUTXO };
                 foreach (Control control in listAddressUTXODataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22207,7 +22154,7 @@ namespace SATSuma
             try
             {
                 Control[] listFiatConversionsToColor = { label288, lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
-                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10, lblAddressConfirmedReceivedUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat};
+                    lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat};
                 foreach (Control control in listFiatConversionsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22272,7 +22219,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOHeadingsToColor = { label311, label312, label314 };
+                Control[] listAddressUTXOHeadingsToColor = { label314, label309 };
                 foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22931,7 +22878,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel141 };
+                Control[] listAddressUTXOHeadingsToColor = { panel141, panel136 };
                 foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23078,7 +23025,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel141 };
+                Control[] listAddressUTXOHeadingsToColor = { panel141, panel136 };
                 foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23209,7 +23156,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOHeadingsToColor = { panel138, panel139, panel141 };
+                Control[] listAddressUTXOHeadingsToColor = { panel141, panel136 };
                 foreach (Control control in listAddressUTXOHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -26834,7 +26781,7 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock, btnMenuAddressUTXO };
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
             foreach (Control control in buttonsToEnable)
             {
                 control.Invoke((MethodInvoker)delegate

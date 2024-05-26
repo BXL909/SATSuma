@@ -28,6 +28,7 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
 * check for errors/duplicates in sample bookmarks file (and add a few more)
+* remove old chart buttons
 */
 
 #region Using
@@ -459,15 +460,15 @@ namespace SATSuma
             #region rounded panels (textbox containers)
             Control[] panelContainersToRound = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, 
                 panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, 
-                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO };
+                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer };
             foreach (Control control in panelContainersToRound)
             {
                 control.Paint += Panel_Paint;
             }
             #endregion
             #region panels (heading containers)
-            Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78, panel79, panel80, panel81, 
-                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136 };
+            Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78, 
+                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -587,7 +588,8 @@ namespace SATSuma
                 {
                     { "blocks", () => BtnMenuBlockList_ClickAsync(sender, e) },
                     { "block", () => BtnMenuBlock_ClickAsync(sender, e) },
-                    { "address", () => BtnMenuAddress_ClickAsync(sender, e) },
+                    { "address - tx's", () => BtnMenuAddress_ClickAsync(sender, e) },
+                    { "address - utxo's", () => BtnMenuAddressUTXO_ClickAsync(sender, e) },
                     { "transaction", () => BtnMenuTransaction_ClickAsync(sender, e) },
                     { "xpub", () => BtnMenuXpub_ClickAsync(sender, e) },
                     { "bitcoin dashboard", () => BtnMenuBitcoinDashboard_ClickAsync(sender, e) },
@@ -3666,6 +3668,13 @@ namespace SATSuma
         }
 
         #endregion
+
+        private void btnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
+        {
+            textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
+            BtnMenuAddressUTXO_ClickAsync(sender, e);
+        }
+
         #endregion
 
         #region ⚡ADDRESS (UTXO's) SCREEN⚡
@@ -3982,18 +3991,6 @@ namespace SATSuma
         {
             try
             {
-                /*
-                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
-                {
-                    rowsReturnedByAddressUTXOsAPI = 25;
-                    panelOwnNodeAddressUTXOInfo.Visible = false;
-                }
-                else
-                {
-                    rowsReturnedByAddressUTXOsAPI = 10;
-                    panelOwnNodeAddressUTXOInfo.Visible = true;
-                }
-                */
                 LightUpNodeLight();
                 var UTXOsJson = await _UTXOsForAddressService.GetUTXOsForAddressAsync(addressString).ConfigureAwait(true);
                 var utxos = JsonConvert.DeserializeObject<List<AddressUTXOs>>(UTXOsJson);
@@ -4138,12 +4135,6 @@ namespace SATSuma
                                 lblAddressConfirmedUnspentOutputsUTXO.Text = "0";
                             });
                         }
-                        /*
-                        if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0) // we only do one call to the 'all' api, then have to switch to the confirmed api for subsequent calls
-                        {
-                            addressScreenConfUnconfOrAllUTXO = "chain";
-                        }
-                        */
                     }
                 }
                 else
@@ -4230,6 +4221,12 @@ namespace SATSuma
             {
                 HandleException(ex, "BtnViewBlockFromAddressUTXO_Click");
             }
+        }
+
+        private void btnViewAddressTXFromUTXO_Click(object sender, EventArgs e)
+        {
+            textboxSubmittedAddress.Text = textboxSubmittedAddressUTXO.Text;
+            BtnMenuAddress_ClickAsync(sender, e);
         }
         #endregion
         #region listview appearance
@@ -4433,7 +4430,6 @@ namespace SATSuma
                     });
                 }
                 listViewAddressUTXOs.BringToFront();
-                //btnViewBlockFromAddressUTXO.BringToFront();
             }
             catch (Exception ex)
             {
@@ -4464,7 +4460,6 @@ namespace SATSuma
                 }
                 else
                 {
-                    //zz
                     // use previously saved states to reinstate buttons
                     btnViewTransactionFromAddressUTXO.Enabled = BtnViewTransactionFromAddressUTXOWasEnabled;
                     btnViewBlockFromAddressUTXO.Enabled = BtnViewBlockFromAddressUTXOWasEnabled;
@@ -4477,7 +4472,6 @@ namespace SATSuma
             }
         }
         #endregion
-
         #region listview scrolling
         private void btnAddressUTXOScrollDown_Click(object sender, EventArgs e)
         {
@@ -4639,6 +4633,23 @@ namespace SATSuma
             }
         }
         #endregion
+        #region disable keys
+        private void listViewAddressUTXOs_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewAddressUTXOs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewAddressUTXOs_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+        #endregion
+        
         #endregion
 
         #region ⚡BLOCK SCREEN⚡
@@ -6805,6 +6816,37 @@ namespace SATSuma
             {
                 HandleException(ex, "DisableEnableTransactionButtons");
             }
+        }
+        #endregion
+        #region disable keys
+        private void listViewTransactionInputs_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionInputs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionInputs_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewTransactionOutputs_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
         #endregion
         #endregion
@@ -9877,14 +9919,104 @@ namespace SATSuma
             }
         }
         #endregion
+        #region disable keys
+        private void listViewXpubAddresses_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewXpubAddresses_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewXpubAddresses_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+        #endregion
         #endregion
 
         #region ⚡CHARTS SCREEN⚡
+        private void comboBoxChartSelect_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxChartSelect.SelectedIndex == 0)
+            {
+                BtnChartFeeRates_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 1)
+            {
+                BtnChartBlockFees_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 2)
+            {
+                BtnChartReward_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 3)
+            {
+                BtnChartBlockSize_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 4)
+            {
+                BtnChartHashrate_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 5)
+            {
+                BtnChartDifficulty_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 6)
+            {
+                BtnChartCirculation_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 7)
+            {
+                BtnChartUniqueAddresses_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 8)
+            {
+                BtnChartUTXO_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 9)
+            {
+                BtnChartPoolsRanking_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 10)
+            {
+                BtnChartNodesByNetwork_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 11)
+            {
+                BtnChartNodesByCountry_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 12)
+            {
+                BtnChartLightningCapacity_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 13)
+            {
+                BtnChartLightningChannels_ClickAsync(sender, e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 14)
+            {
+                BtnChartPrice_ClickAsync(sender,e);
+            }
+            if (comboBoxChartSelect.SelectedIndex == 15)
+            {
+                BtnChartMarketCap_ClickAsync(sender, e);
+            }
+        }
         #region chart - pools ranking
         private async void BtnChartPoolsRanking_ClickAsync(object sender, EventArgs e)
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 pools ranking")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 pools ranking";
+                    });
+                }
                 ActiveChart = "PoolsRanking";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10045,6 +10177,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 fee rates")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 fee rates";
+                    });
+                }
                 ActiveChart = "FeeRates";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10165,6 +10304,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "⚡ nodes by network")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "⚡ nodes by network";
+                    });
+                }
                 ActiveChart = "NodesByNetwork";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10276,6 +10422,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 hashrate")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 hashrate";
+                    });
+                }
                 ActiveChart = "Hashrate";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10375,6 +10528,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 hashrate")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 hashrate";
+                    });
+                }
                 ActiveChart = "HashrateLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10496,6 +10656,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "⚡ nodes by capacity")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "⚡ nodes by capacity";
+                    });
+                }
                 ActiveChart = "LightningCapacity";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10593,6 +10760,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "⚡ channels")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "⚡ channels";
+                    });
+                }
                 ActiveChart = "LightningChannels";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10690,6 +10864,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "⚡ nodes by country")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "⚡ nodes by country";
+                    });
+                }
                 ActiveChart = "NodesByCountry";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10783,6 +10964,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 block reward")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 block reward";
+                    });
+                }
                 ActiveChart = "Reward";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10869,6 +11057,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 block fees")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 block fees";
+                    });
+                }
                 ActiveChart = "BlockFees";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10953,6 +11148,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 difficulty")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 difficulty";
+                    });
+                }
                 ActiveChart = "Difficulty";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11051,6 +11253,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 difficulty")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 difficulty";
+                    });
+                }
                 ActiveChart = "DifficultyLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11172,6 +11381,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 addresses")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 addresses";
+                    });
+                }
                 ActiveChart = "UniqueAddresses";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11265,6 +11481,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 addresses")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 addresses";
+                    });
+                }
                 ActiveChart = "UniqueAddressesLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11384,6 +11607,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "💲 price")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "💲 price";
+                    });
+                }
                 ActiveChart = "Price";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11514,6 +11744,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "💲 price")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "💲 price";
+                    });
+                }
                 ActiveChart = "PriceLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11666,6 +11903,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "💲 market cap.")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "💲 market cap.";
+                    });
+                }
                 ActiveChart = "MarketCap";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11798,6 +12042,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "💲 market cap.")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "💲 market cap.";
+                    });
+                }
                 ActiveChart = "MarketCapLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11951,6 +12202,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 UTXO's")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 UTXO's";
+                    });
+                }
                 ActiveChart = "UTXO";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12046,6 +12304,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 UTXO's")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 UTXO's";
+                    });
+                }
                 ActiveChart = "UTXOLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12164,6 +12429,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 block size")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 block size";
+                    });
+                }
                 ActiveChart = "BlockSize";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12250,6 +12522,13 @@ namespace SATSuma
         {
             try
             {
+                if (comboBoxChartSelect.Texts != "🔗 circulation")
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.Texts = "🔗 circulation";
+                    });
+                }
                 ActiveChart = "Circulation";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -14490,6 +14769,22 @@ namespace SATSuma
             {
                 HandleException(ex, "TextBoxBookmarkKey_TextChanged");
             }
+        }
+        #endregion
+        #region disable keys
+        private void listViewBookmarks_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewBookmarks_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewBookmarks_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
         #endregion
         #endregion
@@ -16927,30 +17222,31 @@ namespace SATSuma
                 { 0, "blocks----" },
                 { 1, "block-----" },
                 { 2, "address---" },
-                { 3, "transactio" },
-                { 4, "xpub------" },
-                { 5, "bitcoindas" },
-                { 6, "lightndash" },
-                { 7, "bookmarks-" },
-                { 8, "directory-" },
-                { 9, "chtfeerate" },
-                { 10, "chtblkfees" },
-                { 11, "chtblkrwrd" },
-                { 12, "chtblksize" },
-                { 13, "chthashrte" },
-                { 14, "chtdffclty" },
-                { 15, "chtcirclat" },
-                { 16, "chtaddrrss" },
-                { 17, "chtutxo---" },
-                { 18, "chtplranks" },
-                { 19, "chtnetwork" },
-                { 20, "chtcntries" },
-                { 21, "chtcapcity" },
-                { 22, "chtchannls" },
-                { 23, "chtprice--" },
-                { 24, "chtmrktcap" },
-                { 25, "btcconvert" },
-                { 26, "dcacalcrtr" }
+                { 3, "addressutx" },
+                { 4, "transactio" },
+                { 5, "xpub------" },
+                { 6, "bitcoindas" },
+                { 7, "lightndash" },
+                { 8, "bookmarks-" },
+                { 9, "directory-" },
+                { 10, "chtfeerate" },
+                { 11, "chtblkfees" },
+                { 12, "chtblkrwrd" },
+                { 13, "chtblksize" },
+                { 14, "chthashrte" },
+                { 15, "chtdffclty" },
+                { 16, "chtcirclat" },
+                { 17, "chtaddrrss" },
+                { 18, "chtutxo---" },
+                { 19, "chtplranks" },
+                { 20, "chtnetwork" },
+                { 21, "chtcntries" },
+                { 22, "chtcapcity" },
+                { 23, "chtchannls" },
+                { 24, "chtprice--" },
+                { 25, "chtmrktcap" },
+                { 26, "btcconvert" },
+                { 27, "dcacalcrtr" }
             };
 
             if (screenMap.ContainsKey(comboBoxStartupScreen.SelectedIndex))
@@ -17173,7 +17469,8 @@ namespace SATSuma
                 {
                     { "blocks----", "blocks" },
                     { "block-----", "block" },
-                    { "address---", "address" },
+                    { "address---", "address - tx's" },
+                    { "addressutx", "address - utxo's" },
                     { "transactio", "transaction" },
                     { "xpub------", "xpub" },
                     { "bitcoindas", "bitcoin dashboard" },
@@ -21599,7 +21896,7 @@ namespace SATSuma
                 #region panels (textbox containers)
                 Control[] textboxPanelsToInvalidate = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, 
                     panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelSettingsUIScaleContainer, panelAppearanceTextbox1Container, 
-                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO };
+                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer };
                 foreach (Control control in textboxPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21609,8 +21906,8 @@ namespace SATSuma
                 }
                 #endregion
                 #region panels (heading containers)
-                Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, 
-                    panel79, panel80, panel81, panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136 };
+                Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139, 
+                    panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22096,7 +22393,7 @@ namespace SATSuma
                     });
                 }
                 //xpub
-                Control[] listXpubLabelsToColor = { label114, label238, label139, label146, lblXpubScreenOwnNodeStatus, label140, label141, label123, label111, label119, label135, label133, label129, label121, lblXpubStatus };
+                Control[] listXpubLabelsToColor = { label238, label139, label146, lblXpubScreenOwnNodeStatus, label140, label141, label123, label111, label119, label135, label133, label129, label121, lblXpubStatus };
                 foreach (Control control in listXpubLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22273,7 +22570,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { label228, label218, label231, label217, label271, label272 };
+                Control[] listChartsHeadingsToColor = { label217, label271, label272, label114 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22387,7 +22684,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label317, label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227 };
+                Control[] listOtherTextToColor = { label317, label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227 };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22427,6 +22724,14 @@ namespace SATSuma
                 rjDatePickerDCAEndDate.Invoke((MethodInvoker)delegate
                 {
                     rjDatePickerDCAEndDate.TextColor = thiscolor;
+                });
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.ListTextColor = thiscolor;
+                });
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.ListBackColor = chartsBackgroundColor;
                 });
             }
             catch (Exception ex)
@@ -22650,7 +22955,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115 };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp ,btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22928,7 +23233,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
+                Control[] listChartsHeadingsToColor = { panel78, panel139, panel49, panel50 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23075,7 +23380,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
+                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23206,7 +23511,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel80, panel79, panel81, panel78, panel49, panel50 };
+                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -27141,7 +27446,7 @@ namespace SATSuma
             }
         }
 
-        private async void BtnMenuAddressUTXO_Click(object sender, EventArgs e)
+        private async void BtnMenuAddressUTXO_ClickAsync(object sender, EventArgs e)
         {
             try
             {
@@ -30202,92 +30507,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private void listViewAddressUTXOs_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewAddressUTXOs_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewAddressUTXOs_KeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void btnViewAddressTXFromUTXO_Click(object sender, EventArgs e)
-        {
-            textboxSubmittedAddress.Text = textboxSubmittedAddressUTXO.Text;
-            BtnMenuAddress_ClickAsync(sender, e);
-        }
-
-        private void btnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
-        {
-            textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
-            BtnMenuAddressUTXO_Click(sender, e);
-        }
-
-        private void listViewTransactionInputs_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewTransactionInputs_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewTransactionInputs_KeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewTransactionOutputs_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewTransactionOutputs_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewTransactionOutputs_KeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewXpubAddresses_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewXpubAddresses_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewXpubAddresses_KeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewBookmarks_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewBookmarks_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void listViewBookmarks_KeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-        }
     }
 }
